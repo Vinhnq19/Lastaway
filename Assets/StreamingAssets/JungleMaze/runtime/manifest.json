@@ -1,8 +1,8 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "files": {
-    "map_demo.json": "b89c608a172e9c6abc68a9aea0184b75a9f6e367f2689dada497bd8ebffe1945",
-    "match_settings.json": "e4b16d5efadd838653ebf5e2ab20d41721f7cbaf5c1a8137031246aaf6b80ad9",
-    "zone_schedule.json": "002a4eae4f7f46a39490d1bdfa0065de2649e7d6f81d3a29377fe7bf5fa33d96"
+    "map_demo.json": "155ed2135bc80b1d128fe23e326916f3aad8644390ca25d29ba5e6f241dfb2ed",
+    "match_settings.json": "36d502706b0912d3bf307d47a6861c9ee96d5ee73d12814d3c45248763773ac4",
+    "zone_schedule.json": "72932eba916d923a62e62a55a07a7189e61650a3d9d9d7c8eec06ab7f7dd1f01"
   }
 }

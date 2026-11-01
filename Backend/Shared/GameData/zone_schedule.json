@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "initialCenter": { "x": 25.0, "y": 25.0 },
   "initialRadius": 25.0,
   "warningDurationSeconds": 10.0,
