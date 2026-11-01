@@ -45,7 +45,7 @@ namespace JungleMaze.EditorTools
         private const int TextSize = 15;
         private static readonly HudPalette P = HudPalette.Default;
         private static TMP_FontAsset TextFont => AssetDatabase.LoadAssetAtPath<TMP_FontAsset>("Assets/_JungleMaze/Art/Fonts/TMP/HudText SDF.asset");
-        private static TMP_FontAsset NumberFont => AssetDatabase.LoadAssetAtPath<TMP_FontAsset>("Assets/_JungleMaze/Art/Fonts/TMP/HudNumber SDF.asset");
+        private static TMP_FontAsset NumberFont => AssetDatabase.LoadAssetAtPath<TMP_FontAsset>("Assets/_JungleMaze/Art/Fonts/TMP/HudTextBold SDF.asset");
 
         [MenuItem("Jungle Maze/UI-03/Build Match Overlay")]
         public static void Build()
@@ -160,16 +160,24 @@ namespace JungleMaze.EditorTools
             var title = Txt("Title", frame, 32, 28, 576, 40, "Bạn đã bị loại", 28, TextFont, TextAlignmentOptions.Center, P.Red);
             title.fontStyle = FontStyles.Bold;
             var rank = Txt("Rank", frame, 32, 84, 576, 64, "#4 / 10", 48, NumberFont, TextAlignmentOptions.Center, P.Amber);
-            var cause = Txt("Cause", frame, 32, 164, 576, 28, "Không rõ nguyên nhân", 17, TextFont, TextAlignmentOptions.Center, P.Text);
-            cause.margin = new Vector4(IconInset, 0, 0, 0); // room for the icon, so icon + text stay centred
-            var causeIcon = Icon(cause.rectTransform, 0, 0, Overlay("CauseUnknown"));
-            causeIcon.rectTransform.pivot = new Vector2(1f, 0.5f);
-            causeIcon.rectTransform.anchoredPosition = new Vector2(0, -14);
+            // Icon + cause text in a centred Horizontal Layout Group (UX review), 8 px apart, sized by the text.
+            var line = Rect("CauseLine", frame, 32, 164, 576, 28);
+            var row = line.gameObject.AddComponent<HorizontalLayoutGroup>();
+            row.childAlignment = TextAnchor.MiddleCenter;
+            row.spacing = 8f;
+            row.childControlWidth = row.childControlHeight = true;
+            row.childForceExpandWidth = row.childForceExpandHeight = false;
+            var causeIcon = Icon(line, 0, 0, Overlay("CauseUnknown"));
+            var iconSize = causeIcon.gameObject.AddComponent<LayoutElement>();
+            iconSize.minWidth = iconSize.preferredWidth = iconSize.minHeight = iconSize.preferredHeight = IconSize;
+            var cause = Txt("Cause", line, 0, 0, 0, 28, "Không rõ nguyên nhân", 17, TextFont, TextAlignmentOptions.Center, P.Text);
+            var causeMax = cause.gameObject.AddComponent<LayoutElement>();
+            causeMax.flexibleWidth = 0f;
             var kills = Txt("Kills", frame, 32, 204, 576, 24, "Hạ gục: 0", TextSize, TextFont, TextAlignmentOptions.Center, P.Muted);
             var survival = Txt("Survival", frame, 32, 236, 576, 24, "Sống sót: 00:00", TextSize, TextFont, TextAlignmentOptions.Center, P.Muted);
             var blocked = Txt("BlockedReason", frame, 32, 330, 576, 24, "Không còn người chơi nào để theo dõi", 13, TextFont, TextAlignmentOptions.Center, P.Muted);
             // Absolute Figma positions: "Về menu" (461,508), "Theo dõi người khác" (599,508).
-            var home = Btn("Home", frame, 461 - 320, 508 - 141, 126, 50, "Về menu", Secondary, P.Text);
+            var home = Btn("Home", frame, 461 - 320, 508 - 141, 126, 50, "Về trang chủ", Secondary, P.Text);
             var spectate = Btn("Spectate", frame, 599 - 320, 508 - 141, 220, 48, "Theo dõi người khác", Primary, P.Text);
             Set(view, "group", group);
             Set(view, "frame", frame);
@@ -340,7 +348,7 @@ namespace JungleMaze.EditorTools
 
         private static OverlayNoticeView BuildNotice(RectTransform parent)
         {
-            var box = Rect("Notice", parent, 390, 108, 500, 36);
+            var box = Rect("Notice", parent, 390, 136, 500, 36); // y 136: below the killcam countdown and the spectator block
             var group = Group(box);
             Skin(Img(box, P.Surface), Hud("ToastBg"), 2f); // 36 px tall, 20 px border
             var text = Txt("Text", box, 12, 0, 476, 36, "", TextSize, TextFont, TextAlignmentOptions.Center, P.Text);
@@ -370,18 +378,17 @@ namespace JungleMaze.EditorTools
             var music = SliderRow(panel, "Music", "Nhạc", "IconMusic", y += RowHeight, 0f, 1f, false, out var musicValue);
             var musicRow = music.transform.parent;
             var musicToggle = Tgl("MusicEnabled", musicRow, 470, 12, 74, 24, "Bật");
-            var musicOff = Txt("MusicOff", musicRow, 150, 30, 250, 16, "Nhạc nền đang tắt", 13, TextFont, TextAlignmentOptions.MidlineLeft, P.Muted);
+            var musicOff = Txt("MusicOff", musicRow, SliderX, 30, SliderWidth, 16, "Nhạc nền đang tắt", 13, TextFont, TextAlignmentOptions.MidlineLeft, P.Muted);
             var sensitivity = SliderRow(panel, "Sensitivity", "Độ nhạy chuột", "IconMouse", y += RowHeight, 5f, 20f, true, out var sensitivityValue);
             var shakeRow = Row(panel, "ShakeRow", y += RowHeight);
             Icon(shakeRow, 16, (RowHeight - IconSize) / 2f, Overlay("IconShake"));
-            Txt("Label", shakeRow, 16, 0, 200, RowHeight, "Rung màn hình", TextSize, TextFont, TextAlignmentOptions.MidlineLeft, P.Text)
-                .margin = new Vector4(IconInset, 0, 0, 0);
+            Txt("Label", shakeRow, LabelX, 0, 200, RowHeight, "Rung màn hình", TextSize, TextFont, TextAlignmentOptions.MidlineLeft, P.Text);
             var shake = Tgl("ScreenShake", shakeRow, 470, 12, 74, 24, "Bật");
 
             y += RowHeight + 12f;
             var defaults = Btn("Defaults", panel, 16, y, 140, 48, "Mặc định", Secondary, P.Text);
             var resume = Btn("Resume", panel, 168, y, 160, 48, "Tiếp tục", Primary, P.Text);
-            var leave = Btn("Leave", panel, 364, y, 180, 48, "Thoát trận", Secondary, P.Red);
+            var leave = Btn("Leave", panel, 364, y, 180, 48, "Thoát trận", Danger, P.RedText);
             ButtonIcon(leave, Overlay("IconExit"));
             var retry = Txt("RetryNotice", panel, 16, y + 52, 528, 20, "Chưa thoát được, thử lại", 13, TextFont, TextAlignmentOptions.MidlineLeft, P.Yellow);
             retry.gameObject.SetActive(false);
@@ -404,14 +411,16 @@ namespace JungleMaze.EditorTools
             return view;
         }
 
+        // UX review: the label starts clear of the 28 px icon (x 54) and the slider moves right (258 / 342 at 1920).
+        private const float LabelX = 54f, SliderX = 172f, SliderWidth = 228f;
+
         private static Slider SliderRow(RectTransform panel, string name, string label, string icon, float y, float min, float max, bool whole, out TMP_Text value)
         {
             var row = Row(panel, name + "Row", y);
             Icon(row, 16, (RowHeight - IconSize) / 2f, Overlay(icon));
-            var text = Txt("Label", row, 16, 0, 130, RowHeight, label, TextSize, TextFont, TextAlignmentOptions.MidlineLeft, P.Text);
-            text.margin = new Vector4(IconInset, 0, 0, 0);
+            var text = Txt("Label", row, LabelX, 0, SliderX - LabelX - 8f, RowHeight, label, TextSize, TextFont, TextAlignmentOptions.MidlineLeft, P.Text);
             text.textWrappingMode = TextWrappingModes.Normal; // a long label takes two lines beside the icon, rect unchanged
-            var slider = Sld(name, row, 150, 10, 250, 20, min, max, whole);
+            var slider = Sld(name, row, SliderX, 10, SliderWidth, 20, min, max, whole);
             value = Txt("Value", row, 410, 0, 54, RowHeight, whole ? "1,0" : "100%", TextSize, NumberFont, TextAlignmentOptions.MidlineRight, P.Text);
             return slider;
         }
@@ -425,16 +434,17 @@ namespace JungleMaze.EditorTools
             var root = Rect("LeaveConfirm", parent, 0, 0, 1280, 720);
             Stretch(root);
             var group = Group(root);
-            Img(root, new Color(0f, 0f, 0f, 0.55f), true);
+            Img(root, P.Scrim, true);
             var box = Centered("Box", root, 420, 190);
             Panel(box);
+            box.GetComponent<Image>().color = new Color(P.Surface.r, P.Surface.g, P.Surface.b, 1f); // opaque: ESC text must not show through
             var view = root.gameObject.AddComponent<LeaveConfirmView>();
             var title = Txt("Title", box, 20, 18, 380, 30, "Thoát trận?", 20, TextFont, TextAlignmentOptions.MidlineLeft, P.Text);
             title.fontStyle = FontStyles.Bold;
             var message = Txt("Message", box, 20, 52, 380, 44, "Bạn sẽ bị loại khỏi trận.", TextSize, TextFont, TextAlignmentOptions.TopLeft, P.Muted);
             message.textWrappingMode = TextWrappingModes.Normal;
             var stay = Btn("Stay", box, 20, 122, 180, 48, "Ở lại", Primary, P.Text);
-            var confirm = Btn("Confirm", box, 220, 122, 180, 48, "Thoát", Secondary, P.Red);
+            var confirm = Btn("Confirm", box, 220, 122, 180, 48, "Thoát", Danger, P.RedText);
             ButtonIcon(confirm, Overlay("IconExit"));
             Set(view, "group", group);
             Set(view, "message", message);
@@ -565,6 +575,7 @@ namespace JungleMaze.EditorTools
 
         private static Sprite Primary => Load(MenuArt + "ButtonPrimary.png");
         private static Sprite Secondary => Load(MenuArt + "ButtonSecondary.png");
+        private static Sprite Danger => Load(MenuArt + "ButtonDanger.png");
         private static Sprite Overlay(string name) => Load(OverlayArt + name + ".png");
         private static Sprite Hud(string name) => Load(HudArt + name + ".png");
 
