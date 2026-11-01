@@ -122,5 +122,124 @@ namespace JungleMaze.EditorTools
             }
             return null;
         }
+
+        /// <summary>
+        /// Callable Editor helper to apply selected terrain and cover art to Game geometry
+        /// while strictly preserving BoxCollider2D (size/offset/trigger), transform (pos/rot/scale),
+        /// tag, layer, and HardCoverTag.
+        /// No scene regeneration or asset modification occurs while Editor is active; Codex executes this helper after review.
+        /// </summary>
+        [MenuItem("Jungle Maze/Phase 2/Apply Static Map Visuals")]
+        public static void ApplyStaticMapVisuals()
+        {
+            var gamePath = "Assets/_JungleMaze/Scenes/Game.unity";
+            var active = SceneManager.GetActiveScene();
+            var opened = false;
+            var scene = SceneManager.GetSceneByPath(gamePath);
+            if (!scene.isLoaded)
+            {
+                scene = EditorSceneManager.OpenScene(gamePath, OpenSceneMode.Additive);
+                opened = true;
+            }
+            try
+            {
+                ApplyStaticMapVisualsToScene(scene);
+                EditorSceneManager.MarkSceneDirty(scene);
+                EditorSceneManager.SaveScene(scene);
+                Debug.Log("[WorldDemoBuild] Static terrain/cover visuals applied to Game scene.");
+            }
+            finally
+            {
+                if (opened) EditorSceneManager.CloseScene(scene, true);
+                if (active.IsValid() && active.isLoaded) SceneManager.SetActiveScene(active);
+            }
+        }
+
+        public static void ApplyStaticMapVisualsToScene(Scene scene)
+        {
+            var groundSprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/_JungleMaze/Art/Foundation/Ground96.png");
+            if (groundSprite != null)
+            {
+                foreach (var root in scene.GetRootGameObjects())
+                {
+                    var gridView = root.GetComponentInChildren<MapGridView>(true);
+                    if (gridView != null)
+                    {
+                        var so = new SerializedObject(gridView);
+                        var prop = so.FindProperty("groundSprite");
+                        if (prop != null)
+                        {
+                            prop.objectReferenceValue = groundSprite;
+                            so.ApplyModifiedProperties();
+                            EditorUtility.SetDirty(gridView);
+                        }
+                    }
+                }
+            }
+
+            var pillarSprite = FindSprite("Assets/Imported/JSurviv/Sprites/OBSTACLES/Tàn tích bỏ hoang/abandoned.png", "abandoned_1");
+            var wallSprite = FindSprite("Assets/Imported/JSurviv/Sprites/OBSTACLES/Tàn tích bỏ hoang/abandoned.png", "abandoned_0");
+            var statueSprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Imported/JSurviv/Sprites/OBSTACLES/19. Tượng đài/tượng.png");
+            var rockSprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Imported/JSurviv/Sprites/OBSTACLES/05. Đá to hơn/stone_4_1.png");
+
+            foreach (var root in scene.GetRootGameObjects())
+            {
+                ApplyCoverVisualIfMatching(root, "AncientPillar", pillarSprite);
+                ApplyCoverVisualIfMatching(root, "CityWall", wallSprite);
+                ApplyCoverVisualIfMatching(root, "AncientStatue", statueSprite);
+                ApplyCoverVisualIfMatching(root, "BoulderRock", rockSprite);
+            }
+        }
+
+        private static Sprite FindSprite(string texturePath, string spriteName)
+        {
+            var assets = AssetDatabase.LoadAllAssetsAtPath(texturePath);
+            foreach (var asset in assets)
+            {
+                if (asset is Sprite s && s.name == spriteName) return s;
+            }
+            return AssetDatabase.LoadAssetAtPath<Sprite>(texturePath);
+        }
+
+        private static void ApplyCoverVisualIfMatching(GameObject obj, string targetName, Sprite sprite)
+        {
+            if (sprite == null) return;
+            foreach (var renderer in obj.GetComponentsInChildren<SpriteRenderer>(true))
+            {
+                var go = renderer.gameObject;
+                if (!go.name.Contains(targetName)) continue;
+
+                var collider = go.GetComponent<BoxCollider2D>();
+                if (collider == null) continue;
+                var initialPos = go.transform.position;
+                var initialLayer = go.layer;
+                var initialTag = go.tag;
+
+                // Imported art has its own pixel size; fit a visual child without scaling the authored collider.
+                var visual = go.transform.Find("Authored visual");
+                if (visual == null)
+                {
+                    visual = new GameObject("Authored visual").transform;
+                    visual.SetParent(go.transform, false);
+                }
+                var view = visual.GetComponent<SpriteRenderer>();
+                if (view == null) view = visual.gameObject.AddComponent<SpriteRenderer>();
+                view.sprite = sprite;
+                view.color = Color.white;
+                view.sharedMaterial = renderer.sharedMaterial;
+                view.sortingLayerID = renderer.sortingLayerID;
+                view.sortingOrder = renderer.sortingOrder;
+                var scale = new Vector2(collider.size.x / sprite.bounds.size.x, collider.size.y / sprite.bounds.size.y);
+                visual.localScale = new Vector3(scale.x, scale.y, 1);
+                visual.localPosition = new Vector3(collider.offset.x - sprite.bounds.center.x * scale.x,
+                    collider.offset.y - sprite.bounds.center.y * scale.y, 0);
+                renderer.enabled = false;
+                EditorUtility.SetDirty(renderer);
+                EditorUtility.SetDirty(view);
+
+                if (go.transform.position != initialPos || go.layer != initialLayer || go.tag != initialTag)
+                    throw new System.InvalidOperationException($"Preservation invariant violated on {go.name}");
+            }
+        }
     }
 }
