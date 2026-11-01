@@ -91,6 +91,86 @@ namespace JungleMaze.App.Lobby.Adapters
     }
 
     /// <summary>
+    /// Offline authoritative simulation adapter for <see cref="ILobbySource"/> over <see cref="OfflineMatchSession"/>.
+    /// Reports InGame while the solo match runs and Ending when the round concludes.
+    /// </summary>
+    public sealed class OfflineMatchLobbySource : ILobbySource
+    {
+        private readonly OfflineMatchSession _session;
+        private readonly List<LobbySlot> _slots = new List<LobbySlot>(1);
+        private Guid _slotsForMatch = Guid.Empty;
+
+        public OfflineMatchLobbySource(OfflineMatchSession session) => _session = session;
+
+        public bool HasPhase => _session != null && _session.IsActive && _session.MatchId != Guid.Empty;
+        public Guid MatchId => _session != null ? _session.MatchId : Guid.Empty;
+        public MatchPhase Phase => _session == null ? MatchPhase.Waiting : (_session.HasResult ? MatchPhase.Ending : MatchPhase.InGame);
+        public int PlayerCount => 1;
+        public int MinPlayers => 1;
+        public int MaxPlayers => 1;
+        public uint PhaseEndTick => 0;
+        public uint ServerTick => _session != null ? _session.CurrentTick : 0;
+        public byte OwnNetId => 0;
+        public string RoomCode => "OFFLINE";
+        public bool ReadySupported => false;
+        public string LoadError => null;
+
+        public IReadOnlyList<LobbySlot> Slots
+        {
+            get
+            {
+                if (_session == null || !_session.IsActive)
+                {
+                    _slots.Clear();
+                    return _slots;
+                }
+                if (_slotsForMatch != _session.MatchId)
+                {
+                    _slotsForMatch = _session.MatchId;
+                    _slots.Clear();
+                    _slots.Add(new LobbySlot(0, "offline-player", _session.DisplayName ?? "Player", true));
+                }
+                return _slots;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Offline result source adapting <see cref="OfflineMatchSession.Result"/> to <see cref="MatchResultView"/>.
+    /// </summary>
+    public sealed class OfflineMatchResultSource : IMatchResultSource
+    {
+        private readonly OfflineMatchSession _session;
+        private MatchResultView _view;
+
+        public OfflineMatchResultSource(OfflineMatchSession session) => _session = session;
+
+        public bool HasResult => _session != null && _session.HasResult;
+
+        public MatchResultView Current
+        {
+            get
+            {
+                if (_session == null || !_session.HasResult) return null;
+                var r = _session.Result;
+                if (_view == null || _view.MatchId != r.MatchId)
+                {
+                    _view = new MatchResultView
+                    {
+                        MatchId = r.MatchId,
+                        Reason = r.Reason,
+                        WinnerNetId = r.WinnerNetId,
+                        ParticipantCount = r.ParticipantCount,
+                        OwnNetId = 0,
+                        Participants = r.Participants ?? Array.Empty<MatchParticipantState>()
+                    };
+                }
+                return _view;
+            }
+        }
+    }
+
+    /// <summary>
     /// N3 from <see cref="INetworkClient"/>. A failure before any transport (login: <see cref="ConnectionError"/>; bad
     /// endpoint: <see cref="ReportLocalFailure"/>) reads as <c>Failed</c> until the next state change, so the join form
     /// shows it instead of waiting for the 20 s budget.
@@ -145,20 +225,48 @@ namespace JungleMaze.App.Lobby.Adapters
         private readonly Action _disconnect;
         private readonly MatchSession _session;
         private readonly IMatchConnection _connection;
+        private readonly OfflineMatchSession _offlineSession;
+        private readonly Func<bool> _isOffline;
+        private readonly Action _onLeaveOffline;
 
-        public SessionLobbyCommands(Action<string, string> join, Action disconnect, MatchSession session, IMatchConnection connection)
+        public SessionLobbyCommands(Action<string, string> join, Action disconnect, MatchSession session,
+            IMatchConnection connection, OfflineMatchSession offlineSession = null, Func<bool> isOffline = null,
+            Action onLeaveOffline = null)
         {
             _join = join ?? throw new ArgumentNullException(nameof(join));
             _disconnect = disconnect ?? throw new ArgumentNullException(nameof(disconnect));
             _session = session ?? throw new ArgumentNullException(nameof(session));
             _connection = connection;
+            _offlineSession = offlineSession;
+            _isOffline = isOffline;
+            _onLeaveOffline = onLeaveOffline;
         }
 
         public void Join(string roomCode, string displayName) => _join(roomCode, displayName);
         public void Cancel() => _disconnect();
-        public void Leave() => _disconnect();
+
+        public void Leave()
+        {
+            if (_isOffline != null && _isOffline())
+            {
+                _offlineSession?.Leave();
+                _onLeaveOffline?.Invoke();
+                return;
+            }
+            _disconnect();
+        }
+
         public void Ready() => _session.AnnounceReady();
-        public void Replay() => _session.Replay();
+
+        public void Replay()
+        {
+            if (_isOffline != null && _isOffline())
+            {
+                _offlineSession?.Replay();
+                return;
+            }
+            _session.Replay();
+        }
 
         public void Resume()
         {

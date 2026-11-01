@@ -37,7 +37,11 @@ namespace JungleMaze.Composition
             public Assertion[] assertions;
         }
         private MatchSession _match;
+        private JungleMaze.App.Lobby.LobbyFlow _lobby;
         private INetworkClient _network;
+        private JungleMaze.Core.Events.IEventBus _bus;
+        private NetworkStats? _failureStats;
+        private string _failureEndpoint, _failureReason;
         private IPacketSender _sender;
         private IPlayerHistory _history;
         private ConnectionMenuPresenter _menu;
@@ -62,8 +66,18 @@ namespace JungleMaze.Composition
         private double _snapshotSeconds;
         private float _nextHistory;
 
-        [Inject] public void Construct(MatchSession match, INetworkClient network, IPacketSender sender, IPlayerHistory history, ConnectionMenuPresenter menu)
-        { _match = match; _network = network; _sender = sender; _history = history; _menu = menu; }
+        [Inject] public void Construct(MatchSession match, INetworkClient network, IPacketSender sender, IPlayerHistory history, ConnectionMenuPresenter menu, JungleMaze.App.Lobby.LobbyFlow lobby, JungleMaze.Core.Events.IEventBus bus)
+        {
+            _lobby = lobby; _match = match; _network = network; _sender = sender; _history = history; _menu = menu;
+            _bus = bus; _bus.Subscribe<NetworkStateChanged>(NetworkChanged);
+        }
+
+        private void NetworkChanged(NetworkStateChanged change)
+        {
+            if (_finished || !_wasJoined || _failureStats.HasValue || change.Current != NetworkState.Failed) return;
+            // Reconnect can reset LastReason/stats in the same frame; retain the original transport failure.
+            _failureStats = _network.Stats; _failureEndpoint = _network.Endpoint; _failureReason = change.Reason.ToString();
+        }
 
         private IEnumerator Start()
         {
@@ -90,13 +104,23 @@ namespace JungleMaze.Composition
             }
             catch (Exception) { Finish("FAIL", "Invalid scenario/output or missing feature check; inspect scenario schema and registered extensions."); yield break; }
             yield return new WaitForSecondsRealtime(1);
-            _menu.Join();
+            // The opt-in acceptance runner uses the same account and join flow as the visible UI.
+            _lobby.Account.Username = Environment.GetEnvironmentVariable("NET_USERNAME") ?? "";
+            _lobby.Account.Password = Environment.GetEnvironmentVariable("NET_PASSWORD") ?? "";
+            _lobby.Account.RegisterMode = false;
+            if (!_lobby.Account.Submit()) { Finish("FAIL", "Account login could not start"); yield break; }
+            var loginAt = Time.realtimeSinceStartup;
+            while (_lobby.Account.Busy && Time.realtimeSinceStartup - loginAt < 15) yield return null;
+            if (!_lobby.Account.IsValid) { Finish("FAIL", "Account login failed before join"); yield break; }
+            _lobby.OpenJoin(); _lobby.Join.SetCode(_menu.RoomCode); _lobby.Join.SetName(_menu.DisplayName);
+            if (!_lobby.SubmitJoin()) { Finish("FAIL", "Authenticated join form rejected input"); yield break; }
         }
 
         private void Update()
         {
             if (_finished || _scenario == null) return;
             var elapsed = Time.realtimeSinceStartup - _started;
+            if (_failureStats.HasValue) { Finish("FAIL", "Unexpected disconnection: " + _failureReason); return; }
             if (_network.State == NetworkState.Joined)
             {
                 _wasJoined = true; _connectedSeconds += Time.unscaledDeltaTime; Mark("joined");
@@ -119,7 +143,25 @@ namespace JungleMaze.Composition
                 else
                 {
                     var moving = elapsed - _movementStarted < 3;
-                    _match.SetIntent(new PlayerIntent { MoveX = moving ? -.25f : 0, MoveY = moving ? .2f : 0, AimDegrees = 45 });
+                    var intent = new PlayerIntent { MoveX = moving ? -.25f : 0, MoveY = moving ? .2f : 0, AimDegrees = 45 };
+                    // A winner can keep full HP forever; exercise damage with real movement, never by changing HP.
+                    if (_scenario.requireHpDamage && !Seen("hpDamage") && elapsed - _movementStarted > 30 &&
+                        _match.Players.TryGet(_match.OwnNetId, out var self) && self.HasState)
+                    {
+                        var center = _match.HasZone ? new Vector2(_match.Zone.CurrentCenterX, _match.Zone.CurrentCenterY) : new Vector2(25, 25);
+                        var outward = new Vector2(self.Current.X, self.Current.Y) - center;
+                        var angle = outward.sqrMagnitude > .001f ? Mathf.Atan2(outward.y, outward.x) : 0;
+                        for (var option = 0; option < 8; option++)
+                        {
+                            var turn = option == 0 ? 0 : ((option + 1) / 2) * (option % 2 == 1 ? 1 : -1);
+                            var direction = new Vector2(Mathf.Cos(angle + turn * Mathf.PI / 4), Mathf.Sin(angle + turn * Mathf.PI / 4));
+                            var world = _match.Prediction.World;
+                            if (world != null && world.Overlaps(self.Current.X + direction.x * .65f, self.Current.Y + direction.y * .65f)) continue;
+                            intent.MoveX = direction.x; intent.MoveY = direction.y;
+                            break;
+                        }
+                    }
+                    _match.SetIntent(intent);
                 }
                 if (_match.Players.TryGet(_match.OwnNetId, out var own) && own.HasState)
                 {
@@ -186,7 +228,7 @@ namespace JungleMaze.Composition
             var expectedMatch = _historyMatch;
             try
             {
-                await _history.RefreshHistoryAsync();
+                await _history.RefreshHistoryAsync(_menu.AccountToken);
                 if (!_finished && !_stop.IsCancellationRequested) foreach (var row in _history.Rows)
                     if (row.MatchId == expectedMatch) { Mark("history"); break; }
             }
@@ -199,8 +241,8 @@ namespace JungleMaze.Composition
             _evidence.status = status; _evidence.reason = reason;
             if (_network != null)
             {
-                var s = _network.Stats;
-                _evidence.selectedTransport = s.Transport; _evidence.fallbackReason = s.FallbackReason; _evidence.endpoint = _network.Endpoint;
+                var s = _failureStats ?? _network.Stats;
+                _evidence.selectedTransport = s.Transport; _evidence.fallbackReason = s.FallbackReason; _evidence.endpoint = _failureEndpoint ?? _network.Endpoint;
                 _evidence.metrics.rttP50Ms = s.P50RttMs; _evidence.metrics.rttP95Ms = s.P95RttMs; _evidence.metrics.rttP99Ms = s.P99RttMs;
                 _evidence.metrics.pings = s.PingsSent; _evidence.metrics.pongs = s.PongsReceived; _evidence.metrics.pongTimeouts = s.PongsLost;
             }
@@ -228,9 +270,9 @@ namespace JungleMaze.Composition
             }
             catch (Exception) { Debug.LogError("[OnlineTest] Could not write evidence"); status = "FAIL"; }
             Debug.Log("[OnlineTest] " + status + ": " + reason);
-            _match?.Leave(); _menu?.Disconnect();
+            _menu?.Disconnect();
             Application.Quit(status == "PASS" ? 0 : status == "INVALID" ? 2 : 1);
         }
-        private void OnDestroy() { _stop.Cancel(); _stop.Dispose(); }
+        private void OnDestroy() { _bus?.Unsubscribe<NetworkStateChanged>(NetworkChanged); _stop.Cancel(); _stop.Dispose(); }
     }
 }

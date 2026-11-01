@@ -9,11 +9,14 @@ public sealed class ServerMetrics
     private readonly List<double> _loopMs = new();
     private long _totalTicks;
     private long _historyUnavailable;
+    private double _loopGapMaxMs, _previousReportMs;
+    private TimeSpan _gcPauseStarted = GC.GetTotalPauseDuration();
     public void RecordHistoryUnavailable() => Interlocked.Increment(ref _historyUnavailable);
     private int _pings, _invalidPackets, _rejections, _tickOverruns, _droppedTicks;
     private double _windowStarted = Stopwatch.GetTimestamp() / (double)Stopwatch.Frequency;
     private double _cpuStartedMs = ReadCpuMs();
 
+    public void RecordLoopSpacing(double elapsedMs) => _loopGapMaxMs = Math.Max(_loopGapMaxMs, elapsedMs);
     public void RecordPing() => _pings++;
     public void RecordInvalidPacket() => _invalidPackets++;
     public void RecordRejection() => _rejections++;
@@ -37,17 +40,22 @@ public sealed class ServerMetrics
         var now = Stopwatch.GetTimestamp() / (double)Stopwatch.Frequency;
         var seconds = now - _windowStarted;
         if (seconds < intervalSeconds) return;
+        var reportStarted = Stopwatch.GetTimestamp();
         var cpuMs = ReadCpuMs();
+        var gcPause = GC.GetTotalPauseDuration();
         var cpuPercent = (cpuMs - _cpuStartedMs) / (seconds * 1000) * 100;
         // CPU một core: 100% = một core bận toàn thời gian, có thể >100%.
         using var process = Process.GetCurrentProcess();
         Console.WriteLine(FormattableString.Invariant(
-            $"[metrics] peers={peers} active={active} pending={pending} ticks={_totalTicks} ticksPerSecond={_tickMs.Count / seconds:F2} tickP95Ms={Percentile(_tickMs, .95):F3} tickP99Ms={Percentile(_tickMs, .99):F3} loopP95Ms={Percentile(_loopMs, .95):F3} loopP99Ms={Percentile(_loopMs, .99):F3} cpuOneCorePercent={cpuPercent:F2} tickOverruns={_tickOverruns} droppedTicks={_droppedTicks} pings={_pings} invalidPackets={_invalidPackets} historyUnavailable={Interlocked.Read(ref _historyUnavailable)} rejected={_rejections} rooms={rooms} workingSetMiB={process.WorkingSet64 / 1048576.0:F2} roomSlots={roomSlots} utc={DateTime.UtcNow:O}"));
+            $"[metrics] peers={peers} active={active} pending={pending} ticks={_totalTicks} ticksPerSecond={_tickMs.Count / seconds:F2} tickP95Ms={Percentile(_tickMs, .95):F3} tickP99Ms={Percentile(_tickMs, .99):F3} tickMaxMs={(_tickMs.Count == 0 ? 0 : _tickMs.Max()):F3} loopMaxMs={(_loopMs.Count == 0 ? 0 : _loopMs.Max()):F3} loopGapMaxMs={_loopGapMaxMs:F3} gcPauseMs={(gcPause - _gcPauseStarted).TotalMilliseconds:F3} previousReportMs={_previousReportMs:F3} loopP95Ms={Percentile(_loopMs, .95):F3} loopP99Ms={Percentile(_loopMs, .99):F3} cpuOneCorePercent={cpuPercent:F2} tickOverruns={_tickOverruns} droppedTicks={_droppedTicks} pings={_pings} invalidPackets={_invalidPackets} historyUnavailable={Interlocked.Read(ref _historyUnavailable)} rejected={_rejections} rooms={rooms} workingSetMiB={process.WorkingSet64 / 1048576.0:F2} roomSlots={roomSlots} utc={DateTime.UtcNow:O}"));
         _tickMs.Clear();
         _loopMs.Clear();
         _pings = _invalidPackets = _rejections = _tickOverruns = _droppedTicks = 0;
         _windowStarted = now;
         _cpuStartedMs = cpuMs;
+        _gcPauseStarted = gcPause;
+        _loopGapMaxMs = 0;
+        _previousReportMs = Stopwatch.GetElapsedTime(reportStarted).TotalMilliseconds;
     }
 
     private static double ReadCpuMs()

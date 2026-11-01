@@ -31,6 +31,7 @@ namespace JungleMaze.EditorTools
         private static Sprite Menu(string name) => AssetDatabase.LoadAssetAtPath<Sprite>(MenuArt + name + ".png");
 
         [MenuItem("Jungle Maze/UI-02/Build Lobby UI")]
+        [MenuItem("Jungle Maze/UI-02/Bind Offline Practice Buttons")]
         public static void Build()
         {
             Directory.CreateDirectory(PrefabFolder);
@@ -94,12 +95,13 @@ namespace JungleMaze.EditorTools
             var r = (RectTransform)v.transform;
             Logo(r, 360, 48, 560, 140);
             Set(v, "join", Btn(r, "Join", "Vào phòng", 490, 208, 300, true));
-            Set(v, "rooms", Btn(r, "Rooms", "Tạo phòng", 490, 264, 300));
-            Set(v, "history", Btn(r, "History", "Lịch sử", 490, 320, 300));
-            Set(v, "leaderboard", Btn(r, "Leaderboard", "Bảng xếp hạng", 490, 376, 300));
-            Set(v, "settings", Btn(r, "Settings", "Cài đặt", 490, 432, 300));
-            Set(v, "quit", Btn(r, "Quit", "Thoát", 490, 488, 300, false, true));
-            Set(v, "apiStatus", Txt(r, "ApiStatus", "", 390, 548, 500, 28, 15, TextAlignmentOptions.Center, P.Muted));
+            Set(v, "offlinePractice", Btn(r, "OfflinePractice", "Luyện tập offline", 490, 260, 300));
+            Set(v, "rooms", Btn(r, "Rooms", "Tạo phòng", 490, 312, 300));
+            Set(v, "history", Btn(r, "History", "Lịch sử", 490, 364, 300));
+            Set(v, "leaderboard", Btn(r, "Leaderboard", "Bảng xếp hạng", 490, 416, 300));
+            Set(v, "settings", Btn(r, "Settings", "Cài đặt", 490, 468, 300));
+            Set(v, "quit", Btn(r, "Quit", "Thoát", 490, 520, 300, false, true));
+            Set(v, "apiStatus", Txt(r, "ApiStatus", "", 390, 576, 500, 28, 15, TextAlignmentOptions.Center, P.Muted));
             var card = Block(r, "AccountCard", 920, 24, 336, 72);
             Set(v, "accountStatus", Txt(card, "Status", "Đã đăng nhập", 16, 10, 140, 18, 13, TextAlignmentOptions.Left, P.Muted));
             Set(v, "accountName", Txt(card, "Username", "", 16, 30, 140, 28, 18, TextAlignmentOptions.Left, P.Yellow));
@@ -151,7 +153,7 @@ namespace JungleMaze.EditorTools
             Txt(b, "NameLabel", "Tên hiển thị", 32, 84, 496, 22, 15, TextAlignmentOptions.Left, P.Muted);
             Set(v, "displayName", Input(b, "DisplayName", "Tên của bạn (1–32 ký tự)", 32, 110, 496));
             Set(v, "nameError", Txt(b, "NameError", "", 32, 158, 496, 22, 14, TextAlignmentOptions.Left, P.Red));
-            Txt(b, "CodeLabel", "Mã phòng (6 ký tự)", 32, 190, 496, 22, 15, TextAlignmentOptions.Left, P.Muted);
+            Txt(b, "CodeLabel", "Mã phòng (phòng mới: 6 ký tự)", 32, 190, 496, 22, 15, TextAlignmentOptions.Left, P.Muted);
             var code = Input(b, "RoomCode", "VD: K7M2Q9", 32, 216, 496);
             code.textComponent.font = NumberFont;
             code.textComponent.fontSize = 24;
@@ -195,7 +197,9 @@ namespace JungleMaze.EditorTools
             var r = (RectTransform)v.transform;
             Set(v, "apiStatus", Txt(r, "ApiStatus", "", 440, 588, 400, 24, 14, TextAlignmentOptions.Center, P.Yellow));
             Set(v, "retry", Btn(r, "Retry", "Thử lại", 440, 620, 192));
-            Set(v, "devSkip", Btn(r, "DevSkip", "Bỏ qua đăng nhập (dev)", 648, 620, 192, false, true));
+            var offlinePracticeBtn = Btn(r, "OfflinePractice", "Luyện tập offline", 648, 620, 192, false, true);
+            Set(v, "offlinePractice", offlinePracticeBtn);
+            Set(v, "devSkip", offlinePracticeBtn);
             return v;
         }
 

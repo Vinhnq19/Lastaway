@@ -26,6 +26,7 @@ namespace JungleMaze.App.Hud
         public string DisplayName(string itemId)
         {
             if (string.IsNullOrEmpty(itemId)) return "";
+            if (itemId == "AMMO") return "Ammo"; // Shared world pickup, not a weapon/equipment definition.
             if (_balance.TryGetWeapon(itemId, out var weapon)) return weapon.DisplayName;
             if (_balance.TryGetEquipment(itemId, out var equipment)) return equipment.DisplayName;
             WarnOnce(itemId);

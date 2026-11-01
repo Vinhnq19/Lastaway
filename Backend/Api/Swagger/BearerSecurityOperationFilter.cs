@@ -10,7 +10,7 @@ public sealed class BearerSecurityOperationFilter : IOperationFilter
     {
         var metadata = context.ApiDescription.ActionDescriptor.EndpointMetadata;
         var path=context.ApiDescription.RelativePath?.Split('?')[0];
-        if(path is "api/game-tickets" or "api/me/matches")
+        if(path is "api/me/matches")
         {
             // Separate requirements mean OR. Guest authentication does not authorize RoomsController.
             operation.Security=new List<OpenApiSecurityRequirement> {

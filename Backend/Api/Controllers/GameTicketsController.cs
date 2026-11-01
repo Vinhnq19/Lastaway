@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Api.Controllers;
 
 [ApiController]
-[AllowAnonymous]
+[Authorize]
 [Route("api/game-tickets")]
 public sealed class GameTicketsController(
     IdentityResolver identityResolver,
@@ -19,7 +19,7 @@ public sealed class GameTicketsController(
 {
     /// <summary>Cấp vé vào game 1 lần (One-use Game Ticket) có thời hạn 30 giây.</summary>
     /// <remarks>
-    /// Xác thực qua JWT Bearer (account:sub) HOẶC header X-Guest-Credential (guest:uuid).
+    /// Bắt buộc JWT Bearer account hợp lệ; Guest không được cấp vé chơi mới.
     /// Vé được đăng ký đồng bộ với GameServer trước khi trả về client.
     /// Không gửi JWT hoặc credential dài hạn qua kết nối gameplay UDP.
     /// </remarks>
@@ -34,7 +34,10 @@ public sealed class GameTicketsController(
         [FromBody] GameTicketRequest request,
         CancellationToken cancellationToken)
     {
+        if (User.Identity?.IsAuthenticated != true) return Unauthorized(new { error = "AccountRequired" });
         var identity = await identityResolver.ResolveAsync(HttpContext, cancellationToken);
+        if (identity.IsGuest || !identity.ProfileKey.StartsWith("account:", StringComparison.Ordinal))
+            return Unauthorized(new { error = "AccountRequired" });
         if (identity.Error == "HttpsRequired")
         {
             return BadRequest(new { error = "HttpsRequired", message = "HTTPS is required except on loopback." });

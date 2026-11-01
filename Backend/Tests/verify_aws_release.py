@@ -53,16 +53,17 @@ def main():
         client = json.load(bundle.extractfile(files['client.aws.json']))
         assert client['gameServerHost'] == manifest['domain'] and manifest['domain'].endswith('.duckdns.org')
         assert client['apiBaseUrl'] == 'https://' + manifest['domain']
+        assert client['protocolVersion'] == 4
         if 'client.aws-auto.json' in files:
             auto=json.load(bundle.extractfile(files['client.aws-auto.json']))
-            assert auto['transport']=='Auto' and auto['protocolVersion']==2 and auto['webSocketUrl']=='wss://'+manifest['domain']+'/game'
+            assert auto['transport']=='Auto' and auto['protocolVersion']==4 and auto['webSocketUrl']=='wss://'+manifest['domain']+'/game'
             proxy=bundle.extractfile(files['Caddyfile']).read().decode()
             assert 'handle /game' in proxy and 'reverse_proxy game-server:7781' in proxy
             compose=bundle.extractfile(files['compose.aws.yaml']).read().decode()
             assert 'WS_ENABLED:' in compose and ':7781:7781' not in compose
         if 'client.phase2-aws.json' in files:
             unity=json.load(bundle.extractfile(files['client.phase2-aws.json']))
-            assert unity['protocolVersion']==3 and unity['transport']=='Auto'
+            assert unity['protocolVersion']==4 and unity['transport']=='Auto'
             assert unity['apiBaseUrl']=='https://'+manifest['domain']
             assert unity['webSocketUrl']=='wss://'+manifest['domain']+'/game'
         # Đọc archive docker save bên trong, không extract filesystem hoặc giữ thêm bản 500MB.

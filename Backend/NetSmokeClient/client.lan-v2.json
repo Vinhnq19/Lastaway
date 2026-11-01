@@ -3,7 +3,8 @@
   "gameServerHost": "192.168.1.20",
   "gameServerPort": 7777,
   "authMode": "RoomCode",
-  "protocolVersion": 2,
+  "protocolVersion": 4,
   "connectTimeoutMs": 5000,
-  "transport": "Udp"
+  "transport": "Udp",
+  "apiBaseUrl": "https://YOUR-SELFHOST.duckdns.org"
 }

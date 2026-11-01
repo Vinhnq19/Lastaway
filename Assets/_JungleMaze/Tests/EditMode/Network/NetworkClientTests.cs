@@ -16,6 +16,14 @@ namespace JungleMaze.Tests.Network
     /// <summary>NetworkClient thật ↔ FakeGameServer trên loopback; mỗi test tự poll cả hai phía ở main thread.</summary>
     public sealed class NetworkClientTests
     {
+        [TestCase("MatchInProgress", DisconnectReason.MatchInProgress)]
+        [TestCase("LoadingTimeout", DisconnectReason.LoadingTimeout)]
+        public void ServerLifecycleFailureHasSpecificUiMessage(string wire, DisconnectReason expected)
+        {
+            Assert.AreEqual(expected, DisconnectReasons.FromServer(wire));
+            Assert.AreNotEqual(DisconnectReasons.Describe(DisconnectReason.Unknown), DisconnectReasons.Describe(expected));
+        }
+
         private FakeGameServer _server;
         private EventBus _bus;
         private NetworkClient _client;
@@ -59,6 +67,45 @@ namespace JungleMaze.Tests.Network
         {
             _client.Connect(new ConnectRequest(Config(_server.Port, version), "ROOM42", "Tester"));
             Assert.IsTrue(Pump(() => _client.State == NetworkState.Joined), $"Không Joined, state={_client.State} reason={_client.LastReason}");
+        }
+
+        [Test]
+        public void AccountV4_AwaitsTicketAndSendsOnlyShortBearer()
+        {
+            _client.Dispose();
+            var pending = new System.Threading.Tasks.TaskCompletionSource<string>();
+            Guid issuedAttempt = Guid.Empty;
+            _client = new NetworkClient(_bus, new PacketRegistry(), ticketIssuer: (request, attempt) =>
+            { issuedAttempt = attempt; Assert.AreEqual("account-jwt-fixture", request.AccessToken); return pending.Task; });
+            _client.Connect(new ConnectRequest(Config(_server.Port, version: 4, api: "http://127.0.0.1:5000"), "ROOM42", "Account", "account-jwt-fixture"));
+            _client.Tick(.016f); _server.Poll();
+            Assert.AreEqual(0, _client.LocalPort, "No socket before ticket verification");
+            var ticket = new string('a', 64); pending.SetResult(ticket);
+            Assert.IsTrue(Pump(() => _client.State == NetworkState.Joined));
+            Assert.AreEqual(issuedAttempt, _server.LastRequest.AttemptId);
+            Assert.AreEqual(ticket, _server.LastRequest.Ticket);
+            Assert.IsNull(_server.ReceivedToken, "JWT must not be sent through gameplay transport");
+        }
+
+        [Test]
+        public void AccountV4_CancelWhileIssuingDoesNotConnectLater()
+        {
+            _client.Dispose();
+            var pending = new System.Threading.Tasks.TaskCompletionSource<string>();
+            _client = new NetworkClient(_bus, new PacketRegistry(), ticketIssuer: (_, __) => pending.Task);
+            _client.Connect(new ConnectRequest(Config(_server.Port, version: 4, api: "http://127.0.0.1:5000"), "ROOM42", "Account", "jwt-fixture"));
+            _client.Disconnect(); pending.SetResult(new string('b', 64));
+            _client.Tick(.016f); _server.Poll();
+            Assert.AreEqual(NetworkState.Disconnected, _client.State);
+            Assert.IsNull(_server.LastRequest);
+        }
+
+        [Test]
+        public void AccountV4_MissingLoginFailsBeforeTransport()
+        {
+            _client.Connect(new ConnectRequest(Config(_server.Port, version: 4, api: "http://127.0.0.1:5000"), "ROOM42", "Account"));
+            Assert.AreEqual(DisconnectReason.AuthenticationRequired, _client.LastReason);
+            Assert.AreEqual(0, _client.LocalPort);
         }
 
         [Test]

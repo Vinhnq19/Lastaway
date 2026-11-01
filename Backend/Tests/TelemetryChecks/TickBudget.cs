@@ -31,7 +31,7 @@ public static partial class TickBudget
         var (map, zone, _) = MatchFlowChecks.LoadData();
         var profile = new MatchProfile
         {
-            Version = "1.0.0", Name = "test", ConfigHash = GameDataLoader.DataHash, MinPlayers = 2, MaxPlayers = 10,
+            Version = map.Version, Name = "test", ConfigHash = GameDataLoader.DataHash, MinPlayers = 2, MaxPlayers = 10,
             LobbyDurationSeconds = 0.1, LoadingTimeoutSeconds = 5, DisconnectGraceSeconds = 15, EndingDurationSeconds = 1,
             TargetMatchDurationSeconds = 420, ZoneTimeScale = 1, PlayerSpeed = 4, PlayerRadius = 0.4f, PlayerHp = 100, InputStaleMs = 250
         };

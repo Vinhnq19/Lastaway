@@ -13,6 +13,7 @@ namespace JungleMaze.App.Network
         public string DisplayName;
         public string Username;
         public string Password;
+        public string AccessToken;
     }
 
     /// <summary>
@@ -41,14 +42,18 @@ namespace JungleMaze.App.Network
         {
             if (IsLoggingIn) return Error("Đang đăng nhập, chờ một chút.");
             var config = _config.Current;
+            if (config != null && !string.IsNullOrWhiteSpace(form.AccessToken))
+                config = new JungleMaze.App.Config.ClientConfig(config.Mode, config.ApiBaseUrl, config.GameServerHost,
+                    config.GameServerPort, JoinAuthMode.RoomCode, NetworkProtocol.Version4, config.ConnectTimeoutMs,
+                    config.Transport, config.Source, config.WebSocketUrl, config.WorldEnabled);
             var invalid = config?.Validate();
             if (config == null || invalid != null) return Error(invalid ?? "Chưa có config.");
             if (string.IsNullOrWhiteSpace(form.RoomCode)) return Error("Nhập mã phòng.");
             if (string.IsNullOrWhiteSpace(form.DisplayName)) return Error("Nhập tên hiển thị.");
 
-            if (config.AuthMode != JoinAuthMode.Jwt)
+            if (config.AuthMode != JoinAuthMode.Jwt || !string.IsNullOrWhiteSpace(form.AccessToken))
             {
-                _network.Connect(new ConnectRequest(config, form.RoomCode.Trim(), form.DisplayName.Trim()));
+                _network.Connect(new ConnectRequest(config, form.RoomCode.Trim(), form.DisplayName.Trim(), form.AccessToken));
                 return null;
             }
 

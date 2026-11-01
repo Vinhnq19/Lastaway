@@ -22,6 +22,7 @@ public sealed class SmokeSession : IDisposable
     private readonly string _roomCode;
     private readonly string _displayName;
     private readonly string? _accessToken;
+    private string _ticket = "";
     private bool _authSent;
     private readonly long _pingInterval;
     private readonly bool _quiet;
@@ -122,20 +123,29 @@ public sealed class SmokeSession : IDisposable
             if (!_quiet) Console.WriteLine(FormattableString.Invariant($"[client {Number}] Pong sequence={sequence} rttMs={rtt:F2}"));
     }
 
+    public async Task StartAsync(CancellationToken cancellation = default)
+    {
+        if (_options.ProtocolVersion == NetworkProtocol.Version4)
+            _ticket = await NetSmokeClient.Services.AccountLogin.TicketAsync(_options, _attemptId, _roomCode, _accessToken, cancellation);
+        Start();
+    }
+
     public void Start()
     {
+        if (_options.ProtocolVersion == NetworkProtocol.Version4 && string.IsNullOrEmpty(_ticket))
+            throw new InvalidOperationException("Protocol v4 requires StartAsync and an authenticated account.");
         _routeStarted = Stopwatch.GetTimestamp();
         if (_options.Transport == "Wss") { StartWebSocket(); return; }
         if (!_manager.Start()) throw new InvalidOperationException("Không mở được socket client.");
         _peer = _manager.Connect(_options.GameServerHost, _options.GameServerPort,
-            NetworkProtocol.WriteConnect(_options.JoinMode, _roomCode, _displayName, (ushort)_options.ProtocolVersion, _attemptId));
+            NetworkProtocol.WriteConnect(_options.JoinMode, _roomCode, _displayName, (ushort)_options.ProtocolVersion, _attemptId, ticket: _ticket));
     }
 
     private void StartWebSocket()
     {
         _selectedTransport = "Wss"; _routeStarted = Stopwatch.GetTimestamp();
         _webSocket = new(new Uri(_options.WebSocketUrl!),
-            NetworkProtocol.WriteConnect(_options.JoinMode, _roomCode, _displayName, (ushort)_options.ProtocolVersion, _attemptId).CopyData(),_options.WebSocketConnectIp);
+            NetworkProtocol.WriteConnect(_options.JoinMode, _roomCode, _displayName, (ushort)_options.ProtocolVersion, _attemptId, ticket: _ticket).CopyData(),_options.WebSocketConnectIp);
     }
     private void Send(byte[] packet, bool reliable)
     {

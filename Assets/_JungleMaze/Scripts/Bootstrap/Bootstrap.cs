@@ -77,7 +77,9 @@ namespace JungleMaze.Composition
             var config = new FileConfigProvider(Application.streamingAssetsPath, Application.persistentDataPath,
                 Environment.GetCommandLineArgs(), Environment.GetEnvironmentVariable, _log);
             var packets = new PacketRegistry();
-            var network = new NetworkClient(bus, packets, _log);
+            var history = new GuestHistoryClient(new GuestCredentialStore(Application.persistentDataPath), () => config.Current.ApiBaseUrl);
+            var network = new NetworkClient(bus, packets, _log, ticketIssuer: (request, attempt) =>
+                history.AccountTicketAsync(request.Config.ApiBaseUrl, attempt, request.RoomCode, request.AccessToken));
             var tickRunner = gameObject.AddComponent<TickRunner>();
             tickRunner.SetLog(_log);
             var pool = new PoolService(_injector, _log, transform);
@@ -89,7 +91,6 @@ namespace JungleMaze.Composition
             _registry.Register<INetworkClient>(network);
             _registry.Register<IMatchConnection>(network);
             _registry.Register<IClientRuntimeData>(new ClientRuntimeData(Application.streamingAssetsPath));
-            var history = new GuestHistoryClient(new GuestCredentialStore(Application.persistentDataPath));
             _registry.Register<IPlayerHistory>(history);
             _registry.Register<IPacketSender>(network);
             _registry.Register<IPacketReceiver>(network);
@@ -175,7 +176,7 @@ namespace JungleMaze.Composition
             _registry.Register(remote);
             _registry.Register<IPlayerPoseSource>(new PlayerPoseSource(match, remote));
             var movementLog = new MovementTelemetry(match, network, remote, _log);
-            _registry.Register(new GuestHistoryCoordinator(config, network, history, match, bus));
+            // Account identity is authenticated before transport join; no automatic Guest creation.
 
             // Presentation (presenter đăng ký trước GameFlow để nhận AppScreenChanged ngay từ Boot)
             _registry.Register(new ConnectionMenuPresenter(config, connect, network, flow, bus, match.Leave, offlineSession));

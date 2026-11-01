@@ -35,6 +35,7 @@ public sealed partial class SessionHub
         public JoinRequest Request = request;
         public Session? Current;
         public string? PlayerId;
+        public string? ProfileKey;
         public bool WssChosen;
         public bool Committed;
         public long RetiredAt;
@@ -260,6 +261,7 @@ public sealed partial class SessionHub
         // Gameplay identity attachment via single-use registered ticket
         _gameplayRegistry.Subscribe<AttachIdentityPacket, Session>((packet, session) =>
         {
+            if (_options.RequireAccountTickets || session.Request.Version == NetworkProtocol.Version4) return;
             if (string.IsNullOrEmpty(packet.Ticket)) return;
             if (!_tickets.TryGetValue(packet.Ticket, out var ticket)) return;
             if (DateTimeOffset.UtcNow >= ticket.ExpiresUtc || session.Request.AttemptId == Guid.Empty || session.Request.AttemptId != ticket.AttemptId) return;
@@ -377,6 +379,9 @@ public sealed partial class SessionHub
         if (string.IsNullOrEmpty(command.ProfileKey) || command.ProfileKey.Length > 80 || command.ProfileKey.Any(char.IsControl))
             return new(400, new RoomError("InvalidProfileKey"));
 
+        if (_options.RequireAccountTickets && (!command.ProfileKey.StartsWith("account:", StringComparison.Ordinal)
+            || command.ProfileKey.Length <= 8 || command.Ticket.Length != 64 || !command.Ticket.All(Uri.IsHexDigit)))
+            return new(400, new RoomError("AccountRequired"));
         var utc = DateTimeOffset.UtcNow;
         if (command.ExpiresUtc <= utc || command.ExpiresUtc > utc.AddSeconds(35)) return new(400, new RoomError("InvalidTicketExpiry"));
         if (_tickets.ContainsKey(command.Ticket)) return new(409, new RoomError("TicketAlreadyRegistered"));
@@ -398,12 +403,32 @@ public sealed partial class SessionHub
         return new(200, new { status = "registered" });
     }
 
+    private bool TryTicketProfile(JoinRequest request, out string? profile)
+    {
+        profile = null;
+        if (request.Version != NetworkProtocol.Version4) return !_options.RequireAccountTickets;
+        // A transferred, uncommitted attempt reuses its consumed ticket and its one existing slot.
+        if (_attempts.TryGetValue(request.AttemptId, out var attempt))
+        {
+            if (attempt.Request != request || attempt.Committed) return false;
+            profile = attempt.ProfileKey;
+            return profile?.StartsWith("account:", StringComparison.Ordinal) == true;
+        }
+        if (request.Ticket.Length != 64 || !_tickets.TryGetValue(request.Ticket, out var ticket)
+            || ticket.ExpiresUtc <= DateTimeOffset.UtcNow || ticket.AttemptId != request.AttemptId
+            || !string.Equals(ticket.RoomCode, request.RoomCode, StringComparison.Ordinal)
+            || !ticket.ProfileKey.StartsWith("account:", StringComparison.Ordinal)) return false;
+        profile = ticket.ProfileKey;
+        return true;
+    }
+
     public string? Validate(JoinRequest request, string transport)
     {
         var invalid = _handshake.ValidateRequest(request);
         if (invalid is not null) return invalid;
-        if (request.Version is (NetworkProtocol.LatestVersion or NetworkProtocol.Version3) && request.AttemptId == Guid.Empty) return "MalformedRequest";
-        if (transport == "Wss" && request.Version is not (NetworkProtocol.LatestVersion or NetworkProtocol.Version3)) return "UnsupportedVersion";
+        if (!TryTicketProfile(request, out var profile)) return "InvalidTicket";
+        if (request.Version is (NetworkProtocol.LatestVersion or NetworkProtocol.Version3 or NetworkProtocol.Version4) && request.AttemptId == Guid.Empty) return "MalformedRequest";
+        if (transport == "Wss" && request.Version is not (NetworkProtocol.LatestVersion or NetworkProtocol.Version3 or NetworkProtocol.Version4)) return "UnsupportedVersion";
         var room = Rooms.Find(request.RoomCode);
         if (room is null) return "InvalidRoomCode";
 
@@ -426,7 +451,9 @@ public sealed partial class SessionHub
             if (room.Match.Phase != MatchPhase.InGame)
                 return "InvalidResumeToken";
 
-            if (!room.Match.IsValidResumeToken(request.ResumeToken, out _))
+            if (!room.Match.IsValidResumeToken(request.ResumeToken, out var resumeEntity) || resumeEntity is null
+                || !_heldSessions.TryGetValue(resumeEntity.PlayerSessionId, out var held)
+                || request.Version == NetworkProtocol.Version4 && !string.Equals(held.ProfileKey, profile, StringComparison.Ordinal))
                 return "InvalidResumeToken";
 
             // Valid resume: slot already reserved/held, bypass capacity check
@@ -441,8 +468,7 @@ public sealed partial class SessionHub
 
         if (request.AttemptId != Guid.Empty && _attempts.TryGetValue(request.AttemptId, out var previous))
         {
-            if (previous.Request.RoomCode != request.RoomCode || previous.Request.DisplayName != request.DisplayName
-                || previous.Request.Mode != request.Mode || previous.Committed || previous.WssChosen || transport != "Wss")
+            if (previous.Request != request || previous.Committed || previous.WssChosen || transport != "Wss")
                 return "AttemptUsed";
             if (previous.Current is not null) return null; // Transfer same slot
         }
@@ -456,6 +482,7 @@ public sealed partial class SessionHub
         var invalid = Validate(request, peer.Transport);
         if (invalid is not null) { Reject(peer, invalid); return false; }
         var room = Rooms.Find(request.RoomCode)!;
+        if (!TryTicketProfile(request, out var profile)) { Reject(peer, "InvalidTicket"); return false; }
 
         // Check if resuming an existing held session
         if (request.ResumeToken != Guid.Empty && room.Match.IsValidResumeToken(request.ResumeToken, out var resumeEntity) && resumeEntity != null)
@@ -466,6 +493,7 @@ public sealed partial class SessionHub
             { _heldSessions[heldSession.PlayerId!] = heldSession; Reject(peer, "InvalidResumeToken"); return false; }
             if (heldSession.Request.AttemptId != Guid.Empty && _attempts.TryGetValue(heldSession.Request.AttemptId, out var oldAttempt))
             { oldAttempt.Current = null; oldAttempt.RetiredAt = Stopwatch.GetTimestamp(); }
+            if (request.Version == NetworkProtocol.Version4) _tickets.Remove(request.Ticket);
             heldSession.Peer = peer;
             heldSession.Request = request;
             heldSession.LastMessage = Stopwatch.GetTimestamp();
@@ -473,7 +501,7 @@ public sealed partial class SessionHub
             _sessions.Add(peer, heldSession);
             _users[heldSession.PlayerId!] = heldSession;
             _attempts[request.AttemptId] = new(request) { Current = heldSession, PlayerId = heldSession.PlayerId,
-                WssChosen = peer.Transport == "Wss", ResumeMatchId = room.Match.MatchId };
+                WssChosen = peer.Transport == "Wss", ResumeMatchId = room.Match.MatchId, ProfileKey = profile };
             return true;
         }
 
@@ -500,10 +528,11 @@ public sealed partial class SessionHub
             return true;
         }
         var playerId = attempt?.PlayerId ?? (_options.Mode == JoinAuthMode.RoomCode ? Guid.NewGuid().ToString() : null);
-        var session = new Session(++_nextId, peer, request, room, playerId);
+        var session = new Session(++_nextId, peer, request, room, playerId) { ProfileKey = profile };
         _sessions.Add(peer, session);
         Rooms.Reserve(room, session.Id, playerId is not null);
-        if (attempt is not null) { attempt.Current = session; attempt.PlayerId = playerId; }
+        if (request.Version == NetworkProtocol.Version4) _tickets.Remove(request.Ticket);
+        if (attempt is not null) { attempt.Current = session; attempt.PlayerId = playerId; attempt.ProfileKey = profile; }
         if (playerId is not null && _options.Mode == JoinAuthMode.Jwt) _users[playerId] = session;
         return true;
     }

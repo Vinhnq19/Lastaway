@@ -37,7 +37,7 @@ Environment.SetEnvironmentVariable("MATCH_PROFILE", "test");
 var testProfile = MatchProfile.CreateTestProfile();
 
 // Helper to create valid MapData and ZoneSchedule
-var map = new MapData();
+var map = new MapData { Version = testProfile.Version };
 for (var i = 0; i < 10; i++)
 {
     var angle = i * MathF.PI * 2f / 10f;
@@ -49,7 +49,7 @@ map.Obstacles.Add(new AABB("BoulderRock", 28.0f, 32.0f, 23.0f, 27.0f));
 map.Obstacles.Add(new AABB("CityWall", 24.5f, 25.5f, 26.0f, 30.0f));
 map.Validate();
 
-var zoneSchedule = new ZoneSchedule();
+var zoneSchedule = new ZoneSchedule { Version = testProfile.Version };
 zoneSchedule.Intervals.Add(new ZoneInterval { Index = 1, StartSecond = 90, EndSecond = 97, StartRadius = 25, EndRadius = 18 });
 zoneSchedule.Intervals.Add(new ZoneInterval { Index = 2, StartSecond = 182, EndSecond = 188, StartRadius = 18, EndRadius = 12 });
 zoneSchedule.Intervals.Add(new ZoneInterval { Index = 3, StartSecond = 268, EndSecond = 273, StartRadius = 12, EndRadius = 7 });

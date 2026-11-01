@@ -57,6 +57,7 @@ public static class Program
         TestGuestCredentialCryptography();
         TestProfileKeySeparationAndOwnerIsolation();
         TestOneUseGameTicketsAndSessionBinding();
+        TestMandatoryAccountHandshake();
         TestForbidRelinkingDuringLoadingAndInGame();
         TestCannotOverwriteDifferentProfile();
         TestCanonicalMatchHasherAndParticipantNormalization();
@@ -212,6 +213,80 @@ public static class Program
             "Entity has correct displayName");
 
         hub.CloseAll();
+    }
+
+    private static void TestMandatoryAccountHandshake()
+    {
+        var options = new ServerOptions(IPAddress.Loopback, 7777, 10, 30, 1, "RoomCode", "TEST01", RequireAccountTickets: true);
+        var hub = new SessionHub(options, new ServerMetrics());
+        var attempt = Guid.NewGuid();
+        var bearer = new string('a', 64);
+        var request = new JoinRequest(NetworkProtocol.Version4, JoinAuthMode.RoomCode, "TEST01", "AccountPlayer", attempt, Ticket: bearer);
+        Check(hub.Validate(request with { Version = 3 }, "Udp") == "AuthRequired", "Old RoomCode client cannot bypass mandatory account");
+        Check(hub.Validate(request, "Udp") == "InvalidTicket" && hub.ReservedPeers == 0, "Unregistered bearer cannot reserve slot");
+        Check(hub.RegisterTicket(new(bearer, attempt, "TEST01", "guest:old", DateTimeOffset.UtcNow.AddSeconds(30))).Status == 400, "Guest ticket rejected by production session hub");
+        Check(hub.RegisterTicket(new(bearer, attempt, "TEST01", "account:owner", DateTimeOffset.UtcNow.AddSeconds(30))).Status == 200, "Account ticket registered");
+        Check(hub.Validate(request with { AttemptId = Guid.NewGuid() }, "Udp") == "InvalidTicket", "Ticket bound to attempt");
+        Check(hub.Validate(request with { RoomCode = "OTHER" }, "Udp") == "InvalidTicket", "Ticket bound to room");
+        var udp = new FakeGamePeer("Udp");
+        Check(hub.Join(request, udp) && hub.PendingTickets == 0 && hub.ReservedPeers == 1, "Verified v4 join consumes one ticket and one slot");
+        hub.Connected(udp);
+        Check(hub.Validate(request with { DisplayName = "Impostor" }, "Wss") == "InvalidTicket", "Fallback cannot change request identity");
+        var ws = new FakeGamePeer("Wss");
+        Check(hub.Join(request, ws) && hub.ReservedPeers == 1 && udp.LastCloseReason == "TransportSwitched", "UDP to WSS transfers same consumed ticket and slot");
+        hub.Connected(ws);
+        Check(hub.Validate(request, "Udp") != null, "Late UDP cannot revive transferred attempt");
+        Check(hub.Validate(request with { AttemptId = Guid.NewGuid() }, "Wss") == "InvalidTicket", "Consumed ticket cannot be replayed for another attempt");
+        var hello = new ClientHelloPacket { ProtocolVersion = MatchProtocol.Version, Ready = true };
+        var writer = new NetDataWriter(); new PacketRegistry().WriteFrame(writer, ref hello);
+        hub.Receive(ws, writer.CopyData(), true, true);
+        Check(!hub.Rooms.Find("TEST01")!.Match.TryAttachProfile(ws.LastSentSessionId!, "account:impostor"), "Verified account attached before roster readiness");
+        Check(hub.Validate(request, "Wss") != null, "Committed attempt cannot fallback again");
+        hub.Disconnect(ws);
+        Check(hub.ReservedPeers == 0, "Disconnect returns v4 slot");
+        hub.CloseAll();
+        var expired = new string('b', 64);
+        Check(hub.RegisterTicket(new(expired, Guid.NewGuid(), "TEST01", "account:owner", DateTimeOffset.UtcNow.AddSeconds(-1))).Status == 400, "Expired ticket cannot be registered");
+        var timedAttempt = Guid.NewGuid();
+        var timedRequest = request with { AttemptId = timedAttempt, Ticket = expired };
+        Check(hub.RegisterTicket(new(expired, timedAttempt, "TEST01", "account:owner", DateTimeOffset.UtcNow.AddMilliseconds(50))).Status == 200, "Near-expiry ticket registered");
+        Thread.Sleep(75);
+        Check(hub.Validate(timedRequest, "Udp") == "InvalidTicket", "Ticket expiring after registration cannot join");
+        var fresh = request with { AttemptId = Guid.NewGuid(), Ticket = new string('c',64) };
+        hub.RegisterTicket(new(fresh.Ticket, fresh.AttemptId, "TEST01", "account:owner", DateTimeOffset.UtcNow.AddSeconds(30)));
+        var lostUdp = new FakeGamePeer("Udp"); hub.Join(fresh,lostUdp); hub.Connected(lostUdp); hub.Disconnect(lostUdp);
+        Check(hub.Join(fresh,new FakeGamePeer("Wss")) && hub.ReservedPeers == 1, "Consumed v4 ticket may finish one uncommitted fallback after UDP release");
+        hub.CloseAll();
+        var previousProfile=Environment.GetEnvironmentVariable("MATCH_PROFILE");
+        Environment.SetEnvironmentVariable("MATCH_PROFILE","test");
+        try
+        {
+            var resumedHub=new SessionHub(options,new ServerMetrics());
+            var peers=new List<FakeGamePeer>();
+            for(var i=0;i<2;i++)
+            {
+                var req=request with{AttemptId=Guid.NewGuid(),Ticket=new string((char)('d'+i),64)};
+                resumedHub.RegisterTicket(new(req.Ticket,req.AttemptId,"TEST01","account:owner"+i,DateTimeOffset.UtcNow.AddSeconds(30)));
+                var peer=new FakeGamePeer("Udp"); peers.Add(peer); resumedHub.Join(req,peer);resumedHub.Connected(peer);
+                var helloFrame=new NetDataWriter();new PacketRegistry().WriteFrame(helloFrame,ref hello);resumedHub.Receive(peer,helloFrame.CopyData(),true,true);
+            }
+            var match=resumedHub.Rooms.Find("TEST01")!.Match;
+            for(var i=0;i<20;i++)resumedHub.Tick(1d/30);
+            foreach(var peer in peers) match.SetPlayerLoaded(peer.LastSentSessionId!,match.MatchId);
+            resumedHub.Tick(1d/30);
+            Check(match.Phase==MatchPhase.InGame,"Account resume fixture enters match");
+            match.Entities.TryGetBySession(peers[0].LastSentSessionId!,out var entity);
+            var proof=entity!.ResumeToken;resumedHub.Disconnect(peers[0]);
+            var resume=request with{AttemptId=Guid.NewGuid(),ResumeToken=proof,Ticket=new string('f',64)};
+            resumedHub.RegisterTicket(new(resume.Ticket,resume.AttemptId,"TEST01","account:attacker",DateTimeOffset.UtcNow.AddSeconds(30)));
+            Check(resumedHub.Validate(resume,"Udp")=="InvalidResumeToken"&&entity.ResumeToken==proof&&resumedHub.ReservedPeers==2,"Different account cannot claim character or rotate proof");
+            resume=resume with{Ticket=new string('1',64)};
+            resumedHub.RegisterTicket(new(resume.Ticket,resume.AttemptId,"TEST01","account:owner0",DateTimeOffset.UtcNow.AddSeconds(30)));
+            Check(resumedHub.Join(resume,new FakeGamePeer("Wss"))&&entity.ResumeToken!=proof&&resumedHub.ReservedPeers==2,"Same account with fresh ticket and resume proof keeps one held slot");
+            resumedHub.CloseAll();
+        }
+        finally {Environment.SetEnvironmentVariable("MATCH_PROFILE",previousProfile);}
+
     }
 
     /// <summary>
@@ -762,7 +837,7 @@ public static class Program
 
     private static MapData CreateValidMapData()
     {
-        var map = new MapData();
+        var map = new MapData { Version = MatchProfile.CreateTestProfile().Version };
         for (var i = 0; i < 10; i++)
         {
             var angle = i * MathF.PI * 2f / 10f;

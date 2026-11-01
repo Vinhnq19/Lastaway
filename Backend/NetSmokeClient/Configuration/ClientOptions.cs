@@ -54,12 +54,12 @@ public sealed class ClientOptions
             throw new ArgumentException("gameServerPort phải nằm trong [1, 65535].");
         if (options.AuthMode is not ("RoomCode" or "Jwt"))
             throw new ArgumentException("authMode phải là RoomCode hoặc Jwt, khớp server.");
-        if (options.ProtocolVersion is not (NetworkProtocol.Version or NetworkProtocol.LatestVersion))
-            throw new ArgumentException("protocolVersion chỉ hỗ trợ 1 hoặc 2.");
+        if (options.ProtocolVersion is not (NetworkProtocol.Version or NetworkProtocol.LatestVersion or NetworkProtocol.Version3 or NetworkProtocol.Version4))
+            throw new ArgumentException("protocolVersion chỉ hỗ trợ 1, 2, 3 hoặc 4.");
         if (options.Transport is not ("Udp" or "Wss" or "Auto")) throw new ArgumentException("transport phải Udp, Wss hoặc Auto.");
         if (options.Transport != "Udp")
         {
-            if (options.ProtocolVersion != NetworkProtocol.LatestVersion) throw new ArgumentException("Wss/Auto cần protocolVersion=2.");
+            if (options.ProtocolVersion < NetworkProtocol.LatestVersion) throw new ArgumentException("Wss/Auto cần protocolVersion >= 2.");
             if (!Uri.TryCreate(options.WebSocketUrl, UriKind.Absolute, out var ws) || ws.Scheme is not ("ws" or "wss")
                 || !string.IsNullOrEmpty(ws.UserInfo) || !string.IsNullOrEmpty(ws.Query) || !string.IsNullOrEmpty(ws.Fragment)
                 || ws.AbsolutePath != "/game" || ws.Scheme == "ws" && !ws.IsLoopback)
@@ -73,7 +73,8 @@ public sealed class ClientOptions
         if (options.ConnectTimeoutMs is < 500 or > 60000)
             throw new ArgumentException("connectTimeoutMs phải nằm trong [500, 60000].");
         // Chỉ kiểm tra API khi bật account; RoomCode hoạt động độc lập API/DB.
-        if (options.AuthMode == "Jwt") options.ValidateApiUrl();
+        if (options.ProtocolVersion == NetworkProtocol.Version4 && options.AuthMode != "RoomCode") throw new ArgumentException("Protocol v4 requires RoomCode mode and account tickets.");
+        if (options.AuthMode == "Jwt" || options.ProtocolVersion == NetworkProtocol.Version4) options.ValidateApiUrl();
         return options;
     }
 

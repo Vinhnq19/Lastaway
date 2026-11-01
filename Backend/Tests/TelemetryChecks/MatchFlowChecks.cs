@@ -165,7 +165,7 @@ public static class MatchFlowChecks
                 && !trailer.GetProperty("truncated").GetBoolean(),
             $"{label}: _trailer.written = {records.Count}, nothing dropped or truncated");
         c.Check(records.All(r => r.GetProperty("matchId").GetString() == matchId.ToString("D") && r.GetProperty("src").GetString() == "server"
-                                 && r.GetProperty("cfg").GetString() == "1.0.0" && r.GetProperty("cfgHash").GetString()!.Length == 64
+                                 && r.GetProperty("cfg").GetString() == MatchProfile.CreateTestProfile().Version && r.GetProperty("cfgHash").GetString()!.Length == 64
                                  && r.GetProperty("balHash").ValueKind == JsonValueKind.Null),
             $"{label}: envelope carries matchId, src=server, cfg, cfgHash and balHash=null");
         c.Check(raw.All(l => !l.Contains("\"fake\"")), $"{label}: real data never carries the fake flag");

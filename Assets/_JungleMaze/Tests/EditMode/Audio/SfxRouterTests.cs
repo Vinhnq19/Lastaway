@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using JungleBackend.Protocol.Gameplay;
 using JungleMaze.App.Audio;
+using JungleMaze.App.Combat;
 using JungleMaze.App.Audio.Mocks;
 using JungleMaze.App.Flow;
 using JungleMaze.App.Hud.State;
@@ -376,6 +377,36 @@ namespace JungleMaze.Tests.Audio
             _source.Tick(1f / 30f);
             Assert.AreEqual(2, _cues.Count, "new phase rings");
             Assert.AreNotEqual(_cues[0].DedupeKey, _cues[1].DedupeKey);
+        }
+
+        [TestCase(CombatWeaponId.Hand, SfxId.MeleeSwing)]
+        [TestCase(CombatWeaponId.Crossbow, SfxId.ShootCrossbow)]
+        [TestCase(CombatWeaponId.Shotgun, SfxId.ShootRanged)]
+        public void RealCombatCue_PredictionDoesNotDoublePlayOnConfirmation(CombatWeaponId weapon, SfxId expected)
+        {
+            _source.OnCombat(new CombatEvent(CombatEventKind.AttackPredicted, weapon, 2, 42, 0, CombatOutcome.Accepted));
+            _source.OnCombat(new CombatEvent(CombatEventKind.AttackConfirmed, weapon, 2, 42, 0, CombatOutcome.Accepted));
+            _source.OnCombat(new CombatEvent(CombatEventKind.AttackRejected, weapon, 2, 42, 0, CombatOutcome.NoAmmo));
+            Assert.AreEqual(1, _cues.Count);
+            Assert.AreEqual(expected, _cues[0].Id);
+            Assert.IsFalse(_cues[0].HasPosition);
+            Assert.AreNotEqual(0UL, _cues[0].DedupeKey);
+        }
+
+        [Test]
+        public void RemoteAttackAndReload_UseKnownPose_AndSkipUnconfirmedReload()
+        {
+            _poses.Poses[5] = new PlayerPose { X = 7, Y = 9 };
+            _source.OnCombat(new CombatEvent(CombatEventKind.RemoteAttackConfirmed, CombatWeaponId.Crossbow, 5, 7, 0, CombatOutcome.Accepted));
+            _source.OnCombat(new CombatEvent(CombatEventKind.RemoteAttackConfirmed, CombatWeaponId.Crossbow, 9, 7, 0, CombatOutcome.Accepted));
+            _source.OnCombat(new CombatEvent(CombatEventKind.ReloadRequested, CombatWeaponId.Shotgun, 2, 8, 0, CombatOutcome.Accepted));
+            _source.OnCombat(new CombatEvent(CombatEventKind.RemoteReloadStarted, CombatWeaponId.Shotgun, 5, 8, 0, CombatOutcome.Accepted));
+            _source.OnCombat(new CombatEvent(CombatEventKind.ReloadStarted, CombatWeaponId.Shotgun, 2, 8, 0, CombatOutcome.Accepted));
+            Assert.AreEqual(3, _cues.Count);
+            Assert.AreEqual(SfxId.ShootCrossbow, _cues[0].Id);
+            Assert.AreEqual(7, _cues[0].X); Assert.AreEqual(9, _cues[0].Y);
+            Assert.IsTrue(_cues[1].HasPosition); Assert.IsFalse(_cues[2].HasPosition);
+            Assert.AreEqual(SfxId.Reload, _cues[1].Id); Assert.AreEqual(SfxId.Reload, _cues[2].Id);
         }
 
         [Test]

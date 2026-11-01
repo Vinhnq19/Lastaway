@@ -17,11 +17,10 @@ namespace JungleMaze.Tests.Lobby
         {
             using var rig = new LobbyRig();
             rig.Flow.OpenJoin();
-            rig.Join.SetCode("k7m2q");
-            Assert.AreEqual("K7M2Q", rig.Join.RoomCode, "upper-cased as typed");
+            rig.Join.SetCode(new string('x', 65));
             Assert.IsFalse(rig.Join.CanSubmit);
             Assert.AreEqual(JoinController.CodeLengthText, rig.Join.CodeErrorText);
-            rig.Join.SetCode("K7M2QI");
+            rig.Join.SetCode("K7M\n2Q");
             Assert.AreEqual(JoinController.BadCodeText, rig.Join.CodeErrorText);
             rig.Join.SetCode("K7M2Q9");
             rig.Join.SetName("   ");
@@ -36,6 +35,16 @@ namespace JungleMaze.Tests.Lobby
             Assert.AreEqual(1, rig.Commands.Joins);
             Assert.AreEqual("K7M2Q9", rig.Commands.LastCode);
             Assert.AreEqual("Huy", rig.Commands.LastName);
+        }
+
+        [TestCase("67676969")]
+        [TestCase("JungleDev123")]
+        [TestCase("K7M2Q9")]
+        public void DefaultAndGeneratedCodesArePreserved(string code)
+        {
+            using var rig = new LobbyRig();
+            rig.Join.SetCode(code); Assert.IsTrue(rig.Join.CanSubmit);
+            Assert.AreEqual(code, rig.Join.RoomCode);
         }
 
         [Test]

@@ -44,6 +44,7 @@ namespace JungleMaze.App.Match
         }
 
         public event Action RoundStarted;
+        public Func<byte, bool> DamageInterceptor { get; set; }
         public bool IsActive { get; private set; }
         public Guid MatchId { get; private set; }
         public float ElapsedSeconds { get; private set; }
@@ -116,7 +117,7 @@ namespace JungleMaze.App.Match
 
         public void ApplyDamage(byte damage)
         {
-            if (damage == 0 || IsDead) return;
+            if (!IsActive || damage == 0 || IsDead || (DamageInterceptor != null && DamageInterceptor(damage))) return;
             PlayerHp = (byte)Math.Max(0, PlayerHp - damage);
             _hudWriter.SetHp(PlayerHp);
             _hudWriter.NotifyDamageTaken(false, 0f);
@@ -149,6 +150,30 @@ namespace JungleMaze.App.Match
 
                 _flow.Go(_flow.Results);
             }
+        }
+
+        public void ApplyDamage(int damage)
+        {
+            if (damage <= 0) return;
+            ApplyDamage((byte)Math.Min(255, damage));
+        }
+
+        public void Heal(byte amount)
+        {
+            if (!IsActive || IsDead || amount == 0) return;
+            var maxHp = (byte)Math.Min(255, Math.Max(1, _hudState?.MaxHp ?? 100));
+            PlayerHp = (byte)Math.Min((int)maxHp, PlayerHp + amount);
+            _hudWriter.SetHp(PlayerHp);
+        }
+
+        public void Rescue(byte hp)
+        {
+            if (!IsActive || IsDead) return;
+            IsDead = false;
+            HasResult = false;
+            PlayerHp = hp;
+            _hudWriter.SetHp(PlayerHp);
+            _hudWriter.SetAliveCount(1, 1);
         }
 
         public void Replay()

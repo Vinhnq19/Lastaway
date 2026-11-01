@@ -31,6 +31,11 @@ namespace JungleMaze.Tests.Lobby
         public readonly LobbyFlow Flow;
         public string Cause;
 
+        public bool IsOffline;
+        public int StartOfflineCalls;
+        public readonly MockLobbySource OfflineLobby = new MockLobbySource();
+        public readonly MockMatchResultSource OfflineResults = new MockMatchResultSource();
+
         /// <param name="login">UI-02 round 2 starts on Login; by default the rig logs in so the flow sits on Home.</param>
         public LobbyRig(Action<LobbyOptions> configure = null, bool login = true)
         {
@@ -39,9 +44,36 @@ namespace JungleMaze.Tests.Lobby
             Account = new AccountSession(Api, () => Utc);
             Join = new JoinController(Commands, Clock.Read, Options, "Huy", "");
             Rooms = new RoomListModel(Api, Account);
+
+            Commands.Called += cmd =>
+            {
+                if (cmd == nameof(Commands.Replay) && IsOffline)
+                {
+                    OfflineLobby.MatchId = Guid.NewGuid();
+                    OfflineLobby.SetPhase(MatchPhase.InGame, 0);
+                    OfflineResults.Current = null;
+                }
+                else if (cmd == nameof(Commands.Leave) && IsOffline)
+                {
+                    IsOffline = false;
+                    OfflineLobby.Clear();
+                    OfflineResults.Current = null;
+                }
+            };
+
             Flow = new LobbyFlow(Lobby, Results, Connection, Commands, Join, Account, Rooms,
                 new HistoryModel(History, () => Account.IsValid ? Account.Token : null, () => Api.Configured, Options, 200),
-                new LeaderboardModel(Api), new ApiStatusModel(Api), Clock.Read, Options, Bus, () => Cause);
+                new LeaderboardModel(Api), new ApiStatusModel(Api), Clock.Read, Options, Bus, () => Cause,
+                isOffline: () => IsOffline,
+                offlineLobby: OfflineLobby,
+                offlineResults: OfflineResults,
+                startOffline: () =>
+                {
+                    StartOfflineCalls++;
+                    IsOffline = true;
+                    OfflineLobby.MatchId = Guid.NewGuid();
+                    OfflineLobby.SetPhase(MatchPhase.InGame, 0);
+                });
             if (!login) return;
             LogIn();
             Api.Logins = 0; // tests count API calls from here on
@@ -101,6 +133,27 @@ namespace JungleMaze.Tests.Lobby
             {
                 MatchId = Lobby.MatchId, Reason = reason, WinnerNetId = winner, OwnNetId = Lobby.OwnNetId,
                 ParticipantCount = (byte)players.Length, Participants = list
+            };
+        }
+
+        public MatchResultView OfflineResult(float survivalSeconds = 45f)
+        {
+            var list = new[]
+            {
+                new MatchParticipantState
+                {
+                    NetId = 0, Rank = 1, DisplayName = "Huy", PlayerSessionId = "offline",
+                    Kills = 0, SurvivalTicks = (uint)(survivalSeconds * 30f)
+                }
+            };
+            return new MatchResultView
+            {
+                MatchId = OfflineLobby.MatchId,
+                Reason = MatchEndReason.Cancelled,
+                WinnerNetId = 255,
+                ParticipantCount = 1,
+                OwnNetId = 0,
+                Participants = list
             };
         }
 

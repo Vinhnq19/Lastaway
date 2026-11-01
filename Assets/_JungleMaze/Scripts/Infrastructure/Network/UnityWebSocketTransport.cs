@@ -62,7 +62,7 @@ namespace JungleMaze.Infrastructure.Network
             if (Interlocked.Increment(ref _sendCount) > MaxSendQueue)
             {
                 Interlocked.Decrement(ref _sendCount);
-                Error = "SlowConsumer";
+                Error = "SendQueueFull";
                 return false;
             }
             _sendQueue.Enqueue(packet);
@@ -153,9 +153,10 @@ namespace JungleMaze.Infrastructure.Network
 
                 var sending = SendLoop();
                 var receiving = ReceiveLoop();
-                await Task.WhenAny(sending, receiving).ConfigureAwait(false);
+                var finished = await Task.WhenAny(sending, receiving).ConfigureAwait(false);
 
-                if (!_stop.IsCancellationRequested && Error == null) Error = "WssDisconnected";
+                if (!_stop.IsCancellationRequested && !_closingGracefully && Error == null)
+                    Error = finished == sending ? (finished.IsCanceled ? "WssSendTimeout" : "WssSendFailed") : "WssReceiveFailed";
                 _stop.Cancel();
                 try { _socket.Abort(); } catch { }
                 await Task.WhenAll(sending, receiving).ConfigureAwait(false);
@@ -258,7 +259,7 @@ namespace JungleMaze.Infrastructure.Network
                 if (Interlocked.Increment(ref _receiveCount) > MaxReceiveQueue)
                 {
                     Interlocked.Decrement(ref _receiveCount);
-                    Error = "SlowConsumer";
+                    Error = "ReceiveQueueFull";
                     return;
                 }
                 _receiveQueue.Enqueue(packet);

@@ -9,7 +9,7 @@ namespace JungleMaze.Domain.Lobby
     /// </summary>
     public static class RoomCodeRules
     {
-        public const int Length = 6;
+        public const int Length = 6, MaxJoinLength = 64;
         public const string Alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 
         /// <summary>Trim and upper-case (invariant); null becomes "".</summary>
@@ -23,6 +23,15 @@ namespace JungleMaze.Domain.Lobby
                 if (Alphabet.IndexOf(c) < 0) return JoinFieldError.BadChar;
             if (code.Length < Length) return JoinFieldError.TooShort;
             return code.Length > Length ? JoinFieldError.TooLong : JoinFieldError.None;
+        }
+
+        // Generated room codes use the six-character alphabet above; the server's configured default may differ.
+        public static JoinFieldError ValidateJoinCode(string code)
+        {
+            if (string.IsNullOrWhiteSpace(code)) return JoinFieldError.Empty;
+            if (code.Length > MaxJoinLength) return JoinFieldError.TooLong;
+            foreach (var c in code) if (char.IsControl(c)) return JoinFieldError.BadChar;
+            return JoinFieldError.None;
         }
 
         /// <summary>Display name after trimming: 1–32 UTF-16 chars.</summary>

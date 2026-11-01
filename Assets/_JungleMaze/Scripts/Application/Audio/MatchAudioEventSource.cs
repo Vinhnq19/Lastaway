@@ -1,6 +1,10 @@
 using System;
 using JungleBackend.Protocol.Gameplay;
 using JungleMaze.App.Match;
+using JungleMaze.App.Combat;
+using JungleMaze.App.Hud.State;
+using JungleMaze.World;
+using JungleMaze.App.World;
 using JungleMaze.App.Ports;
 using JungleMaze.Core.DI;
 using JungleMaze.Core.Ticking;
@@ -25,7 +29,7 @@ namespace JungleMaze.App.Audio
         public MatchSessionAudioFeed(MatchSession match, OfflineMatchSession offline = null)
         { _match = match; _offline = offline; if (match == null && offline == null) throw new ArgumentNullException(nameof(match)); }
 
-        public byte OwnNetId => _offline?.IsActive == true ? (byte)0 : _match.OwnNetId;
+        public byte OwnNetId => _offline?.IsActive == true ? (byte)0 : (_match?.OwnNetId ?? (byte)255);
 
         public bool TryGetZone(out bool inWarning, out byte phaseIndex)
         {
@@ -40,7 +44,7 @@ namespace JungleMaze.App.Audio
     }
 
     /// <summary>
-    /// Turns network state that has no client event yet into keyed cues, without changing MatchSession or GameFlow:
+    /// Routes real combat, movement, and match state into cues without changing simulation ownership:
     /// <c>EventPacket.PlayerDied</c> → <see cref="SfxId.Eliminated"/> (2D for the local player, at the victim's pose
     /// otherwise) and the zone warning rising edge → <see cref="SfxId.ZoneBell3"/>, once per <c>PhaseIndex</c>.
     /// PlayerHit/ItemPickedUp/MatchEnded are deliberately not mapped: those sounds come from the HUD ports or
@@ -61,6 +65,12 @@ namespace JungleMaze.App.Audio
         private bool _subscribed;
         private readonly OfflineMatchSession _offline;
         private bool _wasOfflineDead;
+        private OnlineCombatSession _combat;
+        private OfflineWorldSession _offlineWorld;
+        private WorldClientSession _world;
+        private IHudState _hud;
+        private bool _hasMotionPose, _inBush;
+        private float _lastX, _lastY, _stepDistance;
 
         public MatchAudioEventSource(IPacketReceiver receiver, IMatchAudioFeed feed, IPlayerPoseSource poses, OfflineMatchSession offline = null)
         {
@@ -82,13 +92,48 @@ namespace JungleMaze.App.Audio
 
         public void Dispose()
         {
-            if (!_subscribed) return;
-            _receiver.Unsubscribe(_onEvent);
+            BindCombat(null, null);
+            if (_subscribed) _receiver.Unsubscribe(_onEvent);
             _subscribed = false;
+        }
+
+        // ComposeWorld runs after audio; rebind safely when a world is recreated.
+        public void BindCombat(OnlineCombatSession online, OfflineWorldSession offline, WorldClientSession world = null, IHudState hud = null)
+        {
+            if (_combat != null) _combat.Changed -= OnOnlineCombat;
+            if (_offlineWorld != null) _offlineWorld.CombatChanged -= OnOfflineCombat;
+            _combat = online; _offlineWorld = offline; _world = world; _hud = hud;
+            _hasMotionPose = false; _stepDistance = 0; _inBush = false;
+            if (_combat != null) _combat.Changed += OnOnlineCombat;
+            if (_offlineWorld != null) _offlineWorld.CombatChanged += OnOfflineCombat;
+        }
+
+        private void OnOnlineCombat(CombatEvent value)
+        { if (_offlineWorld?.IsActive != true) OnCombat(value); }
+        private void OnOfflineCombat(CombatEvent value)
+        { if (_offlineWorld?.IsActive == true) OnCombat(value); }
+
+        /// <summary>Maps real controller events; confirmation never replays a locally predicted shot.</summary>
+        public void OnCombat(CombatEvent value)
+        {
+            var own = _feed != null && value.NetId == _feed.OwnNetId;
+            var shot = value.Kind == CombatEventKind.AttackPredicted && own ||
+                       value.Kind == CombatEventKind.RemoteAttackConfirmed && !own;
+            var reload = value.Kind == CombatEventKind.ReloadStarted && own ||
+                         value.Kind == CombatEventKind.RemoteReloadStarted && !own;
+            if (value.Outcome != CombatOutcome.Accepted || (!shot && !reload) ||
+                (byte)value.Weapon > (byte)CombatWeaponId.Shotgun) return;
+            var id = reload ? SfxId.Reload : value.Weapon == CombatWeaponId.Crossbow ? SfxId.ShootCrossbow :
+                     (byte)value.Weapon >= (byte)CombatWeaponId.RubberGun ? SfxId.ShootRanged : SfxId.MeleeSwing;
+            var key = SfxDeduper.Key(reload ? (byte)4 : (byte)3, value.NetId, value.RequestSeq, (uint)value.Weapon);
+            if (own) CueRaised?.Invoke(AudioCue.Global(id, value.NetId, key));
+            else if (_poses != null && _poses.TryGetPose(value.NetId, out var pose))
+                CueRaised?.Invoke(AudioCue.At(id, pose.X, pose.Y, value.NetId, key));
         }
 
         public void Tick(float deltaTime)
         {
+            TickMovement();
             var dead = _offline?.IsActive == true && _offline.IsDead;
             if (dead && !_wasOfflineDead) CueRaised?.Invoke(AudioCue.Global(SfxId.Eliminated));
             _wasOfflineDead = dead;
@@ -106,6 +151,42 @@ namespace JungleMaze.App.Audio
                 CueRaised?.Invoke(AudioCue.Global(SfxId.ZoneBell3, 0, SfxDeduper.Key(KindZoneWarning, phase)));
             }
             _wasWarning = warning;
+        }
+
+        private void TickMovement()
+        {
+            var solo = _offline?.IsActive == true;
+            if (_feed == null || _hud == null || !_hud.HasPose || _hud.Hp <= 0 ||
+                (solo ? _offline.IsDead || _offlineWorld?.IsReady != true : _combat?.CanAct != true))
+            { _hasMotionPose = false; _stepDistance = 0; _inBush = false; return; }
+            var pose = _hud.Pose;
+            var objects = solo ? _offlineWorld.Objects : _world?.Objects;
+            var bush = false; var swamp = false;
+            if (objects != null) foreach (var item in objects)
+            {
+                if ((item.Flags & 1) != 0 || System.Math.Abs(pose.X - item.X) > item.Width * .5f ||
+                    System.Math.Abs(pose.Y - item.Y) > item.Height * .5f) continue;
+                bush |= item.Kind == (byte)WorldObjectKind.Bush;
+                swamp |= item.Kind == (byte)WorldObjectKind.Swamp;
+            }
+            if (_hasMotionPose)
+            {
+                var dx = pose.X - _lastX; var dy = pose.Y - _lastY;
+                var distance = (float)System.Math.Sqrt(dx * dx + dy * dy);
+                // Portal/resume jumps are not footsteps; idle frames never generate a step.
+                if (distance > 2) _stepDistance = 0;
+                else if (distance > .001f)
+                {
+                    if (bush && !_inBush) CueRaised?.Invoke(AudioCue.Global(SfxId.BushEnter, _feed.OwnNetId));
+                    _stepDistance += distance;
+                    if (_stepDistance >= 1)
+                    {
+                        _stepDistance %= 1;
+                        CueRaised?.Invoke(AudioCue.Global(swamp ? SfxId.FootstepSwamp : SfxId.FootstepGrass, _feed.OwnNetId));
+                    }
+                }
+            }
+            _hasMotionPose = true; _lastX = pose.X; _lastY = pose.Y; _inBush = bush;
         }
 
         /// <summary>Handles one server event; public so tests can feed packets without a network.</summary>

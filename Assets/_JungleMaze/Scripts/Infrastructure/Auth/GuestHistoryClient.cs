@@ -15,6 +15,7 @@ namespace JungleMaze.Infrastructure.Auth
     {
         private readonly GuestCredentialStore _store;
         private readonly HttpClient _http = new HttpClient(new HttpClientHandler { AllowAutoRedirect = false }) { Timeout = TimeSpan.FromSeconds(5) };
+        private readonly Func<string> _accountEndpoint;
         private GuestCredential _identity;
         private Uri _endpoint;
         private int _identityGeneration;
@@ -23,7 +24,23 @@ namespace JungleMaze.Infrastructure.Auth
         public bool IsReady => _identity != null;
         public IReadOnlyList<PlayerMatchHistory> Rows { get; private set; } = Array.Empty<PlayerMatchHistory>();
         private sealed class HistoryPage { public PlayerMatchHistory[] Items; }
-        public GuestHistoryClient(GuestCredentialStore store) => _store = store;
+        public GuestHistoryClient(GuestCredentialStore store, Func<string> accountEndpoint = null)
+        { _store = store; _accountEndpoint = accountEndpoint; }
+
+        public async Task<string> AccountTicketAsync(string baseUrl, Guid attempt, string room, string token)
+        {
+            if (string.IsNullOrWhiteSpace(token) || !ConfigureAccountEndpoint(baseUrl)) return null;
+            return await TicketAsync(attempt, room, token);
+        }
+        private bool ConfigureAccountEndpoint(string baseUrl)
+        {
+            if (!Uri.TryCreate(baseUrl, UriKind.Absolute, out var endpoint) || !IsSecureEndpoint(endpoint))
+            { Status = "Lịch sử online không khả dụng"; return false; }
+            if (_endpoint == null || _endpoint != endpoint)
+            { _identityGeneration++; _identity = null; Rows = Array.Empty<PlayerMatchHistory>(); HistoryJson = ""; }
+            _endpoint = endpoint;
+            return true;
+        }
 
         public static bool IsSecureEndpoint(Uri endpoint) => endpoint != null &&
             string.IsNullOrEmpty(endpoint.UserInfo) && string.IsNullOrEmpty(endpoint.Query) && string.IsNullOrEmpty(endpoint.Fragment) &&
@@ -90,12 +107,14 @@ namespace JungleMaze.Infrastructure.Auth
                 }
             }
             catch (Exception e) when (!(e is OutOfMemoryException))
-            { Status = "Chơi ẩn danh: chưa gắn được hồ sơ lịch sử"; return null; }
+            { Status = "Không cấp được vé vào phòng; hãy đăng nhập lại"; return null; }
         }
 
         public async Task RefreshHistoryAsync(string accountToken = null, CancellationToken cancellation = default)
         {
+            if (!string.IsNullOrEmpty(accountToken) && _accountEndpoint != null && !ConfigureAccountEndpoint(_accountEndpoint())) return;
             if (_endpoint == null || _identity == null && string.IsNullOrEmpty(accountToken)) return;
+            var generation = ++_identityGeneration;
             try
             {
                 using (var request = new HttpRequestMessage(HttpMethod.Get, Url("api/me/matches?page=1&pageSize=20")))
@@ -104,14 +123,16 @@ namespace JungleMaze.Infrastructure.Auth
                     using (var response = await _http.SendAsync(request, cancellation))
                     {
                         response.EnsureSuccessStatusCode();
-                        HistoryJson = await response.Content.ReadAsStringAsync();
+                        var json = await response.Content.ReadAsStringAsync();
+                        if (generation != _identityGeneration) return;
+                        HistoryJson = json;
                         Rows = JsonConvert.DeserializeObject<HistoryPage>(HistoryJson)?.Items ?? Array.Empty<PlayerMatchHistory>();
                         Status = "Lịch sử đã cập nhật";
                     }
                 }
             }
             catch (Exception e) when (!(e is OutOfMemoryException))
-            { Rows = Array.Empty<PlayerMatchHistory>(); HistoryJson = ""; Status = "Lịch sử online không khả dụng"; }
+            { if (generation == _identityGeneration) { Rows = Array.Empty<PlayerMatchHistory>(); HistoryJson = ""; Status = "Lịch sử online không khả dụng"; } }
         }
 
         private void SetProof(HttpRequestMessage request, string accountToken)

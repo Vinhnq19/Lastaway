@@ -46,6 +46,7 @@ namespace JungleMaze.Presentation.UI
 
         // Dữ liệu form (view đọc/ghi trực tiếp).
         public string Host, Port, ApiBaseUrl, RoomCode, DisplayName, Username = "", Password = "";
+        public string AccountToken { get; set; } // RAM only; never written into endpoint config.
         public ConnectionMode Mode;
         public bool AdvancedExpanded { get; set; }
         public string SelectedOnlineTarget { get; set; } = "AWS";
@@ -107,7 +108,7 @@ namespace JungleMaze.Presentation.UI
                 Mode = ConnectionMode.LAN;
                 var host = (string.IsNullOrWhiteSpace(Host) || Host == "127.0.0.1" || Host == "localhost" || Host == "junglemaze.duckdns.org") ? "192.168.1.10" : Host;
                 var updated = current.WithEndpoint(host, port, ConnectionMode.LAN, "menu")
-                    .WithApiBaseUrl(null, "menu").WithTransport("Udp", null);
+                    .WithApiBaseUrl(RemoteApiForTarget(), "menu").WithTransport("Udp", null);
                 var error = _config.SaveUserConfig(updated);
                 if (error != null) { Status = error; return; }
                 LoadFromConfig();
@@ -119,7 +120,7 @@ namespace JungleMaze.Presentation.UI
                 Mode = ConnectionMode.Online;
                 var host = (string.IsNullOrWhiteSpace(Host) || Host == "127.0.0.1" || Host == "junglemaze.duckdns.org") ? "100.80.1.20" : Host;
                 var updated = current.WithEndpoint(host, port, ConnectionMode.Online, "menu")
-                    .WithApiBaseUrl(null, "menu").WithTransport("Udp", null);
+                    .WithApiBaseUrl(RemoteApiForTarget(), "menu").WithTransport("Udp", null);
                 var error = _config.SaveUserConfig(updated);
                 if (error != null) { Status = error; return; }
                 LoadFromConfig();
@@ -139,6 +140,13 @@ namespace JungleMaze.Presentation.UI
                 LoadFromConfig();
                 Status = "Chế độ Online (AWS): junglemaze.duckdns.org (Auto UDP->WSS).";
             }
+        }
+
+        private string RemoteApiForTarget()
+        {
+            if (Uri.TryCreate(ApiBaseUrl, UriKind.Absolute, out var uri) && uri.Scheme == "https" &&
+                !uri.IsLoopback && uri.Host != "junglemaze.duckdns.org") return ApiBaseUrl;
+            return "https://YOUR-SELFHOST.duckdns.org";
         }
 
         public void StartOffline()
@@ -173,7 +181,7 @@ namespace JungleMaze.Presentation.UI
             }
             var result = _connect.Execute(new ConnectForm
             {
-                RoomCode = RoomCode, DisplayName = DisplayName, Username = Username, Password = Password
+                RoomCode = RoomCode, DisplayName = DisplayName, Username = Username, Password = Password, AccessToken = AccountToken
             });
             Password = ""; // không giữ password sau khi đã gửi đi
             if (result == null && RequiresLogin) Status = "Đang đăng nhập...";

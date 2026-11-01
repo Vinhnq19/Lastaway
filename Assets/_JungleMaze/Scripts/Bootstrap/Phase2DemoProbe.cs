@@ -50,6 +50,7 @@ namespace JungleMaze.Composition
             _started = Time.realtimeSinceStartup;
             yield return new WaitForSecondsRealtime(1);
             _view = GetComponent<MatchDemoView>(); _view.UseExternalIntent = true;
+            _menu.AccountToken = Environment.GetEnvironmentVariable("NET_ACCESS_TOKEN");
             _menu.Join();
         }
 
@@ -112,7 +113,7 @@ namespace JungleMaze.Composition
             for (var attempt = 0; attempt < 5 && !_finished; attempt++)
             {
                 await Task.Delay(300);
-                await _history.RefreshHistoryAsync();
+                await _history.RefreshHistoryAsync(_menu.AccountToken);
                 if (_history.Rows.Count > 0) { _evidence.historyLoaded = true; return; }
             }
         }

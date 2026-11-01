@@ -22,7 +22,6 @@ namespace JungleMaze.Presentation.UI.Lobby
         public const string EmptySlot = "Chỗ trống";
         public const string SelfTag = "Bạn";
         public const string ReplayWaiting = "Đang chờ người khác…";
-        public const string DevHint = "Chế độ dev: vào bằng mã phòng, không dùng tài khoản";
 
         private readonly LobbyUiRoot _root;
         private readonly LobbyFlow _flow;
@@ -48,7 +47,12 @@ namespace JungleMaze.Presentation.UI.Lobby
             _unbind = BindButtons();
             BindInputs();
             FillEndpoint();
-            root.Login.DevSkip.gameObject.SetActive(flow.Options.DevSkipLogin); // release builds never show it (M1)
+            var practiceBtn = root.Login.OfflinePractice;
+            if (practiceBtn != null)
+            {
+                practiceBtn.gameObject.SetActive(true);
+                SetLabel(practiceBtn, "Luyện tập offline");
+            }
             foreach (var panel in root.Panels) panel.Show(false);
             Tick();
         }
@@ -123,8 +127,7 @@ namespace JungleMaze.Presentation.UI.Lobby
                     _root.JoinForm.DisplayName.SetTextWithoutNotify(_flow.Join.DisplayName);
                     _root.JoinForm.RoomCode.SetTextWithoutNotify(_flow.Join.RoomCode);
                     var user = _flow.Account?.Username?.Trim();
-                    _root.JoinForm.Hint.text = _flow.DevSkipped ? DevHint
-                        : string.IsNullOrEmpty(user) ? "" : "Vào bằng tài khoản " + user + " · tên hiển thị lấy từ tài khoản";
+                    _root.JoinForm.Hint.text = string.IsNullOrEmpty(user) ? "" : "Vào bằng tài khoản " + user + " · tên hiển thị lấy từ tài khoản";
                     break;
                 case LobbyScreen.Login:
                     _flow.Api?.Check(); // status line + Thử lại when the account server is down
@@ -168,14 +171,14 @@ namespace JungleMaze.Presentation.UI.Lobby
         {
             var v = _root.MainMenu;
             var api = _flow.Api?.Text ?? ApiMessages.NoApi;
-            var dev = _flow.DevSkipped;
-            var user = dev ? "Chưa đăng nhập" : _flow.Account?.Username?.Trim() ?? "";
-            if (!Changed(Hash(api, user, dev ? 1 : 0))) return;
+            var user = _flow.Account?.Username?.Trim() ?? "";
+            if (!Changed(Hash(api, user))) return;
             v.ApiStatus.text = api;
-            v.AccountStatus.text = dev ? "Chế độ dev" : "Đã đăng nhập";
+            v.AccountStatus.text = "Đã đăng nhập";
             v.AccountName.text = user;
-            SetLabel(v.Logout, dev ? "Đăng nhập" : "Đăng xuất");
+            SetLabel(v.Logout, "Đăng xuất");
             v.Join.interactable = true; // AC3: never blocked by the API
+            if (v.OfflinePractice != null) v.OfflinePractice.interactable = true;
         }
 
         private void DrawModals()
@@ -365,17 +368,18 @@ namespace JungleMaze.Presentation.UI.Lobby
         private void DrawResults()
         {
             var r = _flow.Result;
-            var apiReady = _flow.Api != null && _flow.Api.Ready;
-            var ending = _flow.Lobby.Phase == MatchPhase.Ending;
-            if (!Changed(Hash(r.MatchId, r.HasData ? 1 : 0, _flow.ReplayPending ? 1 : 0, apiReady ? 1 : 0, ending ? 1 : 0))) return;
+            var isOffline = _flow.IsOffline || r.IsOffline;
+            var apiReady = !isOffline && _flow.Api != null && _flow.Api.Ready;
+            var ending = isOffline ? true : _flow.Lobby.Phase == MatchPhase.Ending;
+            if (!Changed(Hash(r.MatchId, r.HasData ? 1 : 0, _flow.ReplayPending ? 1 : 0, apiReady ? 1 : 0, ending ? 1 : 0, isOffline ? 1 : 0))) return;
             var v = _root.Results;
             v.Title.text = r.HasData ? r.Title : "Đang chờ kết quả…";
             SetOptional(v.Rank, r.RankText);
             SetOptional(v.Kills, r.KillsText);
             SetOptional(v.Survival, r.SurvivalText);
             SetOptional(v.Cause, r.CauseText);
-            v.OnlineLine.text = apiReady ? "" : ApiMessages.HistoryUnavailableLine;
-            v.Online.gameObject.SetActive(apiReady && r.HasData);
+            v.OnlineLine.text = isOffline ? "" : (apiReady ? "" : ApiMessages.HistoryUnavailableLine);
+            v.Online.gameObject.SetActive(apiReady && r.HasData && !isOffline);
             v.Replay.interactable = ending && !_flow.ReplayPending;
             v.ReplayLabel.text = _flow.ReplayPending ? ReplayWaiting : "Chơi lại";
             for (var i = 0; i < v.Rows.Length; i++)
@@ -425,6 +429,7 @@ namespace JungleMaze.Presentation.UI.Lobby
             }
 
             On(r.MainMenu.Join, f.OpenJoin);
+            On(r.MainMenu.OfflinePractice, f.OpenOffline);
             On(r.MainMenu.Rooms, f.OpenRooms);
             On(r.MainMenu.History, f.OpenHistory);
             On(r.MainMenu.Leaderboard, f.OpenLatestLeaderboard);
@@ -445,7 +450,7 @@ namespace JungleMaze.Presentation.UI.Lobby
             On(r.Login.Submit, SubmitLogin);
             On(r.Login.Advanced, f.OpenServerSettings);
             On(r.Login.Retry, () => f.Api?.Check());
-            On(r.Login.DevSkip, f.DevSkipLogin);
+            On(r.Login.OfflinePractice, f.OpenOffline);
             On(r.RoomManager.Create, CreateRoom);
             On(r.RoomManager.Retry, () => f.Rooms?.Refresh());
             On(r.RoomManager.Back, f.Back);
@@ -531,7 +536,7 @@ namespace JungleMaze.Presentation.UI.Lobby
         {
             if (string.IsNullOrEmpty(code)) return;
             CopyCount++;
-            _copy(code.Length > RoomCodeRules.Length ? code.Substring(0, RoomCodeRules.Length) : code); // G-9: 6 chars
+            _copy(code); // Preserve the configured default room code too.
         }
 
         private void FillEndpoint()

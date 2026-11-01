@@ -4,6 +4,7 @@
   "gameServerHost": "junglemaze.duckdns.org",
   "gameServerPort": 7777,
   "authMode": "RoomCode",
-  "protocolVersion": 1,
-  "connectTimeoutMs": 5000
+  "protocolVersion": 4,
+  "connectTimeoutMs": 5000,
+  "worldEnabled": true
 }

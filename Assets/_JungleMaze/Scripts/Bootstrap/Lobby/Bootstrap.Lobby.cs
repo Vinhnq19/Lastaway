@@ -1,4 +1,5 @@
 using System;
+using JungleMaze.App.Flow;
 using JungleMaze.App.Lobby;
 using JungleMaze.App.Lobby.Adapters;
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
@@ -40,12 +41,12 @@ namespace JungleMaze.Composition
 
             Func<double> clock = () => Time.unscaledTimeAsDouble;
             var options = set.ToOptions(balance.Match.DisconnectGraceSeconds);
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
-            options.DevSkipLogin = true; // review M1: play by room code without a backend; never in release builds
-#endif
             var config = _registry.Resolve<IConfigProvider>();
             var menu = _registry.Resolve<ConnectionMenuPresenter>();
             var connect = _registry.Resolve<ConnectToServerUseCase>();
+            _registry.TryResolve<GameFlow>(out var gameFlow);
+            _registry.TryResolve<OfflineMatchSession>(out var offlineSession);
+
             var api = new LobbyApiClient(() => config.Current, _log);
             var connection = new NetworkConnectionStateSource(network, () => match.CanResume, bus);
             _registry.Register(connection);
@@ -53,20 +54,36 @@ namespace JungleMaze.Composition
             ILobbySource lobby = new MatchSessionLobbySource(match, () => network.LastRequest.RoomCode);
             IMatchResultSource results = new MatchSessionResultSource(match);
             IConnectionStateSource state = connection;
+            IAccountApi account = api;
+            IRoomsApi rooms = api;
+            IApiHealth health = api;
+            ILeaderboardApi board = api;
+
+            var accountSession = new AccountSession(account, () => DateTime.UtcNow);
+            accountSession.LoggedOut += () => menu.AccountToken = null;
+
             ILobbyCommands commands = new SessionLobbyCommands((code, name) =>
             {
                 connection.ClearLoginFailure();
+                if (!accountSession.IsValid || string.IsNullOrEmpty(accountSession.Token))
+                {
+                    menu.AccountToken = null;
+                    connection.ReportLocalFailure();
+                    return;
+                }
+                menu.AccountToken = accountSession.Token;
                 menu.RoomCode = code;
                 menu.DisplayName = name;
                 menu.Join();
                 // The form presenter refused before connecting (bad port/endpoint, AC2): its Status says why.
                 if (!connect.IsLoggingIn && (network.State == NetworkState.Disconnected || network.State == NetworkState.Failed))
                     connection.ReportLocalFailure();
-            }, menu.Disconnect, match, network);
-            IAccountApi account = api;
-            IRoomsApi rooms = api;
-            IApiHealth health = api;
-            ILeaderboardApi board = api;
+            }, () =>
+            {
+                menu.AccountToken = null;
+                menu.Disconnect();
+            }, match, network, offlineSession, () => gameFlow != null && gameFlow.IsOffline, () => gameFlow?.ReturnToMenu());
+
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
             var scenarios = new LobbyScenarios(clock, lobby, results, state, commands, account, rooms, health, board);
             var ports = scenarios.Ports;
@@ -80,7 +97,9 @@ namespace JungleMaze.Composition
             ticks.Add(scenarios);
 #endif
 
-            var accountSession = new AccountSession(account, () => DateTime.UtcNow);
+            ILobbySource offlineLobby = offlineSession != null ? new OfflineMatchLobbySource(offlineSession) : null;
+            IMatchResultSource offlineResults = offlineSession != null ? new OfflineMatchResultSource(offlineSession) : null;
+
             var join = new JoinController(commands, clock, options, PlayerPrefs.GetString(DisplayNameKey, menu.DisplayName),
                 menu.RoomCode, name => PlayerPrefs.SetString(DisplayNameKey, name));
             _registry.TryResolve<IEliminationSource>(out var elimination);
@@ -89,7 +108,11 @@ namespace JungleMaze.Composition
                 new HistoryModel(_registry.Resolve<IPlayerHistory>(), () => accountSession.IsValid ? accountSession.Token : null,
                     () => health.Configured, options),
                 new LeaderboardModel(board), new ApiStatusModel(health), clock, options, bus,
-                () => elimination != null && elimination.IsLocalEliminated ? EliminationText.Cause(elimination.Current) : null);
+                () => elimination != null && elimination.IsLocalEliminated ? EliminationText.Cause(elimination.Current) : null,
+                isOffline: () => gameFlow != null && gameFlow.IsOffline,
+                offlineLobby: offlineLobby,
+                offlineResults: offlineResults,
+                startOffline: menu != null ? menu.StartOffline : (Action)null);
             _registry.Register(flow);
             ticks.Add(flow);
 

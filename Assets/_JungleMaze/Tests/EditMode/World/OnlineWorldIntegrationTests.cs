@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using JungleBackend.Protocol.Gameplay;
 using JungleMaze.App.Combat;
@@ -103,14 +104,36 @@ namespace JungleMaze.Tests.World
             public void Dispose(){Combat.Dispose();World.Dispose();Match.Dispose();}
         }
 
-        [Test] public void NormalWorldUsesAuthoredTeamMapWithoutProceduralObjects()
+        [Test] public void NormalWorldUsesAuthoredTeamMapWithFixedInteractivePlacements()
         {
             using(var r=new Rig(true))
             {
                 r.Ready();Assert.IsTrue(r.World.IsReady);
-                Assert.AreEqual(4,r.World.Layout.Objects.Count);
+                Assert.AreEqual(215,r.World.Layout.Objects.Count);
                 Assert.AreEqual(0,r.World.Layout.Seed);
-                foreach(var item in r.World.Layout.Objects)Assert.IsTrue(item.IsHardCover);
+                Assert.AreEqual(4,r.World.Layout.Objects.Count(o=>o.IsHardCover));
+                Assert.AreEqual(60,r.World.Layout.Objects.Count(o=>o.Kind==WorldObjectKind.Chest));
+                Assert.AreEqual(90,r.World.Layout.Objects.Count(o=>o.Kind==WorldObjectKind.Pot));
+                Assert.AreEqual(45,r.World.Layout.Objects.Count(o=>o.Kind==WorldObjectKind.Bush));
+                Assert.AreEqual(6,r.World.Layout.Objects.Count(o=>o.Kind==WorldObjectKind.Portal));
+                Assert.AreEqual(2,r.World.Layout.Objects.Count(o=>o.Kind==WorldObjectKind.Door));
+                Assert.AreEqual(2,r.World.Layout.Objects.Count(o=>o.Kind==WorldObjectKind.Swamp));
+                Assert.AreEqual(2,r.World.Layout.Objects.Count(o=>o.Kind==WorldObjectKind.Lava));
+                Assert.AreEqual(4,r.World.Layout.Objects.Count(o=>o.Kind==WorldObjectKind.Poison));
+                var portalPairs=r.World.Layout.Objects.Where(o=>o.Kind==WorldObjectKind.Portal).GroupBy(o=>o.PairId).ToList();
+                Assert.AreEqual(3,portalPairs.Count);
+                Assert.IsTrue(portalPairs.All(g=>g.Count()==2));
+                foreach(var p in r.World.Layout.Objects.Where(o=>o.Kind==WorldObjectKind.Portal))
+                {
+                    var otherP=r.World.Layout.Objects.First(o=>o.Kind==WorldObjectKind.Portal&&o.PairId==p.PairId&&o.Id!=p.Id);
+                    Assert.IsTrue(r.World.Layout.IsWalkable(otherP.Bounds.Center,.4f));
+                }
+                foreach(var sp in r.World.Layout.Spawns)
+                {
+                    Assert.IsTrue(r.World.Layout.IsWalkable(sp,.4f));
+                    Assert.IsTrue(r.World.Layout.Objects.All(o=>!o.IsHazard||!o.Bounds.Contains(sp,.4f)));
+                }
+                Assert.AreEqual("cb3b0a1356ac911d41f58a3ea225af67b4651de7533b94549bfcfd835b82fd2d",r.World.Layout.Hash);
                 Assert.AreEqual(43,r.World.Layout.Spawns[0].X);
                 Assert.AreEqual(25,r.World.Layout.Spawns[0].Y);
             }

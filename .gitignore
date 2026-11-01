@@ -127,3 +127,10 @@ Backend/out/
 # Backend là project .NET viết tay; không bỏ qua như csproj/sln Unity sinh tự động.
 !Backend/**/*.csproj
 !Backend/*.sln
+
+# Rebuildable project-map intermediates and machine-local state
+/graphify-out/cache/
+/graphify-out/.graphify_*
+/graphify-out/extraction.json
+/graphify-out/code-state.json
+/graphify-out/manifest.json

@@ -97,6 +97,70 @@ namespace JungleMaze.Tests.Lobby
             network.SetState(NetworkState.Connecting, DisconnectReason.None);
             Assert.AreEqual(NetworkState.Connecting, source.State, "a new attempt clears it");
         }
+
+        [Test]
+        public void OfflineAdapters_LobbyAndResultSources()
+        {
+            var bus = new JungleMaze.Core.Events.EventBus();
+            var network = new JungleMaze.Tests.App.FakeNetwork(bus);
+            var scenes = new JungleMaze.Tests.App.FakeScenes();
+            var flow = new JungleMaze.App.Flow.GameFlow(bus, network, network, scenes, new JungleMaze.App.Player.PlayerInputService(network));
+            var hudWriter = new JungleMaze.App.Hud.State.HudStateStore(bus, JungleMaze.Tests.Hud.StoreTestUtil.Balance());
+            var offline = new JungleMaze.App.Match.OfflineMatchSession(null, null, null, hudWriter, bus, flow);
+
+            var lobbySource = new JungleMaze.App.Lobby.Adapters.OfflineMatchLobbySource(offline);
+            var resultSource = new JungleMaze.App.Lobby.Adapters.OfflineMatchResultSource(offline);
+
+            Assert.IsFalse(lobbySource.HasPhase);
+            Assert.IsFalse(resultSource.HasResult);
+
+            offline.StartRound();
+            Assert.IsTrue(lobbySource.HasPhase);
+            Assert.AreEqual(MatchPhase.InGame, lobbySource.Phase);
+            Assert.AreEqual(1, lobbySource.Slots.Count);
+            Assert.IsFalse(resultSource.HasResult);
+
+            offline.ApplyDamage(100);
+            Assert.IsTrue(offline.HasResult);
+            Assert.AreEqual(MatchPhase.Ending, lobbySource.Phase);
+            Assert.IsTrue(resultSource.HasResult);
+            Assert.AreEqual(offline.MatchId, resultSource.Current.MatchId);
+            Assert.AreEqual(1, resultSource.Current.Participants.Length);
+            Assert.AreEqual(1, resultSource.Current.Participants[0].Rank);
+        }
+
+        [Test]
+        public void SessionLobbyCommands_OfflineReplayAndLeave()
+        {
+            var bus = new JungleMaze.Core.Events.EventBus();
+            var network = new JungleMaze.Tests.App.FakeNetwork(bus);
+            var scenes = new JungleMaze.Tests.App.FakeScenes();
+            var flow = new JungleMaze.App.Flow.GameFlow(bus, network, network, scenes, new JungleMaze.App.Player.PlayerInputService(network));
+            var hudWriter = new JungleMaze.App.Hud.State.HudStateStore(bus, JungleMaze.Tests.Hud.StoreTestUtil.Balance());
+            var offline = new JungleMaze.App.Match.OfflineMatchSession(null, null, null, hudWriter, bus, flow);
+
+            bool isOffline = true;
+            bool onLeaveCalled = false;
+            var commands = new JungleMaze.App.Lobby.Adapters.SessionLobbyCommands(
+                (code, name) => { }, () => { },
+                new JungleMaze.App.Match.MatchSession(
+                    network, network, network,
+                    bus, new JungleMaze.Domain.Player.PlayerRegistry(),
+                    new JungleMaze.App.Player.LocalPrediction()),
+                null, offline, () => isOffline, () => onLeaveCalled = true);
+
+            offline.StartRound();
+            var firstId = offline.MatchId;
+
+            // Replay
+            commands.Replay();
+            Assert.AreNotEqual(firstId, offline.MatchId, "offline replay generates fresh match ID");
+
+            // Leave
+            commands.Leave();
+            Assert.IsFalse(offline.IsActive);
+            Assert.IsTrue(onLeaveCalled);
+        }
     }
 
     /// <summary>4.4: mocks, scenarios and the F9 panel are dev-only; composition registers them only in dev builds.</summary>

@@ -29,7 +29,9 @@ namespace JungleMaze.Domain.Network
         ProtocolError,
         InvalidConfig,
         LoginFailed,
-        Unknown
+        Unknown,
+        MatchInProgress,
+        LoadingTimeout
     }
 
     public static class DisconnectReasons
@@ -47,10 +49,15 @@ namespace JungleMaze.Domain.Network
                 case "InvalidDisplayName": return DisconnectReason.InvalidDisplayName;
                 case "RoomFull": return DisconnectReason.RoomFull;
                 case "ServerFull": return DisconnectReason.ServerFull;
+                case "AuthRequired":
                 case "AuthenticationRequired": return DisconnectReason.AuthenticationRequired;
+                case "InvalidTicket":
+                case "TicketExpired":
                 case "InvalidToken": return DisconnectReason.InvalidToken;
                 case "AuthTimeout": return DisconnectReason.AuthTimeout;
                 case "DuplicateSession": return DisconnectReason.DuplicateSession;
+                case "MatchInProgress": return DisconnectReason.MatchInProgress;
+                case "LoadingTimeout": return DisconnectReason.LoadingTimeout;
                 default: return DisconnectReason.Unknown;
             }
         }
@@ -66,6 +73,8 @@ namespace JungleMaze.Domain.Network
                 case DisconnectReason.InvalidRoomCode: return "Mã phòng không đúng.";
                 case DisconnectReason.InvalidDisplayName: return "Tên hiển thị không hợp lệ (1–32 ký tự).";
                 case DisconnectReason.RoomFull: return "Phòng đã đủ người.";
+                case DisconnectReason.MatchInProgress: return "Trận đang diễn ra. Hãy chờ trận tiếp theo hoặc chọn phòng khác.";
+                case DisconnectReason.LoadingTimeout: return "Tải trận quá thời gian. Kiểm tra dữ liệu game và thử vào lại.";
                 case DisconnectReason.ServerFull: return "Server đã đủ người.";
                 case DisconnectReason.AuthenticationRequired: return "Server yêu cầu đăng nhập.";
                 case DisconnectReason.InvalidToken: return "Phiên đăng nhập không hợp lệ hoặc đã hết hạn.";

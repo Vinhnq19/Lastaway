@@ -1,5 +1,8 @@
 # Hướng dẫn setup, phát triển và kiểm thử Jungle Maze
 
+> Chính sách hiện tại (01/11/2026): LAN/online bắt buộc account ở Unity **và GameServer**. Register/login → JWT → HTTPS game-ticket30s → handshake v4 với RoomCode. Guest không cấp vé mới. Local luyện tập không cần account/API/Docker. Khởi chạy backend để join cần cả API/DB/control token: `docker compose --profile account up -d --build`. Các bài v1/v2/v3 và JWT UDP cũ bên dưới chỉ là fixture lịch sử, không bật bypass trên server thật. Xem [hướng dẫn Phase 2](Phase2_Match_Guest_Zone.vi.md) cho flow chơi hiện tại. Lượt AWS account-flow dùng `-UseRunningInstance -KeepInstanceRunning`, không tự Stop máy.
+
+
 > Trong menu game mới, **Local** là solo offline, không cần Docker. Các lệnh Docker Local trong tài liệu này là **backend loopback**; xem [hướng dẫn Phase2](Phase2_Match_Guest_Zone.vi.md#0-chọn-local-lan-hoặc-online) để phân biệt Local/LAN/Radmin/AWS.
 
 Cập nhật **16/10/2026**. Đây là hướng dẫn vận hành chung cho dev, tester và người quản lý AWS. Kiến trúc, packet và trách nhiệm từng module nằm trong [Network_Architecture.vi.md](Network_Architecture.vi.md). Tài liệu nhập assets Unity nằm trong [JSurviv_Integration.vi.md](JSurviv_Integration.vi.md). Tạo nhiều phòng và đo sức chứa: xem mục 14. Quy trình đo backend cũ qua SSM nằm ở mục 14.7; kết nối UDP/WSS thực từ PC và vận hành theo lịch ở mục 16; test PC→EC2 trực tiếp/VPN và rà soát Phase 1 ở mục 15; kết quả thực đo nằm trong báo cáo chung.
@@ -86,7 +89,7 @@ docker compose ps
 docker compose logs --tail 20 game-server
 ```
 
-Cần thấy game-server Up và log `[ready] ... maxPlayers=10 tickRate=30 authMode=RoomCode protocol=1`. Lần đầu Docker tải image SDK/runtime và restore dependency. Server bind trong container `0.0.0.0:7777`; Windows publish mặc định `127.0.0.1:7777/udp`.
+Cần thấy game-server Up và log `[ready] ... maxPlayers=10 tickRate=30 authMode=RoomCode protocol=4`. Lần đầu Docker tải image SDK/runtime và restore dependency. Server bind trong container `0.0.0.0:7777`; Windows publish mặc định `127.0.0.1:7777/udp`.
 
 RoomCode không cần Mongo/API chạy. Docker Desktop → Containers → nhóm Compose thường tên `backend` → game-server → Logs cũng xem được log. `docker compose logs -f game-server` theo dõi liên tục; Ctrl+C chỉ thoát xem log.
 
@@ -338,7 +341,7 @@ Tester nhận source Backend hoặc client self-contained, hostname/cổng, mã 
 dotnet run --project NetSmokeClient/NetSmokeClient.csproj -- --config NetSmokeClient/client.aws.json --name Tester01 --duration 30
 ```
 
-Nhập mã phòng AWS. Cần JoinAccepted/Pong, summary joined=1/failed=0. AWS config là Online, `junglemaze.duckdns.org:7777`, RoomCode, protocol 1. Chạy ở mạng nhà/lớp/hotspot để ghi RTT và phát hiện mạng chặn UDP. HTTPS health thành công không thay cho bài UDP này; `Test-NetConnection -Port 7777` chỉ kiểm tra TCP.
+Nhập mã phòng AWS. Cần JoinAccepted/Pong, summary joined=1/failed=0. AWS config là Online, `junglemaze.duckdns.org:7777`, RoomCode + account ticket, protocol4. Chạy ở mạng nhà/lớp/hotspot để ghi RTT và phát hiện mạng chặn UDP. HTTPS health thành công không thay cho bài UDP này; `Test-NetConnection -Port 7777` chỉ kiểm tra TCP.
 
 Sau bài một client, dùng bài 10/11 ở mục 8. Lệnh `--duration` dừng **client**, không dừng AWS. Không bật một EC2 riêng cho mỗi tester.
 
@@ -717,7 +720,7 @@ VPN: chỉ khi team chọn nhánh này, cấu hình quyền VPN/firewall trướ
 | Jwt__ExpiryMinutes | 1–1440, mặc định 60 | API mặc định 60 |
 | Swagger | SWAGGER_ENABLED trong Local Compose | Bật API, proxy Basic auth UI/JSON |
 
-Client JSON có `mode` Local/LAN/Online, `gameServerHost` (IP/hostname không có scheme/port), `gameServerPort` 1–65535, `authMode` RoomCode/Jwt, `protocolVersion` 1, `connectTimeoutMs` 500–60000. apiBaseUrl chỉ cần với Jwt: localhost HTTP, hoặc HTTPS hợp lệ, hoặc mode Online/Tailscale đã có VPN. Sửa JSON không cần build; không thêm secret hay trường lạ vì parser từ chối unknown field.
+Client JSON có `mode` Local/LAN/Online, `gameServerHost` (IP/hostname không có scheme/port), `gameServerPort` 1–65535, `authMode` RoomCode/Jwt, `protocolVersion` 4, `connectTimeoutMs` 500–60000. apiBaseUrl bắt buộc cho account ticket: HTTP loopback hoặc HTTPS hợp lệ từ xa, kể cả VPN. Sửa JSON không cần build; không thêm secret hay trường lạ vì parser từ chối unknown field.
 
 ### 13.2. Bằng chứng và nghiệm thu còn lại
 
@@ -737,6 +740,9 @@ Cập nhật 16/10: Local 132 network +50 account checks và 10 phiên/300s PASS
 Mỗi lượt ghi ngày/giờ, OS/CPU/RAM, source/release ID, endpoint/authmode, số client, đường mạng, logs đã che secrets và kết quả. Giữ đúng bốn ID này; không đánh Done phần gameplay chỉ vì smoke test qua. Mốc tiếp theo là nối Unity và đồng bộ hai nhân vật như mục 10.
 
 ## 14. Tạo nhiều phòng và đo sức chứa backend
+
+> Cập nhật01/11: runtime hiện bắt buộc account-ticket v4 cả Local/LAN/AWS. Các nhánh `room_benchmark.py`/`local_capacity_probe.py` dùng protocol1/2 bên dưới là hướng dẫn tái hiện lượt đo cũ, chưa chuyển sang policy account mới; không dùng để nghiệm thu runtime hiện hành. Test mới dùng `Tests/auth_smoke.py`, NetSmokeClient v4 có đăng nhập và launcher Unity ở hướng dẫn Phase2.
+
 
 ### 14.1. Bật chức năng tạo phòng trên local
 
@@ -765,7 +771,7 @@ Response **201** có `id`, `name`, `maxPlayers`, `roomCode`, `activePlayers`, `p
 4. `GET /api/rooms`: xem phòng mặc định và phòng của mình. Mã phòng mặc định không xuất hiện; lấy từ người vận hành. Mã phòng tạo thêm chỉ trả về cho chủ phòng; không có danh sách phòng của người khác.
 5. `DELETE /api/rooms/{id}`: nhập ID phòng của mình. Chỉ xóa được khi không còn active/pending; thành công **204**. Không xóa được phòng mặc định.
 
-API HTTP dùng JWT để quản lý phòng; UDP vẫn dùng chế độ auth chung của server. Khi `AUTH_MODE=RoomCode`, người chơi chỉ cần mã join, không cần gửi JWT qua UDP. Nếu cố ý test `AUTH_MODE=Jwt` local/VPN, mỗi phiên cần account riêng; quota tạo phòng không giới hạn số phiên RoomCode của chủ phòng.
+API HTTP dùng JWT để quản lý phòng; UDP vẫn dùng chế độ auth chung của server. Khi `AUTH_MODE=RoomCode`, người chơi vẫn cần đăng nhập và vé v4, cùng mã join; JWT không đi qua UDP. Nếu cố ý test `AUTH_MODE=Jwt` local/VPN, mỗi phiên cần account riêng; quota tạo phòng không giới hạn số phiên RoomCode của chủ phòng.
 
 | Kết quả/lỗi | Ý nghĩa và cách xử lý |
 | --- | --- |
@@ -933,7 +939,7 @@ Mục này giữ quy trình chẩn đoán UDP/LAN/VPN. Luồng triển khai hi�
 | SRV-01 — GameServer & tick | LiteNetLib UDP 7777, fixed tick 30Hz/PollEvents, không chờ API/DB đồng bộ trong tick. Giới hạn 10/phòng, tổng 50/5 phòng; kiểm 10 phiên/300s và metrics. |
 | SRV-02 — Handshake | Luồng chính Local/Online/VPN dùng RoomCode, server cấp PlayerId phiên; kiểm version/payload/capacity, timeout và trả slot. JWT UDP là nhánh tùy chọn Local/VPN, không tự bật khi NET-01 có API account. |
 
-Account ID trong JWT **khác** PlayerId ngẫu nhiên của phiên RoomCode. Có login để tạo phòng không có nghĩa mọi người join phòng phải login. Không đưa JWT vào UDP public; giữ guard PUBLIC_HOSTING và wire protocol v1.
+Account ID trong JWT **khác** PlayerId ngẫu nhiên của phiên RoomCode. Mọi người join LAN/online đều phải login và lấy vé mới. Không đưa JWT vào UDP public; giữ guard account và handshake v4.
 
 ### 15.2. Chọn endpoint bằng biến môi trường
 
@@ -1028,7 +1034,7 @@ PASS/FAIL cho tiêu chí đã chạy; BLOCKED cho đường mạng không tới 
 
 ### 16.1. Phạm vi hiện tại
 
-Backend + NetSmokeClient hỗ trợ UDP chính và WSS dự phòng, dùng chung room/slot. Unity JSurviv chưa chuyển sang backend này, vì vậy hoàn thành bài này chưa phải có trận multiplayer. Giữ 10 người/phòng, 5 phòng gồm mặc định, 50 phiên tổng, 2 phòng thêm/user. Đăng nhập/JWT hợp lệ mới tạo/list/xóa phòng; join dùng RoomCode.
+Backend + NetSmokeClient hỗ trợ UDP chính và WSS dự phòng, dùng chung room/slot. Unity JSurviv chưa chuyển sang backend này, vì vậy hoàn thành bài này chưa phải có trận multiplayer. Giữ 10 người/phòng, 5 phòng gồm mặc định, 50 phiên tổng, 2 phòng thêm/user. Đăng nhập/JWT hợp lệ mới tạo/list/xóa phòng và lấy vé join; game transport dùng ticket ngắn hạn + RoomCode.
 
 ### 16.2. Chạy Local
 

@@ -17,7 +17,9 @@ public sealed class FixedTickLoop(int tickRate, ServerMetrics metrics)
         while (!cancellationToken.IsCancellationRequested)
         {
             var loopStarted = Stopwatch.GetTimestamp();
-            accumulator += (loopStarted - previous) / (double)Stopwatch.Frequency;
+            var spacing = (loopStarted - previous) / (double)Stopwatch.Frequency;
+            metrics.RecordLoopSpacing(spacing * 1000);
+            accumulator += spacing;
             previous = loopStarted;
             pollNetwork();
             var steps = 0;

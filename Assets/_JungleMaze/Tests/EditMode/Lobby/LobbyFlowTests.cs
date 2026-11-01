@@ -703,29 +703,158 @@ namespace JungleMaze.Tests.Lobby
             Assert.AreEqual(LobbyScreen.MainMenu, rig.Flow.Screen, "Quay lại returns to Home");
         }
 
-        /// <summary>Review M1: the dev skip works only when the composition turns it on (Editor/dev builds).</summary>
+        /// <summary>Approved policy: all LAN/online players account required; offline practice always available from Login and MainMenu without account/API.</summary>
         [Test]
-        public void DevSkip_OnlyWhenEnabled_JoinByCode_RoomsStillNeedLogin()
+        public void Login_OpenOffline_EntersGame_WithoutAccountOrApi()
         {
-            using (var release = new LobbyRig(login: false))
+            using var rig = new LobbyRig(login: false);
+            Assert.AreEqual(LobbyScreen.Login, rig.Flow.Screen);
+            Assert.IsFalse(rig.Account.IsValid);
+            Assert.IsNull(rig.Account.Token);
+            Assert.AreEqual(0, rig.Api.Logins);
+
+            rig.Flow.OpenOffline();
+            Assert.AreEqual(1, rig.StartOfflineCalls);
+            Assert.IsTrue(rig.Flow.IsOffline);
+            Assert.AreEqual(LobbyScreen.InGame, rig.Flow.Screen, "enters Game directly");
+            Assert.AreEqual(0, rig.Api.Logins, "no account or API call made");
+        }
+
+        [Test]
+        public async System.Threading.Tasks.Task LogoutDuringHistoryRequest_CannotRestorePreviousAccountRows()
+        {
+            using var rig = new LobbyRig();
+            rig.History.Hang = true;
+            var request = rig.Flow.History.Refresh();
+            Assert.AreEqual(ListState.Loading, rig.Flow.History.State);
+            rig.Account.Logout(); rig.Flow.History.Clear();
+            await request;
+            Assert.AreEqual(ListState.Idle, rig.Flow.History.State);
+            Assert.AreEqual(0, rig.Flow.History.Rows.Count);
+        }
+
+        [Test]
+        public void Offline_InMatchCanvasOff()
+        {
+            using var rig = new LobbyRig(login: false);
+            rig.Flow.OpenOffline();
+            Assert.AreEqual(LobbyScreen.InGame, rig.Flow.Screen);
+            // Presenter rules: InGame has no panel and disables Canvas
+            Assert.IsNull(JungleMaze.Presentation.UI.Lobby.LobbyUiPresenter.PanelFor(null, rig.Flow.Screen));
+        }
+
+        [Test]
+        public void Offline_Result_Replay_NewId_Menu()
+        {
+            using var rig = new LobbyRig(login: false);
+            rig.Flow.OpenOffline();
+            var firstMatchId = rig.OfflineLobby.MatchId;
+            Assert.AreNotEqual(Guid.Empty, firstMatchId);
+
+            // Solo player dies -> Results
+            rig.OfflineResults.Current = rig.OfflineResult(42f);
+            rig.OfflineLobby.SetPhase(MatchPhase.Ending, 0);
+            rig.Tick();
+            Assert.AreEqual(LobbyScreen.Results, rig.Flow.Screen);
+            Assert.IsTrue(rig.Flow.Result.HasData);
+            Assert.IsTrue(rig.Flow.Result.IsOffline);
+            Assert.AreEqual("#1 / 1", rig.Flow.Result.RankText);
+
+            // Replay restarts round with a new MatchId
+            Assert.IsTrue(rig.Flow.Replay());
+            Assert.AreEqual(1, rig.Commands.Replays);
+            Assert.IsTrue(rig.Flow.ReplayPending);
+            rig.Tick();
+            Assert.AreEqual(LobbyScreen.InGame, rig.Flow.Screen);
+            var secondMatchId = rig.OfflineLobby.MatchId;
+            Assert.AreNotEqual(firstMatchId, secondMatchId, "replay generates new match ID");
+
+            // Die again -> Results -> Home returns to menu
+            rig.OfflineResults.Current = rig.OfflineResult(55f);
+            rig.OfflineLobby.SetPhase(MatchPhase.Ending, 0);
+            rig.Tick();
+            Assert.AreEqual(LobbyScreen.Results, rig.Flow.Screen);
+
+            rig.Flow.GoHome();
+            Assert.AreEqual(1, rig.Commands.Leaves);
+            Assert.IsFalse(rig.Flow.IsOffline);
+            Assert.AreEqual(LobbyScreen.Login, rig.Flow.Screen, "returns to login screen (unauthenticated)");
+        }
+
+        [Test]
+        public void MissingOrExpiredAccount_NetworkJoinBlocked()
+        {
+            using (var rig = new LobbyRig(login: false))
             {
-                release.Flow.DevSkipLogin();
-                Assert.AreEqual(LobbyScreen.Login, release.Flow.Screen, "off by default: release has no way past Login");
-                Assert.IsFalse(LobbyOptions.Default.DevSkipLogin);
+                // Missing account: cannot open join or submit join
+                rig.Flow.OpenJoin();
+                Assert.AreEqual(LobbyScreen.Login, rig.Flow.Screen, "missing account redirects to Login");
+                Assert.IsFalse(rig.Flow.SubmitJoin(), "join submission blocked without account");
+                Assert.AreEqual(0, rig.Commands.Joins);
             }
-            using var rig = new LobbyRig(o => o.DevSkipLogin = true, login: false);
-            rig.Flow.DevSkipLogin();
-            Assert.AreEqual(LobbyScreen.MainMenu, rig.Flow.Screen);
-            Assert.IsTrue(rig.Flow.DevSkipped);
-            rig.Flow.OpenJoin();
+
+            using (var rig = new LobbyRig(login: true))
+            {
+                Assert.IsTrue(rig.Account.IsValid);
+                // Advance clock past token expiry
+                rig.Utc = rig.Utc.AddHours(25);
+                Assert.IsFalse(rig.Account.IsValid, "token is now expired");
+
+                rig.Flow.OpenJoin();
+                Assert.AreEqual(LobbyScreen.Login, rig.Flow.Screen, "expired account redirects to Login");
+                Assert.IsFalse(rig.Flow.SubmitJoin(), "join submission blocked when expired");
+                Assert.AreEqual(0, rig.Commands.Joins);
+            }
+        }
+
+        [Test]
+        public void LoggedIn_JoinReceivesTokenRAM()
+        {
+            using var rig = new LobbyRig(login: true);
+            Assert.IsTrue(rig.Account.IsValid);
+            string ramToken = null;
+            var commands = new JungleMaze.App.Lobby.Adapters.SessionLobbyCommands((code, name) =>
+            {
+                if (rig.Account.IsValid) ramToken = rig.Account.Token;
+            }, () => ramToken = null, new JungleMaze.App.Match.MatchSession(
+                new JungleMaze.Tests.App.FakeNetwork(rig.Bus),
+                new JungleMaze.Tests.App.FakeNetwork(rig.Bus),
+                new JungleMaze.Tests.App.FakeNetwork(rig.Bus),
+                rig.Bus, new JungleMaze.Domain.Player.PlayerRegistry(),
+                new JungleMaze.App.Player.LocalPrediction()), null);
+
+            commands.Join("K7M2Q9", "Huy");
+            Assert.AreEqual(rig.Account.Token, ramToken, "token passed in RAM");
+
+            // Logout clears token in RAM
+            rig.Account.Logout();
+            Assert.IsFalse(rig.Account.IsValid);
+            Assert.IsNull(rig.Account.Token);
+        }
+
+        [Test]
+        public void CreateGuest_CannotBypassAuth()
+        {
+            using var rig = new LobbyRig(login: false);
+            // Neither flow nor join creates a guest or bypasses auth
+            Assert.IsFalse(rig.Account.IsValid);
+            Assert.AreEqual(LobbyScreen.Login, rig.Flow.HomeScreen);
             rig.Join.SetCode("K7M2Q9");
-            Assert.IsTrue(rig.Flow.SubmitJoin(), "room code without an account");
-            Assert.AreEqual(1, rig.Commands.Joins);
-            rig.Flow.CancelJoin();
-            rig.Flow.Back();
-            rig.Flow.OpenRooms();
-            Assert.AreEqual(LobbyScreen.Login, rig.Flow.Screen, "the room manager still needs a JWT");
-            Assert.IsFalse(rig.Flow.DevSkipped, "back on Login ends the dev skip");
+            Assert.IsFalse(rig.Flow.SubmitJoin(), "unauthenticated user cannot bypass auth to join network");
+            Assert.AreEqual(0, rig.Commands.Joins);
+        }
+
+        [Test]
+        public void NetworkResults_NotMisclassifiedOffline()
+        {
+            using var rig = new LobbyRig(login: true);
+            rig.InGame();
+            rig.Results.Current = rig.Result(MatchEndReason.LastAlive, 0, (0, 1, "Huy"), (1, 2, "Mai"));
+            rig.Phase(MatchPhase.Ending, 10);
+            Assert.AreEqual(LobbyScreen.Results, rig.Flow.Screen);
+            Assert.IsTrue(rig.Flow.Result.HasData);
+            Assert.IsFalse(rig.Flow.Result.IsOffline, "network result is NOT classified as offline");
+            Assert.AreEqual(ResultHeadline.Victory, rig.Flow.Result.Headline);
         }
 
         /// <summary>Review m1: logout and JWT expiry forget the last account's history and last match.</summary>

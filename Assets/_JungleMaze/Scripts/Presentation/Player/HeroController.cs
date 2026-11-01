@@ -27,6 +27,7 @@ namespace JungleMaze.Presentation.Player
         private Camera _camera;
 
         public Vector2 MoveInput => _moveInput;
+        public float MovementMultiplier { get; set; } = 1f;
         public float AimDegrees => _aimDegrees;
 
         [Inject]
@@ -76,7 +77,7 @@ namespace JungleMaze.Presentation.Player
         /// <summary>Shared kinematics entry point; called by FixedUpdate, also usable by local acceptance tools.</summary>
         public void ApplyMovement(Vector2 input)
         {
-            var speed = _balance != null ? _balance.Match.HeroBaseSpeed : FallbackSpeed;
+            var speed = (_balance != null ? _balance.Match.HeroBaseSpeed : FallbackSpeed) * Mathf.Clamp(MovementMultiplier, 0, 1.3f);
             // deltaTime=1: ComputeMoveDelta returns a per-second rate here, i.e. a velocity, not a per-frame offset.
             var (vx, vy) = HeroMotion.ComputeMoveDelta(input.x, input.y, speed, 1f);
             _body.linearVelocity = new Vector2(vx, vy);

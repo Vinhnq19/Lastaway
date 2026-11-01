@@ -1,11 +1,12 @@
 {
   "authMode": "RoomCode",
-  "protocolVersion": 3,
+  "protocolVersion": 4,
   "connectTimeoutMs": 5000,
   "mode": "Online",
   "apiBaseUrl": "https://HOST.TAILNET.ts.net",
   "gameServerHost": "100.80.1.10",
   "gameServerPort": 7777,
   "transport": "Auto",
-  "webSocketUrl": "wss://HOST.TAILNET.ts.net/game"
+  "webSocketUrl": "wss://HOST.TAILNET.ts.net/game",
+  "worldEnabled": true
 }

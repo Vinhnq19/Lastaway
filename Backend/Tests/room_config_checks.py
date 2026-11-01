@@ -187,7 +187,13 @@ $failStop=$false
 $taskLifecycle=@{startedByThisRun=$false;adoptedRunningInstance=$true};$script:called=0
 & $script
 if($script:called -ne 1 -or -not $taskLifecycle.stoppedConfirmed) {throw 'Explicitly adopted Running instance was not stopped'}
-Write-Output 'PASS lifecycle finally: Stop after error, retries, Stopped verification, explicit Running adoption, no Stop before ownership.'
+$KeepInstanceRunning=$true
+function State { @{ State=@{Name='running'} } }
+$taskLifecycle=@{startedByThisRun=$false;adoptedRunningInstance=$true};$script:called=0
+function Aws { $script:called++; throw 'Keep-running must never call an EC2 mutation' }
+& $script
+if($script:called -ne 0 -or -not $taskLifecycle.runningConfirmed -or $taskLifecycle.stoppedConfirmed) {throw 'Keep-running lifecycle policy violated'}
+Write-Output 'PASS lifecycle finally: legacy Stop/retries remain; keep-running confirms Running without Stop/Start.'
 """
     import os
     env=dict(os.environ,JUNGLE_LIFECYCLE_SOURCE=str(lifecycle))

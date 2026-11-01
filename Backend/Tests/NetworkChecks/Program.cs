@@ -22,6 +22,27 @@ var passed = 0;
 const string TestRoom = "Network_Check_Room";
 try
 {
+    var attemptV4 = Guid.NewGuid();
+    var proofV4 = Guid.NewGuid();
+    var ticketV4 = new string('a', 64);
+    var connectV4 = NetworkProtocol.WriteConnect(JoinAuthMode.RoomCode, TestRoom, "TicketPlayer", NetworkProtocol.Version4, attemptV4, proofV4, ticketV4).CopyData();
+    Check(NetworkProtocol.TryReadConnect(new NetDataReader(connectV4), out var decodedV4, out _)
+        && decodedV4!.AttemptId == attemptV4 && decodedV4.ResumeToken == proofV4 && decodedV4.Ticket == ticketV4,
+        "v4 roundtrip preserves attempt/resume/ticket without JWT");
+    Check(!decodedV4!.ToString().Contains(ticketV4) && !decodedV4.ToString().Contains(TestRoom), "JoinRequest logging redacts bearer and room");
+    Check(!NetworkProtocol.TryReadConnect(new NetDataReader(connectV4.Concat(new byte[] { 0 }).ToArray()), out _, out _), "v4 rejects trailing data");
+    for (var length = 0; length < connectV4.Length; length++)
+        if (NetworkProtocol.TryReadConnect(new NetDataReader(connectV4.Take(length).ToArray()), out _, out _))
+            throw new InvalidOperationException("Truncated v4 accepted at length " + length);
+    Check(true, "v4 rejects every truncated prefix without throwing");
+    foreach (var invalidTicket in new[] { "", new string('a', 63), new string('a', 65), new string('g', 64), new string('界', 64) })
+    {
+        var rejected = false;
+        try { NetworkProtocol.WriteConnect(JoinAuthMode.RoomCode, TestRoom, "Player", NetworkProtocol.Version4, attemptV4, ticket: invalidTicket); }
+        catch (ArgumentException) { rejected = true; }
+        Check(rejected, "v4 rejects malformed bearer before transport");
+    }
+    Check(!NetworkProtocol.TryReadConnect(new NetDataReader(new byte[513]), out _, out var oversizedReason) && oversizedReason == "PayloadTooLarge", "v4 enforces 512-byte cap");
     var port = FreeUdpPort();
     var metrics = new ServerMetrics();
     using var host = new NetworkHost(new ServerOptions(IPAddress.Loopback, port, 10, 30, 1, "RoomCode", TestRoom), metrics);
@@ -233,6 +254,13 @@ try
     }
     finally { Console.SetOut(originalOutput); }
     Check(maximumSteps <= 5 && Regex.IsMatch(output.ToString(), @"droppedTicks=[1-9]\d*"), "Stall 300ms: tối đa 5 catch-up tick, báo droppedTicks");
+    var loopMaxMatch = Regex.Match(output.ToString(), @"loopMaxMs=([0-9.]+)");
+    var gapMaxMatch = Regex.Match(output.ToString(), @"loopGapMaxMs=([0-9.]+)");
+    Check(loopMaxMatch.Success && double.Parse(loopMaxMatch.Groups[1].Value, System.Globalization.CultureInfo.InvariantCulture) >= 250 &&
+        gapMaxMatch.Success && double.Parse(gapMaxMatch.Groups[1].Value, System.Globalization.CultureInfo.InvariantCulture) >= 250,
+        "Stall diagnostics preserve max work/loop spacing even when p99 hides a rare pause");
+    Check(Regex.IsMatch(output.ToString(), @"gcPauseMs=[0-9.]+ previousReportMs=[0-9.]+"),
+        "Window reports distinguish GC pause and previous metric-output time without dropping counters");
 
     // Kiểm tra loader/exit code của executable client thật, không lặp lại validation trong test.
     var clientDll = Path.Combine(backend, "NetSmokeClient/bin/Debug/net8.0/NetSmokeClient.dll");
