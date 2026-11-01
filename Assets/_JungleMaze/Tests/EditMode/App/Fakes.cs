@@ -15,7 +15,8 @@ namespace JungleMaze.Tests.App
         private readonly IEventBus _bus;
         private readonly EventBus _packets = new EventBus();
         public readonly List<ConnectRequest> Connects = new List<ConnectRequest>();
-        public int Sent;
+        public int Sent, SnapshotAcks;
+        public SnapshotAckPacket LastSnapshotAck;
         public bool AcceptSends = true;
 
         public FakeNetwork(IEventBus bus) => _bus = bus;
@@ -46,6 +47,7 @@ namespace JungleMaze.Tests.App
         {
             if (!AcceptSends) return false;
             Sent++;
+            if (packet is SnapshotAckPacket ack) { SnapshotAcks++; LastSnapshotAck = ack; }
             return true;
         }
 

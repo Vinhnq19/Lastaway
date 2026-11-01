@@ -245,6 +245,40 @@ namespace JungleMaze.Tests.Hud
         }
 
         [Test]
+        public void DiagnosticDetails_DefaultHidden_AndCannotCoverOpenMenu()
+        {
+            var host = new GameObject("demoDetailsTest");
+            var menu = new MatchMenuController(_bus, () => 0d, () => _harness.MatchId, AppScreen.InMatch);
+            try
+            {
+                var demo = host.AddComponent<MatchDemoView>(); demo.BindOverlay(menu, null);
+                Assert.IsFalse(demo.DetailsVisible, "Normal gameplay/results must not show the old diagnostic panel");
+                typeof(MatchDemoView).GetField("_showDetails", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).SetValue(demo, true);
+                Assert.IsTrue(demo.DetailsVisible, "F3 may opt in to diagnostics");
+                menu.Open(); Assert.IsFalse(demo.DetailsVisible);
+                menu.Close(); Assert.IsTrue(demo.DetailsVisible);
+            }
+            finally { menu.Dispose(); UnityEngine.Object.DestroyImmediate(host); }
+        }
+
+        [Test]
+        public void Results_HideWorldLabelsBehindTheLeaderboard()
+        {
+            var host = new GameObject("demoResultLabelsTest");
+            try
+            {
+                var demo = host.AddComponent<MatchDemoView>();
+                typeof(MatchDemoView).GetField("_session", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).SetValue(demo, _harness.Match);
+                _harness.Start(ownNetId: 0, count: 2);
+                Assert.IsFalse(demo.ShouldHideWorldLabels);
+                _harness.Network.Push(new MatchResultPacket { MatchId = _harness.MatchId });
+                Assert.IsTrue(demo.ShouldHideWorldLabels);
+                Assert.IsFalse(demo.DetailsVisible);
+            }
+            finally { UnityEngine.Object.DestroyImmediate(host); }
+        }
+
+        [Test]
         public void MatchDemoView_ShouldHideWorldLabels_WhenMenuOrOverlayOpen()
         {
             var host = new GameObject("demoViewTest");

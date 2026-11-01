@@ -33,7 +33,7 @@ namespace JungleMaze.App.Match
         private PlayerIntent _intent;
         private float _sendElapsed, _tickFraction;
         private ushort _inputSequence;
-        private bool _hasSnapshot, _helloSent;
+        private bool _hasSnapshot, _helloSent, _snapshotAckPending;
         private readonly Queue<Guid> _retiredMatches = new Queue<Guid>();
         private uint _lastSnapshotTick;
 
@@ -102,7 +102,15 @@ namespace JungleMaze.App.Match
             _tickFraction += deltaTime * 30f;
             var ticks = (uint)_tickFraction;
             ServerTick += ticks; _tickFraction -= ticks;
-            if (Phase != MatchPhase.InGame || OwnNetId == 255 || OwnHp == 0 || !CanSendGameplayInput) { _sendElapsed = 0; return; }
+            if (Phase != MatchPhase.InGame || OwnNetId == 255 || OwnHp == 0 || !CanSendGameplayInput)
+            { _sendElapsed = 0; _snapshotAckPending = false; return; }
+            // Only the newest ack matters; a backlog must not fill the bounded WebSocket send queue.
+            if (_snapshotAckPending)
+            {
+                var ack = new SnapshotAckPacket { MatchId = MatchId, AckTick = _lastSnapshotTick };
+                if (_sender.Send(ref ack, PacketDelivery.Unreliable)) _snapshotAckPending = false;
+            }
+
             ActiveInputSeconds += deltaTime;
             _sendElapsed += deltaTime;
             var sent = 0;
@@ -132,7 +140,7 @@ namespace JungleMaze.App.Match
             if (change.Current == NetworkState.Failed || change.Current == NetworkState.Disconnected)
             {
                 // Retain only the short-lived resume proof; scene state is repopulated by the server.
-                ClearPlayers(); _intent = default; _sendElapsed = 0; _hasSnapshot = false; _helloSent = false; Prediction.Reset();
+                ClearPlayers(); _intent = default; _sendElapsed = 0; _hasSnapshot = false; _helloSent = false; _snapshotAckPending = false; Prediction.Reset();
             }
         }
         private void PhaseChanged(MatchPhasePacket packet)
@@ -142,7 +150,7 @@ namespace JungleMaze.App.Match
             {
                 if (_retiredMatches.Contains(packet.MatchId)) { IgnoredPackets++; return; }
                 if (MatchId != Guid.Empty) { _retiredMatches.Enqueue(MatchId); if (_retiredMatches.Count > 8) _retiredMatches.Dequeue(); }
-                ClearPlayers(); MatchId = packet.MatchId; _hasSnapshot = false; HasResult = false; _hasZone = false;
+                ClearPlayers(); MatchId = packet.MatchId; _hasSnapshot = false; _snapshotAckPending = false; HasResult = false; _hasZone = false;
                 Roster = Array.Empty<MatchParticipantState>(); OwnNetId = 255; ResumeProof = Guid.Empty; _inputSequence = 0;
                 Prediction.Reset();
             }
@@ -161,8 +169,7 @@ namespace JungleMaze.App.Match
             if (packet.MatchId != MatchId || (_hasSnapshot && unchecked((int)(packet.ServerTick - _lastSnapshotTick)) <= 0))
             { IgnoredPackets++; return; }
             _hasSnapshot = true; _lastSnapshotTick = packet.ServerTick; ServerTick = packet.ServerTick; _tickFraction = 0; Snapshots++;
-            var ack = new SnapshotAckPacket { MatchId = MatchId, AckTick = packet.ServerTick };
-            _sender.Send(ref ack, PacketDelivery.Unreliable);
+            _snapshotAckPending = true;
             ushort seen = 0;
             for (var i = 0; i < packet.PlayerCount; i++)
             {

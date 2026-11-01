@@ -11,6 +11,8 @@ using JungleMaze.Core.DI;
 using JungleMaze.Domain.Balance;
 using JungleMaze.Presentation.Player;
 using JungleMaze.Presentation.World;
+using JungleMaze.App.World;
+using JungleMaze.App.Flow;
 using UnityEngine;
 
 namespace JungleMaze.Presentation.Combat
@@ -51,6 +53,9 @@ namespace JungleMaze.Presentation.Combat
         private System.Action<CombatEvent> _onChanged;
         private float _aimDegrees;
         private float _serverTickAccumulator;
+        private OfflineWorldSession _offlineWorld;
+        private OfflineMatchSession _offlineMatch;
+        private GameFlow _flow;
 
         [Inject]
         public void Construct(IBalanceConfigProvider balance, IPoolService pool, IHudStateWriter hud,
@@ -60,6 +65,14 @@ namespace JungleMaze.Presentation.Combat
             _pool = pool;
             _hud = hud;
             _match=match; _online=online; _menu=menu; _poses=poses;
+        }
+
+        [Inject]
+        public void ConfigureOffline(OfflineWorldSession offlineWorld, OfflineMatchSession offlineMatch, GameFlow flow)
+        {
+            _offlineWorld = offlineWorld;
+            _offlineMatch = offlineMatch;
+            _flow = flow;
         }
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
@@ -85,6 +98,7 @@ namespace JungleMaze.Presentation.Combat
 
             if (!_match.Connected && _server!=null) CreateOfflineController();
             _online.Changed+=OnCombatEvent;
+            if (_offlineWorld != null) _offlineWorld.CombatChanged += OnCombatEvent;
         }
 
         private void CreateOfflineController()
@@ -109,6 +123,18 @@ namespace JungleMaze.Presentation.Combat
                 {
                     if (HeroAim.TryGetTargetDegrees(Camera.main, hero.position, Input.mousePosition, out var onlineAim)) _aimDegrees=onlineAim;
                     _online.TryAttack(_aimDegrees);
+                }
+                return;
+            }
+            if (_flow != null && _flow.IsOffline && _offlineWorld != null)
+            {
+                if (_offlineMatch != null && _offlineMatch.IsDead) return;
+                if (_menu?.BlocksGameplayInput ?? false) return;
+                if (Input.GetKeyDown(KeyCode.R)) _offlineWorld.TryReload();
+                if (Input.GetMouseButton(0))
+                {
+                    if (HeroAim.TryGetTargetDegrees(Camera.main, hero.position, Input.mousePosition, out var offlineAim)) _aimDegrees = offlineAim;
+                    _offlineWorld.TryAttack(_aimDegrees);
                 }
                 return;
             }
@@ -143,6 +169,7 @@ namespace JungleMaze.Presentation.Combat
         {
             if (_controller != null) _controller.Changed -= _onChanged;
             if (_online!=null) _online.Changed-=OnCombatEvent;
+            if (_offlineWorld != null) _offlineWorld.CombatChanged -= OnCombatEvent;
         }
 
         private void OnCombatEvent(CombatEvent combatEvent)
@@ -155,7 +182,7 @@ namespace JungleMaze.Presentation.Combat
 
         private void SpawnAttackVisual(CombatWeaponId weapon, float aimDegrees, Vector3 origin, Transform anchor)
         {
-            var controller=_match.Connected?_online.Controller:_controller;
+            var controller = _match.Connected ? _online.Controller : (_flow != null && _flow.IsOffline && _offlineWorld != null ? _offlineWorld.Combat?.Controller : _controller);
             if (controller==null) return;
             var slot = controller.Slot(weapon);
             if (slot.IsRanged)
