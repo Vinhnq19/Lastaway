@@ -4,8 +4,9 @@
   "gameServerHost": "127.0.0.1",
   "gameServerPort": 7777,
   "authMode": "RoomCode",
-  "protocolVersion": 3,
+  "protocolVersion": 4,
   "connectTimeoutMs": 5000,
   "transport": "Auto",
-  "webSocketUrl": "ws://127.0.0.1:7781/game"
+  "webSocketUrl": "ws://127.0.0.1:7781/game",
+  "worldEnabled": true
 }

@@ -71,15 +71,19 @@ namespace JungleMaze.Infrastructure.Network
 
         private string _selectedTransport = "Udp";
         private string _fallbackReason;
+        private readonly Func<ConnectRequest, Guid, Task<string>> _ticketIssuer;
+        private Task<string> _ticketTask;
+        private string _ticket;
         private Guid _resumeToken;
         private Guid _resumeForNextConnect;
 
-        public NetworkClient(IEventBus bus, PacketRegistry registry, ILog log = null, Func<long> clock = null)
+        public NetworkClient(IEventBus bus, PacketRegistry registry, ILog log = null, Func<long> clock = null, Func<ConnectRequest, Guid, Task<string>> ticketIssuer = null)
         {
             _bus = bus ?? throw new ArgumentNullException(nameof(bus));
             _registry = registry ?? throw new ArgumentNullException(nameof(registry));
             _log = log ?? NullLog.Instance;
             _clock = clock ?? Stopwatch.GetTimestamp;
+            _ticketIssuer = ticketIssuer;
             _packetBus = new EventBus(_log);
             _listener.PeerConnectedEvent += OnPeerConnected;
             _listener.PeerDisconnectedEvent += OnPeerDisconnected;
@@ -104,7 +108,7 @@ namespace JungleMaze.Infrastructure.Network
             if (c == null) return;
             _resumeForNextConnect = proof;
             var upgraded = new ClientConfig(c.Mode, c.ApiBaseUrl, c.GameServerHost, c.GameServerPort, c.AuthMode,
-                NetworkProtocol.Version3, c.ConnectTimeoutMs, c.Transport, c.Source, c.WebSocketUrl, c.WorldEnabled);
+                c.ProtocolVersion >= NetworkProtocol.Version4 ? NetworkProtocol.Version4 : NetworkProtocol.Version3, c.ConnectTimeoutMs, c.Transport, c.Source, c.WebSocketUrl, c.WorldEnabled);
             Connect(new ConnectRequest(upgraded, old.RoomCode, old.DisplayName, old.AccessToken));
         }
 
@@ -174,7 +178,23 @@ namespace JungleMaze.Infrastructure.Network
             _resumeToken = _resumeForNextConnect;
             _resumeForNextConnect = Guid.Empty;
 
-            if (config.Transport == "Wss")
+            if (config.ProtocolVersion == NetworkProtocol.Version4)
+            {
+                if (string.IsNullOrWhiteSpace(request.AccessToken) || _ticketIssuer == null)
+                { FailBeforeStart(DisconnectReason.AuthenticationRequired, "Đăng nhập trước khi vào phòng."); return; }
+                _connectStarted = _clock();
+                try { _ticketTask = _ticketIssuer(request, AttemptId); }
+                catch { FailBeforeStart(DisconnectReason.LoginFailed, "Không cấp được vé vào phòng."); return; }
+                if (_ticketTask == null) { FailBeforeStart(DisconnectReason.LoginFailed, "Không cấp được vé vào phòng."); return; }
+                SetState(NetworkState.Connecting, DisconnectReason.None);
+                return;
+            }
+            StartSelectedTransport();
+        }
+
+        private void StartSelectedTransport()
+        {
+            if (_request.Config.Transport == "Wss")
             {
                 _selectedTransport = "Wss";
                 _fallbackReason = null;
@@ -190,7 +210,7 @@ namespace JungleMaze.Infrastructure.Network
 
         public void Disconnect()
         {
-            if (_manager == null && _webSocket == null)
+            if (_manager == null && _webSocket == null && _ticketTask == null)
             {
                 if (State == NetworkState.Failed) SetState(NetworkState.Disconnected, LastReason);
                 return;
@@ -202,6 +222,21 @@ namespace JungleMaze.Infrastructure.Network
         public void Tick(float deltaTime)
         {
             if (_disposed) return;
+            if (_ticketTask != null)
+            {
+                if (!_ticketTask.IsCompleted)
+                {
+                    if (ElapsedMs(_connectStarted, _clock()) >= 10000)
+                        Fail(DisconnectReason.LoginFailed, "Cấp vé quá thời gian; hãy đăng nhập lại.");
+                    return;
+                }
+                var task = _ticketTask; _ticketTask = null;
+                if (task.IsFaulted || task.IsCanceled || string.IsNullOrEmpty(task.Result))
+                { Fail(DisconnectReason.LoginFailed, "Không cấp được vé; kiểm tra tài khoản/API."); return; }
+                _ticket = task.Result;
+                StartSelectedTransport();
+                return;
+            }
 
             if (_selectedTransport == "Wss")
             {
@@ -324,7 +359,7 @@ namespace JungleMaze.Infrastructure.Network
             try
             {
                 _udpConnectData = NetworkProtocol.WriteConnect(_request.Config.AuthMode, _request.RoomCode,
-                    _request.DisplayName.Trim(), _request.Config.ProtocolVersion, AttemptId, _resumeToken);
+                    _request.DisplayName.Trim(), _request.Config.ProtocolVersion, AttemptId, _resumeToken, _ticket ?? "");
             }
             catch (ArgumentException e) { FailBeforeStart(DisconnectReason.InvalidConfig, e.Message); return; }
 
@@ -408,7 +443,7 @@ namespace JungleMaze.Infrastructure.Network
             try
             {
                 handshake = NetworkProtocol.WriteConnect(_request.Config.AuthMode, _request.RoomCode,
-                    _request.DisplayName.Trim(), _request.Config.ProtocolVersion, AttemptId, _resumeToken).CopyData();
+                    _request.DisplayName.Trim(), _request.Config.ProtocolVersion, AttemptId, _resumeToken, _ticket ?? "").CopyData();
             }
             catch (ArgumentException e) { FailBeforeStart(DisconnectReason.InvalidConfig, e.Message); return; }
 
@@ -516,7 +551,7 @@ namespace JungleMaze.Infrastructure.Network
                 NetworkProtocol.Write(_controlWriter, NetworkProtocol.Ping, ++_pingSequence);
                 if (!_webSocket.Send(_controlWriter.CopyData()))
                 {
-                    Fail(DisconnectReason.ConnectionLost, "WSS send failed");
+                    Fail(DisconnectReason.ConnectionLost, _webSocket.Error ?? "WssSendFailed");
                     return;
                 }
                 _rtt.OnPingSent(_pingSequence, now);
@@ -728,6 +763,7 @@ namespace JungleMaze.Infrastructure.Network
         private void StopTransport(bool explicitQuit = false, bool gracefulWebSocket = false)
         {
             _closing = true;
+            _ticketTask = null;
             _generation++;
             try
             {
@@ -771,6 +807,8 @@ namespace JungleMaze.Infrastructure.Network
 
         private void ResetSession()
         {
+            _ticketTask = null;
+            _ticket = null;
             _rtt.Reset();
             _pingSequence = 0;
             _invalidPackets = 0;

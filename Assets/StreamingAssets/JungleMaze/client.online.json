@@ -4,6 +4,7 @@
   "gameServerHost": "100.80.1.20",
   "gameServerPort": 7777,
   "authMode": "RoomCode",
-  "protocolVersion": 1,
-  "connectTimeoutMs": 5000
+  "protocolVersion": 4,
+  "connectTimeoutMs": 5000,
+  "worldEnabled": true
 }

@@ -35,6 +35,32 @@ namespace JungleMaze.Tests.Protocol
             match.Tick(.1f); Assert.AreEqual(2, network.Sent, "Hello is announced once.");
         }
         [Test]
+        public void SnapshotBacklogAcknowledgesNewestOnly_AndDoesNotAckRetiredMatch()
+        {
+            var bus = new EventBus(); var network = new FakeNetwork(bus);
+            using var match = new MatchSession(network, network, network, bus, new PlayerRegistry());
+            match.Initialize(); network.SetState(NetworkState.Joined, DisconnectReason.None);
+            var id = Guid.NewGuid();
+            network.Push(new MatchPhasePacket { MatchId = id, Phase = MatchPhase.InGame });
+            network.Push(new ResumeTokenPacket { MatchId = id, NetId = 0 });
+            for (uint tick = 1; tick <= 100; tick++)
+            {
+                var snapshot = new WorldSnapshotPacket { MatchId = id, ServerTick = tick, PlayerCount = 1 };
+                snapshot.SetPlayer(0, new PlayerStatePacket { NetId = 0, Hp = 100 });
+                network.Push(snapshot);
+            }
+            Assert.AreEqual(0, network.SnapshotAcks, "receiving a backlog must not emit a burst of 100 sends");
+            match.Tick(.001f);
+            Assert.AreEqual(1, network.SnapshotAcks);
+            Assert.AreEqual(100, network.LastSnapshotAck.AckTick);
+            Assert.AreEqual(id, network.LastSnapshotAck.MatchId);
+            network.Push(new WorldSnapshotPacket { MatchId = id, ServerTick = 101 });
+            network.Push(new MatchPhasePacket { MatchId = Guid.NewGuid(), Phase = MatchPhase.Loading });
+            match.Tick(.001f);
+            Assert.AreEqual(1, network.SnapshotAcks, "pending ack must not migrate to another match");
+        }
+
+        [Test]
         public void SnapshotHotCodec_DoesNotAllocate()
         {
             var registry = new PacketRegistry();
@@ -122,9 +148,9 @@ namespace JungleMaze.Tests.Protocol
             using var sha = SHA256.Create();
             var hash = BitConverter.ToString(sha.ComputeHash(stream.ToArray())).Replace("-", "").ToLowerInvariant();
             var data = new ClientRuntimeData(Application.streamingAssetsPath);
-            Assert.IsNull(data.Verify("1.0.0", hash)); Assert.AreEqual(4, data.Covers.Count);
+            Assert.IsNull(data.Verify("1.1.0", hash)); Assert.AreEqual(4, data.Covers.Count);
             Assert.AreEqual(50, data.Bounds.MaxX); Assert.AreEqual(0, data.Bounds.MinY);
-            Assert.IsNotNull(data.Verify("1.0.0", new string('0', 64)));
+            Assert.IsNotNull(data.Verify("1.1.0", new string('0', 64)));
         }
 
         [Test]
@@ -156,7 +182,7 @@ namespace JungleMaze.Tests.Protocol
                 Directory.CreateDirectory(destination);
                 using var aggregate = new MemoryStream();
                 using var sha = SHA256.Create();
-                var manifest = new StringBuilder("{\"version\":\"1.0.0\",\"files\":{");
+                var manifest = new StringBuilder("{\"version\":\"1.1.0\",\"files\":{");
                 var first = true;
                 foreach (var name in new[] { "map_demo.json", "match_settings.json", "zone_schedule.json" })
                 {
@@ -170,7 +196,7 @@ namespace JungleMaze.Tests.Protocol
                 }
                 File.WriteAllText(Path.Combine(destination, "manifest.json"), manifest.Append("}}").ToString());
                 var expected = BitConverter.ToString(sha.ComputeHash(aggregate.ToArray())).Replace("-", "").ToLowerInvariant();
-                Assert.IsNull(new ClientRuntimeData(root).Verify("1.0.0", expected));
+                Assert.IsNull(new ClientRuntimeData(root).Verify("1.1.0", expected));
             }
             finally { if (Directory.Exists(root)) Directory.Delete(root, true); }
         }

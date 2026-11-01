@@ -76,15 +76,15 @@ namespace JungleMaze.App.Config
             if (Mode == ConnectionMode.Local && !IsLoopbackHost(GameServerHost))
                 return "Local cần host loopback; chọn đúng profile LAN/VPN/AWS trước khi đổi môi trường.";
             if (Mode != ConnectionMode.Local && !IsLoopbackHost(GameServerHost) && Uri.TryCreate(ApiBaseUrl, UriKind.Absolute, out var apiRoute) && apiRoute.IsLoopback)
-                return "API loopback không đi cùng server từ xa; chọn profile cùng backend hoặc bỏ API để chơi ẩn danh.";
-            if (ProtocolVersion != NetworkProtocol.Version && ProtocolVersion != NetworkProtocol.LatestVersion && ProtocolVersion != NetworkProtocol.Version3)
-                return $"protocolVersion chỉ hỗ trợ {NetworkProtocol.Version}, {NetworkProtocol.LatestVersion} hoặc {NetworkProtocol.Version3}.";
+                return "API loopback không đi cùng server từ xa; chọn profile cùng backend và API cùng backend.";
+            if (ProtocolVersion != NetworkProtocol.Version && ProtocolVersion != NetworkProtocol.LatestVersion && ProtocolVersion != NetworkProtocol.Version3 && ProtocolVersion != NetworkProtocol.Version4)
+                return $"protocolVersion chỉ hỗ trợ {NetworkProtocol.Version}, {NetworkProtocol.LatestVersion} {NetworkProtocol.Version3} hoặc {NetworkProtocol.Version4}.";
             if (Transport != "Udp" && Transport != "Wss" && Transport != "Auto")
                 return "transport phải là Udp, Wss hoặc Auto.";
             if (Transport != "Udp")
             {
-                if (ProtocolVersion != NetworkProtocol.LatestVersion && ProtocolVersion != NetworkProtocol.Version3)
-                    return "Wss/Auto cần protocolVersion=2 hoặc 3.";
+                if (ProtocolVersion != NetworkProtocol.LatestVersion && ProtocolVersion != NetworkProtocol.Version3 && ProtocolVersion != NetworkProtocol.Version4)
+                    return "Wss/Auto cần protocolVersion=2, 3 hoặc 4.";
                 var wsError = ValidateWebSocketUrl(out _);
                 if (wsError != null) return wsError;
                 var ws = new Uri(WebSocketUrl);
@@ -95,8 +95,9 @@ namespace JungleMaze.App.Config
             }
             if (ConnectTimeoutMs < MinTimeoutMs || ConnectTimeoutMs > MaxTimeoutMs)
                 return $"connectTimeoutMs phải nằm trong [{MinTimeoutMs}, {MaxTimeoutMs}].";
-            // Chỉ kiểm tra API khi bật account; RoomCode hoạt động độc lập API/DB.
-            if (AuthMode == JoinAuthMode.Jwt) return ValidateApiUrl(out _);
+            // v4 xác thực account qua HTTPS trước khi gửi ticket qua game transport.
+            if (ProtocolVersion == NetworkProtocol.Version4 && AuthMode != JoinAuthMode.RoomCode) return "Protocol v4 cần authMode=RoomCode và account ticket.";
+            if (AuthMode == JoinAuthMode.Jwt || ProtocolVersion == NetworkProtocol.Version4) return ValidateApiUrl(out _);
             return null;
         }
 
