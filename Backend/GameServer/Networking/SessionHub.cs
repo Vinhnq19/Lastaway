@@ -13,7 +13,7 @@ namespace GameServer.Networking;
 
 /// <summary>Single writer: toàn bộ hàm trong lớp này chạy trên vòng PollEvents/tick.
 /// Socket async chỉ enqueue công việc; không khóa hoặc await I/O trong lớp này.</summary>
-public sealed class SessionHub
+public sealed partial class SessionHub
 {
     private sealed class Session(int id, IGamePeer peer, JoinRequest request, RoomManager.Room room, string? playerId)
     {
@@ -25,6 +25,10 @@ public sealed class SessionHub
         public string? ProfileKey;
         public long LastMessage = Stopwatch.GetTimestamp();
         public bool ApplicationSeen;
+        public bool WorldEnabled;
+        public uint LastWorldRequestTick=uint.MaxValue,LastWorldSyncTick,LastWorldRevision,LastWorldResyncTick,LastWorldInventoryTick;
+        public Guid LastWorldMatch;
+        public string LastWorldEffectKey = "";
     }
     private sealed class Attempt(JoinRequest request)
     {
@@ -77,7 +81,11 @@ public sealed class SessionHub
         _frameValidator.Subscribe<ReplayAckPacket>(_ => { });
         _frameValidator.Subscribe<SnapshotAckPacket>(_ => { });
         _frameValidator.Subscribe<AttachIdentityPacket>(_ => { });
+        _frameValidator.Subscribe<KillcamRequestPacket>(_ => { });
+        _frameValidator.Subscribe<AttackRequestPacket>(_ => { });
+        _frameValidator.Subscribe<ReloadRequestPacket>(_ => { });
         SetupGameplaySubscriptions();
+        SetupWorldSubscriptions();
         Rooms.RoomCreated += HookRoom;
         HookRoomMatches();
     }
@@ -235,6 +243,20 @@ public sealed class SessionHub
 
         _gameplayRegistry.Subscribe<SnapshotAckPacket, Session>((_, _) => { });
 
+        _gameplayRegistry.Subscribe<AttackRequestPacket, Session>((packet, session) =>
+        {
+            if (session.PlayerId is null) return;
+            if (!session.Room.Match.TryProcessAttack(session.PlayerId, packet, out var result)) return;
+            if (result.Outcome != CombatOutcome.Accepted) SendCombatResult(session, ref result);
+        });
+
+        _gameplayRegistry.Subscribe<ReloadRequestPacket, Session>((packet, session) =>
+        {
+            if (session.PlayerId is null) return;
+            if (!session.Room.Match.TryProcessReload(session.PlayerId, packet, out var result)) return;
+            if (result.Outcome != CombatOutcome.Accepted) SendCombatResult(session, ref result);
+        });
+
         // Gameplay identity attachment via single-use registered ticket
         _gameplayRegistry.Subscribe<AttachIdentityPacket, Session>((packet, session) =>
         {
@@ -249,6 +271,74 @@ public sealed class SessionHub
             _tickets.Remove(packet.Ticket);
             session.ProfileKey = ticket.ProfileKey;
         });
+
+        _gameplayRegistry.Subscribe<KillcamRequestPacket, Session>((packet, session) =>
+        {
+            if (session.PlayerId is null) return;
+            if (packet.Version != KillcamRequestPacket.CurrentVersion) return;
+            if (packet.MatchId != session.Room.Match.MatchId) return;
+
+            if (!session.Room.Match.TryGetKillcamReplay(session.PlayerId, packet.MatchId, packet.VictimNetId, out var replay) || replay == null)
+            {
+                return;
+            }
+
+            SendKillcamChunks(session, replay);
+        });
+    }
+
+    private void SendKillcamChunks(Session session, KillcamReplayResult replay)
+    {
+        if (replay.Status != 0 || replay.Frames.Count == 0)
+        {
+            var chunk = new KillcamDataChunkPacket
+            {
+                Version = KillcamDataChunkPacket.CurrentVersion,
+                MatchId = replay.MatchId,
+                Status = replay.Status,
+                VictimNetId = replay.VictimNetId,
+                KillerNetId = replay.KillerNetId,
+                EndTick = replay.EndTick,
+                TotalFrames = 0,
+                ChunkIndex = 0,
+                TotalChunks = 1,
+                FrameCount = 0,
+                Frames = Array.Empty<KillcamFramePayload>()
+            };
+            var writer = new NetDataWriter();
+            PacketRegistry.BeginFrame(writer);
+            _gameplayRegistry.Write(writer, ref chunk);
+            Send(session, writer.CopyData(), true, GameplayProtocol.GameplayChannel);
+            return;
+        }
+
+        var totalFrames = (ushort)replay.Frames.Count;
+        const int framesPerChunk = KillcamDataChunkPacket.MaxFramesPerChunk;
+        var totalChunks = (byte)Math.Ceiling((double)totalFrames / framesPerChunk);
+
+        for (byte c = 0; c < totalChunks; c++)
+        {
+            var skip = c * framesPerChunk;
+            var chunkFrames = replay.Frames.Skip(skip).Take(framesPerChunk).ToArray();
+            var chunk = new KillcamDataChunkPacket
+            {
+                Version = KillcamDataChunkPacket.CurrentVersion,
+                MatchId = replay.MatchId,
+                Status = 0,
+                VictimNetId = replay.VictimNetId,
+                KillerNetId = replay.KillerNetId,
+                EndTick = replay.EndTick,
+                TotalFrames = totalFrames,
+                ChunkIndex = c,
+                TotalChunks = totalChunks,
+                FrameCount = (byte)chunkFrames.Length,
+                Frames = chunkFrames
+            };
+            var writer = new NetDataWriter();
+            PacketRegistry.BeginFrame(writer);
+            _gameplayRegistry.Write(writer, ref chunk);
+            Send(session, writer.CopyData(), true, GameplayProtocol.GameplayChannel);
+        }
     }
 
     private void SendInitialState(Session session)
@@ -487,6 +577,14 @@ public sealed class SessionHub
         Console.WriteLine($"[joined] playerId={session.PlayerId} roomId={session.Room.Id} transport={session.Peer.Transport} serverSlots={ReservedPeers}/{(_options.Rooms ?? new()).MaxTotalPlayers}");
     }
 
+    private void SendCombatResult<T>(Session session, ref T packet) where T : struct, INetSerializable
+    {
+        var writer = new NetDataWriter();
+        PacketRegistry.BeginFrame(writer);
+        _gameplayRegistry.Write(writer, ref packet);
+        Send(session, writer.CopyData(), true, GameplayProtocol.GameplayChannel);
+    }
+
     private void Send(Session session, byte[] packet, bool reliable, byte channel = 0)
     {
         if (!session.Peer.TrySend(packet, reliable, channel)) { session.Peer.Close("SlowConsumer"); Disconnect(session.Peer); }
@@ -580,6 +678,7 @@ public sealed class SessionHub
     public void Tick(double dt)
     {
         Rooms.Tick(dt);
+        TickWorldStreams();
     }
 
     public void CloseAll()

@@ -1,5 +1,7 @@
 # Hướng dẫn setup, phát triển và kiểm thử Jungle Maze
 
+> Trong menu game mới, **Local** là solo offline, không cần Docker. Các lệnh Docker Local trong tài liệu này là **backend loopback**; xem [hướng dẫn Phase2](Phase2_Match_Guest_Zone.vi.md#0-chọn-local-lan-hoặc-online) để phân biệt Local/LAN/Radmin/AWS.
+
 Cập nhật **16/10/2026**. Đây là hướng dẫn vận hành chung cho dev, tester và người quản lý AWS. Kiến trúc, packet và trách nhiệm từng module nằm trong [Network_Architecture.vi.md](Network_Architecture.vi.md). Tài liệu nhập assets Unity nằm trong [JSurviv_Integration.vi.md](JSurviv_Integration.vi.md). Tạo nhiều phòng và đo sức chứa: xem mục 14. Quy trình đo backend cũ qua SSM nằm ở mục 14.7; kết nối UDP/WSS thực từ PC và vận hành theo lịch ở mục 16; test PC→EC2 trực tiếp/VPN và rà soát Phase 1 ở mục 15; kết quả thực đo nằm trong báo cáo chung.
 
 Hướng dẫn thao tác nhanh trên server đã triển khai: [Đăng nhập EC2, test Swagger và xem MongoDB bằng Compass](AWS_SSH_Swagger_Compass.vi.md).
@@ -43,7 +45,7 @@ Mỗi dev lấy source mới nhất, bao gồm `Backend/Shared`, `Backend/global
 
 Trong hướng dẫn:
 
-- **PC / PowerShell tại Backend:** terminal nằm ở thư mục `Backend` của checkout của bạn. Ví dụ máy chủ dự án dùng `D:/Unity/Jungle_Maze_Survival/Backend`; dev khác thay đường dẫn theo checkout của mình.
+- **PC / PowerShell tại Backend:** terminal nằm ở thư mục `Backend` của checkout của bạn. Ví dụ máy chủ dự án dùng `D:/Unity/Lastaway/Backend`; dev khác thay đường dẫn theo checkout của mình.
 - **SSH EC2:** terminal đã đăng nhập bằng user `ubuntu`, thường có prompt `ubuntu@ip-...`. Chỉ chạy lệnh Bash/Linux tại đây.
 - **AWS Console:** thao tác trên trình duyệt, region Sydney `ap-southeast-2`.
 - Copy các lệnh trong code block; không copy phần prompt `PS ...>` hoặc `ubuntu@...$` từ log.
@@ -51,7 +53,7 @@ Trong hướng dẫn:
 **PC, kiểm tra công cụ:**
 
 ```powershell
-Set-Location 'D:/Unity/Jungle_Maze_Survival/Backend'
+Set-Location 'D:/Unity/Lastaway/Backend'
 dotnet --version
 docker version
 docker compose version
@@ -741,7 +743,7 @@ Mỗi lượt ghi ngày/giờ, OS/CPU/RAM, source/release ID, endpoint/authmode,
 Thực hiện trong PowerShell tại **Backend**, sau khi tạo `.env` ở mục 3 và thiết lập `Jwt__SigningKey` random hợp lệ theo mục 5.1 (API cần key này kể cả game đang RoomCode). Script dưới đây thêm secret điều khiển phòng vào `.env` nếu thiếu/trống, giữ nguyên secret và cấu hình đang có. Secret này khác JWT key và mã join; không gửi cho tester.
 
 ```powershell
-Set-Location 'D:\Unity\Jungle_Maze_Survival\Backend'
+Set-Location 'D:\Unity\Lastaway\Backend'
 powershell -ExecutionPolicy Bypass -File Tools/Enable-RoomControl.ps1
 docker compose --profile account up -d --build
 docker compose ps
@@ -892,7 +894,7 @@ Kết thúc: kiểm tra client đã đóng, phòng benchmark được xóa; admi
    Gói này chỉ có image API/GameServer. Mongo 7 và Caddy phải tồn tại trên EC2; giữ volume và các secret cũ. Migration chỉ thêm control secret nếu thiếu và đặt giới hạn phòng 10/50/5/2. Không thay dữ liệu Mongo.
 3. Chạy kiểm tra cấu hình trước, thêm -PreflightOnly vào lệnh sau. Khi đạt, chạy lại bỏ cờ đó để bắt đầu buổi đo:
 
-    powershell -NoProfile -ExecutionPolicy Bypass -File Backend/Deploy/test-aws-rooms.ps1 -Python python -Release D:/Unity/Jungle_Maze_Survival/Backend/out/aws-room-test/release.tar.gz -OutputDirectory D:/Unity/Jungle_Maze_Survival/Backend/out/aws-room-test/session-NEW
+    powershell -NoProfile -ExecutionPolicy Bypass -File Backend/Deploy/test-aws-rooms.ps1 -Python python -Release D:/Unity/Lastaway/Backend/out/aws-room-test/release.tar.gz -OutputDirectory D:/Unity/Lastaway/Backend/out/aws-room-test/session-NEW
 
    Thay đường dẫn repo/Python nếu máy khác; mỗi lượt dùng output mới. Thông tin đăng nhập ba fixture account được lưu riêng tại LocalAppData/JungleMaze/aws-room-fixtures.json với ACL chỉ user hiện tại. Không gửi file này, token hoặc mã phòng lên Git/báo cáo.
 4. Script kiểm tra Stopped, shutdown=stop, CPU Standard và quyền Start/Stop; bật máy, đợi SSM tối đa 3 phút, đặt timer tắt EC2 độc lập rồi upload qua SSH/SSM. Kết nối HTTPS dùng IP hiện tại nhưng vẫn kiểm chứng hostname/certificate, không sửa hosts hoặc bỏ TLS.

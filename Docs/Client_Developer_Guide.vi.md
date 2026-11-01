@@ -13,7 +13,7 @@ Cập nhật **23/10/2026**. Tài liệu dành cho người mới vào làm game
      $env:AUTH_MODE="RoomCode"; $env:ROOM_CODE="ROOM42"; $env:GAME_BIND_ADDRESS="127.0.0.1"
      dotnet run --project GameServer/GameServer.csproj
      ```
-2. Mở `Assets/_JungleMaze/Scenes/Boot.unity` rồi bấm Play. Bootstrap tự được tạo cho scene trong `Assets/_JungleMaze/`; bắt đầu từ `Game.unity` vẫn về menu Boot trước khi join.
+2. Mở `Assets/_JungleMaze/Scenes/Boot.unity` rồi bấm Play. Bootstrap tự được tạo cho scene trong `Assets/_JungleMaze/`. Trong Editor, mở trực tiếp `Game.unity` và bấm Play để thử di chuyển, ngắm và công cụ bắn cục bộ không cần server; bắt đầu từ Boot để dùng luồng kết nối bình thường.
 3. Trên menu, chọn profile `local`, nhập mã phòng `ROOM42` và tên, rồi bấm **Vào phòng**. Client chuyển sang InRoom và load scene `Game`.
 4. Bấm **F3** để xem số đo mạng: state, endpoint, RTT ping/pong (last/avg/p95), RTT của LiteNetLib, packet/bytes, FPS. Overlay chỉ có trong Editor và Development build.
 5. Click vào **Game View**, dùng **WASD/mũi tên** để đi, chuột để ngắm. Hero di chuyển local 4 cell/s; đi chéo không nhanh hơn đi thẳng. Camera theo Hero và giữ khung nhìn trong map.
@@ -30,9 +30,11 @@ Client đọc JSON cùng schema với `Backend/NetSmokeClient/client.*.json`. Th
 | Nguồn | Khi nào dùng |
 | --- | --- |
 | `StreamingAssets/JungleMaze/client.<profile>.json` (`local`, `lan`, `online`, `aws`) | Mặc định đi theo build. Sửa trực tiếp trong thư mục `<Game>_Data/StreamingAssets` của bản build |
-| `persistentDataPath/client.json` | Tự tạo khi bấm **Lưu endpoint** hoặc khi vào phòng với host/port đã sửa trên menu. Windows: `%USERPROFILE%\AppData\LocalLow\DefaultCompany\Jungle_Maze_Survival\client.json` |
+| `persistentDataPath/client.json` | Tự tạo khi bấm **Lưu endpoint** hoặc khi vào phòng với host/port đã sửa trên menu. Windows: `%USERPROFILE%\AppData\LocalLow\DefaultCompany\Lastaway\client.json` |
 | Biến môi trường `NET_MODE`, `NET_GAME_SERVER_HOST`, `NET_GAME_SERVER_PORT`, `NET_API_BASE_URL` | Cùng tên với NetSmokeClient |
 | Dòng lệnh `-clientConfig <path>`, `-profile lan`, `-mode LAN`, `-host 192.168.1.20`, `-port 7777`, `-room ROOM42`, `-name P2` | Mở nhiều client trên một máy để test |
+
+Dữ liệu từ bản cũ có thể nằm trong thư mục %USERPROFILE%\AppData\LocalLow\DefaultCompany\Jungle_Maze_Survival; ứng dụng không tự chuyển dữ liệu sang thư mục mới.
 
 Key lạ, thiếu key bắt buộc, host có `http://`, hay `transport` ngoài `Udp|Wss|Auto` đều bị từ chối. Unity Windows/Editor có WebSocket và Auto; `webSocketUrl` dùng WSS từ xa, WS chỉ loopback Local. Env thêm `NET_TRANSPORT`, `NET_WS_URL`, `NET_ROOM_CODE`; CLI thêm `-transport`, `-webSocketUrl`. Auto chỉ fallback khi lỗi kết nối trước join, không đổi khi phòng đầy/mã sai. Dùng các profile `phase2-*` và [hướng dẫn Phase 2](Phase2_Match_Guest_Zone.vi.md#6-chọn-môi-trường-online) cho gameplay authoritative; ví dụ foundation ở trên chỉ dành cho module cũ.
 
@@ -211,3 +213,11 @@ Unity Windows/Editor đã có WSS/Auto. Prediction/reconciliation (MOV-02) và i
 - `MapGridView` đọc `mapSize` và `cellSize` từ match config: mặc định **50×50 cell, 48 pixel/cell, 1 Unity unit/cell**. Nền dùng một tiled renderer; bốn collider biên được tạo lúc Start. Giữ transform `MapGrid` tại gốc, scale 1.
 - Bốn prefab trong `Prefabs/Obstacles/` là Cột 1×2, Tường 1×4, Đá 4×4, Tượng 3×3; root scale quy định footprint, BoxCollider2D không trigger, layer `HardCover`. Sprite 48 PPU hiển thị đúng kích thước collider.
 - Đạn thử dùng `CoverQuery.Sweep` quét cả bước di chuyển thay vì chỉ kiểm tra điểm cuối, nên không xuyên cover khi tốc độ cao. FOW/LOS sau này tái sử dụng query/collider này; task hiện tại chưa dựng shader/FOW.
+
+### World integration respects the authored map
+
+`world_settings.json` defaults to `layoutMode: "Authored"`. World services read the team's existing `map_demo.json`; they preserve its cover bounds and spawn coordinates. `WorldSceneView` never disables existing map objects and only creates views/colliders for interactive world objects and floor items. An empty placement list stays empty: it does not fill the Game scene with procedural containers, hazards or portals.
+
+The map owner can export optional `worldObjects` in the same map document using `WorldObjectDefinition` (`kind`, `bounds.minX/minY/maxX/maxY`, and `pairId` for portals). World runtime assigns instance IDs and validates placements without moving them. This export is separate from the renderer/prefabs; do not modify scene cover geometry in an item or environment adapter.
+
+Procedural layouts remain available in the explicit WorldDemo and backend fixtures. Backend fixtures set `WORLD_LAYOUT_MODE=Prototype`; normal team matches must not set this override. The existing map JSON and Game scene are not rewritten by world initialization.

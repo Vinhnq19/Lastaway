@@ -34,6 +34,7 @@ public sealed class MatchNetworkClient : IAsyncDisposable
     public WorldSnapshotPacket Snapshot { get; private set; }
     public MatchResultPacket? Result { get; private set; }
     public ZoneStatePacket Zone { get; private set; }
+    public readonly List<KillcamDataChunkPacket> KillcamChunks = new();
     public int SnapshotCount { get; private set; }
     public int DuplicateSnapshots { get; private set; }
     public int InvalidFrames { get; private set; }
@@ -61,7 +62,26 @@ public sealed class MatchNetworkClient : IAsyncDisposable
         _registry.Subscribe<MatchResultPacket>(p => { if (p.MatchId == MatchId) Result = p; });
         _registry.Subscribe<MatchRosterPacket>(_ => { });
         _registry.Subscribe<MatchEntityEventPacket>(_ => { });
+        _registry.Subscribe<MatchEliminationEventPacket>(_ => { });
+        _registry.Subscribe<KillcamDataChunkPacket>(p => { if (p.MatchId == MatchId && KillcamChunks.Count < 2) KillcamChunks.Add(p); });
         _registry.Subscribe<EventPacket>(_ => { });
+        _registry.Subscribe<AttackResultPacket>(p => AttackResults.Add(p));
+        _registry.Subscribe<ReloadResultPacket>(p => ReloadResults.Add(p));
+    }
+
+    public readonly List<AttackResultPacket> AttackResults = new();
+    public readonly List<ReloadResultPacket> ReloadResults = new();
+
+    public void Attack(ushort requestSeq, CombatWeaponId weapon, ushort aim = 0)
+    {
+        var packet = new AttackRequestPacket { RequestSeq = requestSeq, Weapon = weapon, Aim = aim };
+        Send(ref packet, true);
+    }
+
+    public void Reload(ushort requestSeq, CombatWeaponId weapon)
+    {
+        var packet = new ReloadRequestPacket { RequestSeq = requestSeq, Weapon = weapon };
+        Send(ref packet, true);
     }
 
     public async Task ConnectAsync(string host, int udpPort, string wsUrl, string code, Guid resume = default)
