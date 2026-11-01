@@ -73,7 +73,7 @@ public sealed class NetworkHost : IDisposable
     public void Start()
     {
         if (!_manager.Start(_options.BindAddress, IPAddress.IPv6Any, _options.Port)) throw new InvalidOperationException("Không mở được UDP socket.");
-        Console.WriteLine($"[ready] udp={_options.BindAddress}:{_options.Port} maxPlayers={_options.MaxPlayers} tickRate=30 authMode={_options.AuthMode} protocol=1 supported=1,2,3");
+        Console.WriteLine($"[ready] udp={_options.BindAddress}:{_options.Port} maxPlayers={_options.MaxPlayers} tickRate=30 authMode={_options.AuthMode} protocol=4 accountRequired={_options.RequireAccountTickets} supported=1,2,3,4");
     }
     public void PollEvents() { _manager.PollEvents(); Hub.Poll(); }
     public void Dispose() { Hub.CloseAll(); _manager.Stop(); _peers.Clear(); Console.WriteLine("[stopped] UDP socket đã đóng."); }

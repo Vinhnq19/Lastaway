@@ -35,7 +35,9 @@ public sealed class HandshakeValidator
 
     public string? ValidateRequest(JoinRequest request)
     {
-        if (request.Version is not (NetworkProtocol.Version or NetworkProtocol.LatestVersion or NetworkProtocol.Version3)) return "UnsupportedVersion";
+        if (request.Version is not (NetworkProtocol.Version or NetworkProtocol.LatestVersion or NetworkProtocol.Version3 or NetworkProtocol.Version4)) return "UnsupportedVersion";
+        if (_options.RequireAccountTickets && request.Version != NetworkProtocol.Version4) return "AuthRequired";
+        if (request.Version == NetworkProtocol.Version4 && (request.Mode != JoinAuthMode.RoomCode || request.AttemptId == Guid.Empty)) return "MalformedRequest";
         if (request.Mode != _options.Mode) return "AuthModeMismatch";
         if (string.IsNullOrWhiteSpace(request.RoomCode) || request.RoomCode.Length > NetworkProtocol.MaxRoomChars) return "InvalidRoomCode";
         if (string.IsNullOrWhiteSpace(request.DisplayName) || request.DisplayName.Length > NetworkProtocol.MaxNameChars)

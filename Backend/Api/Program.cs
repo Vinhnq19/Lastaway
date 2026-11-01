@@ -72,7 +72,7 @@ builder.Services.AddSwaggerGen(options =>
     {
         Title = "Jungle Maze Account, Guests & Rooms API",
         Version = "v1",
-        Description = "Test: register → login → Authorize → POST /api/rooms → join UDP bằng roomCode 6 ký tự. Hỗ trợ guest profile qua POST /api/guests, game tickets qua POST /api/game-tickets, và xem lịch sử trận đấu qua GET /api/me/matches."
+        Description = "Test: register → login → Authorize → tạo/vào phòng → POST /api/game-tickets → handshake v4 UDP/WSS. Tạo/list/xóa phòng và cấp vé chơi bắt buộc account JWT; Guest cũ chỉ dùng để xem lịch sử. Local luyện tập không cần API."
     });
     options.IncludeXmlComments(typeof(AuthService).Assembly);
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme

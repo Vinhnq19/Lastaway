@@ -6,7 +6,7 @@ namespace GameServer.Configuration;
 /// <summary>Đọc biến môi trường trước khi mở socket; cấu hình sai thì dừng ngay.</summary>
 public sealed record ServerOptions(IPAddress BindAddress, int Port, int MaxPlayers, int TickRate,
     int MetricsIntervalSeconds, string AuthMode, string RoomCode, int AuthTimeoutMs = 5000, JwtSettings? Jwt = null,
-    bool PublicHosting = false, RoomOptions? Rooms = null)
+    bool PublicHosting = false, RoomOptions? Rooms = null, bool RequireAccountTickets = false)
 {
     public JungleBackend.Protocol.JoinAuthMode Mode => AuthMode == "Jwt"
         ? JungleBackend.Protocol.JoinAuthMode.Jwt : JungleBackend.Protocol.JoinAuthMode.RoomCode;
@@ -26,7 +26,9 @@ public sealed record ServerOptions(IPAddress BindAddress, int Port, int MaxPlaye
             ReadInt("METRICS_INTERVAL_SECONDS", 5, 1, 60), authMode,
             Environment.GetEnvironmentVariable("ROOM_CODE") ?? string.Empty,
             ReadInt("AUTH_TIMEOUT_MS", 5000, 500, 30000), authMode == "Jwt" ? JwtSettings.FromEnvironment() : null,
-            ReadBool("PUBLIC_HOSTING"), RoomOptions.FromEnvironment());
+            ReadBool("PUBLIC_HOSTING"), RoomOptions.FromEnvironment(),
+            // Normal runtime luôn yêu cầu account ticket; không có biến môi trường tắt.
+            RequireAccountTickets: true);
         result.Validate();
         return result;
     }
@@ -45,6 +47,8 @@ public sealed record ServerOptions(IPAddress BindAddress, int Port, int MaxPlaye
             throw new ArgumentException("PUBLIC_HOSTING chỉ hỗ trợ RoomCode; JWT UDP public cần mã hóa trước.");
         if (string.IsNullOrWhiteSpace(RoomCode) || RoomCode.Length > JungleBackend.Protocol.NetworkProtocol.MaxRoomChars)
             throw new ArgumentException("ROOM_CODE cần 1–64 ký tự, không được trống.");
+        if ((RequireAccountTickets && AuthMode != "RoomCode") || (PublicHosting && !RequireAccountTickets))
+            throw new ArgumentException("Normal/public hosting requires account tickets in RoomCode mode.");
         if (AuthMode == "Jwt")
         {
             if (Jwt is null) throw new ArgumentException("Thiếu cấu hình JWT; không fallback sang RoomCode.");
