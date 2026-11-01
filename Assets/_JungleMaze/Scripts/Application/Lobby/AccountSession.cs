@@ -28,6 +28,9 @@ namespace JungleMaze.App.Lobby
         /// <summary>Raised once per successful login.</summary>
         public event Action LoggedIn;
 
+        /// <summary>Raised on logout or token expiry so in-RAM tokens can be cleared.</summary>
+        public event Action LoggedOut;
+
         public bool IsValid => _token.HasValue && _utcNow() < _token.Value.ExpiresAtUtc;
 
         /// <summary>Null when there is no valid token; an expired one is dropped with the expiry notice (AC17).</summary>
@@ -77,12 +80,14 @@ namespace JungleMaze.App.Lobby
         {
             _token = null;
             Message = ApiMessages.SessionExpired;
+            LoggedOut?.Invoke();
         }
 
         public void Logout()
         {
             _token = null;
             Message = "";
+            LoggedOut?.Invoke();
         }
 
         private void OnLogin(ApiResult<AuthToken> r)

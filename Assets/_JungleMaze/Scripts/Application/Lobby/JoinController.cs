@@ -10,8 +10,8 @@ namespace JungleMaze.App.Lobby
     /// </summary>
     public sealed class JoinController
     {
-        public const string BadCodeText = "Mã chỉ gồm chữ A–Z (trừ I, O) và số 2–9";
-        public const string CodeLengthText = "Mã phòng gồm 6 ký tự";
+        public const string BadCodeText = "Mã phòng không được chứa ký tự điều khiển";
+        public const string CodeLengthText = "Mã phòng cần 1–64 ký tự; phòng mới có 6 ký tự";
         public const string NameText = "Tên cần 1–32 ký tự";
 
         private readonly ILobbyCommands _commands;
@@ -58,11 +58,11 @@ namespace JungleMaze.App.Lobby
             ClearNotice();
         }
 
-        /// <summary>Upper-cases as the player types (AC5); an empty field shows no error until submitted.</summary>
+        /// <summary>Preserves configured default code case; an empty field shows no error until submitted.</summary>
         public void SetCode(string raw)
         {
-            RoomCode = RoomCodeRules.Normalize(raw);
-            CodeError = RoomCodeRules.Validate(RoomCode);
+            RoomCode = (raw ?? "").Trim();
+            CodeError = RoomCodeRules.ValidateJoinCode(RoomCode);
             ClearNotice();
         }
 

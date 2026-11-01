@@ -122,17 +122,11 @@ namespace JungleMaze.Tests.PlayMode.Lobby
             Assert.AreEqual(1, rig.Quits);
         }
 
-        /// <summary>Review M1: "Bỏ qua đăng nhập (dev)" is hidden unless the dev option is on; with it, Login shows the
-        /// account-server error with Thử lại and the skip lands on Home in dev mode.</summary>
+        /// <summary>Approved policy: offline practice button is always available from Login; when API is down, Retry button appears.</summary>
         [UnityTest]
-        public IEnumerator DevSkip_HiddenByDefault_ShownInDev_ApiDownHasRetry()
+        public IEnumerator OfflinePractice_AlwaysAvailable_ApiDownHasRetry()
         {
-            using (var release = new LobbyUiRig())
-            {
-                yield return null;
-                Assert.IsFalse(release.Root.Login.DevSkip.gameObject.activeSelf, "release: no dev skip");
-            }
-            using var rig = new LobbyUiRig(options: new LobbyOptions { DevSkipLogin = true });
+            using var rig = new LobbyUiRig();
             rig.Scenarios.Api.Configured = false;
             yield return null;
             rig.Click(rig.Root.MainMenu.Logout);
@@ -140,15 +134,9 @@ namespace JungleMaze.Tests.PlayMode.Lobby
             yield return null;
             yield return null;
             Assert.IsTrue(rig.Visible(rig.Root.Login));
+            Assert.IsTrue(rig.Root.Login.OfflinePractice.gameObject.activeSelf, "offline practice button always available");
             Assert.AreEqual(ApiMessages.NoApi, rig.Root.Login.ApiStatus.text);
             Assert.IsTrue(rig.Root.Login.Retry.gameObject.activeInHierarchy, "Thử lại when the account server is down");
-            rig.Click(rig.Root.Login.DevSkip);
-            yield return null;
-            Assert.IsTrue(rig.Visible(rig.Root.MainMenu));
-            Assert.AreEqual("Chế độ dev", rig.Root.MainMenu.AccountStatus.text);
-            rig.JoinForm();
-            rig.Click(rig.Root.JoinForm.Join);
-            yield return rig.Until(() => rig.Visible(rig.Root.Lobby), 2f, "lobby by room code without login");
         }
 
         /// <summary>Round 2: the join form is a modal over Home (Home drawn but inert), "Hủy" closes it; the server
@@ -194,18 +182,17 @@ namespace JungleMaze.Tests.PlayMode.Lobby
     public sealed class LobbyFlowPlayTests
     {
         [UnityTest]
-        public IEnumerator GuestJoin_ApiDown_LobbyWithin500ms_TenSlots_Copy6Chars()
+        public IEnumerator AuthenticatedJoin_LobbyWithin500ms_TenSlots_CopyCompleteCode()
         {
             using var rig = new LobbyUiRig();
-            rig.Scenarios.Api.Configured = false;
             yield return null;
-            rig.JoinForm("k7m2q9");
-            Assert.AreEqual("K7M2Q9", rig.Root.JoinForm.RoomCode.text, "upper-cased in the field");
+            rig.JoinForm("JungleDev123");
+            Assert.AreEqual("JungleDev123", rig.Root.JoinForm.RoomCode.text, "configured default codes preserve case and length");
             rig.Click(rig.Root.JoinForm.Join);
             var sawLogin = false;
             var end = Time.unscaledTime + 2f;
             while (!rig.Visible(rig.Root.Lobby) && Time.unscaledTime < end) { sawLogin |= rig.Visible(rig.Root.Login); yield return null; }
-            Assert.IsTrue(rig.Visible(rig.Root.Lobby), "joined without the API (AC6)");
+            Assert.IsTrue(rig.Visible(rig.Root.Lobby), "authenticated account reached the scripted lobby");
             Assert.IsFalse(sawLogin);
             var joinedAt = Time.unscaledTime;
             yield return null;
@@ -217,7 +204,7 @@ namespace JungleMaze.Tests.PlayMode.Lobby
             Assert.AreEqual(1, slots.Count(s => s.Badge.text == LobbyUiPresenter.SelfTag));
             StringAssert.Contains("tối thiểu 2", rig.Root.Lobby.Count.text);
             rig.Click(rig.Root.Lobby.Copy);
-            Assert.AreEqual("K7M2Q9", rig.Copied);
+            Assert.AreEqual("JungleDev123", rig.Copied);
             Assert.IsFalse(rig.Root.Lobby.Ready.gameObject.activeSelf, "Ready off by default (Q1)");
         }
 
@@ -257,11 +244,12 @@ namespace JungleMaze.Tests.PlayMode.Lobby
         public IEnumerator FullRun_ResultsApiDown_RankShown_ReplayThenHome()
         {
             using var rig = new LobbyUiRig();
-            rig.Scenarios.Api.Configured = false;
-            rig.Flow.Api.Check();
             yield return null;
             rig.JoinForm();
             rig.Click(rig.Root.JoinForm.Join);
+            yield return rig.Until(() => rig.Visible(rig.Root.Lobby), 2f, "authenticated join before API outage");
+            rig.Scenarios.Api.Configured = false;
+            rig.Flow.Api.Check();
             yield return rig.Until(() => rig.Visible(rig.Root.Results), 5f, "results");
             yield return null;
             var v = rig.Root.Results;

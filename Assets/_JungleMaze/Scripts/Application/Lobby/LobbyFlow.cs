@@ -12,8 +12,8 @@ namespace JungleMaze.App.Lobby
     /// UI-02 screen machine (plan 4.1). Menu sub-screens are UI-02's own state inside <c>AppScreen.MainMenu</c> (G-2);
     /// connected screens are derived every tick from the server phase and the connection (decision 2). Each command is
     /// sent once per press (decision 4), and <see cref="LeaveMatchRequested"/> from UI-03 is handled here (N7).
-    /// Round 2 (Flow_Proposal 6): login comes first; without a valid JWT every menu screen falls back to Login, and
-    /// joining is blocked on the client only (the server-side JWT check belongs to NET-01).
+    /// Round 2: login is required for all LAN/online play; without a valid JWT every menu screen falls back to Login,
+    /// and joining is blocked on the client. Offline practice is always available from Login and MainMenu.
     /// </summary>
     public sealed class LobbyFlow : ITickable, IDisposable
     {
@@ -28,13 +28,15 @@ namespace JungleMaze.App.Lobby
         private readonly OnceGate _gate = new OnceGate();
         private LobbyScreen _leaderboardReturn = LobbyScreen.History;
         private double _loadingSince;
-        private bool _sawConnect, _leaving, _roomsAfterLogin, _devSkipped;
+        private bool _sawConnect, _leaving, _roomsAfterLogin;
         private Guid _lastMatchId;
 
         public LobbyFlow(ILobbySource lobby, IMatchResultSource results, IConnectionStateSource connection,
             ILobbyCommands commands, JoinController join, AccountSession account, RoomListModel rooms,
             HistoryModel history, LeaderboardModel leaderboard, ApiStatusModel api, Func<double> clock,
-            LobbyOptions options = null, IEventBus bus = null, Func<string> eliminationCause = null)
+            LobbyOptions options = null, IEventBus bus = null, Func<string> eliminationCause = null,
+            Func<bool> isOffline = null, ILobbySource offlineLobby = null, IMatchResultSource offlineResults = null,
+            Action startOffline = null)
         {
             _lobby = lobby ?? throw new ArgumentNullException(nameof(lobby));
             _results = results ?? throw new ArgumentNullException(nameof(results));
@@ -55,6 +57,10 @@ namespace JungleMaze.App.Lobby
             _bus?.Subscribe(_onLeaveMatch);
             if (Account != null) Account.LoggedIn += OnLoggedIn;
             if (Rooms != null) Rooms.AuthExpired += OnAuthExpired;
+            IsOfflineSource = isOffline;
+            OfflineLobby = offlineLobby;
+            OfflineResults = offlineResults;
+            StartOfflineAction = startOffline;
             Screen = HomeScreen;
         }
 
@@ -65,18 +71,22 @@ namespace JungleMaze.App.Lobby
         /// <summary>Home when a JWT is valid, otherwise Login. No account service (old rigs) means no gate.</summary>
         public LobbyScreen HomeScreen => NeedsLogin ? LobbyScreen.Login : LobbyScreen.MainMenu;
 
-        private bool NeedsLogin => Account != null && !_devSkipped && Account.Token == null;
+        private bool NeedsLogin => Account != null && Account.Token == null;
 
-        /// <summary>True after "Bỏ qua đăng nhập (dev)": Home and room codes work, the room manager still needs a JWT.</summary>
-        public bool DevSkipped => _devSkipped;
+        public Func<bool> IsOfflineSource { get; set; }
+        public ILobbySource OfflineLobby { get; set; }
+        public IMatchResultSource OfflineResults { get; set; }
+        public Action StartOfflineAction { get; set; }
+        public bool IsOffline => IsOfflineSource != null && IsOfflineSource();
 
-        /// <summary>M1 (round 2): Editor/dev builds only, so the team can play by room code without a backend.</summary>
-        public void DevSkipLogin()
+        public void OpenOffline()
         {
-            if (!Options.DevSkipLogin || Screen != LobbyScreen.Login) return;
-            _devSkipped = true;
-            Go(LobbyScreen.MainMenu);
+            StartOfflineAction?.Invoke();
+            if (IsOffline) FollowOffline();
         }
+
+        public void StartOffline() => OpenOffline();
+
         public string Notice { get; private set; } = "";
         public string LoadErrorText { get; private set; } = "";
         public bool ReplayPending { get; private set; }
@@ -161,7 +171,6 @@ namespace JungleMaze.App.Lobby
         public void RequestLogout()
         {
             if (Account == null || Screen != LobbyScreen.MainMenu) return;
-            if (_devSkipped) { Go(LobbyScreen.Login); return; } // nothing to lose: no confirm
             LogoutConfirmOpen = true;
         }
 
@@ -251,7 +260,16 @@ namespace JungleMaze.App.Lobby
 
         public bool Replay()
         {
-            if (Screen != LobbyScreen.Results || _lobby.Phase != MatchPhase.Ending) return false;
+            if (Screen != LobbyScreen.Results) return false;
+            if (IsOffline)
+            {
+                ReplayRequests++;
+                ReplayPending = true;
+                Result.Clear();
+                _commands.Replay();
+                return true;
+            }
+            if (_lobby.Phase != MatchPhase.Ending) return false;
             if (!_gate.TryPass(_lobby.MatchId, "replay")) return false;
             ReplayRequests++;
             ReplayPending = true;
@@ -263,6 +281,11 @@ namespace JungleMaze.App.Lobby
         public void GoHome()
         {
             if (Join.Busy) Join.Cancel();
+            else if (IsOffline)
+            {
+                LeaveRequests++;
+                _commands.Leave();
+            }
             else if (!_leaving && (!LobbyScreenRules.IsMenu(Screen) || IsActive(_connection.State)))
             {
                 _leaving = true;
@@ -281,6 +304,12 @@ namespace JungleMaze.App.Lobby
 
         public void Tick(float deltaTime)
         {
+            if (IsOffline)
+            {
+                FollowOffline();
+                return;
+            }
+
             var net = _connection.State;
             if (_leaving)
             {
@@ -324,8 +353,17 @@ namespace JungleMaze.App.Lobby
             if (net == NetworkState.Connecting || net == NetworkState.Authenticating) { _sawConnect = true; return; }
             if (net == NetworkState.Failed || _sawConnect)
             {
-                Join.Rejected(_connection.LastReason);
-                Go(LobbyScreen.JoinForm);
+                var reason = _connection.LastReason;
+                Join.Rejected(reason);
+                if (reason == DisconnectReason.LoginFailed)
+                {
+                    Account?.Expire();
+                    Go(LobbyScreen.Login);
+                }
+                else
+                {
+                    Go(LobbyScreen.JoinForm);
+                }
             }
         }
 
@@ -356,11 +394,31 @@ namespace JungleMaze.App.Lobby
             Go(next);
         }
 
+        private void FollowOffline()
+        {
+            var lobby = OfflineLobby ?? _lobby;
+            var results = OfflineResults ?? _results;
+            var resultForMatch = results.HasResult && results.Current != null && results.Current.MatchId == lobby.MatchId;
+            var next = LobbyScreenRules.ForPhase(lobby.HasPhase, lobby.Phase, resultForMatch);
+            if (next == LobbyScreen.Results) ShowOfflineResultIfNew(results, lobby.MatchId);
+            if (next != LobbyScreen.Results) ReplayPending = false;
+            Go(next);
+        }
+
         private void ShowResultIfNew()
         {
             var current = _results.HasResult ? _results.Current : null;
             if (current == null || current.MatchId != _lobby.MatchId || Result.HasData && Result.MatchId == current.MatchId) return;
-            Result.Show(current, _eliminationCause(), Options.ShowKills);
+            Result.Show(current, _eliminationCause(), Options.ShowKills, isOffline: false);
+            _lastMatchId = current.MatchId;
+            ResultsShown++;
+        }
+
+        private void ShowOfflineResultIfNew(IMatchResultSource results, Guid matchId)
+        {
+            var current = results.HasResult ? results.Current : null;
+            if (current == null || current.MatchId != matchId || Result.HasData && Result.MatchId == current.MatchId) return;
+            Result.Show(current, _eliminationCause(), Options.ShowKills, isOffline: true);
             _lastMatchId = current.MatchId;
             ResultsShown++;
         }
@@ -373,6 +431,12 @@ namespace JungleMaze.App.Lobby
 
         private void OnLost()
         {
+            if (_connection.LastReason == DisconnectReason.LoginFailed)
+            {
+                Account?.Expire();
+                Go(LobbyScreen.Login);
+                return;
+            }
             var next = LobbyScreenRules.OnLost(Screen, Options.ReconnectEnabled, _connection.CanResume);
             if (next == LobbyScreen.LoadError) { FailLoading(LobbyScreenRules.LoadLostText(_connection.LastReason)); return; }
             if (next == LobbyScreen.Reconnecting && !Reconnect.Begin(_connection.CanResume)) next = LobbyScreen.Disconnected;
@@ -406,8 +470,6 @@ namespace JungleMaze.App.Lobby
             if (next != LobbyScreen.MainMenu) LogoutConfirmOpen = false;
             if (next == LobbyScreen.Login)
             {
-                // Logout, expiry or a dev skip ended: nothing of the last account stays visible (review m1).
-                _devSkipped = false;
                 History?.Clear();
                 _lastMatchId = Guid.Empty;
             }

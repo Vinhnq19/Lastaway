@@ -20,8 +20,10 @@ namespace JungleMaze.Presentation.UI.Lobby
         [SerializeField] private TMP_Text message;
         [SerializeField] private TMP_Text apiStatus;
         [SerializeField] private Button retry;
-        [Tooltip("\"Bỏ qua đăng nhập (dev)\": the presenter hides it unless LobbyOptions.DevSkipLogin (Editor/dev builds).")]
+        [Tooltip("\"Bỏ qua đăng nhập (dev)\": legacy slot falling back to offline practice.")]
         [SerializeField] private Button devSkip;
+        [Tooltip("\"Luyện tập offline\": always available button.")]
+        [SerializeField] private Button offlinePractice;
         [Tooltip("Inactive tab: dimmed button and grey label (AC50: changed on the prefab only).")]
         [SerializeField] private float idleTabAlpha = 0.6f;
         [SerializeField] private Color idleTabText = new Color32(0xA6, 0xBB, 0xB7, 0xFF);
@@ -38,6 +40,7 @@ namespace JungleMaze.Presentation.UI.Lobby
         public TMP_Text ApiStatus => apiStatus;
         public Button Retry => retry;
         public Button DevSkip => devSkip;
+        public Button OfflinePractice => offlinePractice != null ? offlinePractice : devSkip;
 
         public void SetTab(bool register)
         {
@@ -50,8 +53,8 @@ namespace JungleMaze.Presentation.UI.Lobby
             var c = tab.image.color;
             c.a = active ? 1f : idleTabAlpha;
             tab.image.color = c;
-            var label = tab.GetComponentInChildren<TMP_Text>();
-            if (label != null) label.color = active ? activeTabText : idleTabText;
+            var t = tab.GetComponentInChildren<TMP_Text>();
+            if (t != null) t.color = active ? activeTabText : idleTabText;
         }
     }
 }

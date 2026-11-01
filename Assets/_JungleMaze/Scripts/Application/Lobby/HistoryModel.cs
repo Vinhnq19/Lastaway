@@ -20,6 +20,7 @@ namespace JungleMaze.App.Lobby
         private readonly Func<bool> _apiConfigured;
         private readonly LobbyOptions _options;
         private readonly int _timeoutMs;
+        private int _generation;
 
         public HistoryModel(IPlayerHistory history, Func<string> accountToken, Func<bool> apiConfigured,
             LobbyOptions options, int timeoutMs = 10000)
@@ -48,6 +49,7 @@ namespace JungleMaze.App.Lobby
                 Set(ListState.Unavailable, ApiMessages.HistoryDown);
                 return;
             }
+            var generation = ++_generation;
             Set(ListState.Loading, "");
             try
             {
@@ -55,6 +57,7 @@ namespace JungleMaze.App.Lobby
                 {
                     var work = _history.RefreshHistoryAsync(token, cts.Token);
                     if (!work.IsCompleted) await Task.WhenAny(work, Task.Delay(_timeoutMs));
+                    if (generation != _generation || token != _accountToken()) return;
                     if (!work.IsCompleted || work.IsFaulted || work.IsCanceled
                         || _history.Status == ClientUnavailable)
                     {
@@ -65,9 +68,10 @@ namespace JungleMaze.App.Lobby
             }
             catch (Exception e) when (!(e is OutOfMemoryException))
             {
-                Set(ListState.Unavailable, ApiMessages.HistoryDown);
+                if (generation == _generation) Set(ListState.Unavailable, ApiMessages.HistoryDown);
                 return;
             }
+            if (generation != _generation || token != _accountToken()) return;
             Rows = _history.Rows ?? Array.Empty<PlayerMatchHistory>();
             if (Rows.Count == 0) Set(ListState.Empty, ApiMessages.HistoryEmpty);
             else Set(ListState.Ready, "");
@@ -76,7 +80,7 @@ namespace JungleMaze.App.Lobby
         /// <summary>Forget the rows of the last account (logout, expired JWT); the next open loads again.</summary>
         public void Clear()
         {
-            if (State == ListState.Loading) return; // the running refresh overwrites anyway
+            ++_generation; // Logout invalidates late responses from the previous identity.
             Set(ListState.Idle, "");
         }
 

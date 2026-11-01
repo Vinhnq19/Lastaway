@@ -20,6 +20,7 @@ namespace JungleMaze.App.Lobby
 
         public Guid MatchId { get; private set; }
         public bool HasData { get; private set; }
+        public bool IsOffline { get; private set; }
         public ResultHeadline Headline { get; private set; }
         public string Title { get; private set; } = "";
         /// <summary>"#n / N"; null when the own row is missing.</summary>
@@ -30,11 +31,12 @@ namespace JungleMaze.App.Lobby
         public string CauseText { get; private set; }
         public IReadOnlyList<ResultRow> Rows => _rows;
 
-        public void Show(MatchResultView result, string cause, bool showKills)
+        public void Show(MatchResultView result, string cause, bool showKills, bool isOffline = false)
         {
             Clear();
             if (result == null) return;
             HasData = true;
+            IsOffline = isOffline;
             MatchId = result.MatchId;
             var participants = result.Participants ?? Array.Empty<MatchParticipantState>();
             var count = Math.Min(participants.Length, Math.Max((int)result.ParticipantCount, participants.Length));
@@ -58,10 +60,19 @@ namespace JungleMaze.App.Lobby
 
             Headline = HeadlineFor(result);
             var n = result.ParticipantCount > 0 ? result.ParticipantCount : count;
-            Title = Headline == ResultHeadline.Victory ? VictoryText
-                : Headline == ResultHeadline.Tie ? TieText
-                : Headline == ResultHeadline.Cancelled ? CancelledText
-                : self.HasValue && self.Value.Rank > 0 ? "HẠNG #" + self.Value.Rank : "KẾT QUẢ";
+            if (isOffline && result.Reason == MatchEndReason.Cancelled)
+            {
+                Headline = ResultHeadline.Ranked;
+                Title = self.HasValue && self.Value.Rank > 0 ? "HẠNG #" + self.Value.Rank : "KẾT THÚC";
+            }
+            else
+            {
+                Title = Headline == ResultHeadline.Victory ? VictoryText
+                    : Headline == ResultHeadline.Tie ? TieText
+                    : Headline == ResultHeadline.Cancelled ? CancelledText
+                    : self.HasValue && self.Value.Rank > 0 ? "HẠNG #" + self.Value.Rank : "KẾT QUẢ";
+            }
+
             if (self.HasValue)
             {
                 if (self.Value.Rank > 0) RankText = "#" + self.Value.Rank + " / " + n;
@@ -83,6 +94,7 @@ namespace JungleMaze.App.Lobby
         {
             _rows.Clear();
             HasData = false;
+            IsOffline = false;
             MatchId = Guid.Empty;
             Title = "";
             RankText = KillsText = SurvivalText = CauseText = null;
