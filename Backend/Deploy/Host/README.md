@@ -52,4 +52,4 @@ tailscale serve reset
 powershell -File Deploy/Host/setup-firewall.ps1 -Action Disable
 ```
 
-Không thêm `-v`: Mongo/outbox có volume riêng của `junglemaze-host`. Dừng GameServer dev đang chiếm UDP7777 trước khi bật host này. Không publish Mongo27017, API5000, control7780 hoặc WS7781. Caddy chặn `/internal`, chỉ Swagger yêu cầu Basic auth. Tạo/list/xóa phòng vẫn yêu cầu JWT account; Guest chỉ chơi và xem lịch sử của mình.
+Không thêm `-v`: Mongo/outbox có volume riêng của `junglemaze-host`. Dừng GameServer dev đang chiếm UDP7777 trước khi bật host này. Không publish Mongo27017, API5000, control7780 hoặc WS7781. Caddy chặn `/internal`, chỉ Swagger yêu cầu Basic auth. LAN/VPN/public đều cần account: JWT qua API HTTPS → ticket v4 → join RoomCode. Tạo/list/xóa phòng cần JWT; Guest cũ chỉ xem lịch sử, không lấy vé chơi mới. Offline luyện tập không đi qua stack này.

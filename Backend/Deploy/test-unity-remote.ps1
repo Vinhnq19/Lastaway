@@ -4,7 +4,9 @@ param(
     [Parameter(Mandatory=$true)][string]$OutputDirectory,
     [string]$ApiBaseUrl='https://junglemaze.duckdns.org',
     [ValidateRange(1,10)][int]$Clients=6,
+    [ValidateRange(0,5000)][int]$StaggerMs=100,
     [switch]$ReconnectOnly,
+    [switch]$Local,
     [switch]$ForceAutoFallback,
     # Only an in-process lifecycle controller may request the private restart fixture.
     [switch]$ReturnFixture,
@@ -13,9 +15,9 @@ param(
 $ErrorActionPreference='Stop'
 Add-Type -AssemblyName System.Net.Http
 $taskUri=[Uri]$ApiBaseUrl
-if ($taskUri.Scheme -ne 'https' -or $taskUri.UserInfo -or $taskUri.Query -or $taskUri.Fragment) { throw 'Remote Unity API requires a clean HTTPS origin.' }
+if (($taskUri.Scheme -ne 'https' -and -not ($Local -and $taskUri.Scheme -eq 'http' -and $taskUri.IsLoopback)) -or $taskUri.UserInfo -or $taskUri.Query -or $taskUri.Fragment) { throw 'Remote Unity API requires a clean HTTPS origin.' }
 New-Item -ItemType Directory -Path $OutputDirectory -Force | Out-Null
-$taskReport=[ordered]@{schemaVersion=1;status='FAIL';endpoint=$ApiBaseUrl;physicalDeviceCount=1;checks=@();cleanupErrors=@()}
+$taskReport=[ordered]@{schemaVersion=1;status='FAIL';endpoint=$ApiBaseUrl;physicalDeviceCount=1;startupStaggerMs=$StaggerMs;checks=@();cleanupErrors=@()}
 # Windows PowerShell5 shares ServicePoint DNS across HttpClient instances.
 # Re-resolve on a new connection after EC2 Stop/Start, without IP pinning or TLS bypass.
 $taskDnsRefresh=[Net.ServicePointManager]::DnsRefreshTimeout
@@ -26,6 +28,9 @@ $taskHttp=[System.Net.Http.HttpClient]::new($taskHandler)
 $taskHttp.Timeout=[TimeSpan]::FromSeconds(12)
 $taskRoom=$null; $taskToken=$null; $taskGuest=$null
 $taskPreviousCode=$env:NET_ROOM_CODE
+$taskPreviousToken=$env:NET_ACCESS_TOKEN
+$taskPreviousUsername=$env:NET_USERNAME
+$taskPreviousPassword=$env:NET_PASSWORD
 function Api([string]$Method,[string]$Path,[object]$Body=$null,[string]$Token='',[string]$Guest='') {
     $request=[System.Net.Http.HttpRequestMessage]::new([System.Net.Http.HttpMethod]::new($Method),$ApiBaseUrl.TrimEnd('/')+$Path)
     if ($null -ne $Body) { $request.Content=[System.Net.Http.StringContent]::new(($Body | ConvertTo-Json -Compress),[Text.Encoding]::UTF8,'application/json') }
@@ -50,6 +55,7 @@ try {
     $taskGuest=$guest.json.credential
     if (-not $taskGuest) { $taskGuest=$guest.json.proof }
     Check 'Guest credential present' (-not [string]::IsNullOrEmpty($taskGuest))
+    $deniedTicket=Api POST '/api/game-tickets' @{attemptId=[Guid]::NewGuid().ToString();roomCode='Denied'} '' $taskGuest; Check 'Guest cannot obtain game ticket' ($deniedTicket.status -eq 401)
     $denied=Api POST '/api/rooms' @{name='Denied';maxPlayers=10} '' $taskGuest; Check 'Guest cannot create rooms' ($denied.status -eq 401)
     if (-not $Fixture) {
         $bytes=New-Object byte[] 24; $rng=[Security.Cryptography.RandomNumberGenerator]::Create();$rng.GetBytes($bytes);$rng.Dispose()
@@ -63,10 +69,14 @@ try {
     $login=Api POST '/api/auth/login' @{username=$Fixture.username;password=$Fixture.password}
     Check 'Login after verified registration' ($login.status -eq 200 -and $login.json.accessToken)
     $taskToken=$login.json.accessToken
+    $env:NET_ACCESS_TOKEN=$taskToken
+    $env:NET_USERNAME=$Fixture.username
+    $env:NET_PASSWORD=$Fixture.password
     $created=Api POST '/api/rooms' @{name='Unity online acceptance';maxPlayers=10} $taskToken
     Check 'JWT creates room' ($created.status -eq 201)
     $taskRoom=$created.json; Check 'Six character join code' ($taskRoom.roomCode -match '^[A-Z0-9]{6}$')
-    $config=[ordered]@{mode='Online';apiBaseUrl=$ApiBaseUrl;gameServerHost=$taskUri.Host;gameServerPort=7777;authMode='RoomCode';protocolVersion=3;connectTimeoutMs=5000;transport='Auto';webSocketUrl=('wss://'+$taskUri.Authority+'/game')}
+    $config=[ordered]@{mode='Online';apiBaseUrl=$ApiBaseUrl;gameServerHost=$taskUri.Host;gameServerPort=7777;authMode='RoomCode';protocolVersion=4;connectTimeoutMs=5000;transport='Auto';worldEnabled=$true;webSocketUrl=('wss://'+$taskUri.Authority+'/game')}
+    if ($Local) { $config.mode='Local'; $config.webSocketUrl='ws://127.0.0.1:7781/game' }
     if ($ForceAutoFallback) { $config.gameServerPort=7779;$taskReport.fallbackTest='Unused UDP7779, same real WSS443 endpoint; no firewall changes' }
     $configPath=Join-Path $OutputDirectory 'client.json'
     $config | ConvertTo-Json | Set-Content -LiteralPath $configPath -Encoding utf8
@@ -88,7 +98,7 @@ try {
         if ($left -lt ([double]$taskScenario.maxDurationSeconds+45)) { throw 'Not enough AWS soft budget for this full scenario; Stop without shortening acceptance.' }
     }
     $routes=@();for ($i=0;$i -lt $Clients;$i++) { $routes+= $(if (-not $ReconnectOnly -and -not $ForceAutoFallback -and $i -lt [Math]::Floor($Clients/2)) {$wssPath} else {$configPath}) }
-    & (Join-Path $PSScriptRoot 'test-unity-online.ps1') -Player $Player -Config $configPath -ClientConfigs $routes -Scenario $Scenario -Clients $Clients -OutputDirectory (Join-Path $OutputDirectory 'players')
+    & (Join-Path $PSScriptRoot 'test-unity-online.ps1') -Player $Player -Config $configPath -ClientConfigs $routes -Scenario $Scenario -Clients $Clients -OutputDirectory (Join-Path $OutputDirectory 'players') -StaggerMs $StaggerMs
     $summaryPath=Join-Path $OutputDirectory 'players/report.json'
     if (-not (Test-Path -LiteralPath $summaryPath)) { throw 'Unity launcher did not produce report.json' }
     $summary=Get-Content -LiteralPath $summaryPath -Raw | ConvertFrom-Json
@@ -103,6 +113,9 @@ try {
     if ($taskReport.checks.Count -eq 0) { $taskReport.status='BLOCKED' }
 } finally {
     $env:NET_ROOM_CODE=$taskPreviousCode
+    $env:NET_ACCESS_TOKEN=$taskPreviousToken
+    $env:NET_USERNAME=$taskPreviousUsername
+    $env:NET_PASSWORD=$taskPreviousPassword
     if ($taskRoom -and $taskToken) {
         for ($attempt=0;$attempt -lt 4;$attempt++) {
             try { $deleted=Api DELETE ('/api/rooms/'+$taskRoom.id) $null $taskToken; if ($deleted.status -eq 204 -or $deleted.status -eq 404) { $taskRoom=$null;break } } catch { }

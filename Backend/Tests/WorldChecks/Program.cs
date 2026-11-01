@@ -5,6 +5,10 @@ using LiteNetLib.Utils;
 using JungleMaze.World.Inventory;
 
 var checks=0;
+
+
+
+
 void Check(bool okay,string name){checks++;if(!okay)throw new Exception("FAIL: "+name);Console.WriteLine("PASS: "+name);}
 void Throws(Action action,string name){try{action();}catch(ArgumentException){Check(true,name);return;}throw new Exception("Expected rejection: "+name);}
 var config=new MapLayoutConfig();
@@ -83,10 +87,10 @@ try
     Environment.SetEnvironmentVariable("WORLD_LAYOUT_MODE","Prototype");
     var canonical=MapData.Load(GameDataLoader.ReadGameDataFile("map_demo.json"));
     var schedule=ZoneSchedule.Load(GameDataLoader.ReadGameDataFile("zone_schedule.json"));
-    var profile=new MatchProfile{MinPlayers=2,LobbyDurationSeconds=.01,LoadingTimeoutSeconds=1,ZoneTimeScale=1000,TargetMatchDurationSeconds=10000};
+    var profile=new MatchProfile{Version=canonical.Version,MinPlayers=2,LobbyDurationSeconds=.01,LoadingTimeoutSeconds=1,ZoneTimeScale=1000,TargetMatchDurationSeconds=10000};
     MatchRuntime Start(string room,byte hp=100)
     {
-        var p=hp==100?profile:new MatchProfile{MinPlayers=2,LobbyDurationSeconds=.01,LoadingTimeoutSeconds=1,PlayerHp=hp,ZoneTimeScale=1000,TargetMatchDurationSeconds=10000};
+        var p=hp==100?profile:new MatchProfile{Version=canonical.Version,MinPlayers=2,LobbyDurationSeconds=.01,LoadingTimeoutSeconds=1,PlayerHp=hp,ZoneTimeScale=1000,TargetMatchDurationSeconds=10000};
         var m=new MatchRuntime(room,canonical,schedule,p);
         m.TryRegisterPlayer("p0","Hero0",out _);m.TryRegisterPlayer("p1","Hero1",out _);m.SetPlayerReady("p0");m.SetPlayerReady("p1");
         for(var i=0;i<4;i++)m.Tick(1.0/30);
@@ -98,9 +102,54 @@ try
     var active=match.World!;var second=other.World!;
     Environment.SetEnvironmentVariable("WORLD_LAYOUT_MODE","Authored");
     var authored=Start("TEAM_MAP");
-    Check(authored.World!.Layout.Objects.Count==canonical.Obstacles.Count&&authored.World.Layout.Objects.All(o=>o.IsHardCover),"normal world uses only the team's authored map without generated placements");
+    var authoredLayout=authored.World!.Layout;
+    Check(authoredLayout.Objects.Count(o=>o.IsHardCover)==4,"authored mode preserves exact 4 hard covers");
+    Check(authoredLayout.Objects.Count==215,"authored map contains 4 hard covers + 211 versioned fixed worldObjects");
+    Check(authoredLayout.Objects.Count(o=>o.Kind==WorldObjectKind.Chest)==60,"authored map exact 60 chests");
+    Check(authoredLayout.Objects.Count(o=>o.Kind==WorldObjectKind.Pot)==90,"authored map exact 90 pots");
+    Check(authoredLayout.Objects.Count(o=>o.Kind==WorldObjectKind.Bush)==45,"authored map exact 45 bushes");
+    Check(authoredLayout.Objects.Count(o=>o.Kind==WorldObjectKind.Portal)==6,"authored map exact 6 portals (3 pairs)");
+    Check(authoredLayout.Objects.Count(o=>o.Kind==WorldObjectKind.Door)==2,"authored map exact 2 doors");
+    Check(authoredLayout.Objects.Count(o=>o.Kind==WorldObjectKind.Swamp)==2,"authored map exact 2 swamps");
+    Check(authoredLayout.Objects.Count(o=>o.Kind==WorldObjectKind.Lava)==2,"authored map exact 2 lava");
+    Check(authoredLayout.Objects.Count(o=>o.Kind==WorldObjectKind.Poison)==4,"authored map exact 4 poison");
+    var portalPairs=authoredLayout.Objects.Where(o=>o.Kind==WorldObjectKind.Portal).GroupBy(o=>o.PairId).ToList();
+    Check(portalPairs.Count==3&&portalPairs.All(g=>g.Count()==2),"authored portals paired into 3 valid 2-endpoint groups");
+    foreach(var p in authoredLayout.Objects.Where(o=>o.Kind==WorldObjectKind.Portal))
+    {
+        var otherP=authoredLayout.Objects.First(o=>o.Kind==WorldObjectKind.Portal&&o.PairId==p.PairId&&o.Id!=p.Id);
+        Check(authoredLayout.IsWalkable(otherP.Bounds.Center,profile.PlayerRadius),"portal destination is walkable with hero radius");
+    }
+    for(var i=0;i<authoredLayout.Spawns.Count;i++)
+    {
+        var sp=authoredLayout.Spawns[i];
+        Check(authoredLayout.IsWalkable(sp,profile.PlayerRadius),"spawn point is walkable");
+        Check(authoredLayout.Objects.All(o=>!o.IsHazard||!o.Bounds.Contains(sp,profile.PlayerRadius)),"spawn point has no hazard overlap");
+        Check(new WorldPoint(25,25).DistanceSquared(sp)<=25*25,"spawn point inside initial zone radius");
+        for(var j=i+1;j<authoredLayout.Spawns.Count;j++)
+            Check(sp.DistanceSquared(authoredLayout.Spawns[j])>=6*6,"pairwise spawn distance >= 6");
+    }
+    var reachVisited=new HashSet<int>();var reachQ=new Queue<int>();var startCell=(int)authoredLayout.Spawns[0].X+(int)authoredLayout.Spawns[0].Y*authoredLayout.Size;
+    reachQ.Enqueue(startCell);reachVisited.Add(startCell);
+    while(reachQ.Count>0)
+    {
+        var cur=reachQ.Dequeue();var cx=cur%authoredLayout.Size;var cy=cur/authoredLayout.Size;
+        foreach(var d in new[]{-1,1,-authoredLayout.Size,authoredLayout.Size})
+        {
+            var n=cur+d;var nx=n%authoredLayout.Size;var ny=n/authoredLayout.Size;
+            if(n<0||n>=authoredLayout.Size*authoredLayout.Size||Math.Abs(nx-cx)+Math.Abs(ny-cy)!=1||reachVisited.Contains(n)||!authoredLayout.IsWalkable(new WorldPoint(nx+.5f,ny+.5f),profile.PlayerRadius))continue;
+            reachVisited.Add(n);reachQ.Enqueue(n);
+        }
+    }
+    Check(authoredLayout.Spawns.All(s=>reachVisited.Contains((int)s.X+(int)s.Y*authoredLayout.Size)),"all spawns connected in single reachable component");
+    Check(authoredLayout.Objects.Where(o=>o.Kind==WorldObjectKind.Portal).All(p=>reachVisited.Contains((int)p.Bounds.Center.X+(int)p.Bounds.Center.Y*authoredLayout.Size)),"all portal exits connected to reachable component");
+    Check(authoredLayout.Objects.Where(o=>o.IsDestructible).All(o=>reachVisited.Any(cell=>
+        {var p=new WorldPoint(cell%authoredLayout.Size+.5f,cell/authoredLayout.Size+.5f);var b=o.Bounds;
+         var dx=Math.Max(b.MinX,Math.Min(b.MaxX,p.X))-p.X;var dy=Math.Max(b.MinY,Math.Min(b.MaxY,p.Y))-p.Y;
+         return dx*dx+dy*dy<=1.2f*1.2f;})),"every authored loot container has a reachable interaction approach");
+    Check(authoredLayout.Hash=="cb3b0a1356ac911d41f58a3ea225af67b4651de7533b94549bfcfd835b82fd2d","authored client/server hash matches golden vector");
     Check(authored.World.Layout.Spawns.Select(p=>(p.X,p.Y)).SequenceEqual(canonical.SpawnPoints),"authored mode preserves every team spawn coordinate");
-    Check(authored.World.Layout.Objects.Select(o=>(o.Bounds.MinX,o.Bounds.MaxX,o.Bounds.MinY,o.Bounds.MaxY)).SequenceEqual(canonical.Obstacles.Select(o=>(o.MinX,o.MaxX,o.MinY,o.MaxY))),"authored mode preserves every team collider exactly");
+    Check(authored.World.Layout.Objects.Take(4).Select(o=>(o.Bounds.MinX,o.Bounds.MaxX,o.Bounds.MinY,o.Bounds.MaxY)).SequenceEqual(canonical.Obstacles.Select(o=>(o.MinX,o.MaxX,o.MinY,o.MaxY))),"authored mode preserves every team collider exactly");
     Environment.SetEnvironmentVariable("WORLD_LAYOUT_MODE","Prototype");
     Check(canonical.Obstacles.Count==4,"world collision never mutates shared canonical map");
     Check(match.Entities.All.All(e=>!match.Zone!.IsOutside(e.X,e.Y)),"world spawns start inside actual zone schedule");

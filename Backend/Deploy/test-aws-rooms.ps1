@@ -17,6 +17,7 @@ param(
     [string]$LocalConfig = '',
     # Only after the owner explicitly reserves an already Running instance for this test.
     [switch]$UseRunningInstance,
+    [switch]$KeepInstanceRunning,
     [switch]$DualTransport,
     [switch]$WssReconnectOnly,
     [switch]$UnityGameplay,
@@ -80,6 +81,7 @@ function Probe-PublicHttps([string]$Ip) {
     }
 }
 function Restart-Guarded {
+    if ($KeepInstanceRunning) { throw 'Restart is disabled when KeepInstanceRunning is selected.' }
     Aws @('ec2','stop-instances','--instance-ids',$InstanceId) | Out-Null
     $by=[DateTime]::UtcNow.AddMinutes(3)
     do {
@@ -116,6 +118,8 @@ try {
     $taskLifecycle.account = $identity.Account
     $taskLifecycle.instanceType = $instance.InstanceType
     $taskLifecycle.initialState = $instance.State.Name
+    if ($KeepInstanceRunning -and (-not $UseRunningInstance -or $instance.State.Name -ne 'running' -or -not $DualTransport -or $WssReconnectOnly)) { throw 'KeepInstanceRunning requires an exclusively reserved Running instance and DualTransport; no restart test.' }
+    $taskLifecycle.keepInstanceRunning = [bool]$KeepInstanceRunning
     if ($UseRunningInstance -and -not ($Phase1Connectivity -or $DualTransport)) { throw 'UseRunningInstance is restricted to an explicitly reserved connectivity test.' }
     if ($DualTransport -and ($Phase1Connectivity -or $GeneratorOnServer -or $CapacityAfter)) { throw 'DualTransport requires real PC and its own test path.' }
     if ($WssReconnectOnly -and -not $DualTransport) { throw 'WssReconnectOnly requires DualTransport.' }
@@ -150,7 +154,7 @@ try {
     $credit = Aws @('ec2','describe-instance-credit-specifications','--instance-ids',$InstanceId)
     if ($credit.InstanceCreditSpecifications[0].CpuCredits -ne 'standard') { throw 'Set CPU credits to Standard before the paid test.' }
     # DryRun proves permissions without starting/stopping anything.
-    foreach ($verb in @('start-instances','stop-instances')) {
+    foreach ($verb in $(if ($KeepInstanceRunning) { @() } else { @('start-instances','stop-instances') })) {
         $ErrorActionPreference = 'Continue'
         try { $dry = & $AwsCli ec2 $verb --instance-ids $InstanceId --dry-run --profile $Profile --region $Region --no-cli-pager 2>&1 | Out-String }
         finally { $ErrorActionPreference = 'Stop' }
@@ -181,7 +185,7 @@ try {
     if ($GeneratorOnServer -and -not (Test-Path -LiteralPath (Join-Path $taskBackend 'out/aws-room-test/smoke-client.tar.gz'))) {
         throw 'Publish Linux NetSmokeClient and pack out/aws-room-test/smoke-client.tar.gz BEFORE starting EC2.'
     }
-    Event ('Preflight passed: '+$instance.State.Name+', EBS, x86_64, shutdown=stop, CPU Standard, Start/Stop allowed.')
+    Event ('Preflight passed: '+$instance.State.Name+', EBS, x86_64, shutdown=stop, CPU Standard; lifecycle='+$(if ($KeepInstanceRunning) {'keep Running; no Start/Stop'} else {'guarded Start/Stop'}))
     if ($PreflightOnly) { return }
     # Prepare reusable fixture credentials outside the repository; restrict ACL before use.
     $fixtureDirectory = Join-Path $env:LOCALAPPDATA 'JungleMaze'
@@ -215,6 +219,7 @@ try {
     $taskLifecycle.idleSleepPrevented=$taskSleepHeld
     $taskDeadline = [DateTime]::UtcNow.AddMinutes($HardStopMinutes)
     $taskLifecycle.hardStopUtc = $taskDeadline.ToString('o')
+    if (-not $KeepInstanceRunning) {
     $guard = @(
         ('$end = [DateTime]::Parse(''{0}'').ToUniversalTime()' -f $taskDeadline.ToString('o')),
         'while ([DateTime]::UtcNow -lt $end) { Start-Sleep -Seconds 5 }',
@@ -222,6 +227,7 @@ try {
     ) -join [Environment]::NewLine
     $encoded = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($guard))
     $taskWatchdog = Start-Process powershell -WindowStyle Hidden -PassThru -ArgumentList "-NoProfile -EncodedCommand $encoded"
+    }
     # Mark ownership before request: even a lost Start response must lead to Stop.
     $taskLifecycle.adoptedRunningInstance = $UseRunningInstance -and $instance.State.Name -eq 'running'
     $taskLifecycle.startedByThisRun = -not $taskLifecycle.adoptedRunningInstance
@@ -230,7 +236,7 @@ try {
     if ($taskLifecycle.adoptedRunningInstance) {
         $taskLifecycle.adoptedUtc = $taskLifecycle.startRequestedUtc
         $taskLifecycle.initialLaunchUtc = $instance.LaunchTime
-        Event 'Explicitly reserved Running instance adopted; no Start requested. Stop at end is authorized.'
+        Event ('Explicitly reserved Running instance adopted; final policy: ' + $(if ($KeepInstanceRunning) { 'keep Running' } else { 'Stop' }))
     } else {
         Aws @('ec2','start-instances','--instance-ids',$InstanceId) | Out-Null
         Event ("EC2 start requested. Hard deadline: $HardStopMinutes minutes including startup/deployment.")
@@ -245,6 +251,7 @@ try {
         Start-Sleep -Seconds 5
     } while ($true)
     $taskLifecycle.publicIp = $instance.PublicIpAddress
+    if (-not $KeepInstanceRunning) {
     $stamp = $taskDeadline.ToString('yyyy-MM-dd HH:mm:ss') + ' UTC'
     $paramFile = Join-Path $OutputDirectory 'stop-timer-parameters.json'
     @{ commands=@("systemd-run --quiet --unit=junglemaze-test-stop --on-calendar='$stamp' /usr/sbin/shutdown -h now") } |
@@ -259,8 +266,10 @@ try {
     }
     if (-not $timerOk) { throw 'Could not arm independent EC2 shutdown timer.' }
     Event 'SSM Online; independent server stop timer armed.'
+    } else { Event 'KeepInstanceRunning: no EC2 stop watchdog or shutdown timer installed.' }
     if ($DualTransport) { Probe-PublicHttps $instance.PublicIpAddress }
     if ($WssReconnectOnly) {
+        if ($KeepInstanceRunning) { throw 'Stop/Start rejoin is disabled by keep-running policy.' }
         # Short independent rejoin after the previous guarded run has already Stopped.
         # No upload, deployment, capacity load or second restart in this branch.
         $env:AWS_ROOM_DEADLINE_UTC=[DateTime]::Parse($taskLifecycle.startRequestedUtc).ToUniversalTime().AddMinutes($BudgetMinutes).ToString('o')
@@ -388,16 +397,16 @@ try {
         & (Join-Path $PSScriptRoot '../Tests/OnlineReadiness/Test-ServerMetrics.ps1') -LogPath (Join-Path $OutputDirectory 'game-server.log') -MemoryPercent $taskRamPeak -OutputPath (Join-Path $OutputDirectory 'server-metrics.json')
         $runtimeState=& ssh -o BatchMode=yes -o ConnectTimeout=15 $SshAlias "sudo docker inspect --format 'OOMKilled={{.State.OOMKilled}} RestartCount={{.RestartCount}}' junglemaze-aws-game-server-1"
         if ($LASTEXITCODE -ne 0 -or ($runtimeState -join '') -notmatch 'OOMKilled=false RestartCount=0') { throw 'GameServer OOM/restart or inspect failure' }
-        if ([DateTime]::UtcNow.AddMinutes(5) -lt [DateTime]::Parse($env:AWS_ROOM_DEADLINE_UTC).ToUniversalTime()) {
+        if (-not $KeepInstanceRunning -and [DateTime]::UtcNow.AddMinutes(5) -lt [DateTime]::Parse($env:AWS_ROOM_DEADLINE_UTC).ToUniversalTime()) {
             $taskRejoinIp=Restart-Guarded
             Probe-PublicHttps $taskRejoinIp
             $null = & (Join-Path $PSScriptRoot 'test-unity-remote.ps1') -Player $UnityPlayer -Scenario $UnityScenario -Clients 1 -ReconnectOnly -Fixture $taskUnityFixture -OutputDirectory (Join-Path $OutputDirectory 'unity-reconnect')
             $taskLifecycle.stopStartRejoin='PASS'
-        } else { $taskLifecycle.stopStartRejoin='NOT_TESTED: insufficient remaining soft budget' }
+        } else { $taskLifecycle.stopStartRejoin='NOT_TESTED: keep-running policy or insufficient remaining soft budget' }
     } else {
     & $Python @testArguments
     if ($LASTEXITCODE -ne 0) { throw 'AWS test incomplete; inspect test/report.json.' }
-    if ($DualTransport) {
+    if ($DualTransport -and -not $KeepInstanceRunning) {
         Event 'WSS/Auto and concurrent Local completed; checking Stop/Start.'
         $taskRejoinIp=Restart-Guarded
         Probe-PublicHttps $taskRejoinIp
@@ -416,9 +425,12 @@ try {
 } finally {
     if ($taskCollector) {
         try { & ssh -o BatchMode=yes -o ConnectTimeout=5 -o ServerAliveInterval=5 -o ServerAliveCountMax=1 $SshAlias "sudo systemctl stop $taskCollector" 2>$null | Out-Null }
-        catch { Event 'Collector cleanup not confirmed; continuing mandatory EC2 Stop.' }
+        catch { Event ('Collector cleanup not confirmed; continuing final lifecycle policy: '+$(if ($KeepInstanceRunning) {'verify Running'} else {'Stop'})) }
     }
-    if ($taskLifecycle.startedByThisRun -or $taskLifecycle.adoptedRunningInstance) {
+    if ($KeepInstanceRunning -and $taskLifecycle.adoptedRunningInstance) {
+        try { $taskLifecycle.runningConfirmed = (State).State.Name -eq 'running' } catch { $taskLifecycle.runningConfirmed = $false }
+        Event ('KeepInstanceRunning final state confirmed: ' + $taskLifecycle.runningConfirmed + '. Compute credits continue.')
+    } elseif ($taskLifecycle.startedByThisRun -or $taskLifecycle.adoptedRunningInstance) {
         # Stop remains mandatory even when deployment/JWT/room cleanup fails.
         $taskLifecycle.stopRequestedUtc = [DateTime]::UtcNow.ToString('o')
         for ($attempt=0; $attempt -lt 3; $attempt++) {
@@ -438,4 +450,4 @@ try {
     if ($taskSleepHeld) { [JungleMaze.TestPower]::Release() }
     Save-Lifecycle
 }
-if ($taskLifecycle.error -or (($taskLifecycle.startedByThisRun -or $taskLifecycle.adoptedRunningInstance) -and -not $taskLifecycle.stoppedConfirmed)) { exit 1 }
+if ($taskLifecycle.error -or ($KeepInstanceRunning -and $taskLifecycle.adoptedRunningInstance -and -not $taskLifecycle.runningConfirmed) -or (-not $KeepInstanceRunning -and ($taskLifecycle.startedByThisRun -or $taskLifecycle.adoptedRunningInstance) -and -not $taskLifecycle.stoppedConfirmed)) { exit 1 }

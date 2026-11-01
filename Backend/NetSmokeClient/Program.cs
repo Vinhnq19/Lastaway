@@ -65,7 +65,7 @@ try
     var roomCode = roomPlan is null
         ? CredentialInput.ReadSecret("NET_ROOM_CODE", "Mã phòng (ẩn khi nhập): ", shutdown.Token) : "";
     string? accessToken = null;
-    if (options.AuthMode == "Jwt")
+    if (options.AuthMode == "Jwt" || options.ProtocolVersion == JungleBackend.Protocol.NetworkProtocol.Version4)
     {
         accessToken = Environment.GetEnvironmentVariable("NET_ACCESS_TOKEN");
         if (accessToken is null)
@@ -87,7 +87,7 @@ try
         var name = clients == 1 ? displayName : displayName[..Math.Min(29, displayName.Length)] + "-" + number;
         var session = new SmokeSession(number, options, assignment.Code, name, accessToken, pingRate, quiet, assignment.Label);
         sessions.Add(session); // Ghi vào danh sách trước Start để lỗi giữa chừng vẫn được Dispose.
-        session.Start();
+        await session.StartAsync(shutdown.Token);
     }
     var started = Stopwatch.GetTimestamp();
     var measuring = false;

@@ -71,10 +71,11 @@ def main():
     game_process = game_log = held_client = held_log = None
     opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
 
-    def request(method, path, data=None, token=None):
+    def request(method, path, data=None, token=None, extra_headers=None):
         headers = {'Content-Type': 'application/json'}
         if token is not None:
             headers['Authorization'] = 'Bearer ' + token
+        if extra_headers: headers.update(extra_headers)
         payload = json.dumps(data).encode() if data is not None else None
         req = urllib.request.Request(base_url + path, data=payload, headers=headers, method=method)
         try:
@@ -181,7 +182,8 @@ def main():
                     'Mongo__Database': DATABASE, 'Jwt__Issuer': 'JungleMaze.Local',
                     'Jwt__Audience': 'JungleMaze.Game', 'Jwt__SigningKey': key,
                     'Jwt__ExpiryMinutes': '60', 'ASPNETCORE_ENVIRONMENT': 'Production',
-                    'DOTNET_ENVIRONMENT': 'Production', 'Swagger__Enabled': 'true'})
+                    'DOTNET_ENVIRONMENT': 'Production', 'Swagger__Enabled': 'true',
+                    'MATCH_RESULT_TOKEN': secrets.token_hex(32)})
         start_api(env, 'api')
         check('health pings real MongoDB', request('GET', '/health')[0] == 200)
         ui_status, ui = request('GET', '/swagger/index.html')
@@ -264,10 +266,29 @@ def main():
         script = "const u=db.users.findOne({NormalizedUsername:'PLAYERONE'}); if(!u || u.PasswordHash==='DemoPassword_123!' || u.PasswordHash.length<40 || u.Password!==undefined) quit(1); if(!db.users.getIndexes().some(i=>i.name==='ux_users_normalized_username' && i.unique)) quit(2); if(db.users.countDocuments({NormalizedUsername:'CONCURRENTUSER'})!==1) quit(3); print('verified');"
         check('MongoDB stores hash and enforces unique index', command('docker', 'exec', CONTAINER,
               'mongosh', DATABASE, '--quiet', '--eval', script) == 'verified')
+        # Real Mongo atomic insert/retry/conflict, not only the in-memory repository fixture.
+        import uuid
+        match_id = str(uuid.uuid4())
+        submission = {'matchId': match_id, 'roomId': str(uuid.uuid4()), 'configVersion': '1.1.0',
+                      'startUtc': '2026-11-01T00:00:00Z', 'endUtc': '2026-11-01T00:01:00Z', 'reason': 'LastAlive',
+                      'participants': [{'playerSessionId': str(uuid.uuid4()), 'displayName': 'SameName', 'rank': 1,
+                                        'kills': 0, 'survivalSeconds': 60, 'profileKey': 'account:' + claims['sub']}]}
+        result_headers = {'X-Match-Result-Token': env['MATCH_RESULT_TOKEN']}
+        check('player JWT cannot write authoritative results', request('POST', '/internal/match-results', submission, token)[0] == 401)
+        with ThreadPoolExecutor(max_workers=4) as pool:
+            result_statuses = list(pool.map(lambda _: request('POST', '/internal/match-results', submission, extra_headers=result_headers)[0], range(4)))
+        check('Mongo concurrent result retry inserts once', sorted(result_statuses) == [200, 200, 200, 201])
+        changed_result = dict(submission, reason='Tie')
+        check('same MatchId with changed payload rejected', request('POST', '/internal/match-results', changed_result, extra_headers=result_headers)[0] == 409)
+        check('verified account history has one matching result', sum(row['matchId'] == match_id for row in request('GET', '/api/me/matches', token=token)[1]['items']) == 1)
+        status_board, board = request('GET', '/api/matches/' + match_id + '/leaderboard')
+        check('public leaderboard strips private identity', status_board == 200 and 'profileKey' not in json.dumps(board) and 'account:' not in json.dumps(board))
         stop_api()
         start_api(env, 'api-restarted')
         check('login survives API restart', request('POST', '/api/auth/login',
               {'username': 'PlayerOne', 'password': credentials['password']})[0] == 200)
+        check('result retry after API restart remains idempotent', request('POST', '/internal/match-results', submission, extra_headers=result_headers)[0] == 200)
+        check('history survives API restart', sum(row['matchId'] == match_id for row in request('GET', '/api/me/matches', token=token)[1]['items']) == 1)
         stop_api()
         disabled_env = env.copy()
         disabled_env['Swagger__Enabled'] = 'false'
@@ -284,75 +305,73 @@ def main():
         check('weak signing key prevents startup', invalid.returncode != 0
               and b'Jwt__SigningKey' in invalid.stderr + invalid.stdout)
 
-        # Xác minh token do chính API cấp dùng được trong UDP server, không chỉ token tự tạo trong unit test.
-        start_api(env, 'api-network')
-        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as udp_probe:
-            udp_probe.bind(('127.0.0.1', 0))
-            game_port = udp_probe.getsockname()[1]
+        # Normal runtime requires account v4 on every interface. Legacy/JWT wire fixtures live in NetworkChecks.
+        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as probe:
+            probe.bind(('127.0.0.1', 0)); game_port = probe.getsockname()[1]
+        with socket.socket() as probe:
+            probe.bind(('127.0.0.1', 0)); control_port = probe.getsockname()[1]
+        with socket.socket() as probe:
+            probe.bind(('127.0.0.1',0)); ws_port=probe.getsockname()[1]
         room_code = 'TestRoom_' + secrets.token_hex(12)
-        game_env = env.copy()
-        game_env.update({'GAME_BIND_ADDRESS': '127.0.0.1', 'GAME_PORT': str(game_port),
-                         'MAX_PLAYERS': '10', 'TICK_RATE': '30', 'AUTH_MODE': 'Jwt',
-                         'ROOM_CODE': room_code, 'AUTH_TIMEOUT_MS': '5000', 'METRICS_INTERVAL_SECONDS': '1'})
-        start_game(game_env, 'game-jwt')
-        client_config = {'mode': 'Local', 'apiBaseUrl': base_url, 'gameServerHost': '127.0.0.1',
-                         'gameServerPort': game_port, 'authMode': 'Jwt', 'protocolVersion': 1, 'connectTimeoutMs': 5000}
-        client_env = {'NET_ROOM_CODE': room_code, 'NET_USERNAME': 'PlayerOne', 'NET_PASSWORD': credentials['password']}
-        cross = run_client(client_config, client_env)
-        check('client login API -> signed JWT -> UDP JoinAccepted -> Pong', cross.returncode == 0
-              and '[login]' in cross.stdout and ('playerId=' + user['id']) in cross.stdout and 'Pong sequence=' in cross.stdout)
-        wrong_password = run_client(client_config, dict(client_env, NET_PASSWORD='WrongPassword'))
-        check('client login failure stops before UDP, no RoomCode fallback', wrong_password.returncode == 1
-              and 'HTTP 401' in wrong_password.stderr and 'transportConnected' not in wrong_password.stdout)
-        wrong_room = run_client(client_config, dict(client_env, NET_ROOM_CODE='Wrong_Room'))
-        check('JWT alone cannot bypass room code', wrong_room.returncode == 1 and 'InvalidRoomCode' in wrong_room.stderr)
-
-        held_log_path = LOG_DIR / 'held-client.log'
-        held_log = held_log_path.open('w', encoding='utf-8')
-        held_args, held_env = client_start(client_config, client_env, duration=8)
-        held_client = subprocess.Popen(held_args, cwd=BACKEND, env=held_env,
-                                       stdout=held_log, stderr=subprocess.STDOUT)
-        for _ in range(100):
-            if 'JoinAccepted' in held_log_path.read_text(encoding='utf-8'):
-                break
-            if held_client.poll() is not None:
-                raise RuntimeError('Held client did not join.')
-            time.sleep(0.1)
-        else:
-            raise RuntimeError('Held client timed out.')
-        duplicated = run_client(client_config, client_env)
-        check('real API account cannot join twice', duplicated.returncode == 1 and 'DuplicateSession' in duplicated.stderr)
-        held_client.wait(timeout=12)
-        held_client = None
-        held_log.close()
-        held_log = None
-        retry = run_client(client_config, client_env)
-        check('real client disconnect releases user mapping for next join', retry.returncode == 0 and 'JoinAccepted' in retry.stdout)
+        control_token = secrets.token_hex(32)
+        env.update({'ROOM_CONTROL_TOKEN': control_token, 'RoomControl__BaseUrl': f'http://127.0.0.1:{control_port}'})
+        game_env = dict(env, GAME_BIND_ADDRESS='127.0.0.1', GAME_PORT=str(game_port),
+                        MAX_PLAYERS='10', TICK_RATE='30', AUTH_MODE='RoomCode', ROOM_CODE=room_code,
+                        ROOM_CONTROL_BIND_ADDRESS='127.0.0.1', ROOM_CONTROL_PORT=str(control_port), METRICS_INTERVAL_SECONDS='1',
+                        WS_ENABLED='true', WS_BIND_ADDRESS='127.0.0.1', WS_PORT=str(ws_port))
+        start_game(game_env, 'game-account-v4'); start_api(env, 'api-network')
+        ticket_body = {'attemptId': secrets.token_hex(16), 'roomCode': room_code}
+        # Use UUID wire syntax, not a shortened nickname or PlayerId.
+        import uuid
+        ticket_body['attemptId'] = str(uuid.uuid4())
+        for label, proof in [('missing', None), ('invalid', 'invalid.jwt')]:
+            check('game ticket requires valid JWT: ' + label, request('POST', '/api/game-tickets', ticket_body, proof)[0] == 401)
         expired_claims = dict(claims, exp=int(time.time()) - 120, nbf=int(time.time()) - 300)
-        expired_client = run_client(client_config, dict(client_env, NET_ACCESS_TOKEN=signed_token(expired_claims, key)))
-        check('UDP rejects expired token with no fallback', expired_client.returncode == 1 and 'InvalidToken' in expired_client.stderr)
-        stop_game()
-        stop_api()
+        expired_token = signed_token(expired_claims, key)
+        check('expired JWT cannot obtain game ticket', request('POST', '/api/game-tickets', ticket_body, expired_token)[0] == 401)
+        guest_status, guest = request('POST', '/api/guests', {})
+        check('legacy guest profile remains available', guest_status in (200, 201))
+        guest_proof = guest.get('credential') or guest.get('proof')
+        check('Guest cannot obtain new play tickets', request('POST', '/api/game-tickets', ticket_body,
+              extra_headers={'X-Guest-Credential': guest_proof})[0] == 401)
+        check('Guest cannot create rooms', request('POST', '/api/rooms', {'name':'Denied','maxPlayers':10},
+              extra_headers={'X-Guest-Credential': guest_proof})[0] == 401)
+        status, issued = request('POST', '/api/game-tickets', ticket_body, token)
+        check('valid account obtains opaque 30-second ticket', status == 200 and len(issued['ticket']) == 64)
+        check('Swagger game-ticket requires only Bearer', request('GET','/swagger/v1/swagger.json')[1]['paths']['/api/game-tickets']['post']['security'] == [{'Bearer':[]}])
+        status, room = request('POST', '/api/rooms', {'name':'Account room','maxPlayers':10}, token)
+        check('logged-in account creates room', status == 201)
+        check('owner lists own room', request('GET','/api/rooms',token=token)[0] == 200)
+        check('owner deletes empty room', request('DELETE','/api/rooms/'+room['id'],token=token)[0] == 204)
+        client_config = {'mode':'Local','apiBaseUrl':base_url,'gameServerHost':'127.0.0.1',
+                         'gameServerPort':game_port,'authMode':'RoomCode','protocolVersion':4,'connectTimeoutMs':5000}
+        client_env = {'NET_ROOM_CODE':room_code,'NET_USERNAME':'PlayerOne','NET_PASSWORD':credentials['password']}
+        cross = run_client(client_config, client_env)
+        check('real login -> HTTPS ticket -> UDP v4 join -> pong', cross.returncode == 0 and 'JoinAccepted' in cross.stdout and 'Pong sequence=' in cross.stdout)
+        ws_config=dict(client_config, transport='Wss', webSocketUrl=f'ws://127.0.0.1:{ws_port}/game')
+        ws_cross=run_client(ws_config,dict(client_env,NET_ACCESS_TOKEN=token),duration=3)
+        check('real account ticket joins WebSocket binary transport',ws_cross.returncode==0 and 'JoinAccepted' in ws_cross.stdout and 'Pong sequence=' in ws_cross.stdout)
+        with socket.socket(socket.AF_INET,socket.SOCK_DGRAM) as probe:
+            probe.bind(('127.0.0.1',0)); unused_port=probe.getsockname()[1]
+        auto_config=dict(ws_config,transport='Auto',gameServerPort=unused_port)
+        auto_cross=run_client(auto_config,dict(client_env,NET_ACCESS_TOKEN=token),duration=8)
+        check('real Auto fallback obtains one ticket before UDP and joins WSS',auto_cross.returncode==0 and 'JoinAccepted' in auto_cross.stdout)
 
-        # RoomCode vẫn chạy khi không có API và không có signing key.
-        game_env.update({'AUTH_MODE': 'RoomCode', 'Jwt__SigningKey': ''})
-        start_game(game_env, 'game-room')
-        room_config = dict(client_config, authMode='RoomCode', apiBaseUrl=None)
-        room_clients = run_client(room_config, {'NET_ROOM_CODE': room_code}, clients=10, duration=3)
-        check('10 RoomCode clients join/pong with API stopped and no JWT key', room_clients.returncode == 0
-              and 'joined=10 failed=0' in room_clients.stdout)
-        room_capacity = run_client(room_config, {'NET_ROOM_CODE': room_code}, clients=11, duration=3)
-        check('client tool shows 10 accepted and 11th RoomFull', room_capacity.returncode == 1
-              and 'joined=10 failed=1' in room_capacity.stdout and 'RoomFull' in room_capacity.stderr)
-        captured = cross.stdout + cross.stderr + (LOG_DIR / 'game-jwt.log').read_text(encoding='utf-8')
-        check('network logs do not expose room/password/signing key/token',
-              all(secret not in captured for secret in (room_code, credentials['password'], key, token)))
-        stop_game()
-        missing_jwt_key = dict(game_env, AUTH_MODE='Jwt', Jwt__SigningKey='')
-        missing_key_process = subprocess.run(['dotnet', str(GAME_DLL)], cwd=BACKEND,
-                                             env=missing_jwt_key, capture_output=True, timeout=10)
-        check('JWT GameServer refuses startup without signing key', missing_key_process.returncode == 1
-              and b'Jwt' in missing_key_process.stderr)
+        wrong_password = run_client(client_config, dict(client_env, NET_PASSWORD='WrongPassword'))
+        check('bad login fails before UDP without guest fallback', wrong_password.returncode == 1 and 'HTTP 401' in wrong_password.stderr and 'transportConnected' not in wrong_password.stdout)
+        wrong_room = run_client(client_config, dict(client_env, NET_ROOM_CODE='Wrong_Room'))
+        check('account cannot bypass nonexistent room', wrong_room.returncode == 1 and 'HTTP 404' in wrong_room.stderr)
+        expired_client = run_client(client_config, dict(client_env, NET_ACCESS_TOKEN=expired_token))
+        check('expired login fails at ticket API before game transport', expired_client.returncode == 1 and 'HTTP 401' in expired_client.stderr)
+        legacy = run_client(dict(client_config, protocolVersion=1), {'NET_ROOM_CODE':room_code})
+        check('legacy anonymous client refused by normal runtime', legacy.returncode == 1 and 'AuthRequired' in legacy.stderr)
+        room_clients = run_client(client_config, dict(client_env, NET_ACCESS_TOKEN=token), clients=10, duration=3)
+        check('10 account-ticket sessions join/pong', room_clients.returncode == 0 and 'joined=10 failed=0' in room_clients.stdout)
+        room_capacity = run_client(client_config, dict(client_env, NET_ACCESS_TOKEN=token), clients=11, duration=3)
+        check('mixed account admissions preserve ten-player capacity', room_capacity.returncode == 1 and 'joined=10 failed=1' in room_capacity.stdout and 'RoomFull' in room_capacity.stderr)
+        captured = cross.stdout + cross.stderr + (LOG_DIR/'game-account-v4.log').read_text(encoding='utf-8')
+        check('network logs redact account bearer, ticket, room and password', all(secret not in captured for secret in (room_code, credentials['password'], key, token, issued['ticket'])))
+        stop_game(); stop_api()
         if '--short-lifetime' in sys.argv:
             # Same real JWT path used on AWS; no forged expired token and no production key.
             stop_game(); stop_api()
