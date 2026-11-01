@@ -72,10 +72,13 @@ namespace JungleMaze.Presentation.UI
             _overlayFlow = overlayFlow;
         }
 
+        public bool DetailsVisible => _showDetails && _menuState?.IsOpen != true;
+
         public bool ShouldHideWorldLabels
         {
             get
             {
+                if (_session?.HasResult == true) return true;
                 if (_menuState != null && _menuState.IsOpen) return true;
                 if (_overlayFlow != null && (_overlayFlow.Phase == MatchOverlayPhase.Killcam ||
                                              _overlayFlow.Phase == MatchOverlayPhase.Spectating ||
@@ -252,7 +255,7 @@ namespace JungleMaze.Presentation.UI
 
             if (_offlineSession != null && _offlineSession.IsActive)
             {
-                if (_menuState?.IsOpen == true || (!_showDetails && !_offlineSession.HasResult)) return;
+                if (!DetailsVisible) return;
                 GUILayout.BeginArea(new Rect(10, 52, 370, Mathf.Min(Screen.height - 62, 220)), GUI.skin.box);
                 GUILayout.Label("Lastaway · Solo Offline", _label);
                 GUILayout.Label($"Trận {_offlineSession.MatchId.ToString().Substring(0, 8)} · 1 người chơi", _label);
@@ -283,6 +286,15 @@ namespace JungleMaze.Presentation.UI
                     foreach (var row in _session.Roster) if (row.NetId == id) { name = (id == _session.OwnNetId ? "Bạn: " : "") + row.DisplayName; break; }
                     GUI.Label(new Rect(point.x - 50, Screen.height - point.y - 30, 150, 25), name + " · HP " + player.Current.Hp);
                 }
+            var worldStatus = _generatedWorld != null && _generatedWorld.Required && _session.Phase == MatchPhase.InGame && !_generatedWorld.IsReady
+                ? (_generatedWorld.Error != null ? "Không thể tải bản đồ. Dữ liệu client và server không khớp; hãy cập nhật game." : "Đang đồng bộ bản đồ và túi đồ…") : null;
+            if (!DetailsVisible)
+            {
+                // Normal play uses the composed Lobby/HUD/results UI; only critical load errors stay visible.
+                if (_dataError != null || worldStatus != null)
+                    GUI.Box(new Rect(10, 52, 370, 62), _dataError ?? worldStatus, _label);
+                return;
+            }
             GUILayout.BeginArea(new Rect(_session.Connected ? 10 : 420, 52, 370, Mathf.Min(Screen.height - 62, 590)), GUI.skin.box);
             GUILayout.Label("Lastaway · Demo Phase 2", _label);
             if (!_session.Connected)
@@ -298,8 +310,7 @@ namespace JungleMaze.Presentation.UI
                 foreach (var row in _session.Roster) GUILayout.Label(row.DisplayName, _label);
             GUILayout.Label($"HP: {_session.OwnHp} · Tick server: {_session.ServerTick} · Snapshot: {_session.Snapshots}", _label);
             if (_dataError != null) GUILayout.Label(_dataError, _label);
-            if (_generatedWorld!=null && _generatedWorld.Required && _session.Phase==MatchPhase.InGame && !_generatedWorld.IsReady)
-                GUILayout.Label(_generatedWorld.Error!=null?"Không thể tải bản đồ. Dữ liệu client và server không khớp; hãy cập nhật game.":"Đang đồng bộ bản đồ và túi đồ…",_label);
+            if (worldStatus != null) GUILayout.Label(worldStatus, _label);
             if (_session.HasZone) GUILayout.Label($"Bo {_session.Zone.PhaseIndex}: r={_session.Zone.CurrentRadius:F1}" + (_session.Zone.InWarning ? " · Sắp co" : ""), _label);
             var p = _session.Prediction.Stats;
             GUILayout.Label($"WASD di chuyển, chuột trái đánh, R nạp đạn, F nhặt đồ; 1–4 chọn vũ khí, 5–8 dùng dược. Prediction: {(_session.Prediction.IsActive ? "bật" : "chờ")} · sửa {p.Corrections} · lệch max {p.MaxErrorMeters:F2}.", _label);
