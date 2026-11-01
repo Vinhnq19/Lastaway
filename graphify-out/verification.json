@@ -1,0 +1,20 @@
+{
+  "unchanged_code_no_output_rewrite": "PASS",
+  "query_symbols": "PASS: SessionHub, MatchRuntime, RoomManager resolved to source locations",
+  "browser": {
+    "workflow": "Antigravity native Chrome DevTools",
+    "task_id": "492f9462-8cf6-4970-896f-9c226c277fa9",
+    "tree": "PASS: Backend > GameServer > Simulation > MatchRuntime.cs expanded",
+    "graph": "PASS: community search/focus works",
+    "fatal_console_errors": 0,
+    "cdn_dependency": "D3 and vis-network require reachable CDN on first load"
+  },
+  "browser_raw_usage": {
+    "input_tokens": 27106,
+    "output_tokens": 3395,
+    "thinking_tokens": 2392,
+    "cache_read_tokens": 42786,
+    "total_tokens": 30501
+  },
+  "note": "Usage is raw reported telemetry, no savings/billing claim. Initial tree-root argument failed and was corrected. Initial no-rewrite check failed before stable fingerprint; final identical-input check passed. No Unity gameplay test, commit, push or AWS action."
+}

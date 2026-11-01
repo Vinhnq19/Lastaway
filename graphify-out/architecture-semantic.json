@@ -1,0 +1,622 @@
+{
+  "nodes": [
+    {
+      "id": "docs_network_architecture_vi_unity",
+      "label": "Unity client",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§0–9",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_gameserver",
+      "label": "GameServer",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§0–9",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_api",
+      "label": "ASP.NET Core API",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§0–9",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_mongodb",
+      "label": "MongoDB",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§0–9",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_outbox",
+      "label": "Persistent match-result outbox",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§0–9",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_simulation",
+      "label": "Backend/GameServer/Simulation",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§0–9",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_networking",
+      "label": "Backend/GameServer/Networking",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§0–9",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_rooms",
+      "label": "Backend/GameServer/Rooms",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§0–9",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_protocol",
+      "label": "Backend/Shared/Protocol",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§0–9",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_gamedata",
+      "label": "Backend/Shared/GameData",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§0–9",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_runtime_data",
+      "label": "StreamingAssets/JungleMaze/runtime",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§0–9",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_caddy",
+      "label": "Caddy",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§0–9",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_sessionhub",
+      "label": "SessionHub",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§0–9",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_offlinematchsession",
+      "label": "OfflineMatchSession",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§0–9",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_healthservice",
+      "label": "HealthService",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§0–9",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_safe_zone",
+      "label": "Safe Zone",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§0–9",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_netsmokeclient",
+      "label": "NetSmokeClient",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§0–9",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_account_ticket",
+      "label": "Account play ticket v4",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§4–5",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_jwt",
+      "label": "Account JWT",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§4",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_roomcode",
+      "label": "RoomCode",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§4–5",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_offlineworld",
+      "label": "OfflineWorldSession",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§0",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_authored_map",
+      "label": "Versioned authored map 1.1.0",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§3",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_autoroute",
+      "label": "Auto UDP to WSS fallback",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§2, §5",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_keep_running",
+      "label": "KeepInstanceRunning policy",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§1, §8",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_realaudio",
+      "label": "Real combat and movement audio bridge",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§1",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_runtime_metrics",
+      "label": "Tick loop GC and metrics-output diagnostics",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§1",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "docs_network_architecture_vi_unity",
+      "target": "docs_network_architecture_vi_gameserver",
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§2",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_unity",
+      "target": "docs_network_architecture_vi_api",
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§2",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_api",
+      "target": "docs_network_architecture_vi_gameserver",
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§2",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_gameserver",
+      "target": "docs_network_architecture_vi_outbox",
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§2, §6",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_outbox",
+      "target": "docs_network_architecture_vi_api",
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§2, §6",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_api",
+      "target": "docs_network_architecture_vi_mongodb",
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§2, §6",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_simulation",
+      "target": "docs_network_architecture_vi_gameserver",
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§3",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_networking",
+      "target": "docs_network_architecture_vi_gameserver",
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§3",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_rooms",
+      "target": "docs_network_architecture_vi_gameserver",
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§3",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_unity",
+      "target": "docs_network_architecture_vi_protocol",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§3",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_gamedata",
+      "target": "docs_network_architecture_vi_runtime_data",
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§3",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_unity",
+      "target": "docs_network_architecture_vi_runtime_data",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§3",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_caddy",
+      "target": "docs_network_architecture_vi_gameserver",
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§2",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_caddy",
+      "target": "docs_network_architecture_vi_api",
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§2",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_sessionhub",
+      "target": "docs_network_architecture_vi_gameserver",
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§2",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_sessionhub",
+      "target": "docs_network_architecture_vi_unity",
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§0",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_offlinematchsession",
+      "target": "docs_network_architecture_vi_unity",
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§0",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_safe_zone",
+      "target": "docs_network_architecture_vi_healthservice",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§6",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_netsmokeclient",
+      "target": "docs_network_architecture_vi_gameserver",
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§2",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_jwt",
+      "target": "docs_network_architecture_vi_api",
+      "relation": "authenticates",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§4",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_api",
+      "target": "docs_network_architecture_vi_account_ticket",
+      "relation": "issues",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§4",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_sessionhub",
+      "target": "docs_network_architecture_vi_account_ticket",
+      "relation": "validates",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§5",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_account_ticket",
+      "target": "docs_network_architecture_vi_roomcode",
+      "relation": "binds",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§4",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_account_ticket",
+      "target": "docs_network_architecture_vi_unity",
+      "relation": "authenticates",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§4",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_unity",
+      "target": "docs_network_architecture_vi_autoroute",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§2",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_autoroute",
+      "target": "docs_network_architecture_vi_gameserver",
+      "relation": "connects_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§2",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_authored_map",
+      "target": "docs_network_architecture_vi_gamedata",
+      "relation": "stored_in",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§3",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_offlinematchsession",
+      "target": "docs_network_architecture_vi_offlineworld",
+      "relation": "coordinates",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§0",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_keep_running",
+      "target": "docs_network_architecture_vi_gameserver",
+      "relation": "constrains_operation",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§1, §8",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_unity",
+      "target": "docs_network_architecture_vi_realaudio",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§1",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_offlineworld",
+      "target": "docs_network_architecture_vi_realaudio",
+      "relation": "publishes_real_events_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§1",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_gameserver",
+      "target": "docs_network_architecture_vi_runtime_metrics",
+      "relation": "reports",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§1",
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": [],
+  "input_tokens": 6370,
+  "output_tokens": 3260,
+  "coverage": {
+    "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md": 118
+  },
+  "source_sha256": "27fadd50e98a1f810a7924a773bd0af98d2355efee5c09bea92e5a5aa5191d44",
+  "usage_note": "Token counts self-reported by extraction agent, not provider billing metadata.",
+  "extracted_at": "2026-11-01T14:12:37.002109+00:00",
+  "extraction_note": "Incremental local semantic re-extraction: reviewed new §1 real audio/UI visibility and runtime diagnostic statements; retained unchanged §0–9 concepts. No semantic API call."
+}
