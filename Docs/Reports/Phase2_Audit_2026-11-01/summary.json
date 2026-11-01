@@ -1,0 +1,56 @@
+{
+  "commit": "0eb51d89af5c786551a168ab04d4c3fb011df37e",
+  "trackingTaskCount": 22,
+  "editMode": {
+    "passed": 823,
+    "failed": 0,
+    "skipped": 0
+  },
+  "playMode": {
+    "passed": 120,
+    "failed": 0,
+    "skipped": 0
+  },
+  "backend": {
+    "MatchChecks": 133,
+    "MatchResultChecks": 53,
+    "CombatChecks": 27,
+    "InventoryChecks": 83,
+    "WorldChecks": 73,
+    "NetworkChecks": 132,
+    "DualTransportChecks": 53,
+    "GameplayNetworkChecks": {
+      "Udp": 16,
+      "Wss": 16,
+      "Mixed": 16
+    },
+    "WorldNetworkChecks": {
+      "Udp": 22,
+      "Wss": 22,
+      "Mixed": 22
+    }
+  },
+  "runtimeObserved": {
+    "bootOpenJoinWithoutToken": "Login -> Login",
+    "offlineScene": "Game",
+    "gameFlow": "InMatch",
+    "lobbyFlow": "Login",
+    "lobbyCanvasActive": true,
+    "outsideZoneHp": 0,
+    "hasResult": true,
+    "replayNewMatchId": true,
+    "replayHp": 100,
+    "consoleErrors": 0
+  },
+  "limits": {
+    "uiHiddenForGameplayScreenshot": true,
+    "worldNetworkFixture": "Prototype",
+    "authoredMapInteractiveObjects": 0,
+    "twoCurrentUnityPlayers": "NOT_TESTED",
+    "physicalTwoPc": "NOT_TESTED",
+    "publicWssAws": "NOT_TESTED",
+    "realMongoApi": "NOT_TESTED",
+    "awsTouched": false
+  },
+  "browserSecondarySource": "Excluded: Chrome debugging approval timed out; worker fallback contradicted connector snapshot."
+}

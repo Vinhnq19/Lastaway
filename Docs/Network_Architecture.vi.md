@@ -1,6 +1,6 @@
 # Kiến trúc mạng Jungle Maze / Lastaway
 
-Cập nhật Phase 2 ngày **28/10/2026**. Tài liệu mô tả kiến trúc dùng để triển khai game và ranh giới giữa các module. Setup nền nằm trong [hướng dẫn Phase 1](Phase1_First4Tasks.vi.md); chạy trận/Guest/bo theo [hướng dẫn Phase 2](Phase2_Match_Guest_Zone.vi.md). Bằng chứng nghiệm thu nằm trong [báo cáo Phase 2](Reports/Phase2_Local/report.vi.md); số liệu mạng các lượt trước ở [báo cáo Phase 1](Reports/Local_Capacity_Retest_2026-10-14/report.vi.md).
+Cập nhật Phase 2 ngày **01/11/2026**. Tài liệu mô tả kiến trúc dùng để triển khai game và ranh giới giữa các module. Setup nền nằm trong [hướng dẫn Phase 1](Phase1_First4Tasks.vi.md); chạy trận/account/bo theo [hướng dẫn Phase 2](Phase2_Match_Guest_Zone.vi.md). Bằng chứng nghiệm thu nằm trong [báo cáo Phase 2](Reports/Phase2_Local/report.vi.md); số liệu mạng các lượt trước ở [báo cáo Phase 1](Reports/Local_Capacity_Retest_2026-10-14/report.vi.md).
 
 ## 0. Đường chơi và phạm vi thẩm quyền
 
@@ -8,15 +8,17 @@ Local offline dùng OfflineMatchSession trong Unity, dữ liệu runtime có ki�
 
 LAN dùng UDP tới IP LAN host; Online tự host dùng IP Radmin VPN với UDP, hoặc AWS Auto UDP/WSS443. Các mode này dùng cùng GameServer authoritative bên dưới; không đưa logic offline vào server online. UI chỉ hiện trường cần thiết, phần Nâng cao giữ backend loopback/CLI/profile cũ. Radmin phải được cài và cấu hình riêng; game không vượt mọi chính sách chặn mạng.
 
-Replay có packet riêng version1, giữ nguyên layout packet cũ. SessionHub xác định người yêu cầu từ session trong room, chỉ cho nạn nhân đã bị loại lấy150frame kết thúc ở death tick server, chỉ nạn nhân+killer, tối đa3 request/người/trận. Mỗi chunk tối đa75frame (<4KiB); client kiểm shape, số frame, metadata và discard/cancel. API/DB không tham gia tick hay đọc replay. Zone/unknown killer dùng NoData, cửa sổ ngắn dùng TooShort. Tick/room/MatchId mới dọn buffer; Bootstrap nối NetworkKillcamReplaySource. Chưa có giao diện killcam combat đầy đủ từ gameplay vũ khí chưa Done.
+Replay có packet riêng version1, giữ nguyên layout packet cũ. SessionHub xác định người yêu cầu từ session trong room, chỉ cho nạn nhân đã bị loại lấy150frame kết thúc ở death tick server, chỉ nạn nhân+killer, tối đa3 request/người/trận. Mỗi chunk tối đa75frame (<4KiB); client kiểm shape, số frame, metadata và discard/cancel. API/DB không tham gia tick hay đọc replay. Zone/unknown killer dùng NoData, cửa sổ ngắn dùng TooShort. Tick/room/MatchId mới dọn buffer; Bootstrap nối NetworkKillcamReplaySource. Không dùng task ngoài phạm vi làm tiêu chí nghiệm thu.
 
 ## 1. Định hướng và trạng thái triển khai
 
 Game dùng **server authoritative**: client gửi input; GameServer quyết định vị trí, va chạm, HP, bo, vòng đời và kết quả trận. Mỗi phòng có runtime riêng. Hạn mức cấu hình: **10 người/phòng, 5 phòng gồm mặc định, tổng 50 slot active/pending/grace**, mỗi account tạo tối đa 2 phòng bổ sung. Đây là hạn mức, không phải cam kết hiệu năng gameplay cho 50 người.
 
-Phase 2 gồm SRV-03, NET-02, ZON-01 và demo Unity UDP/WebSocket/Auto. Prediction/reconciliation/interpolation đầy đủ thuộc MOV-02/03. Vũ khí, inventory và hazard vẫn thuộc task riêng. HUD đã nối HP/còn sống/countdown; UI-03 dùng adapter replay server riêng theo quyền phiên. Demo chỉ dùng HP cơ bản và bo; số hạ gục bằng 0.
+Phase 2 gồm SRV-03, NET-02, ZON-01 và demo Unity UDP/WebSocket/Auto. Prediction/reconciliation/interpolation đầy đủ thuộc MOV-02/03. Các module vũ khí, inventory, world và HUD được ghép qua các service đang có. Audio dùng MatchAudioEventSource nhận combat online/offline và pose/địa hình thật; không phát lặp shot dự đoán khi nhận confirmation. Bảng chẩn đoán chỉ bật bằng F3, tách khỏi Lobby/HUD/kết quả chính. UI-03 dùng replay server theo quyền phiên. DRG-01, ART-06, Game-10 tạm ngoài phạm vi; không dùng sự kiện rồng giả để nghiệm thu audio.
 
-Bản Phase 2 Local và lần mở rộng online được ghi riêng trong báo cáo Phase 2. Chỉ triển khai EC2 trong cửa sổ kiểm thử đã được chủ máy cho phép, có watchdog và Stop ở cuối. Các kết quả AWS cũ chỉ chứng minh phiên bản ghi tại lượt đo đó. Hai PC vật lý phải được kiểm tra riêng.
+Bản Phase 2 Local và lần mở rộng online được ghi riêng trong báo cáo Phase 2. Chỉ deploy EC2 trong cửa sổ đã được chủ máy dành riêng. Lượt account-flow này dùng `-UseRunningInstance -KeepInstanceRunning`: không Stop/Start, không cài timer tắt máy; deadline chỉ đóng công cụ/client. EC2 tiếp tục tiêu credits sau test. Những lượt cũ dùng chính sách Stop phải được ghi riêng. Các kết quả AWS cũ chỉ chứng minh phiên bản ghi tại lượt đo đó. Hai PC vật lý phải được kiểm tra riêng.
+
+Server đo thêm tick/loop tối đa, khoảng cách giữa vòng chạy, GC pause và thời gian xuất metrics trước đó để chẩn đoán stall hiếm. Vẫn báo dropped tick và giữ giới hạn catch-up; số đo này không tự sửa hoặc che lỗi hiệu năng.
 
 ## 2. Topology và đường đi dữ liệu
 
@@ -24,8 +26,8 @@ Bản Phase 2 Local và lần mở rộng online được ghi riêng trong báo 
 flowchart LR
     U[Unity UDP / WSS / Auto] <-->|input / snapshot / phase / result| G[GameServer: SessionHub + RoomManager]
     S[NetSmokeClient / gameplay checks] <-->|UDP hoặc binary WebSocket| G
-    U -->|HTTPS: Guest / ticket / history| A[ASP.NET Core API]
-    A -->|JWT quản lý phòng; secret nội bộ cấp ticket| G
+    U -->|HTTPS: register / login / ticket / history| A[ASP.NET Core API]
+    A -->|JWT account; secret nội bộ đăng ký ticket| G
     G -->|hàng đợi ngoài tick| O[(Outbox trên volume)]
     O -->|HTTP nội bộ + secret kết quả riêng| A
     A --> M[(MongoDB: users / Guest / kết quả trận)]
@@ -54,20 +56,20 @@ Selfhost dùng `compose.host.yaml`, DB/volume/secret riêng. VPN: Tailscale Serv
 
 Dữ liệu chuẩn được đồng bộ sang `StreamingAssets/JungleMaze/runtime`. Menu Unity **Jungle Maze → Phase 2 → Sync Runtime Data** tạo bản sao và manifest SHA256. Build từ chối dữ liệu cũ; client so version/hash với server trước LoadingAck. Không sửa bản sao để đổi luật server.
 
-Map demo 50×50 có 4 cover hình chữ nhật theo scene Game; server mô phỏng nhân vật tròn, sweep/slide với cover và biên bằng C#; không chạy Unity Physics2D. 10 spawn trong bo đầu, tránh cover và cách nhau ít nhất 6 cell. Bo r25 tâm (25,25) làm các góc map nằm ngoài vùng an toàn.
+Map demo 50×50 có 4 cover hình chữ nhật theo scene Game; server mô phỏng nhân vật tròn, sweep/slide với cover và biên bằng C#; không chạy Unity Physics2D. 10 spawn trong bo đầu, tránh cover và cách nhau ít nhất 6 cell. Data version1.1.0 bổ sung cố định60 rương,90 chum,45 bụi,3 cặp portal,2 cửa,2 đầm lầy,2 lava,4 poison; giữ geometry/spawn gốc. Tổng215 object gồm4 cover. Manifest/hash phải khớp giữa server và Unity. Bo r25 tâm (25,25) làm các góc map nằm ngoài vùng an toàn.
 
-## 4. Account, Guest và quyền truy cập
+## 4. Account bắt buộc và dữ liệu Guest cũ
 
 | Việc | Bằng chứng quyền |
 | --- | --- |
 | Tạo/list/xóa phòng | JWT account hợp lệ; owner từ claim `sub`, không từ user ID client gửi |
-| Join/chơi | RoomCode; GameServer cấp PlayerSessionId, không tự coi đó là account |
+| Join/chơi LAN/online | Account JWT → HTTPS `/api/game-tickets` → handshake v4 mang ticket + RoomCode; server cấp PlayerSessionId và gắn account đã xác minh trước roster |
 | Hồ sơ Guest lâu dài | Credential ngẫu nhiên; Mongo chỉ giữ hash, Windows dùng DPAPI current-user theo origin API |
-| Liên kết phiên với hồ sơ | Ticket ngắn hạn, dùng một lần, ràng buộc attempt + phòng; gửi credential/JWT tới API qua HTTPS, chỉ gửi ticket qua gameplay |
+| Account của phiên | Ticket ngẫu nhiên 256 bit/64 hex, dùng một lần, TTL 30s, ràng buộc account + attempt + phòng; JWT chỉ qua API HTTPS, game transport không mang JWT |
 | Xem lịch sử cá nhân | JWT hoặc Guest credential đã xác minh, không truy vấn theo nickname |
 | Ghi kết quả | GameServer qua tuyến nội bộ, secret kết quả riêng; client không được tự nộp rank/điểm |
 
-Guest **không có quyền quản lý phòng**. Hai người cùng tên không được trộn lịch sử. Không tự gộp Guest/account theo tên. Kết quả có thể chứa người ẩn danh không gắn hồ sơ; LAN không có API vẫn chơi và xem bảng hạng trực tiếp, lịch sử online báo không khả dụng.
+Guest cũ chỉ giữ dữ liệu/lịch sử, **không được cấp vé chơi mới hoặc quản lý phòng**. Không tự gộp/xóa Guest/account theo tên. LAN/online mất API thì không nhận lượt join mới; trận đang chạy tiếp tục không chờ API/DB. Local luyện tập vẫn dùng được khi không có API. JWT hết hạn không đá người đang chơi; lượt kết nối mới phải xác thực lại.
 
 API: `POST /api/guests`, `POST /api/game-tickets`, `GET /api/me/matches`, `GET /api/matches/{matchId}/leaderboard`; `POST /internal/match-results` chỉ dành cho GameServer. Lịch sử phân trang, leaderboard công khai đã loại ProfileKey/credential. Các endpoint account và room cũ giữ nguyên.
 
@@ -81,11 +83,11 @@ Loading/InGame/Ending từ chối người mới `MatchInProgress`. Mất mạng
 
 Server xử lý toàn bộ damage của tick rồi xét thắng. Còn một người: thắng; không ai: hòa, không trao win. Cùng tick bị loại đồng hạng. Không có công thức điểm tổng. Mục tiêu420s không cưỡng bức kết thúc. Ending10s hoặc mọi người còn kết nối xác nhận chơi lại; dọn entity/input/bo cũ, giữ phòng và kết nối hợp lệ, tạo MatchId mới.
 
-Protocol control v1/v2 giữ tương thích; v3 bổ sung resume. Gameplay có version riêng, MatchId, input sequence/tick và snapshot ack. Phase/roster/spawn/despawn/elimination/result gửi reliable; snapshot+zone30Hz có thể bỏ gói cũ. Client bỏ dữ liệu thuộc trận cũ. Binary WebSocket tối đa4KiB sau ghép fragment, hàng gửi có giới hạn; client chậm bị ngắt. Không gửi JWT hoặc credential Guest dài hạn qua UDP public.
+Runtime tạo từ biến môi trường luôn yêu cầu account-ticket v4; không có env tắt guard. v1/v2/v3 chỉ còn fixture riêng tạo trực tiếp trong test, không bypass LAN/AWS. v4 thêm ticket vào v3, payload connect tối đa512 byte. Auto giữ cùng attempt/ticket, chỉ chuyển UDP→WSS một lần trước thông điệp ứng dụng đầu tiên; callback UDP muộn không tạo lại slot. Resume cần proof còn hạn và ticket mới của cùng account, proof xoay sau khi xác minh. Gameplay có version riêng, MatchId, input sequence/tick và snapshot ack. Phase/roster/spawn/despawn/elimination/result gửi reliable; snapshot+zone30Hz có thể bỏ gói cũ. Client bỏ dữ liệu thuộc trận cũ. Binary WebSocket tối đa4KiB sau ghép fragment, hàng gửi có giới hạn; client chậm bị ngắt. Không gửi JWT hoặc credential Guest dài hạn qua UDP public.
 
 ## 6. Tick, Safe Zone và kết quả
 
-Chỉ vòng ứng dụng thay đổi room/session/world. Input chuẩn hóa đường chéo, speed4 cell/s, ngừng khi thiếu input250ms; từ chối input trùng/cũ/sai trận và giới hạn tốc độ. Snapshot/ack30Hz chứa vị trí, aim, HP và sequence đã xử lý. Replay buffer riêng ít nhất5s chuẩn bị UI-03, chưa công khai killcam.
+Chỉ vòng ứng dụng thay đổi room/session/world. Input chuẩn hóa đường chéo, speed4 cell/s, ngừng khi thiếu input250ms; từ chối input trùng/cũ/sai trận và giới hạn tốc độ. Snapshot/ack30Hz chứa vị trí, aim, HP và sequence đã xử lý. Replay buffer riêng ít nhất5s; UI-03 chỉ đọc theo quyền phiên như mục0, không công khai toàn bộ buffer.
 
 | Co bo từ lúc InGame | Bán kính |
 | --- | --- |
@@ -101,18 +103,20 @@ Kết quả bất biến chứa MatchId, RoomId/config version, UTC, lý do, phi
 
 ## 7. Release, dữ liệu và vận hành
 
-Local/AWS có DB, secret, endpoint và volume riêng. `ROOM_CONTROL_TOKEN` bảo vệ room/ticket nội bộ; `MATCH_RESULT_TOKEN` bảo vệ ghi kết quả, không dùng lại JWT key. `MATCH_OUTBOX_PATH` phải nằm trên volume để retry qua restart. Tắt tính năng lịch sử khi chưa cấu hình không làm mất chức năng chơi RoomCode.
+Local/AWS có DB, secret, endpoint và volume riêng. `ROOM_CONTROL_TOKEN` bảo vệ room/ticket nội bộ; `MATCH_RESULT_TOKEN` bảo vệ ghi kết quả, không dùng lại JWT key. `MATCH_OUTBOX_PATH` phải nằm trên volume để retry qua restart. Lịch sử lỗi không dừng trận đã xác thực; lượt join mới vẫn cần API cấp account-ticket. Offline không phụ thuộc API.
 
 Restart giữ users/Guest/kết quả và outbox trên volume; session, trận đang chạy và phòng bổ sung trong RAM mất, phòng mặc định tạo lại. Không tự tạo kết quả cho trận bị ngắt. Update release có checksum, giữ bản trước để rollback và không ghi đè cấu hình bí mật. Triển khai AWS Phase 2 cần một cửa sổ riêng sau nghiệm thu Local.
 
+Windows đang giữ Unity6000.3.15f1 theo quyết định01/11. Lượt account-flow có crash native lúc thoát trong cleanup Accessibility; dù scenario đã ghi nhận kết quả, process exit lỗi vẫn làm cổng Local thất bại. Không deploy AWS khi cổng này chưa đạt. Bản sửa engine được Unity ghi tại [6000.3.21f1, UUM-146676](https://unity.com/releases/editor/whats-new/6000.3.21f1); chưa thay Editor hoặc tắt accessibility để né lỗi.
+
 ## 8. Credits và nguyên tắc test lớp học
 
-Dev dùng Local trước; không bật EC2 chỉ để compile/unit test. Khi cần online, đặt thời lượng và watchdog trước Start; không nâng instance/Unlimited hoặc mở port DB/control. Stop EC2 sau buổi và xác nhận Stopped; đóng client/SSH hoặc `docker stop` không dừng chi phí EC2. EBS vẫn có thể tính credits khi instance đã Stop.
+Dev dùng Local trước; không bật EC2 chỉ để compile/unit test. Khi cần online, đặt thời lượng trước khi chạy. Mặc định các buổi test tự quản dùng watchdog và Stop sau buổi; riêng lượt được chủ máy yêu cầu giữ Running dùng `-UseRunningInstance -KeepInstanceRunning`, không cài timer Stop và không kiểm Stop–Start. Deadline chỉ đóng client/công cụ. Không nâng instance/Unlimited hoặc mở port DB/control. Đóng client/SSH hoặc `docker stop` không dừng chi phí EC2. EBS vẫn có thể tính credits khi instance đã Stop.
 
 Không suy diễn bài ping/pong cũ thành sức chứa gameplay. Khi bổ sung movement/combat/snapshot phải đo lại CPU, RAM, tick/dropped ticks, RTT, loss và tốc độ phát thực; lượt PC Sleep/biên dịch nặng hoặc generator thiếu tốc độ cần đánh INVALID.
 
 ## 9. Bằng chứng và phát triển tiếp
 
-[Báo cáo chung](Reports/Local_Capacity_Retest_2026-10-14/report.vi.md) phân biệt kết quả backend Local, Unity thực, AWS UDP/WSS và lượt co-located cũ. Kiểm thử hai process Unity trên cùng PC không thay nghiệm thu hai máy vật lý.
+[Báo cáo chung Phase2](Reports/Phase2_Local/report.vi.md) phân biệt kết quả backend Local, Unity thực, AWS UDP/WSS và lượt co-located cũ. Kiểm thử hai process Unity trên cùng PC không thay nghiệm thu hai máy vật lý.
 
-Các dev tích hợp gameplay qua contract runtime/health/registry; combat phát damage, không tự ghi HP từ client. MOV-02/03 cải thiện cảm giác di chuyển; WPN-02 thêm combat authoritative; UI-02/03 mở rộng HUD/killcam. Các phần này chưa được coi hoàn thành bởi demo Phase 2. Khung `Application/Testing`, `OnlineScenarioRunner` và launcher `test-unity-online.ps1` nhận scenario JSON và check/driver đăng ký qua Bootstrap, dùng lại cho feature mới. Test không đủ tốc độ phát phải ghi INVALID; [checklist hai PC](../Backend/Tests/OnlineReadiness/PHYSICAL_TWO_PC_CHECKLIST.md) ghi rõ LAN/VPN/public/AWS và phần cần nghiệm thu bằng thiết bị thật.
+Các dev tích hợp gameplay qua contract runtime/health/registry; combat phát damage, không tự ghi HP từ client. MOV-02/03, combat/world và UI được ghép qua các service hiện có. Trạng thái nghiệm thu từng module và toàn flow phải theo bằng chứng bản mới trong báo cáo, không suy từ demo Phase2 cũ. Khung `Application/Testing`, `OnlineScenarioRunner` và launcher `test-unity-online.ps1` nhận scenario JSON và check/driver đăng ký qua Bootstrap, dùng lại cho feature mới. Test không đủ tốc độ phát phải ghi INVALID; [checklist hai PC](../Backend/Tests/OnlineReadiness/PHYSICAL_TWO_PC_CHECKLIST.md) ghi rõ LAN/VPN/public/AWS và phần cần nghiệm thu bằng thiết bị thật.

@@ -1,23 +1,17 @@
-> Cập nhật Phase 2 ngày 24/10/2026. Chạy trận/Guest/history theo [hướng dẫn Phase 2](Phase2_Match_Guest_Zone.vi.md); các ví dụ foundation cũ chỉ dùng để kiểm thử module riêng.
+> Cập nhật01/11/2026: LAN/online bắt buộc account-ticket v4; Guest cũ chỉ đọc lịch sử. Chạy trận/account/history theo [hướng dẫn Phase 2](Phase2_Match_Guest_Zone.vi.md); các ví dụ foundation cũ chỉ dùng để kiểm thử module riêng.
 
 # Hướng dẫn dùng Client Base cho người làm gameplay
 
-Cập nhật **23/10/2026**. Tài liệu dành cho người mới vào làm gameplay trên Unity client. Đọc mục 1–3 trước khi viết code; mục 4 là các công thức làm việc hằng ngày. Lý do thiết kế nằm ở [Client_Base_Plan.vi.md](Client_Base_Plan.vi.md); wire protocol và server nằm ở [Network_Architecture.vi.md](Network_Architecture.vi.md).
+Cập nhật **01/11/2026**. Tài liệu dành cho người mới vào làm gameplay trên Unity client. Đọc mục 1–3 trước khi viết code; mục 4 là các công thức làm việc hằng ngày. Lý do thiết kế nằm ở [Client_Base_Plan.vi.md](Client_Base_Plan.vi.md); wire protocol và server nằm ở [Network_Architecture.vi.md](Network_Architecture.vi.md).
 
 ## 1. Chạy thử trong 5 phút
 
-1. Chạy GameServer local, một trong hai cách:
-   - Docker theo [hướng dẫn vận hành](Phase1_First4Tasks.vi.md).
-   - Chạy trực tiếp từ thư mục `Backend`:
-     ```powershell
-     $env:AUTH_MODE="RoomCode"; $env:ROOM_CODE="ROOM42"; $env:GAME_BIND_ADDRESS="127.0.0.1"
-     dotnet run --project GameServer/GameServer.csproj
-     ```
-2. Mở `Assets/_JungleMaze/Scenes/Boot.unity` rồi bấm Play. Bootstrap tự được tạo cho scene trong `Assets/_JungleMaze/`. Trong Editor, mở trực tiếp `Game.unity` và bấm Play để thử di chuyển, ngắm và công cụ bắn cục bộ không cần server; bắt đầu từ Boot để dùng luồng kết nối bình thường.
-3. Trên menu, chọn profile `local`, nhập mã phòng `ROOM42` và tên, rồi bấm **Vào phòng**. Client chuyển sang InRoom và load scene `Game`.
-4. Bấm **F3** để xem số đo mạng: state, endpoint, RTT ping/pong (last/avg/p95), RTT của LiteNetLib, packet/bytes, FPS. Overlay chỉ có trong Editor và Development build.
-5. Click vào **Game View**, dùng **WASD/mũi tên** để đi, chuột để ngắm. Hero di chuyển local 4 cell/s; đi chéo không nhanh hơn đi thẳng. Camera theo Hero và giữ khung nhìn trong map.
-6. Giữ **chuột trái** để chạy công cụ bắn thử local: đạn vàng và hiệu ứng va chạm dùng Pool + Factory, bị Hard Cover/biên map chặn. Đây là công cụ nghiệm thu config/collision, chưa gây damage, chưa có ammo/reload hay đồng bộ combat.
+1. **Offline:** mở Boot, Play → **Luyện tập offline** từ Login/Home, hoặc mở trực tiếp Game trong Editor. Không bật Docker/API; một người chơi đủ vòng bo/HP → kết quả luyện tập → replay/menu. Không ghi lịch sử online.
+2. **Chơi mạng:** setup stack API/Mongo/GameServer và secret theo [Phase2, mục1](Phase2_Match_Guest_Zone.vi.md#1-khởi-chạy-backend-local). Chọn profile `phase2-local`, đăng ký/đăng nhập trên menu rồi tạo/vào phòng bằng mã và tên. Không dùng RoomCode để bỏ bước account. LAN/VPN/AWS cần API HTTPS; HTTP chỉ loopback Local.
+3. Server `main` cần6 người, lobby15s/loading30s. Profile `test` chỉ dành Local2 người/timer tăng tốc; không dùng public. Chỉ bắt đầu từ Boot khi kiểm full flow mạng.
+4. Click **Game View**, WASD/mũi tên để đi và chuột ngắm. Client gửi input; online nhận vị trí/HP/bo từ server. Offline dùng HeroController và OfflineMatchSession, không chạy cùng hai mô phỏng.
+5. Chuột trái attack, R reload, F nhặt món đang trỏ,1–4 chọn vũ khí,5–8 dùng đồ, Backspace bỏ vũ khí. Scene dùng world/item/combat service đã ghép; trạng thái nghiệm thu từng bước và giới hạn đọc trong [báo cáo hiện hành](Reports/Phase2_Local/report.vi.md). Không dùng công cụ projectile foundation cũ để chứng minh PvP đã hoàn tất.
+6. F3 bật số đo; ESC mở menu và không dừng timer. Build Windows hiện giữ6000.3.15f1, có native quit BLOCKED; file evidence PASS chưa đủ nếu exit khác0.
 
 Nếu Editor không được focus mà game đứng hình, bật **Project Settings → Player → Run In Background**.
 
@@ -32,7 +26,7 @@ Client đọc JSON cùng schema với `Backend/NetSmokeClient/client.*.json`. Th
 | `StreamingAssets/JungleMaze/client.<profile>.json` (`local`, `lan`, `online`, `aws`) | Mặc định đi theo build. Sửa trực tiếp trong thư mục `<Game>_Data/StreamingAssets` của bản build |
 | `persistentDataPath/client.json` | Tự tạo khi bấm **Lưu endpoint** hoặc khi vào phòng với host/port đã sửa trên menu. Windows: `%USERPROFILE%\AppData\LocalLow\DefaultCompany\Lastaway\client.json` |
 | Biến môi trường `NET_MODE`, `NET_GAME_SERVER_HOST`, `NET_GAME_SERVER_PORT`, `NET_API_BASE_URL` | Cùng tên với NetSmokeClient |
-| Dòng lệnh `-clientConfig <path>`, `-profile lan`, `-mode LAN`, `-host 192.168.1.20`, `-port 7777`, `-room ROOM42`, `-name P2` | Mở nhiều client trên một máy để test |
+| Dòng lệnh `-clientConfig <path>`, `-profile lan`, `-mode LAN`, `-host 192.168.1.20`, `-port 7777`, `-name P2` | Mở nhiều client trên một máy để test |
 
 Dữ liệu từ bản cũ có thể nằm trong thư mục %USERPROFILE%\AppData\LocalLow\DefaultCompany\Jungle_Maze_Survival; ứng dụng không tự chuyển dữ liệu sang thư mục mới.
 
@@ -192,15 +186,15 @@ Số đo ngày 20/10/2026 trên một PC, GameServer chạy bằng `dotnet run` 
 
 ## 6. Kết nối Phase 2 và ranh giới tiếp theo
 
-Luồng chạy trận nằm trong [hướng dẫn Phase 2](Phase2_Match_Guest_Zone.vi.md). Dùng profile `phase2-local` (UDP protocol v3) cho resume và Guest ticket. Server main cần 6 người, profile test riêng cần 2. Giữ 10 người/phòng, 5 phòng/tổng 50 slot.
+Luồng chạy trận nằm trong [hướng dẫn Phase 2](Phase2_Match_Guest_Zone.vi.md). Dùng profile `phase2-local` (protocol v4) cho account-ticket và resume. Ticket được lấy qua API trước transport; không gửi JWT/Guest credential dài hạn qua UDP. Server main cần 6 người, profile test riêng cần 2. Giữ 10 người/phòng, 5 phòng/tổng 50 slot.
 
 | Module | Trách nhiệm hiện tại |
 | --- | --- |
 | `MatchSession` | Hello/loading, MatchId, input 30Hz, snapshot/ack, own NetId từ welcome, HP/bo/kết quả/replay; bỏ packet trận cũ |
-| `NetworkClient` | UDP v1/v2/v3, hai channel; attempt mới mỗi connect, resume bằng proof riêng. Không tự reconnect khi đã join |
+| `NetworkClient` | UDP/WSS/Auto v4, hai channel; attempt/ticket trước join, một slot khi fallback, resume bằng proof + vé mới cùng account. Codec cũ chỉ cho fixture |
 | `MatchDemoView` | Góc nhìn toàn map, roster/timer/HP/bo/result/history; tắt local controller và local weapon probe khi chơi mạng |
 | `ClientRuntimeData` | Kiểm manifest/hash với server và geometry scene trước LoadingAck |
-| `GuestHistoryClient` | API HTTPS/loopback, DPAPI theo origin; ticket một lần, không gửi credential/JWT dài hạn qua UDP |
+| `GuestHistoryClient` | Account ticket/history qua HTTPS hoặc loopback; DPAPI chỉ còn cho hồ sơ Guest cũ. Guest không lấy vé chơi mới |
 | GameServer | C# authoritative movement/collision, lifecycle, 5 đợt bo, HealthService và kết quả; API/DB không chặn tick |
 
 Unity Windows/Editor đã có WSS/Auto. Prediction/reconciliation (MOV-02) và interpolation (MOV-03) đã có, xem [Docs/hvu](hvu/README.vi.md). Combat, inventory, hazard, HUD đầy đủ và killcam không được coi hoàn tất bởi demo. Sprite/nhãn hiện tại dùng để kiểm mạng. `PlayerInputService` cũ không được tick cùng `MatchSession`; không bật lại HeroController trong demo mạng. Dùng khung scenario/assertion/driver ở mục8 của hướng dẫn Phase2 để kiểm feature mới, không sửa state server từ client để tạo kết quả PASS.

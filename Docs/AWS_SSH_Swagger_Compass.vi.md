@@ -411,7 +411,7 @@ Các xác nhận trên là kết quả tại thời điểm thiết lập, khôn
 
 ## 8. Tạo phòng, join UDP và mạng chặn VPN
 
-Swagger: register/login → copy accessToken → Authorize → `POST /api/rooms` với tên phòng và `maxPlayers: 10`. Thiếu JWT/sai/hết hạn trả 401; login lại rồi Authorize. `GET /api/rooms` xem phòng của mình và mặc định; chỉ chủ phòng tạo thêm thấy RoomCode. `DELETE /api/rooms/{id}` chỉ xóa phòng của mình đang trống, không xóa mặc định. Không đăng endpoint join HTTP: NetSmokeClient join **UDP** bằng RoomCode nhận được, không dùng JWT Swagger.
+Swagger: register/login → copy accessToken → Authorize → `POST /api/rooms` với tên phòng và `maxPlayers: 10`. Thiếu JWT/sai/hết hạn trả 401; login lại rồi Authorize. `GET /api/rooms` xem phòng của mình và mặc định; chỉ chủ phòng tạo thêm thấy RoomCode. `DELETE /api/rooms/{id}` chỉ xóa phòng của mình đang trống, không xóa mặc định. Không đăng endpoint join HTTP: NetSmokeClient/Unity phải đăng nhập account, lấy ticket qua HTTPS rồi join **UDP/WSS v4** cùng RoomCode. JWT chỉ dùng API, không gửi qua UDP.
 
 Từ PC, `client.aws.json` thử AWS trực tiếp; `client.aws-vpn.json` chỉ dùng sau khi PC/EC2 đã có Tailscale và thay IP mẫu. Cách setup VPN, cấp policy UDP 7777/HTTPS 443, test hai PC và chạy có watchdog ở [mục 15 hướng dẫn chính](Phase1_First4Tasks.vi.md#15-nghiệm-thu-phase-1-local-và-pc--ec2). Test HTTPS/Compass thành công không chứng minh UDP thông.
 
