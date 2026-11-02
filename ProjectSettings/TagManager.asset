@@ -51,8 +51,14 @@ TagManager:
   - name: Enemy
     uniqueID: 2606665595
     locked: 0
+  - name: WorldDynamic
+    uniqueID: 1736764305
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Foreground
+    uniqueID: 1643900377
     locked: 0
   - name: VFX
     uniqueID: 2616002819

@@ -101,6 +101,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3278995001472548613}
   - component: {fileID: 1140707430495988283}
+  - component: {fileID: 4004306988520629231}
+  - component: {fileID: 3657678237323901720}
   m_Layer: 0
   m_Name: PlayerView
   m_TagString: Untagged
@@ -138,3 +140,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: JungleMaze.Presentation::JungleMaze.Presentation.Player.PlayerView
   body: {fileID: 3325320186031762863}
   followSharpness: 15
+--- !u!210 &4004306988520629231
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8167461162328765544}
+  m_Enabled: 1
+  m_SortingLayerID: 1736764305
+  m_SortingLayer: -1
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
+  m_Sort3DAs2D: 0
+--- !u!114 &3657678237323901720
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8167461162328765544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f31803c34b74089479cc9993599dae01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JungleMaze.Presentation::JungleMaze.Presentation.Rendering.DepthSortable
+  sortPoint: {fileID: 0}
+  sortingGroup: {fileID: 4004306988520629231}
