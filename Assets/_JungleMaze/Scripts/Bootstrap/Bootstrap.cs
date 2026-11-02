@@ -277,12 +277,15 @@ namespace JungleMaze.Composition
     internal static class BootstrapAutoCreate
     {
         private const string ProjectScenes = "Assets/_JungleMaze/";
+        // Scene công cụ không chạy game: không nối mạng, không HUD/menu.
+        private const string LevelEditorScene = "LevelEditor";
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void EnsureBootstrap()
         {
             // Không chen vào scene JSurviv/SampleScene: chỉ áp dụng cho scene trong thư mục dự án mới.
-            if (!SceneManager.GetActiveScene().path.StartsWith(ProjectScenes, StringComparison.Ordinal)) return;
+            var scene = SceneManager.GetActiveScene();
+            if (!scene.path.StartsWith(ProjectScenes, StringComparison.Ordinal) || scene.name == LevelEditorScene) return;
             if (UnityEngine.Object.FindAnyObjectByType<Bootstrap>() != null) return;
             new GameObject("[Bootstrap]").AddComponent<Bootstrap>();
         }
