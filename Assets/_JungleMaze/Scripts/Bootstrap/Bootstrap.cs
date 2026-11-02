@@ -23,6 +23,7 @@ using JungleMaze.Infrastructure.Network;
 using JungleMaze.Infrastructure.Pooling;
 using JungleMaze.Infrastructure.Scenes;
 using JungleMaze.Infrastructure.Ticking;
+using JungleMaze.Presentation.Rendering;
 using JungleMaze.Presentation.UI;
 using JungleMaze.Presentation.UI.Hud;
 using UnityEngine;
@@ -82,6 +83,7 @@ namespace JungleMaze.Composition
                 history.AccountTicketAsync(request.Config.ApiBaseUrl, attempt, request.RoomCode, request.AccessToken));
             var tickRunner = gameObject.AddComponent<TickRunner>();
             tickRunner.SetLog(_log);
+            var depthSorting = gameObject.AddComponent<DepthSortingSystem>(); // Y-sorting, LateUpdate sau mọi script
             var pool = new PoolService(_injector, _log, transform);
             var balance = new BalanceConfigProvider(Application.streamingAssetsPath, _log);
             _registry.Register<IConfigProvider>(config);
@@ -98,6 +100,7 @@ namespace JungleMaze.Composition
             _registry.Register<ISceneLoader>(new SceneLoader(_log));
             _registry.Register<ITickScheduler>(tickRunner);
             _registry.Register<IPoolService>(pool);
+            _registry.Register(depthSorting);
 
             // HUD state (UI-01): HUD reads the three ports, data owners write through the writer ports.
             var hudState = new HudStateStore(bus, balance, _log);

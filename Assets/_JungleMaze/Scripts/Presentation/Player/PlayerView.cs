@@ -1,6 +1,7 @@
 using JungleMaze.App.Ports;
 using JungleMaze.Core.Pooling;
 using JungleMaze.Domain.Player;
+using JungleMaze.Presentation.Rendering;
 using UnityEngine;
 
 namespace JungleMaze.Presentation.Player
@@ -18,6 +19,8 @@ namespace JungleMaze.Presentation.Player
         private PlayerModel _model;
         private IPlayerPoseSource _poses;
         private bool _snapNext;
+        private DepthSortable _depth;
+        private Vector3 _lastDepthPosition;
 
         public byte NetId => _model?.NetId ?? 0;
 
@@ -39,6 +42,8 @@ namespace JungleMaze.Presentation.Player
             Refresh();
         }
 
+        private void Awake() => TryGetComponent(out _depth); // tùy chọn, xem DepthSortable
+
         public void OnSpawned() => _snapNext = true;
 
         public void OnDespawned()
@@ -59,6 +64,7 @@ namespace JungleMaze.Presentation.Player
                 transform.SetPositionAndRotation(new Vector3(pose.X, pose.Y, 0f), Quaternion.Euler(0f, 0f, pose.RotationDegrees));
                 if (body != null) body.enabled = !pose.IsDead;
                 _snapNext = false;
+                NotifyDepth();
                 return;
             }
             if (!_model.HasState) return;
@@ -69,6 +75,16 @@ namespace JungleMaze.Presentation.Player
             transform.rotation = Quaternion.Euler(0f, 0f, state.RotationDegrees);
             if (body != null) body.enabled = !state.IsDead;
             _snapNext = false;
+            NotifyDepth();
+        }
+
+        private void NotifyDepth()
+        {
+            if (_depth == null) return;
+            var position = transform.position;
+            if (position == _lastDepthPosition) return;
+            _lastDepthPosition = position;
+            _depth.MarkDirty();
         }
     }
 }

@@ -1,5 +1,6 @@
 using JungleMaze.App.Ports;
 using JungleMaze.Core.DI;
+using JungleMaze.Presentation.Rendering;
 using UnityEngine;
 
 namespace JungleMaze.Presentation.World
@@ -53,6 +54,7 @@ namespace JungleMaze.Presentation.World
             renderer.sprite = groundSprite != null ? groundSprite : _sprite;
             renderer.drawMode = SpriteDrawMode.Tiled;
             renderer.size = new Vector2(cells, cells);
+            renderer.sortingLayerID = SortingLayers.IdOf(SortingLayers.Ground); // luôn dưới entity Y-sort
             renderer.sortingOrder = -100;
 
             // Inner faces exactly at 0 and cells. Radius-aware collision keeps the entire Hero inside.
