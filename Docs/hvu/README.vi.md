@@ -9,6 +9,7 @@ Bộ tài liệu cho người **mới vào dự án**, chưa có kinh nghiệm l
 | 3 | [MOV-03 — Hiển thị người chơi khác](03_MOV-03_Interpolation.vi.md) | Sửa cách vẽ người khác, spawn/despawn |
 | 4 | [Hướng dẫn sử dụng & kiểm thử](04_Su_Dung_Va_Kiem_Thu.vi.md) | Chạy game, đọc overlay/log, chạy test, thêm tính năng |
 | 5 | [Depth Sorting & Occlusion](05_Depth_Sorting.vi.md) | Thứ tự vẽ trước/sau theo trục Y, thêm entity Y-sort, tán cây che player |
+| 6 | [Level Editor](06_Level_Editor.vi.md) | Xếp map: ground tilemap, đặt obstacle, xuất/mở JSON đúng định dạng game |
 
 ## Tóm tắt một phút
 
