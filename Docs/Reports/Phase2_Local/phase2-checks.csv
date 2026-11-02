@@ -1,12 +1,13 @@
-﻿check,status,detail,checkpointEvidence
-Account/JWT/tickets,PASS_MODULE,68 real Mongo/API/UDP/WS/Auto checks,auth-smoke-persistence.log
-Unity EditMode,PASS_MODULE,854/854,editmode-audio-final.xml
-Unity PlayMode,PASS_MODULE,120/120,playmode-audio-final.xml
-Authored world,PASS_MODULE,168 checks;215 placements,WorldChecks-access.log
-Editor gameplay,PASS_STEPS,Chest loot/armor/weapons/select/drop/fire/reload/GOD_LEAF use;controlled positioning,editor-world-flow.json;editor-shotgun-state.json;editor-consumable.json
-Real audio,PASS_MODULE,16 focused checks;5 active Editor voices,editor-consumable.json
-Windows native exit,BLOCKED,Unity6000.3.15f1 retained;0xc0000005,native-symbol.cs
-Six-player ACK retest,INVALID,Two Mono native startup crashes;remaining clients aborted,local6-ack-retest/abort.json
-Six-player latest,RUNNING,3WSS+3Auto;1500ms startup stagger,local6-audio-ack-final
-AWS current release,BLOCKED,Local acceptance not passed;no new deployment;EC2 kept Running,run.json
-Two physical PCs,NOT_TESTED,Only one physical PC available,report.vi.md
+﻿environment,client,transport,status,seconds,inputHz,activeInputSeconds,snapshotHz,rttP50Ms,rttP95Ms,rttP99Ms,pongTimeouts
+Local,evidence-client-1,Wss,PASS,311.34564208984375,29.966532524392363,255.45164405554533,29.998846130205166,33.3344,33.5607,33.9113,0
+Local,evidence-client-2,Wss,PASS,309.44091796875,29.972858776464285,271.44557883776724,30.000746645569947,33.3385,33.5561,33.9717,0
+Local,evidence-client-3,Wss,PASS,307.5690612792969,29.95537797892108,181.5033014714718,29.997885602995943,33.3421,33.521,34.1729,0
+Local,evidence-client-4,Udp,PASS,300.0125732421875,29.9457029865449,146.7990249544382,30.004243860861358,33.3332,33.7886,67.059,0
+Local,evidence-client-5,Udp,PASS,300.03057861328125,29.46453600470049,14.016850627958775,30.00567807185094,33.3199,33.4665,33.9468,0
+Local,evidence-client-6,Udp,PASS,300.0199279785156,29.950846171101,169.51107060536742,30.003149029335958,33.3442,34.0154,66.6971,0
+AWS,evidence-client-1,Wss,PASS,300.00445556640625,29.98641962073034,21.376343294978142,30.000417941331158,268.3885,366.7252,400.2646,0
+AWS,evidence-client-2,Wss,PASS,300.0157470703125,29.973138225745146,249.49005818739533,29.997087598785527,234.0347,333.4223,400.0051,0
+AWS,evidence-client-3,Wss,PASS,300.0157775878906,29.96087178134622,198.62572903186083,29.99580677176499,300.038,400.1634,534.0312,0
+AWS,evidence-client-4,Udp,PASS,300.0296936035156,29.99332499158786,193.70976714417338,29.949856259694826,298.3947,333.8541,366.8538,0
+AWS,evidence-client-5,Udp,PASS,300.03057861328125,29.96399831380103,193.06502221152186,29.959247373349324,233.3931,332.9951,333.488,0
+AWS,evidence-client-6,Udp,PASS,300.0180358886719,29.972551797592036,247.35965259373188,29.972760780813783,233.501,300.0406,333.3886,0

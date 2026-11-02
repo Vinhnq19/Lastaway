@@ -60,7 +60,8 @@ namespace JungleMaze.Composition
         private Vector2? _firstPosition;
         private bool _finished, _wasJoined, _historyBusy;
         private bool _capturedView, _capturedResult;
-        private Guid _lastReplay, _historyMatch;
+        private Guid _lastReplay, _historyMatch, _movementMatch;
+        private double _movementInputSeconds;
         private int _baseInputs;
         private double _baseInputSeconds;
         private double _snapshotSeconds;
@@ -138,11 +139,18 @@ namespace JungleMaze.Composition
             {
                 _snapshotSeconds += Time.unscaledDeltaTime;
                 _rounds.Add(_match.MatchId);
-                if (_movementStarted < 0) _movementStarted = elapsed;
+                if (_movementMatch != _match.MatchId)
+                {
+                    _movementMatch = _match.MatchId;
+                    _movementStarted = elapsed;
+                    _movementInputSeconds = _match.ActiveInputSeconds;
+                    _firstPosition = null; // A new spawn is not evidence that movement input worked.
+                }
                 if (_driver != null) _driver.Apply(context);
                 else
                 {
-                    var moving = elapsed - _movementStarted < 3;
+                    // World loading can take longer than the drive window; count actual input time.
+                    var moving = _match.ActiveInputSeconds - _movementInputSeconds < 3;
                     var intent = new PlayerIntent { MoveX = moving ? -.25f : 0, MoveY = moving ? .2f : 0, AimDegrees = 45 };
                     // A winner can keep full HP forever; exercise damage with real movement, never by changing HP.
                     if (_scenario.requireHpDamage && !Seen("hpDamage") && elapsed - _movementStarted > 30 &&

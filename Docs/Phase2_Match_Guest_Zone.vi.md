@@ -18,6 +18,64 @@ Muốn tạo/list/xóa phòng: Swagger → register/login → Authorize JWT → 
 
 Killcam dùng replay server theo chính phiên/phòng, tối đa5s (150frame), dữ liệu chỉ có nạn nhân và kẻ hạ. Mặc định vẫn tắt theo ticket; bật asset MatchOverlaySet hoặc `-killcam` ở development build để kiểm. Chết do bo/không rõ killer hiển thị fallback, không giả lập combat. Chỉ báo PASS theo bằng chứng combat/replay thật của bản build hiện tại.
 
+## 0.1. Chạy từng môi trường từ bản Windows
+
+**Mặc định khi mở game: Online · AWS** (`phase2-aws`, `junglemaze.duckdns.org`). Đây là chọn endpoint, không tự đăng nhập hoặc tự vào phòng. Cấu hình Local/LAN đã lưu không đổi mặc định lần mở sau. `-profile` và `-clientConfig` chỉ định rõ vẫn được ưu tiên để dev/test tự động dùng đúng môi trường. Nút Luyện tập offline luôn có trên menu.
+
+Mở `Builds/Windows-6000.3.15f1/Lastaway.exe`. Vào cài đặt máy chủ để đổi môi trường **trước khi đăng nhập**; đổi API sẽ đăng xuất. Mỗi backend có tài khoản và dữ liệu riêng. Sau đăng nhập: tạo phòng hoặc nhập mã phòng của cùng server; chủ phòng chia sẻ mã, không chia sẻ JWT. Profile `main` cần ít nhất6 người mới bắt đầu; phòng chứa tối đa10. Muốn test2 người trên host riêng, dùng `MATCH_PROFILE=test`, không đổi AWS đang phục vụ người khác.
+
+### Luyện tập offline — không dùng server
+
+Chọn **Luyện tập offline** từ màn đăng nhập/menu → vào Game một người. Không cần Docker, API, tài khoản hoặc RoomCode. Thoát trận về menu; không ghi thành tích online. Đây là lựa chọn test gameplay một mình.
+
+### Local · Docker — backend trên chính PC
+
+1. Bật Docker Desktop và đợi engine chạy.
+2. Mở PowerShell ở thư mục `Backend` của checkout. Lần đầu tạo `.env` nếu chưa có: `if (-not (Test-Path .env)) { Copy-Item .env.example .env }`. Điền secret theo hướng dẫn Phase1; giữ file riêng, không ghi đè cấu hình đã có.
+3. Chạy `docker compose --profile account up -d --build`; kiểm `docker compose ps` và `docker compose logs --tail 30 game-server api`.
+4. Trong game chọn **Local · Docker**: Host `127.0.0.1`, UDP7777, API `http://127.0.0.1:5000`, WS `ws://127.0.0.1:7781/game` từ preset.
+5. Đăng ký/đăng nhập vào API Local, tạo phòng rồi mở thêm client cùng profile/mã phòng. Nếu đứng chờ Lobby, kiểm số người và MATCH_PROFILE.
+6. Xong chạy `docker compose --profile account stop` từ Backend. Giữ volume Mongo; không thêm `-v`.
+
+Lần sau chỉ bật Docker, chạy `docker compose --profile account up -d`, rồi chọn lại Local trong game. `--build` dùng khi code backend thay đổi. Có thể mở thẳng Local bằng `Lastaway.exe -profile phase2-local`.
+
+### LAN · cùng mạng — một PC host, PC khác chơi
+
+1. Chọn một PC chạy backend, lấy IPv4 của interface Wi-Fi/Ethernet đang dùng bằng `ipconfig` (ví dụ192.168.1.10). Máy còn lại phải truy cập được host; Wi-Fi guest/client isolation có thể chặn các máy với nhau.
+2. Trên host, đặt `GAME_PUBLISH_HOST` trong Backend/.env thành IP LAN đó, giữ `GAME_BIND_ADDRESS=0.0.0.0`; bật stack account như Local. Cho phép UDP7777 ở Windows Firewall trên interface/mạng riêng cần dùng.
+3. **Chuẩn bị API HTTPS hợp lệ của cùng backend host**. Dùng gateway tự host ở mục6/README Host; cấu hình domain/chứng chỉ và DNS phù hợp. Stack Local chỉ có API HTTP loopback5000 nên riêng bước2 chưa đủ để PC2 đăng nhập. Không dùng API AWS với GameServer LAN, không bỏ xác minh TLS.
+4. Mọi client chọn **LAN · cùng mạng**, thay Host bằng IP LAN của host, API bằng URL HTTPS đã chuẩn bị; UDP7777. Lưu endpoint, đăng ký/đăng nhập trên host rồi dùng cùng mã phòng.
+5. Xác nhận PC2 thật thấy cùng trận/vị trí/bo, sau đó kiểm kết quả và chơi lại. Khi xong dừng backend ở máy host.
+
+Không cần port-forward router cho UDP LAN. Không mở Mongo27017/27018 hoặc control7780 ra LAN.
+
+### VPN · tự host — người chơi ở mạng khác
+
+1. Host và các máy chơi cài VPN và vào cùng mạng. Radmin dùng IP VPN mà ứng dụng hiển thị; Tailscale dùng IP/hostname được cấp. Chỉ chọn một tuyến thực, không dùng IP mẫu100.80.1.20 nếu đó không phải IP host.
+2. Host thiết lập stack riêng bằng hướng dẫn [Host](../Backend/Deploy/Host/README.md). Với Tailscale, từ Backend chạy `powershell -File Deploy/Host/configure-host.ps1 -Mode vpn` một lần; chạy preflight và compose VPN theo README, sau đó `tailscale serve --bg http://127.0.0.1:8080`. Bật HTTPS trong tailnet nếu Tailscale yêu cầu; đăng nhập VPN trực tiếp, không gửi token vào repo.
+3. Với **Radmin**, VPN chỉ tạo đường mạng riêng; cần tự thiết lập gateway HTTPS/chứng chỉ được client tin cậy cho API cùng host. Radmin không thay thế Tailscale Serve. Nếu chưa có HTTPS hợp lệ thì tuyến đăng nhập chưa sẵn sàng; dùng Tailscale Serve hoặc AWS.
+4. Cho UDP7777 qua firewall đúng interface VPN. Client chọn **VPN · tự host**, đặt Host bằng IP VPN; API/WSS dùng hostname HTTPS hợp lệ của host. Preset Tailscale chứa địa chỉ mẫu, phải thay đúng host. Nếu chỉ dùng UDP Radmin, chọn transport UDP qua config riêng; không để WSS trỏ hostname mẫu.
+5. Đăng nhập, tạo/join phòng như Local. Kiểm bằng hai máy ở hai mạng; VPN có thể dùng relay nên cần đo RTT thực.
+6. Xong dừng compose VPN và Serve theo README, giữ volume. Không tắt VPN của buổi khác hoặc reset Serve khi host đang phục vụ ai.
+
+### Internet · tự host — người chơi không cài VPN
+
+1. Host cần IP public/đường inbound được phép. CGNAT cần làm việc với ISP hoặc chuyển sang VPN/AWS.
+2. Chuẩn bị domain riêng trỏ về IP host; không dùng domain AWS `junglemaze.duckdns.org`. Router chuyển TCP80/443 và UDP7777 về host; firewall chỉ mở các cổng này.
+3. Làm theo [Host README, mục Public](../Backend/Deploy/Host/README.md#public): tạo cấu hình public bằng `configure-host.ps1`, chạy preflight và compose public. Caddy cấp HTTPS; chờ API/DB/GameServer healthy và certificate hợp lệ.
+4. Client chọn **Internet · tự host**, thay domain mẫu ở game/API/WSS bằng domain host; API `https://<domain>`, WSS `wss://<domain>/game`, UDP7777. Đăng nhập vào backend host, tạo/join bằng mã phòng.
+5. Test từ PC ngoài mạng nhà; tự kết nối từ host chưa chứng minh port-forward hoạt động. Auto thử UDP rồi WSS443 nếu UDP bị chặn.
+6. Dừng stack host khi xong. Giữ secret/volume và chỉ chia sẻ endpoint/mã phòng cho người chơi.
+
+### Online · AWS — mặc định
+
+1. Admin Start EC2 nếu đang Stopped; đợi status checks, DuckDNS cập nhật và HTTPS `/health` hoạt động. Quy trình SSH/Swagger/Compass ở [hướng dẫn AWS](AWS_SSH_Swagger_Compass.vi.md).
+2. Mở game bình thường, mặc định đã là AWS; nếu đang đổi cấu hình trong phiên thì chọn **Online · AWS**. Endpoint `junglemaze.duckdns.org`, UDP7777, API HTTPS và WSS `/game` cùng domain.
+3. Đăng ký/đăng nhập → tạo phòng hoặc nhập RoomCode. Người chơi không cần AWS CLI, SSH hay VPN. Auto fallback WSS khi UDP không tới được; DNS/HTTPS bị chặn vẫn phải đổi mạng được phép.
+4. Kết thúc đóng client/rời phòng. Admin quản lý lịch chạy EC2; đóng game/SSH không dừng EC2. Stop khi hết buổi nếu không có yêu cầu giữ Running; EBS có thể tiếp tục tiêu credits.
+
+**Kiểm bằng hai PC thật:** LAN, VPN và Internet tự host bắt buộc có máy thứ hai; checklist ở `Backend/Tests/OnlineReadiness/PHYSICAL_TWO_PC_CHECKLIST.md`. Một PC mở nhiều cửa sổ chỉ kiểm logic room/session, không xác nhận router/firewall/VPN của máy khác.
+
 ## 1. Chuẩn bị backend Docker loopback lần đầu
 
 1. Bật Docker Desktop, dùng Linux containers. Mở PowerShell **tại `Backend`**, không chạy compose từ `C:\Users\...`.
@@ -99,7 +157,7 @@ Phần mở rộng ngày **25/10/2026** bổ sung Unity WSS/Auto và bộ test d
 | Profile Unity | Host game / API | Việc phải cấu hình |
 | --- | --- | --- |
 | `phase2-local` | Loopback: UDP7777, API5000, WS7781 | Docker Local, RoomCode trong Backend/.env |
-| `phase2-lan` | IP LAN của máy host, UDP | Thay IP mẫu; API để null thì chơi ẩn danh, không có lịch sử online |
+| `phase2-lan` | IP LAN của máy host, UDP | Thay IP mẫu và API HTTPS của cùng host; phải đăng nhập để lấy ticket, API null không vào phòng mạng |
 | `phase2-vpn` | IP Tailscale cho UDP; hostname ts.net cho HTTPS/WSS | Thay IP/hostname mẫu, cùng tailnet, Tailscale Serve HTTPS |
 | `phase2-selfhost` | Hostname riêng cho UDP/HTTPS/WSS | Thay YOUR-SELFHOST, DNS, router forwarding và TLS |
 | `phase2-aws` | junglemaze.duckdns.org | EC2 phải được deploy release mới; game/API/WSS cùng backend |

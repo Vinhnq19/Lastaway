@@ -5,6 +5,7 @@ using JungleBackend.Protocol.Gameplay;
 using JungleMaze.App.Config;
 using JungleMaze.App.Flow;
 using JungleMaze.App.Hud.State;
+using JungleMaze.App.Lobby;
 using JungleMaze.App.Match;
 using JungleMaze.App.Network;
 using JungleMaze.App.Player;
@@ -71,6 +72,38 @@ namespace JungleMaze.Tests.App
             public ZoneSchedule ZoneSchedule { get; set; } = ZoneSchedule.Default();
             public string Verify(string expectedVersion, string expectedHash) => null;
             public string LoadLocal() => null;
+        }
+
+        private sealed class FakeAccountApi : IAccountApi
+        {
+            public AuthToken Token = new AuthToken("mock-jwt", DateTime.UtcNow.AddMinutes(30));
+            public void Register(string username, string password, Action<ApiResult<bool>> done) => done(ApiResult<bool>.Success(true, 201));
+            public void Login(string username, string password, Action<ApiResult<AuthToken>> done) => done(ApiResult<AuthToken>.Success(Token));
+        }
+
+        private sealed class TestMultiProfileConfig : IConfigProvider
+        {
+            private readonly Dictionary<string, ClientConfig> _profiles = new Dictionary<string, ClientConfig>(StringComparer.OrdinalIgnoreCase);
+            public TestMultiProfileConfig(ClientConfig initial) => Current = initial;
+            public void AddProfile(string name, ClientConfig config) => _profiles[name] = config;
+            public ClientConfig Current { get; set; }
+            public IReadOnlyList<string> Profiles => new List<string>(_profiles.Keys);
+            public string SelectProfile(string profile)
+            {
+                if (_profiles.TryGetValue(profile, out var cfg))
+                {
+                    Current = cfg;
+                    return null;
+                }
+                return "Unknown profile";
+            }
+            public string SaveUserConfig(ClientConfig config)
+            {
+                Current = config;
+                return null;
+            }
+            public string CommandLineRoomCode => null;
+            public string CommandLineDisplayName => null;
         }
 
         private EventBus _bus;
@@ -212,6 +245,167 @@ namespace JungleMaze.Tests.App
             Assert.AreEqual(ConnectionMode.LAN, _config.Current.Mode);
             Assert.AreEqual("Udp", _config.Current.Transport);
             Assert.IsNull(_config.Current.WebSocketUrl);
+        }
+
+        [Test]
+        public void TargetSwitching_FromAwsToLan_InvalidatesSessionOnce_AndClearsAccountToken()
+        {
+            _presenter.SelectTarget("AWS");
+            var accountApi = new FakeAccountApi();
+            var session = new AccountSession(accountApi, () => DateTime.UtcNow);
+            session.LoggedOut += () => _presenter.AccountToken = null;
+            var endpointChangedCount = 0;
+            _presenter.EndpointChanged += () =>
+            {
+                endpointChangedCount++;
+                _presenter.AccountToken = null;
+                session.Logout();
+            };
+
+            session.Username = "user";
+            session.Password = "pass";
+            Assert.IsTrue(session.Submit());
+            _presenter.AccountToken = session.Token;
+            Assert.IsTrue(session.IsValid);
+            Assert.AreEqual("mock-jwt", _presenter.AccountToken);
+
+            // Switch to LAN -> real API origin change (junglemaze.duckdns.org -> YOUR-SELFHOST.duckdns.org)
+            _presenter.SelectTarget("LAN");
+
+            Assert.AreEqual(1, endpointChangedCount, "EndpointChanged must fire exactly once on real API change");
+            Assert.IsNull(_presenter.AccountToken, "AccountToken must be cleared");
+            Assert.IsFalse(session.IsValid, "AccountSession must be logged out");
+            Assert.IsNull(session.Token, "AccountSession token must be null");
+        }
+
+        [Test]
+        public void TargetSwitching_SameTargetOrEndpoint_DoesNotInvalidateSession()
+        {
+            _presenter.SelectTarget("AWS");
+            var accountApi = new FakeAccountApi();
+            var session = new AccountSession(accountApi, () => DateTime.UtcNow);
+            session.LoggedOut += () => _presenter.AccountToken = null;
+            var endpointChangedCount = 0;
+            _presenter.EndpointChanged += () =>
+            {
+                endpointChangedCount++;
+                _presenter.AccountToken = null;
+                session.Logout();
+            };
+
+            session.Username = "user";
+            session.Password = "pass";
+            Assert.IsTrue(session.Submit());
+            _presenter.AccountToken = session.Token;
+
+            // Re-select same target (AWS)
+            _presenter.SelectTarget("AWS");
+            Assert.AreEqual(0, endpointChangedCount, "Re-selecting same target must not fire EndpointChanged");
+            Assert.AreEqual("mock-jwt", _presenter.AccountToken, "Login must be preserved");
+            Assert.IsTrue(session.IsValid, "Session must remain valid");
+
+            // Save endpoint without changing API origin
+            var saved = _presenter.SaveEndpoint();
+            Assert.IsTrue(saved);
+            Assert.AreEqual(0, endpointChangedCount, "Saving unchanged endpoint must not fire EndpointChanged");
+            Assert.AreEqual("mock-jwt", _presenter.AccountToken, "Login must be preserved");
+            Assert.IsTrue(session.IsValid, "Session must remain valid");
+        }
+
+        [Test]
+        public void SaveEndpoint_InvalidOrFailedSave_DoesNotInvalidateSession()
+        {
+            _presenter.SelectTarget("AWS");
+            _presenter.AccountToken = "valid-token";
+            var endpointChangedCount = 0;
+            _presenter.EndpointChanged += () => endpointChangedCount++;
+
+            // Invalid port
+            _presenter.Port = "not_a_number";
+            var saved = _presenter.SaveEndpoint();
+            Assert.IsFalse(saved);
+            Assert.AreEqual(0, endpointChangedCount, "Invalid save must not fire EndpointChanged");
+            Assert.AreEqual("valid-token", _presenter.AccountToken, "Login must be preserved on invalid save");
+        }
+
+        [Test]
+        public void SelectProfile_SuccessfulApiChangeInvalidates_FailedOrSameProfilePreservesSession()
+        {
+            var awsConfig = new ClientConfig(ConnectionMode.Online, "https://junglemaze.duckdns.org", "junglemaze.duckdns.org", 7777,
+                JoinAuthMode.RoomCode, NetworkProtocol.Version, 5000, "Auto", "test", "wss://junglemaze.duckdns.org/game");
+            var lanConfig = new ClientConfig(ConnectionMode.LAN, "https://192.168.1.10:5000", "192.168.1.10", 7777,
+                JoinAuthMode.RoomCode, NetworkProtocol.Version, 5000, "Udp", "test");
+            var multiConfig = new TestMultiProfileConfig(awsConfig);
+            multiConfig.AddProfile("aws", awsConfig);
+            multiConfig.AddProfile("lan", lanConfig);
+
+            var presenter = new ConnectionMenuPresenter(multiConfig, _connect, _network, _flow, _bus, null, _offlineSession);
+            presenter.Initialize();
+            var accountApi = new FakeAccountApi();
+            var session = new AccountSession(accountApi, () => DateTime.UtcNow);
+            session.LoggedOut += () => presenter.AccountToken = null;
+            var endpointChangedCount = 0;
+            presenter.EndpointChanged += () =>
+            {
+                endpointChangedCount++;
+                presenter.AccountToken = null;
+                session.Logout();
+            };
+
+            session.Username = "user";
+            session.Password = "pass";
+            Assert.IsTrue(session.Submit());
+            presenter.AccountToken = session.Token;
+
+            // 1. Select unknown profile -> fails
+            presenter.SelectProfile("unknown_profile");
+            Assert.AreEqual(0, endpointChangedCount, "Failed profile select must not invalidate");
+            Assert.AreEqual("mock-jwt", presenter.AccountToken);
+            Assert.IsTrue(session.IsValid);
+
+            // 2. Select same profile (aws) -> no API change
+            presenter.SelectProfile("aws");
+            Assert.AreEqual(0, endpointChangedCount, "Selecting profile with same API origin must not invalidate");
+            Assert.AreEqual("mock-jwt", presenter.AccountToken);
+            Assert.IsTrue(session.IsValid);
+
+            // 3. Select lan profile -> real API change (junglemaze.duckdns.org -> 192.168.1.10:5000)
+            presenter.SelectProfile("lan");
+            Assert.AreEqual(1, endpointChangedCount, "Selecting profile with new API origin must invalidate once");
+            Assert.IsNull(presenter.AccountToken, "AccountToken must be cleared");
+            Assert.IsFalse(session.IsValid, "Session must be logged out");
+
+            presenter.Dispose();
+        }
+
+        [Test]
+        public void Join_WhenApiUrlModified_InvalidatesSessionBeforeConnect()
+        {
+            _presenter.SelectTarget("LAN");
+            var accountApi = new FakeAccountApi();
+            var session = new AccountSession(accountApi, () => DateTime.UtcNow);
+            session.LoggedOut += () => _presenter.AccountToken = null;
+            var endpointChangedCount = 0;
+            _presenter.EndpointChanged += () =>
+            {
+                endpointChangedCount++;
+                _presenter.AccountToken = null;
+                session.Logout();
+            };
+
+            session.Username = "user";
+            session.Password = "pass";
+            Assert.IsTrue(session.Submit());
+            _presenter.AccountToken = session.Token;
+            _presenter.RoomCode = "ROOM1";
+
+            // User edits API Base URL in menu before clicking Join
+            _presenter.ApiBaseUrl = "https://selfhost.example.com";
+            _presenter.Join();
+
+            Assert.AreEqual(1, endpointChangedCount, "Join with modified API origin must persist and invalidate session once");
+            Assert.IsNull(_presenter.AccountToken, "AccountToken must be cleared before connecting");
+            Assert.IsFalse(session.IsValid, "AccountSession must be logged out");
         }
 
         [Test]

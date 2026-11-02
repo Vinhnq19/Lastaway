@@ -9,14 +9,14 @@ using JungleMaze.Core.Logging;
 namespace JungleMaze.Infrastructure.Config
 {
     /// <summary>
-    /// Thứ tự nạp: -clientConfig path → persistentDataPath/client.json (người dùng đã lưu)
-    /// → StreamingAssets/JungleMaze/client.&lt;profile&gt;.json (mặc định "local"); sau đó áp env/command line.
+    /// Thứ tự nạp: -clientConfig path → -profile → AWS mặc định; sau đó áp env/command line.
+    /// client.json vẫn lưu được, nhưng chỉ nạp lại khi được chỉ định để lần mở thường luôn về AWS.
     /// </summary>
     public sealed class FileConfigProvider : IConfigProvider
     {
         public const string ProfileFolder = "JungleMaze";
         public const string UserFileName = "client.json";
-        public const string DefaultProfile = "local";
+        public const string DefaultProfile = "phase2-aws";
 
         private readonly string _profileDirectory;
         private readonly string _userFilePath;
@@ -38,7 +38,6 @@ namespace JungleMaze.Infrastructure.Config
             string error;
             ClientConfig loaded;
             if (!string.IsNullOrEmpty(overrides.ConfigPath)) error = LoadFile(overrides.ConfigPath, "cmd:" + overrides.ConfigPath, out loaded);
-            else if (overrides.Profile == null && File.Exists(_userFilePath)) error = LoadFile(_userFilePath, "user:client.json", out loaded);
             else error = LoadProfile(overrides.Profile ?? DefaultProfile, out loaded);
 
             if (error == null) error = overrides.Apply(loaded, out loaded);
@@ -95,6 +94,10 @@ namespace JungleMaze.Infrastructure.Config
                 var name = Path.GetFileNameWithoutExtension(file).Substring("client.".Length);
                 if (name.Length > 0) _profiles.Add(name);
             }
+            // Keep legacy files loadable by CLI, but show one current preset per environment.
+            foreach (var alias in new[] { "local", "lan", "aws", "online" })
+                if (_profiles.Contains("phase2-" + (alias == "online" ? "vpn" : alias)))
+                    _profiles.Remove(alias);
             _profiles.Sort(StringComparer.OrdinalIgnoreCase);
         }
 

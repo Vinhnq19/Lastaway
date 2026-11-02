@@ -61,6 +61,14 @@ namespace JungleMaze.Composition
 
             var accountSession = new AccountSession(account, () => DateTime.UtcNow);
             accountSession.LoggedOut += () => menu.AccountToken = null;
+            if (menu != null)
+            {
+                menu.EndpointChanged += () =>
+                {
+                    menu.AccountToken = null;
+                    accountSession.Logout();
+                };
+            }
 
             ILobbyCommands commands = new SessionLobbyCommands((code, name) =>
             {

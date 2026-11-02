@@ -168,7 +168,43 @@ namespace JungleMaze.Tests.Config
         }
 
         [Test]
-        public void FileProvider_UserFileBeatsProfile_AndSaveRoundTrips()
+        public void FileProvider_HidesLegacyAliasesButStillLoadsThemExplicitly()
+        {
+            var root = Path.Combine(Path.GetTempPath(), "jm-presets-" + System.Guid.NewGuid().ToString("N"));
+            var profiles = Path.Combine(root, FileConfigProvider.ProfileFolder);
+            try
+            {
+                Directory.CreateDirectory(profiles);
+                foreach (var name in new[] { "local", "lan", "aws", "online", "phase2-local", "phase2-lan", "phase2-aws", "phase2-vpn", "phase2-selfhost", "custom" })
+                    File.WriteAllText(Path.Combine(profiles, "client." + name + ".json"), ValidJson);
+                var provider = new FileConfigProvider(root, Path.Combine(root, "user"), new[] { "-profile", "lan" }, null, null);
+                CollectionAssert.AreEquivalent(new[] { "phase2-local", "phase2-lan", "phase2-aws", "phase2-vpn", "phase2-selfhost", "custom" }, provider.Profiles);
+                Assert.IsNull(provider.SelectProfile("online"), "Existing CLI/profile references remain compatible");
+                Assert.AreEqual("profile:online", provider.Current.Source);
+            }
+            finally { if (Directory.Exists(root)) Directory.Delete(root, true); }
+        }
+
+        [Test]
+        public void FileProvider_NormalLaunchUsesAwsEvenWithSavedLocalEndpoint()
+        {
+            var root = Path.Combine(Path.GetTempPath(), "jm-default-" + System.Guid.NewGuid().ToString("N"));
+            var profiles = Path.Combine(root, FileConfigProvider.ProfileFolder);
+            var user = Path.Combine(root, "user");
+            try
+            {
+                Directory.CreateDirectory(profiles); Directory.CreateDirectory(user);
+                File.WriteAllText(Path.Combine(profiles, "client.phase2-aws.json"), ValidJson.Replace("LAN", "Online").Replace("192.168.1.20", "junglemaze.duckdns.org"));
+                File.WriteAllText(Path.Combine(user, FileConfigProvider.UserFileName), ValidJson);
+                var provider = new FileConfigProvider(root, user, new string[0], null, null);
+                Assert.AreEqual("profile:phase2-aws", provider.Current.Source);
+                Assert.AreEqual("junglemaze.duckdns.org", provider.Current.GameServerHost);
+            }
+            finally { if (Directory.Exists(root)) Directory.Delete(root, true); }
+        }
+
+        [Test]
+        public void FileProvider_ExplicitSavedFileRoundTrips()
         {
             var root = Path.Combine(Path.GetTempPath(), "jm-config-" + System.Guid.NewGuid().ToString("N"));
             var streaming = Path.Combine(root, "streaming");
@@ -181,7 +217,7 @@ namespace JungleMaze.Tests.Config
                     ValidJson.Replace("LAN", "Local").Replace("192.168.1.20", "127.0.0.1"));
                 File.WriteAllText(Path.Combine(streaming, FileConfigProvider.ProfileFolder, "client.lan.json"), ValidJson);
 
-                var first = new FileConfigProvider(streaming, persistent, new string[0], null, null);
+                var first = new FileConfigProvider(streaming, persistent, new[] { "-profile", "local" }, null, null);
                 Assert.AreEqual("127.0.0.1:7777", first.Current.Endpoint);
                 CollectionAssert.AreEqual(new[] { "lan", "local" }, first.Profiles);
 
@@ -189,7 +225,7 @@ namespace JungleMaze.Tests.Config
                 Assert.AreEqual("192.168.1.20:7777", first.Current.Endpoint);
                 Assert.IsNull(first.SaveUserConfig(first.Current.WithEndpoint("192.168.1.99", 7778, ConnectionMode.LAN, "ui")));
 
-                var second = new FileConfigProvider(streaming, persistent, new string[0], null, null);
+                var second = new FileConfigProvider(streaming, persistent, new[] { "-clientConfig", first.UserFilePath }, null, null);
                 Assert.AreEqual("192.168.1.99:7778", second.Current.Endpoint);
                 Assert.IsNotNull(first.SelectProfile("../evil"));
             }
