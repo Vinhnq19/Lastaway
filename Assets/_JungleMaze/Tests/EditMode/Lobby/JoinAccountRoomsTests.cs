@@ -246,6 +246,145 @@ namespace JungleMaze.Tests.Lobby
             }
             finally { Application.logMessageReceived -= Capture; }
         }
+
+        [Test]
+        public void LateLoginAfterLogout_IsIgnored()
+        {
+            var api = new DeferredAccountApi();
+            var account = new AccountSession(api, () => api.UtcNow);
+            var loggedIn = 0;
+            var loggedOut = 0;
+            account.LoggedIn += () => loggedIn++;
+            account.LoggedOut += () => loggedOut++;
+            account.Username = "huycv";
+            account.Password = "secret123";
+            Assert.IsTrue(account.Submit());
+            Assert.IsTrue(account.Busy);
+            Assert.AreEqual(1, api.Logins);
+            account.Logout();
+            Assert.IsFalse(account.Busy, "logout clears Busy");
+            Assert.AreEqual(1, loggedOut);
+            api.Flush(); // the login answer arrives after the logout
+            Assert.IsFalse(account.IsValid, "a stale login never restores a token");
+            Assert.IsNull(account.Token);
+            Assert.AreEqual(0, loggedIn);
+            Assert.IsFalse(account.Busy);
+            Assert.AreEqual("", account.Message);
+        }
+
+        [Test]
+        public void LateRegistrationAfterLogout_DoesNotLogin()
+        {
+            var api = new DeferredAccountApi();
+            var account = new AccountSession(api, () => api.UtcNow);
+            var loggedIn = 0;
+            account.LoggedIn += () => loggedIn++;
+            account.RegisterMode = true;
+            account.Username = "huycv";
+            account.Password = "secret123";
+            Assert.IsTrue(account.Submit());
+            Assert.AreEqual(1, api.Registers);
+            account.Logout();
+            api.Flush(); // register succeeds after the cancel
+            Assert.AreEqual(0, api.Logins, "no registration-followup login after logout");
+            Assert.IsFalse(account.IsValid);
+            Assert.IsFalse(account.Busy);
+            Assert.AreEqual(0, loggedIn);
+            Assert.AreEqual("", account.Message);
+        }
+
+        [Test]
+        public void OldResponse_CannotOverwriteNewerRequest()
+        {
+            var api = new DeferredAccountApi();
+            var account = new AccountSession(api, () => api.UtcNow);
+            var loggedIn = 0;
+            account.LoggedIn += () => loggedIn++;
+            account.Username = "huycv";
+            account.Password = "secret123";
+            api.LoginStatus = 401;
+            Assert.IsTrue(account.Submit());
+            account.Logout();
+            api.LoginStatus = 200;
+            account.Password = "secret123";
+            Assert.IsTrue(account.Submit());
+            Assert.AreEqual(2, api.Logins);
+            api.AnswerOldest(); // the first login fails, one request too late
+            Assert.IsFalse(account.IsValid);
+            Assert.IsTrue(account.Busy, "the newer request is still in flight");
+            Assert.AreEqual("", account.Message, "the stale answer cannot set the newer message");
+            Assert.AreEqual(0, loggedIn);
+            api.Flush(); // the second login succeeds
+            Assert.IsTrue(account.IsValid);
+            Assert.AreEqual("deferred-jwt-2", account.Token);
+            Assert.IsFalse(account.Busy);
+            Assert.AreEqual(1, loggedIn);
+            Assert.AreEqual("", account.Message);
+        }
+
+        [Test]
+        public void LoginAlreadyExpired_Rejected()
+        {
+            var api = new DeferredAccountApi { Lifetime = TimeSpan.FromMinutes(-1) };
+            var account = new AccountSession(api, () => api.UtcNow);
+            var loggedIn = 0;
+            account.LoggedIn += () => loggedIn++;
+            account.Username = "huycv";
+            account.Password = "secret123";
+            Assert.IsTrue(account.Submit());
+            api.Flush();
+            Assert.IsFalse(account.IsValid, "an already-expired token never logs in");
+            Assert.IsNull(account.Token);
+            Assert.AreEqual(0, loggedIn);
+            Assert.IsFalse(account.Busy);
+            Assert.AreEqual(ApiMessages.SessionExpired, account.Message);
+        }
+
+        /// <summary>IAccountApi that holds every answer until the test releases it, oldest first.</summary>
+        private sealed class DeferredAccountApi : IAccountApi
+        {
+            private readonly System.Collections.Generic.List<Action> _pending =
+                new System.Collections.Generic.List<Action>();
+
+            public DateTime UtcNow = new DateTime(2026, 10, 31, 0, 0, 0, DateTimeKind.Utc);
+            public TimeSpan Lifetime = TimeSpan.FromHours(1);
+            public int LoginStatus = 200, RegisterStatus = 201;
+            public int Registers, Logins;
+
+            public void Register(string username, string password, Action<ApiResult<bool>> done)
+            {
+                Registers++;
+                var result = RegisterStatus / 100 == 2
+                    ? ApiResult<bool>.Success(true, RegisterStatus)
+                    : ApiResult<bool>.Fail(RegisterStatus);
+                _pending.Add(() => done(result));
+            }
+
+            public void Login(string username, string password, Action<ApiResult<AuthToken>> done)
+            {
+                Logins++;
+                var token = "deferred-jwt-" + Logins;
+                var result = LoginStatus == 200
+                    ? ApiResult<AuthToken>.Success(new AuthToken(token, UtcNow + Lifetime))
+                    : ApiResult<AuthToken>.Fail(LoginStatus);
+                _pending.Add(() => done(result));
+            }
+
+            /// <summary>Releases only the oldest held answer, leaving the newer request in flight.</summary>
+            public void AnswerOldest()
+            {
+                var call = _pending[0];
+                _pending.RemoveAt(0);
+                call();
+            }
+
+            public void Flush()
+            {
+                var calls = _pending.ToArray();
+                _pending.Clear();
+                foreach (var call in calls) call();
+            }
+        }
     }
 
     /// <summary>AC14–AC16, AC41 on the room manager.</summary>

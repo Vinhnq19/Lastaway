@@ -51,6 +51,9 @@ namespace JungleMaze.Presentation.UI
         public bool AdvancedExpanded { get; set; }
         public string SelectedOnlineTarget { get; set; } = "AWS";
 
+        /// <summary>Fired when the API origin/config changes successfully, separating account sessions.</summary>
+        public event Action EndpointChanged;
+
         public AppScreen Screen => _flow.Screen;
         public string Status { get; private set; } = "";
         public string ConfigSource => _config.Current?.Source ?? "";
@@ -82,14 +85,17 @@ namespace JungleMaze.Presentation.UI
         {
             _bus.Unsubscribe(_onScreen);
             _bus.Unsubscribe(_onError);
+            EndpointChanged = null;
         }
 
         public void SelectProfile(string profile)
         {
+            var before = _config.Current;
             var error = _config.SelectProfile(profile);
             if (error != null) { Status = error; return; }
             LoadFromConfig();
             Status = $"Đã chọn profile {profile}.";
+            NotifyIfApiChanged(before, _config.Current);
         }
 
         public void SelectTarget(string target)
@@ -113,6 +119,7 @@ namespace JungleMaze.Presentation.UI
                 if (error != null) { Status = error; return; }
                 LoadFromConfig();
                 Status = "Chế độ LAN: UDP.";
+                NotifyIfApiChanged(current, _config.Current);
             }
             else if (string.Equals(target, "Radmin", StringComparison.OrdinalIgnoreCase))
             {
@@ -125,6 +132,7 @@ namespace JungleMaze.Presentation.UI
                 if (error != null) { Status = error; return; }
                 LoadFromConfig();
                 Status = "Chế độ Online (Radmin/VPN): UDP.";
+                NotifyIfApiChanged(current, _config.Current);
             }
             else if (string.Equals(target, "AWS", StringComparison.OrdinalIgnoreCase))
             {
@@ -139,6 +147,7 @@ namespace JungleMaze.Presentation.UI
                 if (error != null) { Status = error; return; }
                 LoadFromConfig();
                 Status = "Chế độ Online (AWS): junglemaze.duckdns.org (Auto UDP->WSS).";
+                NotifyIfApiChanged(current, _config.Current);
             }
         }
 
@@ -164,20 +173,25 @@ namespace JungleMaze.Presentation.UI
         /// <summary>Lưu host/port/mode người dùng sửa vào persistentDataPath/client.json (lần sau tự dùng).</summary>
         public bool SaveEndpoint()
         {
+            var before = _config.Current;
             if (!TryBuildConfig(out var config)) return false;
             var error = _config.SaveUserConfig(config);
             Status = error ?? "Đã lưu endpoint vào client.json.";
-            return error == null;
+            if (error != null) return false;
+            NotifyIfApiChanged(before, _config.Current);
+            return true;
         }
 
         public void Join()
         {
+            var before = _config.Current;
             if (!TryBuildConfig(out var config)) return;
             // Endpoint sửa trên menu được lưu vào client.json trước khi vào phòng: lần mở sau dùng lại, không cần build.
             if (!ReferenceEquals(config, _config.Current))
             {
                 var error = _config.SaveUserConfig(config);
                 if (error != null) { Status = error; return; }
+                NotifyIfApiChanged(before, _config.Current);
             }
             var result = _connect.Execute(new ConnectForm
             {
@@ -226,6 +240,30 @@ namespace JungleMaze.Presentation.UI
             var invalid = config.Validate();
             if (invalid != null) { Status = invalid; return false; }
             return true;
+        }
+
+        private void NotifyIfApiChanged(ClientConfig before, ClientConfig after)
+        {
+            if (!HasApiOriginChanged(before, after)) return;
+            AccountToken = null;
+            EndpointChanged?.Invoke();
+        }
+
+        private static string GetApiOrigin(ClientConfig config)
+        {
+            if (config == null || string.IsNullOrWhiteSpace(config.ApiBaseUrl)) return "";
+            var trimmed = config.ApiBaseUrl.Trim();
+            if (Uri.TryCreate(trimmed, UriKind.Absolute, out var uri))
+                return uri.GetLeftPart(UriPartial.Authority);
+            return trimmed;
+        }
+
+        private static bool HasApiOriginChanged(ClientConfig before, ClientConfig after)
+        {
+            if (ReferenceEquals(before, after)) return false;
+            var beforeOrigin = GetApiOrigin(before);
+            var afterOrigin = GetApiOrigin(after);
+            return !string.Equals(beforeOrigin, afterOrigin, StringComparison.OrdinalIgnoreCase);
         }
     }
 }

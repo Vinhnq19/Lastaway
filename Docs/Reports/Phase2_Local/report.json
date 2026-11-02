@@ -1,872 +1,528 @@
 {
-  "schemaVersion": 2,
-  "date": "2026-11-01",
-  "status": "IN_PROGRESS",
-  "overallFlow": "FAIL",
-  "awsDeployment": "BLOCKED_LOCAL_GATE",
-  "unityVersion": "6000.3.15f1",
-  "userDecision": "Keep Unity6000.3.15f1; native exit issue BLOCKED",
-  "sourceCommit": "0eb51d89af5c786551a168ab04d4c3fb011df37e",
+  "schemaVersion": 3,
+  "date": "2026-11-02",
+  "status": "PASS_NETWORK_FLOW_WITH_LIMITATIONS",
+  "unity": "6000.3.15f1",
   "branch": "codex/phase2-account-flow-20261101",
-  "uncommitted": true,
-  "limits": {
-    "roomPlayers": 10,
-    "rooms": 5,
-    "serverSessions": 50,
-    "extraRoomsPerAccount": 2
+  "accountEndpointTests": {
+    "passed": 24,
+    "total": 24
   },
-  "checks": {
-    "accountMongoReal": {
-      "status": "PASS_MODULE",
-      "passed": 68
-    },
-    "unityEditMode": {
-      "status": "PASS_MODULE",
-      "passed": 854,
-      "failed": 0,
-      "job": "a0ee6533ab2c4367b9aedd5eb4695110"
-    },
-    "unityPlayMode": {
-      "status": "PASS_MODULE",
-      "passed": 120,
-      "failed": 0,
-      "job": "3a09423b0d8d4bedbb0c6c6324f3bf9e"
-    },
-    "map": {
-      "status": "PASS_MODULE",
-      "checks": 168,
-      "objects": 215
-    },
-    "windows": {
-      "status": "FAIL",
-      "nativeExitCode": -1073741819,
-      "latestAckRepair": "WSS_NO_UNEXPECTED_DISCONNECT_IN_394_SECONDS_OBSERVED",
-      "ackRetest": {
-        "status": "INVALID",
-        "reason": "Two Mono startup native crashes before six-player roster; four remaining owned clients deliberately aborted",
-        "nativeModule": "mono-2.0-bdwgc.dll",
-        "rva": "0x26bef6",
-        "cleanupErrors": []
+  "local": {
+    "status": "PASS",
+    "scenarioId": "main6-smoke",
+    "schemaVersion": 1,
+    "timestampUtc": "2026-11-02T07:38:47.9101411Z",
+    "reason": null,
+    "playerSha256": "04a137e8f3c105937a1cb13fc57300734117f5874292ee9c764bda7537d8aef2",
+    "playerFingerprint": "b832f756c9f79fda3373f5b2eabfc4428edbc6c6414da6782f15c199a4502241",
+    "clientCount": 6,
+    "passedCount": 6,
+    "physicalDeviceCount": 1,
+    "physicalTwoPc": "NOT_TESTED",
+    "clients": [
+      {
+        "id": "Player1",
+        "index": 1,
+        "pid": 34144,
+        "exitCode": 0,
+        "status": "PASS",
+        "evidenceStatus": "PASS",
+        "selectedTransport": "Wss",
+        "fallbackReason": "",
+        "connectedSeconds": 311.35,
+        "p50RttMs": 33.33,
+        "p99RttMs": 33.91,
+        "assertionsPassed": 8,
+        "assertionsTotal": 8,
+        "reason": "Required observations and rates verified",
+        "evidenceFile": "evidence-client-1.json",
+        "logFile": "unity-client-1.log"
       },
-      "latestAudioAckRun": {
-        "status": "PASS_OBSERVATIONS_FAIL_ACCEPTANCE",
-        "functionalScenarios": 6,
-        "clients": [
-          {
-            "id": "evidence-client-1",
-            "scenarioStatus": "PASS",
-            "transport": "Wss",
-            "metrics": {
-              "elapsedSeconds": 397.9009094238281,
-              "connectedSeconds": 395.0759582519531,
-              "snapshots": 10710,
-              "inputs": 5074,
-              "ignoredPackets": 0,
-              "catchupDrops": 0,
-              "maxPlayers": 6,
-              "completedMatches": 2,
-              "inputHz": 29.996692668841163,
-              "activeInputSeconds": 169.15198138728738,
-              "snapshotHz": 29.98308845438011,
-              "snapshotSeconds": 357.2013609036803,
-              "rttP50Ms": 33.345,
-              "rttP95Ms": 33.8309,
-              "rttP99Ms": 35.5479,
-              "pings": 394,
-              "pongs": 394,
-              "pongTimeouts": 0
-            },
-            "assertions": [
-              {
-                "id": "joined",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              },
-              {
-                "id": "playersVisible",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              },
-              {
-                "id": "movement",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              },
-              {
-                "id": "zone",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              },
-              {
-                "id": "hpDamage",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              },
-              {
-                "id": "result",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              },
-              {
-                "id": "replay",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              },
-              {
-                "id": "history",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              }
-            ]
-          },
-          {
-            "id": "evidence-client-2",
-            "scenarioStatus": "PASS",
-            "transport": "Wss",
-            "metrics": {
-              "elapsedSeconds": 397.9269104003906,
-              "connectedSeconds": 395.2125549316406,
-              "snapshots": 10709,
-              "inputs": 5044,
-              "ignoredPackets": 0,
-              "catchupDrops": 0,
-              "maxPlayers": 6,
-              "completedMatches": 2,
-              "inputHz": 29.99529375746673,
-              "activeInputSeconds": 168.15971334651113,
-              "snapshotHz": 29.97800980426907,
-              "snapshotSeconds": 357.22851750068367,
-              "rttP50Ms": 33.3448,
-              "rttP95Ms": 33.8634,
-              "rttP99Ms": 36.2911,
-              "pings": 394,
-              "pongs": 394,
-              "pongTimeouts": 0
-            },
-            "assertions": [
-              {
-                "id": "joined",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              },
-              {
-                "id": "playersVisible",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              },
-              {
-                "id": "movement",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              },
-              {
-                "id": "zone",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              },
-              {
-                "id": "hpDamage",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              },
-              {
-                "id": "result",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              },
-              {
-                "id": "replay",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              },
-              {
-                "id": "history",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              }
-            ]
-          },
-          {
-            "id": "evidence-client-3",
-            "scenarioStatus": "PASS",
-            "transport": "Wss",
-            "metrics": {
-              "elapsedSeconds": 396.6137390136719,
-              "connectedSeconds": 393.8729553222656,
-              "snapshots": 10709,
-              "inputs": 8193,
-              "ignoredPackets": 0,
-              "catchupDrops": 0,
-              "maxPlayers": 6,
-              "completedMatches": 2,
-              "inputHz": 29.99703563173756,
-              "activeInputSeconds": 273.126988299191,
-              "snapshotHz": 29.979918802942507,
-              "snapshotSeconds": 357.2057706490159,
-              "rttP50Ms": 33.3639,
-              "rttP95Ms": 33.9198,
-              "rttP99Ms": 35.0591,
-              "pings": 394,
-              "pongs": 394,
-              "pongTimeouts": 0
-            },
-            "assertions": [
-              {
-                "id": "joined",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              },
-              {
-                "id": "playersVisible",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              },
-              {
-                "id": "movement",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              },
-              {
-                "id": "zone",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              },
-              {
-                "id": "hpDamage",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              },
-              {
-                "id": "result",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              },
-              {
-                "id": "replay",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              },
-              {
-                "id": "history",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              }
-            ]
-          },
-          {
-            "id": "evidence-client-4",
-            "scenarioStatus": "PASS",
-            "transport": "Udp",
-            "metrics": {
-              "elapsedSeconds": 394.1484680175781,
-              "connectedSeconds": 390.8581848144531,
-              "snapshots": 10710,
-              "inputs": 10712,
-              "ignoredPackets": 0,
-              "catchupDrops": 0,
-              "maxPlayers": 6,
-              "completedMatches": 2,
-              "inputHz": 29.99707674890043,
-              "activeInputSeconds": 357.10146324150264,
-              "snapshotHz": 29.985824824355102,
-              "snapshotSeconds": 357.16876433230937,
-              "rttP50Ms": 33.3264,
-              "rttP95Ms": 33.9263,
-              "rttP99Ms": 66.7963,
-              "pings": 391,
-              "pongs": 391,
-              "pongTimeouts": 0
-            },
-            "assertions": [
-              {
-                "id": "joined",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              },
-              {
-                "id": "playersVisible",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              },
-              {
-                "id": "movement",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              },
-              {
-                "id": "zone",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              },
-              {
-                "id": "hpDamage",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              },
-              {
-                "id": "result",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              },
-              {
-                "id": "replay",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              },
-              {
-                "id": "history",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              }
-            ]
-          },
-          {
-            "id": "evidence-client-5",
-            "scenarioStatus": "PASS",
-            "transport": "Udp",
-            "metrics": {
-              "elapsedSeconds": 392.0501403808594,
-              "connectedSeconds": 389.5620422363281,
-              "snapshots": 10710,
-              "inputs": 8851,
-              "ignoredPackets": 0,
-              "catchupDrops": 1,
-              "maxPlayers": 6,
-              "completedMatches": 2,
-              "inputHz": 29.98323389909086,
-              "activeInputSeconds": 295.19831082224846,
-              "snapshotHz": 29.985578180105485,
-              "snapshotSeconds": 357.1717021986842,
-              "rttP50Ms": 33.2988,
-              "rttP95Ms": 34.4253,
-              "rttP99Ms": 67.0702,
-              "pings": 390,
-              "pongs": 390,
-              "pongTimeouts": 0
-            },
-            "assertions": [
-              {
-                "id": "joined",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              },
-              {
-                "id": "playersVisible",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              },
-              {
-                "id": "movement",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              },
-              {
-                "id": "zone",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              },
-              {
-                "id": "hpDamage",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              },
-              {
-                "id": "result",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              },
-              {
-                "id": "replay",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              },
-              {
-                "id": "history",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              }
-            ]
-          },
-          {
-            "id": "evidence-client-6",
-            "scenarioStatus": "PASS",
-            "transport": "Udp",
-            "metrics": {
-              "elapsedSeconds": 390.052734375,
-              "connectedSeconds": 387.87786865234375,
-              "snapshots": 10710,
-              "inputs": 7953,
-              "ignoredPackets": 0,
-              "catchupDrops": 0,
-              "maxPlayers": 6,
-              "completedMatches": 2,
-              "inputHz": 29.996368726983196,
-              "activeInputSeconds": 265.13209223374724,
-              "snapshotHz": 29.982105526212607,
-              "snapshotSeconds": 357.2130713313818,
-              "rttP50Ms": 33.3309,
-              "rttP95Ms": 34.1626,
-              "rttP99Ms": 66.577,
-              "pings": 388,
-              "pongs": 388,
-              "pongTimeouts": 0
-            },
-            "assertions": [
-              {
-                "id": "joined",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              },
-              {
-                "id": "playersVisible",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              },
-              {
-                "id": "movement",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              },
-              {
-                "id": "zone",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              },
-              {
-                "id": "hpDamage",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              },
-              {
-                "id": "result",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              },
-              {
-                "id": "replay",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              },
-              {
-                "id": "history",
-                "status": "PASS",
-                "detail": "Observed during this run"
-              }
-            ]
-          }
-        ],
-        "server": {
-          "allWindows": 86,
-          "sixPeerWindows": 78,
-          "allDroppedTicks": 8.0,
-          "sixPeerDroppedTicks": 8.0,
-          "allTickOverruns": 1.0,
-          "tickMean": 29.978974358974362,
-          "tickMin": 28.38,
-          "tickMax": 30.2,
-          "cpuOneCorePeak": 25.78,
-          "workingSetPeakMiB": 125.0
-        },
-        "nativeQuit": "BLOCKED_KEEP_UNITY_6000.3.15f1",
-        "strictNoDrop": "FAIL_8_DROPPED_TICKS",
-        "startupStaggerMs": 1500,
-        "uiDiagnosticOverlap": "FOUND_REPAIR_IN_SOURCE_NOT_THIS_BINARY"
+      {
+        "id": "Player2",
+        "index": 2,
+        "pid": 39988,
+        "exitCode": 0,
+        "status": "PASS",
+        "evidenceStatus": "PASS",
+        "selectedTransport": "Wss",
+        "fallbackReason": "",
+        "connectedSeconds": 309.44,
+        "p50RttMs": 33.34,
+        "p99RttMs": 33.97,
+        "assertionsPassed": 8,
+        "assertionsTotal": 8,
+        "reason": "Required observations and rates verified",
+        "evidenceFile": "evidence-client-2.json",
+        "logFile": "unity-client-2.log"
+      },
+      {
+        "id": "Player3",
+        "index": 3,
+        "pid": 49828,
+        "exitCode": 0,
+        "status": "PASS",
+        "evidenceStatus": "PASS",
+        "selectedTransport": "Wss",
+        "fallbackReason": "",
+        "connectedSeconds": 307.57,
+        "p50RttMs": 33.34,
+        "p99RttMs": 34.17,
+        "assertionsPassed": 8,
+        "assertionsTotal": 8,
+        "reason": "Required observations and rates verified",
+        "evidenceFile": "evidence-client-3.json",
+        "logFile": "unity-client-3.log"
+      },
+      {
+        "id": "Player4",
+        "index": 4,
+        "pid": 40420,
+        "exitCode": 0,
+        "status": "PASS",
+        "evidenceStatus": "PASS",
+        "selectedTransport": "Udp",
+        "fallbackReason": "",
+        "connectedSeconds": 300.01,
+        "p50RttMs": 33.33,
+        "p99RttMs": 67.06,
+        "assertionsPassed": 8,
+        "assertionsTotal": 8,
+        "reason": "Required observations and rates verified",
+        "evidenceFile": "evidence-client-4.json",
+        "logFile": "unity-client-4.log"
+      },
+      {
+        "id": "Player5",
+        "index": 5,
+        "pid": 38900,
+        "exitCode": 0,
+        "status": "PASS",
+        "evidenceStatus": "PASS",
+        "selectedTransport": "Udp",
+        "fallbackReason": "",
+        "connectedSeconds": 300.03,
+        "p50RttMs": 33.32,
+        "p99RttMs": 33.95,
+        "assertionsPassed": 8,
+        "assertionsTotal": 8,
+        "reason": "Required observations and rates verified",
+        "evidenceFile": "evidence-client-5.json",
+        "logFile": "unity-client-5.log"
+      },
+      {
+        "id": "Player6",
+        "index": 6,
+        "pid": 42400,
+        "exitCode": 0,
+        "status": "PASS",
+        "evidenceStatus": "PASS",
+        "selectedTransport": "Udp",
+        "fallbackReason": "",
+        "connectedSeconds": 300.02,
+        "p50RttMs": 33.34,
+        "p99RttMs": 66.7,
+        "assertionsPassed": 8,
+        "assertionsTotal": 8,
+        "reason": "Required observations and rates verified",
+        "evidenceFile": "evidence-client-6.json",
+        "logFile": "unity-client-6.log"
       }
-    },
-    "realAudio": {
-      "status": "PASS_MODULE",
-      "focusedPassed": 16,
-      "actualEditorMaxVoices": 5,
-      "remoteFootstepFlow": "NOT_TESTED"
-    },
-    "editorAuthoredWorld": {
-      "status": "PASS_STEPS_CONTROLLED_POSE",
-      "chestBroken": true,
-      "chestItemsGenerated": 4,
-      "weaponPickupSelectDrop": true,
-      "shotgunReload": {
-        "magazineBefore": 4,
-        "afterFire": 3,
-        "afterReload": 3,
-        "reserveBefore": 4
-      },
-      "potConsumable": "GOD_LEAF",
-      "consumableBefore": 1,
-      "consumableAfter": 0,
-      "useCompleted": true,
-      "twoPlayerPvp": "NOT_TESTED_CURRENT_FULL_FLOW"
-    }
+    ]
+  },
+  "localServer": {
+    "status": "PASS",
+    "reason": "Active-player tick/CPU/RAM thresholds satisfied",
+    "activeSamples": 62,
+    "tickAverageHz": 30.001774193548396,
+    "cpuPeakOneCorePercent": 15.4,
+    "memoryPercent": 22.78289794921875,
+    "droppedTicks": 0.0,
+    "memorySampling": "cgroup v1 memory.max_usage_in_bytes since container creation immediately before run"
   },
   "aws": {
-    "lastObservedState": "Running",
-    "publicIpv4": "13.239.10.69",
-    "deployed": false,
-    "instanceStateMutated": false,
-    "keepRunning": true,
-    "publicIp": "13.239.10.69",
-    "observedAt": "2026-11-01T20:51:00+07:00"
+    "status": "PASS",
+    "scenarioId": "main6-smoke",
+    "schemaVersion": 1,
+    "timestampUtc": "2026-11-02T07:48:25.3337200Z",
+    "reason": null,
+    "playerSha256": "04a137e8f3c105937a1cb13fc57300734117f5874292ee9c764bda7537d8aef2",
+    "playerFingerprint": "b832f756c9f79fda3373f5b2eabfc4428edbc6c6414da6782f15c199a4502241",
+    "clientCount": 6,
+    "passedCount": 6,
+    "physicalDeviceCount": 1,
+    "physicalTwoPc": "NOT_TESTED",
+    "clients": [
+      {
+        "id": "Player1",
+        "index": 1,
+        "pid": 49244,
+        "exitCode": 0,
+        "status": "PASS",
+        "evidenceStatus": "PASS",
+        "selectedTransport": "Wss",
+        "fallbackReason": "",
+        "connectedSeconds": 300.0,
+        "p50RttMs": 268.39,
+        "p99RttMs": 400.26,
+        "assertionsPassed": 8,
+        "assertionsTotal": 8,
+        "reason": "Required observations and rates verified",
+        "evidenceFile": "evidence-client-1.json",
+        "logFile": "unity-client-1.log"
+      },
+      {
+        "id": "Player2",
+        "index": 2,
+        "pid": 12948,
+        "exitCode": 0,
+        "status": "PASS",
+        "evidenceStatus": "PASS",
+        "selectedTransport": "Wss",
+        "fallbackReason": "",
+        "connectedSeconds": 300.02,
+        "p50RttMs": 234.03,
+        "p99RttMs": 400.01,
+        "assertionsPassed": 8,
+        "assertionsTotal": 8,
+        "reason": "Required observations and rates verified",
+        "evidenceFile": "evidence-client-2.json",
+        "logFile": "unity-client-2.log"
+      },
+      {
+        "id": "Player3",
+        "index": 3,
+        "pid": 51024,
+        "exitCode": 0,
+        "status": "PASS",
+        "evidenceStatus": "PASS",
+        "selectedTransport": "Wss",
+        "fallbackReason": "",
+        "connectedSeconds": 300.02,
+        "p50RttMs": 300.04,
+        "p99RttMs": 534.03,
+        "assertionsPassed": 8,
+        "assertionsTotal": 8,
+        "reason": "Required observations and rates verified",
+        "evidenceFile": "evidence-client-3.json",
+        "logFile": "unity-client-3.log"
+      },
+      {
+        "id": "Player4",
+        "index": 4,
+        "pid": 33884,
+        "exitCode": 0,
+        "status": "PASS",
+        "evidenceStatus": "PASS",
+        "selectedTransport": "Udp",
+        "fallbackReason": "",
+        "connectedSeconds": 300.03,
+        "p50RttMs": 298.39,
+        "p99RttMs": 366.85,
+        "assertionsPassed": 8,
+        "assertionsTotal": 8,
+        "reason": "Required observations and rates verified",
+        "evidenceFile": "evidence-client-4.json",
+        "logFile": "unity-client-4.log"
+      },
+      {
+        "id": "Player5",
+        "index": 5,
+        "pid": 31856,
+        "exitCode": 0,
+        "status": "PASS",
+        "evidenceStatus": "PASS",
+        "selectedTransport": "Udp",
+        "fallbackReason": "",
+        "connectedSeconds": 300.03,
+        "p50RttMs": 233.39,
+        "p99RttMs": 333.49,
+        "assertionsPassed": 8,
+        "assertionsTotal": 8,
+        "reason": "Required observations and rates verified",
+        "evidenceFile": "evidence-client-5.json",
+        "logFile": "unity-client-5.log"
+      },
+      {
+        "id": "Player6",
+        "index": 6,
+        "pid": 9572,
+        "exitCode": 0,
+        "status": "PASS",
+        "evidenceStatus": "PASS",
+        "selectedTransport": "Udp",
+        "fallbackReason": "",
+        "connectedSeconds": 300.02,
+        "p50RttMs": 233.5,
+        "p99RttMs": 333.39,
+        "assertionsPassed": 8,
+        "assertionsTotal": 8,
+        "reason": "Required observations and rates verified",
+        "evidenceFile": "evidence-client-6.json",
+        "logFile": "unity-client-6.log"
+      }
+    ]
   },
-  "physicalTwoPc": "NOT_TESTED",
-  "excluded": [
-    "DRG-01",
-    "ART-06",
-    "Game-10"
-  ],
-  "cleanup": {
-    "kept": [
-      "current Windows build",
-      "done-closure-20261028/build rollback/reference",
-      "full release and deployed rollback release",
-      "all Mongo/outbox volumes",
-      "original four dev containers/images",
-      "GDD xlsx/artifacts and linked node_modules",
-      "source/meta/env/credentials",
-      "unfinished checkpoint/spec/plan"
-    ],
-    "deleted": [
+  "awsServer": {
+    "status": "PASS",
+    "reason": "Active-player tick/CPU/RAM thresholds satisfied",
+    "activeSamples": 60,
+    "tickAverageHz": 29.999666666666677,
+    "cpuPeakOneCorePercent": 14.39,
+    "memoryPercent": 24.81,
+    "droppedTicks": 0.0,
+    "memorySampling": "Sampled peak from bounded Docker stats collector plus final sample"
+  },
+  "awsAuto": {
+    "schemaVersion": 1,
+    "status": "PASS",
+    "endpoint": "https://junglemaze.duckdns.org",
+    "physicalDeviceCount": 1,
+    "startupStaggerMs": 100,
+    "checks": [
       {
-        "absent": true,
-        "bytes": 0,
-        "path": "D:\\Unity\\Lastaway\\.utmp\\phase2\\build"
+        "name": "HTTPS certificate and API health",
+        "status": "PASS"
       },
       {
-        "absent": true,
-        "bytes": 43040,
-        "path": "D:\\Unity\\Lastaway\\.utmp\\phase2\\unity-existing"
+        "name": "Room creation without JWT denied",
+        "status": "PASS"
       },
       {
-        "absent": true,
-        "bytes": 39203,
-        "path": "D:\\Unity\\Lastaway\\.utmp\\phase2\\unity-src"
+        "name": "Invalid JWT denied",
+        "status": "PASS"
       },
       {
-        "absent": true,
-        "bytes": 186340751,
-        "path": "D:\\Unity\\Lastaway\\.utmp\\online-20261024\\build"
+        "name": "Guest profile over HTTPS",
+        "status": "PASS"
       },
       {
-        "absent": true,
-        "bytes": 92261441,
-        "path": "D:\\Unity\\Lastaway\\Backend\\out\\aws-account-20261101\\delta.tar.gz"
+        "name": "Guest credential present",
+        "status": "PASS"
       },
       {
-        "absent": true,
-        "bytes": 80,
-        "path": "D:\\Unity\\Lastaway\\Backend\\out\\aws-account-20261101\\delta.tar.gz.sha256"
+        "name": "Guest cannot obtain game ticket",
+        "status": "PASS"
+      },
+      {
+        "name": "Guest cannot create rooms",
+        "status": "PASS"
+      },
+      {
+        "name": "Register test account",
+        "status": "PASS"
+      },
+      {
+        "name": "Login after verified registration",
+        "status": "PASS"
+      },
+      {
+        "name": "JWT creates room",
+        "status": "PASS"
+      },
+      {
+        "name": "Six character join code",
+        "status": "PASS"
+      },
+      {
+        "name": "Actual Windows players completed scenario",
+        "status": "PASS"
+      },
+      {
+        "name": "Auto selected WSS after deliberate UDP failure",
+        "status": "PASS"
       }
     ],
-    "bytesFreed": 278684515
+    "cleanupErrors": [],
+    "fallbackTest": "Unused UDP7779, same real WSS443 endpoint; no firewall changes"
   },
-  "legacyEvidence": [
-    "phase2-evidence.zip",
-    "online-evidence-20261025.zip"
-  ],
-  "runs": [
+  "clientMetrics": [
     {
-      "id": "local2-final",
-      "data": {
-        "status": "FAIL",
-        "scenarioId": "local2-accelerated",
-        "schemaVersion": 1,
-        "timestampUtc": "2026-11-01T08:28:01.8992382Z",
-        "reason": null,
-        "playerSha256": "04a137e8f3c105937a1cb13fc57300734117f5874292ee9c764bda7537d8aef2",
-        "playerFingerprint": "c722f2eeba0ed597dcd3adb62250c84167c5a91c1b1bfc646ea8a261e1fc0e96",
-        "clientCount": 2,
-        "passedCount": 0,
-        "physicalDeviceCount": 1,
-        "physicalTwoPc": "NOT_TESTED",
-        "clients": [
-          {
-            "id": "Player1",
-            "index": 1,
-            "pid": 41296,
-            "exitCode": -1073741819,
-            "status": "FAIL",
-            "evidenceStatus": "PASS",
-            "selectedTransport": "Wss",
-            "fallbackReason": "",
-            "connectedSeconds": 24.98,
-            "p50RttMs": 33.37,
-            "p99RttMs": 192.97,
-            "assertionsPassed": 0,
-            "assertionsTotal": 0,
-            "reason": "Player crashed or exited with error",
-            "evidenceFile": "evidence-client-1.json",
-            "logFile": "unity-client-1.log"
-          },
-          {
-            "id": "Player2",
-            "index": 2,
-            "pid": 42864,
-            "exitCode": -1073741819,
-            "status": "FAIL",
-            "evidenceStatus": "PASS",
-            "selectedTransport": "Udp",
-            "fallbackReason": "",
-            "connectedSeconds": 25.03,
-            "p50RttMs": 33.32,
-            "p99RttMs": 987.1,
-            "assertionsPassed": 0,
-            "assertionsTotal": 0,
-            "reason": "Player crashed or exited with error",
-            "evidenceFile": "evidence-client-2.json",
-            "logFile": "unity-client-2.log"
-          }
-        ]
-      }
+      "environment": "Local",
+      "client": "evidence-client-1",
+      "transport": "Wss",
+      "status": "PASS",
+      "seconds": 311.34564208984375,
+      "inputHz": 29.966532524392363,
+      "activeInputSeconds": 255.45164405554533,
+      "snapshotHz": 29.998846130205166,
+      "rttP50Ms": 33.3344,
+      "rttP95Ms": 33.5607,
+      "rttP99Ms": 33.9113,
+      "pongTimeouts": 0
     },
     {
-      "id": "local6-main",
-      "data": {
-        "status": "FAIL",
-        "scenarioId": "main6-smoke",
-        "schemaVersion": 1,
-        "timestampUtc": "2026-11-01T12:40:09.7794908Z",
-        "reason": null,
-        "playerSha256": "04a137e8f3c105937a1cb13fc57300734117f5874292ee9c764bda7537d8aef2",
-        "playerFingerprint": "2de4c99d3fb9a7960e2abb1682d8bc55e55d989ba7394a9b0e1fe94f26330d36",
-        "clientCount": 6,
-        "passedCount": 0,
-        "physicalDeviceCount": 1,
-        "physicalTwoPc": "NOT_TESTED",
-        "clients": [
-          {
-            "id": "Player1",
-            "index": 1,
-            "pid": 39884,
-            "exitCode": -1073741819,
-            "status": "FAIL",
-            "evidenceStatus": "PASS",
-            "selectedTransport": "Wss",
-            "fallbackReason": "",
-            "connectedSeconds": 300.01,
-            "p50RttMs": 33.34,
-            "p99RttMs": 45.47,
-            "assertionsPassed": 0,
-            "assertionsTotal": 0,
-            "reason": "Player crashed or exited with error",
-            "evidenceFile": "evidence-client-1.json",
-            "logFile": "unity-client-1.log"
-          },
-          {
-            "id": "Player2",
-            "index": 2,
-            "pid": 17884,
-            "exitCode": -1073741819,
-            "status": "FAIL",
-            "evidenceStatus": "PASS",
-            "selectedTransport": "Wss",
-            "fallbackReason": "",
-            "connectedSeconds": 300.02,
-            "p50RttMs": 33.34,
-            "p99RttMs": 45.69,
-            "assertionsPassed": 0,
-            "assertionsTotal": 0,
-            "reason": "Player crashed or exited with error",
-            "evidenceFile": "evidence-client-2.json",
-            "logFile": "unity-client-2.log"
-          },
-          {
-            "id": "Player3",
-            "index": 3,
-            "pid": 44196,
-            "exitCode": -1073741819,
-            "status": "FAIL",
-            "evidenceStatus": "PASS",
-            "selectedTransport": "Wss",
-            "fallbackReason": "",
-            "connectedSeconds": 300.02,
-            "p50RttMs": 33.32,
-            "p99RttMs": 46.64,
-            "assertionsPassed": 0,
-            "assertionsTotal": 0,
-            "reason": "Player crashed or exited with error",
-            "evidenceFile": "evidence-client-3.json",
-            "logFile": "unity-client-3.log"
-          },
-          {
-            "id": "Player4",
-            "index": 4,
-            "pid": 39728,
-            "exitCode": -1,
-            "status": "FAIL",
-            "evidenceStatus": "UNKNOWN",
-            "selectedTransport": null,
-            "fallbackReason": null,
-            "connectedSeconds": 0.0,
-            "p50RttMs": 0.0,
-            "p99RttMs": 0.0,
-            "assertionsPassed": 0,
-            "assertionsTotal": 0,
-            "reason": "Missing evidence after player exit/deadline",
-            "evidenceFile": "evidence-client-4.json",
-            "logFile": "unity-client-4.log"
-          },
-          {
-            "id": "Player5",
-            "index": 5,
-            "pid": 30144,
-            "exitCode": -1073741819,
-            "status": "FAIL",
-            "evidenceStatus": "PASS",
-            "selectedTransport": "Udp",
-            "fallbackReason": "",
-            "connectedSeconds": 300.01,
-            "p50RttMs": 33.35,
-            "p99RttMs": 66.7,
-            "assertionsPassed": 0,
-            "assertionsTotal": 0,
-            "reason": "Player crashed or exited with error",
-            "evidenceFile": "evidence-client-5.json",
-            "logFile": "unity-client-5.log"
-          },
-          {
-            "id": "Player6",
-            "index": 6,
-            "pid": 42260,
-            "exitCode": -1073741819,
-            "status": "FAIL",
-            "evidenceStatus": "PASS",
-            "selectedTransport": "Udp",
-            "fallbackReason": "",
-            "connectedSeconds": 300.01,
-            "p50RttMs": 33.35,
-            "p99RttMs": 66.66,
-            "assertionsPassed": 0,
-            "assertionsTotal": 0,
-            "reason": "Player crashed or exited with error",
-            "evidenceFile": "evidence-client-6.json",
-            "logFile": "unity-client-6.log"
-          }
-        ]
-      }
+      "environment": "Local",
+      "client": "evidence-client-2",
+      "transport": "Wss",
+      "status": "PASS",
+      "seconds": 309.44091796875,
+      "inputHz": 29.972858776464285,
+      "activeInputSeconds": 271.44557883776724,
+      "snapshotHz": 30.000746645569947,
+      "rttP50Ms": 33.3385,
+      "rttP95Ms": 33.5561,
+      "rttP99Ms": 33.9717,
+      "pongTimeouts": 0
     },
     {
-      "id": "local6-final",
-      "data": {
-        "status": "FAIL",
-        "scenarioId": "main6-smoke",
-        "schemaVersion": 1,
-        "timestampUtc": "2026-11-01T12:51:17.7742991Z",
-        "reason": null,
-        "playerSha256": "04a137e8f3c105937a1cb13fc57300734117f5874292ee9c764bda7537d8aef2",
-        "playerFingerprint": "b514a2b7af7da1d7b55f81770e508ca4f0463ed0d666cf4c653561f1cf9b8226",
-        "clientCount": 6,
-        "passedCount": 0,
-        "physicalDeviceCount": 1,
-        "physicalTwoPc": "NOT_TESTED",
-        "clients": [
-          {
-            "id": "Player1",
-            "index": 1,
-            "pid": 36788,
-            "exitCode": -1073741819,
-            "status": "FAIL",
-            "evidenceStatus": "FAIL",
-            "selectedTransport": "Udp",
-            "fallbackReason": "",
-            "connectedSeconds": 143.88,
-            "p50RttMs": 0.0,
-            "p99RttMs": 0.0,
-            "assertionsPassed": 0,
-            "assertionsTotal": 0,
-            "reason": "Player crashed or exited with error",
-            "evidenceFile": "evidence-client-1.json",
-            "logFile": "unity-client-1.log"
-          },
-          {
-            "id": "Player2",
-            "index": 2,
-            "pid": 46876,
-            "exitCode": -1073741819,
-            "status": "FAIL",
-            "evidenceStatus": "FAIL",
-            "selectedTransport": "Udp",
-            "fallbackReason": "",
-            "connectedSeconds": 144.92,
-            "p50RttMs": 0.0,
-            "p99RttMs": 0.0,
-            "assertionsPassed": 0,
-            "assertionsTotal": 0,
-            "reason": "Player crashed or exited with error",
-            "evidenceFile": "evidence-client-2.json",
-            "logFile": "unity-client-2.log"
-          },
-          {
-            "id": "Player3",
-            "index": 3,
-            "pid": 21224,
-            "exitCode": -1073741819,
-            "status": "FAIL",
-            "evidenceStatus": "FAIL",
-            "selectedTransport": "Udp",
-            "fallbackReason": "",
-            "connectedSeconds": 146.72,
-            "p50RttMs": 0.0,
-            "p99RttMs": 0.0,
-            "assertionsPassed": 0,
-            "assertionsTotal": 0,
-            "reason": "Player crashed or exited with error",
-            "evidenceFile": "evidence-client-3.json",
-            "logFile": "unity-client-3.log"
-          },
-          {
-            "id": "Player4",
-            "index": 4,
-            "pid": 19244,
-            "exitCode": -1073741819,
-            "status": "FAIL",
-            "evidenceStatus": "PASS",
-            "selectedTransport": "Udp",
-            "fallbackReason": "",
-            "connectedSeconds": 311.57,
-            "p50RttMs": 33.33,
-            "p99RttMs": 1203.8,
-            "assertionsPassed": 0,
-            "assertionsTotal": 0,
-            "reason": "Player crashed or exited with error",
-            "evidenceFile": "evidence-client-4.json",
-            "logFile": "unity-client-4.log"
-          },
-          {
-            "id": "Player5",
-            "index": 5,
-            "pid": 37944,
-            "exitCode": -1073741819,
-            "status": "FAIL",
-            "evidenceStatus": "PASS",
-            "selectedTransport": "Udp",
-            "fallbackReason": "",
-            "connectedSeconds": 311.26,
-            "p50RttMs": 33.36,
-            "p99RttMs": 1200.05,
-            "assertionsPassed": 0,
-            "assertionsTotal": 0,
-            "reason": "Player crashed or exited with error",
-            "evidenceFile": "evidence-client-5.json",
-            "logFile": "unity-client-5.log"
-          },
-          {
-            "id": "Player6",
-            "index": 6,
-            "pid": 48076,
-            "exitCode": -1073741819,
-            "status": "FAIL",
-            "evidenceStatus": "PASS",
-            "selectedTransport": "Udp",
-            "fallbackReason": "",
-            "connectedSeconds": 310.79,
-            "p50RttMs": 33.34,
-            "p99RttMs": 1055.8,
-            "assertionsPassed": 0,
-            "assertionsTotal": 0,
-            "reason": "Player crashed or exited with error",
-            "evidenceFile": "evidence-client-6.json",
-            "logFile": "unity-client-6.log"
-          }
-        ]
-      }
+      "environment": "Local",
+      "client": "evidence-client-3",
+      "transport": "Wss",
+      "status": "PASS",
+      "seconds": 307.5690612792969,
+      "inputHz": 29.95537797892108,
+      "activeInputSeconds": 181.5033014714718,
+      "snapshotHz": 29.997885602995943,
+      "rttP50Ms": 33.3421,
+      "rttP95Ms": 33.521,
+      "rttP99Ms": 34.1729,
+      "pongTimeouts": 0
+    },
+    {
+      "environment": "Local",
+      "client": "evidence-client-4",
+      "transport": "Udp",
+      "status": "PASS",
+      "seconds": 300.0125732421875,
+      "inputHz": 29.9457029865449,
+      "activeInputSeconds": 146.7990249544382,
+      "snapshotHz": 30.004243860861358,
+      "rttP50Ms": 33.3332,
+      "rttP95Ms": 33.7886,
+      "rttP99Ms": 67.059,
+      "pongTimeouts": 0
+    },
+    {
+      "environment": "Local",
+      "client": "evidence-client-5",
+      "transport": "Udp",
+      "status": "PASS",
+      "seconds": 300.03057861328125,
+      "inputHz": 29.46453600470049,
+      "activeInputSeconds": 14.016850627958775,
+      "snapshotHz": 30.00567807185094,
+      "rttP50Ms": 33.3199,
+      "rttP95Ms": 33.4665,
+      "rttP99Ms": 33.9468,
+      "pongTimeouts": 0
+    },
+    {
+      "environment": "Local",
+      "client": "evidence-client-6",
+      "transport": "Udp",
+      "status": "PASS",
+      "seconds": 300.0199279785156,
+      "inputHz": 29.950846171101,
+      "activeInputSeconds": 169.51107060536742,
+      "snapshotHz": 30.003149029335958,
+      "rttP50Ms": 33.3442,
+      "rttP95Ms": 34.0154,
+      "rttP99Ms": 66.6971,
+      "pongTimeouts": 0
+    },
+    {
+      "environment": "AWS",
+      "client": "evidence-client-1",
+      "transport": "Wss",
+      "status": "PASS",
+      "seconds": 300.00445556640625,
+      "inputHz": 29.98641962073034,
+      "activeInputSeconds": 21.376343294978142,
+      "snapshotHz": 30.000417941331158,
+      "rttP50Ms": 268.3885,
+      "rttP95Ms": 366.7252,
+      "rttP99Ms": 400.2646,
+      "pongTimeouts": 0
+    },
+    {
+      "environment": "AWS",
+      "client": "evidence-client-2",
+      "transport": "Wss",
+      "status": "PASS",
+      "seconds": 300.0157470703125,
+      "inputHz": 29.973138225745146,
+      "activeInputSeconds": 249.49005818739533,
+      "snapshotHz": 29.997087598785527,
+      "rttP50Ms": 234.0347,
+      "rttP95Ms": 333.4223,
+      "rttP99Ms": 400.0051,
+      "pongTimeouts": 0
+    },
+    {
+      "environment": "AWS",
+      "client": "evidence-client-3",
+      "transport": "Wss",
+      "status": "PASS",
+      "seconds": 300.0157775878906,
+      "inputHz": 29.96087178134622,
+      "activeInputSeconds": 198.62572903186083,
+      "snapshotHz": 29.99580677176499,
+      "rttP50Ms": 300.038,
+      "rttP95Ms": 400.1634,
+      "rttP99Ms": 534.0312,
+      "pongTimeouts": 0
+    },
+    {
+      "environment": "AWS",
+      "client": "evidence-client-4",
+      "transport": "Udp",
+      "status": "PASS",
+      "seconds": 300.0296936035156,
+      "inputHz": 29.99332499158786,
+      "activeInputSeconds": 193.70976714417338,
+      "snapshotHz": 29.949856259694826,
+      "rttP50Ms": 298.3947,
+      "rttP95Ms": 333.8541,
+      "rttP99Ms": 366.8538,
+      "pongTimeouts": 0
+    },
+    {
+      "environment": "AWS",
+      "client": "evidence-client-5",
+      "transport": "Udp",
+      "status": "PASS",
+      "seconds": 300.03057861328125,
+      "inputHz": 29.96399831380103,
+      "activeInputSeconds": 193.06502221152186,
+      "snapshotHz": 29.959247373349324,
+      "rttP50Ms": 233.3931,
+      "rttP95Ms": 332.9951,
+      "rttP99Ms": 333.488,
+      "pongTimeouts": 0
+    },
+    {
+      "environment": "AWS",
+      "client": "evidence-client-6",
+      "transport": "Udp",
+      "status": "PASS",
+      "seconds": 300.0180358886719,
+      "inputHz": 29.972551797592036,
+      "activeInputSeconds": 247.35965259373188,
+      "snapshotHz": 29.972760780813783,
+      "rttP50Ms": 233.501,
+      "rttP95Ms": 300.0406,
+      "rttP99Ms": 333.3886,
+      "pongTimeouts": 0
     }
-  ]
+  ],
+  "physicalTwoPc": "NOT_TESTED",
+  "nativeEngineUIAutomation": "BLOCKED: known UUM-146676 on15f1; no native patch implemented; ordinary latest13 gameplay clients all exit0",
+  "fullPvpLootAudioFlow": "NOT_TESTED end-to-end by two human players",
+  "awsRelease": "aws-account-20261102",
+  "releaseSha256": "f4603ef871003ba3f3c06ea584d1221dce9e71ae319b963f812ccaeddd425e77",
+  "awsFinalState": "Running confirmed",
+  "cleanup": {
+    "localDocker": "stopped, baseline compose restored, volumes retained",
+    "removedDockerImage": "junglemaze-api:aws-rooms-20261016",
+    "oldBuildCacheReclaimedBytes": 12460000,
+    "additionalImageCleanup": "REJECTED by automatic review; Nov1 AWS images retained"
+  },
+  "menuCleanup": {
+    "tests": "ClientConfigTests20/20 PASS",
+    "runtimeDropdown": "Verified five environments plus neutral prompt, no aliases or client.json",
+    "build": "Succeeded0errors231501964bytes",
+    "awsRetestedAfterMenuChange": false
+  }
 }

@@ -19,12 +19,15 @@ Chi tiết phạm vi và bằng chứng năm task nền tảng: [Unity_Foundatio
 
 ## 2. Đổi endpoint không cần build lại
 
-Client đọc JSON cùng schema với `Backend/NetSmokeClient/client.*.json`. Thứ tự ưu tiên, nguồn sau ghi đè nguồn trước:
+Mặc định khi mở game bình thường là **Online · AWS** (`phase2-aws`); endpoint Local/LAN đã lưu không tự được nạp lại. Chọn lại môi trường trong menu mỗi phiên, hoặc chỉ định `-profile phase2-local` / `-clientConfig <file>` khi chạy test. Xem hướng dẫn từng môi trường tại mục0.1 của [Phase2](Phase2_Match_Guest_Zone.vi.md).
+
+
+Client đọc JSON cùng schema với `Backend/NetSmokeClient/client.*.json`. Chọn file bằng `-clientConfig`, nếu không có thì dùng `-profile`, nếu không có cả hai thì dùng `phase2-aws`. Sau khi đọc file, áp biến môi trường rồi override endpoint từ dòng lệnh:
 
 | Nguồn | Khi nào dùng |
 | --- | --- |
-| `StreamingAssets/JungleMaze/client.<profile>.json` (`local`, `lan`, `online`, `aws`) | Mặc định đi theo build. Sửa trực tiếp trong thư mục `<Game>_Data/StreamingAssets` của bản build |
-| `persistentDataPath/client.json` | Tự tạo khi bấm **Lưu endpoint** hoặc khi vào phòng với host/port đã sửa trên menu. Windows: `%USERPROFILE%\AppData\LocalLow\DefaultCompany\Lastaway\client.json` |
+| `StreamingAssets/JungleMaze/client.<profile>.json` (`phase2-local`, `phase2-lan`, `phase2-vpn`, `phase2-selfhost`, `phase2-aws`) | AWS là mặc định khi mở thường. Sửa trực tiếp trong thư mục `<Game>_Data/StreamingAssets` của bản build |
+| `persistentDataPath/client.json` | Chỉ nạp khi chỉ định bằng `-clientConfig <đường dẫn>`. Tự tạo khi bấm **Lưu endpoint** hoặc khi vào phòng với host/port đã sửa trên menu. Windows: `%USERPROFILE%\AppData\LocalLow\DefaultCompany\Lastaway\client.json` |
 | Biến môi trường `NET_MODE`, `NET_GAME_SERVER_HOST`, `NET_GAME_SERVER_PORT`, `NET_API_BASE_URL` | Cùng tên với NetSmokeClient |
 | Dòng lệnh `-clientConfig <path>`, `-profile lan`, `-mode LAN`, `-host 192.168.1.20`, `-port 7777`, `-name P2` | Mở nhiều client trên một máy để test |
 

@@ -4,15 +4,18 @@ using JungleMaze.Domain.Lobby;
 namespace JungleMaze.App.Lobby
 {
     /// <summary>
-    /// Login/register for room management only (AC12, AC13, AC17). The JWT and its expiry live in this object and
-    /// nowhere else (Q6); the password field is cleared the moment it is sent, success or not. Joining never uses it
-    /// on the RoomCode profile (AC18).
+    /// Login/register for online play (AC12, AC13, AC17). The JWT and its expiry live in this object and nowhere
+    /// else (Q6); the password field is cleared the moment it is sent, success or not. Joining a network room now
+    /// needs a valid account token, while offline practice never uses this object. Every submit carries a request
+    /// generation: a callback that outlives <see cref="Logout"/>/<see cref="Expire"/> or a newer submit is dropped,
+    /// so a late answer never restores a token, never starts a follow-up login and never touches newer state.
     /// </summary>
     public sealed class AccountSession
     {
         private readonly IAccountApi _api;
         private readonly Func<DateTime> _utcNow;
         private AuthToken? _token;
+        private int _request;
 
         public AccountSession(IAccountApi api, Func<DateTime> utcNow)
         {
@@ -63,21 +66,25 @@ namespace JungleMaze.App.Lobby
             var user = Username.Trim();
             var pass = Password;
             Password = ""; // AC13: never kept after sending, even when the call fails
+            var request = ++_request;
             Busy = true;
             Message = "";
             if (RegisterMode)
                 _api.Register(user, pass, r =>
                 {
+                    if (request != _request) return; // logged out, expired or superseded: no follow-up login
                     if (!r.Ok) { Busy = false; Message = ApiMessages.For(ApiOp.Register, r); return; }
-                    _api.Login(user, pass, OnLogin);
+                    _api.Login(user, pass, t => OnLogin(t, request));
                 });
-            else _api.Login(user, pass, OnLogin);
+            else _api.Login(user, pass, r => OnLogin(r, request));
             return true;
         }
 
         /// <summary>401 or passed expiry: drop the token, ask again, never resend (AC17).</summary>
         public void Expire()
         {
+            _request++;
+            Busy = false;
             _token = null;
             Message = ApiMessages.SessionExpired;
             LoggedOut?.Invoke();
@@ -85,17 +92,25 @@ namespace JungleMaze.App.Lobby
 
         public void Logout()
         {
+            _request++;
+            Busy = false;
             _token = null;
             Message = "";
             LoggedOut?.Invoke();
         }
 
-        private void OnLogin(ApiResult<AuthToken> r)
+        private void OnLogin(ApiResult<AuthToken> r, int request)
         {
+            if (request != _request) return; // a stale answer never logs in nor touches newer state
             Busy = false;
             if (!r.Ok || string.IsNullOrEmpty(r.Value.AccessToken))
             {
                 Message = r.Ok ? ApiMessages.AccountUnreachable : ApiMessages.For(ApiOp.Login, r);
+                return;
+            }
+            if (_utcNow() >= r.Value.ExpiresAtUtc)
+            {
+                Message = ApiMessages.SessionExpired; // an already-expired token is not a session
                 return;
             }
             _token = r.Value;

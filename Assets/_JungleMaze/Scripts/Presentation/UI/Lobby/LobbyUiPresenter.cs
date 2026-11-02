@@ -547,25 +547,37 @@ namespace JungleMaze.Presentation.UI.Lobby
                 m.Profile.gameObject.SetActive(false);
                 return;
             }
+            var profiles = _menu.Profiles;
+            var labels = new System.Collections.Generic.List<string> { "Chọn môi trường…" };
+            foreach (var profile in profiles)
+                labels.Add(ProfileLabel(profile));
             m.Profile.ClearOptions();
-            m.Profile.AddOptions(new System.Collections.Generic.List<string>(_menu.Profiles));
-            var current = System.Array.FindIndex(_menu.Profiles, name => _menu.ConfigSource == "profile:" + name);
-            if (current < 0) // a saved client.json or command line: name it instead of showing the first profile
-            {
-                m.Profile.AddOptions(new System.Collections.Generic.List<string> { "Đang dùng: " + _menu.ConfigSource });
-                current = m.Profile.options.Count - 1;
-            }
-            m.Profile.SetValueWithoutNotify(current); // QA m-a: show the profile in use, not the first one
+            m.Profile.AddOptions(labels);
+            var current = System.Array.FindIndex(profiles, name => _menu.ConfigSource == "profile:" + name);
+            m.Profile.SetValueWithoutNotify(current + 1);
             m.Host.SetTextWithoutNotify(_menu.Host ?? "");
             m.Port.SetTextWithoutNotify(_menu.Port ?? "");
             m.Api.SetTextWithoutNotify(_menu.ApiBaseUrl ?? "");
         }
 
+        private static string ProfileLabel(string profile)
+        {
+            switch (profile)
+            {
+                case "phase2-local": return "Local · Docker";
+                case "phase2-lan": return "LAN · cùng mạng";
+                case "phase2-vpn": return "VPN · tự host";
+                case "phase2-selfhost": return "Internet · tự host";
+                case "phase2-aws": return "Online · AWS";
+                default: return profile;
+            }
+        }
+
         private void SelectProfile(int index)
         {
             var profiles = _menu.Profiles;
-            if (index < 0 || index >= profiles.Length) return;
-            _menu.SelectProfile(profiles[index]);
+            if (index <= 0 || index > profiles.Length) return;
+            _menu.SelectProfile(profiles[index - 1]);
             FillEndpointFields();
         }
 
