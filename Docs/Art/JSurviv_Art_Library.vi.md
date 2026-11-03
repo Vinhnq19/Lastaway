@@ -78,6 +78,17 @@ Vũ khí và trang bị 2024 được nhận diện theo tên folder có số th
 
 **Kiểm chứng:** EditMode 919 test (918 pass; `RoomMapTests.BothPublishedMapsActivate…` fail sẵn, chỉ đọc `Backend/Shared/GameData` + `StreamingAssets`, không liên quan), PlayMode 133/133 pass, chạy Game offline và chụp ảnh đối chiếu trước/sau.
 
+### Chum, ổ gai, cửa đá (04/11/2026)
+
+| Kind | GDD | Art | Ghi chú |
+| --- | --- | --- | --- |
+| Pot (6) | Chum gốm 1×1 | `Art/LevelEditor/Cainos/Prefab/Props/PF Props - Pot 01` (chum đất nung) | Bộ JSurviv không có chum gốm; Cainos đã có trong project cho LevelEditor. Mảnh vỡ giữ `Mảnh sành điệu` |
+| Poison (10) | Ổ gai 1×1, gây độc | Hồng dại đột biến, 8 frame (`BIG_WILD_ROSE.idle`) | Thay bẫy thợ săn tạm |
+| Door (12) | Cửa đá 1×2, mở/đóng theo chu kỳ | `Cửa đá/stone_door.aseprite` 15 frame: mở 0→7, đóng 7→14, 0.07 s/frame | Thay cửa của bộ 2024; khi mở vẫn mờ 25% như logic cũ |
+| Lava (9), Portal (11) | | Giữ art 2025 sẵn có | Đã đúng tỉ lệ |
+
+Nguồn nằm trong `WorldDemoBuild` (`JungleArt`, `StoneDoorFrames`); dựng lại bằng **Build World Visual Assets**. Kiểm chứng: ảnh cận cảnh từng vật trong Game, EditMode 943/944 pass (`RoomMapTests` fail sẵn), PlayMode 133/133 pass.
+
 ### Tấn công và vũ khí cầm tay
 
 - **Animation tấn công:** `HeroVisualSet` có thêm loop `attack` back/side/front. `HeroSpriteAnimator.PlayAttack()` chạy một lần theo hướng hiện tại, rồi quay về idle/move. `CombatWeaponPresenter` gọi hàm này khi local dự đoán đòn (`AttackPredicted`) và khi server xác nhận đòn của người khác (`RemoteAttackConfirmed`).
@@ -122,7 +133,7 @@ Vũ khí và trang bị 2024 được nhận diện theo tên folder có số th
   - Client cũ chỉ đếm frame này là invalid rồi bỏ qua (không ngắt kết nối). Server cũ không gửi packet này.
   - Kiểm chứng: `WorldNetworkChecks` 24/24 pass, có check mới: nhặt chuối, chọn, client khác thấy mã 15 kèm BANANA. Các bộ check backend còn lại đều pass. Unity EditMode 943/944 pass (`RoomMapTests` fail sẵn), PlayMode 133/133 pass.
 - World object chưa Y-sort với hero. `map_demo` có rương nằm trong footprint của tượng nên vẽ đè lên tượng.
-- Pot, Lava, Portal, Door, Poison, Supply vẫn dùng art cũ.
+- Supply (trứng rồng) vẫn là art tạm.
 
 ## Kế hoạch thay thế
 
