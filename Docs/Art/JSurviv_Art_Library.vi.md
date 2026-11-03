@@ -104,8 +104,19 @@ Vũ khí và trang bị 2024 được nhận diện theo tên folder có số th
 - `CoverProbeProjectile` giờ luôn xoay theo hướng bay. Trước đây tracer 0.18×0.08 luôn nằm ngang dù bắn hướng nào. `SetLook/ResetLook` chỉ đổi hình, không đổi sweep va chạm. Pool trả về hình tracer gốc khi despawn.
 - Kiểm chứng: EditMode 935 test, 934 pass (`RoomMapTests` fail sẵn). PlayMode 133 test, 132 pass: `Switch20In5s…` fail do thời gian khi editor không focus, chạy lại pass. Ảnh playtest bắn đủ 4 vũ khí qua `SpawnAttackVisual`.
 
+### Vũ khí đang cầm của người chơi khác
+
+- **Protocol:** server ghi mã vũ khí đang cầm vào 4 bit cao (4–7) đang trống của `PlayerStatePacket.Flags`. Kích thước gói (19 byte) và `MatchProtocol.Version` (2) giữ nguyên. Các giá trị: 0 = không rõ (server cũ), 1..10 = `CombatWeaponId` + 1, 15 = đang cầm item không có combat id (đồ ném, đồ đặc biệt). API: `SetHeldWeapon`, `SetHeldOther`, `HeldCode`, `TryGetHeldWeapon`.
+- **Server:** `MatchRuntime.WriteHeldWeapon` chỉ ghép mã vào gói lúc gửi; `entity.Flags` dùng cho replay/killfeed không bị dính bit. Có world map thì lấy từ inventory (`World.TryGetHeld`), không có thì lấy từ `CombatService.HeldWeapon`.
+- **Client:** `PlayerSnapshot.HeldCode` → `PlayerView` gọi `HeldWeaponView.ShowServerCode` mỗi khi mã đổi. Mã 0 thì giữ cách cũ, tức hiện vũ khí của đòn đánh gần nhất, nên client mới chơi với server cũ vẫn ổn. Client cũ bỏ qua 4 bit này.
+- **Kiểm chứng:**
+  - `GameplayNetworkChecks` 18/18 qua UDP/WS thật, có 2 check mới: người khác thấy attacker tay không, rồi thấy RubberGun sau khi trang bị.
+  - Các bộ check còn lại (Combat, Match, MatchResult, World, WorldNetwork, Inventory, Network, DualTransport, MapCatalog, Telemetry) đều pass. `NetworkChecks` có 1 lần fail ở check nhịp 30 Hz khi máy đang chạy test Unity song song, chạy lại 144/144 pass.
+  - Unity EditMode 941 test: 940 pass (`RoomMapTests` fail sẵn). PlayMode 133/133 pass.
+- **Deploy:** server trên AWS phải deploy lại thì người chơi online mới thấy vũ khí của nhau. Trước khi deploy, client mới vẫn chơi bình thường với server cũ.
+
 **Còn lại:**
-- Người chơi khác chỉ đổi vũ khí cầm tay khi tấn công; muốn hiện ngay thì snapshot cần gửi vũ khí đang cầm.
+- Đồ ném và đồ đặc biệt (chuối, bom khói, chuông, gậy sahur…) chỉ có mã chung 15, nên người khác thấy tay trống. Muốn hiện đúng thì cần thêm bảng item id ổn định dùng chung, hoặc thêm 1 byte (sẽ phải nâng `MatchProtocol.Version`).
 - World object chưa Y-sort với hero. `map_demo` có rương nằm trong footprint của tượng nên vẽ đè lên tượng.
 - Pot, Lava, Portal, Door, Poison, Supply vẫn dùng art cũ.
 
