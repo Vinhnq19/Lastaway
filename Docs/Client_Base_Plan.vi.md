@@ -334,7 +334,8 @@ Tất cả là `struct` implement `INetSerializable`, chỉ dùng kiểu cố đ
 | Packet | Trường | Ghi chú |
 | --- | --- | --- |
 | `PlayerInputPacket` | `uint Tick`, `ushort InputSeq`, `sbyte MoveX`, `sbyte MoveY` (lượng tử −127..127), `short AimAngle` (độ ×100 hoặc 0..65535), `byte Buttons` (bitmask: Attack, Interact, Reload, Dash...) | ~11 byte payload. `InputSeq` dùng cho reconcile sau này |
-| `PlayerStatePacket` | `uint Tick`, `byte NetId`, `float X`, `float Y`, `short Rotation`, `ushort LastProcessedInputSeq`, `byte Hp`, `byte Flags` (bit 0-3: dead, invulnerable, attacking, dashing; bit 4-7: mã vũ khí đang cầm, 0 = không rõ, 1..10 = `CombatWeaponId`+1, 15 = item không có combat id) | Bản đầu một player một packet; sau gom thành snapshot nhiều entity |
+| `PlayerStatePacket` | `uint Tick`, `byte NetId`, `float X`, `float Y`, `short Rotation`, `ushort LastProcessedInputSeq`, `byte Hp`, `byte Flags` (bit 0-3: dead, invulnerable, attacking, dashing; bit 4-7: mã vũ khí đang cầm, 0 = không rõ, 1..10 = `CombatWeaponId`+1, 15 = item không có combat id, xem `HeldItemsPacket`) | Bản đầu một player một packet; sau gom thành snapshot nhiều entity |
+| `HeldItemsPacket` | `Guid MatchId`, `uint Tick`, `byte Count`, tối đa 10 × (`byte NetId`, `string ItemId`) | Server → room, ReliableOrdered, frame riêng; gửi khi đồ đang cầm đổi và lặp lại mỗi 60 tick. Danh sách đầy đủ: NetId vắng mặt = không cầm item đặc biệt. Peer cũ bỏ frame, không cần nâng version |
 | `EventPacket` | `uint Tick`, `byte EventType`, `byte SourceNetId`, `byte TargetNetId`, `int Param1`, `int Param2` | Dạng chung cho MatchStart/Hit/Death/ItemPickup. Event cần dữ liệu riêng thì tách packet riêng |
 
 **Điểm cần quyết với server:** hiện `JoinAccepted` trả `PlayerId` dạng **string**. Packet gameplay không nên mang string (tốn byte và cấp phát). Đề xuất server gán thêm `byte NetId` (chỉ số slot 0..9) và gửi kèm trong `JoinAccepted` của protocol v2.

@@ -115,8 +115,12 @@ Vũ khí và trang bị 2024 được nhận diện theo tên folder có số th
   - Unity EditMode 941 test: 940 pass (`RoomMapTests` fail sẵn). PlayMode 133/133 pass.
 - **Deploy:** server trên AWS phải deploy lại thì người chơi online mới thấy vũ khí của nhau. Trước khi deploy, client mới vẫn chơi bình thường với server cũ.
 
-**Còn lại:**
-- Đồ ném và đồ đặc biệt (chuối, bom khói, chuông, gậy sahur…) chỉ có mã chung 15, nên người khác thấy tay trống. Muốn hiện đúng thì cần thêm bảng item id ổn định dùng chung, hoặc thêm 1 byte (sẽ phải nâng `MatchProtocol.Version`).
+- **Đồ ném và đồ đặc biệt:**
+  - Snapshot vẫn để mã 15. Item id thật đi trong `HeldItemsPacket`: ReliableOrdered, frame riêng, gửi khi đồ đang cầm đổi và lặp lại mỗi 60 tick (2 s) cho người vào sau.
+  - `MatchSession` chỉ áp danh sách cho người chơi đã có trong snapshot, bỏ qua danh sách cũ hơn hoặc của trận khác. Người vắng mặt trong danh sách thì xóa.
+  - `PlayerView` gặp mã 15 thì hiện item trong `PlayerModel.HeldItemId`. Chưa nhận được danh sách thì ẩn tay.
+  - Client cũ chỉ đếm frame này là invalid rồi bỏ qua (không ngắt kết nối). Server cũ không gửi packet này.
+  - Kiểm chứng: `WorldNetworkChecks` 24/24 pass, có check mới: nhặt chuối, chọn, client khác thấy mã 15 kèm BANANA. Các bộ check backend còn lại đều pass. Unity EditMode 943/944 pass (`RoomMapTests` fail sẵn), PlayMode 133/133 pass.
 - World object chưa Y-sort với hero. `map_demo` có rương nằm trong footprint của tượng nên vẽ đè lên tượng.
 - Pot, Lava, Portal, Door, Poison, Supply vẫn dùng art cũ.
 
