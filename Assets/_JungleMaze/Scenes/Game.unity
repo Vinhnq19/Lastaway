@@ -146,7 +146,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.035555556, y: 0.035555556, z: 1}
+  m_LocalScale: {x: 1, y: 0.25, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2921162822530368229}
@@ -200,12 +200,12 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 3421638360734764489, guid: e4e2483e878b2f24faf9fe89381f52ab, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a4c791d98d1af5b4c8a1ddabf0fdd3f0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 28.125, y: 28.125}
+  m_DrawMode: 2
+  m_Size: {x: 1, y: 4}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -281,8 +281,8 @@ Transform:
   m_GameObject: {fileID: 848772288}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5625, y: 0.78125, z: 1}
+  m_LocalPosition: {x: 0, y: -0.5, z: 0}
+  m_LocalScale: {x: 1.5094341, y: 1.5094341, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4731403308723573255}
@@ -336,7 +336,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: b058f60fede58844c8207e61d7fc47e3, type: 3}
+  m_Sprite: {fileID: 3044524228441471248, guid: a4704ed9e9f998a41b1630420074c673, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1210,8 +1210,8 @@ Transform:
   m_GameObject: {fileID: 1406553975}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.035555556, y: 0.035555556, z: 1}
+  m_LocalPosition: {x: -0.008474569, y: -0.5338983, z: 0}
+  m_LocalScale: {x: 1.6949153, y: 0.84745765, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5685333572351651288}
@@ -1265,7 +1265,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 1164744560329520030, guid: e4e2483e878b2f24faf9fe89381f52ab, type: 3}
+  m_Sprite: {fileID: 2835147341013550457, guid: d1d9429727bde16468cd425aabd75d38, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1301,8 +1301,8 @@ Transform:
   m_GameObject: {fileID: 1446013631}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5625, y: 1.5625, z: 1}
+  m_LocalPosition: {x: -0.007936501, y: -0.515873, z: 0}
+  m_LocalScale: {x: 1.5873016, y: 1.5873016, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6292319544127039858}
@@ -1356,7 +1356,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: 7f085d8d25c86e64781760936da60fa1, type: 3}
+  m_Sprite: {fileID: -6261621603163303434, guid: fde85cd55088d664b84ad2f9be005085, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1611,7 +1611,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6366bc83003255540a59eab2446b644e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: JungleMaze.Presentation::JungleMaze.Presentation.World.MapGridView
-  groundSprite: {fileID: 21300000, guid: 20cdb8d7b869b0d4fb5ed22da4d9ebed, type: 3}
+  groundSprite: {fileID: 21300000, guid: 6b81daced5be06b41af66bbc1c0d0125, type: 3}
+  wallSprite: {fileID: 21300000, guid: a4c791d98d1af5b4c8a1ddabf0fdd3f0, type: 3}
 --- !u!4 &2072242980
 Transform:
   m_ObjectHideFlags: 0

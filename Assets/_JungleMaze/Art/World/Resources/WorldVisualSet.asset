@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: JungleMaze.Presentation::JungleMaze.Presentation.World.Phase2.WorldVisualSet
   Entries:
   - Kind: 5
-    Sprite: {fileID: -5801566434257123781, guid: 38d40510924267845aed576e9f4e4e78, type: 3}
+    Sprite: {fileID: 3573113493505397520, guid: ab7106feba6886946a6f2b72058c7bfb, type: 3}
     BrokenSprite: {fileID: 0}
     Idle:
       Sprites: []
@@ -31,7 +31,7 @@ MonoBehaviour:
       Times: []
       Duration: 0
       Loop: 0
-    Source: Assets/Imported/JSurviv/Prefabs/Destructibles/CHEST1.prefab
+    Source: "Assets/_JungleMaze/Art/JSurviv/World/Obstacles/Sprites/01. R\u01B0\u01A1ng/chest.aseprite"
   - Kind: 6
     Sprite: {fileID: 21300000, guid: 7d5801e42ffb74c4aacde06e42cf1d7c, type: 3}
     BrokenSprite: {fileID: 21300000, guid: 3d5daae75f1d5dc409b3e5765ed4ae57, type: 3}
@@ -52,7 +52,7 @@ MonoBehaviour:
       Loop: 0
     Source: "Assets/Imported/JSurviv/Prefabs/Destructibles/B\xECnh Hoa.prefab"
   - Kind: 7
-    Sprite: {fileID: 2726743452636938855, guid: d3f0ece6db5fdfd4f847819f573d4a8b, type: 3}
+    Sprite: {fileID: -1280696506768504347, guid: a374cfa64a2ec084ca6aa6641978cece, type: 3}
     BrokenSprite: {fileID: 0}
     Idle:
       Sprites: []
@@ -69,25 +69,16 @@ MonoBehaviour:
       Times: []
       Duration: 0
       Loop: 0
-    Source: Assets/Imported/JSurviv/Prefabs/Obstacles/CanGoThrough/Bush.prefab
+    Source: "Assets/_JungleMaze/Art/JSurviv/World/Obstacles/Sprites/19. B\u1EE5i
+      c\xE2y/bush1.aseprite"
   - Kind: 8
-    Sprite: {fileID: -309623231551762633, guid: 03bc83c85164b5149b7c40aaf5acd91b, type: 3}
+    Sprite: {fileID: 9073102424355309539, guid: c6ab9c3079bc7d14bb670240ced3d6af, type: 3}
     BrokenSprite: {fileID: 0}
     Idle:
-      Sprites:
-      - {fileID: -309623231551762633, guid: 03bc83c85164b5149b7c40aaf5acd91b, type: 3}
-      - {fileID: -8383224671308069845, guid: 03bc83c85164b5149b7c40aaf5acd91b, type: 3}
-      - {fileID: -5419280627500341452, guid: 03bc83c85164b5149b7c40aaf5acd91b, type: 3}
-      - {fileID: 2804511359988579887, guid: 03bc83c85164b5149b7c40aaf5acd91b, type: 3}
-      - {fileID: -309623231551762633, guid: 03bc83c85164b5149b7c40aaf5acd91b, type: 3}
-      Times:
-      - 0
-      - 0.31666666
-      - 0.6
-      - 0.8666667
-      - 1.1333333
-      Duration: 1.15
-      Loop: 1
+      Sprites: []
+      Times: []
+      Duration: 0
+      Loop: 0
     Open:
       Sprites: []
       Times: []
@@ -98,7 +89,8 @@ MonoBehaviour:
       Times: []
       Duration: 0
       Loop: 0
-    Source: Assets/Imported/JSurviv/Prefabs/Obstacles/CanGoThrough/POND.prefab
+    Source: "Assets/_JungleMaze/Art/JSurviv/World/Obstacles/Sprites/\u0110\u1EA7m
+      l\u1EA7y/swamp2.aseprite"
   - Kind: 9
     Sprite: {fileID: 6673312695985084743, guid: 2e59f2e6c394ffb45bd008a537eb460e, type: 3}
     BrokenSprite: {fileID: 0}
@@ -215,7 +207,8 @@ MonoBehaviour:
       - 1.4
       Duration: 1.6
       Loop: 0
-    Source: "Assets/_JungleMaze/Art/JSurviv/Legacy2024/Obstacles/T\xE0n t\xEDch b\u1ECF hoang/Abandoned_door_idle/open/close.anim"
+    Source: "Assets/_JungleMaze/Art/JSurviv/Legacy2024/Obstacles/T\xE0n t\xEDch b\u1ECF
+      hoang/Abandoned_door_idle/open/close.anim"
   - Kind: 10
     Sprite: {fileID: 1966274907916846902, guid: 6829ca3cf4a181f4d9497cdfa590e31b, type: 3}
     BrokenSprite: {fileID: 0}
@@ -255,7 +248,7 @@ MonoBehaviour:
       Loop: 0
     Source: Assets/Imported/JSurviv/Prefabs/Destructibles/DragonEgg.prefab
   - Kind: 1
-    Sprite: {fileID: 1164744560329520030, guid: e4e2483e878b2f24faf9fe89381f52ab, type: 3}
+    Sprite: {fileID: 2835147341013550457, guid: d1d9429727bde16468cd425aabd75d38, type: 3}
     BrokenSprite: {fileID: 0}
     Idle:
       Sprites: []
@@ -272,9 +265,9 @@ MonoBehaviour:
       Times: []
       Duration: 0
       Loop: 0
-    Source: "Assets/_JungleMaze/Art/JSurviv/Legacy2024/Obstacles/T\xE0n t\xEDch b\u1ECF hoang/abandoned.png"
+    Source: Assets/_JungleMaze/Art/JSurviv/World/Obstacles/Sprites/obsidan/obsidian.aseprite
   - Kind: 2
-    Sprite: {fileID: 3421638360734764489, guid: e4e2483e878b2f24faf9fe89381f52ab, type: 3}
+    Sprite: {fileID: 21300000, guid: a4c791d98d1af5b4c8a1ddabf0fdd3f0, type: 3}
     BrokenSprite: {fileID: 0}
     Idle:
       Sprites: []
@@ -291,9 +284,9 @@ MonoBehaviour:
       Times: []
       Duration: 0
       Loop: 0
-    Source: "Assets/_JungleMaze/Art/JSurviv/Legacy2024/Obstacles/T\xE0n t\xEDch b\u1ECF hoang/abandoned.png"
+    Source: Assets/_JungleMaze/Art/World/Terrain/WallBlock16.png
   - Kind: 3
-    Sprite: {fileID: 21300000, guid: 7f085d8d25c86e64781760936da60fa1, type: 3}
+    Sprite: {fileID: -6261621603163303434, guid: fde85cd55088d664b84ad2f9be005085, type: 3}
     BrokenSprite: {fileID: 0}
     Idle:
       Sprites: []
@@ -310,9 +303,10 @@ MonoBehaviour:
       Times: []
       Duration: 0
       Loop: 0
-    Source: "Assets/_JungleMaze/Art/JSurviv/Legacy2024/Obstacles/05. \u0110\xE1 to h\u01A1n/stone_4_1.png"
+    Source: "Assets/_JungleMaze/Art/JSurviv/World/Obstacles/Sprites/10. \u0110\xE1
+      l\u1EDBn/bigstone.aseprite"
   - Kind: 4
-    Sprite: {fileID: 21300000, guid: b058f60fede58844c8207e61d7fc47e3, type: 3}
+    Sprite: {fileID: 3044524228441471248, guid: a4704ed9e9f998a41b1630420074c673, type: 3}
     BrokenSprite: {fileID: 0}
     Idle:
       Sprites: []
@@ -329,4 +323,4 @@ MonoBehaviour:
       Times: []
       Duration: 0
       Loop: 0
-    Source: "Assets/_JungleMaze/Art/JSurviv/Legacy2024/Obstacles/19. T\u01B0\u1EE3ng \u0111\xE0i/t\u01B0\u1EE3ng.png"
+    Source: "Assets/_JungleMaze/Art/JSurviv/World/Obstacles/Sprites/22. T\u01B0\u1EE3ng/statue.aseprite"

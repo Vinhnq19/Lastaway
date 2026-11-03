@@ -7,6 +7,7 @@ using JungleMaze.App.Ports;
 using JungleMaze.App.World;
 using JungleMaze.Core.DI;
 using JungleMaze.Presentation.Player;
+using JungleMaze.Presentation.UI.Hud;
 using JungleMaze.World.Inventory;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -26,6 +27,7 @@ namespace JungleMaze.Presentation.World.Phase2
         private OfflineMatchSession _offlineMatch;
         private GameFlow _flow;
         private Transform _hero;
+        private IItemIconProvider _icons;
 
         [SerializeField] private WorldVisualSet visuals;
         private Transform _root;
@@ -48,6 +50,10 @@ namespace JungleMaze.Presentation.World.Phase2
             _menu = menu;
             _catalog = catalog;
         }
+
+        /// <summary>Ground item icons; the HUD's normalized catalog, never raw JSurviv art.</summary>
+        [Inject]
+        public void ConfigureIcons(IItemIconProvider icons) => _icons = icons;
 
         [Inject]
         public void ConfigureOffline(OfflineWorldSession offlineWorld, OfflineMatchSession offlineMatch, GameFlow flow)
@@ -248,7 +254,7 @@ namespace JungleMaze.Presentation.World.Phase2
             var dynamicStates = new List<WorldObjectWire>();
             foreach (var state in sourceObjects) if (!isOffline || state.Kind > 4) dynamicStates.Add(state);
             var states = dynamicStates.ToArray();
-            ApplyViews(states, _root, _views, _visuals, _square);
+            ApplyViews(states, _root, _views, _visuals, _square, _icons);
             ApplyCollision(states);
         }
 
@@ -275,7 +281,8 @@ namespace JungleMaze.Presentation.World.Phase2
             foreach (var id in gone) { if (_colliders[id] != null) Destroy(_colliders[id].gameObject); _colliders.Remove(id); }
         }
 
-        public static void ApplyViews(WorldObjectWire[] states, Transform root, Dictionary<ushort, WorldObjectView> views, WorldVisualSet set, Sprite fallback)
+        /// <param name="icons">Optional: ground items (kind 100) show their item icon instead of the blank marker.</param>
+        public static void ApplyViews(WorldObjectWire[] states, Transform root, Dictionary<ushort, WorldObjectView> views, WorldVisualSet set, Sprite fallback, IItemIconProvider icons = null)
         {
             var seen = new HashSet<ushort>();
             foreach (var s in states)
@@ -289,7 +296,9 @@ namespace JungleMaze.Presentation.World.Phase2
                     view.Configure(set);
                     views.Add(s.Id, view);
                 }
-                view.Apply(s, set != null ? set.Find(s.Kind) ?? fallback : fallback);
+                var icon = s.Kind == 100 && icons != null && !string.IsNullOrEmpty(s.ItemId) ? icons.GetIcon(s.ItemId) : null;
+                if (icon != null) view.Apply(s, icon, true);
+                else view.Apply(s, set != null ? set.Find(s.Kind) ?? fallback : fallback);
             }
             var gone = new List<ushort>();
             foreach (var entry in views) if (!seen.Contains(entry.Key)) gone.Add(entry.Key);

@@ -74,8 +74,8 @@ namespace JungleMaze.EditorTools
                 var path=paths[i].Length==0?"":"Assets/Imported/JSurviv/Prefabs/"+paths[i]+".prefab";
                 var source=AssetDatabase.LoadAssetAtPath<GameObject>(path);var sprite=source!=null?source.GetComponentInChildren<SpriteRenderer>(true):null;
                 var entry=new WorldVisualSet.Entry{Kind=kinds[i],Sprite=sprite!=null?sprite.sprite:null,Source=path};
+                if(JungleArt.TryGetValue(kinds[i],out var jungle)){var art=LoadSprite(jungle.path,jungle.name);if(art!=null){entry.Sprite=art;entry.Source=jungle.path;}}
                 var animationRoot="Assets/_JungleMaze/Art/JSurviv/World/Obstacles/Animations/";
-                if(kinds[i]==WorldObjectKind.Swamp)entry.Idle=ExtractFrames(animationRoot+"POND/POND.idle.anim",true);
                 if(kinds[i]==WorldObjectKind.Lava)entry.Idle=ExtractFrames(animationRoot+"LAVA/LAVA.idle.anim",true);
                 if(kinds[i]==WorldObjectKind.Portal)entry.Idle=ExtractFrames(animationRoot+"PORTAL/PORTAL.idle.anim",true);
                 if(kinds[i]==WorldObjectKind.Door)
@@ -120,22 +120,39 @@ namespace JungleMaze.EditorTools
             foreach(var entry in set.Entries)if((byte)entry.Kind>4)entries.Add(entry);
             entries.AddRange(MapCoverVisuals());set.Entries=entries.ToArray();EditorUtility.SetDirty(set);AssetDatabase.SaveAssetIfDirty(set);
         }
+        private const string JungleObstacles = "Assets/_JungleMaze/Art/JSurviv/World/Obstacles/Sprites/";
+        /// <summary>Jungle 2025 art per world kind (whole-object Aseprite sprites, Point filtered). Kinds not listed keep their prefab source.</summary>
+        private static readonly Dictionary<WorldObjectKind,(string path,string name)> JungleArt=new Dictionary<WorldObjectKind,(string,string)>
+        {
+            {WorldObjectKind.Chest,(JungleObstacles+"01. Rương/chest.aseprite","Frame_0")},
+            {WorldObjectKind.Bush,(JungleObstacles+"19. Bụi cây/bush1.aseprite","bush1")},
+            {WorldObjectKind.Swamp,(JungleObstacles+"Đầm lầy/swamp2.aseprite","swamp2")},
+            {WorldObjectKind.Pillar,(JungleObstacles+"obsidan/obsidian.aseprite","obsidian")},
+            {WorldObjectKind.Wall,("Assets/_JungleMaze/Art/World/Terrain/WallBlock16.png","")},
+            {WorldObjectKind.Rock,(JungleObstacles+"10. Đá lớn/bigstone.aseprite","bigstone")},
+            {WorldObjectKind.Statue,(JungleObstacles+"22. Tượng/statue.aseprite","statue")},
+        };
+        private const string GroundPath = "Assets/_JungleMaze/Art/World/Terrain/GroundGrass48.png";
+
+        private static Sprite LoadSprite(string path,string name)
+        {
+            foreach(var asset in AssetDatabase.LoadAllAssetsAtPath(path))if(asset is Sprite candidate&&(name.Length==0||candidate.name==name))return candidate;
+            return null;
+        }
+
         private static WorldVisualSet.Entry[] MapCoverVisuals()
         {
             var result=new List<WorldVisualSet.Entry>();
-            var kinds=new[]{WorldObjectKind.Pillar,WorldObjectKind.Wall,WorldObjectKind.Rock,WorldObjectKind.Statue};
-            var guids=new[]{"e4e2483e878b2f24faf9fe89381f52ab","e4e2483e878b2f24faf9fe89381f52ab","7f085d8d25c86e64781760936da60fa1","b058f60fede58844c8207e61d7fc47e3"};
-            var names=new[]{"abandoned_1","abandoned_0","",""};
-            for(var i=0;i<kinds.Length;i++)
+            foreach(var kind in new[]{WorldObjectKind.Pillar,WorldObjectKind.Wall,WorldObjectKind.Rock,WorldObjectKind.Statue})
             {
-                var path=AssetDatabase.GUIDToAssetPath(guids[i]);Sprite sprite=null;
-                foreach(var asset in AssetDatabase.LoadAllAssetsAtPath(path))if(asset is Sprite candidate&&(names[i].Length==0||candidate.name==names[i])){sprite=candidate;break;}
-                if(sprite==null)throw new System.InvalidOperationException("Missing map cover sprite: "+path);
-                result.Add(new WorldVisualSet.Entry{Kind=kinds[i],Sprite=sprite,Source=path});
+                var art=JungleArt[kind];var sprite=LoadSprite(art.path,art.name);
+                if(sprite==null)throw new System.InvalidOperationException("Missing map cover sprite: "+art.path);
+                result.Add(new WorldVisualSet.Entry{Kind=kind,Sprite=sprite,Source=art.path});
             }
             return result.ToArray();
         }
-        private static WorldVisualSet.Frames ExtractFrames(string path,bool loop)
+        /// <summary>Sprite keyframes of a clip's first SpriteRenderer.m_Sprite curve; null when the clip or curve is missing.</summary>
+        internal static WorldVisualSet.Frames ExtractFrames(string path,bool loop)
         {
             var clip=AssetDatabase.LoadAssetAtPath<AnimationClip>(path);if(clip==null)return null;
             foreach(var binding in AnimationUtility.GetObjectReferenceCurveBindings(clip))
@@ -182,51 +199,36 @@ namespace JungleMaze.EditorTools
 
         public static void ApplyStaticMapVisualsToScene(Scene scene)
         {
-            var groundSprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/_JungleMaze/Art/Foundation/Ground96.png");
-            if (groundSprite != null)
-            {
-                foreach (var root in scene.GetRootGameObjects())
-                {
-                    var gridView = root.GetComponentInChildren<MapGridView>(true);
-                    if (gridView != null)
-                    {
-                        var so = new SerializedObject(gridView);
-                        var prop = so.FindProperty("groundSprite");
-                        if (prop != null)
-                        {
-                            prop.objectReferenceValue = groundSprite;
-                            so.ApplyModifiedProperties();
-                            EditorUtility.SetDirty(gridView);
-                        }
-                    }
-                }
-            }
-
-            var pillarSprite = FindSprite("Assets/_JungleMaze/Art/JSurviv/Legacy2024/Obstacles/Tàn tích bỏ hoang/abandoned.png", "abandoned_1");
-            var wallSprite = FindSprite("Assets/_JungleMaze/Art/JSurviv/Legacy2024/Obstacles/Tàn tích bỏ hoang/abandoned.png", "abandoned_0");
-            var statueSprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/_JungleMaze/Art/JSurviv/Legacy2024/Obstacles/19. Tượng đài/tượng.png");
-            var rockSprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/_JungleMaze/Art/JSurviv/Legacy2024/Obstacles/05. Đá to hơn/stone_4_1.png");
-
+            var groundSprite = AssetDatabase.LoadAssetAtPath<Sprite>(GroundPath);
+            var wallArt = JungleArt[WorldObjectKind.Wall];
+            var boundarySprite = LoadSprite(wallArt.path, wallArt.name);
             foreach (var root in scene.GetRootGameObjects())
             {
-                ApplyCoverVisualIfMatching(root, "AncientPillar", pillarSprite);
-                ApplyCoverVisualIfMatching(root, "CityWall", wallSprite);
-                ApplyCoverVisualIfMatching(root, "AncientStatue", statueSprite);
-                ApplyCoverVisualIfMatching(root, "BoulderRock", rockSprite);
+                var gridView = root.GetComponentInChildren<MapGridView>(true);
+                if (gridView == null) continue;
+                var so = new SerializedObject(gridView);
+                if (groundSprite != null) so.FindProperty("groundSprite").objectReferenceValue = groundSprite;
+                if (boundarySprite != null) so.FindProperty("wallSprite").objectReferenceValue = boundarySprite;
+                so.ApplyModifiedProperties();
+                EditorUtility.SetDirty(gridView);
             }
-        }
 
-        private static Sprite FindSprite(string texturePath, string spriteName)
-        {
-            var assets = AssetDatabase.LoadAllAssetsAtPath(texturePath);
-            foreach (var asset in assets)
+            Sprite Cover(WorldObjectKind kind) { var art = JungleArt[kind]; return LoadSprite(art.path, art.name); }
+            foreach (var root in scene.GetRootGameObjects())
             {
-                if (asset is Sprite s && s.name == spriteName) return s;
+                ApplyCoverVisualIfMatching(root, "AncientPillar", Cover(WorldObjectKind.Pillar), false);
+                ApplyCoverVisualIfMatching(root, "CityWall", Cover(WorldObjectKind.Wall), true);
+                ApplyCoverVisualIfMatching(root, "AncientStatue", Cover(WorldObjectKind.Statue), false);
+                ApplyCoverVisualIfMatching(root, "BoulderRock", Cover(WorldObjectKind.Rock), false);
             }
-            return AssetDatabase.LoadAssetAtPath<Sprite>(texturePath);
         }
 
-        private static void ApplyCoverVisualIfMatching(GameObject obj, string targetName, Sprite sprite)
+        /// <summary>
+        /// Fits art to an authored cover without distortion. The root may be scaled unevenly (1×4 wall), so the child
+        /// cancels that scale: tiled art covers the footprint 1:1, other art keeps its aspect, spans the footprint width
+        /// and stands on the footprint's bottom edge.
+        /// </summary>
+        private static void ApplyCoverVisualIfMatching(GameObject obj, string targetName, Sprite sprite, bool tiled)
         {
             if (sprite == null) return;
             foreach (var renderer in obj.GetComponentsInChildren<SpriteRenderer>(true))
@@ -254,10 +256,24 @@ namespace JungleMaze.EditorTools
                 view.sharedMaterial = renderer.sharedMaterial;
                 view.sortingLayerID = renderer.sortingLayerID;
                 view.sortingOrder = renderer.sortingOrder;
-                var scale = new Vector2(collider.size.x / sprite.bounds.size.x, collider.size.y / sprite.bounds.size.y);
-                visual.localScale = new Vector3(scale.x, scale.y, 1);
-                visual.localPosition = new Vector3(collider.offset.x - sprite.bounds.center.x * scale.x,
-                    collider.offset.y - sprite.bounds.center.y * scale.y, 0);
+                var parent = go.transform.lossyScale;
+                var footprint = new Vector2(collider.size.x * Mathf.Abs(parent.x), collider.size.y * Mathf.Abs(parent.y));
+                var bottom = collider.offset.y - collider.size.y * .5f;
+                if (tiled)
+                {
+                    view.drawMode = SpriteDrawMode.Tiled;
+                    view.size = footprint;
+                    visual.localScale = new Vector3(1f / parent.x, 1f / parent.y, 1);
+                    visual.localPosition = new Vector3(collider.offset.x, collider.offset.y, 0);
+                }
+                else
+                {
+                    view.drawMode = SpriteDrawMode.Simple;
+                    var k = Mathf.Min(footprint.x / sprite.bounds.size.x, footprint.y * WorldObjectView.MaxRise / sprite.bounds.size.y);
+                    visual.localScale = new Vector3(k / parent.x, k / parent.y, 1);
+                    visual.localPosition = new Vector3(collider.offset.x - sprite.bounds.center.x * k / parent.x,
+                        bottom - sprite.bounds.min.y * k / parent.y, 0);
+                }
                 renderer.enabled = false;
                 EditorUtility.SetDirty(renderer);
                 EditorUtility.SetDirty(view);
