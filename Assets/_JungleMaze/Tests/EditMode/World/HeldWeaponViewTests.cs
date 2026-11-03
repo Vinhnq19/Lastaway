@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using JungleBackend.Protocol.Gameplay;
 using JungleMaze.Presentation.Combat;
 using JungleMaze.Presentation.Player;
 using JungleMaze.Presentation.World.Phase2;
@@ -121,6 +122,44 @@ namespace JungleMaze.Tests.World
             _body.enabled = false;
             _held.Apply();
             Assert.IsFalse(_held.Visible);
+        }
+
+        [Test]
+        public void ServerCodeDrivesRemoteHands_UnknownLeavesTheLastAttackInPlace()
+        {
+            _held.ShowServerCode((byte)(CombatWeaponId.Axe + 1));
+            _held.Apply();
+            Assert.AreEqual("AXE", _held.ItemId);
+            Assert.IsTrue(_held.Visible);
+
+            _held.ShowServerCode(PlayerStatePacket.HeldUnknown);
+            Assert.AreEqual("AXE", _held.ItemId, "older servers send 0: keep what the attack showed");
+
+            _held.ShowServerCode(PlayerStatePacket.HeldOther);
+            _held.Apply();
+            Assert.IsFalse(_held.Visible, "an item without combat art hides the hand");
+
+            _held.ShowServerCode((byte)(CombatWeaponId.Hand + 1));
+            _held.Apply();
+            Assert.AreEqual("HAND", _held.ItemId);
+            Assert.IsFalse(_held.Visible);
+        }
+
+        [Test]
+        public void RemotePlayerViewFollowsTheSnapshotHeldWeapon()
+        {
+            var view = _root.AddComponent<PlayerView>();
+            var so = new SerializedObject(view);
+            so.FindProperty("heldWeapon").objectReferenceValue = _held;
+            so.ApplyModifiedPropertiesWithoutUndo();
+            var model = new JungleMaze.Domain.Player.PlayerModel(4);
+            model.Apply(new JungleMaze.Domain.Player.PlayerSnapshot { Tick = 1, Hp = 100, HeldCode = (byte)(CombatWeaponId.Axe + 1) });
+            view.Bind(model);
+            Assert.AreEqual("AXE", _held.ItemId);
+
+            model.Apply(new JungleMaze.Domain.Player.PlayerSnapshot { Tick = 2, Hp = 100, HeldCode = PlayerStatePacket.HeldOther });
+            view.Bind(model);
+            Assert.IsNull(_held.ItemId);
         }
 
         private Sprite Art(int w, int h, float ppu)

@@ -176,7 +176,7 @@ namespace JungleMaze.App.Match
                 var state = packet.GetPlayer(i); seen |= (ushort)(1 << state.NetId);
                 var model = new PlayerSnapshot { Tick = packet.ServerTick, X = state.X, Y = state.Y,
                     RotationDegrees = state.RotationDegrees, Hp = state.Hp, IsDead = state.IsDead,
-                    LastProcessedInputSeq = state.LastProcessedInputSeq };
+                    LastProcessedInputSeq = state.LastProcessedInputSeq, HeldCode = state.HeldCode };
                 if (state.NetId == OwnNetId) Prediction.Reconcile(model);
                 if (_players.GetOrAdd(state.NetId).Apply(model)) _bus.Publish(new PlayerStateUpdated(state.NetId));
             }

@@ -1,6 +1,7 @@
 using JungleMaze.App.Ports;
 using JungleMaze.Core.Pooling;
 using JungleMaze.Domain.Player;
+using JungleMaze.Presentation.Combat;
 using JungleMaze.Presentation.Rendering;
 using UnityEngine;
 
@@ -16,6 +17,9 @@ namespace JungleMaze.Presentation.Player
     {
         [SerializeField] private SpriteRenderer body;
         [SerializeField] private float followSharpness = 15f;
+        /// <summary>In-hand weapon that follows the server's held-weapon code; found among the children when empty.</summary>
+        [SerializeField] private HeldWeaponView heldWeapon;
+        private int _appliedHeldCode = -1;
 
         private PlayerModel _model;
         private IPlayerPoseSource _poses;
@@ -49,22 +53,43 @@ namespace JungleMaze.Presentation.Player
             Refresh();
         }
 
-        private void Awake() => TryGetComponent(out _depth); // tùy chọn, xem DepthSortable
+        private void Awake()
+        {
+            TryGetComponent(out _depth); // tùy chọn, xem DepthSortable
+            if (heldWeapon == null) heldWeapon = GetComponentInChildren<HeldWeaponView>(true);
+        }
 
-        public void OnSpawned() => _snapNext = true;
+        public void OnSpawned()
+        {
+            _snapNext = true;
+            _appliedHeldCode = -1;
+        }
 
         public void OnDespawned()
         {
             _model = null;
             _poses = null;
+            _appliedHeldCode = -1;
+            if (heldWeapon != null) heldWeapon.Show(null);
         }
 
         // LateUpdate: prediction/interpolation đã được tick trong Update của frame này.
         private void LateUpdate() => Refresh();
 
+        /// <summary>Applies the latest snapshot's held-weapon code once per change.</summary>
+        private void SyncHeldWeapon()
+        {
+            if (heldWeapon == null || !_model.HasState) return;
+            var code = _model.Current.HeldCode;
+            if (code == _appliedHeldCode) return;
+            _appliedHeldCode = code;
+            heldWeapon.ShowServerCode(code);
+        }
+
         private void Refresh()
         {
             if (_model == null) return;
+            SyncHeldWeapon();
             if (_poses != null && _poses.TryGetPose(_model.NetId, out var pose))
             {
                 // Pose đã mượt sẵn: đặt thẳng, không làm mượt thêm (sẽ cộng độ trễ).

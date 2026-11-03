@@ -1,3 +1,5 @@
+using JungleBackend.Protocol.Gameplay;
+using JungleMaze.App.Combat;
 using JungleMaze.App.Hud.State;
 using JungleMaze.Core.DI;
 using JungleMaze.Domain.Hud;
@@ -10,7 +12,8 @@ namespace JungleMaze.Presentation.Combat
     /// Draws the weapon in the hero's hand: at reach along the aim, rotated with it, mirrored when aiming left and
     /// behind the body when the hero faces away. Hidden for bare hands, while dead, and during a melee swing (the
     /// swing visual draws the weapon then). Ranged and thrown attacks kick it back briefly. Presentation only.
-    /// The local hero follows <see cref="IHudState.HeldWeapon"/>; remote players show what they last attacked with.
+    /// The local hero follows <see cref="IHudState.HeldWeapon"/>; remote players follow the server snapshot
+    /// (<see cref="ShowServerCode"/>), falling back to what they last attacked with on servers that do not send it.
     /// </summary>
     [DisallowMultipleComponent]
     public sealed class HeldWeaponView : MonoBehaviour
@@ -69,6 +72,17 @@ namespace JungleMaze.Presentation.Combat
             t.localRotation = Quaternion.Euler(0f, 0f, _entry.AngleOffset);
             t.localPosition = -(Vector3)(t.localRotation * (Vector3)(_entry.GripLocal * scale));
             Apply();
+        }
+
+        /// <summary>
+        /// Follows the server's held-weapon code for a remote player: 0 (older server) changes nothing, so the last
+        /// attack keeps driving the hand; 15 (an item with no combat art) hides it; 1..10 holds that combat weapon.
+        /// </summary>
+        public void ShowServerCode(byte code)
+        {
+            if (code == PlayerStatePacket.HeldUnknown) return;
+            if (PlayerStatePacket.TryDecodeHeld(code, out var weapon)) Show(CombatWeaponIds.ToJsonId(weapon));
+            else Show(null);
         }
 
         /// <summary>Melee: hide while the swing visual draws the weapon. Otherwise: a short recoil.</summary>

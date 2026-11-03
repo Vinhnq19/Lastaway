@@ -9,6 +9,8 @@ namespace JungleMaze.Domain.Player
         public byte Hp;
         public bool IsDead;
         public ushort LastProcessedInputSeq;
+        /// <summary>Held weapon code from the server: 0 unknown, 1..10 combat weapon + 1, 15 a non-combat item.</summary>
+        public byte HeldCode;
     }
 
     /// <summary>Model phía client của một người chơi. Server authoritative: client chỉ áp snapshot mới hơn.</summary>
