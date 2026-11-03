@@ -18,20 +18,20 @@ namespace JungleMaze.LevelEditor
         };
 
         private const string Help =
-            "Chuột trái: đặt (chế độ Đặt) / chọn + kéo (chế độ Chọn)\n" +
+            "Mọi vật đặt theo ô. Chuột trái: đặt (chế độ Đặt) / chọn + kéo (chế độ Chọn)\n" +
             "Chuột phải: xóa vật thể dưới con trỏ\n" +
-            "Lăn chuột: to/nhỏ bút hoặc vật đang chọn\n" +
-            "Shift: lật ngang (sx = -1)   R: xoay 90°\n" +
+            "P: cọ đường đá (giữ trái tô, giữ phải xoá)\n" +
+            "Shift: lật ngang bút hoặc vật đang chọn\n" +
+            "Lăn chuột, +/-: phóng to / thu nhỏ\n" +
             "Alt + kéo chuột trái: di chuyển camera (hoặc giữ chuột giữa, WASD)\n" +
-            "Alt + lăn chuột, +/-: phóng to / thu nhỏ\n" +
             "Q/Esc: về chế độ Chọn   Del: xóa vật đang chọn\n" +
-            "Mũi tên: dịch vật đang chọn 0.1   G: snap 0.5\n" +
+            "Mũi tên: dịch vật đang chọn 1 ô\n" +
             "Ctrl+Z / Ctrl+Y: hoàn tác / làm lại   Ctrl+S: lưu\n" +
-            "Ctrl+D: nhân bản vật đang chọn   F: xem toàn map   H: viền";
+            "Ctrl+D: nhân bản   F: xem toàn map   H: viền + collider chân   L: lưới";
 
         private Rect _topRect, _leftRect, _rightRect, _bottomRect;
         private Vector2 _leftScroll, _rightScroll;
-        private string _widthText, _heightText, _versionText;
+        private string _widthText, _heightText, _versionText, _seedText;
         private string _path = "";
         private string _status = "";
         private string _validation;
@@ -64,6 +64,7 @@ namespace JungleMaze.LevelEditor
             _widthText = _doc.Width.ToString();
             _heightText = _doc.Height.ToString();
             _versionText = _doc.Version;
+            _seedText = _doc.Seed.ToString();
         }
 
         private void SetStatus(string message) => _status = message;
@@ -131,9 +132,9 @@ namespace JungleMaze.LevelEditor
             GUI.enabled = true;
             GUILayout.Space(10);
             if (GUILayout.Button("Kiểm tra", GUILayout.Width(75))) Defer(RunValidation);
-            _snap = GUILayout.Toggle(_snap, " Snap 0.5", GUILayout.Width(80));
             var outlines = GUILayout.Toggle(_showOutlines, " Viền", GUILayout.Width(55));
             if (outlines != _showOutlines) Defer(() => { _showOutlines = outlines; RefreshHighlights(); });
+            _showGrid = GUILayout.Toggle(_showGrid, " Lưới", GUILayout.Width(55));
             if (GUILayout.Button("Xem toàn map", GUILayout.Width(100))) Defer(FrameMap);
             GUILayout.FlexibleSpace();
             var name = string.IsNullOrEmpty(_path) ? "(chưa lưu)" : Path.GetFileName(_path);
@@ -150,7 +151,7 @@ namespace JungleMaze.LevelEditor
             GUILayout.BeginArea(new Rect(_leftRect.x + 6, _leftRect.y + 6, _leftRect.width - 12, _leftRect.height - 12));
             GUILayout.BeginHorizontal();
             if (GUILayout.Toggle(_tool == Tool.Select, "Chọn (Q)", GUI.skin.button)) { if (_tool != Tool.Select) Defer(() => SetTool(Tool.Select, null)); }
-            GUILayout.Label(_tool == Tool.Place ? "Đang: Đặt" : "Đang: Chọn", _small);
+            if (GUILayout.Toggle(_tool == Tool.Path, "Đường đá (P)", GUI.skin.button)) { if (_tool != Tool.Path) Defer(() => SetTool(Tool.Path, null)); }
             GUILayout.EndHorizontal();
             _leftScroll = GUILayout.BeginScrollView(_leftScroll);
             foreach (var (group, title) in PaletteGroups)
@@ -162,7 +163,7 @@ namespace JungleMaze.LevelEditor
                     if (item == null || item.Group != group) continue;
                     var active = _tool == Tool.Place && _brush == item;
                     var count = _doc.Count(item.Group, item.Group == LevelItemGroup.Spawn ? null : item.Id);
-                    var label = $"{item.DisplayName}  <size=10>{item.BaseSize.x:0.#}×{item.BaseSize.y:0.#} · {count}</size>";
+                    var label = $"{item.DisplayName}  <size=10>{item.Footprint.x}×{item.Footprint.y} ô · {count}</size>";
                     GUILayout.BeginHorizontal();
                     var iconRect = GUILayoutUtility.GetRect(26, 26, GUILayout.Width(26), GUILayout.Height(26));
                     DrawIcon(iconRect, item);
@@ -173,7 +174,7 @@ namespace JungleMaze.LevelEditor
                         {
                             if (active) { SetTool(Tool.Select, null); return; }
                             SetTool(Tool.Place, picked);
-                            SetStatus($"Đặt {picked.DisplayName}: chuột trái đặt, lăn đổi kích thước, Shift lật, R xoay.");
+                            SetStatus($"Đặt {picked.DisplayName}: click vào ô để đặt, Shift lật ngang.");
                         });
                     }
                     GUILayout.EndHorizontal();
@@ -181,7 +182,7 @@ namespace JungleMaze.LevelEditor
             }
             GUILayout.EndScrollView();
             // Luôn đúng hai nhãn để số control không đổi giữa các lượt vẽ.
-            GUILayout.Label(_brush != null ? $"Bút: ×{_brushScale:0.##} · {_brushRotation * 90}°" + (_brushFlip ? " · lật" : "") : "", _header);
+            GUILayout.Label(_brush != null ? $"Bút: {_brush.Footprint.x}×{_brush.Footprint.y} ô" + (_brushFlip ? " · lật" : "") : _tool == Tool.Path ? "Cọ đường đá" : "", _header);
             GUILayout.Label(_brush != null ? _brush.Note ?? "" : _tooltip, _small);
             GUILayout.EndArea();
         }
@@ -224,21 +225,19 @@ namespace JungleMaze.LevelEditor
             var version = GUILayout.TextField(_versionText, 32);
             if (version != _versionText) { _versionText = version; Defer(() => { RecordHistory(); _doc.Version = version; MarkDirty(); }); }
             GUILayout.EndHorizontal();
-            if (catalog.GroundTiles.Length > 1)
-            {
-                GUILayout.Label("Ground tile", _small);
-                GUILayout.BeginHorizontal();
-                for (var i = 0; i < catalog.GroundTiles.Length; i++)
-                {
-                    var tile = catalog.GroundTiles[i];
-                    if (GUILayout.Toggle(_doc.GroundTile == i, tile != null ? tile.name : "?", GUI.skin.button) && _doc.GroundTile != i)
-                    {
-                        var index = i;
-                        Defer(() => { RecordHistory(); _doc.GroundTile = index; MarkDirty(); GenerateGround(); });
-                    }
-                }
-                GUILayout.EndHorizontal();
-            }
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(new GUIContent("Seed", "Sinh cỏ/hoa, viền đường đá, tường mép và mẫu hình bụi/bình. Cùng seed = cùng map."), GUILayout.Width(36));
+            _seedText = GUILayout.TextField(_seedText, 11, GUILayout.Width(90));
+            if (GUILayout.Button("Áp dụng")) Defer(ApplySeedText);
+            if (GUILayout.Button("Ngẫu nhiên")) Defer(() => { SetSeed(UnityEngine.Random.Range(1, 1000000)); SyncMapFields(); });
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+            GUILayout.Label($"Cỏ rải {_doc.Decor:0.00}", GUILayout.Width(80));
+            var decor = GUILayout.HorizontalSlider(_doc.Decor, 0f, .5f);
+            if (Mathf.Abs(decor - _doc.Decor) > .005f) Defer(() => SetDecor(decor));
+            if (Event.current.type == EventType.MouseUp) _decorRecorded = false;
+            GUILayout.EndHorizontal();
+            GUILayout.Label($"Đường đá: {_doc.Path.Count} ô", _small);
 
             GUILayout.Space(8);
             DrawSelection();
@@ -282,20 +281,10 @@ namespace JungleMaze.LevelEditor
             var p = _doc.Placements[_selected];
             var type = catalog.Find(p.Type);
             GUILayout.Label($"{(type != null ? type.DisplayName : p.Type)}  <size=10>({p.Type})</size>", _wrap);
-            GUILayout.Label($"Tâm ({p.X:0.###}, {p.Y:0.###}) · footprint {p.Width:0.##}×{p.Height:0.##}", _small);
-            if (p.Group != LevelItemGroup.Spawn)
-            {
-                GUILayout.BeginHorizontal();
-                GUILayout.Label($"Kích thước ×{p.Scale:0.##}", GUILayout.Width(110));
-                if (GUILayout.Button("−")) Defer(() => ScaleActive(1f / WheelScaleStep));
-                if (GUILayout.Button("+")) Defer(() => ScaleActive(WheelScaleStep));
-                if (GUILayout.Button("1:1")) Defer(() => { RecordHistory(); p.Scale = 1f; MarkDirty(); RefreshView(_selected); });
-                GUILayout.EndHorizontal();
-                GUILayout.BeginHorizontal();
-                if (GUILayout.Button($"Xoay ({p.Rotation * 90}°)")) Defer(RotateActive);
-                if (GUILayout.Button(p.FlipX ? "Lật: sx = -1" : "Lật: sx = 1")) Defer(FlipActive);
-                GUILayout.EndHorizontal();
-            }
+            GUILayout.Label(p.OnGrid
+                ? $"Ô ({p.CellX}, {p.CellY}) · {p.Width:0}×{p.Height:0} ô" + (p.Group == LevelItemGroup.Cover ? $" · {CountColliders(p)} collider chân" : "")
+                : $"<color=#FF9EFF>Lệch ô</color> (map cũ) tâm ({p.X:0.##}, {p.Y:0.##}) · {p.Width:0.##}×{p.Height:0.##}. Kéo hoặc dịch để đưa vào ô.", _small);
+            if (p.Group != LevelItemGroup.Spawn && GUILayout.Button(p.FlipX ? "Lật ngang: bật (Shift)" : "Lật ngang: tắt (Shift)")) Defer(FlipActive);
             if (p.IsPortal)
             {
                 GUILayout.BeginHorizontal();
@@ -313,9 +302,8 @@ namespace JungleMaze.LevelEditor
         private void DrawStatusBar()
         {
             GUI.Box(_bottomRect, GUIContent.none);
-            var mode = _tool == Tool.Place && _brush != null ? $"Đặt: {_brush.DisplayName}" : "Chọn";
-            var text = $"{mode}   |   ({_mouseWorld.x:0.00}, {_mouseWorld.y:0.00})   |   Map {_doc.Width}×{_doc.Height}" +
-                       (_snap ? "   |   Snap 0.5" : "") + "   |   " + _status;
+            var mode = _tool == Tool.Path ? "Đường đá" : _tool == Tool.Place && _brush != null ? $"Đặt: {_brush.DisplayName}" : "Chọn";
+            var text = $"{mode}   |   Ô ({_mouseCell.x}, {_mouseCell.y})   |   Map {_doc.Width}×{_doc.Height} · seed {_doc.Seed}   |   " + _status;
             GUI.Label(new Rect(8, _bottomRect.y + 4, _bottomRect.width - 16, BottomHeight - 6), text);
         }
 
@@ -373,6 +361,7 @@ namespace JungleMaze.LevelEditor
             h = Mathf.Clamp(h, LevelDocument.MinMapSize, LevelDocument.MaxMapSize);
             _widthText = w.ToString();
             _heightText = h.ToString();
+            ApplySeedText();
             if (w == _doc.Width && h == _doc.Height) { GenerateGround(); return; }
             RecordHistory();
             _doc.Width = w;
@@ -384,6 +373,15 @@ namespace JungleMaze.LevelEditor
             foreach (var p in _doc.Placements) if (p.X > w || p.Y > h) outside++;
             SetStatus($"Ground {w}×{h}." + (outside > 0 ? $" {outside} vật thể nằm ngoài map mới." : "") + (w != h ? " Lưu ý: game chỉ nhận map vuông." : ""));
         }
+
+        private void ApplySeedText()
+        {
+            if (int.TryParse(_seedText, out var seed)) SetSeed(seed);
+            else SetStatus("Seed phải là số nguyên.");
+            _seedText = _doc.Seed.ToString();
+        }
+
+        private static int CountColliders(LevelPlacement p) => p.Colliders != null && p.Colliders.Length > 0 ? p.Colliders.Length : 1;
 
         private void OpenWithDialog()
         {
@@ -399,12 +397,18 @@ namespace JungleMaze.LevelEditor
         {
             try
             {
-                var document = LevelDocument.FromJson(File.ReadAllText(path), catalog.BaseSizeOf);
+                var document = ParseDocument(File.ReadAllText(path));
                 var unknown = new HashSet<string>();
-                foreach (var p in document.Placements) if (catalog.Find(p.Type) == null) unknown.Add(p.Type);
+                var offGrid = 0;
+                foreach (var p in document.Placements)
+                {
+                    if (catalog.Find(p.Type) == null) unknown.Add(p.Type);
+                    if (!p.OnGrid) offGrid++;
+                }
                 _path = Path.GetFullPath(path);
                 ReplaceDocument(document);
                 SetStatus($"Đã mở {Path.GetFileName(path)}: {document.Placements.Count} vật thể." +
+                          (offGrid > 0 ? $" {offGrid} vật lệch ô (giữ nguyên tới khi kéo)." : "") +
                           (unknown.Count > 0 ? " Loại không có trong catalog: " + string.Join(", ", unknown) : ""));
             }
             catch (Exception e) when (e is IOException || e is UnauthorizedAccessException || e is FormatException ||
