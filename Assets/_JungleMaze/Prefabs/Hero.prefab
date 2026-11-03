@@ -162,6 +162,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6333116455387424350}
   - component: {fileID: 9030781189361835718}
+  - component: {fileID: 899812505089332105}
   m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
@@ -179,7 +180,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.8, y: 0.8, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6622091488143811520}
@@ -233,7 +234,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 7883213599954190473, guid: 625d60e35ea210c4c82f3eee1095db12, type: 3}
+  m_Sprite: {fileID: 6518368477050014531, guid: 572a9610b89414341b7498e160254345, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -243,3 +244,18 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &899812505089332105
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1934432215760104708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50244847149c52941b1b2edea8fc5059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JungleMaze.Presentation::JungleMaze.Presentation.Player.HeroSpriteAnimator
+  visuals: {fileID: 11400000, guid: 05794daac3c06454c8791eeb58b3c4bc, type: 2}
+  heroIndex: 0
+  moveThreshold: 0.25

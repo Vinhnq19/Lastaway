@@ -10,6 +10,7 @@ namespace JungleMaze.Presentation.Player
     /// Hiển thị một người chơi (không đọc packet). Vị trí lấy từ <see cref="IPlayerPoseSource"/>: prediction cho nhân vật
     /// của mình (MOV-02), interpolation cho người khác (MOV-03). Chưa có pose thì đặt thẳng theo snapshot mới nhất.
     /// Được lấy từ pool nên reset trạng thái trong OnSpawned/OnDespawned.
+    /// Body có <see cref="HeroSpriteAnimator"/> thì mỗi NetId nhận một hero riêng (không tô màu, animator giữ scale).
     /// </summary>
     public sealed class PlayerView : MonoBehaviour, IPoolable
     {
@@ -29,6 +30,12 @@ namespace JungleMaze.Presentation.Player
             _model = model;
             _poses = poses;
             _snapNext = true;
+            if (body != null && body.TryGetComponent<HeroSpriteAnimator>(out var hero) && hero.enabled)
+            {
+                body.color = Color.white;
+                hero.SetHero(model.NetId);
+                if (hero.HasVisuals) { Refresh(); return; }
+            }
             if (body != null)
             {
                 body.color = Color.HSVToRGB(model.NetId * 0.1f % 1f, 0.6f, 1f);
