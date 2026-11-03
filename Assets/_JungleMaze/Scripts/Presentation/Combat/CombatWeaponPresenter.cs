@@ -36,6 +36,12 @@ namespace JungleMaze.Presentation.Combat
         [SerializeField] private MeleeSwingVisual swingPrefab;
         /// <summary>Index = CombatWeaponId. Entry 0 (Hand) may stay empty; weapon sprites are read from these prefabs.</summary>
         [SerializeField] private GameObject[] weaponPrefabs = new GameObject[CombatWeaponIds.Count];
+        /// <summary>Remote bodies to animate on confirmed attacks; found in the scene when left empty.</summary>
+        [SerializeField] private RemotePlayerSpawner remotePlayers;
+
+        private HeroSpriteAnimator _heroAnimator;
+        private HeldWeaponView _heroWeapon;
+        private HeldWeaponCatalog _heldCatalog;
 
         private IBalanceConfigProvider _balance;
         private IPoolService _pool;
@@ -89,6 +95,10 @@ namespace JungleMaze.Presentation.Combat
             }
             _projectiles = new PooledPrefabFactory<CoverProbeProjectile>(_pool, projectilePrefab, 16);
             _swings = new PooledPrefabFactory<MeleeSwingVisual>(_pool, swingPrefab, 4);
+            _heroAnimator = hero.GetComponentInChildren<HeroSpriteAnimator>(true);
+            _heroWeapon = hero.GetComponentInChildren<HeldWeaponView>(true);
+            _heldCatalog = _heroWeapon != null ? _heroWeapon.Catalog : null;
+            if (remotePlayers == null) remotePlayers = FindAnyObjectByType<RemotePlayerSpawner>();
             for (var i = 0; i < weaponPrefabs.Length && i < _weaponSprites.Length; i++)
             {
                 if (weaponPrefabs[i] == null) continue;
@@ -175,15 +185,34 @@ namespace JungleMaze.Presentation.Combat
         private void OnCombatEvent(CombatEvent combatEvent)
         {
             if (combatEvent.Kind == CombatEventKind.AttackPredicted)
-                SpawnAttackVisual(combatEvent.Weapon, combatEvent.AimDegrees, hero.position, hero);
+            {
+                var swing = SpawnAttackVisual(combatEvent.Weapon, combatEvent.AimDegrees, hero.position, hero);
+                Animate(_heroAnimator, _heroWeapon, combatEvent.Weapon, swing);
+            }
             else if (combatEvent.Kind == CombatEventKind.RemoteAttackConfirmed && _poses!=null && _poses.TryGetPose(combatEvent.NetId,out var pose))
-                SpawnAttackVisual(combatEvent.Weapon, pose.RotationDegrees, new Vector3(pose.X,pose.Y,0), null);
+            {
+                var swing = SpawnAttackVisual(combatEvent.Weapon, pose.RotationDegrees, new Vector3(pose.X,pose.Y,0), null);
+                var view = remotePlayers != null ? remotePlayers.GetView(combatEvent.NetId) : null;
+                if (view != null)
+                    Animate(view.GetComponentInChildren<HeroSpriteAnimator>(), view.GetComponentInChildren<HeldWeaponView>(), combatEvent.Weapon, swing);
+            }
         }
 
-        private void SpawnAttackVisual(CombatWeaponId weapon, float aimDegrees, Vector3 origin, Transform anchor)
+        /// <summary>Body attack swing plus in-hand weapon: remote hands switch to the weapon they attacked with.</summary>
+        private static void Animate(HeroSpriteAnimator body, HeldWeaponView held, CombatWeaponId weapon, float swingSeconds)
+        {
+            if (swingSeconds < 0f) return;
+            if (body != null) body.PlayAttack();
+            if (held == null) return;
+            held.Show(CombatWeaponIds.ToJsonId(weapon));
+            held.OnAttack(swingSeconds > 0f, swingSeconds);
+        }
+
+        /// <summary>Spawns the projectile or swing. Returns the swing length (0 for ranged, -1 when nothing was shown).</summary>
+        private float SpawnAttackVisual(CombatWeaponId weapon, float aimDegrees, Vector3 origin, Transform anchor)
         {
             var controller = _match.Connected ? _online.Controller : (_flow != null && _flow.IsOffline && _offlineWorld != null ? _offlineWorld.Combat?.Controller : _controller);
-            if (controller==null) return;
+            if (controller==null) return -1f;
             var slot = controller.Slot(weapon);
             if (slot.IsRanged)
             {
@@ -197,13 +226,17 @@ namespace JungleMaze.Presentation.Combat
                     var projectile = _projectiles.Create(in pose);
                     projectile.Launch(in shot, direction);
                 }
-                return;
+                return 0f;
             }
 
             var swing = _swings.Create(SpawnPose.At(origin));
             var duration = Mathf.Max(0.1f, slot.CadenceSeconds * 0.6f);
-            swing.Play(_weaponSprites[(int)weapon], anchor, aimDegrees, slot.ArcDegrees, slot.Range, duration);
+            if (_heldCatalog != null && _heldCatalog.TryGet(CombatWeaponIds.ToJsonId(weapon), out var art))
+                swing.Play(art.Sprite, anchor, aimDegrees, slot.ArcDegrees, slot.Range, duration, art.Scale, art.AngleOffset);
+            else
+                swing.Play(_weaponSprites[(int)weapon], anchor, aimDegrees, slot.ArcDegrees, slot.Range, duration);
             _pool.Despawn(swing, duration + 0.05f);
+            return duration;
         }
     }
 }

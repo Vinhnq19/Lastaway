@@ -28,12 +28,18 @@ namespace JungleMaze.Presentation.Combat
         private bool _swinging;
 
         /// <summary>Starts the swing. The anchor is followed every frame so the arc stays on the wielder.</summary>
-        public void Play(Sprite sprite, Transform anchor, float aimDegrees, float arcDegrees, float rangeCells, float durationSeconds)
+        /// <param name="spriteScale">Uniform sprite scale (normalized held-weapon length); 1 keeps the sprite's native size.</param>
+        /// <param name="spriteAngle">Degrees that turn the sprite's handle→tip axis outward along the swing radius.</param>
+        public void Play(Sprite sprite, Transform anchor, float aimDegrees, float arcDegrees, float rangeCells, float durationSeconds,
+            float spriteScale = 1f, float spriteAngle = 0f)
         {
             if (spriteRenderer != null)
             {
                 spriteRenderer.sprite = sprite;
-                spriteRenderer.transform.localPosition = new Vector3(rangeCells * ReachFraction, 0f, 0f);
+                var t = spriteRenderer.transform;
+                t.localPosition = new Vector3(rangeCells * ReachFraction, 0f, 0f);
+                t.localScale = new Vector3(spriteScale, spriteScale, 1f);
+                t.localRotation = Quaternion.Euler(0f, 0f, spriteAngle);
             }
             _anchor = anchor;
             _startDegrees = aimDegrees - arcDegrees * 0.5f;
