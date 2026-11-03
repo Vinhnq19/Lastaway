@@ -74,13 +74,13 @@ namespace JungleMaze.EditorTools
                 var path=paths[i].Length==0?"":"Assets/Imported/JSurviv/Prefabs/"+paths[i]+".prefab";
                 var source=AssetDatabase.LoadAssetAtPath<GameObject>(path);var sprite=source!=null?source.GetComponentInChildren<SpriteRenderer>(true):null;
                 var entry=new WorldVisualSet.Entry{Kind=kinds[i],Sprite=sprite!=null?sprite.sprite:null,Source=path};
-                var animationRoot="Assets/Imported/JSurviv/AnimationClips/Obstacle/";
+                var animationRoot="Assets/_JungleMaze/Art/JSurviv/World/Obstacles/Animations/";
                 if(kinds[i]==WorldObjectKind.Swamp)entry.Idle=ExtractFrames(animationRoot+"POND/POND.idle.anim",true);
                 if(kinds[i]==WorldObjectKind.Lava)entry.Idle=ExtractFrames(animationRoot+"LAVA/LAVA.idle.anim",true);
                 if(kinds[i]==WorldObjectKind.Portal)entry.Idle=ExtractFrames(animationRoot+"PORTAL/PORTAL.idle.anim",true);
                 if(kinds[i]==WorldObjectKind.Door)
                 {
-                    path="Assets/Imported/JSurviv/Sprites/OBSTACLES/Tàn tích bỏ hoang/Abandoned_door_";
+                    path="Assets/_JungleMaze/Art/JSurviv/Legacy2024/Obstacles/Tàn tích bỏ hoang/Abandoned_door_";
                     entry.Open=ExtractFrames(path+"open.anim",false);entry.Close=ExtractFrames(path+"close.anim",false);
                     var idle=ExtractFrames(path+"idle.anim",false);entry.Sprite=idle?.Sample(0);entry.Source=path+"idle/open/close.anim";
                 }
@@ -202,10 +202,10 @@ namespace JungleMaze.EditorTools
                 }
             }
 
-            var pillarSprite = FindSprite("Assets/Imported/JSurviv/Sprites/OBSTACLES/Tàn tích bỏ hoang/abandoned.png", "abandoned_1");
-            var wallSprite = FindSprite("Assets/Imported/JSurviv/Sprites/OBSTACLES/Tàn tích bỏ hoang/abandoned.png", "abandoned_0");
-            var statueSprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Imported/JSurviv/Sprites/OBSTACLES/19. Tượng đài/tượng.png");
-            var rockSprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Imported/JSurviv/Sprites/OBSTACLES/05. Đá to hơn/stone_4_1.png");
+            var pillarSprite = FindSprite("Assets/_JungleMaze/Art/JSurviv/Legacy2024/Obstacles/Tàn tích bỏ hoang/abandoned.png", "abandoned_1");
+            var wallSprite = FindSprite("Assets/_JungleMaze/Art/JSurviv/Legacy2024/Obstacles/Tàn tích bỏ hoang/abandoned.png", "abandoned_0");
+            var statueSprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/_JungleMaze/Art/JSurviv/Legacy2024/Obstacles/19. Tượng đài/tượng.png");
+            var rockSprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/_JungleMaze/Art/JSurviv/Legacy2024/Obstacles/05. Đá to hơn/stone_4_1.png");
 
             foreach (var root in scene.GetRootGameObjects())
             {

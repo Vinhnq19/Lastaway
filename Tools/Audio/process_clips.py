@@ -28,7 +28,7 @@ import soundfile as sf
 ROOT = Path(__file__).resolve().parents[2]
 RECIPE = ROOT / 'Tools/Audio/art05_recipe.csv'
 DOWNLOADS = ROOT / 'Tools/Audio/Sources/ART-05'
-JSURVIV = ROOT / 'Assets/Imported/JSurviv/Sound'
+JSURVIV = ROOT / 'Assets/_JungleMaze/Art/JSurviv/Audio'
 SR = 44100
 CEILING_DB = -1.05            # 0.05 dB below the -1.0 dBFS rule, room for 16-bit rounding
 MAX_REDUCTION_DB = 6.0        # TR1; CPO 4.9 kept it without exceptions

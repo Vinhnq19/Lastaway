@@ -13,7 +13,7 @@
 
 ## 1. Mục tiêu
 
-Biến thư mục âm thanh JSurviv nhập sẵn (`Assets/Imported/JSurviv/Sound`) từ "có vẻ dùng được" thành một **bảng sự thật**: trong 26 mã SFX của AUD-01, mã nào đã có file dùng được, mã nào cần cắt/chuẩn hóa, mã nào thiếu; từng file có định dạng, độ dài, kích thước, nguồn và tình trạng giấy phép ghi rõ. Sau đó đưa các clip đã xử lý vào game **chỉ bằng dữ liệu** (clip trong `SfxCatalog.asset`, nhạc trong `AudioRuntimeSet.asset`, import settings), không sửa mã `AudioManager`/router của AUD-01, để người chơi nghe đúng hitmarker, tiếng nhận sát thương, bắn, chém, nhặt đồ, chuông cảnh báo bo và tiếng rồng. Mọi clip chung một mức âm có kiểm đo được, nên không clip nào lấn át cảnh báo. Nhạc nền (BGM) được chuẩn bị (nén, đo, ánh xạ) nhưng **mặc định vẫn tắt** vì GDD chưa chốt phạm vi.
+Biến thư mục âm thanh JSurviv nhập sẵn (`Assets/_JungleMaze/Art/JSurviv/Audio`) từ "có vẻ dùng được" thành một **bảng sự thật**: trong 26 mã SFX của AUD-01, mã nào đã có file dùng được, mã nào cần cắt/chuẩn hóa, mã nào thiếu; từng file có định dạng, độ dài, kích thước, nguồn và tình trạng giấy phép ghi rõ. Sau đó đưa các clip đã xử lý vào game **chỉ bằng dữ liệu** (clip trong `SfxCatalog.asset`, nhạc trong `AudioRuntimeSet.asset`, import settings), không sửa mã `AudioManager`/router của AUD-01, để người chơi nghe đúng hitmarker, tiếng nhận sát thương, bắn, chém, nhặt đồ, chuông cảnh báo bo và tiếng rồng. Mọi clip chung một mức âm có kiểm đo được, nên không clip nào lấn át cảnh báo. Nhạc nền (BGM) được chuẩn bị (nén, đo, ánh xạ) nhưng **mặc định vẫn tắt** vì GDD chưa chốt phạm vi.
 
 **Cách bổ sung đã chọn (CPO 27/10/2026, theo chỉ đạo của người dùng):** 14 mã hiện chỉ có bíp được thay bằng clip **CC0** tải từ thư viện tự do (Kenney, OpenGameArt) với nguồn ghi đủ; 12 mã đang dùng JSurviv được cắt và chuẩn hóa cùng thang mức; tất cả vào `Assets/_JungleMaze/Art/Audio/Sfx/`.
 
@@ -23,7 +23,7 @@ Ticket **không** quyết định quyền sử dụng: mọi file JSurviv ghi "c
 
 **Trong phạm vi:**
 
-1. **Kiểm kê** 21 file trong `Assets/Imported/JSurviv/Sound` (19 file âm thanh + 2 file `.zip` chứa 9 clip): định dạng, tần số lấy mẫu, kênh, độ dài, kích thước, mức đỉnh/mức trung bình (khi đo được), nguồn và giấy phép. Kết quả ghi vào manifest `Docs/Tickets/ART-05_audio_manifest.csv` (một dòng cho mỗi clip có trong repo, xem 2.5).
+1. **Kiểm kê** 21 file trong `Assets/_JungleMaze/Art/JSurviv/Audio` (19 file âm thanh + 2 file `.zip` chứa 9 clip): định dạng, tần số lấy mẫu, kênh, độ dài, kích thước, mức đỉnh/mức trung bình (khi đo được), nguồn và giấy phép. Kết quả ghi vào manifest `Docs/Tickets/ART-05_audio_manifest.csv` (một dòng cho mỗi clip có trong repo, xem 2.5).
 2. **Đối chiếu 26 SfxId với file thật** (bảng 2.2): trạng thái **Có / Cần chỉnh / Thiếu**. Chỉ "Có" khi có file đúng loại sự kiện, độ dài trong khoảng đích (bảng 2.3) và không cần ghép/cắt. Chưa ai nghe file: mọi trạng thái là **tạm** cho tới khi PIC nghe (AC6).
 3. **Xử lý clip** cho các mã "Cần chỉnh" và "Thiếu" có nguồn: giải nén (zip), cắt, fade hai đầu, đổi mono, chuẩn hóa mức, xuất WAV 16-bit. Chuẩn hóa theo mục 2.6. Mọi thao tác nằm ngoài `Assets/Imported`.
 4. **Nơi lưu clip cuối** (quyết định ở 2.4): sao chép/chuyển đổi vào `Assets/_JungleMaze/Art/Audio/Sfx/` (SFX) và `Assets/_JungleMaze/Art/Audio/Music/` (nhạc), không tham chiếu `Assets/Imported`.
@@ -73,7 +73,7 @@ Ticket **không** quyết định quyền sử dụng: mọi file JSurviv ghi "c
 
 ### 2.1. Hiện trạng trong repo (đo ngày 27/10/2026)
 
-- `Assets/Imported/JSurviv/Sound`: **21 file** (19 âm thanh + 2 zip), tổng **39 658 338 byte (≈ 39,7 MB)**. Riêng `Waiting Room Music.wav` là 25,7 MB (65 %). Import ở commit `09e0f1cc` ngày 12/10/2026. `git status` của thư mục này sạch.
+- `Assets/_JungleMaze/Art/JSurviv/Audio`: **21 file** (19 âm thanh + 2 zip), tổng **39 658 338 byte (≈ 39,7 MB)**. Riêng `Waiting Room Music.wav` là 25,7 MB (65 %). Import ở commit `09e0f1cc` ngày 12/10/2026. `git status` của thư mục này sạch.
 - **Không có** file giấy phép, README hay credit nào trong `Sound`. `Docs/JSurviv_Integration.vi.md` và `Docs/JSurviv_Verification.vi.md` không nhắc âm thanh hay giấy phép (đã tìm theo "sound", "âm thanh", "nhạc", "licen", "giấy phép": không có kết quả).
 - AUD-01 đã **chép** (không tham chiếu) 12 file SFX + 2 nhạc sang `Art/Audio/Placeholder/JSurviv/` với tên ASCII, và sinh 14 file bíp (`Placeholder/Beeps`, tự tạo bằng `Tools/Audio/make_placeholder_sfx.py`). Catalog hiện trỏ tới các bản chép/bíp này. Không clip nào là bản **đã xử lý**.
 - Dấu vết trong metadata của file (chỉ là dữ kiện, không phải bằng chứng về quyền sử dụng):
@@ -83,7 +83,7 @@ Ticket **không** quyết định quyền sử dụng: mọi file JSurviv ghi "c
 
 ### 2.2. Bảng 26 SFX đối chiếu file thật
 
-**Chú thích.** **File thật** = ứng viên trong `Assets/Imported/JSurviv/Sound` (tên theo thư mục, `Nhặt đồ/` là thư mục con). **Có** = đúng loại sự kiện (theo tên và độ dài) và độ dài nằm trong khoảng đích (bảng 2.3), không cần ghép hay giải nén; **Cần chỉnh** = có file nhưng phải cắt/chuẩn hóa/giải nén/chọn lại; **Thiếu** = không file nào khớp, hiện dùng bíp tự sinh của AUD-01. Mọi trạng thái **chưa nghe** (AC6). **Định dạng** viết dạng `codec, tần số, kênh, kbps`. "Mức đo" là mức đỉnh / mức trung bình **cả file** (dBFS), chỉ đo được với WAV; MP3 cần bộ giải mã, ghi "chưa đo". **Giấy phép** = "chưa kiểm chứng" cho mọi file JSurviv (mục 2.9). ★ = thuộc 7 nhóm ưu tiên của ticket (hitmarker, nhận sát thương, bắn, melee, loot, cảnh báo bo, rồng); ◆ = bàn giao từ AUD-01.
+**Chú thích.** **File thật** = ứng viên trong `Assets/_JungleMaze/Art/JSurviv/Audio` (tên theo thư mục, `Nhặt đồ/` là thư mục con). **Có** = đúng loại sự kiện (theo tên và độ dài) và độ dài nằm trong khoảng đích (bảng 2.3), không cần ghép hay giải nén; **Cần chỉnh** = có file nhưng phải cắt/chuẩn hóa/giải nén/chọn lại; **Thiếu** = không file nào khớp, hiện dùng bíp tự sinh của AUD-01. Mọi trạng thái **chưa nghe** (AC6). **Định dạng** viết dạng `codec, tần số, kênh, kbps`. "Mức đo" là mức đỉnh / mức trung bình **cả file** (dBFS), chỉ đo được với WAV; MP3 cần bộ giải mã, ghi "chưa đo". **Giấy phép** = "chưa kiểm chứng" cho mọi file JSurviv (mục 2.9). ★ = thuộc 7 nhóm ưu tiên của ticket (hitmarker, nhận sát thương, bắn, melee, loot, cảnh báo bo, rồng); ◆ = bàn giao từ AUD-01.
 
 | # | SfxId | File thật | Trạng thái | Độ dài | Định dạng · kích thước | Việc cần làm (ART-05) |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -172,7 +172,7 @@ Docs/Tickets/ART-05_audio_manifest.csv  # một dòng cho mỗi clip, xem 2.5
 Docs/Licenses/Audio/                    # bằng chứng giấy phép, nếu có
 ```
 
-**Phương án còn lại (không khuyến nghị): tham chiếu thẳng `Assets/Imported/JSurviv/Sound`.** Nhanh hơn (không chép), nhưng không cắt/chuẩn hóa được, không đổi được import, và buộc game phụ thuộc vùng nhập.
+**Phương án còn lại (không khuyến nghị): tham chiếu thẳng `Assets/_JungleMaze/Art/JSurviv/Audio`.** Nhanh hơn (không chép), nhưng không cắt/chuẩn hóa được, không đổi được import, và buộc game phụ thuộc vùng nhập.
 
 ### 2.5. Cách một clip thay một clip tạm, không đổi mã
 
@@ -375,7 +375,7 @@ Kết luận và quyết định (Q7):
 | --- | --- | --- | --- |
 | AC1 | Manifest `Docs/Tickets/ART-05_audio_manifest.csv` có **đúng 26 dòng SFX** khớp enum `SfxId` (cùng tên, cùng thứ tự 1–26, không thiếu, không thừa, không trùng). Mỗi dòng có đúng một trạng thái trong {Có, Cần chỉnh, Thiếu} | Test dữ liệu EditMode đọc CSV và `Enum.GetNames(typeof(SfxId))` | P0 |
 | AC2 | Mỗi mã không phải "Thiếu" ghi đủ: file nguồn, độ dài (s, 2 chữ số), codec, tần số, kênh, kích thước (byte). Chạy `Tools/Audio/measure_clips.py` hoặc đo lại trên Unity cho kết quả khớp: độ dài ± 0,01 s, kích thước đúng từng byte. Tổng Có + Cần chỉnh + Thiếu = 26. Số hiện có ở bảng 2.2 là mốc so sánh | Script + review CSV | P0 |
-| AC3 | Mỗi trong **21 file** của `Assets/Imported/JSurviv/Sound` và mỗi **thành viên của hai zip** (8 + 1) có đúng 1 dòng manifest với phân loại: mã SFX (26) / BGM / UI / ngoài 26 / không dùng. Số dòng "nguồn JSurviv" = 21 + 9 = 30. Không file nào bị bỏ sót | Test đếm `Directory` + CSV | P0 |
+| AC3 | Mỗi trong **21 file** của `Assets/_JungleMaze/Art/JSurviv/Audio` và mỗi **thành viên của hai zip** (8 + 1) có đúng 1 dòng manifest với phân loại: mã SFX (26) / BGM / UI / ngoài 26 / không dùng. Số dòng "nguồn JSurviv" = 21 + 9 = 30. Không file nào bị bỏ sót | Test đếm `Directory` + CSV | P0 |
 | AC4 | Cột giấy phép của **mọi** dòng chỉ nhận một trong ba giá trị ở 2.9. Mọi dòng nguồn JSurviv (và clip dẫn xuất) ghi `chưa kiểm chứng`; dòng `có bằng chứng` phải có tệp ở `Docs/Licenses/Audio/` (đường dẫn tồn tại); không dòng nào chứa "miễn phí", "CC0", "royalty-free", "được phép" mà thiếu đường dẫn bằng chứng. Ghi dấu vết `hollywoodedge.com` của `TimeOver.wav` vào cột ghi chú nguồn | Test CSV + review | P0 |
 | AC5 | Hai file `.zip` được liệt kê nội dung đủ (8 + 1 thành viên), tên zip sai lệch được ghi (M5). Không file zip nào được tham chiếu trong catalog. Phần giải nén nằm ở `Sfx/`/thư mục tạm, **không** ở `Assets/Imported/` | Review + `git diff` | P0 |
 | AC6 | Mỗi mã "Có" hoặc "Cần chỉnh" có cột "Đã nghe": `có` (PIC hoặc người được chỉ định nghe qua F6, ghi tên và ngày) hoặc `chưa`. Dòng `chưa` coi là **tạm**; báo cáo cuối ghi số mã đã nghe / tổng. Một mã đã nghe và **không khớp** sự kiện thì đổi trạng thái thành Thiếu (hoặc Cần chỉnh) và ghi lý do | Review CSV | P1 |
@@ -464,7 +464,7 @@ Kết luận và quyết định (Q7):
 
 | # | Câu hỏi | Mặc định / khuyến nghị |
 | --- | --- | --- |
-| **Q1** | **Clip cuối nằm đâu**: sao chép/chuyển đổi vào `Art/Audio/Sfx/` hay tham chiếu thẳng `Assets/Imported/JSurviv/Sound`? | **Khuyến nghị (CPO đã chọn đích `Sfx/`): sao chép/chuyển đổi vào `Sfx/`** (2.4): import settings nằm trong `.meta`, phải cắt/chuẩn hóa, giấy phép chưa rõ có thể phải bỏ từng file, vùng nhập không sửa được |
+| **Q1** | **Clip cuối nằm đâu**: sao chép/chuyển đổi vào `Art/Audio/Sfx/` hay tham chiếu thẳng `Assets/_JungleMaze/Art/JSurviv/Audio`? | **Khuyến nghị (CPO đã chọn đích `Sfx/`): sao chép/chuyển đổi vào `Sfx/`** (2.4): import settings nằm trong `.meta`, phải cắt/chuẩn hóa, giấy phép chưa rõ có thể phải bỏ từng file, vùng nhập không sửa được |
 | **Q2** | **Định dạng SFX cuối**: WAV 16-bit mono đã bake (đo được bằng thư viện chuẩn, không mất chất lượng) hay giữ MP3? `MatchEnd` giữ stereo hay mono? | **Khuyến nghị: WAV 16-bit 44,1 kHz mono** cho mọi SFX, kể cả `MatchEnd` (AUD-01 đã ép mono, `spatialBlend = 0`). Nhạc giữ stereo |
 | **Q3** | **Nguồn cho 14 mã bíp:** *đã quyết* theo chỉ đạo của người dùng ("thiếu cái gì thì tự tìm thư viện rồi tự bổ sung") qua CPO 27/10: clip CC0 của Kenney (Impact, Interface, RPG Audio) và OpenGameArt (rồng), bảng ở 2.11 | **Đã chốt**, không còn là câu hỏi mở. Còn mở: tải/nhập vào repo chờ QA trả Unity Editor; xác nhận bằng chứng CC0 cho RPG Audio và trazzz123 |
 | **Q4** | **BGM có thuộc MVP không?** GDD chưa chốt (Assets STT 14) | **Khuyến nghị: giữ mặc định tắt**, vẫn nén và ánh xạ ba bài (2.8) để bật bằng một công tắc khi PIC chốt; không làm UI mới |
@@ -638,7 +638,7 @@ Dung lượng dự kiến: SFX ≈ 2 MB, nhạc ≈ 5,5 MB; tổng < 12 MB (AC35
 | `ArtAudioSpec` | Bảng tĩnh của test: SfxId → tầng E, khoảng độ dài (2.3), khoảng L (2.6). Không phải mã runtime | — |
 | `ArtAudioCatalogTests` | Tên `^[a-z0-9_]+\.wav$`, ≤ 5 clip/mã · không clip nào nằm dưới `Assets/Imported/`, GUID trong `Sfx/`/`Music/` không trùng `.meta` trong `Imported` · 26 mã, mọi clip dưới `Art/Audio/Sfx/`, 0 dưới `Placeholder/` · các cặp phải khác clip · độ dài từng mã trong khoảng · BombFuse ≤ 1,5, Explosion ≤ 3,0 | AC8, AC9, AC10, AC13, AC17, AC21–AC24, AC26, AC27 (phần dữ liệu) |
 | `ArtAudioLevelTests` | `LoadAudioData` + `GetData` từng clip: mono · đỉnh ≤ −1,0 dBFS (dung sai ADPCM 0,2 dB), 0 chuỗi ≥ 3 mẫu chạm trần · 2 ms đầu/cuối ≤ −40 dBFS · L trong khoảng · E trong tầng ± 3 · lề của HitMarker · đỉnh sau import khớp số đo nguồn trong manifest ± 0,5 dB · importer: Decompress On Load, ADPCM/PCM, `forceToMono` tắt; `normalize` đọc từ dòng `normalize:` trong `.meta` (API công khai không lộ cờ này) | AC16, AC18, AC19, AC20, AC40 |
-| `ArtAudioManifestTests` | 26 dòng `sfx` đúng thứ tự `Enum.GetNames(typeof(SfxId))`, trạng thái ∈ {Có, Cần chỉnh, Thiếu} · số file trong `Assets/Imported/JSurviv/Sound` = 21 và dòng `jsurviv` = 30 · giấy phép theo từ vựng G-11, `có bằng chứng:` trỏ tệp có thật, không có "CC0/miễn phí/royalty-free/được phép" nếu thiếu đường dẫn · dòng `clip` khớp một-một với file trong `Sfx/` + `Music/`, dòng tải về có URL/tác giả/ngày · cột `heard` ∈ {`có: <tên>, <ngày>`, `chưa`} | AC1, AC3, AC4, AC6, AC41 |
+| `ArtAudioManifestTests` | 26 dòng `sfx` đúng thứ tự `Enum.GetNames(typeof(SfxId))`, trạng thái ∈ {Có, Cần chỉnh, Thiếu} · số file trong `Assets/_JungleMaze/Art/JSurviv/Audio` = 21 và dòng `jsurviv` = 30 · giấy phép theo từ vựng G-11, `có bằng chứng:` trỏ tệp có thật, không có "CC0/miễn phí/royalty-free/được phép" nếu thiếu đường dẫn · dòng `clip` khớp một-một với file trong `Sfx/` + `Music/`, dòng tải về có URL/tác giả/ngày · cột `heard` ∈ {`có: <tên>, <ngày>`, `chưa`} | AC1, AC3, AC4, AC6, AC41 |
 | `ArtAudioMusicTests` | Mỗi file ≤ 3,0 MB, độ dài lệch ≤ 0,1 s so với gốc · `waitingRoomMusic` ≠ `loadingMusic`, cả ba không rỗng và nằm dưới `Music/` · importer Streaming + Vorbis | AC29, AC31, AC16 (nhạc) |
 
 **Python** `Tools/Audio/test_art05_audio.py` (unittest): fade đạt −40 dBFS ở 2 ms đầu/cuối; limiter không vượt trần; độ lợi đạt L ± 0,1 dB; chạy hai lần ra cùng byte; đổi tần số giữ độ dài ± 1 mẫu.
@@ -744,7 +744,7 @@ Tổng: **6 commit** trước G3 (5 nếu nhạc lùi), cộng 1 commit dọn sa
 
 Thứ tự khác 4.5: nhạc (6) trước manifest (4) và test (5), vì manifest có dòng nhạc và `ArtAudioMusicTests` dùng chung `ArtAudioSpec` với test SFX. Thêm commit 6b.
 
-**Quy trình.** `process_clips.py` đọc bản gốc chỉ-đọc (`Tools/Audio/Sources/ART-05/`, `Assets/Imported/JSurviv/Sound/`), ghi ra `%TEMP%/art05_stage`, rồi mới chép vào `Assets/` khi đã giữ Editor. Python có `soundfile` 0.14 (libsndfile 1.2.2) và `numpy` 2.5, không ffmpeg (G1 T-1). WAV ra giống từng byte khi chạy lại (đã kiểm md5 hai lần chạy). Đổi tần số bằng sinc cửa sổ Blackman (`súng bắn`, `countdown` 24 kHz; RPG Audio 48 kHz). Mọi clip: 2 ms im lặng + fade-in 3 ms, fade-out cosine rồi 2 ms im lặng, limiter nhìn trước trần −1,05 dBFS. `.meta` của 15 + 3 file mới chép từ mẫu `.meta` SFX sẵn có (GUID mới) trước khi Unity import, nên không lúc nào có `.meta` mặc định `normalize: 1`.
+**Quy trình.** `process_clips.py` đọc bản gốc chỉ-đọc (`Tools/Audio/Sources/ART-05/`, `Assets/_JungleMaze/Art/JSurviv/Audio/`), ghi ra `%TEMP%/art05_stage`, rồi mới chép vào `Assets/` khi đã giữ Editor. Python có `soundfile` 0.14 (libsndfile 1.2.2) và `numpy` 2.5, không ffmpeg (G1 T-1). WAV ra giống từng byte khi chạy lại (đã kiểm md5 hai lần chạy). Đổi tần số bằng sinc cửa sổ Blackman (`súng bắn`, `countdown` 24 kHz; RPG Audio 48 kHz). Mọi clip: 2 ms im lặng + fade-in 3 ms, fade-out cosine rồi 2 ms im lặng, limiter nhìn trước trần −1,05 dBFS. `.meta` của 15 + 3 file mới chép từ mẫu `.meta` SFX sẵn có (GUID mới) trước khi Unity import, nên không lúc nào có `.meta` mặc định `normalize: 1`.
 
 **Ba khoảng trống P0 của Tech Lead (4.0):**
 - K1 fade-in: cả 40 SFX có 2 ms đầu và 2 ms cuối im hẳn (đo −240 dBFS trên WAV và qua `GetData`).
@@ -990,7 +990,7 @@ Nên nghe thêm:
 | --- | --- | --- |
 | AC1 | **Đạt** | Manifest 99 dòng (26 `sfx` + 30 `jsurviv` + 43 `clip`); 26 dòng `sfx` đúng tên và thứ tự `SfxId` 1–26, trạng thái Có 4 · Cần chỉnh 9 · Thiếu 13. Test `ArtAudioManifestTests.SfxRows_FollowTheEnum_WithAStatus` xanh. Cột `status` là trạng thái **trước** ART-05 (13 "Thiếu" dù 0 bíp còn lại: quan sát 4) |
 | AC2 | **Đạt** | Đo lại 30 dòng nguồn JSurviv (21 file + 9 thành viên zip) bằng libsndfile: độ dài lệch ≤ 0,01 s, kích thước đúng từng byte, 0 sai (`R/misc_checks.txt`). 4 + 9 + 13 = 26 |
-| AC3 | **Đạt** | 21 file trong `Assets/Imported/JSurviv/Sound` + 9 thành viên zip = 30 dòng `jsurviv`, mỗi file/thành viên đúng 1 dòng: mã SFX 15 · BGM 3 · UI 1 · ngoài 26 là 4 · không dùng 7. Test `JSurvivRows_CoverEveryFileAndZipMember` xanh |
+| AC3 | **Đạt** | 21 file trong `Assets/_JungleMaze/Art/JSurviv/Audio` + 9 thành viên zip = 30 dòng `jsurviv`, mỗi file/thành viên đúng 1 dòng: mã SFX 15 · BGM 3 · UI 1 · ngoài 26 là 4 · không dùng 7. Test `JSurvivRows_CoverEveryFileAndZipMember` xanh |
 | AC4 | **Đạt** | 99 dòng: `có bằng chứng` 37 (tệp tồn tại hết), `chưa kiểm chứng` 60, `chưa kiểm chứng (nguồn tự khai CC0)` 2 (chỉ DragonRoar). 30 dòng JSurviv và 18 dòng clip dẫn xuất (15 SFX + 3 nhạc) đều `chưa kiểm chứng`; `TimeOver.wav` ghi thẻ `www.hollywoodedge.com` (rủi ro cao). Ngoài từ vựng, không dòng nào có "miễn phí/CC0/royalty-free/được phép" thiếu bằng chứng, trừ cụm "nguồn tự khai CC0" mà CPO cho phép ở 4.9 (câu chữ AC4 và AC41 lệch nhau: quan sát 3) |
 | AC5 | **Đạt** | Hai zip liệt kê đủ 8 + 1 thành viên; tên sai của `bot di chuyển.zip` ghi (M5); không GUID nào của zip trong catalog; `git diff` `Assets/Imported/**` = 0 tệp; không giải nén vào `Assets/Imported` |
 | AC6 | **Đạt** (cơ chế) | Cột `heard` có ở 26 dòng `sfx` và 43 dòng `clip`. Đã nghe: **4/26** mã (`HitMarker`, `BombFuse`, `Reload`, `EmptyClick`: `có: V.Huy, 2026-10-27`, theo lời người dùng do CPO ghi ở 4.9 và commit `689a0b34`); 22 mã `chưa`. QA không nghe, chỉ trích bản ghi |

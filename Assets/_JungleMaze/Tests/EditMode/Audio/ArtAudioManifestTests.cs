@@ -11,7 +11,7 @@ namespace JungleMaze.Tests.Audio
     /// <summary>ART-05 manifest (Docs/Tickets/ART-05_audio_manifest.csv): inventory, licence vocabulary, traceability (AC1, AC3, AC4, AC6, AC41).</summary>
     public sealed class ArtAudioManifestTests
     {
-        private const string JSurviv = "Assets/Imported/JSurviv/Sound";
+        private const string JSurviv = "Assets/_JungleMaze/Art/JSurviv/Audio";
         private static readonly string[] Forbidden = { "miễn phí", "CC0", "royalty-free", "được phép" };
         private List<Dictionary<string, string>> _rows;
 
