@@ -20,7 +20,7 @@ Hai map đầu tiên: **Di tích cổ** (`di-tich-co`, mặc định) và **Bãi
 6. **Cập nhật:** giữ ID, tăng version, xuất/publish/reload lại. Trận đang chạy giữ map cũ; phòng chờ/lượt sau lấy bản mới. Nếu map bị gỡ, phòng chờ chuyển map mặc định. Chỉ JSON/PNG được tải; thêm loại vật thể hoặc assets chưa được client hỗ trợ cần build client mới.
 7. **Rollback:** các payload cũ được giữ; mỗi lần publish lưu manifest trước vào `data/maps/catalog-history/<generation>.json`. Tạo thư mục nguồn rollback riêng, chép các thư mục map theo ID/hash cần phục hồi từ `data/maps`, chép manifest cũ thành `catalog.json` trong thư mục nguồn đó. Chạy `--maps validate <nguồn-rollback>`, `--maps publish <nguồn-rollback> data/maps`, rồi reload như trên. Công cụ tạo generation mới cho dữ liệu cũ; không chép đè catalog đang chạy trực tiếp.
 
-AWS đã chuẩn bị bind mount mặc định `/opt/junglemaze/data/maps`; đợt này chưa deploy AWS. Khi triển khai sau, chuyển gói vào thư mục staging riêng trên EC2, validate/publish bằng container cùng phiên bản rồi reload nội bộ. Giữ volume Mongo, secret và map cũ. Trước khi đổi sang client mới phải deploy server gameplay protocol **2**; handshake tài khoản vẫn **v4**.
+AWS release `maps-hvu-20261103` dùng bind mount `/opt/junglemaze/data/maps` và gameplay protocol **2**; handshake tài khoản vẫn **v4**. Khi cập nhật map, chuyển gói vào thư mục staging riêng trên EC2, validate/publish bằng container cùng phiên bản rồi reload nội bộ. Giữ volume Mongo, secret và map cũ. Client cũ cần thay bằng bản hỗ trợ gameplay protocol 2.
 
 Kiểm hai PC: chạy client cùng bản trên hai máy, trỏ cùng API HTTPS/server LAN hoặc WSS, dùng hai tài khoản. Đổi map và đối chiếu preview, hash trong lobby, cover/spawn/vật thể trong trận; thử rời lúc countdown, lỗi tải rồi retry, kết thúc/chơi lại. Hai process cùng PC chỉ xác minh hai client, chưa nghiệm thu hai PC vật lý.
 
@@ -31,7 +31,7 @@ Cập nhật **03/11/2026**. Scene `Assets/_JungleMaze/Scenes/LevelEditor.unity`
 1. Chỉ khi chưa có scene/catalog (lệnh này ghi lại các asset; giữ bản sửa thủ công trước khi chạy): menu **Jungle Maze → Level Editor → Build Level Editor Scene**. Lệnh này sinh lại `Art/LevelEditor/LevelEditorCatalog.asset` và scene, chạy lại nhiều lần không tạo trùng.
 2. **Jungle Maze → Level Editor → Open Level Editor Scene**, rồi bấm **Play**.
 
-Scene này **không** tạo Bootstrap của game (không menu kết nối, HUD hay network). Có sẵn map mẫu `Levels/demo_cainos.json`.
+Scene này **không** tạo Bootstrap của game (không menu kết nối, HUD hay network). Có sẵn map mẫu nhỏ `Levels/demo_cainos.json` để thử công cụ; map này chưa đạt kích thước phát hành 50×50. Khi xuất map theo ô, công cụ đọc footprint/collider chân của `LevelEditorCatalog.asset`; không thay bằng khối 1×1 mặc định.
 
 ## 2. Giao diện
 

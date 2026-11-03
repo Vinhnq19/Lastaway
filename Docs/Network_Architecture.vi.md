@@ -2,7 +2,7 @@
 
 ## Chọn map theo phòng
 
-Nguồn map phát hành là catalog `Backend/Shared/GameData/Maps/`; production đọc bản ngoài image qua `MAP_DATA_PATH`. Local Compose bind `Backend/data/maps`, AWS chuẩn bị `/opt/junglemaze/data/maps`. `MapPublisher` validate cả gói, giữ payload ID/hash bất biến, lưu manifest cũ, đổi catalog nguyên tử; `/internal/maps/reload` có secret chỉ ở control API private đưa snapshot catalog đã parse vào hàng đợi ứng dụng. Không upload/reload công khai, không I/O/parse trong tick.
+Nguồn map phát hành là catalog `Backend/Shared/GameData/Maps/`; production đọc bản ngoài image qua `MAP_DATA_PATH`. Local Compose bind `Backend/data/maps`, AWS dùng `/opt/junglemaze/data/maps` từ release `maps-hvu-20261103`. `MapPublisher` validate cả gói, giữ payload ID/hash bất biến, lưu manifest cũ, đổi catalog nguyên tử; `/internal/maps/reload` có secret chỉ ở control API private đưa snapshot catalog đã parse vào hàng đợi ứng dụng. Không upload/reload công khai, không I/O/parse trong tick.
 
 Mỗi room giữ MapDefinition riêng. Bộ luật dùng RulesHash độc lập với MapHash. Trận được chốt bằng **MapId + MapHash + RulesHash** và ghi bộ khóa này vào kết quả/outbox/Mongo/lịch sử. Hai map khởi đầu cùng luật, khác bố cục: Di tích cổ và Bãi đá. World, movement/collision, spawn, loot/portal đều nhận map của room. Trận đang chạy không đổi dữ liệu khi reload; phòng chờ chuyển bản mới hoặc map mặc định còn được phát hành.
 
@@ -10,7 +10,7 @@ Gameplay protocol **2** bổ sung RoomMapState/SelectRoomMap/RoomMapReady/StartR
 
 Client lấy catalog, JSON và preview qua `/api/maps` yêu cầu JWT. JSON tối đa 2 MiB, PNG tối đa 512 KiB; remote HTTPS, HTTP chỉ loopback. Cache tách origin/hash, payload kiểm hash/schema trước khi nhận; tải bằng file tạm, lỗi không dùng map khác. Generation/revision và cancellation chặn callback cũ. Offline vẫn dùng bundle, không gọi API. Trưởng phòng chỉ Bắt đầu sau khi đủ người và mọi client đã xác minh; vào/rời countdown hủy lượt bắt đầu. Sau kết quả giữ kết nối về phòng chờ để chọn map/lượt mới.
 
-Quy trình dev xuất/publish/rollback và kiểm hai máy nằm ở [Level Editor](hvu/06_Level_Editor.vi.md). NetSmokeClient có `--gameplay` để tải/ack map, trưởng phòng gửi Start và kiểm vòng trận; `NET_SMOKE_MAP_ID` chọn map cho lượt smoke. Đây là kiểm protocol/backend, không thay nghiệm thu gameplay Unity. Không chạy tải hoặc deploy AWS tự động.
+Quy trình dev xuất/publish/rollback và kiểm hai máy nằm ở [Level Editor](hvu/06_Level_Editor.vi.md). Editor từ nhánh `hvu` đặt vật theo ô, dùng catalog Cainos; exporter phải giữ footprint và collider chân từ catalog khi tạo JSON authoritative. Art/đường đá của Editor không tự trở thành visual trong trận. NetSmokeClient có `--gameplay` để tải/ack map, trưởng phòng gửi Start và kiểm vòng trận; `NET_SMOKE_MAP_ID` chọn map cho lượt smoke. Đây là kiểm protocol/backend, không thay nghiệm thu gameplay Unity. Không chạy tải hoặc deploy AWS tự động.
 
 Cập nhật Phase 2 ngày **03/11/2026**. Tài liệu mô tả kiến trúc dùng để triển khai game và ranh giới giữa các module. Setup nền nằm trong [hướng dẫn Phase 1](Phase1_First4Tasks.vi.md); chạy trận/account/bo theo [hướng dẫn Phase 2](Phase2_Match_Guest_Zone.vi.md). Bằng chứng nghiệm thu nằm trong [báo cáo Phase 2](Reports/Phase2_Local/report.vi.md); số liệu mạng các lượt trước ở [báo cáo Phase 1](Reports/Local_Capacity_Retest_2026-10-14/report.vi.md).
 
@@ -129,6 +129,6 @@ Không suy diễn bài ping/pong cũ thành sức chứa gameplay. Khi bổ sung
 
 ## 9. Bằng chứng và phát triển tiếp
 
-[Báo cáo chọn map mới](Reports/Map_Selection_Local/report.vi.md) ghi bản build và kiểm Local của tính năng map. [Báo cáo chung Phase2 trước đó](Reports/Phase2_Local/report.vi.md) phân biệt kết quả backend Local, Unity thực, AWS UDP/WSS và lượt co-located cũ. Kiểm thử hai process Unity trên cùng PC không thay nghiệm thu hai máy vật lý.
+[Báo cáo chọn map Local](Reports/Map_Selection_Local/report.vi.md) ghi phần triển khai ban đầu. [Báo cáo merge hvu và AWS](Reports/Map_Selection_AWS/report.vi.md) ghi bản build mới, 6 client WSS/Auto trong 5 phút và lượt UDP/WSS trên hai map. [Báo cáo chung Phase2 trước đó](Reports/Phase2_Local/report.vi.md) phân biệt các lượt cũ. Nhiều process Unity trên cùng PC không thay nghiệm thu hai máy vật lý.
 
 Các dev tích hợp gameplay qua contract runtime/health/registry; combat phát damage, không tự ghi HP từ client. MOV-02/03, combat/world và UI được ghép qua các service hiện có. Trạng thái nghiệm thu từng module và toàn flow phải theo bằng chứng bản mới trong báo cáo, không suy từ demo Phase2 cũ. Khung `Application/Testing`, `OnlineScenarioRunner` và launcher `test-unity-online.ps1` nhận scenario JSON và check/driver đăng ký qua Bootstrap, dùng lại cho feature mới. Test không đủ tốc độ phát phải ghi INVALID; [checklist hai PC](../Backend/Tests/OnlineReadiness/PHYSICAL_TWO_PC_CHECKLIST.md) ghi rõ LAN/VPN/public/AWS và phần cần nghiệm thu bằng thiết bị thật.

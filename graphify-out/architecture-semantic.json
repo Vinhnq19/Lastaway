@@ -417,6 +417,14 @@
       "captured_at": null,
       "author": null,
       "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_level_catalog",
+      "label": "LevelCatalog",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Chọn map theo phòng",
+      "_origin": "semantic"
     }
   ],
   "edges": [
@@ -889,6 +897,17 @@
       "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
       "source_location": "Chọn map theo phòng",
       "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_map_export",
+      "target": "docs_network_architecture_vi_level_catalog",
+      "relation": "preserves_footprint_and_foot_colliders",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Chọn map theo phòng",
+      "weight": 1.0,
+      "_origin": "semantic"
     }
   ],
   "hyperedges": [],
@@ -897,8 +916,8 @@
   "coverage": {
     "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md": 134
   },
-  "source_sha256": "08448c9dc688d71d4ae11484136e7c1b7517f1fd34253794bf56a0071b3e2ab2",
+  "source_sha256": "3f4208701127a4d23cc628e8c6bf83d33c5cd7bba16def195808816ff3314348",
   "usage_note": "6370/3260 are historical extraction-agent self-reported tokens retained from the prior fragment; this Codex re-extraction and supervision are unmetered, not zero-cost or provider billing metadata.",
-  "extracted_at": "2026-11-03T08:23:49.930074+00:00",
-  "extraction_note": "Manual Codex incremental re-extraction after reading complete network architecture and map contracts: retained unchanged sections, updated published-map concept and map/host/API/hash relations. No semantic API call. Graph edges describe document statements, not runtime acceptance."
+  "extracted_at": "2026-11-03T09:27:19.542914+00:00",
+  "extraction_note": "Codex re-read network architecture for hvu integration and verified deployment path; added documented exporter→LevelCatalog geometry dependency. Retained unchanged statements/relations. No paid semantic API. Updated evidence links after reading final AWS report; no new architecture relation inferred from test status."
 }
