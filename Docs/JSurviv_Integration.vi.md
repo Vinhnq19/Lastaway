@@ -1,6 +1,6 @@
 # JSurvivUnity đã nhập vào Lastaway
 
-Mã nguồn và assets tham khảo hiện nằm tại `Assets/Imported/JSurviv`; thư mục nguồn riêng `JSurvivUnity` không còn trong workspace hiện tại. Dự án gốc tiếp tục dùng Unity **6000.3.15f1** và URP. Phần nhập assets chưa chuyển Socket.IO sang LiteNetLib và chưa cung cấp demo gameplay offline hoàn chỉnh.
+Art (sprite, animation, animator, tile palette, âm thanh, font) đã chuyển sang `Assets/_JungleMaze/Art/JSurviv`, chia theo chủ đề, GUID giữ nguyên; xem [Art/JSurviv_Art_Library.vi.md](Art/JSurviv_Art_Library.vi.md). Mã nguồn, prefab và plugin vẫn nằm tại `Assets/Imported/JSurviv`; thư mục nguồn riêng `JSurvivUnity` không còn trong workspace hiện tại. Dự án gốc tiếp tục dùng Unity **6000.3.15f1** và URP. Phần nhập assets chưa chuyển Socket.IO sang LiteNetLib và chưa cung cấp demo gameplay offline hoàn chỉnh.
 
 Backend mới và AWS được mô tả trong [Network_Architecture.vi.md](Network_Architecture.vi.md). Setup, phát triển, chạy lại server và test theo [hướng dẫn vận hành chung](Phase1_First4Tasks.vi.md); Unity client hiện chưa được nối với backend LiteNetLib đó. Tài liệu này chỉ hướng dẫn sử dụng assets/scene tham khảo.
 
