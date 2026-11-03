@@ -33,7 +33,7 @@ MonoBehaviour:
       Loop: 0
     Source: "Assets/_JungleMaze/Art/JSurviv/World/Obstacles/Sprites/01. R\u01B0\u01A1ng/chest.aseprite"
   - Kind: 6
-    Sprite: {fileID: 21300000, guid: 7d5801e42ffb74c4aacde06e42cf1d7c, type: 3}
+    Sprite: {fileID: 21300090, guid: d6db5af9a560057579123b5fdc3ebd09, type: 3}
     BrokenSprite: {fileID: 21300000, guid: 3d5daae75f1d5dc409b3e5765ed4ae57, type: 3}
     Idle:
       Sprites: []
@@ -50,7 +50,8 @@ MonoBehaviour:
       Times: []
       Duration: 0
       Loop: 0
-    Source: "Assets/Imported/JSurviv/Prefabs/Destructibles/B\xECnh Hoa.prefab"
+    Source: Assets/_JungleMaze/Art/LevelEditor/Cainos/Prefab/Props/PF Props - Pot
+      01.prefab
   - Kind: 7
     Sprite: {fileID: -1280696506768504347, guid: a374cfa64a2ec084ca6aa6641978cece, type: 3}
     BrokenSprite: {fileID: 0}
@@ -158,7 +159,7 @@ MonoBehaviour:
       Loop: 0
     Source: Assets/Imported/JSurviv/Prefabs/Obstacles/CanGoThrough/PORTAL.prefab
   - Kind: 12
-    Sprite: {fileID: 8486296057191674605, guid: 3a82a0e5963460b4eb1dac4af442b6f4, type: 3}
+    Sprite: {fileID: 5931769310776738614, guid: c49f897f8600fd547b6e49193582011d, type: 3}
     BrokenSprite: {fileID: 0}
     Idle:
       Sprites: []
@@ -167,56 +168,71 @@ MonoBehaviour:
       Loop: 0
     Open:
       Sprites:
-      - {fileID: 8486296057191674605, guid: 3a82a0e5963460b4eb1dac4af442b6f4, type: 3}
-      - {fileID: -2881488769231503838, guid: 3a82a0e5963460b4eb1dac4af442b6f4, type: 3}
-      - {fileID: -6677915800141327756, guid: 3a82a0e5963460b4eb1dac4af442b6f4, type: 3}
-      - {fileID: -707589463745829922, guid: 3a82a0e5963460b4eb1dac4af442b6f4, type: 3}
-      - {fileID: -7461416672238673261, guid: 3a82a0e5963460b4eb1dac4af442b6f4, type: 3}
-      - {fileID: 7502713464295188262, guid: 3a82a0e5963460b4eb1dac4af442b6f4, type: 3}
-      - {fileID: -4836770343147908097, guid: 3a82a0e5963460b4eb1dac4af442b6f4, type: 3}
-      - {fileID: -5764698707744440058, guid: 3a82a0e5963460b4eb1dac4af442b6f4, type: 3}
+      - {fileID: 5931769310776738614, guid: c49f897f8600fd547b6e49193582011d, type: 3}
+      - {fileID: -378898544460820957, guid: c49f897f8600fd547b6e49193582011d, type: 3}
+      - {fileID: 3383959907573305732, guid: c49f897f8600fd547b6e49193582011d, type: 3}
+      - {fileID: 4098889586282790961, guid: c49f897f8600fd547b6e49193582011d, type: 3}
+      - {fileID: -1640524563467807512, guid: c49f897f8600fd547b6e49193582011d, type: 3}
+      - {fileID: -2308880167399914328, guid: c49f897f8600fd547b6e49193582011d, type: 3}
+      - {fileID: -1964029707674495670, guid: c49f897f8600fd547b6e49193582011d, type: 3}
+      - {fileID: -2804564564845465777, guid: c49f897f8600fd547b6e49193582011d, type: 3}
       Times:
       - 0
-      - 0.2
-      - 0.4
-      - 0.6
-      - 0.8
-      - 1
-      - 1.2
-      - 1.4
-      Duration: 1.6
+      - 0.07
+      - 0.14
+      - 0.21000001
+      - 0.28
+      - 0.35
+      - 0.42000002
+      - 0.49
+      Duration: 0.56
       Loop: 0
     Close:
       Sprites:
-      - {fileID: -5764698707744440058, guid: 3a82a0e5963460b4eb1dac4af442b6f4, type: 3}
-      - {fileID: -4033119038840029914, guid: 3a82a0e5963460b4eb1dac4af442b6f4, type: 3}
-      - {fileID: 6139439943536723462, guid: 3a82a0e5963460b4eb1dac4af442b6f4, type: 3}
-      - {fileID: 5196312554948977678, guid: 3a82a0e5963460b4eb1dac4af442b6f4, type: 3}
-      - {fileID: 7736384607938015522, guid: 3a82a0e5963460b4eb1dac4af442b6f4, type: 3}
-      - {fileID: -335505464372674136, guid: 3a82a0e5963460b4eb1dac4af442b6f4, type: 3}
-      - {fileID: 4403956468772265136, guid: 3a82a0e5963460b4eb1dac4af442b6f4, type: 3}
-      - {fileID: -3706516731319282574, guid: 3a82a0e5963460b4eb1dac4af442b6f4, type: 3}
+      - {fileID: -2804564564845465777, guid: c49f897f8600fd547b6e49193582011d, type: 3}
+      - {fileID: 1416540837454450408, guid: c49f897f8600fd547b6e49193582011d, type: 3}
+      - {fileID: -2972580388020557275, guid: c49f897f8600fd547b6e49193582011d, type: 3}
+      - {fileID: 5585655801967587656, guid: c49f897f8600fd547b6e49193582011d, type: 3}
+      - {fileID: -8964935594766872278, guid: c49f897f8600fd547b6e49193582011d, type: 3}
+      - {fileID: 8103462816208144941, guid: c49f897f8600fd547b6e49193582011d, type: 3}
+      - {fileID: 4187689466112653718, guid: c49f897f8600fd547b6e49193582011d, type: 3}
+      - {fileID: -4390686998171401481, guid: c49f897f8600fd547b6e49193582011d, type: 3}
       Times:
       - 0
-      - 0.2
-      - 0.4
-      - 0.6
-      - 0.8
-      - 1
-      - 1.2
-      - 1.4
-      Duration: 1.6
+      - 0.07
+      - 0.14
+      - 0.21000001
+      - 0.28
+      - 0.35
+      - 0.42000002
+      - 0.49
+      Duration: 0.56
       Loop: 0
-    Source: "Assets/_JungleMaze/Art/JSurviv/Legacy2024/Obstacles/T\xE0n t\xEDch b\u1ECF
-      hoang/Abandoned_door_idle/open/close.anim"
+    Source: "Assets/_JungleMaze/Art/JSurviv/World/Obstacles/Sprites/C\u1EEDa \u0111\xE1/stone_door.aseprite"
   - Kind: 10
-    Sprite: {fileID: 1966274907916846902, guid: 6829ca3cf4a181f4d9497cdfa590e31b, type: 3}
+    Sprite: {fileID: -7077856168484384893, guid: 8709a413da26d3b498c92473446a7f1c, type: 3}
     BrokenSprite: {fileID: 0}
     Idle:
-      Sprites: []
-      Times: []
-      Duration: 0
-      Loop: 0
+      Sprites:
+      - {fileID: -7077856168484384893, guid: 8709a413da26d3b498c92473446a7f1c, type: 3}
+      - {fileID: -3376519068089473419, guid: 8709a413da26d3b498c92473446a7f1c, type: 3}
+      - {fileID: 2684468003416762005, guid: 8709a413da26d3b498c92473446a7f1c, type: 3}
+      - {fileID: -8779979358689555089, guid: 8709a413da26d3b498c92473446a7f1c, type: 3}
+      - {fileID: 7318888313872620989, guid: 8709a413da26d3b498c92473446a7f1c, type: 3}
+      - {fileID: -1239698189517791193, guid: 8709a413da26d3b498c92473446a7f1c, type: 3}
+      - {fileID: 9062537614241097227, guid: 8709a413da26d3b498c92473446a7f1c, type: 3}
+      - {fileID: -7077856168484384893, guid: 8709a413da26d3b498c92473446a7f1c, type: 3}
+      Times:
+      - 0
+      - 0.11666667
+      - 0.23333333
+      - 0.35
+      - 0.48333332
+      - 0.6
+      - 0.71666664
+      - 0.8333333
+      Duration: 0.84999996
+      Loop: 1
     Open:
       Sprites: []
       Times: []
@@ -227,7 +243,7 @@ MonoBehaviour:
       Times: []
       Duration: 0
       Loop: 0
-    Source: Assets/Imported/JSurviv/Prefabs/Obstacles/CanGoThrough/HUNT_TRAP.prefab
+    Source: Assets/_JungleMaze/Art/JSurviv/World/Obstacles/Animations/BIG_WILD_ROSE/BIG_WILD_ROSE.idle.anim
   - Kind: 13
     Sprite: {fileID: -4987371248746193744, guid: 93e6b284fea6b0c4a9a5c4138d6b35af, type: 3}
     BrokenSprite: {fileID: 0}

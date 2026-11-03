@@ -78,11 +78,21 @@ namespace JungleMaze.EditorTools
                 var animationRoot="Assets/_JungleMaze/Art/JSurviv/World/Obstacles/Animations/";
                 if(kinds[i]==WorldObjectKind.Lava)entry.Idle=ExtractFrames(animationRoot+"LAVA/LAVA.idle.anim",true);
                 if(kinds[i]==WorldObjectKind.Portal)entry.Idle=ExtractFrames(animationRoot+"PORTAL/PORTAL.idle.anim",true);
+                if(kinds[i]==WorldObjectKind.Poison)
+                {
+                    var thorns=ExtractFrames(animationRoot+"BIG_WILD_ROSE/BIG_WILD_ROSE.idle.anim",true);
+                    if(thorns!=null){entry.Idle=thorns;entry.Sprite=thorns.Sample(0);entry.Source=animationRoot+"BIG_WILD_ROSE/BIG_WILD_ROSE.idle.anim";}
+                }
                 if(kinds[i]==WorldObjectKind.Door)
                 {
-                    path="Assets/_JungleMaze/Art/JSurviv/Legacy2024/Obstacles/Tàn tích bỏ hoang/Abandoned_door_";
-                    entry.Open=ExtractFrames(path+"open.anim",false);entry.Close=ExtractFrames(path+"close.anim",false);
-                    var idle=ExtractFrames(path+"idle.anim",false);entry.Sprite=idle?.Sample(0);entry.Source=path+"idle/open/close.anim";
+                    var door=StoneDoorFrames(out var open,out var close);
+                    if(door!=null){entry.Sprite=door;entry.Open=open;entry.Close=close;entry.Source=StoneDoorPath;}
+                    else
+                    {
+                        path="Assets/_JungleMaze/Art/JSurviv/Legacy2024/Obstacles/Tàn tích bỏ hoang/Abandoned_door_";
+                        entry.Open=ExtractFrames(path+"open.anim",false);entry.Close=ExtractFrames(path+"close.anim",false);
+                        var idle=ExtractFrames(path+"idle.anim",false);entry.Sprite=idle?.Sample(0);entry.Source=path+"idle/open/close.anim";
+                    }
                 }
                 if(kinds[i]==WorldObjectKind.Pot)
                 {
@@ -101,7 +111,7 @@ namespace JungleMaze.EditorTools
                 if(entry.Open!=null&&entry.Close!=null)status="Server-state open/close sprite curves; legacy callback events discarded";
                 if(kinds[i]==WorldObjectKind.Pot)status+="; verified broken-pot debris sprite only (no poison script)";
                 if(kinds[i]==WorldObjectKind.Chest)status+="; broken artwork absent, hide after confirmed break";
-                if(kinds[i]==WorldObjectKind.Poison)status+="; hunt-trap artwork is a provisional marker, poison-specific art unverified";
+                if(kinds[i]==WorldObjectKind.Poison)status+="; thorn nest (GDD Ổ gai) shown as the animated mutated wild rose";
                 if(kinds[i]==WorldObjectKind.Supply)status+="; DragonEgg is a provisional supply visual, DRG-01 is outside scope";
                 report.Append('|').Append(kinds[i]).Append('|').Append(entry.Source).Append('|').Append(status).Append("|\n");
             }
@@ -131,11 +141,43 @@ namespace JungleMaze.EditorTools
             {WorldObjectKind.Wall,("Assets/_JungleMaze/Art/World/Terrain/WallBlock16.png","")},
             {WorldObjectKind.Rock,(JungleObstacles+"10. Đá lớn/bigstone.aseprite","bigstone")},
             {WorldObjectKind.Statue,(JungleObstacles+"22. Tượng/statue.aseprite","statue")},
+            {WorldObjectKind.Pot,("Assets/_JungleMaze/Art/LevelEditor/Cainos/Prefab/Props/PF Props - Pot 01.prefab","")},
         };
+
+        private const string StoneDoorPath = JungleObstacles + "Cửa đá/stone_door.aseprite";
+        private const float DoorFrameSeconds = .07f;
+
+        /// <summary>
+        /// The jungle stone door turns on its hinge over 15 frames: 0 closed, 7 edge-on (open), 14 closed again.
+        /// Opening plays 0→7 and closing 7→14; both hold their last frame. Returns the closed frame, or null when missing.
+        /// </summary>
+        private static Sprite StoneDoorFrames(out WorldVisualSet.Frames open,out WorldVisualSet.Frames close)
+        {
+            open=close=null;
+            var frames=new Sprite[15];
+            foreach(var asset in AssetDatabase.LoadAllAssetsAtPath(StoneDoorPath))
+                if(asset is Sprite s&&s.name.StartsWith("Frame_")&&int.TryParse(s.name.Substring(6),out var n)&&n>=0&&n<frames.Length)frames[n]=s;
+            foreach(var f in frames)if(f==null)return null;
+            WorldVisualSet.Frames Range(int from,int to)
+            {
+                var count=to-from+1;var sprites=new Sprite[count];var times=new float[count];
+                for(var k=0;k<count;k++){sprites[k]=frames[from+k];times[k]=k*DoorFrameSeconds;}
+                return new WorldVisualSet.Frames{Sprites=sprites,Times=times,Duration=count*DoorFrameSeconds,Loop=false};
+            }
+            open=Range(0,7);close=Range(7,14);
+            return frames[0];
+        }
         private const string GroundPath = "Assets/_JungleMaze/Art/World/Terrain/GroundGrass48.png";
 
+        /// <summary>Sprite by name in an image/Aseprite file, or the first SpriteRenderer sprite of a prefab.</summary>
         private static Sprite LoadSprite(string path,string name)
         {
+            if(path.EndsWith(".prefab",System.StringComparison.OrdinalIgnoreCase))
+            {
+                var prefab=AssetDatabase.LoadAssetAtPath<GameObject>(path);
+                var renderer=prefab!=null?prefab.GetComponentInChildren<SpriteRenderer>(true):null;
+                return renderer!=null?renderer.sprite:null;
+            }
             foreach(var asset in AssetDatabase.LoadAllAssetsAtPath(path))if(asset is Sprite candidate&&(name.Length==0||candidate.name==name))return candidate;
             return null;
         }
