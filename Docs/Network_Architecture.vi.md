@@ -1,6 +1,18 @@
 # Kiến trúc mạng Jungle Maze / Lastaway
 
-Cập nhật Phase 2 ngày **01/11/2026**. Tài liệu mô tả kiến trúc dùng để triển khai game và ranh giới giữa các module. Setup nền nằm trong [hướng dẫn Phase 1](Phase1_First4Tasks.vi.md); chạy trận/account/bo theo [hướng dẫn Phase 2](Phase2_Match_Guest_Zone.vi.md). Bằng chứng nghiệm thu nằm trong [báo cáo Phase 2](Reports/Phase2_Local/report.vi.md); số liệu mạng các lượt trước ở [báo cáo Phase 1](Reports/Local_Capacity_Retest_2026-10-14/report.vi.md).
+## Chọn map theo phòng
+
+Nguồn map phát hành là catalog `Backend/Shared/GameData/Maps/`; production đọc bản ngoài image qua `MAP_DATA_PATH`. Local Compose bind `Backend/data/maps`, AWS dùng `/opt/junglemaze/data/maps` từ release `maps-hvu-20261103`. `MapPublisher` validate cả gói, giữ payload ID/hash bất biến, lưu manifest cũ, đổi catalog nguyên tử; `/internal/maps/reload` có secret chỉ ở control API private đưa snapshot catalog đã parse vào hàng đợi ứng dụng. Không upload/reload công khai, không I/O/parse trong tick.
+
+Mỗi room giữ MapDefinition riêng. Bộ luật dùng RulesHash độc lập với MapHash. Trận được chốt bằng **MapId + MapHash + RulesHash** và ghi bộ khóa này vào kết quả/outbox/Mongo/lịch sử. Hai map khởi đầu cùng luật, khác bố cục: Di tích cổ và Bãi đá. World, movement/collision, spawn, loot/portal đều nhận map của room. Trận đang chạy không đổi dữ liệu khi reload; phòng chờ chuyển bản mới hoặc map mặc định còn được phát hành.
+
+Gameplay protocol **2** bổ sung RoomMapState/SelectRoomMap/RoomMapReady/StartRoomMatch và metadata kết quả; client cũ nhận `GameplayVersionMismatch`. Handshake account-ticket vẫn **v4**, không gửi JWT qua UDP. Trưởng phòng phiên tách khỏi account owner quản lý/xóa room. Phòng tạo thêm chờ chủ account vào làm trưởng phòng đầu tiên; phòng mặc định lấy người vào đầu; khi trưởng phòng rời phòng chờ, quyền chuyển cho người còn kết nối sớm nhất.
+
+Client lấy catalog, JSON và preview qua `/api/maps` yêu cầu JWT. JSON tối đa 2 MiB, PNG tối đa 512 KiB; remote HTTPS, HTTP chỉ loopback. Cache tách origin/hash, payload kiểm hash/schema trước khi nhận; tải bằng file tạm, lỗi không dùng map khác. Generation/revision và cancellation chặn callback cũ. Offline vẫn dùng bundle, không gọi API. Trưởng phòng chỉ Bắt đầu sau khi đủ người và mọi client đã xác minh; vào/rời countdown hủy lượt bắt đầu. Sau kết quả giữ kết nối về phòng chờ để chọn map/lượt mới.
+
+Quy trình dev xuất/publish/rollback và kiểm hai máy nằm ở [Level Editor](hvu/06_Level_Editor.vi.md). Editor từ nhánh `hvu` đặt vật theo ô, dùng catalog Cainos; exporter phải giữ footprint và collider chân từ catalog khi tạo JSON authoritative. Art/đường đá của Editor không tự trở thành visual trong trận. NetSmokeClient có `--gameplay` để tải/ack map, trưởng phòng gửi Start và kiểm vòng trận; `NET_SMOKE_MAP_ID` chọn map cho lượt smoke. Đây là kiểm protocol/backend, không thay nghiệm thu gameplay Unity. Không chạy tải hoặc deploy AWS tự động.
+
+Cập nhật Phase 2 ngày **03/11/2026**. Tài liệu mô tả kiến trúc dùng để triển khai game và ranh giới giữa các module. Setup nền nằm trong [hướng dẫn Phase 1](Phase1_First4Tasks.vi.md); chạy trận/account/bo theo [hướng dẫn Phase 2](Phase2_Match_Guest_Zone.vi.md). Bằng chứng nghiệm thu nằm trong [báo cáo Phase 2](Reports/Phase2_Local/report.vi.md); số liệu mạng các lượt trước ở [báo cáo Phase 1](Reports/Local_Capacity_Retest_2026-10-14/report.vi.md).
 
 ## 0. Đường chơi và phạm vi thẩm quyền
 
@@ -54,9 +66,9 @@ Selfhost dùng `compose.host.yaml`, DB/volume/secret riêng. VPN: Tailscale Serv
 | `Assets/_JungleMaze` | Composition root + port/service; MatchSession nhận trạng thái; view vẽ và gửi input |
 | `Assets/Imported/JSurviv` | Mã tham khảo; Socket.IO cũ, `AutoConnectLegacy=false`; không tự trở thành client của backend mới |
 
-Dữ liệu chuẩn được đồng bộ sang `StreamingAssets/JungleMaze/runtime`. Menu Unity **Jungle Maze → Phase 2 → Sync Runtime Data** tạo bản sao và manifest SHA256. Build từ chối dữ liệu cũ; client so version/hash với server trước LoadingAck. Không sửa bản sao để đổi luật server.
+Luật dùng chung và map offline được đồng bộ sang `StreamingAssets/JungleMaze/runtime`; map online đọc từ catalog/API đã xác minh của từng phòng. Menu Unity **Jungle Maze → Phase 2 → Sync Runtime Data** tạo bản sao và manifest SHA256. Build từ chối dữ liệu cũ; client so version/hash với server trước LoadingAck. Không sửa bản sao để đổi luật server.
 
-Map demo 50×50 có 4 cover hình chữ nhật theo scene Game; server mô phỏng nhân vật tròn, sweep/slide với cover và biên bằng C#; không chạy Unity Physics2D. 10 spawn trong bo đầu, tránh cover và cách nhau ít nhất 6 cell. Data version1.1.0 bổ sung cố định60 rương,90 chum,45 bụi,3 cặp portal,2 cửa,2 đầm lầy,2 lava,4 poison; giữ geometry/spawn gốc. Tổng215 object gồm4 cover. Manifest/hash phải khớp giữa server và Unity. Bo r25 tâm (25,25) làm các góc map nằm ngoài vùng an toàn.
+Di tích cổ 50×50 giữ 4 cover hình chữ nhật của map gốc; Bãi đá giữ cùng số loại vật thể nhưng có cover/đường đi/portal khác. Online dựng cover và world view từ map đã xác minh, không dùng collider cứng của scene Game; server mô phỏng nhân vật tròn, sweep/slide với cover và biên bằng C#; không chạy Unity Physics2D. 10 spawn trong bo đầu, tránh cover và cách nhau ít nhất 6 cell. Data version1.1.0 bổ sung cố định60 rương,90 chum,45 bụi,3 cặp portal,2 cửa,2 đầm lầy,2 lava,4 poison; giữ geometry/spawn gốc. Tổng215 object gồm4 cover. Manifest/hash phải khớp giữa server và Unity. Bo r25 tâm (25,25) làm các góc map nằm ngoài vùng an toàn.
 
 ## 4. Account bắt buộc và dữ liệu Guest cũ
 
@@ -77,7 +89,7 @@ API: `POST /api/guests`, `POST /api/game-tickets`, `GET /api/me/matches`, `GET /
 
 `Waiting → Lobby → Loading → InGame → Ending → Cleanup → Waiting`.
 
-Main: min6/max10; lobby15s không có nút Ready. Hello là xác nhận khả năng gameplay; client chỉ ping không được tính vào người đủ điều kiện bắt đầu. Thiếu người hủy countdown. Loading chốt roster, tối đa30s, loại người không xác nhận; dưới min quay về Waiting. Profile `test` dùng min2 và tăng tốc bo/timer, chỉ cho nghiệm thu Local, không dùng public hosting.
+Main: min6/max10. Trưởng phòng chọn map, tất cả client xác minh đúng MapId/MapHash/RulesHash, rồi trưởng phòng bấm Bắt đầu; countdown 15s không có nút Ready. Vào/rời trong countdown hủy về Waiting và cần Bắt đầu lại. Hello là xác nhận khả năng gameplay; client chỉ ping không được tính vào người đủ điều kiện bắt đầu. Thiếu người hủy countdown. Loading chốt roster, tối đa30s, loại người không xác nhận; dưới min quay về Waiting. Profile `test` dùng min2 và tăng tốc bo/timer, chỉ cho nghiệm thu Local, không dùng public hosting.
 
 Loading/InGame/Ending từ chối người mới `MatchInProgress`. Mất mạng trong trận giữ avatar/slot15s từ lúc server phát hiện; avatar đứng yên, vẫn bị damage. Resume dùng proof ngẫu nhiên riêng, luân chuyển sau mỗi lần dùng, giữ PlayerId/slot và chỉ một kết nối điều khiển. Hết grace hoặc chủ động thoát bị loại; callback cũ không giải phóng slot mới.
 
@@ -107,7 +119,7 @@ Local/AWS có DB, secret, endpoint và volume riêng. `ROOM_CONTROL_TOKEN` bảo
 
 Restart giữ users/Guest/kết quả và outbox trên volume; session, trận đang chạy và phòng bổ sung trong RAM mất, phòng mặc định tạo lại. Không tự tạo kết quả cho trận bị ngắt. Update release có checksum, giữ bản trước để rollback và không ghi đè cấu hình bí mật. Triển khai AWS Phase 2 cần một cửa sổ riêng sau nghiệm thu Local.
 
-Windows đang giữ Unity6000.3.15f1 theo quyết định01/11. Lượt account-flow có crash native lúc thoát trong cleanup Accessibility; dù scenario đã ghi nhận kết quả, process exit lỗi vẫn làm cổng Local thất bại. Không deploy AWS khi cổng này chưa đạt. Bản sửa engine được Unity ghi tại [6000.3.21f1, UUM-146676](https://unity.com/releases/editor/whats-new/6000.3.21f1); chưa thay Editor hoặc tắt accessibility để né lỗi.
+Windows giữ Unity6000.3.15f1. Lượt map ngày03/11 có hai client UDP và hai client WebSocket Local hoàn tất kịch bản và process exit0. Trước đó lượt account-flow từng có crash native lúc thoát trong cleanup Accessibility; dù scenario đã ghi nhận kết quả, process exit lỗi vẫn làm cổng Local thất bại. Không deploy AWS khi cổng này chưa đạt. Bản sửa engine được Unity ghi tại [6000.3.21f1, UUM-146676](https://unity.com/releases/editor/whats-new/6000.3.21f1); chưa thay Editor hoặc tắt accessibility để né lỗi.
 
 ## 8. Credits và nguyên tắc test lớp học
 
@@ -117,6 +129,6 @@ Không suy diễn bài ping/pong cũ thành sức chứa gameplay. Khi bổ sung
 
 ## 9. Bằng chứng và phát triển tiếp
 
-[Báo cáo chung Phase2](Reports/Phase2_Local/report.vi.md) phân biệt kết quả backend Local, Unity thực, AWS UDP/WSS và lượt co-located cũ. Kiểm thử hai process Unity trên cùng PC không thay nghiệm thu hai máy vật lý.
+[Báo cáo chọn map Local](Reports/Map_Selection_Local/report.vi.md) ghi phần triển khai ban đầu. [Báo cáo merge hvu và AWS](Reports/Map_Selection_AWS/report.vi.md) ghi bản build mới, 6 client WSS/Auto trong 5 phút và lượt UDP/WSS trên hai map. [Báo cáo chung Phase2 trước đó](Reports/Phase2_Local/report.vi.md) phân biệt các lượt cũ. Nhiều process Unity trên cùng PC không thay nghiệm thu hai máy vật lý.
 
 Các dev tích hợp gameplay qua contract runtime/health/registry; combat phát damage, không tự ghi HP từ client. MOV-02/03, combat/world và UI được ghép qua các service hiện có. Trạng thái nghiệm thu từng module và toàn flow phải theo bằng chứng bản mới trong báo cáo, không suy từ demo Phase2 cũ. Khung `Application/Testing`, `OnlineScenarioRunner` và launcher `test-unity-online.ps1` nhận scenario JSON và check/driver đăng ký qua Bootstrap, dùng lại cho feature mới. Test không đủ tốc độ phát phải ghi INVALID; [checklist hai PC](../Backend/Tests/OnlineReadiness/PHYSICAL_TWO_PC_CHECKLIST.md) ghi rõ LAN/VPN/public/AWS và phần cần nghiệm thu bằng thiết bị thật.

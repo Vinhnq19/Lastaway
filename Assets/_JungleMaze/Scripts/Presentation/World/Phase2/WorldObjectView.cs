@@ -1,4 +1,5 @@
 using JungleBackend.Protocol.Gameplay;
+using JungleMaze.Presentation.Rendering;
 using UnityEngine;
 namespace JungleMaze.Presentation.World.Phase2
 {
@@ -43,7 +44,9 @@ namespace JungleMaze.Presentation.World.Phase2
             if (broken) { _flashRemaining=0; VisualState=WorldVisualState.Broken; }
             else if (fresh || _broken) VisualState=WorldVisualState.Normal;
             _broken=broken;_closed=closed;_hp=state.Hp;_applied=true;
-            _renderer.sortingOrder=state.Kind==100?8:state.Kind>=8&&state.Kind<=10?-1:1;
+            var flat=state.Kind>=8&&state.Kind<=10; // swamp/lava/poison nằm dưới mọi entity Y-sort
+            _renderer.sortingLayerID=SortingLayers.IdOf(flat?SortingLayers.Ground:SortingLayers.Default);
+            _renderer.sortingOrder=state.Kind==100?8:flat?-1:1;
             transform.position=new Vector3(state.X,state.Y,0);
             var reference=_entry.Sprite!=null?_entry.Sprite:sprite;
             if(reference!=null){var s=reference.bounds.size;transform.localScale=new Vector3(state.Width/Mathf.Max(.01f,s.x),state.Height/Mathf.Max(.01f,s.y),1);}

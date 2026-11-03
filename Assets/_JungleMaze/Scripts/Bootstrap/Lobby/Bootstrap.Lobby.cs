@@ -60,6 +60,12 @@ namespace JungleMaze.Composition
             ILeaderboardApi board = api;
 
             var accountSession = new AccountSession(account, () => DateTime.UtcNow);
+            var mapFiles = new RoomMapFiles(() => config.Current, () => accountSession.Token,
+                (JungleMaze.Infrastructure.Config.ClientRuntimeData)_registry.Resolve<IClientRuntimeData>(),
+                System.IO.Path.Combine(Application.persistentDataPath, "maps"), Application.streamingAssetsPath);
+            var roomMaps = new RoomMapSession(match, _registry.Resolve<IPacketSender>(), _registry.Resolve<IPacketReceiver>(), mapFiles);
+            _registry.Register(roomMaps);
+            ticks.Add(roomMaps);
             accountSession.LoggedOut += () => menu.AccountToken = null;
             if (menu != null)
             {
@@ -132,7 +138,8 @@ namespace JungleMaze.Composition
             }
             var root = Instantiate(set.UiPrefab, transform);
             root.name = "LobbyUi";
-            root.Bind(new LobbyUiPresenter(root, flow, menu, null, null, settingsOpen));
+            root.Bind(new LobbyUiPresenter(root, flow, menu, null, null, settingsOpen, roomMaps));
+            root.Lobby.gameObject.AddComponent<RoomMapPanel>().Bind(roomMaps, match, root.Lobby);
             gameObject.AddComponent<LegacyImguiToggle>().Construct(GetComponent<ConnectionMenuView>);
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
             gameObject.AddComponent<LobbyDebugPanel>().Construct(scenarios, flow);

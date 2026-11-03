@@ -2,6 +2,21 @@ namespace GameServer.Simulation;
 /// <summary>Read packaged canonical data, or an explicitly selected directory. Invalid data never silently falls back.</summary>
 public static class GameDataLoader
 {
+    // Map geometry is versioned independently; changing one map must not invalidate all other maps.
+    public static readonly string[] RuleFiles = { "match_settings.json", "zone_schedule.json", "world_settings.json", "items_catalog.json", "weapons.json" };
+    public static string RulesHash
+    {
+        get
+        {
+            using var hash = System.Security.Cryptography.IncrementalHash.CreateHash(System.Security.Cryptography.HashAlgorithmName.SHA256);
+            foreach (var file in RuleFiles)
+            {
+                hash.AppendData(System.Text.Encoding.UTF8.GetBytes(file));
+                hash.AppendData(System.Text.Encoding.UTF8.GetBytes(ReadGameDataFile(file).Replace("\r\n", "\n")));
+            }
+            return Convert.ToHexString(hash.GetHashAndReset()).ToLowerInvariant();
+        }
+    }
     public static string DataHash
     {
         get

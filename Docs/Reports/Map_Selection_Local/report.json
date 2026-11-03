@@ -1,0 +1,345 @@
+{
+  "generatedAt": "2026-11-03T08:35:12.032219+00:00",
+  "scope": "Local room map selection and immutable hot publication",
+  "baseCommit": "fe8226766f982e26bbc609ba7c6545ab68210ea7",
+  "branch": "codex/room-map-catalog-20261103",
+  "workingTreeChanges": true,
+  "unity": "6000.3.15f1",
+  "accountHandshake": 4,
+  "gameplayProtocol": 2,
+  "policy": {
+    "playersPerRoom": 10,
+    "rooms": 5,
+    "totalSessions": 50,
+    "mainMinPlayers": 6,
+    "testMinPlayers": 2
+  },
+  "catalog": {
+    "schemaVersion": 1,
+    "generation": 1,
+    "defaultMapId": "di-tich-co",
+    "maps": [
+      {
+        "id": "di-tich-co",
+        "name": "Di tích cổ",
+        "description": "Bố cục di tích hiện tại, nhiều vật thể và portal.",
+        "version": "1.1.0",
+        "mapHash": "b4810e608a95b11fcd6e47e5be76c75786e67208c2e1ccb6b5e0f3143b5845b6",
+        "previewHash": "4fcebbe9cfb2f11eca862f02c93dc3e6a3f14379904850cf75465d45bc65450d"
+      },
+      {
+        "id": "bai-da",
+        "name": "Bãi đá",
+        "description": "Cover bố trí khác, đường tiếp cận và vị trí vật thể thay đổi.",
+        "version": "1.0.0",
+        "mapHash": "f6980362fbce0fcb279b4ac7928ae89c3726ce5d418955198ac058586162bab2",
+        "previewHash": "3a6de3836851f4a3cba1b8e2f93157d0467b0cb146271e38a899a0ed047de2e2"
+      }
+    ]
+  },
+  "statusMatrix": [
+    {
+      "item": "Catalog / hai map",
+      "status": "PASS",
+      "evidence": "80 MapCatalogChecks; hai map/spawn/geometry/placements hợp lệ; ID/hash/path/bounds/schema được kiểm."
+    },
+    {
+      "item": "Host / Start / countdown",
+      "status": "PASS",
+      "evidence": "Creator/default host, chuyển quyền, cấm người khác, map-ready, join/leave/disconnect hủy countdown; không tự chạy lượt sau."
+    },
+    {
+      "item": "Hai phòng độc lập",
+      "status": "PASS_MODULE",
+      "evidence": "Hai runtime đồng thời nhận map/layout/world/hash khác nhau trong MapCatalogChecks; không phải bốn Unity client."
+    },
+    {
+      "item": "API catalog và payload",
+      "status": "PASS",
+      "evidence": "API Docker thật: JWT bắt buộc, JWT sai 401, hash không tồn tại 404; tải/xác minh hai JSON và hai PNG."
+    },
+    {
+      "item": "Cache / hủy / lỗi / retry",
+      "status": "PASS_MODULE",
+      "evidence": "8 EditMode test mới: origin/hash, file lỗi/quá cỡ, HTTPS, callback cũ, retry; Unity thật tải và dùng dữ liệu đã xác minh."
+    },
+    {
+      "item": "Publish / reload / rollback",
+      "status": "PASS",
+      "evidence": "Validate/export fixture; publish nguyên tử và gói lỗi giữ catalog; live 2→1→2, fallback và lấy hash cũ; khôi phục catalog hai map."
+    },
+    {
+      "item": "Hot publish trong trận",
+      "status": "PASS_FLOW",
+      "evidence": "Hai Unity player giữ Bãi đá 1.0.0 trong trận; phòng/lượt sau nhận 1.0.1/hash mới. Fixture đổi version JSON, không thử layout thứ ba."
+    },
+    {
+      "item": "UDP hai Windows player",
+      "status": "PASS_FLOW",
+      "evidence": "Cả hai account join, thấy người khác/di chuyển/bo/HP, kết quả, history, replay; exit 0."
+    },
+    {
+      "item": "WS hai Windows player",
+      "status": "PASS_FLOW",
+      "evidence": "Cùng flow qua ws://127.0.0.1:7781/game; exit 0. Chưa phải WSS Internet."
+    },
+    {
+      "item": "10 phiên hỗn hợp / phiên 11",
+      "status": "PASS",
+      "evidence": "6 UDP + 4 WS có mapVerified/snapshot; phiên 11 RoomFull. Đây là smoke ngắn, không phải benchmark."
+    },
+    {
+      "item": "Kết quả có map identity",
+      "status": "PASS",
+      "evidence": "77 MatchResultChecks và API/Mongo thật: history/leaderboard giữ MapId/Version/Hash/RulesHash cho hai version Bãi đá."
+    },
+    {
+      "item": "Hồi quy backend",
+      "status": "PASS",
+      "evidence": "Network 144 (rerun), Match 133, MatchResult 77; DualTransport, GameplayNetwork, World, WorldNetwork, Combat, Inventory, Telemetry exit 0."
+    },
+    {
+      "item": "Unity regression / Windows",
+      "status": "PASS",
+      "evidence": "EditMode 886/886; PlayMode 133/133; build 6000.3.15f1 thành công, 0 error/3 warning; bản bàn giao đối chiếu SHA256 từng file."
+    },
+    {
+      "item": "Hai PC vật lý / LAN",
+      "status": "NOT_TESTED",
+      "evidence": "Chỉ một PC; hai process không thay bằng chứng hai thiết bị. Có checklist riêng."
+    },
+    {
+      "item": "AWS / WSS public",
+      "status": "NOT_TESTED",
+      "evidence": "Không bật, deploy, test hoặc đổi trạng thái EC2 trong đợt này; compose AWS chỉ chuẩn bị mount maps."
+    },
+    {
+      "item": "6 người main / tải dài",
+      "status": "NOT_TESTED",
+      "evidence": "Giữ cấu hình main min6, lobby15s; flow mới chạy profile test min2 tăng tốc. Không suy ra sức chứa gameplay từ smoke."
+    }
+  ],
+  "metrics": [
+    {
+      "transport": "UDP",
+      "client": 0,
+      "status": "PASS",
+      "exitCode": 0,
+      "elapsedSeconds": 30.559961318969727,
+      "connectedSeconds": 28.99845314025879,
+      "snapshots": 810,
+      "inputs": 804,
+      "ignoredPackets": 0,
+      "catchupDrops": 1,
+      "maxPlayers": 2,
+      "completedMatches": 1,
+      "inputHz": 29.833759759397985,
+      "activeInputSeconds": 26.94933546707034,
+      "snapshotHz": 29.982234447253372,
+      "snapshotSeconds": 27.01599847152829,
+      "rttP50Ms": 33.3256,
+      "rttP95Ms": 33.5056,
+      "rttP99Ms": 44.8432,
+      "pings": 29,
+      "pongs": 29,
+      "pongTimeouts": 0
+    },
+    {
+      "transport": "UDP",
+      "client": 1,
+      "status": "PASS",
+      "exitCode": 0,
+      "elapsedSeconds": 30.363037109375,
+      "connectedSeconds": 28.889875411987305,
+      "snapshots": 810,
+      "inputs": 805,
+      "ignoredPackets": 0,
+      "catchupDrops": 1,
+      "maxPlayers": 2,
+      "completedMatches": 1,
+      "inputHz": 29.8322606942129,
+      "activeInputSeconds": 26.984210424125195,
+      "snapshotHz": 29.943577952728926,
+      "snapshotSeconds": 27.050875525921583,
+      "rttP50Ms": 33.3342,
+      "rttP95Ms": 33.7292,
+      "rttP99Ms": 39.3565,
+      "pings": 29,
+      "pongs": 29,
+      "pongTimeouts": 0
+    },
+    {
+      "transport": "WS Local",
+      "client": 0,
+      "status": "PASS",
+      "exitCode": 0,
+      "elapsedSeconds": 32.13621139526367,
+      "connectedSeconds": 30.278532028198242,
+      "snapshots": 851,
+      "inputs": 807,
+      "ignoredPackets": 0,
+      "catchupDrops": 1,
+      "maxPlayers": 2,
+      "completedMatches": 1,
+      "inputHz": 29.7349204711291,
+      "activeInputSeconds": 27.139806907624006,
+      "snapshotHz": 29.91960313992338,
+      "snapshotSeconds": 28.442890636622906,
+      "rttP50Ms": 33.3273,
+      "rttP95Ms": 39.1462,
+      "rttP99Ms": 72.1354,
+      "pings": 31,
+      "pongs": 31,
+      "pongTimeouts": 0
+    },
+    {
+      "transport": "WS Local",
+      "client": 1,
+      "status": "PASS",
+      "exitCode": 0,
+      "elapsedSeconds": 32.13475036621094,
+      "connectedSeconds": 30.30455207824707,
+      "snapshots": 851,
+      "inputs": 807,
+      "ignoredPackets": 0,
+      "catchupDrops": 1,
+      "maxPlayers": 2,
+      "completedMatches": 1,
+      "inputHz": 29.72337851086206,
+      "activeInputSeconds": 27.150345634669065,
+      "snapshotHz": 29.90856589054058,
+      "snapshotSeconds": 28.45338700339198,
+      "rttP50Ms": 33.3603,
+      "rttP95Ms": 43.0325,
+      "rttP99Ms": 69.8563,
+      "pings": 31,
+      "pongs": 31,
+      "pongTimeouts": 0
+    }
+  ],
+  "hotPublish": {
+    "status": "PASS",
+    "before": {
+      "id": "41bb8144-1dcc-46f1-99cb-7b0810f2aa72",
+      "mapId": "bai-da",
+      "mapVersion": "1.0.0",
+      "mapHash": "f6980362fbce0fcb279b4ac7928ae89c3726ce5d418955198ac058586162bab2",
+      "activePlayers": 2,
+      "pendingPlayers": 0
+    },
+    "during": {
+      "id": "41bb8144-1dcc-46f1-99cb-7b0810f2aa72",
+      "mapId": "bai-da",
+      "mapVersion": "1.0.0",
+      "mapHash": "f6980362fbce0fcb279b4ac7928ae89c3726ce5d418955198ac058586162bab2",
+      "activePlayers": 2,
+      "pendingPlayers": 0
+    },
+    "after": {
+      "id": "41bb8144-1dcc-46f1-99cb-7b0810f2aa72",
+      "mapId": "bai-da",
+      "mapVersion": "1.0.1",
+      "mapHash": "c274dfcd425ec82969b832df4d8a11435f7dee27bc4a84ee76107f040584f23e",
+      "activePlayers": 2,
+      "pendingPlayers": 0
+    },
+    "publishedHash": "c274dfcd425ec82969b832df4d8a11435f7dee27bc4a84ee76107f040584f23e"
+  },
+  "catalogCount": {
+    "status": "PASS",
+    "oneMapGeneration": 6,
+    "waitingRoomFallback": "bai-da",
+    "oldDefaultHashStillFetchable": true
+  },
+  "api": {
+    "status": "PASS",
+    "maps": [
+      "di-tich-co",
+      "bai-da"
+    ],
+    "mapHashesVerified": 2,
+    "previewHashesVerified": 2,
+    "jwtRequired": true
+  },
+  "mixedCapacity": {
+    "status": "PASS",
+    "sessions": 11,
+    "joined": 10,
+    "RoomFull": 1,
+    "snapshotsAndMapVerification": true
+  },
+  "history": {
+    "status": "PASS",
+    "rows": [
+      {
+        "matchId": "2299f15d-fe58-4ef1-96b1-25efc2e50d29",
+        "mapId": "bai-da",
+        "mapVersion": "1.0.1",
+        "mapHash": "c274dfcd425ec82969b832df4d8a11435f7dee27bc4a84ee76107f040584f23e",
+        "rulesHash": "b273e795e342ce8191c7f3b127dd2b3cd03c3b78b7bab772adbbfcc860d60872"
+      },
+      {
+        "matchId": "f38b3724-e6d9-4b92-af32-cf8f9905eb57",
+        "mapId": "bai-da",
+        "mapVersion": "1.0.0",
+        "mapHash": "f6980362fbce0fcb279b4ac7928ae89c3726ce5d418955198ac058586162bab2",
+        "rulesHash": "b273e795e342ce8191c7f3b127dd2b3cd03c3b78b7bab772adbbfcc860d60872"
+      },
+      {
+        "matchId": "10f655ba-f912-46e9-a015-04a3bce4b001",
+        "mapId": "bai-da",
+        "mapVersion": "1.0.0",
+        "mapHash": "f6980362fbce0fcb279b4ac7928ae89c3726ce5d418955198ac058586162bab2",
+        "rulesHash": "b273e795e342ce8191c7f3b127dd2b3cd03c3b78b7bab772adbbfcc860d60872"
+      },
+      {
+        "matchId": "9bfe3b33-bebb-4574-aeac-7c74b05dbefc",
+        "mapId": "bai-da",
+        "mapVersion": "1.0.0",
+        "mapHash": "f6980362fbce0fcb279b4ac7928ae89c3726ce5d418955198ac058586162bab2",
+        "rulesHash": "b273e795e342ce8191c7f3b127dd2b3cd03c3b78b7bab772adbbfcc860d60872"
+      },
+      {
+        "matchId": "864cbf48-99a0-4b4c-a188-950ababe12b2",
+        "mapId": "bai-da",
+        "mapVersion": "1.0.0",
+        "mapHash": "f6980362fbce0fcb279b4ac7928ae89c3726ce5d418955198ac058586162bab2",
+        "rulesHash": "b273e795e342ce8191c7f3b127dd2b3cd03c3b78b7bab772adbbfcc860d60872"
+      }
+    ]
+  },
+  "build": {
+    "success": true,
+    "message": "Build Succeeded.",
+    "data": {
+      "job_id": "build-5dbd3c8bd6",
+      "result": "succeeded",
+      "platform": "StandaloneWindows64",
+      "output_path": "D:/Unity/Lastaway/.utmp/map-selection-20261103/player/Lastaway.exe",
+      "started_at": "2026-11-03T08:23:54.2587431Z",
+      "duration_seconds": 102.1294126,
+      "completed_at": "2026-11-03T08:25:36.3881557Z",
+      "total_size_mb": 152.43,
+      "errors": 0,
+      "warnings": 3
+    }
+  },
+  "buildManifest": "evidence.zip/player-manifest.json",
+  "evidence": "evidence.zip",
+  "awsActions": false,
+  "physicalDeviceCount": 1,
+  "cleanup": {
+    "status": "PASS",
+    "beforeTemporaryBytes": 164115378,
+    "archiveBytes": 2724826,
+    "archiveSha256": "59201ebb8f476eeff12435d00d0608240a0a1f32ff20a2572a2567ec9277eeb8",
+    "archiveFiles": 121,
+    "roomsDeleted": 1,
+    "volumesPreserved": true,
+    "awsActions": false,
+    "canonicalBuildFiles": 253,
+    "canonicalBuildBytes": 160219208,
+    "temporaryBytesRemoved": 164118030,
+    "remainingTemporaryBytes": 614
+  }
+}

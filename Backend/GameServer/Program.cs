@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using GameServer.Rooms;
 
 // Composition root: cấu hình -> mở UDP -> poll + tick -> đóng socket khi dừng.
+if (args.Length > 0 && args[0] == "--maps") return await GameServer.Maps.MapPublisher.Run(args);
 try
 {
     var options = ServerOptions.FromEnvironment();

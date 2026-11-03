@@ -22,6 +22,29 @@ public sealed class RoomView
     public int ActivePlayers { get; init; }
     public int PendingPlayers { get; init; }
     public string? RoomCode { get; init; }
+    public string MapId { get; init; } = "";
+    public string MapName { get; init; } = "";
+    public string MapVersion { get; init; } = "";
+    public string MapHash { get; init; } = "";
+}
+
+public sealed class PublishedMapView
+{
+    public string Id { get; init; } = "";
+    public string Name { get; init; } = "";
+    public string Description { get; init; } = "";
+    public string Version { get; init; } = "";
+    public string MapHash { get; init; } = "";
+    public string PreviewHash { get; init; } = "";
+}
+
+public sealed class MapCatalogView
+{
+    public int SchemaVersion { get; init; } = 1;
+    public long Generation { get; init; }
+    public string DefaultMapId { get; init; } = "";
+    public string RulesHash { get; init; } = "";
+    public PublishedMapView[] Maps { get; init; } = Array.Empty<PublishedMapView>();
 }
 public sealed class CreateRoomCommand
 {

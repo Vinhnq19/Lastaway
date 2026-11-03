@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "generation": 1,
+  "defaultMapId": "di-tich-co",
+  "maps": [
+    {
+      "id": "di-tich-co",
+      "name": "Di tích cổ",
+      "description": "Bố cục di tích hiện tại, nhiều vật thể và portal.",
+      "version": "1.1.0",
+      "mapHash": "b4810e608a95b11fcd6e47e5be76c75786e67208c2e1ccb6b5e0f3143b5845b6",
+      "previewHash": "4fcebbe9cfb2f11eca862f02c93dc3e6a3f14379904850cf75465d45bc65450d"
+    },
+    {
+      "id": "bai-da",
+      "name": "Bãi đá",
+      "description": "Cover bố trí khác, đường tiếp cận và vị trí vật thể thay đổi.",
+      "version": "1.0.0",
+      "mapHash": "f6980362fbce0fcb279b4ac7928ae89c3726ce5d418955198ac058586162bab2",
+      "previewHash": "3a6de3836851f4a3cba1b8e2f93157d0467b0cb146271e38a899a0ed047de2e2"
+    }
+  ]
+}

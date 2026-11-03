@@ -23,6 +23,7 @@ namespace JungleMaze.App.World
         private readonly InventoryHudBinding _hud;
         private readonly MapLayoutConfig _config;
         private readonly MapLayout _authored;
+        private readonly Func<MapLayout> _selectedMap;
         private readonly Func<bool> _enabled;
         private readonly IEffectStateWriter _effects;
         private uint _effectsTick;
@@ -51,8 +52,8 @@ namespace JungleMaze.App.World
         public event Action<ushort,uint> Teleported;
 
         public WorldClientSession(MatchSession match, IPacketSender sender, IPacketReceiver receiver,
-            IClientRuntimeData runtime, InventoryHudBinding hud, MapLayoutConfig config, Func<bool> enabled = null, IEffectStateWriter effects = null, MapLayout authored = null)
-        { _match=match; _sender=sender; _receiver=receiver; _runtime=runtime; _hud=hud; _config=config; _enabled=enabled; _effects=effects; _authored=authored; }
+            IClientRuntimeData runtime, InventoryHudBinding hud, MapLayoutConfig config, Func<bool> enabled = null, IEffectStateWriter effects = null, MapLayout authored = null, Func<MapLayout> selectedMap = null)
+        { _match=match; _sender=sender; _receiver=receiver; _runtime=runtime; _hud=hud; _config=config; _enabled=enabled; _effects=effects; _authored=authored; _selectedMap=selectedMap; }
         public void Initialize()
         { _match.GameplayReady = GameplayReady; _receiver.Subscribe<WorldManifestPacket>(Manifest); _receiver.Subscribe<WorldObjectStatePacket>(Page); _receiver.Subscribe<InventoryStatePacket>(Items); }
         public void Dispose()
@@ -85,9 +86,11 @@ namespace JungleMaze.App.World
             if (p.MatchId!=_requested || p.MatchId==Guid.Empty) return;
             try
             {
-                if(_config==null||(_authored!=null?_authored.Version:_config.Version)!=p.Version||(_authored!=null?_authored.Size:_config.Size)!=p.Size){Reject("World config version/size differs from server.");return;}
-                if(_authored!=null&&p.Seed!=_authored.Seed){Reject("Authored map seed differs from server.");return;}
-                var layout=_authored??MapLayoutGenerator.Generate(_config,p.Seed);
+                var authored = _selectedMap != null ? _selectedMap() : _authored;
+                if(_selectedMap != null && authored == null){Reject("Selected map has not been verified.");return;}
+                if(_config==null||(authored!=null?authored.Version:_config.Version)!=p.Version||(authored!=null?authored.Size:_config.Size)!=p.Size){Reject("World config version/size differs from server.");return;}
+                if(authored!=null&&p.Seed!=authored.Seed){Reject("Authored map seed differs from server.");return;}
+                var layout=authored??MapLayoutGenerator.Generate(_config,p.Seed);
                 if (!string.Equals(layout.Hash,p.Hash,StringComparison.OrdinalIgnoreCase))
                 { Reject("World layout/config differs from server. Update the client data."); return; }
                 if (Layout != null && string.Equals(Layout.Hash, layout.Hash, StringComparison.OrdinalIgnoreCase)) return;

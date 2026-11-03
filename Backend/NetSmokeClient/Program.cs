@@ -10,6 +10,7 @@ if (args.Contains("--help"))
     Console.WriteLine("NetSmokeClient --config <JSON> [--name <displayName>] [--clients 1..256] [--duration 0..3600] [--warmup 0..300] [--ping-rate 1..60] [--quiet] [--report <JSON>] [--room-label <non-secret ID>] [--room-plan <private JSON>]");
     Console.WriteLine("duration tính bằng giây; 0 = đến Ctrl+C. Nhập mã phòng; Jwt cần login hoặc NET_ACCESS_TOKEN trong môi trường process.");
     Console.WriteLine("Endpoint: NET_MODE / NET_GAME_SERVER_HOST / NET_GAME_SERVER_PORT / NET_API_BASE_URL / NET_TRANSPORT / NET_WS_URL override JSON. NET_WS_CONNECT_IP chỉ pin TCP, giữ TLS hostname. Auto: UDP -> WSS trước khi join.");
+    Console.WriteLine("--gameplay: xác minh map, trưởng phòng gửi Start và kiểm vòng trận. NET_SMOKE_MAP_ID chọn map phát hành; cần account. Mặc định vẫn chỉ ping/pong.");
     return 0;
 }
 var sessions = new List<SmokeSession>();
@@ -21,11 +22,13 @@ try
     var warmupSeconds = 0;
     var pingRate = 1;
     var quiet = false;
+    var gameplay = false;
     string? reportPath = null, roomLabel = null, roomPlanPath = null;
     string? displayName = Environment.GetEnvironmentVariable("NET_DISPLAY_NAME");
     for (var index = 0; index < args.Length; index++)
     {
         if (args[index] == "--quiet") { quiet = true; continue; }
+        if (args[index] == "--gameplay") { gameplay = true; continue; }
         if (index + 1 >= args.Length) throw new ArgumentException($"Thiếu giá trị cho {args[index]}.");
         switch (args[index])
         {
@@ -85,7 +88,7 @@ try
     {
         number++;
         var name = clients == 1 ? displayName : displayName[..Math.Min(29, displayName.Length)] + "-" + number;
-        var session = new SmokeSession(number, options, assignment.Code, name, accessToken, pingRate, quiet, assignment.Label);
+        var session = new SmokeSession(number, options, assignment.Code, name, accessToken, pingRate, quiet, assignment.Label, gameplay);
         sessions.Add(session); // Ghi vào danh sách trước Start để lỗi giữa chừng vẫn được Dispose.
         await session.StartAsync(shutdown.Token);
     }

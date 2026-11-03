@@ -66,7 +66,8 @@ public sealed record MatchResult(
     DateTimeOffset StartUtc,
     DateTimeOffset EndUtc,
     string Reason,
-    IReadOnlyList<MatchParticipant> Participants
+    IReadOnlyList<MatchParticipant> Participants,
+    string MapId = "", string MapVersion = "", string MapHash = "", string RulesHash = ""
 );
 
 public sealed record KillcamReplayResult(

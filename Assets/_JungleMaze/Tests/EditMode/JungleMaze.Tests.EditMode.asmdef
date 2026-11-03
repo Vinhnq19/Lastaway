@@ -10,7 +10,8 @@
         "JungleMaze.Domain",
         "JungleMaze.Application",
         "JungleMaze.Infrastructure",
-        "JungleMaze.Presentation"
+        "JungleMaze.Presentation",
+        "JungleMaze.LevelEditor"
     ],
     "includePlatforms": [
         "Editor"
@@ -20,7 +21,8 @@
     "overrideReferences": true,
     "precompiledReferences": [
         "nunit.framework.dll",
-        "LiteNetLib.dll"
+        "LiteNetLib.dll",
+        "Newtonsoft.Json.dll"
     ],
     "autoReferenced": false,
     "defineConstraints": [

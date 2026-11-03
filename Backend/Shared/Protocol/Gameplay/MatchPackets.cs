@@ -4,7 +4,7 @@ using LiteNetLib.Utils;
 
 namespace JungleBackend.Protocol.Gameplay
 {
-    public static class MatchProtocol { public const ushort Version = 1; public const int MaxPlayers = 10; }
+    public static class MatchProtocol { public const ushort Version = 2; public const int MaxPlayers = 10; }
     public enum MatchPhase : byte { Waiting, Lobby, Loading, InGame, Ending, Cleanup }
     public enum MatchEndReason : byte { None, LastAlive, Tie, Timeout, Cancelled }
     public enum MatchEntityEvent : byte { Spawn, Despawn, Eliminated }
@@ -173,17 +173,20 @@ namespace JungleBackend.Protocol.Gameplay
     public struct MatchResultPacket : INetSerializable
     {
         public Guid MatchId; public MatchEndReason Reason; public byte WinnerNetId,ParticipantCount;
+        public string MapId, MapVersion, MapHash, RulesHash;
         public MatchParticipantState[]? Participants;
         public void Serialize(NetDataWriter w)
         {
             var n=Participants?.Length??0;MatchWire.Count(n);MatchWire.WriteGuid(w,MatchId);w.Put((byte)Reason);w.Put(WinnerNetId);w.Put((byte)n);
             if(Participants!=null)for(var i=0;i<n;i++)Participants[i].Serialize(w);
+            w.Put(MapId ?? ""); w.Put(MapVersion ?? ""); w.Put(MapHash ?? ""); w.Put(RulesHash ?? "");
         }
         public void Deserialize(NetDataReader r)
         {
             MatchId=MatchWire.ReadGuid(r);Reason=(MatchEndReason)r.GetByte();WinnerNetId=r.GetByte();ParticipantCount=r.GetByte();MatchWire.Count(ParticipantCount);
             if(Reason>MatchEndReason.Cancelled)throw new InvalidOperationException("Invalid match result.");
             Participants=new MatchParticipantState[ParticipantCount];for(var i=0;i<ParticipantCount;i++)Participants[i].Deserialize(r);
+            MapId=MatchWire.ReadString(r,32); MapVersion=MatchWire.ReadString(r,32); MapHash=MatchWire.ReadString(r,64); RulesHash=MatchWire.ReadString(r,64);
         }
     }
 

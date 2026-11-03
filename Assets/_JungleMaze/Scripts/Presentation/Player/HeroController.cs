@@ -1,6 +1,7 @@
 using JungleMaze.App.Player;
 using JungleMaze.App.Ports;
 using JungleMaze.Core.DI;
+using JungleMaze.Presentation.Rendering;
 using UnityEngine;
 
 namespace JungleMaze.Presentation.Player
@@ -25,6 +26,8 @@ namespace JungleMaze.Presentation.Player
         private Vector2 _moveInput;
         private float _aimDegrees;
         private Camera _camera;
+        private DepthSortable _depth;
+        private Vector3 _lastDepthPosition;
 
         public Vector2 MoveInput => _moveInput;
         public float MovementMultiplier { get; set; } = 1f;
@@ -47,6 +50,7 @@ namespace JungleMaze.Presentation.Player
             _body.interpolation = RigidbodyInterpolation2D.Interpolate;
             _body.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
             _aimDegrees = transform.eulerAngles.z;
+            TryGetComponent(out _depth); // tùy chọn: Hero không có DepthSortable vẫn chạy như cũ
             ApplyColliderConfig();
         }
 
@@ -73,6 +77,16 @@ namespace JungleMaze.Presentation.Player
         }
 
         private void FixedUpdate() => ApplyMovement(_moveInput);
+
+        // LateUpdate: transform đã mang pose nội suy của Rigidbody2D và mọi teleport trong Update của frame.
+        private void LateUpdate()
+        {
+            if (_depth == null) return;
+            var position = transform.position;
+            if (position == _lastDepthPosition) return;
+            _lastDepthPosition = position;
+            _depth.MarkDirty();
+        }
 
         /// <summary>Shared kinematics entry point; called by FixedUpdate, also usable by local acceptance tools.</summary>
         public void ApplyMovement(Vector2 input)

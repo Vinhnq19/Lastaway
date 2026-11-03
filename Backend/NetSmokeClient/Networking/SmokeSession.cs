@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using JungleBackend.Protocol;
+using JungleBackend.Protocol.Gameplay;
 using LiteNetLib;
 using LiteNetLib.Utils;
 using NetSmokeClient.Configuration;
@@ -32,6 +33,7 @@ public sealed class SmokeSession : IDisposable
     private long _routeStarted, _wsConnectedAt, _lastPong;
     private string _selectedTransport = "Udp";
     private string? _fallbackReason;
+    private readonly RoomGameplaySmoke? _gameplay;
     public string? FailureReason { get; private set; }
     public string? PlayerId { get; private set; }
     public bool Joined => PlayerId is not null;
@@ -42,7 +44,7 @@ public sealed class SmokeSession : IDisposable
     public bool Failed { get; private set; }
     public int Pongs { get; private set; }
 
-    public SmokeSession(int number, ClientOptions options, string roomCode, string displayName, string? accessToken = null, int pingRate = 1, bool quiet = false, string? roomLabel = null)
+    public SmokeSession(int number, ClientOptions options, string roomCode, string displayName, string? accessToken = null, int pingRate = 1, bool quiet = false, string? roomLabel = null, bool gameplay = false)
     {
         Number = number;
         RoomLabel = roomLabel;
@@ -52,10 +54,12 @@ public sealed class SmokeSession : IDisposable
         _accessToken = accessToken;
         _pingInterval = Stopwatch.Frequency / pingRate;
         _quiet = quiet;
+        if (gameplay) _gameplay = new RoomGameplaySmoke(options, accessToken ?? "", Send, Fail);
         var listener = new EventBasedNetListener();
         _manager = new NetManager(listener)
         {
             AutoRecycle = true,
+            ChannelsCount = GameplayProtocol.ChannelsCount,
             EnableStatistics = true,
             IPv6Enabled = false,
             ReconnectDelay = 500,
@@ -77,13 +81,14 @@ public sealed class SmokeSession : IDisposable
         };
         listener.NetworkReceiveEvent += (_, reader, channel, method) =>
             Receive(reader.GetRemainingBytes(), method == DeliveryMethod.ReliableOrdered,
-                method == DeliveryMethod.Unreliable, channel == 0);
+                method == DeliveryMethod.Unreliable, channel < GameplayProtocol.ChannelsCount);
         listener.NetworkErrorEvent += (_, error) => { if (!_closing) Fail($"SocketError:{error}"); };
     }
 
     private void Receive(byte[] packet, bool reliable, bool reliablePong, bool validChannel = true)
     {
         var reader = new NetDataReader(packet);
+        if (Joined && validChannel && PacketRegistry.IsFrame(reader)) { _gameplay?.Receive(packet); return; }
 
             if (!validChannel || reader.AvailableBytes == 0) return;
             var type = reader.PeekByte();
@@ -102,6 +107,7 @@ public sealed class SmokeSession : IDisposable
                 PlayerId = id;
                 _lastPong = Stopwatch.GetTimestamp();
                 _nextPing = Stopwatch.GetTimestamp();
+                _gameplay?.Start();
                 if (!_quiet) Console.WriteLine($"[client {Number}] JoinAccepted playerId={PlayerId}");
                 return;
             }
@@ -147,11 +153,11 @@ public sealed class SmokeSession : IDisposable
         _webSocket = new(new Uri(_options.WebSocketUrl!),
             NetworkProtocol.WriteConnect(_options.JoinMode, _roomCode, _displayName, (ushort)_options.ProtocolVersion, _attemptId, ticket: _ticket).CopyData(),_options.WebSocketConnectIp);
     }
-    private void Send(byte[] packet, bool reliable)
+    private void Send(byte[] packet, bool reliable, byte channel = 0)
     {
         if (_webSocket is not null)
         { if (!_webSocket.Send(packet)) Fail("SlowConsumer"); }
-        else _peer!.Send(packet, reliable ? DeliveryMethod.ReliableOrdered : DeliveryMethod.Unreliable);
+        else _peer!.Send(packet, channel, reliable ? DeliveryMethod.ReliableOrdered : DeliveryMethod.Unreliable);
     }
 
     public void Update()
@@ -166,6 +172,7 @@ public sealed class SmokeSession : IDisposable
         }
         if (Finished) return;
         var now = Stopwatch.GetTimestamp();
+        if (Joined) _gameplay?.Tick();
         var joinExpired = _webSocket is null
             ? Stopwatch.GetElapsedTime(_routeStarted).TotalMilliseconds >= (_options.Transport == "Auto" ? 5000 : _options.ConnectTimeoutMs)
             : _wsConnectedAt == 0 ? Stopwatch.GetElapsedTime(_routeStarted).TotalSeconds >= 10
@@ -227,7 +234,7 @@ public sealed class SmokeSession : IDisposable
         return new { client = Number, room = RoomLabel, connected = ConnectedOnce, joined = Joined,
             playerId = PlayerId, localUdpPort = _manager.LocalPort,
             transport = _selectedTransport, requestedTransport = _options.Transport, fallbackReason = _fallbackReason,
-            webSocketConnectIp = _options.WebSocketConnectIp,
+            webSocketConnectIp = _options.WebSocketConnectIp, gameplay = _gameplay?.Report,
             transportPacketsSent = _manager.Statistics.PacketsSent,
             transportPacketsReceived = _manager.Statistics.PacketsReceived,
             rejected = Failed && !Joined, disconnected = Failed && Joined,
@@ -247,6 +254,7 @@ public sealed class SmokeSession : IDisposable
     public void Dispose()
     {
         _closing = true;
+        _gameplay?.Dispose();
         // Stop gửi disconnect cho server; không tự reconnect để che giấu lỗi mạng/capacity.
         _manager.Stop();
         _webSocket?.Dispose();

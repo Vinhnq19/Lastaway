@@ -71,7 +71,7 @@ public sealed class MatchesController(
                     Kills: participant.Kills,
                     SurvivalSeconds: participant.SurvivalSeconds,
                     EndedAt: new DateTimeOffset(match.EndUtc, TimeSpan.Zero),
-                    Reason: match.Reason
+                    Reason: match.Reason, MapId: match.MapId, MapVersion: match.MapVersion, MapHash: match.MapHash, RulesHash: match.RulesHash
                 ));
             }
         }
@@ -118,7 +118,7 @@ public sealed class MatchesController(
                 StartUtc: new DateTimeOffset(match.StartUtc, TimeSpan.Zero),
                 EndUtc: new DateTimeOffset(match.EndUtc, TimeSpan.Zero),
                 Reason: match.Reason,
-                Players: players
+                Players: players, MapId: match.MapId, MapVersion: match.MapVersion, MapHash: match.MapHash, RulesHash: match.RulesHash
             );
 
             return Ok(response);
@@ -199,6 +199,7 @@ public sealed class MatchesController(
             CanonicalHash = canonicalHash,
             RoomId = submission.RoomId ?? "",
             ConfigVersion = submission.ConfigVersion ?? "",
+            MapId = submission.MapId, MapVersion = submission.MapVersion, MapHash = submission.MapHash, RulesHash = submission.RulesHash,
             StartUtc = submission.StartUtc.UtcDateTime,
             EndUtc = submission.EndUtc.UtcDateTime,
             Reason = submission.Reason ?? "",

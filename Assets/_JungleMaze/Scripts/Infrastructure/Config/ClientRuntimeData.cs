@@ -13,6 +13,24 @@ namespace JungleMaze.Infrastructure.Config
     public sealed class ClientRuntimeData : IClientRuntimeData
     {
         private readonly string _directory;
+        private SelectedMapData _selected;
+        public JungleMaze.World.MapLayout SelectedLayout => _selected?.Layout;
+        public string SelectedMapHash => _selected?.MapHash;
+        public void ClearSelectedMap() => _selected = null;
+        public string ActivateSelectedMap(string json, string mapHash, string rulesHash)
+        {
+            try
+            {
+                var prepared = SelectedMapData.Prepare(json, mapHash, rulesHash, _directory);
+                var oldZone = ZoneSchedule;
+                try { TryLoadZoneSchedule(); }
+                catch { ZoneSchedule = oldZone; throw; }
+                Bounds = prepared.Bounds; Covers = prepared.Covers; PlayerSpeed = prepared.PlayerSpeed; PlayerRadius = prepared.PlayerRadius;
+                _selected = prepared;
+                return null;
+            }
+            catch (Exception e) when (!(e is OutOfMemoryException)) { return "Map hoặc luật không hợp lệ/khác server; cập nhật client rồi thử lại."; }
+        }
         public IReadOnlyList<RuntimeCover> Covers { get; private set; } = Array.Empty<RuntimeCover>();
         public RuntimeMapBounds Bounds { get; private set; }
         public float PlayerSpeed { get; private set; }
@@ -26,6 +44,8 @@ namespace JungleMaze.Infrastructure.Config
 
         public string Verify(string expectedVersion, string expectedHash)
         {
+            if (_selected != null)
+                return _selected.MatchVersion == expectedVersion && _selected.RulesHash == expectedHash ? null : "Map/luật đã chọn không khớp server.";
             try
             {
                 var manifest = JObject.Parse(File.ReadAllText(Path.Combine(_directory, "manifest.json")));
@@ -69,6 +89,7 @@ namespace JungleMaze.Infrastructure.Config
 
         public string LoadLocal()
         {
+            ClearSelectedMap();
             try
             {
                 var manifest = JObject.Parse(File.ReadAllText(Path.Combine(_directory, "manifest.json")));

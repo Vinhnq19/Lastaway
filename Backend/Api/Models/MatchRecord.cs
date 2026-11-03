@@ -31,6 +31,10 @@ public sealed class MatchRecord
 
     public string RoomId { get; set; } = string.Empty;
     public string ConfigVersion { get; set; } = string.Empty;
+    public string MapId { get; set; } = string.Empty;
+    public string MapVersion { get; set; } = string.Empty;
+    public string MapHash { get; set; } = string.Empty;
+    public string RulesHash { get; set; } = string.Empty;
 
     [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
     public DateTime StartUtc { get; set; }

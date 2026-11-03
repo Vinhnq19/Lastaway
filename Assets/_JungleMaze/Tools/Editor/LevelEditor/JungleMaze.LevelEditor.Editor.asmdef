@@ -1,0 +1,1 @@
+{"name":"JungleMaze.LevelEditor.Editor","rootNamespace":"JungleMaze.EditorTools","references":["JungleMaze.LevelEditor","JungleMaze.Presentation","JungleMaze.World"],"includePlatforms":["Editor"],"autoReferenced":false}

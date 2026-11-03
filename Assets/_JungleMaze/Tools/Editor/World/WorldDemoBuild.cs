@@ -105,11 +105,36 @@ namespace JungleMaze.EditorTools
                 if(kinds[i]==WorldObjectKind.Supply)status+="; DragonEgg is a provisional supply visual, DRG-01 is outside scope";
                 report.Append('|').Append(kinds[i]).Append('|').Append(entry.Source).Append('|').Append(status).Append("|\n");
             }
+            entries.AddRange(MapCoverVisuals());
             set.Entries=entries.ToArray();EditorUtility.SetDirty(set);
             Directory.CreateDirectory("Docs/Art");File.WriteAllText("Docs/Art/ART03_Source_Audit.vi.md",report.ToString());
             AssetDatabase.SaveAssets();
         }
 
+        [MenuItem("Jungle Maze/Phase 2/Sync Map Cover Visuals")]
+        public static void SyncMapCoverVisuals()
+        {
+            var set=AssetDatabase.LoadAssetAtPath<WorldVisualSet>("Assets/_JungleMaze/Art/World/Resources/WorldVisualSet.asset");
+            if(set==null)throw new System.InvalidOperationException("Missing WorldVisualSet.");
+            var entries=new List<WorldVisualSet.Entry>();
+            foreach(var entry in set.Entries)if((byte)entry.Kind>4)entries.Add(entry);
+            entries.AddRange(MapCoverVisuals());set.Entries=entries.ToArray();EditorUtility.SetDirty(set);AssetDatabase.SaveAssetIfDirty(set);
+        }
+        private static WorldVisualSet.Entry[] MapCoverVisuals()
+        {
+            var result=new List<WorldVisualSet.Entry>();
+            var kinds=new[]{WorldObjectKind.Pillar,WorldObjectKind.Wall,WorldObjectKind.Rock,WorldObjectKind.Statue};
+            var guids=new[]{"e4e2483e878b2f24faf9fe89381f52ab","e4e2483e878b2f24faf9fe89381f52ab","7f085d8d25c86e64781760936da60fa1","b058f60fede58844c8207e61d7fc47e3"};
+            var names=new[]{"abandoned_1","abandoned_0","",""};
+            for(var i=0;i<kinds.Length;i++)
+            {
+                var path=AssetDatabase.GUIDToAssetPath(guids[i]);Sprite sprite=null;
+                foreach(var asset in AssetDatabase.LoadAllAssetsAtPath(path))if(asset is Sprite candidate&&(names[i].Length==0||candidate.name==names[i])){sprite=candidate;break;}
+                if(sprite==null)throw new System.InvalidOperationException("Missing map cover sprite: "+path);
+                result.Add(new WorldVisualSet.Entry{Kind=kinds[i],Sprite=sprite,Source=path});
+            }
+            return result.ToArray();
+        }
         private static WorldVisualSet.Frames ExtractFrames(string path,bool loop)
         {
             var clip=AssetDatabase.LoadAssetAtPath<AnimationClip>(path);if(clip==null)return null;

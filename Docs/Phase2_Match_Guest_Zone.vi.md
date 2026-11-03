@@ -22,7 +22,7 @@ Killcam dùng replay server theo chính phiên/phòng, tối đa5s (150frame), d
 
 **Mặc định khi mở game: Online · AWS** (`phase2-aws`, `junglemaze.duckdns.org`). Đây là chọn endpoint, không tự đăng nhập hoặc tự vào phòng. Cấu hình Local/LAN đã lưu không đổi mặc định lần mở sau. `-profile` và `-clientConfig` chỉ định rõ vẫn được ưu tiên để dev/test tự động dùng đúng môi trường. Nút Luyện tập offline luôn có trên menu.
 
-Mở `Builds/Windows-6000.3.15f1/Lastaway.exe`. Vào cài đặt máy chủ để đổi môi trường **trước khi đăng nhập**; đổi API sẽ đăng xuất. Mỗi backend có tài khoản và dữ liệu riêng. Sau đăng nhập: tạo phòng hoặc nhập mã phòng của cùng server; chủ phòng chia sẻ mã, không chia sẻ JWT. Profile `main` cần ít nhất6 người mới bắt đầu; phòng chứa tối đa10. Muốn test2 người trên host riêng, dùng `MATCH_PROFILE=test`, không đổi AWS đang phục vụ người khác.
+Mở `Builds/Windows-6000.3.15f1/Lastaway.exe`. Vào cài đặt máy chủ để đổi môi trường **trước khi đăng nhập**; đổi API sẽ đăng xuất. Mỗi backend có tài khoản và dữ liệu riêng. Sau đăng nhập: tạo phòng hoặc nhập mã phòng của cùng server; chủ phòng chia sẻ mã, không chia sẻ JWT. Trong phòng, trưởng phòng chọn map, chờ tất cả tải/xác minh xong rồi bấm **Bắt đầu**. Profile `main` cần ít nhất6 người; phòng chứa tối đa10. Muốn test2 người trên host riêng, dùng `MATCH_PROFILE=test`, không đổi AWS đang phục vụ người khác.
 
 ### Luyện tập offline — không dùng server
 
@@ -99,9 +99,9 @@ docker compose logs --tail 40 game-server api
 1. Mở project Unity **6000.3.15f1**, đợi hết compile. Trong menu **Jungle Maze → Phase 2 → Sync Runtime Data** đồng bộ map/luật/bo từ `Backend/Shared/GameData`. Dùng Verify Runtime Data để kiểm; không sửa bản sao StreamingAssets thay nguồn chuẩn.
 2. Trong Nâng cao của menu kết nối scene Boot, chọn profile **phase2-local**, đặt host/port theo compose và nhập `ROOM_CODE` trong `.env`. Protocol v4 bắt buộc account. Đăng ký/đăng nhập trên menu trước khi vào phòng; `apiBaseUrl` trỏ API loopback đang chạy. API từ xa phải HTTPS. Vé30s được cấp trước socket, không nhập JWT vào RoomCode.
 3. Build hai scene `Boot` và `Game` thành Windows player. Chạy một player + Unity Editor, hoặc hai player. Dùng hai tên dễ phân biệt. Cả hai dùng chung endpoint và mã phòng.
-4. Với `MATCH_PROFILE=test`, hai người đủ bắt đầu; lobby 0,5s, loading tối đa 1s, disconnect grace 1s, kết quả 0,5s và lịch bo chạy ở 4% thời gian gốc. Với `main`, cần ít nhất 6 người, lobby 15s, loading tối đa 30s, grace 15s, kết quả 10s và bo đúng lịch GDD. **Không dùng test profile để đo thời lượng GDD hoặc đưa public.**
+4. Với `MATCH_PROFILE=test`, hai người đủ điều kiện; trưởng phòng vẫn phải bấm Bắt đầu; lobby 0,5s, loading tối đa 1s, disconnect grace 1s, kết quả 0,5s và lịch bo chạy ở 4% thời gian gốc. Với `main`, cần ít nhất 6 người, lobby 15s, loading tối đa 30s, grace 15s, kết quả 10s và bo đúng lịch GDD. **Không dùng test profile để đo thời lượng GDD hoặc đưa public.**
 5. Quan sát roster/countdown/loading, hai nhân vật có nhãn tên/HP, bo đỏ hiện tại và bo vàng kế tiếp. WASD gửi input thật; server tính va chạm/speed/HP. Góc nhìn toàn map dành cho demo. Local HeroController bị tắt khi chơi mạng, tránh hai mô phỏng ghi vị trí.
-6. Ra ngoài bo để thấy HP giảm5/s; đợi thắng/hòa, xem hạng và nhấn chơi lại. Cùng tick bị loại đồng hạng. Bo về0 vẫn gây damage toàn map;420s không phải timeout cưỡng bức.
+6. Ra ngoài bo để thấy HP giảm5/s; đợi thắng/hòa, xem hạng và nhấn chơi lại để trở về phòng; trưởng phòng chọn map và Bắt đầu lượt mới. Cùng tick bị loại đồng hạng. Bo về0 vẫn gây damage toàn map;420s không phải timeout cưỡng bức.
 7. Rời phòng bằng nút để loại ngay. Mất mạng đột ngột: nhân vật đứng yên và còn nhận damage; nút khôi phục chỉ thành công khi còn sống và trong grace từ lúc server phát hiện mất kết nối: 15s với `main`, 1s với `test`. Resume giữ PlayerId/slot và đổi proof; không tạo nhân vật thứ hai.
 8. Nút lịch sử gọi API cho hồ sơ đã xác minh. Không tạo Guest mới trong flow chơi. JWT chỉ giữ RAM; mở lại client cần đăng nhập. Guest cũ không bị xóa/gộp. API mất kết nối vẫn xem kết quả trực tiếp; lịch sử báo không khả dụng. Không tự gộp tài khoản theo tên.
 

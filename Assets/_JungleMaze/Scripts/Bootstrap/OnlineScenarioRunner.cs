@@ -61,6 +61,12 @@ namespace JungleMaze.Composition
         private bool _finished, _wasJoined, _historyBusy;
         private bool _capturedView, _capturedResult;
         private Guid _lastReplay, _historyMatch, _movementMatch;
+        private RoomMapSession _roomMaps;
+        private bool _startRequested;
+        private string _testMapId;
+        private uint _testMapRevision;
+        private bool _capturedLobby;
+        [Inject] public void BindRoomMaps(RoomMapSession maps) => _roomMaps = maps;
         private double _movementInputSeconds;
         private int _baseInputs;
         private double _baseInputSeconds;
@@ -83,6 +89,7 @@ namespace JungleMaze.Composition
         private IEnumerator Start()
         {
             _started = Time.realtimeSinceStartup;
+            _testMapId = Environment.GetEnvironmentVariable("NET_TEST_MAP_ID");
             var args = Environment.GetCommandLineArgs(); string scenarioPath = null;
             for (var i = 0; i + 1 < args.Length; i++)
             { if (args[i] == "-onlineTest") scenarioPath = args[++i]; else if (args[i] == "-onlineEvidence") _output = args[++i]; }
@@ -135,6 +142,20 @@ namespace JungleMaze.Composition
                 Finish(blocked ? "BLOCKED" : "FAIL", "Connect failed: " + reason); return;
             }
             var context = new OnlineTestContext(_match, _network, _history, _sender, elapsed);
+            if (_roomMaps != null && _roomMaps.HasState)
+            {
+                if (_roomMaps.Verified && !_capturedLobby)
+                { ScreenCapture.CaptureScreenshot(_output + ".lobby.png"); _capturedLobby = true; }
+                if (_roomMaps.IsHost && _match.Phase == MatchPhase.Waiting && !string.IsNullOrEmpty(_testMapId) && _roomMaps.State.MapId != _testMapId)
+                {
+                    var target = Array.Find(_roomMaps.Catalog?.Maps ?? Array.Empty<PublishedMap>(), map => map.Id == _testMapId);
+                    if (target != null && _testMapRevision != _roomMaps.State.SelectionRevision)
+                    { _testMapRevision = _roomMaps.State.SelectionRevision; _roomMaps.Select(target); }
+                    return;
+                }
+                if (!_roomMaps.CanStart || _match.Phase != MatchPhase.Waiting) _startRequested = false;
+                else if (!_startRequested) { _startRequested = true; _roomMaps.Start(); Mark("host-start"); }
+            }
             if (_match.Phase == MatchPhase.InGame && _match.Connected)
             {
                 _snapshotSeconds += Time.unscaledDeltaTime;
@@ -196,10 +217,11 @@ namespace JungleMaze.Composition
                 if (!_capturedResult) { ScreenCapture.CaptureScreenshot(_output + ".result.png"); _capturedResult = true; }
                 _results.Add(_match.Result.MatchId); _historyMatch = _match.Result.MatchId;
                 if (_match.Result.ParticipantCount >= _scenario.expectedPlayers) Mark("result");
-                if (_scenario.requireHistory && !_historyBusy && elapsed >= _nextHistory && !Seen("history")) RefreshHistory();
                 if (_scenario.requireReplay && _match.Phase == MatchPhase.Ending && _lastReplay != _match.MatchId)
                 { _lastReplay = _match.MatchId; _match.Replay(); }
             }
+            // Persistence is asynchronous; Replay may close Ending before the outbox receives its ACK.
+            if (_scenario.requireHistory && _historyMatch != Guid.Empty && !_historyBusy && elapsed >= _nextHistory && !Seen("history")) RefreshHistory();
             if (_rounds.Count >= 2) Mark("replay");
             foreach (var pair in _checks)
             {

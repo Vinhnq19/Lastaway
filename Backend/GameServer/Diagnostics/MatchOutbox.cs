@@ -219,7 +219,7 @@ public sealed class MatchOutbox : IDisposable
                     p.Kills,
                     p.SurvivalSeconds,
                     p.ProfileKey
-                )).ToList()
+                )).ToList(), result.MapId, result.MapVersion, result.MapHash, result.RulesHash
             );
 
             var json = JsonSerializer.Serialize(submission, new JsonSerializerOptions(JsonSerializerDefaults.Web));
