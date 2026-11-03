@@ -78,9 +78,22 @@ Vũ khí và trang bị 2024 được nhận diện theo tên folder có số th
 
 **Kiểm chứng:** EditMode 919 test (918 pass; `RoomMapTests.BothPublishedMapsActivate…` fail sẵn, chỉ đọc `Backend/Shared/GameData` + `StreamingAssets`, không liên quan), PlayMode 133/133 pass, chạy Game offline và chụp ảnh đối chiếu trước/sau.
 
+### Tấn công và vũ khí cầm tay
+
+- **Animation tấn công:** `HeroVisualSet` có thêm loop `attack` back/side/front. `HeroSpriteAnimator.PlayAttack()` chạy một lần theo hướng hiện tại, rồi quay về idle/move. `CombatWeaponPresenter` gọi hàm này khi local dự đoán đòn (`AttackPredicted`) và khi server xác nhận đòn của người khác (`RemoteAttackConfirmed`).
+- **Vũ khí cầm tay:**
+  - `HeldWeaponCatalog.asset` gồm 17 vũ khí. Sprite lấy theo CSV ART-04. Góc xoay, điểm cầm và độ dài nằm trong `HeroVisualBuild.Tuning`. Kích thước tính theo vùng có nội dung thật của sprite, không theo canvas.
+  - `HeldWeaponView` (child `Weapon` của Hero/PlayerView) đặt vũ khí ở tay theo hướng ngắm, lật khi ngắm sang trái, nằm sau body khi quay lưng, ẩn khi tay không hoặc khi chết.
+  - Hero local theo `IHudState.HeldWeapon`. Người chơi khác hiện vũ khí của đòn đánh gần nhất, vì snapshot không có vũ khí đang cầm.
+- **Khi đánh:** đòn cận chiến ẩn vũ khí cầm tay, vì `MeleeSwingVisual` vẽ vũ khí quét theo cung, giờ cũng dùng sprite đã chuẩn hóa. Đòn bắn hoặc ném làm vũ khí giật lùi 0.12 giây.
+- **Kiểm chứng:**
+  - EditMode 929 test: 928 pass, `RoomMapTests` fail sẵn.
+  - PlayMode 133 test: 132 pass. `MenuOpen_DoesNotPause` fail do thời gian khi editor không được focus, chạy lại thì pass.
+  - Preview 17 vũ khí × 4 góc ngắm. Playtest có kích một đòn thật qua `OfflineWorldSession.TryAttack`.
+
 **Còn lại:**
-- Animation tấn công của hero (clip `attack` đã có, chưa nối với sự kiện combat).
-- Vũ khí cầm tay và đạn riêng theo vũ khí (tracer vàng hiện tại không méo, giữ tạm).
+- Đạn riêng theo vũ khí (tracer vàng hiện tại không méo, giữ tạm).
+- Người chơi khác chỉ đổi vũ khí cầm tay khi tấn công; muốn hiện ngay thì snapshot cần gửi vũ khí đang cầm.
 - World object chưa Y-sort với hero. `map_demo` có rương nằm trong footprint của tượng nên vẽ đè lên tượng.
 - Pot, Lava, Portal, Door, Poison, Supply vẫn dùng art cũ.
 
