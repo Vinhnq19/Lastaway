@@ -49,6 +49,41 @@ Vũ khí và trang bị 2024 được nhận diện theo tên folder có số th
 | VFX | Chưa có (chỉ tint flash, hit marker) | — |
 | Icon HUD | Bản đã chuẩn hóa 32px trong `Art/UI/Icons` (ART-04) | `HudItemIconCatalog.asset` |
 
+## Đã thay (03/11/2026)
+
+| Hạng mục | Art mới | Ghi chú |
+| --- | --- | --- |
+| Nền map | `Art/World/Terrain/GroundGrass48.png` (bản sao `TileMap_dat/NenDat/tilemap_grass.png`, 48 px = 1 ô, lát liền) | `MapGridView.groundSprite` |
+| Tường biên | `Art/World/Terrain/WallBlock16.png` (khối đá cắt từ `Nền đá/stone_wall_2.png`) | `MapGridView.wallSprite`, lát tile |
+| Pillar (1) | `obsidan/obsidian.aseprite` | |
+| Wall (2) | `WallBlock16` lát theo footprint | |
+| Rock (3) | `10. Đá lớn/bigstone.aseprite` | |
+| Statue (4) | `22. Tượng/statue.aseprite` | cao tối đa 1.6 lần footprint |
+| Chest (5) | `01. Rương/chest.aseprite` (Frame_0) | |
+| Bush (7) | `19. Bụi cây/bush1.aseprite` | |
+| Swamp (8) | `Đầm lầy/swamp2.aseprite` | |
+| 4 vật cản tĩnh trong Game | như kind 1–4 | `WorldDemoBuild.ApplyStaticMapVisuals` |
+| Item rơi trên đất (100) | Icon HUD đã chuẩn hóa theo item id | qua `IItemIconProvider`, không dùng thẳng art JSurviv |
+| Hero (local + remote) | `HeroVisualSet.asset`: 9 hero (`Hero_14` mặc định, bỏ `Hero_1`/Teemo), idle + move × back/side/front | `HeroSpriteAnimator` trên Body; người chơi khác nhận hero theo NetId |
+
+**Sửa lỗi méo:** trước đây mọi vật thể bị scale X/Y riêng để nhét vừa khung va chạm (tượng 64×128 ép vào 3×3, cột lấy nhầm slice 450×450 rồi ép 1×2). Giờ `WorldObjectView.Fit` và `ApplyCoverVisualIfMatching` luôn scale đều:
+- Vật đứng (kind 1–7, 12, 13): rộng bằng footprint, chân đặt ở đáy footprint, cao tối đa `MaxRise` = 1.6 footprint.
+- Mảng phẳng (kind 8–11) và item: nằm gọn trong footprint, căn giữa.
+- Tường: lát tile 1:1.
+- Root của vật cản tĩnh bị scale lệch (1×4), nên visual con được bù lại scale đó.
+
+**Body hero** đứng thẳng, chọn hướng theo góc ngắm của root (root vẫn xoay như cũ cho gameplay/test), lật trái/phải với hướng side, đổi idle/move theo tốc độ root.
+
+**Dựng lại:** menu **Jungle Maze → Phase 2 → Build World Visual Assets**, **Apply Static Map Visuals**, **Jungle Maze → Art → Build Hero Visuals**. Nguồn art của từng kind nằm trong `WorldDemoBuild.JungleArt`.
+
+**Kiểm chứng:** EditMode 919 test (918 pass; `RoomMapTests.BothPublishedMapsActivate…` fail sẵn, chỉ đọc `Backend/Shared/GameData` + `StreamingAssets`, không liên quan), PlayMode 133/133 pass, chạy Game offline và chụp ảnh đối chiếu trước/sau.
+
+**Còn lại:**
+- Animation tấn công của hero (clip `attack` đã có, chưa nối với sự kiện combat).
+- Vũ khí cầm tay và đạn riêng theo vũ khí (tracer vàng hiện tại không méo, giữ tạm).
+- World object chưa Y-sort với hero. `map_demo` có rương nằm trong footprint của tượng nên vẽ đè lên tượng.
+- Pot, Lava, Portal, Door, Poison, Supply vẫn dùng art cũ.
+
 ## Kế hoạch thay thế
 
 Ưu tiên theo mức độ người chơi nhìn thấy. Mỗi bước nên làm thành một ticket riêng, đi qua review và QA.
