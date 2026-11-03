@@ -91,8 +91,20 @@ Vũ khí và trang bị 2024 được nhận diện theo tên folder có số th
   - PlayMode 133 test: 132 pass. `MenuOpen_DoesNotPause` fail do thời gian khi editor không được focus, chạy lại thì pass.
   - Preview 17 vũ khí × 4 góc ngắm. Playtest có kích một đòn thật qua `OfflineWorldSession.TryAttack`.
 
+### Đạn riêng theo vũ khí
+
+| Vũ khí | Đạn | Nguồn JSurviv |
+| --- | --- | --- |
+| RUBBER_GUN | Viên sỏi, 7 frame lặp, dài 0.28 | `Prefabs/Projectiles/BowProjectile` (`37. Đạn sỏi`) |
+| SCEPTER | Quả cầu phép, dài 0.30 | `ScepterProjectile` (`quyen_truong_dan`) |
+| CROSSBOW | Mũi tên, bù −45° (sprite vẽ chéo), dài 0.50 | `Arrow` (`mui_ten`) |
+| SHOTGUN | Mỗi viên là tracer cam; một vệt nổ hình nón 6 frame ở nòng, dài 1.4, nén còn 0.24 s | `ShotgunProjectile` (JSurviv vẽ cả chùm đạn thành một hình nón, nên dùng làm hiệu ứng nòng) |
+
+- `ProjectileArtCatalog.asset` (menu **Jungle Maze → Art → Build Projectile Art**) chuẩn hóa kích thước theo vùng nội dung lớn nhất trong mọi frame. Tool cũng tạo `Prefabs/Combat/ShotFlashVisual.prefab` và gắn cả hai vào `CombatWeaponPresenter` trong Game.
+- `CoverProbeProjectile` giờ luôn xoay theo hướng bay. Trước đây tracer 0.18×0.08 luôn nằm ngang dù bắn hướng nào. `SetLook/ResetLook` chỉ đổi hình, không đổi sweep va chạm. Pool trả về hình tracer gốc khi despawn.
+- Kiểm chứng: EditMode 935 test, 934 pass (`RoomMapTests` fail sẵn). PlayMode 133 test, 132 pass: `Switch20In5s…` fail do thời gian khi editor không focus, chạy lại pass. Ảnh playtest bắn đủ 4 vũ khí qua `SpawnAttackVisual`.
+
 **Còn lại:**
-- Đạn riêng theo vũ khí (tracer vàng hiện tại không méo, giữ tạm).
 - Người chơi khác chỉ đổi vũ khí cầm tay khi tấn công; muốn hiện ngay thì snapshot cần gửi vũ khí đang cầm.
 - World object chưa Y-sort với hero. `map_demo` có rương nằm trong footprint của tượng nên vẽ đè lên tượng.
 - Pot, Lava, Portal, Door, Poison, Supply vẫn dùng art cũ.
