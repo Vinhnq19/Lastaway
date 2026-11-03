@@ -3,6 +3,7 @@ using LiteNetLib.Utils;
 
 namespace JungleBackend.Protocol.Gameplay
 {
+    /// <summary>State bits 0-3. Bits 4-7 carry the held weapon code: use <see cref="PlayerStatePacket.HeldCode"/>, never test them as flags.</summary>
     [Flags]
     public enum PlayerStateFlags : byte
     {
@@ -31,6 +32,39 @@ namespace JungleBackend.Protocol.Gameplay
         public ushort LastProcessedInputSeq;
         public byte Hp;
         public PlayerStateFlags Flags;
+
+        /// <summary>
+        /// Held weapon lives in the free high nibble of <see cref="Flags"/> (bits 4-7), so the packet size and the
+        /// gameplay version stay the same and older peers ignore it. 0 = unknown (server without this field),
+        /// 1..10 = <see cref="CombatWeaponId"/> + 1, 15 = holding an item that has no combat id (e.g. a throwable).
+        /// </summary>
+        public const byte HeldUnknown = 0, HeldOther = 15;
+        private const int HeldShift = 4;
+        private const byte LowFlagsMask = 0x0F;
+
+        /// <summary>Raw held-weapon code from the high nibble; see <see cref="HeldUnknown"/>.</summary>
+        public byte HeldCode => (byte)((byte)Flags >> HeldShift);
+
+        /// <summary>Stores the held combat weapon without touching the state flags in the low nibble.</summary>
+        public void SetHeldWeapon(CombatWeaponId weapon) => SetHeldCode((byte)((byte)weapon + 1));
+
+        /// <summary>Marks that the player holds an item with no combat id.</summary>
+        public void SetHeldOther() => SetHeldCode(HeldOther);
+
+        /// <summary>The combat weapon held, when the server sent one.</summary>
+        public bool TryGetHeldWeapon(out CombatWeaponId weapon) => TryDecodeHeld(HeldCode, out weapon);
+
+        /// <summary>Decodes a held code: true only for 1..10 (a <see cref="CombatWeaponId"/>).</summary>
+        public static bool TryDecodeHeld(byte code, out CombatWeaponId weapon)
+        {
+            weapon = CombatWeaponId.Hand;
+            if (code < 1 || code > (byte)CombatWeaponId.Shotgun + 1) return false;
+            weapon = (CombatWeaponId)(code - 1);
+            return true;
+        }
+
+        private void SetHeldCode(byte code) =>
+            Flags = (PlayerStateFlags)(((byte)Flags & LowFlagsMask) | ((code & 0x0F) << HeldShift));
 
         public float RotationDegrees => Rotation / RotationScale;
         public bool IsDead => (Flags & PlayerStateFlags.Dead) != 0;

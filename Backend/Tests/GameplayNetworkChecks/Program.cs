@@ -51,7 +51,11 @@ var cooldownStart=clock.ElapsedMilliseconds;Pump(()=>clock.ElapsedMilliseconds-c
 attacker.Reload(2,CombatWeaponId.Hand);
 Pump(()=>attacker.ReloadResults.Any(r=>r.RequestSeq==2));
 Check(attacker.ReloadResults.First(r=>r.RequestSeq==2).Outcome==CombatOutcome.InvalidWeapon&&!witness.ReloadResults.Any(r=>r.RequestSeq==2),"Reload with bare hands is InvalidWeapon and not broadcast");
+Check(Enumerable.Range(0,witness.Snapshot.PlayerCount).Select(i=>witness.Snapshot.GetPlayer(i)).Any(s=>s.NetId==attacker.OwnNetId&&s.TryGetHeldWeapon(out var hand)&&hand==CombatWeaponId.Hand),"Other clients' snapshots show the attacker bare-handed before equipping");
 Check(combatMatch.TrySetHeldWeapon(attacker.PlayerId!,CombatWeaponId.RubberGun),"Server accepts held RubberGun for the attacker");
+bool WitnessSeesRubberGun()=>Enumerable.Range(0,witness.Snapshot.PlayerCount).Select(i=>witness.Snapshot.GetPlayer(i)).Any(s=>s.NetId==attacker.OwnNetId&&!s.IsDead&&s.TryGetHeldWeapon(out var held)&&held==CombatWeaponId.RubberGun);
+Pump(WitnessSeesRubberGun);
+Check(WitnessSeesRubberGun(),"Snapshot carries the attacker's held RubberGun to other clients without touching state flags");
 attacker.Attack(3,CombatWeaponId.RubberGun);
 Pump(()=>attacker.AttackResults.Any(r=>r.RequestSeq==3)&&witness.AttackResults.Any(r=>r.RequestSeq==3));
 Check(attacker.AttackResults.First(r=>r.RequestSeq==3) is {Outcome:CombatOutcome.Accepted,Magazine:11}&&witness.AttackResults.Any(r=>r.RequestSeq==3),"Ranged shot accepted over real transport and broadcast to the room");
