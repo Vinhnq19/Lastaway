@@ -44,6 +44,7 @@ public sealed class WorldNetworkClient : IAsyncDisposable
     public WorldManifestPacket? Manifest { get; private set; }
     public int WorldPacketsSeen { get; private set; }
     public InventoryStatePacket? Inventory { get; private set; }
+    public HeldItemsPacket? HeldItems { get; private set; }
     public readonly Dictionary<ushort, WorldObjectStatePacket> Pages = new();
     public readonly List<WorldActionResultPacket> Results = new();
     public readonly List<AttackResultPacket> Attacks = new();
@@ -79,6 +80,7 @@ public sealed class WorldNetworkClient : IAsyncDisposable
         _registry.Subscribe<ReloadResultPacket>(p=>Reloads.Add(p));
         _registry.Subscribe<WorldManifestPacket>(p => { WorldPacketsSeen++; if (p.MatchId == MatchId) Manifest = p; });
         _registry.Subscribe<InventoryStatePacket>(p => { if (p.MatchId == MatchId && p.Actor == OwnNetId) Inventory = p; });
+        _registry.Subscribe<HeldItemsPacket>(p => { if (p.MatchId == MatchId) HeldItems = p; });
         _registry.Subscribe<WorldActionResultPacket>(p => { if (p.MatchId == MatchId) Results.Add(p); });
         _registry.Subscribe<WorldObjectStatePacket>(p =>
         {

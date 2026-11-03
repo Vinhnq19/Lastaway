@@ -15,6 +15,78 @@ namespace JungleBackend.Protocol.Gameplay
     }
 
     /// <summary>
+    /// Server → room, ReliableOrdered in its own frame: the item each player holds, so others can draw items that have no
+    /// <see cref="CombatWeaponId"/> (snapshot code <see cref="PlayerStatePacket.HeldOther"/>). Sent when a held item
+    /// changes and again every couple of seconds for late joiners. A full list: a missing NetId holds nothing special.
+    /// Peers that do not know this packet drop the frame and keep working, so no gameplay version bump is needed.
+    /// </summary>
+    public struct HeldItemsPacket : INetSerializable
+    {
+        public const int MaxPlayers = 10;
+        public const int MaxItemIdLength = 32;
+
+        public Guid MatchId;
+        public uint Tick;
+        public byte Count;
+        private HeldItemWire _p0, _p1, _p2, _p3, _p4, _p5, _p6, _p7, _p8, _p9;
+
+        public HeldItemWire Get(int index)
+        {
+            switch (index)
+            {
+                case 0: return _p0; case 1: return _p1; case 2: return _p2; case 3: return _p3; case 4: return _p4;
+                case 5: return _p5; case 6: return _p6; case 7: return _p7; case 8: return _p8; case 9: return _p9;
+                default: throw new ArgumentOutOfRangeException(nameof(index));
+            }
+        }
+
+        /// <summary>Appends one player's held item; false when the list is full.</summary>
+        public bool TryAdd(byte netId, string itemId)
+        {
+            if (Count >= MaxPlayers) return false;
+            var wire = new HeldItemWire { NetId = netId, ItemId = itemId ?? "" };
+            switch (Count)
+            {
+                case 0: _p0 = wire; break; case 1: _p1 = wire; break; case 2: _p2 = wire; break; case 3: _p3 = wire; break;
+                case 4: _p4 = wire; break; case 5: _p5 = wire; break; case 6: _p6 = wire; break; case 7: _p7 = wire; break;
+                case 8: _p8 = wire; break; default: _p9 = wire; break;
+            }
+            Count++;
+            return true;
+        }
+
+        public void Serialize(NetDataWriter writer)
+        {
+            MatchWire.WriteGuid(writer, MatchId);
+            writer.Put(Tick);
+            writer.Put(Count);
+            for (var i = 0; i < Count; i++)
+            {
+                var wire = Get(i);
+                writer.Put(wire.NetId);
+                writer.Put(wire.ItemId ?? "");
+            }
+        }
+
+        public void Deserialize(NetDataReader reader)
+        {
+            MatchId = MatchWire.ReadGuid(reader);
+            Tick = reader.GetUInt();
+            var count = reader.GetByte();
+            if (count > MaxPlayers) throw new InvalidOperationException("Too many held items.");
+            Count = 0;
+            for (var i = 0; i < count; i++) TryAdd(reader.GetByte(), MatchWire.ReadString(reader, MaxItemIdLength));
+        }
+    }
+
+    /// <summary>One player's held item ID ("" for nothing).</summary>
+    public struct HeldItemWire
+    {
+        public byte NetId;
+        public string ItemId;
+    }
+
+    /// <summary>
     /// Server → client, trạng thái authoritative của một người chơi tại Tick. Unreliable/Sequenced.
     /// NetId là slot 0..9 do server cấp (cần bổ sung vào JoinAccepted ở bản server tiếp theo).
     /// </summary>
@@ -48,7 +120,7 @@ namespace JungleBackend.Protocol.Gameplay
         /// <summary>Stores the held combat weapon without touching the state flags in the low nibble.</summary>
         public void SetHeldWeapon(CombatWeaponId weapon) => SetHeldCode((byte)((byte)weapon + 1));
 
-        /// <summary>Marks that the player holds an item with no combat id.</summary>
+        /// <summary>Marks that the player holds an item with no combat id; its ID travels in <see cref="HeldItemsPacket"/>.</summary>
         public void SetHeldOther() => SetHeldCode(HeldOther);
 
         /// <summary>The combat weapon held, when the server sent one.</summary>

@@ -120,6 +120,18 @@ try
     WaitTicks(35); Send(owner, 4, WorldActionKind.Resync);
     Pump(() => owner.WorldPacketsSeen > beforeResync);
     Check(owner.WorldObjects.Any(o => o.Id == chest.Id && (o.Flags & 1) != 0) && !owner.WorldObjects.Any(o => o.Id == drop.Id), "resync keeps chest broken and picked loot absent");
+    var witness = owner == clients[0] ? clients[1] : clients[0];
+    var ownerActor = serverMatch.Entities.All.First(a => a.NetId == owner.OwnNetId);
+    Check(world.Floor.TrySpawn(new JungleMaze.World.Inventory.ItemStack { ItemId = "BANANA", Count = 1 }, ownerActor.X, ownerActor.Y, out var bananaId), "fixture places a throwable at the owner");
+    WaitTicks(1); Send(owner, 10, WorldActionKind.Pickup, bananaId);
+    Pump(() => owner.Inventory!.Value.Slots.Take(4).Any(s => s.ItemId == "BANANA"));
+    var bananaSlot = (byte)Array.FindIndex(owner.Inventory!.Value.Slots, s => s.ItemId == "BANANA");
+    WaitTicks(1); Send(owner, 11, WorldActionKind.Select, 0, null, bananaSlot);
+    bool WitnessSeesBanana() => witness.HeldItems is { } held && held.MatchId == witness.MatchId &&
+        Enumerable.Range(0, held.Count).Select(held.Get).Any(e => e.NetId == owner.OwnNetId && e.ItemId == "BANANA") &&
+        Enumerable.Range(0, witness.Snapshot.PlayerCount).Select(witness.Snapshot.GetPlayer).Any(s => s.NetId == owner.OwnNetId && s.HeldCode == PlayerStatePacket.HeldOther);
+    Pump(WitnessSeesBanana);
+    Check(WitnessSeesBanana(), "other clients learn the held throwable: snapshot says other item, held-items list says BANANA");
     Check(clients.All(c => c.InvalidFrames == 0), "all real packet frames deserialize without protocol errors");
     var oldMatch = serverMatch.MatchId;
     var victim = clients.Take(2).First(c => c != owner);
