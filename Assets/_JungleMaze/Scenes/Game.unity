@@ -1169,6 +1169,9 @@ MonoBehaviour:
   - {fileID: 8787065810530966089, guid: 6caa90e4d645b4d49a0241d4aa1403b2, type: 3}
   - {fileID: 8787065810530966089, guid: 8433d16d135a4394ebe30a851c4267f6, type: 3}
   - {fileID: 8787065810530966089, guid: 554cdfa652cf16449bd36e94d6649265, type: 3}
+  remotePlayers: {fileID: 0}
+  projectileArt: {fileID: 11400000, guid: 413e4925634908d47ad6312c3fdde52e, type: 2}
+  flashPrefab: {fileID: 2087763340348962410, guid: 133926141b713fe4aa897158a3f6a77f, type: 3}
 --- !u!4 &1335988116
 Transform:
   m_ObjectHideFlags: 0

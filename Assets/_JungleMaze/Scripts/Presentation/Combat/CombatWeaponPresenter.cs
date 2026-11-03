@@ -38,6 +38,14 @@ namespace JungleMaze.Presentation.Combat
         [SerializeField] private GameObject[] weaponPrefabs = new GameObject[CombatWeaponIds.Count];
         /// <summary>Remote bodies to animate on confirmed attacks; found in the scene when left empty.</summary>
         [SerializeField] private RemotePlayerSpawner remotePlayers;
+        /// <summary>Per-weapon shot art; empty keeps the plain tracer for every ranged weapon.</summary>
+        [SerializeField] private ProjectileArtCatalog projectileArt;
+        /// <summary>Optional muzzle flash prefab for weapons whose art has a muzzle clip.</summary>
+        [SerializeField] private ShotFlashVisual flashPrefab;
+
+        private PooledPrefabFactory<ShotFlashVisual> _flashes;
+        /// <summary>Distance from the wielder's centre to the barrel, where shots and flashes start.</summary>
+        private const float MuzzleReach = .45f;
 
         private HeroSpriteAnimator _heroAnimator;
         private HeldWeaponView _heroWeapon;
@@ -99,6 +107,7 @@ namespace JungleMaze.Presentation.Combat
             _heroWeapon = hero.GetComponentInChildren<HeldWeaponView>(true);
             _heldCatalog = _heroWeapon != null ? _heroWeapon.Catalog : null;
             if (remotePlayers == null) remotePlayers = FindAnyObjectByType<RemotePlayerSpawner>();
+            if (flashPrefab != null) _flashes = new PooledPrefabFactory<ShotFlashVisual>(_pool, flashPrefab, 4);
             for (var i = 0; i < weaponPrefabs.Length && i < _weaponSprites.Length; i++)
             {
                 if (weaponPrefabs[i] == null) continue;
@@ -216,23 +225,34 @@ namespace JungleMaze.Presentation.Combat
             var slot = controller.Slot(weapon);
             if (slot.IsRanged)
             {
-                var shot = new ConfiguredShot(_balance, CombatWeaponIds.ToJsonId(weapon));
+                var itemId = CombatWeaponIds.ToJsonId(weapon);
+                var shot = new ConfiguredShot(_balance, itemId);
                 var count = CombatShotMath.PelletAngles(aimDegrees, slot.Pellets, slot.SpreadDegrees, _pelletAngles);
                 var pose = new SpawnPose(origin, Quaternion.identity);
+                var art = default(ProjectileArtCatalog.Entry);
+                var hasArt = projectileArt != null && projectileArt.TryGet(itemId, out art);
                 for (var i = 0; i < count; i++)
                 {
                     var radians = _pelletAngles[i] * Mathf.Deg2Rad;
                     var direction = new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
                     var projectile = _projectiles.Create(in pose);
+                    if (hasArt) projectile.SetLook(art.HasFlight ? art.Flight : null, art.FlightScale, art.AngleOffset, art.Spin, art.TracerColor);
                     projectile.Launch(in shot, direction);
+                }
+                if (hasArt && art.HasMuzzle && _flashes != null)
+                {
+                    var aim = aimDegrees * Mathf.Deg2Rad;
+                    var flash = _flashes.Create(SpawnPose.At(origin));
+                    flash.Play(art.Muzzle, origin + new Vector3(Mathf.Cos(aim), Mathf.Sin(aim), 0f) * MuzzleReach, aimDegrees, art.MuzzleScale);
+                    _pool.Despawn(flash, flash.Duration + .05f);
                 }
                 return 0f;
             }
 
             var swing = _swings.Create(SpawnPose.At(origin));
             var duration = Mathf.Max(0.1f, slot.CadenceSeconds * 0.6f);
-            if (_heldCatalog != null && _heldCatalog.TryGet(CombatWeaponIds.ToJsonId(weapon), out var art))
-                swing.Play(art.Sprite, anchor, aimDegrees, slot.ArcDegrees, slot.Range, duration, art.Scale, art.AngleOffset);
+            if (_heldCatalog != null && _heldCatalog.TryGet(CombatWeaponIds.ToJsonId(weapon), out var held))
+                swing.Play(held.Sprite, anchor, aimDegrees, slot.ArcDegrees, slot.Range, duration, held.Scale, held.AngleOffset);
             else
                 swing.Play(_weaponSprites[(int)weapon], anchor, aimDegrees, slot.ArcDegrees, slot.Range, duration);
             _pool.Despawn(swing, duration + 0.05f);
