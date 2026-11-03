@@ -36,7 +36,10 @@ namespace JungleMaze.EditorTools
                     var controller = Application.isPlaying ? FindAnyObjectByType<LevelEditorController>() : null;
                     var json = controller != null ? controller.Document.ToJson() : File.ReadAllText(_file);
                     // Work on a copy: exporting another version never mutates the level being edited.
-                    var document = LevelDocument.FromJson(json); document.Version = _version;
+                    // Grid placements need catalog footprints/foot colliders; a default parse would turn them into 1x1 blocks.
+                    var catalog = AssetDatabase.LoadAssetAtPath<LevelCatalog>("Assets/_JungleMaze/Art/LevelEditor/LevelEditorCatalog.asset");
+                    if (catalog == null) throw new InvalidOperationException("Thiếu Level Editor catalog; không thể xác minh footprint.");
+                    var document = LevelDocument.FromJson(json, catalog.BaseSizeOf, catalog.ShapeOf); document.Version = _version;
                     var root = Path.GetFullPath(Path.Combine(Application.dataPath, "../Backend/Shared/GameData/Maps"));
                     Export(document, root, _id, _name, _description, _default);
                     _status = "Đã xuất. Chạy validate → publish → reload; client sẽ tải bản mới trước trận tiếp theo.";

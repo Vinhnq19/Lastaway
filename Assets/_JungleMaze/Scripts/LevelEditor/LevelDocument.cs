@@ -4,6 +4,7 @@ using System.Globalization;
 using JungleMaze.World;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using UnityEngine;
 
 namespace JungleMaze.LevelEditor
 {
@@ -20,9 +21,26 @@ namespace JungleMaze.LevelEditor
         Spawn,
     }
 
+    /// <summary>Footprint ô nguyên của một loại vật và collider chân (theo góc dưới-trái footprint, chưa lật).</summary>
+    public readonly struct LevelItemShape
+    {
+        public readonly int Width, Height;
+        /// <summary>null/rỗng = cả footprint là collider (world object, decor, vật không có collider trong prefab).</summary>
+        public readonly Rect[] Colliders;
+
+        public LevelItemShape(int width, int height, Rect[] colliders)
+        {
+            Width = Math.Max(1, width);
+            Height = Math.Max(1, height);
+            Colliders = colliders;
+        }
+    }
+
     /// <summary>
-    /// Một vật thể đặt trên map. Vị trí tự do (không theo cell); footprint = kích thước gốc × Scale, xoay theo bước
-    /// 90° nên vẫn là AABB như game yêu cầu. FlipX chỉ là hình ảnh, không đổi footprint.
+    /// Một vật thể đặt trên map. Vật mới đặt theo ô (<see cref="OnGrid"/>): footprint nguyên, góc dưới-trái tại
+    /// (CellX, CellY), không scale/xoay; vùng chặn trong game là các collider chân. Vật đọc từ map cũ (lệch ô) giữ
+    /// footprint = kích thước gốc × Scale, xoay theo bước 90°, cho tới khi được kéo vào ô. FlipX chỉ đổi hình và
+    /// lật collider trong footprint.
     /// </summary>
     public sealed class LevelPlacement
     {
@@ -36,6 +54,10 @@ namespace JungleMaze.LevelEditor
         public bool FlipX;
         /// <summary>Chỉ dùng cho Portal: hai đầu cùng PairId là một cặp.</summary>
         public ushort PairId;
+        public bool OnGrid;
+        public int CellX, CellY;
+        /// <summary>Collider chân theo góc dưới-trái footprint (chưa lật); null = cả footprint.</summary>
+        public Rect[] Colliders;
 
         public float Width => (Rotation % 2 == 0 ? BaseWidth : BaseHeight) * Scale;
         public float Height => (Rotation % 2 == 0 ? BaseHeight : BaseWidth) * Scale;
@@ -43,6 +65,44 @@ namespace JungleMaze.LevelEditor
         public bool IsPortal => Group == LevelItemGroup.WorldObject && Type == nameof(WorldObjectKind.Portal);
 
         public LevelPlacement Clone() => (LevelPlacement)MemberwiseClone();
+
+        public static LevelPlacement OnCell(string type, LevelItemGroup group, int cellX, int cellY, LevelItemShape shape)
+        {
+            var p = new LevelPlacement { Type = type, Group = group, BaseWidth = shape.Width, BaseHeight = shape.Height, Colliders = shape.Colliders, OnGrid = true };
+            p.MoveToCell(cellX, cellY);
+            return p;
+        }
+
+        /// <summary>Đưa vật vào ô (vật lệch ô từ map cũ cũng được chuẩn hoá: bỏ scale/xoay, footprint làm tròn lên).</summary>
+        public void MoveToCell(int cellX, int cellY)
+        {
+            if (!OnGrid)
+            {
+                var w = Math.Max(1, (int)Math.Ceiling(Width - .01f));
+                var h = Math.Max(1, (int)Math.Ceiling(Height - .01f));
+                BaseWidth = w; BaseHeight = h; Scale = 1f; Rotation = 0; OnGrid = true;
+            }
+            CellX = cellX;
+            CellY = cellY;
+            X = cellX + Width / 2f;
+            Y = cellY + Height / 2f;
+        }
+
+        /// <summary>Vùng chặn ghi ra JSON game: từng collider chân (lật theo FlipX, dịch tới ô), hoặc cả footprint.</summary>
+        public IEnumerable<WorldBounds> GameRects()
+        {
+            if (!OnGrid || Colliders == null || Colliders.Length == 0)
+            {
+                yield return Bounds;
+                yield break;
+            }
+            foreach (var c in Colliders)
+            {
+                var minX = FlipX ? Width - c.xMax : c.xMin;
+                var maxX = FlipX ? Width - c.xMin : c.xMax;
+                yield return new WorldBounds { MinX = CellX + minX, MaxX = CellX + maxX, MinY = CellY + c.yMin, MaxY = CellY + c.yMax };
+            }
+        }
     }
 
     /// <summary>
@@ -59,7 +119,12 @@ namespace JungleMaze.LevelEditor
 
         public string Version = "1.1.0";
         public int Width = 50, Height = 50;
-        public int GroundTile;
+        /// <summary>Seed sinh cỏ/hoa, viền đường đá và tường mép (xem <see cref="LevelGround"/>).</summary>
+        public int Seed = 1;
+        /// <summary>Mật độ cỏ/hoa nhỏ rải theo seed (0–1, tỉ lệ ô trống có cỏ).</summary>
+        public float Decor = .12f;
+        /// <summary>Ô đường đá; chỉ là hình, đi xuyên, game không đọc.</summary>
+        public readonly HashSet<Vector2Int> Path = new HashSet<Vector2Int>();
         public readonly List<LevelPlacement> Placements = new List<LevelPlacement>();
 
         public static float ClampScale(float scale) => Math.Max(MinScale, Math.Min(MaxScale, scale));
@@ -89,6 +154,23 @@ namespace JungleMaze.LevelEditor
             return (ushort)(max + 1);
         }
 
+        /// <summary>
+        /// Vùng ô [x, x+w) × [y, y+h) nằm trong map và không chồng vật cùng lớp. Decor là một lớp riêng (đi xuyên);
+        /// cover, vật thể game và spawn chung một lớp vì game cấm chúng chồng nhau.
+        /// </summary>
+        public bool IsFree(int x, int y, int w, int h, bool decor, int ignore = -1)
+        {
+            if (x < 0 || y < 0 || x + w > Width || y + h > Height) return false;
+            var area = new WorldBounds { MinX = x, MinY = y, MaxX = x + w, MaxY = y + h };
+            for (var i = 0; i < Placements.Count; i++)
+            {
+                var p = Placements[i];
+                if (i == ignore || (p.Group == LevelItemGroup.Decoration) != decor) continue;
+                if (p.Bounds.Overlaps(area, -.001f)) return false;
+            }
+            return true;
+        }
+
         public int Count(LevelItemGroup group, string type = null)
         {
             var n = 0;
@@ -106,8 +188,10 @@ namespace JungleMaze.LevelEditor
             var decorations = new JArray();
             var spawns = new JArray();
             ushort id = 0;
+            var placements = new JArray();
             foreach (var p in Placements)
             {
+                placements.Add(EditorEntry(p));
                 var b = p.Bounds;
                 switch (p.Group)
                 {
@@ -115,7 +199,7 @@ namespace JungleMaze.LevelEditor
                         spawns.Add(new JObject { ["x"] = R(p.X), ["y"] = R(p.Y) });
                         break;
                     case LevelItemGroup.Cover:
-                        obstacles.Add(Rect(p, b));
+                        foreach (var rect in p.GameRects()) obstacles.Add(Rect(p, rect));
                         break;
                     case LevelItemGroup.Decoration:
                         decorations.Add(Rect(p, b));
@@ -141,7 +225,14 @@ namespace JungleMaze.LevelEditor
                 ["spawnPoints"] = spawns,
                 ["worldObjects"] = worldObjects,
                 ["decorations"] = decorations,
-                ["editor"] = new JObject { ["tool"] = "JungleMaze.LevelEditor", ["groundTile"] = GroundTile },
+                ["editor"] = new JObject
+                {
+                    ["tool"] = "JungleMaze.LevelEditor",
+                    ["seed"] = Seed,
+                    ["decor"] = R(Decor),
+                    ["path"] = PathJson(),
+                    ["placements"] = placements,
+                },
             };
             return root.ToString(Formatting.Indented);
         }
@@ -150,14 +241,29 @@ namespace JungleMaze.LevelEditor
         /// Đọc file do editor ghi hoặc <c>map_demo.json</c> gốc. <paramref name="baseSize"/> trả kích thước gốc của
         /// một loại (từ catalog) để tính lại Scale; trả null thì coi footprint trong file là kích thước gốc.
         /// </summary>
-        public static LevelDocument FromJson(string json, Func<string, (float width, float height)?> baseSize = null)
+        public static LevelDocument FromJson(string json, Func<string, (float width, float height)?> baseSize = null,
+            Func<string, LevelItemShape?> shape = null)
         {
             var root = JObject.Parse(json);
             var doc = new LevelDocument { Version = (string)root["version"] ?? "1.0.0" };
             var bounds = root["mapBounds"] as JObject ?? throw new FormatException("Thiếu mapBounds.");
             doc.Width = (int)Math.Round(F(bounds, "maxX") - F(bounds, "minX"));
             doc.Height = (int)Math.Round(F(bounds, "maxY") - F(bounds, "minY"));
-            if (root["editor"] is JObject editor) doc.GroundTile = (int?)editor["groundTile"] ?? 0;
+            if (root["editor"] is JObject editor)
+            {
+                doc.Seed = (int?)editor["seed"] ?? doc.Seed;
+                doc.Decor = (float?)editor["decor"] ?? doc.Decor;
+                if (editor["path"] is JArray path)
+                    foreach (var cell in path)
+                        if (cell is JArray xy && xy.Count == 2) doc.Path.Add(new Vector2Int((int)xy[0], (int)xy[1]));
+                // File do editor mới ghi: danh sách placement là nguồn sự thật (một cover có thể ra nhiều obstacle).
+                if (editor["placements"] is JArray entries)
+                {
+                    foreach (var token in entries)
+                        if (token is JObject o) doc.Placements.Add(FromEditorEntry(o, shape));
+                    return doc;
+                }
+            }
 
             foreach (var o in Items(root, "obstacles"))
                 doc.Placements.Add(FromRect(o, LevelItemGroup.Cover, (string)o["name"], baseSize));
@@ -209,12 +315,63 @@ namespace JungleMaze.LevelEditor
             }
         }
 
+        private JArray PathJson()
+        {
+            var cells = new List<Vector2Int>();
+            foreach (var c in Path)
+                if (c.x >= 0 && c.y >= 0 && c.x < Width && c.y < Height) cells.Add(c);
+            cells.Sort((a, b) => a.y != b.y ? a.y.CompareTo(b.y) : a.x.CompareTo(b.x));
+            var array = new JArray();
+            foreach (var c in cells) array.Add(new JArray(c.x, c.y));
+            return array;
+        }
+
+        private static JObject EditorEntry(LevelPlacement p)
+        {
+            var o = new JObject { ["type"] = p.Type, ["group"] = p.Group.ToString() };
+            if (p.OnGrid)
+            {
+                o["cellX"] = p.CellX;
+                o["cellY"] = p.CellY;
+            }
+            else
+            {
+                o["x"] = R(p.X); o["y"] = R(p.Y);
+                o["baseWidth"] = R(p.BaseWidth); o["baseHeight"] = R(p.BaseHeight);
+                o["scale"] = R(p.Scale); o["rotation"] = p.Rotation;
+            }
+            if (p.FlipX) o["flipX"] = true;
+            if (p.PairId != 0) o["pairId"] = p.PairId;
+            return o;
+        }
+
+        private static LevelPlacement FromEditorEntry(JObject o, Func<string, LevelItemShape?> shape)
+        {
+            var type = (string)o["type"];
+            if (string.IsNullOrEmpty(type)) throw new FormatException("Placement thiếu type.");
+            if (!Enum.TryParse<LevelItemGroup>((string)o["group"], out var group)) throw new FormatException($"Placement {type} sai group.");
+            LevelPlacement p;
+            if (o["cellX"] != null)
+                p = LevelPlacement.OnCell(type, group, (int)o["cellX"], (int)o["cellY"], shape?.Invoke(type) ?? new LevelItemShape(1, 1, null));
+            else
+                p = new LevelPlacement
+                {
+                    Type = type, Group = group, X = F(o, "x"), Y = F(o, "y"),
+                    BaseWidth = F(o, "baseWidth"), BaseHeight = F(o, "baseHeight"),
+                    Scale = (float?)o["scale"] ?? 1f, Rotation = ((int?)o["rotation"] ?? 0) & 3,
+                };
+            p.FlipX = (bool?)o["flipX"] ?? false;
+            p.PairId = (ushort?)o["pairId"] ?? 0;
+            return p;
+        }
+
         private static JObject Rect(LevelPlacement p, WorldBounds b)
         {
             var o = new JObject
             {
                 ["name"] = p.Type,
-                ["centerX"] = R(p.X), ["centerY"] = R(p.Y), ["sizeX"] = R(p.Width), ["sizeY"] = R(p.Height),
+                ["centerX"] = R((b.MinX + b.MaxX) / 2f), ["centerY"] = R((b.MinY + b.MaxY) / 2f),
+                ["sizeX"] = R(b.MaxX - b.MinX), ["sizeY"] = R(b.MaxY - b.MinY),
                 ["minX"] = R(b.MinX), ["maxX"] = R(b.MaxX), ["minY"] = R(b.MinY), ["maxY"] = R(b.MaxY),
             };
             AddVisual(o, p);

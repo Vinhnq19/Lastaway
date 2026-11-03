@@ -3,20 +3,16 @@ using UnityEngine;
 namespace JungleMaze.LevelEditor
 {
     /// <summary>
-    /// Scene LevelEditor (chạy bằng Play). Ground là Tilemap sinh từ W×H; vật thể đặt tự do theo world unit.
-    /// Chuột trái đặt/chọn-kéo, chuột phải xóa, lăn chuột đổi kích thước, Shift lật ngang (scale x = -1), R xoay 90°.
-    /// Alt + kéo chuột trái di chuyển camera, Alt + lăn chuột phóng to/thu nhỏ.
+    /// Scene LevelEditor (chạy bằng Play). Ground là Tilemap cỏ sinh theo seed; mọi vật đặt theo ô với footprint
+    /// nguyên, vùng chặn trong game là collider chân lấy từ prefab Cainos. Chuột trái đặt/chọn-kéo, chuột phải xóa,
+    /// Shift lật ngang, P cọ đường đá. Lăn chuột phóng to/thu nhỏ, Alt + kéo chuột trái (hoặc chuột giữa) di chuyển camera.
     /// File: cùng định dạng map_demo.json nên game/server đọc thẳng được. Ba file partial: điều khiển (file này),
     /// hiển thị (.View), giao diện + file (.Gui).
     /// </summary>
     [DisallowMultipleComponent]
     public sealed partial class LevelEditorController : MonoBehaviour
     {
-        private enum Tool { Select, Place }
-
-        private const float WheelScaleStep = 1.1f;
-        private const float SnapStep = .5f;
-        private const float NudgeStep = .1f;
+        private enum Tool { Select, Place, Path }
 
         [SerializeField] private LevelCatalog catalog;
         [SerializeField] private Camera viewCamera;
@@ -25,20 +21,18 @@ namespace JungleMaze.LevelEditor
         private readonly LevelHistory _history = new LevelHistory();
         private Tool _tool = Tool.Select;
         private LevelItemType _brush;
-        private float _brushScale = 1f;
-        private int _brushRotation;
         private bool _brushFlip;
         private int _selected = -1;
         private int _hover = -1;
         private bool _dragging, _dragRecorded;
-        private Vector2 _dragOffset;
+        private Vector2Int _dragOffset;
+        private bool _painting, _paintRecorded, _paintErase;
         private bool _panning;
         private int _panButton = -1;
         private Vector3 _panOrigin;
-        private float _lastWheelRecord;
-        private bool _snap;
         private bool _dirty;
         private Vector2 _mouseWorld;
+        private Vector2Int _mouseCell;
 
         public LevelDocument Document => _doc;
 
@@ -55,17 +49,19 @@ namespace JungleMaze.LevelEditor
             InitializeGui();
             RebuildAll();
             FrameMap();
-            SetStatus("Chọn vật thể ở cột trái rồi click chuột trái để đặt. Xem phím tắt ở cột phải.");
+            SetStatus("Chọn vật thể ở cột trái rồi click vào ô để đặt. P: cọ đường đá. Xem phím tắt ở cột phải.");
         }
 
         private void Update()
         {
             if (viewCamera == null) return;
             _mouseWorld = viewCamera.ScreenToWorldPoint(Input.mousePosition);
+            _mouseCell = new Vector2Int(Mathf.FloorToInt(_mouseWorld.x), Mathf.FloorToInt(_mouseWorld.y));
             HandleCamera();
             if (!IsTyping) HandleShortcuts();
             HandleMouse();
             UpdateGhost();
+            UpdateGridVisibility();
         }
 
         // ---------- Chuột ----------
@@ -74,19 +70,27 @@ namespace JungleMaze.LevelEditor
         {
             var overUi = IsPointerOverUi();
             if (_dragging) { ContinueDrag(); return; }
-            var hover = overUi ? -1 : _doc.FindTopAt(_mouseWorld.x, _mouseWorld.y);
+            if (_painting) { ContinuePaint(); return; }
+            var hover = overUi || _tool == Tool.Path ? -1 : _doc.FindTopAt(_mouseWorld.x, _mouseWorld.y);
             if (hover != _hover) { _hover = hover; RefreshHighlights(); }
             if (overUi) return;
 
             var wheel = Input.mouseScrollDelta.y;
-            if (wheel != 0f)
-            {
-                if (Alt) Zoom(wheel);
-                else ScaleActive(wheel > 0 ? WheelScaleStep : 1f / WheelScaleStep);
-            }
+            if (wheel != 0f) Zoom(wheel);
             if (Alt || _panning) return; // Alt + chuột trái là kéo camera, không đặt/chọn
 
             if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)) GUIUtility.keyboardControl = 0;
+            if (_tool == Tool.Path)
+            {
+                if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
+                {
+                    _painting = true;
+                    _paintRecorded = false;
+                    _paintErase = Input.GetMouseButtonDown(1);
+                    ContinuePaint();
+                }
+                return;
+            }
             if (Input.GetMouseButtonDown(1))
             {
                 if (_hover >= 0) RemoveAt(_hover);
@@ -97,52 +101,77 @@ namespace JungleMaze.LevelEditor
 
             Select(_hover);
             if (_selected < 0) return;
-            var p = _doc.Placements[_selected];
-            _dragOffset = new Vector2(p.X, p.Y) - _mouseWorld;
+            _dragOffset = CellOf(_doc.Placements[_selected]) - _mouseCell;
+            _dragStartCell = _mouseCell;
             _dragging = true;
             _dragRecorded = false;
         }
 
+        /// <summary>Kéo theo ô. Vật lệch ô (map cũ) chỉ được đưa vào ô khi con trỏ thực sự rời ô ban đầu.</summary>
         private void ContinueDrag()
         {
             if (!Input.GetMouseButton(0) || _selected < 0) { _dragging = false; return; }
-            var target = ClampToMap(SnapPoint(_mouseWorld + _dragOffset));
+            if (_mouseCell == _dragStartCell) return;
             var p = _doc.Placements[_selected];
-            if (Mathf.Approximately(p.X, target.x) && Mathf.Approximately(p.Y, target.y)) return;
+            var target = _mouseCell + _dragOffset;
+            if (p.OnGrid && p.CellX == target.x && p.CellY == target.y) return;
+            var moved = p.Clone();
+            moved.MoveToCell(target.x, target.y);
+            if (!CanPlace(moved, _selected)) return;
             if (!_dragRecorded) { RecordHistory(); _dragRecorded = true; }
-            p.X = target.x;
-            p.Y = target.y;
+            _doc.Placements[_selected] = moved;
             MarkDirty();
             RefreshView(_selected);
+            RebuildSprinkles();
         }
+
+        private Vector2Int _dragStartCell;
+
+        private static Vector2Int CellOf(LevelPlacement p) =>
+            p.OnGrid ? new Vector2Int(p.CellX, p.CellY) : new Vector2Int(Mathf.RoundToInt(p.Bounds.MinX), Mathf.RoundToInt(p.Bounds.MinY));
+
+        private void ContinuePaint()
+        {
+            var held = _paintErase ? Input.GetMouseButton(1) : Input.GetMouseButton(0);
+            if (!held) { _painting = false; return; }
+            var cell = _mouseCell;
+            if (cell.x < 0 || cell.y < 0 || cell.x >= _doc.Width || cell.y >= _doc.Height) return;
+            if (_doc.Path.Contains(cell) != _paintErase) return;
+            if (!_paintRecorded) { RecordHistory(); _paintRecorded = true; } // một lượt kéo = một bước undo
+            if (_paintErase) _doc.Path.Remove(cell);
+            else _doc.Path.Add(cell);
+            MarkDirty();
+            RefreshGroundAround(cell);
+            RebuildSprinkles();
+        }
+
+        /// <summary>Ô dưới-trái của footprint khi con trỏ ở <paramref name="cell"/>: con trỏ nằm giữa cạnh đáy.</summary>
+        private Vector2Int BrushOrigin(Vector2Int cell) => new Vector2Int(cell.x - (_brush.Footprint.x - 1) / 2, cell.y);
+
+        private bool CanPlace(LevelPlacement p, int ignore) =>
+            _doc.IsFree(Mathf.RoundToInt(p.Bounds.MinX), Mathf.RoundToInt(p.Bounds.MinY), Mathf.RoundToInt(p.Width), Mathf.RoundToInt(p.Height),
+                p.Group == LevelItemGroup.Decoration, ignore);
 
         private void PlaceBrush()
         {
-            var position = ClampToMap(SnapPoint(_mouseWorld));
-            var placement = CreateFromBrush(position);
+            var placement = CreateFromBrush(BrushOrigin(_mouseCell));
+            if (!CanPlace(placement, -1))
+            {
+                SetStatus("Ô này đã có vật hoặc nằm ngoài map.");
+                return;
+            }
             RecordHistory();
             _doc.Placements.Add(placement);
             MarkDirty();
             SyncViews();
-            SetStatus($"Đã đặt {_brush.DisplayName} tại ({position.x:0.##}, {position.y:0.##})" +
+            SetStatus($"Đã đặt {_brush.DisplayName} tại ô ({placement.CellX}, {placement.CellY})" +
                       (placement.IsPortal ? $" — cặp portal #{placement.PairId}" : ""));
         }
 
-        private LevelPlacement CreateFromBrush(Vector2 position)
+        private LevelPlacement CreateFromBrush(Vector2Int origin)
         {
-            var spawn = _brush.Group == LevelItemGroup.Spawn;
-            var placement = new LevelPlacement
-            {
-                Type = _brush.Id,
-                Group = _brush.Group,
-                X = position.x,
-                Y = position.y,
-                BaseWidth = spawn ? LevelDocument.SpawnSize : _brush.BaseSize.x,
-                BaseHeight = spawn ? LevelDocument.SpawnSize : _brush.BaseSize.y,
-                Scale = spawn ? 1f : _brushScale,
-                Rotation = spawn ? 0 : _brushRotation,
-                FlipX = !spawn && _brushFlip,
-            };
+            var placement = LevelPlacement.OnCell(_brush.Id, _brush.Group, origin.x, origin.y, _brush.Shape);
+            placement.FlipX = _brush.Group != LevelItemGroup.Spawn && _brushFlip;
             if (placement.IsPortal) placement.PairId = _doc.NextPortalPair();
             return placement;
         }
@@ -167,20 +196,20 @@ namespace JungleMaze.LevelEditor
                 return;
             }
             if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift)) FlipActive();
-            if (Input.GetKeyDown(KeyCode.R)) RotateActive();
             if (Input.GetKeyDown(KeyCode.Delete) || Input.GetKeyDown(KeyCode.Backspace)) { if (_selected >= 0) RemoveAt(_selected); }
             if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Q)) SetTool(Tool.Select, null);
-            if (Input.GetKeyDown(KeyCode.G)) { _snap = !_snap; SetStatus(_snap ? "Bật snap 0.5" : "Tắt snap"); }
+            if (Input.GetKeyDown(KeyCode.P)) SetTool(_tool == Tool.Path ? Tool.Select : Tool.Path, null);
             if (Input.GetKeyDown(KeyCode.H)) { _showOutlines = !_showOutlines; RefreshHighlights(); }
+            if (Input.GetKeyDown(KeyCode.L)) _showGrid = !_showGrid;
             if (Input.GetKeyDown(KeyCode.F)) FrameMap();
             if (_tool == Tool.Select && _selected >= 0)
             {
-                var nudge = Vector2.zero;
-                if (Input.GetKeyDown(KeyCode.LeftArrow)) nudge.x -= NudgeStep;
-                if (Input.GetKeyDown(KeyCode.RightArrow)) nudge.x += NudgeStep;
-                if (Input.GetKeyDown(KeyCode.DownArrow)) nudge.y -= NudgeStep;
-                if (Input.GetKeyDown(KeyCode.UpArrow)) nudge.y += NudgeStep;
-                if (nudge != Vector2.zero) Nudge(nudge);
+                var nudge = Vector2Int.zero;
+                if (Input.GetKeyDown(KeyCode.LeftArrow)) nudge.x -= 1;
+                if (Input.GetKeyDown(KeyCode.RightArrow)) nudge.x += 1;
+                if (Input.GetKeyDown(KeyCode.DownArrow)) nudge.y -= 1;
+                if (Input.GetKeyDown(KeyCode.UpArrow)) nudge.y += 1;
+                if (nudge != Vector2Int.zero) Nudge(nudge);
             }
         }
 
@@ -190,7 +219,8 @@ namespace JungleMaze.LevelEditor
         {
             _tool = tool;
             _brush = tool == Tool.Place ? brush : null;
-            if (_brush != null) Select(-1);
+            if (_brush != null || tool == Tool.Path) Select(-1);
+            if (tool == Tool.Path) SetStatus("Đường đá: giữ chuột trái để tô, chuột phải để xoá. P hoặc Q để thoát.");
             UpdateGhost();
         }
 
@@ -215,33 +245,12 @@ namespace JungleMaze.LevelEditor
             SetStatus($"Đã xóa {DisplayName(removed.Type)}" + (removed.IsPortal ? $" (cặp #{removed.PairId} còn lẻ)" : ""));
         }
 
-        private void ScaleActive(float factor)
-        {
-            if (_tool == Tool.Place && _brush != null)
-            {
-                if (_brush.Group == LevelItemGroup.Spawn) return;
-                _brushScale = LevelDocument.ClampScale(_brushScale * factor);
-                SetStatus($"Kích thước bút: ×{_brushScale:0.##}");
-                return;
-            }
-            if (_selected < 0) return;
-            var p = _doc.Placements[_selected];
-            if (p.Group == LevelItemGroup.Spawn) return;
-            // Một lượt lăn liên tục chỉ tạo một bước undo.
-            if (Time.unscaledTime - _lastWheelRecord > .5f) RecordHistory();
-            _lastWheelRecord = Time.unscaledTime;
-            p.Scale = LevelDocument.ClampScale(p.Scale * factor);
-            MarkDirty();
-            RefreshView(_selected);
-            SetStatus($"{DisplayName(p.Type)}: ×{p.Scale:0.##} ({p.Width:0.##}×{p.Height:0.##})");
-        }
-
         private void FlipActive()
         {
             if (_tool == Tool.Place && _brush != null)
             {
                 _brushFlip = !_brushFlip;
-                SetStatus(_brushFlip ? "Bút: lật ngang (sx = -1)" : "Bút: hướng gốc");
+                SetStatus(_brushFlip ? "Bút: lật ngang" : "Bút: hướng gốc");
                 return;
             }
             if (_selected < 0) return;
@@ -252,31 +261,18 @@ namespace JungleMaze.LevelEditor
             RefreshView(_selected);
         }
 
-        private void RotateActive()
+        private void Nudge(Vector2Int delta)
         {
-            if (_tool == Tool.Place && _brush != null)
-            {
-                _brushRotation = (_brushRotation + 1) & 3;
-                SetStatus($"Bút: xoay {_brushRotation * 90}°");
-                return;
-            }
-            if (_selected < 0 || _doc.Placements[_selected].Group == LevelItemGroup.Spawn) return;
-            RecordHistory();
             var p = _doc.Placements[_selected];
-            p.Rotation = (p.Rotation + 1) & 3;
+            var target = CellOf(p) + delta;
+            var moved = p.Clone();
+            moved.MoveToCell(target.x, target.y);
+            if (!CanPlace(moved, _selected)) { SetStatus("Không dịch được: ô bận hoặc ra ngoài map."); return; }
+            RecordHistory();
+            _doc.Placements[_selected] = moved;
             MarkDirty();
             RefreshView(_selected);
-        }
-
-        private void Nudge(Vector2 delta)
-        {
-            RecordHistory();
-            var p = _doc.Placements[_selected];
-            var target = ClampToMap(new Vector2(p.X, p.Y) + delta);
-            p.X = target.x;
-            p.Y = target.y;
-            MarkDirty();
-            RefreshView(_selected);
+            RebuildSprinkles();
         }
 
         private void DuplicateSelected()
@@ -285,8 +281,6 @@ namespace JungleMaze.LevelEditor
             var p = _doc.Placements[_selected];
             var type = catalog.Find(p.Type);
             if (type == null) return;
-            _brushScale = p.Scale;
-            _brushRotation = p.Rotation;
             _brushFlip = p.FlipX;
             SetTool(Tool.Place, type);
             SetStatus($"Nhân bản {type.DisplayName}: click để đặt bản sao.");
@@ -301,6 +295,29 @@ namespace JungleMaze.LevelEditor
             p.PairId = (ushort)next;
             MarkDirty();
         }
+
+        private void SetSeed(int seed)
+        {
+            if (seed == _doc.Seed) return;
+            RecordHistory();
+            _doc.Seed = seed;
+            MarkDirty();
+            GenerateGround();
+            SyncViews(); // mẫu hình bụi/bình chọn theo seed
+            SetStatus($"Seed {seed}: cỏ, hoa, viền đường và tường mép sinh lại.");
+        }
+
+        private void SetDecor(float density)
+        {
+            density = Mathf.Clamp01(density);
+            if (Mathf.Abs(density - _doc.Decor) < .005f) return;
+            if (!_decorRecorded) { RecordHistory(); _decorRecorded = true; }
+            _doc.Decor = density;
+            MarkDirty();
+            RebuildSprinkles();
+        }
+
+        private bool _decorRecorded;
 
         // ---------- Undo / tài liệu ----------
 
@@ -320,17 +337,18 @@ namespace JungleMaze.LevelEditor
             SetStatus("Làm lại.");
         }
 
+        private LevelDocument ParseDocument(string json) => LevelDocument.FromJson(json, catalog.BaseSizeOf, catalog.ShapeOf);
+
         private void Restore(string json)
         {
-            var restored = LevelDocument.FromJson(json, catalog.BaseSizeOf);
-            var sizeChanged = restored.Width != _doc.Width || restored.Height != _doc.Height || restored.GroundTile != _doc.GroundTile;
-            _doc = restored;
+            _doc = ParseDocument(json);
             _selected = -1;
             _hover = -1;
             _dragging = false;
+            _painting = false;
             MarkDirty();
             SyncMapFields();
-            if (sizeChanged) GenerateGround();
+            GenerateGround();
             SyncViews();
         }
 
@@ -341,6 +359,7 @@ namespace JungleMaze.LevelEditor
             _selected = -1;
             _hover = -1;
             _dragging = false;
+            _painting = false;
             _dirty = false;
             _validation = null;
             SyncMapFields();
@@ -354,12 +373,6 @@ namespace JungleMaze.LevelEditor
             _validation = null; // kết quả kiểm tra cũ không còn đúng
         }
 
-        private Vector2 SnapPoint(Vector2 p) =>
-            _snap ? new Vector2(Mathf.Round(p.x / SnapStep) * SnapStep, Mathf.Round(p.y / SnapStep) * SnapStep) : p;
-
-        private Vector2 ClampToMap(Vector2 p) =>
-            new Vector2(Mathf.Clamp(p.x, 0f, _doc.Width), Mathf.Clamp(p.y, 0f, _doc.Height));
-
         private string DisplayName(string id)
         {
             var type = catalog.Find(id);
@@ -371,7 +384,7 @@ namespace JungleMaze.LevelEditor
         private void HandleCamera()
         {
             // Kéo camera: Alt + chuột trái (hoặc giữ chuột giữa).
-            if (!_panning && !_dragging && !IsPointerOverUi())
+            if (!_panning && !_dragging && !_painting && !IsPointerOverUi())
             {
                 if (Alt && Input.GetMouseButtonDown(0)) _panButton = 0;
                 else if (Input.GetMouseButtonDown(2)) _panButton = 2;
@@ -418,9 +431,9 @@ namespace JungleMaze.LevelEditor
         private void FrameMap()
         {
             viewCamera.orthographic = true;
-            viewCamera.transform.position = new Vector3(_doc.Width / 2f, _doc.Height / 2f, -10f);
+            viewCamera.transform.position = new Vector3(_doc.Width / 2f, _doc.Height / 2f - 1f, -10f);
             var aspect = Mathf.Max(.1f, viewCamera.aspect);
-            viewCamera.orthographicSize = Mathf.Max(_doc.Height / 2f, _doc.Width / 2f / aspect) * 1.15f + 1f;
+            viewCamera.orthographicSize = Mathf.Max(_doc.Height / 2f + 1f, _doc.Width / 2f / aspect) * 1.15f + 1f;
         }
     }
 }
