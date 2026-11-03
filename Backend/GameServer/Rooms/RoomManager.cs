@@ -2,13 +2,14 @@ using System.Security.Cryptography;
 using GameServer.Configuration;
 using JungleBackend.Protocol.Gameplay;
 using JungleBackend.Rooms;
+using GameServer.Maps;
 
 namespace GameServer.Rooms;
 
 using GameServer.Simulation;
 
 /// <summary>Chỉ truy cập trên thread PollEvents. Không lock/HTTP/DB trong tick.</summary>
-public sealed class RoomManager
+public sealed partial class RoomManager
 {
     public sealed class Room(Guid id, string name, string code, string? owner, int max, DateTimeOffset now, MatchRuntime match)
     {
@@ -21,6 +22,12 @@ public sealed class RoomManager
         public Dictionary<int, bool> Peers { get; } = new(); // false=pending JWT; true=active
         public DateTimeOffset EmptySince { get; set; } = now;
         public MatchRuntime Match { get; } = match;
+        internal List<byte> MemberOrder { get; } = new();
+        internal Dictionary<byte, string> MemberProfiles { get; } = new();
+        internal HashSet<byte> MapReady { get; } = new();
+        internal byte HostNetId = 255;
+        internal bool HostAssigned;
+        internal uint SelectionRevision = 1;
         public override string ToString() => $"Room(id={Id}, peers={Peers.Count})";
     }
     private readonly RoomOptions _options;
@@ -29,21 +36,25 @@ public sealed class RoomManager
     private readonly MapData _map;
     private readonly ZoneSchedule _zoneSchedule;
     private readonly MatchProfile _profile;
+    private readonly MatchWorldSetup? _worldSetup;
+    public MapCatalogStore? Catalog { get; }
 
     public event Action<Room>? RoomCreated;
 
-    public RoomManager(ServerOptions server, TimeProvider? time = null, MatchProfile? profile = null, MapData? map = null, ZoneSchedule? zoneSchedule = null)
+    public RoomManager(ServerOptions server, TimeProvider? time = null, MatchProfile? profile = null, MapData? map = null, ZoneSchedule? zoneSchedule = null, MapCatalogStore? catalog = null)
     {
         _options = server.Rooms ?? new RoomOptions();
         _time = time ?? TimeProvider.System;
         _profile = profile ?? MatchProfile.Current;
+        Catalog = catalog;
+        if (catalog is not null) _worldSetup = MatchWorldSetup.Load();
 
         // Invalid or missing canonical data is a startup error; never substitute a different map.
-        _map = map ?? MapData.Load(GameDataLoader.ReadGameDataFile("map_demo.json"));
+        _map = map ?? catalog?.Current.Find(catalog.Current.DefaultMapId)?.Data ?? MapData.Load(GameDataLoader.ReadGameDataFile("map_demo.json"));
         _zoneSchedule = zoneSchedule ?? ZoneSchedule.Load(GameDataLoader.ReadGameDataFile("zone_schedule.json"));
 
         var roomId = Guid.NewGuid();
-        var defaultMatch = new MatchRuntime(server.RoomCode, _map, _zoneSchedule, _profile, roomId.ToString());
+        var defaultMatch = NewRuntime(server.RoomCode, roomId);
         var room = new Room(roomId, "Default", server.RoomCode, null, server.MaxPlayers, _time.GetUtcNow(), defaultMatch);
         _byCode.Add(room.Code, room);
     }
@@ -87,7 +98,12 @@ public sealed class RoomManager
     {
         foreach (var room in _byCode.Values)
         {
+            var phase = room.Match.Phase;
+            var matchId = room.Match.MatchId;
             room.Match.Tick(dt);
+            RefreshMembers(room);
+            if (room.Match.Phase == MatchPhase.Waiting && Catalog is not null) ReconcileMap(room, Catalog.Current);
+            if (phase != room.Match.Phase || matchId != room.Match.MatchId) MapStateChanged?.Invoke(room);
         }
     }
 
@@ -112,7 +128,7 @@ public sealed class RoomManager
         } while (_byCode.ContainsKey(code));
 
         var roomId = Guid.NewGuid();
-        var match = new MatchRuntime(code, _map, _zoneSchedule, _profile, roomId.ToString());
+        var match = NewRuntime(code, roomId);
         var created = new Room(roomId, command.Name.Trim(), code, command.OwnerId, command.MaxPlayers, _time.GetUtcNow(), match);
         _byCode.Add(code, created);
         RoomCreated?.Invoke(created);
@@ -149,7 +165,11 @@ public sealed class RoomManager
     {
         Id = room.Id, Name = room.Name, IsDefault = room.IsDefault, MaxPlayers = room.MaxPlayers,
         ActivePlayers = room.Peers.Values.Count(active => active), PendingPlayers = room.Peers.Values.Count(active => !active),
-        RoomCode = !room.IsDefault && room.Owner == owner ? room.Code : null
+        RoomCode = !room.IsDefault && room.Owner == owner ? room.Code : null,
+        MapId = room.Match.SelectedMap?.Entry.Id ?? "",
+        MapName = room.Match.SelectedMap?.Entry.Name ?? "",
+        MapVersion = room.Match.SelectedMap?.Entry.Version ?? "",
+        MapHash = room.Match.SelectedMap?.Entry.MapHash ?? ""
     };
 
     public string Occupancy() => string.Join(',', _byCode.Values.Select(r => $"{r.Id}:{r.Peers.Count}/{r.MaxPlayers}"));

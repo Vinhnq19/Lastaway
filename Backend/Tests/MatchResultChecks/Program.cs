@@ -271,6 +271,11 @@ public static class Program
                 var helloFrame=new NetDataWriter();new PacketRegistry().WriteFrame(helloFrame,ref hello);resumedHub.Receive(peer,helloFrame.CopyData(),true,true);
             }
             var match=resumedHub.Rooms.Find("TEST01")!.Match;
+            var room=resumedHub.Rooms.Find("TEST01")!;
+            var mapState=resumedHub.Rooms.GetMapState(room);
+            foreach(var peer in peers)
+                Check(resumedHub.Rooms.AcknowledgeMap(room,peer.LastSentSessionId!,new RoomMapReadyPacket{RoomId=room.Id,SelectionRevision=mapState.SelectionRevision,MapHash=mapState.MapHash,RulesHash=mapState.RulesHash})==RoomMapError.None,"Resume fixture verifies selected map");
+            Check(resumedHub.Rooms.StartMatch(room,peers[0].LastSentSessionId!,new StartRoomMatchPacket{RoomId=room.Id,SelectionRevision=mapState.SelectionRevision})==RoomMapError.None,"Resume fixture host starts verified room");
             for(var i=0;i<20;i++)resumedHub.Tick(1d/30);
             foreach(var peer in peers) match.SetPlayerLoaded(peer.LastSentSessionId!,match.MatchId);
             resumedHub.Tick(1d/30);

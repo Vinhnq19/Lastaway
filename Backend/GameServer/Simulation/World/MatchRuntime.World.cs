@@ -18,6 +18,13 @@ public sealed partial class MatchRuntime
     {
         var mode = Environment.GetEnvironmentVariable("WORLD_ENABLED");
         if (mode != "1" && (mode == "0" || !_profile.WorldEnabled)) return;
+        if (SelectedMap is not null && _preparedWorld is not null)
+        {
+            _worldSettings = _preparedWorld.ForMap(SelectedMap);
+            _worldCatalog = _preparedWorld.Catalog;
+            _worldLootProfile = _preparedWorld.Loot;
+            return;
+        }
         _worldSettings = WorldSettings.Load(GameDataLoader.ReadGameDataFile("world_settings.json"));
         if (_worldSettings.LayoutMode == "Authored")
         {

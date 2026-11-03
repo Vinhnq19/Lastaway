@@ -1,10 +1,34 @@
 # 06 — Level Editor (xếp map)
 
+## Map phát hành cho phòng mạng
+
+Hai map đầu tiên: **Di tích cổ** (`di-tich-co`, mặc định) và **Bãi đá** (`bai-da`). Map online lấy từ catalog server; Local offline dùng map mặc định đóng gói sẵn và không cần API.
+
+1. **Tạo/sửa:** mở Level Editor, Play, mở JSON map và chỉnh bố cục. Map phát hành hiện phải 50×50, đúng 10 spawn an toàn cách nhau tối thiểu 6 cell, portal đủ cặp, không chồng vật cản. Bấm **Kiểm tra**. Lưu bản nguồn bằng **Lưu thành…**; không sửa file theo hash đang phát hành.
+2. **Xuất:** menu **Jungle Maze → Level Editor → Export Published Map**. Nhập ID ổn định, tên, mô tả, version mới; chọn mặc định nếu cần. Khi Level Editor đang Play, công cụ dùng bản đồ đang mở; ngoài Play, chọn JSON. Bấm **Kiểm tra và xuất map + preview vào catalog**. Preview là ảnh sơ đồ sinh từ đúng geometry/placements/spawn. Scene và catalog asset của Level Editor được giữ nguyên.
+3. **Danh sách map:** nguồn ở `Backend/Shared/GameData/Maps/catalog.json`. Chỉ các mục trong `maps` được thấy trong phòng. Bỏ một mục để ẩn map; giữ ít nhất một mục, `defaultMapId` phải trỏ mục còn lại. Không cần xóa dữ liệu phiên bản cũ. Đổi JSON thì phải xuất lại để cập nhật hash; không sửa hash bằng tay.
+4. **Validate/publish Local:** mở terminal tại `Backend`, chạy:
+
+   ```powershell
+   dotnet run --project GameServer -- --maps validate Shared/GameData/Maps
+   dotnet run --project GameServer -- --maps publish Shared/GameData/Maps data/maps
+   docker compose exec game-server dotnet GameServer.dll --maps reload
+   ```
+
+   Lệnh publish kiểm toàn bộ gói trước, chép payload bất biến rồi thay `catalog.json` bằng rename nguyên tử. Generation được tăng; gói lỗi không thay catalog active. Reload dùng `ROOM_CONTROL_TOKEN` trong container, không đưa token vào lệnh hoặc mở cổng 7780. `MAP_CATALOG_PATH` đổi thư mục host (mặc định `Backend/data/maps`); thư mục này nằm ngoài image. Lần chạy đầu thư mục trống được seed từ hai map đóng gói. Không chạy publish đồng thời từ nhiều cửa sổ.
+5. **Chọn/chạy:** đăng nhập → tạo hoặc vào phòng → xem thẻ map. Trưởng phòng chọn; mỗi client tải JSON/preview qua API và xác minh hash. Có lỗi thì **Thử tải map lại**. Nút **Bắt đầu** chỉ bật khi đủ người và tất cả cùng sẵn sàng. Người vào/rời countdown làm hủy countdown. Kết thúc trận trở lại phòng, không tự bắt đầu lượt tiếp.
+6. **Cập nhật:** giữ ID, tăng version, xuất/publish/reload lại. Trận đang chạy giữ map cũ; phòng chờ/lượt sau lấy bản mới. Nếu map bị gỡ, phòng chờ chuyển map mặc định. Chỉ JSON/PNG được tải; thêm loại vật thể hoặc assets chưa được client hỗ trợ cần build client mới.
+7. **Rollback:** các payload cũ được giữ; mỗi lần publish lưu manifest trước vào `data/maps/catalog-history/<generation>.json`. Tạo thư mục nguồn rollback riêng, chép các thư mục map theo ID/hash cần phục hồi từ `data/maps`, chép manifest cũ thành `catalog.json` trong thư mục nguồn đó. Chạy `--maps validate <nguồn-rollback>`, `--maps publish <nguồn-rollback> data/maps`, rồi reload như trên. Công cụ tạo generation mới cho dữ liệu cũ; không chép đè catalog đang chạy trực tiếp.
+
+AWS đã chuẩn bị bind mount mặc định `/opt/junglemaze/data/maps`; đợt này chưa deploy AWS. Khi triển khai sau, chuyển gói vào thư mục staging riêng trên EC2, validate/publish bằng container cùng phiên bản rồi reload nội bộ. Giữ volume Mongo, secret và map cũ. Trước khi đổi sang client mới phải deploy server gameplay protocol **2**; handshake tài khoản vẫn **v4**.
+
+Kiểm hai PC: chạy client cùng bản trên hai máy, trỏ cùng API HTTPS/server LAN hoặc WSS, dùng hai tài khoản. Đổi map và đối chiếu preview, hash trong lobby, cover/spawn/vật thể trong trận; thử rời lúc countdown, lỗi tải rồi retry, kết thúc/chơi lại. Hai process cùng PC chỉ xác minh hai client, chưa nghiệm thu hai PC vật lý.
+
 Cập nhật **03/11/2026**. Scene `Assets/_JungleMaze/Scenes/LevelEditor.unity`, chạy bằng **Play** trong Unity Editor.
 
 ## 1. Mở
 
-1. Lần đầu (hoặc sau khi đổi catalog): menu **Jungle Maze → Level Editor → Build Level Editor Scene**. Lệnh này sinh lại `Art/LevelEditor/LevelEditorCatalog.asset` và scene, chạy lại nhiều lần không tạo trùng.
+1. Chỉ khi chưa có scene/catalog (lệnh này ghi lại các asset; giữ bản sửa thủ công trước khi chạy): menu **Jungle Maze → Level Editor → Build Level Editor Scene**. Lệnh này sinh lại `Art/LevelEditor/LevelEditorCatalog.asset` và scene, chạy lại nhiều lần không tạo trùng.
 2. **Jungle Maze → Level Editor → Open Level Editor Scene**, rồi bấm **Play**.
 
 Scene này **không** tạo Bootstrap của game (không menu kết nối, HUD hay network).
@@ -70,7 +94,7 @@ Số liệu và sprite nằm trong `LevelEditorCatalog.asset`. Bản catalog nà
 - **Kiểm tra**: chạy đúng đường game đọc map (`AuthoredMapDocument.Build`). Bắt buộc map **vuông**, gốc (0,0), **đúng 10 spawn** cách nhau ≥ 6, nằm trong bo đầu, không bị chặn, đi tới được nhau. Không vật thể nào đè nhau, portal đủ cặp. Hợp lệ thì hiện hash của map.
 - Lưu không bắt buộc hợp lệ (cho phép lưu bản dở). Thanh trạng thái báo map đã dùng được cho game hay chưa.
 
-**Đưa map vào game:** **Lưu thành…** đè lên `Backend/Shared/GameData/map_demo.json`, rồi chạy **Jungle Maze → Phase 2 → Sync Runtime Data** để client nhận file mới và hash. Server cũng đọc file này nên phải deploy lại server.
+**Đưa map vào phòng mạng:** dùng quy trình **Export Published Map → validate → publish → reload** ở đầu tài liệu; không ghi đè `map_demo.json`, không cần build lại server/client khi chỉ thay dữ liệu được hỗ trợ. **Đổi map mặc định offline đóng gói:** lưu vào `Backend/Shared/GameData/map_demo.json`, chạy **Jungle Maze → Phase 2 → Sync Runtime Data**, rồi build lại client. Thao tác offline này không thay lựa chọn map của phòng mạng.
 
 ## 6. Mã nguồn
 

@@ -123,6 +123,7 @@ Backend/**/bin/
 Backend/**/obj/
 Backend/**/__pycache__/
 Backend/out/
+Backend/data/
 
 # Backend là project .NET viết tay; không bỏ qua như csproj/sln Unity sinh tự động.
 !Backend/**/*.csproj

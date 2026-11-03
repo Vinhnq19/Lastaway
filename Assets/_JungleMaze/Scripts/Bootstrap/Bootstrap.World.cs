@@ -38,7 +38,9 @@ namespace JungleMaze.Composition
             }
             catch (System.Exception e) { _log.Warn("[World] " + e.Message); }
             var config = _registry.Resolve<IConfigProvider>();
-            var world = new WorldClientSession(match, _registry.Resolve<IPacketSender>(), _registry.Resolve<IPacketReceiver>(), _registry.Resolve<IClientRuntimeData>(), binding, data != null ? data.Map : null, () => config.Current.WorldEnabled, _registry.Resolve<IEffectStateWriter>(), data != null ? data.Layout : null);
+            var runtimeData = _registry.Resolve<IClientRuntimeData>();
+            var world = new WorldClientSession(match, _registry.Resolve<IPacketSender>(), _registry.Resolve<IPacketReceiver>(), runtimeData, binding, data != null ? data.Map : null, () => config.Current.WorldEnabled, _registry.Resolve<IEffectStateWriter>(), data != null ? data.Layout : null,
+                () => ((ClientRuntimeData)runtimeData).SelectedLayout);
             _registry.Register(world);
             ticks.Add(world);
             var combat = new OnlineCombatSession(match, world, _registry.Resolve<IBalanceConfigProvider>(), _registry.Resolve<IPacketSender>(), _registry.Resolve<IPacketReceiver>(), hudWriter);

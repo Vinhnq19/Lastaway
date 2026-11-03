@@ -246,7 +246,7 @@ namespace JungleMaze.Presentation.World.Phase2
             }
             var sourceObjects = isOffline ? _offlineWorld.Objects : _world.Objects;
             var dynamicStates = new List<WorldObjectWire>();
-            foreach (var state in sourceObjects) if (state.Kind > 4) dynamicStates.Add(state);
+            foreach (var state in sourceObjects) if (!isOffline || state.Kind > 4) dynamicStates.Add(state);
             var states = dynamicStates.ToArray();
             ApplyViews(states, _root, _views, _visuals, _square);
             ApplyCollision(states);

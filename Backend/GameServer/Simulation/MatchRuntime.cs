@@ -1,6 +1,7 @@
 using GameServer.Simulation.Combat;
 using JungleBackend.Protocol.Gameplay;
 using LiteNetLib.Utils;
+using GameServer.Maps;
 
 namespace GameServer.Simulation;
 
@@ -49,14 +50,18 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
         public (byte NetId, float X, float Y, byte Hp, PlayerStateFlags Flags)[] Players = Array.Empty<(byte, float, float, byte, PlayerStateFlags)>();
     }
 
-    private readonly MapData _map;
+    private MapData _map;
     private readonly ZoneSchedule _zoneSchedule;
     private readonly MatchProfile _profile;
     private readonly Dictionary<byte, Entity> _entities = new();
     private readonly Dictionary<string, Entity> _bySession = new(StringComparer.Ordinal);
     private HealthService _health;
     private CombatService _combat;
-    private readonly PhysicsSimulation _physics;
+    private PhysicsSimulation _physics;
+    private readonly MatchWorldSetup? _preparedWorld;
+    public MapDefinition? SelectedMap { get; private set; }
+    public bool RequiresManualStart => SelectedMap is not null;
+    public string RulesHash => _preparedWorld?.RulesHash ?? _profile.ConfigHash;
     private ZoneSimulation? _zone;
 
     // Private replay ring buffer >= 5s (150 ticks; 180 ticks = 6 seconds at 30Hz)
@@ -96,18 +101,21 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
     public event Action<byte[]>? SnapshotGenerated;
     public event Action<byte[]>? ReliableBroadcast;
 
-    public MatchRuntime(string roomCode, MapData map, ZoneSchedule zoneSchedule, MatchProfile profile, string? roomId = null)
+    public MatchRuntime(string roomCode, MapData map, ZoneSchedule zoneSchedule, MatchProfile profile, string? roomId = null,
+        MapDefinition? selectedMap = null, MatchWorldSetup? worldSetup = null)
     {
         RoomCode = roomCode;
         RoomId = roomId ?? Guid.NewGuid().ToString();
         _map = map;
         _zoneSchedule = zoneSchedule;
         _profile = profile;
+        SelectedMap = selectedMap;
+        _preparedWorld = selectedMap is not null ? worldSetup ?? MatchWorldSetup.Load() : null;
         _health = new HealthService(this, _profile.PlayerHp);
         _health.EntityDied += OnEntityDied;
         _combat = CreateCombat();
         _physics = new PhysicsSimulation(map, profile.PlayerRadius, profile.PlayerSpeed);
-        if (map.Version != profile.Version || zoneSchedule.Version != profile.Version)
+        if ((selectedMap is null && map.Version != profile.Version) || zoneSchedule.Version != profile.Version)
             throw new InvalidDataException("Game data versions differ.");
         ConfigureWorld();
 
@@ -211,7 +219,7 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
 
         BroadcastRoster();
 
-        if (Phase == MatchPhase.Waiting && _entities.Values.Count(e => e.Ready) >= _profile.MinPlayers)
+        if (!RequiresManualStart && Phase == MatchPhase.Waiting && _entities.Values.Count(e => e.Ready) >= _profile.MinPlayers)
         {
             TransitionTo(MatchPhase.Lobby);
         }
@@ -296,6 +304,13 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
 
     public bool ProcessLeave(string sessionId, Guid matchId)
     {
+        if (matchId == MatchId && RequiresManualStart && Phase is MatchPhase.Waiting or MatchPhase.Lobby)
+        {
+            if (!_bySession.ContainsKey(sessionId)) return false;
+            MarkDisconnected(sessionId);
+            CancelRoomCountdown();
+            return true;
+        }
         if (matchId != MatchId || !_bySession.TryGetValue(sessionId, out var entity) || !entity.IsAlive)
             return false;
 
@@ -335,8 +350,9 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
             BroadcastEntityEvent(entity.NetId, MatchEntityEvent.Despawn);
             BroadcastRoster();
 
-            // Cancel lobby if below min
-            if (_entities.Values.Count(e => e.Ready) < _profile.MinPlayers)
+            // Manual rooms: any membership change cancels the running countdown (host must Start again).
+            // Legacy auto-start rooms: keep the count-based rule and only cancel when below min ready.
+            if (RequiresManualStart || _entities.Values.Count(e => e.Ready) < _profile.MinPlayers)
             {
                 TransitionTo(MatchPhase.Waiting);
             }
@@ -441,7 +457,7 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
 
     private void TickWaiting()
     {
-        if (_entities.Values.Count(e => e.Ready) >= _profile.MinPlayers)
+        if (!RequiresManualStart && _entities.Values.Count(e => e.Ready) >= _profile.MinPlayers)
         {
             TransitionTo(MatchPhase.Lobby);
         }
@@ -668,6 +684,9 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
 
         TransitionTo(MatchPhase.Waiting);
         BroadcastRoster();
+        // Manual rooms need the new round's identity before the host can press Start again.
+        foreach (var entity in _entities.Values)
+            ResumeTokenRotated?.Invoke(entity.PlayerSessionId, entity.NetId, entity.ResumeToken);
     }
 
     private CombatService CreateCombat() => new(
@@ -780,7 +799,8 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
             _startUtc,
             DateTimeOffset.UtcNow,
             reason.ToString(),
-            participants
+            participants,
+            SelectedMap?.Entry.Id ?? "", SelectedMap?.Entry.Version ?? "", SelectedMap?.Entry.MapHash ?? "", RulesHash
         );
 
         // Fire outside tick sink for persistence
@@ -803,7 +823,8 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
             Reason = reason,
             WinnerNetId = winnerNetId,
             ParticipantCount = (byte)participantStates.Length,
-            Participants = participantStates
+            Participants = participantStates,
+            MapId = SelectedMap?.Entry.Id ?? "", MapVersion = SelectedMap?.Entry.Version ?? "", MapHash = SelectedMap?.Entry.MapHash ?? "", RulesHash = RulesHash
         };
 
         var writer = new NetDataWriter();
@@ -879,7 +900,7 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
         MatchId = MatchId,
         Phase = Phase,
         ConfigVersion = _profile.Version,
-        ConfigHash = _profile.ConfigHash,
+        ConfigHash = RulesHash,
         ServerTick = CurrentTick,
         PhaseStartTick = CurrentTick,
         PhaseEndTick = CurrentTick + (uint)(_phaseTimer * 30),

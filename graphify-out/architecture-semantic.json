@@ -233,10 +233,10 @@
     },
     {
       "id": "docs_network_architecture_vi_authored_map",
-      "label": "Versioned authored map 1.1.0",
+      "label": "Published authored maps: Di tích cổ and Bãi đá",
       "file_type": "concept",
       "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
-      "source_location": "§3",
+      "source_location": "Chọn map theo phòng; §3",
       "source_url": null,
       "captured_at": null,
       "author": null,
@@ -281,6 +281,138 @@
       "file_type": "concept",
       "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
       "source_location": "§1",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_map_catalog",
+      "label": "Backend/Shared/GameData/Maps",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Chọn map theo phòng",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_map_store",
+      "label": "MapCatalogStore",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Chọn map theo phòng",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_map_publisher",
+      "label": "MapPublisher",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Chọn map theo phòng",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_map_export",
+      "label": "MapCatalogExportWindow",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Chọn map theo phòng",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_room_maps",
+      "label": "RoomMapSession",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Chọn map theo phòng",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_map_files",
+      "label": "RoomMapFiles",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Chọn map theo phòng",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_rules_hash",
+      "label": "RulesHash",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Chọn map theo phòng",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_map_hash",
+      "label": "MapHash",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Chọn map theo phòng",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_gameplay_v2",
+      "label": "Gameplay protocol v2",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Chọn map theo phòng",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_room_host",
+      "label": "Session host authority",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Chọn map theo phòng",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_room_manager",
+      "label": "RoomManager",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Chọn map theo phòng",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_world_client",
+      "label": "WorldClientSession",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Chọn map theo phòng",
       "source_url": null,
       "captured_at": null,
       "author": null,
@@ -607,16 +739,166 @@
       "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
       "source_location": "§1",
       "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_map_export",
+      "target": "docs_network_architecture_vi_map_catalog",
+      "relation": "exports_map_and_preview",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Chọn map theo phòng",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_map_publisher",
+      "target": "docs_network_architecture_vi_map_catalog",
+      "relation": "publishes_atomically",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Chọn map theo phòng",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_map_store",
+      "target": "docs_network_architecture_vi_map_catalog",
+      "relation": "loads_validated_snapshot",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Chọn map theo phòng",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_room_manager",
+      "target": "docs_network_architecture_vi_map_store",
+      "relation": "uses_catalog",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Chọn map theo phòng",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_room_manager",
+      "target": "docs_network_architecture_vi_room_host",
+      "relation": "enforces",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Chọn map theo phòng",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_room_maps",
+      "target": "docs_network_architecture_vi_map_files",
+      "relation": "downloads_and_verifies",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Chọn map theo phòng",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_map_files",
+      "target": "docs_network_architecture_vi_api",
+      "relation": "authenticated_https_fetch",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Chọn map theo phòng",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_api",
+      "target": "docs_network_architecture_vi_map_store",
+      "relation": "private_control_proxy",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Chọn map theo phòng",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_room_maps",
+      "target": "docs_network_architecture_vi_gameplay_v2",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Chọn map theo phòng",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_room_manager",
+      "target": "docs_network_architecture_vi_gameplay_v2",
+      "relation": "broadcasts",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Chọn map theo phòng",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_room_maps",
+      "target": "docs_network_architecture_vi_world_client",
+      "relation": "supplies_verified_map",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Chọn map theo phòng",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_map_store",
+      "target": "docs_network_architecture_vi_map_hash",
+      "relation": "pins_map_version",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Chọn map theo phòng",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_map_store",
+      "target": "docs_network_architecture_vi_rules_hash",
+      "relation": "separates_common_rules",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Chọn map theo phòng",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_outbox",
+      "target": "docs_network_architecture_vi_map_hash",
+      "relation": "persists",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Chọn map theo phòng",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_outbox",
+      "target": "docs_network_architecture_vi_rules_hash",
+      "relation": "persists",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Chọn map theo phòng",
+      "weight": 1.0
     }
   ],
   "hyperedges": [],
   "input_tokens": 6370,
   "output_tokens": 3260,
   "coverage": {
-    "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md": 118
+    "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md": 134
   },
-  "source_sha256": "27fadd50e98a1f810a7924a773bd0af98d2355efee5c09bea92e5a5aa5191d44",
-  "usage_note": "Token counts self-reported by extraction agent, not provider billing metadata.",
-  "extracted_at": "2026-11-01T14:12:37.002109+00:00",
-  "extraction_note": "Incremental local semantic re-extraction: reviewed new §1 real audio/UI visibility and runtime diagnostic statements; retained unchanged §0–9 concepts. No semantic API call."
+  "source_sha256": "08448c9dc688d71d4ae11484136e7c1b7517f1fd34253794bf56a0071b3e2ab2",
+  "usage_note": "6370/3260 are historical extraction-agent self-reported tokens retained from the prior fragment; this Codex re-extraction and supervision are unmetered, not zero-cost or provider billing metadata.",
+  "extracted_at": "2026-11-03T08:23:49.930074+00:00",
+  "extraction_note": "Manual Codex incremental re-extraction after reading complete network architecture and map contracts: retained unchanged sections, updated published-map concept and map/host/API/hash relations. No semantic API call. Graph edges describe document statements, not runtime acceptance."
 }

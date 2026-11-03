@@ -44,6 +44,15 @@ public static class RoomControlHost
 
         if (hub is not null)
         {
+            if (hub.Rooms.Catalog is { } maps)
+            {
+                app.MapGet("/internal/maps", () => Results.Json(maps.View()));
+                app.MapGet("/internal/maps/{id}/{hash}/map", (string id, string hash) =>
+                    maps.FindVersion(id, hash) is { } map ? Results.Text(map.Json, "application/json") : Results.NotFound());
+                app.MapGet("/internal/maps/previews/{hash}", (string hash) =>
+                    maps.FindPreview(hash) is { } png ? Results.Bytes(png, "image/png") : Results.NotFound());
+                app.MapPost("/internal/maps/reload", async (CancellationToken ct) => Respond(await maps.Reload(commands, ct)));
+            }
             app.MapPost("/internal/game-tickets", async (RegisterGameTicketCommand command, CancellationToken ct) =>
                 Respond(await commands.Submit(_ => hub.RegisterTicket(command), ct)));
         }

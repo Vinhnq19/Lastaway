@@ -34,6 +34,7 @@ namespace JungleMaze.Presentation.UI
         private IClientRuntimeData _data;
         private IPlayerPoseSource _poses;
         private WorldClientSession _generatedWorld;
+        private RoomMapSession _roomMaps;
         private IMatchMenuState _menuState;
         private MatchOverlayFlow _overlayFlow;
         private string _worldHash;
@@ -51,6 +52,7 @@ namespace JungleMaze.Presentation.UI
         private GUIStyle _label;
 
         [Inject] public void BindWorld(WorldClientSession world) => _generatedWorld=world;
+        [Inject] public void BindMaps(RoomMapSession maps) => _roomMaps = maps;
 
         [Inject]
         public void Construct(MatchSession session, INetworkClient network, IMatchConnection connection,
@@ -111,15 +113,19 @@ namespace JungleMaze.Presentation.UI
             if (_session == null) return;
             if (!_session.Connected || !inScene) { HideRings(); return; }
             PrepareScene();
+            if (_roomMaps?.HasState == true && !_roomMaps.Verified)
+            { _dataError = _roomMaps.Error; HideRings(); return; }
+            var mapKey = _session.PhaseState.ConfigHash + "/" + (_roomMaps?.HasState == true ? _roomMaps.State.MapHash : "");
+            if (_worldHash != mapKey) _dataError = null;
             if (_session.Phase != MatchPhase.Loading) _loadedAck = Guid.Empty;
             if (_session.Phase == MatchPhase.Loading && _loadedAck != _session.MatchId)
             {
                 _dataError = _data.Verify(_session.PhaseState.ConfigVersion, _session.PhaseState.ConfigHash);
-                if (_dataError == null) _dataError = VerifyGeometry();
+                if (_dataError == null && _roomMaps?.HasState != true) _dataError = VerifyGeometry();
                 if (_dataError == null) { UsePredictionWorld(); _session.ConfirmLoaded(); _loadedAck = _session.MatchId; }
             }
             // Resume thẳng vào InGame (bỏ qua Loading) vẫn cần map cho prediction; chỉ kiểm, không gửi LoadAck.
-            if (_session.Phase == MatchPhase.InGame && _worldHash != _session.PhaseState.ConfigHash && _dataError == null)
+            if (_session.Phase == MatchPhase.InGame && _worldHash != mapKey && _dataError == null)
             {
                 _dataError = _data.Verify(_session.PhaseState.ConfigVersion, _session.PhaseState.ConfigHash);
                 if (_dataError == null) UsePredictionWorld();
@@ -149,6 +155,13 @@ namespace JungleMaze.Presentation.UI
 
         private void PrepareScene()
         {
+            if (_roomMaps?.HasState == true)
+                foreach (var collider in FindObjectsByType<BoxCollider2D>(FindObjectsSortMode.None))
+                    if (collider.gameObject.layer == LayerMask.NameToLayer("HardCover") && !collider.name.StartsWith("World collision ", StringComparison.Ordinal))
+                    {
+                        collider.enabled = false;
+                        foreach (var visual in collider.GetComponentsInChildren<SpriteRenderer>()) visual.enabled = false;
+                    }
             if (_camera == null) _camera = Camera.main;
             if (_camera != null)
             {
@@ -174,10 +187,11 @@ namespace JungleMaze.Presentation.UI
         /// <summary>Map đã khớp hash server → mô phỏng movement client giống hệt server (MOV-02).</summary>
         private void UsePredictionWorld()
         {
-            if (_worldHash == _session.PhaseState.ConfigHash && _session.Prediction.HasWorld) return;
+            var mapKey = _session.PhaseState.ConfigHash + "/" + (_roomMaps?.HasState == true ? _roomMaps.State.MapHash : "");
+            if (_worldHash == mapKey && _session.Prediction.HasWorld) return;
             if (_generatedWorld==null || !_generatedWorld.IsReady)
                 _session.Prediction.SetWorld(new MovementSimulation(_data.Bounds, _data.Covers, _data.PlayerRadius, _data.PlayerSpeed));
-            _worldHash = _session.PhaseState.ConfigHash;
+            _worldHash = mapKey;
         }
 
         private string VerifyGeometry()

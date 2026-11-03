@@ -73,7 +73,8 @@ public sealed partial class SessionHub
     public SessionHub(ServerOptions options, ServerMetrics metrics)
     {
         _options = options; _metrics = metrics;
-        _handshake = new(options); Rooms = new(options);
+        _handshake = new(options);
+        Rooms = new(options, catalog: options.RequireAccountTickets ? GameServer.Maps.MapCatalogStore.FromEnvironment() : null);
         // First parse with inert handlers: malformed trailing bytes cannot partially mutate a match.
         _frameValidator.Subscribe<ClientHelloPacket>(_ => { });
         _frameValidator.Subscribe<LoadAckPacket>(_ => { });
@@ -87,6 +88,7 @@ public sealed partial class SessionHub
         _frameValidator.Subscribe<ReloadRequestPacket>(_ => { });
         SetupGameplaySubscriptions();
         SetupWorldSubscriptions();
+        SetupRoomMapSubscriptions();
         Rooms.RoomCreated += HookRoom;
         HookRoomMatches();
     }
@@ -197,7 +199,8 @@ public sealed partial class SessionHub
         _gameplayRegistry.Subscribe<ClientHelloPacket, Session>((packet, session) =>
         {
             if (session.PlayerId is null) return;
-            if (packet.ProtocolVersion != MatchProtocol.Version || !packet.Ready) return;
+            if (packet.ProtocolVersion != MatchProtocol.Version) { Reject(session.Peer, "GameplayVersionMismatch"); return; }
+            if (!packet.Ready) return;
 
             // Register entity ONLY on valid ClientHello(ProtocolVersion=MatchProtocol.Version,Ready=true)
             if (!session.Room.Match.TryRegisterPlayer(session.PlayerId, session.Request.DisplayName, out _))
@@ -211,6 +214,7 @@ public sealed partial class SessionHub
             }
 
             session.Room.Match.SetPlayerReady(session.PlayerId);
+            Rooms.RegisterMember(session.Room, session.PlayerId, session.ProfileKey);
 
             // Send initial phase, roster, and resume proof
             SendInitialState(session);
@@ -353,6 +357,11 @@ public sealed partial class SessionHub
         PacketRegistry.BeginFrame(writer);
         _gameplayRegistry.Write(writer, ref phase);
         _gameplayRegistry.Write(writer, ref roster);
+        if (match.RequiresManualStart)
+        {
+            var maps = Rooms.GetMapState(session.Room);
+            _gameplayRegistry.Write(writer, ref maps);
+        }
 
         if (match.Entities.TryGetBySession(session.PlayerId!, out var entity) && entity != null)
         {

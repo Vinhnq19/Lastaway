@@ -65,7 +65,8 @@ public sealed record MatchResultSubmission(
     DateTimeOffset StartUtc,
     DateTimeOffset EndUtc,
     string Reason,
-    IReadOnlyList<MatchParticipantSubmission> Participants
+    IReadOnlyList<MatchParticipantSubmission> Participants,
+    string MapId = "", string MapVersion = "", string MapHash = "", string RulesHash = ""
 );
 
 /// <summary>
@@ -89,7 +90,8 @@ public sealed record MatchLeaderboardResponse(
     DateTimeOffset StartUtc,
     DateTimeOffset EndUtc,
     string Reason,
-    IReadOnlyList<SanitizedMatchParticipant> Players
+    IReadOnlyList<SanitizedMatchParticipant> Players,
+    string MapId = "", string MapVersion = "", string MapHash = "", string RulesHash = ""
 );
 
 /// <summary>
@@ -102,7 +104,8 @@ public sealed record MyMatchHistoryItem(
     int Kills,
     double SurvivalSeconds,
     DateTimeOffset EndedAt,
-    string Reason
+    string Reason,
+    string MapId = "", string MapVersion = "", string MapHash = "", string RulesHash = ""
 );
 
 /// <summary>
@@ -129,7 +132,7 @@ public static class MatchCanonicalHasher
             submission.StartUtc,
             submission.EndUtc,
             submission.Reason,
-            submission.Participants);
+            submission.Participants, submission.MapId, submission.MapVersion, submission.MapHash, submission.RulesHash);
 
     public static string ComputeCanonicalHash(
         Guid matchId,
@@ -138,7 +141,8 @@ public static class MatchCanonicalHasher
         DateTimeOffset startUtc,
         DateTimeOffset endUtc,
         string reason,
-        IEnumerable<MatchParticipantSubmission> participants)
+        IEnumerable<MatchParticipantSubmission> participants,
+        string mapId = "", string mapVersion = "", string mapHash = "", string rulesHash = "")
     {
         // Length-prefixed binary canonical form: names may contain pipes/newlines without hash ambiguity.
         // Preserve full time/double precision so a subtly changed payload is still a conflict.
@@ -155,6 +159,9 @@ public static class MatchCanonicalHasher
                 writer.Write(p.SurvivalSeconds == 0 ? 0 : p.SurvivalSeconds);
                 writer.Write(p.ProfileKey != null); if (p.ProfileKey != null) writer.Write(p.ProfileKey);
             }
+            // Old outbox records retain their canonical hash; selected-map results bind all independent versions.
+            if (!string.IsNullOrEmpty(mapId) || !string.IsNullOrEmpty(mapHash) || !string.IsNullOrEmpty(rulesHash) || !string.IsNullOrEmpty(mapVersion))
+            { writer.Write(mapId ?? ""); writer.Write(mapVersion ?? ""); writer.Write(mapHash ?? ""); writer.Write(rulesHash ?? ""); }
         }
         return Convert.ToHexString(SHA256.HashData(stream.ToArray())).ToLowerInvariant();
     }

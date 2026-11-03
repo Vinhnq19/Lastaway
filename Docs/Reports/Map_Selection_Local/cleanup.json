@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "beforeTemporaryBytes": 164115378,
+  "archiveBytes": 2724826,
+  "archiveSha256": "59201ebb8f476eeff12435d00d0608240a0a1f32ff20a2572a2567ec9277eeb8",
+  "archiveFiles": 121,
+  "roomsDeleted": 1,
+  "volumesPreserved": true,
+  "awsActions": false,
+  "canonicalBuildFiles": 253,
+  "canonicalBuildBytes": 160219208,
+  "temporaryBytesRemoved": 164118030,
+  "remainingTemporaryBytes": 614
+}

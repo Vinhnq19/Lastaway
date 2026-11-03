@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using JungleBackend.Protocol.Gameplay;
 using JungleMaze.App.Lobby;
+using JungleMaze.App.Match;
 using JungleMaze.Domain.Lobby;
 using TMPro;
 using UnityEngine;
@@ -34,9 +35,10 @@ namespace JungleMaze.Presentation.UI.Lobby
         private LobbyScreen _shown = (LobbyScreen)255;
         private int _drawnKey = int.MinValue;
         private bool _serverShown;
+        private readonly RoomMapSession _maps;
 
         public LobbyUiPresenter(LobbyUiRoot root, LobbyFlow flow, ConnectionMenuPresenter menu = null, Action quit = null,
-            Action<string> copy = null, Func<bool> settingsOpen = null)
+            Action<string> copy = null, Func<bool> settingsOpen = null, RoomMapSession maps = null)
         {
             _root = root ? root : throw new ArgumentNullException(nameof(root));
             _flow = flow ?? throw new ArgumentNullException(nameof(flow));
@@ -44,6 +46,7 @@ namespace JungleMaze.Presentation.UI.Lobby
             _quit = quit ?? Quit;
             _copy = copy ?? (text => GUIUtility.systemCopyBuffer = text);
             _settingsOpen = settingsOpen;
+            _maps = maps;
             _unbind = BindButtons();
             BindInputs();
             FillEndpoint();
@@ -312,7 +315,8 @@ namespace JungleMaze.Presentation.UI.Lobby
             var s = _flow.Lobby;
             var slots = s.Slots;
             var key = Hash(s.MatchId, slots.Count, s.MaxPlayers, s.MinPlayers, _flow.HasCountdown ? _flow.CountdownSeconds : -1,
-                _flow.Notice, _flow.ReadyRequests, s.RoomCode);
+                _flow.Notice, _flow.ReadyRequests, s.RoomCode, _maps?.State.SelectionRevision, _maps?.State.ReadyCount,
+                _maps?.State.HostNetId, _maps?.CanStart, _maps?.Busy, _maps?.Error, _maps?.Notice, _maps?.State.MapName);
             for (var i = 0; i < slots.Count; i++) key = key * 31 + slots[i].NetId * 7 + (slots[i].IsSelf ? 1 : 0) + (slots[i].Ready ? 2 : 0);
             if (!Changed(key)) return;
             var v = _root.Lobby;
@@ -349,6 +353,20 @@ namespace JungleMaze.Presentation.UI.Lobby
             v.ReadyLabel.text = _flow.ReadyRequests > 0 ? "Đã sẵn sàng" : "Sẵn sàng";
             v.Start.gameObject.SetActive(o.StartEnabled);
             v.Start.interactable = false; // T-6: the server has no start command
+            if (_maps != null && _maps.HasState)
+            {
+                v.Ready.gameObject.SetActive(false);
+                v.Start.gameObject.SetActive(true);
+                SetLabel(v.Start, _maps.IsHost ? "Bắt đầu" : "Chờ chủ phòng");
+                v.Start.interactable = _maps.CanStart;
+                if (!_flow.HasCountdown)
+                    v.Status.text = count < s.MinPlayers ? "Chờ đủ " + s.MinPlayers + " người" :
+                        _maps.State.ReadyCount < _maps.State.PlayerCount ? "Đang chờ tải map" : "Sẵn sàng · chờ trưởng phòng";
+                v.Rule.text = _maps.State.MapName + " · v" + _maps.State.MapVersion + " · Đã tải " + _maps.State.ReadyCount + "/" + _maps.State.PlayerCount;
+                v.Notice.text = _maps.Error ?? _maps.Notice ?? (_maps.Busy ? "Đang tải và xác minh map…" : _maps.IsHost ? "Bạn là trưởng phòng · chọn map rồi Bắt đầu" : "Chờ chủ phòng chọn map và bắt đầu");
+                for (var i = 0; i < slots.Count && i < v.Slots.Length; i++)
+                    if (slots[i].NetId == _maps.State.HostNetId) v.Slots[i].Badge.text = "Trưởng phòng";
+            }
         }
 
         private void DrawLoading()
@@ -466,6 +484,7 @@ namespace JungleMaze.Presentation.UI.Lobby
             }
             On(r.Lobby.Copy, () => Copy(f.Lobby.RoomCode));
             On(r.Lobby.Ready, () => f.Ready());
+            On(r.Lobby.Start, () => _maps?.Start());
             On(r.Lobby.Leave, f.GoHome);
             On(r.Loading.Home, f.GoHome);
             On(r.Results.Replay, () => f.Replay());

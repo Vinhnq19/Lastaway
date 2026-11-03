@@ -1,0 +1,2420 @@
+{
+  "version": "1.1.0",
+  "mapBounds": {
+    "minX": 0.0,
+    "minY": 0.0,
+    "maxX": 50.0,
+    "maxY": 50.0
+  },
+  "obstacles": [
+    {
+      "name": "AncientPillar",
+      "centerX": 23.0,
+      "centerY": 25.0,
+      "sizeX": 1.0,
+      "sizeY": 2.0,
+      "minX": 22.5,
+      "maxX": 23.5,
+      "minY": 24.0,
+      "maxY": 26.0
+    },
+    {
+      "name": "AncientStatue",
+      "centerX": 25.0,
+      "centerY": 20.0,
+      "sizeX": 3.0,
+      "sizeY": 3.0,
+      "minX": 23.5,
+      "maxX": 26.5,
+      "minY": 18.5,
+      "maxY": 21.5
+    },
+    {
+      "name": "BoulderRock",
+      "centerX": 30.0,
+      "centerY": 25.0,
+      "sizeX": 4.0,
+      "sizeY": 4.0,
+      "minX": 28.0,
+      "maxX": 32.0,
+      "minY": 23.0,
+      "maxY": 27.0
+    },
+    {
+      "name": "CityWall",
+      "centerX": 25.0,
+      "centerY": 28.0,
+      "sizeX": 1.0,
+      "sizeY": 4.0,
+      "minX": 24.5,
+      "maxX": 25.5,
+      "minY": 26.0,
+      "maxY": 30.0
+    }
+  ],
+  "spawnPoints": [
+    {
+      "x": 43.0,
+      "y": 25.0
+    },
+    {
+      "x": 39.562,
+      "y": 35.58
+    },
+    {
+      "x": 30.562,
+      "y": 42.116
+    },
+    {
+      "x": 19.438,
+      "y": 42.116
+    },
+    {
+      "x": 10.438,
+      "y": 35.58
+    },
+    {
+      "x": 7.0,
+      "y": 25.0
+    },
+    {
+      "x": 10.438,
+      "y": 14.42
+    },
+    {
+      "x": 19.438,
+      "y": 7.884
+    },
+    {
+      "x": 30.562,
+      "y": 7.884
+    },
+    {
+      "x": 39.562,
+      "y": 14.42
+    }
+  ],
+  "worldObjects": [
+    {
+      "id": 5,
+      "kind": "Swamp",
+      "pairId": 0,
+      "bounds": {
+        "minX": 18.5,
+        "minY": 36.5,
+        "maxX": 22.5,
+        "maxY": 40.5
+      }
+    },
+    {
+      "id": 6,
+      "kind": "Swamp",
+      "pairId": 0,
+      "bounds": {
+        "minX": 26.5,
+        "minY": 27.5,
+        "maxX": 30.5,
+        "maxY": 31.5
+      }
+    },
+    {
+      "id": 7,
+      "kind": "Lava",
+      "pairId": 0,
+      "bounds": {
+        "minX": 6.0,
+        "minY": 37.0,
+        "maxX": 9.0,
+        "maxY": 40.0
+      }
+    },
+    {
+      "id": 8,
+      "kind": "Lava",
+      "pairId": 0,
+      "bounds": {
+        "minX": 16.0,
+        "minY": 45.0,
+        "maxX": 19.0,
+        "maxY": 48.0
+      }
+    },
+    {
+      "id": 9,
+      "kind": "Poison",
+      "pairId": 0,
+      "bounds": {
+        "minX": 20.0,
+        "minY": 13.0,
+        "maxX": 21.0,
+        "maxY": 14.0
+      }
+    },
+    {
+      "id": 10,
+      "kind": "Poison",
+      "pairId": 0,
+      "bounds": {
+        "minX": 16.0,
+        "minY": 5.0,
+        "maxX": 17.0,
+        "maxY": 6.0
+      }
+    },
+    {
+      "id": 11,
+      "kind": "Poison",
+      "pairId": 0,
+      "bounds": {
+        "minX": 37.0,
+        "minY": 33.0,
+        "maxX": 38.0,
+        "maxY": 34.0
+      }
+    },
+    {
+      "id": 12,
+      "kind": "Poison",
+      "pairId": 0,
+      "bounds": {
+        "minX": 13.0,
+        "minY": 12.0,
+        "maxX": 14.0,
+        "maxY": 13.0
+      }
+    },
+    {
+      "id": 13,
+      "kind": "Door",
+      "pairId": 0,
+      "bounds": {
+        "minX": 43.0,
+        "minY": 29.5,
+        "maxX": 44.0,
+        "maxY": 31.5
+      }
+    },
+    {
+      "id": 14,
+      "kind": "Door",
+      "pairId": 0,
+      "bounds": {
+        "minX": 3.0,
+        "minY": 6.5,
+        "maxX": 4.0,
+        "maxY": 8.5
+      }
+    },
+    {
+      "id": 15,
+      "kind": "Portal",
+      "pairId": 1,
+      "bounds": {
+        "minX": 9.0,
+        "minY": 45.0,
+        "maxX": 10.0,
+        "maxY": 46.0
+      }
+    },
+    {
+      "id": 16,
+      "kind": "Portal",
+      "pairId": 1,
+      "bounds": {
+        "minX": 32.0,
+        "minY": 33.0,
+        "maxX": 33.0,
+        "maxY": 34.0
+      }
+    },
+    {
+      "id": 17,
+      "kind": "Portal",
+      "pairId": 2,
+      "bounds": {
+        "minX": 40.0,
+        "minY": 5.0,
+        "maxX": 41.0,
+        "maxY": 6.0
+      }
+    },
+    {
+      "id": 18,
+      "kind": "Portal",
+      "pairId": 2,
+      "bounds": {
+        "minX": 3.0,
+        "minY": 48.0,
+        "maxX": 4.0,
+        "maxY": 49.0
+      }
+    },
+    {
+      "id": 19,
+      "kind": "Portal",
+      "pairId": 3,
+      "bounds": {
+        "minX": 43.0,
+        "minY": 7.0,
+        "maxX": 44.0,
+        "maxY": 8.0
+      }
+    },
+    {
+      "id": 20,
+      "kind": "Portal",
+      "pairId": 3,
+      "bounds": {
+        "minX": 6.0,
+        "minY": 32.0,
+        "maxX": 7.0,
+        "maxY": 33.0
+      }
+    },
+    {
+      "id": 21,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 13.0,
+        "minY": 29.0,
+        "maxX": 14.0,
+        "maxY": 30.0
+      }
+    },
+    {
+      "id": 22,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 47.0,
+        "minY": 27.0,
+        "maxX": 48.0,
+        "maxY": 28.0
+      }
+    },
+    {
+      "id": 23,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 20.0,
+        "minY": 1.0,
+        "maxX": 21.0,
+        "maxY": 2.0
+      }
+    },
+    {
+      "id": 24,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 7.0,
+        "minY": 43.0,
+        "maxX": 8.0,
+        "maxY": 44.0
+      }
+    },
+    {
+      "id": 25,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 17.0,
+        "minY": 37.0,
+        "maxX": 18.0,
+        "maxY": 38.0
+      }
+    },
+    {
+      "id": 26,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 9.0,
+        "minY": 17.0,
+        "maxX": 10.0,
+        "maxY": 18.0
+      }
+    },
+    {
+      "id": 27,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 26.0,
+        "minY": 17.0,
+        "maxX": 27.0,
+        "maxY": 18.0
+      }
+    },
+    {
+      "id": 28,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 22.0,
+        "minY": 18.0,
+        "maxX": 23.0,
+        "maxY": 19.0
+      }
+    },
+    {
+      "id": 29,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 1.0,
+        "minY": 5.0,
+        "maxX": 2.0,
+        "maxY": 6.0
+      }
+    },
+    {
+      "id": 30,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 25.0,
+        "minY": 40.0,
+        "maxX": 26.0,
+        "maxY": 41.0
+      }
+    },
+    {
+      "id": 31,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 42.0,
+        "minY": 13.0,
+        "maxX": 43.0,
+        "maxY": 14.0
+      }
+    },
+    {
+      "id": 32,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 36.0,
+        "minY": 28.0,
+        "maxX": 37.0,
+        "maxY": 29.0
+      }
+    },
+    {
+      "id": 33,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 26.0,
+        "minY": 26.0,
+        "maxX": 27.0,
+        "maxY": 27.0
+      }
+    },
+    {
+      "id": 34,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 21.0,
+        "minY": 23.0,
+        "maxX": 22.0,
+        "maxY": 24.0
+      }
+    },
+    {
+      "id": 35,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 16.0,
+        "minY": 3.0,
+        "maxX": 17.0,
+        "maxY": 4.0
+      }
+    },
+    {
+      "id": 36,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 27.0,
+        "minY": 41.0,
+        "maxX": 28.0,
+        "maxY": 42.0
+      }
+    },
+    {
+      "id": 37,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 27.0,
+        "minY": 37.0,
+        "maxX": 28.0,
+        "maxY": 38.0
+      }
+    },
+    {
+      "id": 38,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 39.0,
+        "minY": 7.0,
+        "maxX": 40.0,
+        "maxY": 8.0
+      }
+    },
+    {
+      "id": 39,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 7.0,
+        "minY": 12.0,
+        "maxX": 8.0,
+        "maxY": 13.0
+      }
+    },
+    {
+      "id": 40,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 46.0,
+        "minY": 23.0,
+        "maxX": 47.0,
+        "maxY": 24.0
+      }
+    },
+    {
+      "id": 41,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 35.0,
+        "minY": 13.0,
+        "maxX": 36.0,
+        "maxY": 14.0
+      }
+    },
+    {
+      "id": 42,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 35.0,
+        "minY": 17.0,
+        "maxX": 36.0,
+        "maxY": 18.0
+      }
+    },
+    {
+      "id": 43,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 2.0,
+        "minY": 27.0,
+        "maxX": 3.0,
+        "maxY": 28.0
+      }
+    },
+    {
+      "id": 44,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 5.0,
+        "minY": 43.0,
+        "maxX": 6.0,
+        "maxY": 44.0
+      }
+    },
+    {
+      "id": 45,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 41.0,
+        "minY": 1.0,
+        "maxX": 42.0,
+        "maxY": 2.0
+      }
+    },
+    {
+      "id": 46,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 47.0,
+        "minY": 2.0,
+        "maxX": 48.0,
+        "maxY": 3.0
+      }
+    },
+    {
+      "id": 47,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 41.0,
+        "minY": 31.0,
+        "maxX": 42.0,
+        "maxY": 32.0
+      }
+    },
+    {
+      "id": 48,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 7.0,
+        "minY": 29.0,
+        "maxX": 8.0,
+        "maxY": 30.0
+      }
+    },
+    {
+      "id": 49,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 15.0,
+        "minY": 28.0,
+        "maxX": 16.0,
+        "maxY": 29.0
+      }
+    },
+    {
+      "id": 50,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 6.0,
+        "minY": 45.0,
+        "maxX": 7.0,
+        "maxY": 46.0
+      }
+    },
+    {
+      "id": 51,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 9.0,
+        "minY": 9.0,
+        "maxX": 10.0,
+        "maxY": 10.0
+      }
+    },
+    {
+      "id": 52,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 12.0,
+        "minY": 32.0,
+        "maxX": 13.0,
+        "maxY": 33.0
+      }
+    },
+    {
+      "id": 53,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 46.0,
+        "minY": 15.0,
+        "maxX": 47.0,
+        "maxY": 16.0
+      }
+    },
+    {
+      "id": 54,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 15.0,
+        "minY": 32.0,
+        "maxX": 16.0,
+        "maxY": 33.0
+      }
+    },
+    {
+      "id": 55,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 25.0,
+        "minY": 22.0,
+        "maxX": 26.0,
+        "maxY": 23.0
+      }
+    },
+    {
+      "id": 56,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 42.0,
+        "minY": 36.0,
+        "maxX": 43.0,
+        "maxY": 37.0
+      }
+    },
+    {
+      "id": 57,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 35.0,
+        "minY": 8.0,
+        "maxX": 36.0,
+        "maxY": 9.0
+      }
+    },
+    {
+      "id": 58,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 25.0,
+        "minY": 5.0,
+        "maxX": 26.0,
+        "maxY": 6.0
+      }
+    },
+    {
+      "id": 59,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 18.0,
+        "minY": 35.0,
+        "maxX": 19.0,
+        "maxY": 36.0
+      }
+    },
+    {
+      "id": 60,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 41.0,
+        "minY": 11.0,
+        "maxX": 42.0,
+        "maxY": 12.0
+      }
+    },
+    {
+      "id": 61,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 2.0,
+        "minY": 13.0,
+        "maxX": 3.0,
+        "maxY": 14.0
+      }
+    },
+    {
+      "id": 62,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 45.0,
+        "minY": 33.0,
+        "maxX": 46.0,
+        "maxY": 34.0
+      }
+    },
+    {
+      "id": 63,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 17.0,
+        "minY": 13.0,
+        "maxX": 18.0,
+        "maxY": 14.0
+      }
+    },
+    {
+      "id": 64,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 45.0,
+        "minY": 7.0,
+        "maxX": 46.0,
+        "maxY": 8.0
+      }
+    },
+    {
+      "id": 65,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 11.0,
+        "minY": 46.0,
+        "maxX": 12.0,
+        "maxY": 47.0
+      }
+    },
+    {
+      "id": 66,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 47.0,
+        "minY": 30.0,
+        "maxX": 48.0,
+        "maxY": 31.0
+      }
+    },
+    {
+      "id": 67,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 32.0,
+        "minY": 43.0,
+        "maxX": 33.0,
+        "maxY": 44.0
+      }
+    },
+    {
+      "id": 68,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 38.0,
+        "minY": 3.0,
+        "maxX": 39.0,
+        "maxY": 4.0
+      }
+    },
+    {
+      "id": 69,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 6.0,
+        "minY": 1.0,
+        "maxX": 7.0,
+        "maxY": 2.0
+      }
+    },
+    {
+      "id": 70,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 28.0,
+        "minY": 2.0,
+        "maxX": 29.0,
+        "maxY": 3.0
+      }
+    },
+    {
+      "id": 71,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 12.0,
+        "minY": 1.0,
+        "maxX": 13.0,
+        "maxY": 2.0
+      }
+    },
+    {
+      "id": 72,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 7.0,
+        "minY": 10.0,
+        "maxX": 8.0,
+        "maxY": 11.0
+      }
+    },
+    {
+      "id": 73,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 33.0,
+        "minY": 37.0,
+        "maxX": 34.0,
+        "maxY": 38.0
+      }
+    },
+    {
+      "id": 74,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 37.0,
+        "minY": 21.0,
+        "maxX": 38.0,
+        "maxY": 22.0
+      }
+    },
+    {
+      "id": 75,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 3.0,
+        "minY": 42.0,
+        "maxX": 4.0,
+        "maxY": 43.0
+      }
+    },
+    {
+      "id": 76,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 23.0,
+        "minY": 37.0,
+        "maxX": 24.0,
+        "maxY": 38.0
+      }
+    },
+    {
+      "id": 77,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 1.0,
+        "minY": 46.0,
+        "maxX": 2.0,
+        "maxY": 47.0
+      }
+    },
+    {
+      "id": 78,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 23.0,
+        "minY": 48.0,
+        "maxX": 24.0,
+        "maxY": 49.0
+      }
+    },
+    {
+      "id": 79,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 3.0,
+        "minY": 46.0,
+        "maxX": 4.0,
+        "maxY": 47.0
+      }
+    },
+    {
+      "id": 80,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 31.0,
+        "minY": 39.0,
+        "maxX": 32.0,
+        "maxY": 40.0
+      }
+    },
+    {
+      "id": 81,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 47.0,
+        "minY": 40.0,
+        "maxX": 48.0,
+        "maxY": 41.0
+      }
+    },
+    {
+      "id": 82,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 38.0,
+        "minY": 37.0,
+        "maxX": 39.0,
+        "maxY": 38.0
+      }
+    },
+    {
+      "id": 83,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 45.0,
+        "minY": 25.0,
+        "maxX": 46.0,
+        "maxY": 26.0
+      }
+    },
+    {
+      "id": 84,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 37.0,
+        "minY": 25.0,
+        "maxX": 38.0,
+        "maxY": 26.0
+      }
+    },
+    {
+      "id": 85,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 36.0,
+        "minY": 15.0,
+        "maxX": 37.0,
+        "maxY": 16.0
+      }
+    },
+    {
+      "id": 86,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 31.0,
+        "minY": 31.0,
+        "maxX": 32.0,
+        "maxY": 32.0
+      }
+    },
+    {
+      "id": 87,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 22.0,
+        "minY": 11.0,
+        "maxX": 23.0,
+        "maxY": 12.0
+      }
+    },
+    {
+      "id": 88,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 5.0,
+        "minY": 9.0,
+        "maxX": 6.0,
+        "maxY": 10.0
+      }
+    },
+    {
+      "id": 89,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 29.0,
+        "minY": 35.0,
+        "maxX": 30.0,
+        "maxY": 36.0
+      }
+    },
+    {
+      "id": 90,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 3.0,
+        "minY": 36.0,
+        "maxX": 4.0,
+        "maxY": 37.0
+      }
+    },
+    {
+      "id": 91,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 46.0,
+        "minY": 19.0,
+        "maxX": 47.0,
+        "maxY": 20.0
+      }
+    },
+    {
+      "id": 92,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 23.0,
+        "minY": 35.0,
+        "maxX": 24.0,
+        "maxY": 36.0
+      }
+    },
+    {
+      "id": 93,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 38.0,
+        "minY": 16.0,
+        "maxX": 39.0,
+        "maxY": 17.0
+      }
+    },
+    {
+      "id": 94,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 45.0,
+        "minY": 46.0,
+        "maxX": 46.0,
+        "maxY": 47.0
+      }
+    },
+    {
+      "id": 95,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 47.0,
+        "minY": 5.0,
+        "maxX": 48.0,
+        "maxY": 6.0
+      }
+    },
+    {
+      "id": 96,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 45.0,
+        "minY": 10.0,
+        "maxX": 46.0,
+        "maxY": 11.0
+      }
+    },
+    {
+      "id": 97,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 48.0,
+        "minY": 22.0,
+        "maxX": 49.0,
+        "maxY": 23.0
+      }
+    },
+    {
+      "id": 98,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 5.0,
+        "minY": 21.0,
+        "maxX": 6.0,
+        "maxY": 22.0
+      }
+    },
+    {
+      "id": 99,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 20.0,
+        "minY": 25.0,
+        "maxX": 21.0,
+        "maxY": 26.0
+      }
+    },
+    {
+      "id": 100,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 41.0,
+        "minY": 18.0,
+        "maxX": 42.0,
+        "maxY": 19.0
+      }
+    },
+    {
+      "id": 101,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 30.0,
+        "minY": 16.0,
+        "maxX": 31.0,
+        "maxY": 17.0
+      }
+    },
+    {
+      "id": 102,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 7.0,
+        "minY": 7.0,
+        "maxX": 8.0,
+        "maxY": 8.0
+      }
+    },
+    {
+      "id": 103,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 11.0,
+        "minY": 28.0,
+        "maxX": 12.0,
+        "maxY": 29.0
+      }
+    },
+    {
+      "id": 104,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 1.0,
+        "minY": 36.0,
+        "maxX": 2.0,
+        "maxY": 37.0
+      }
+    },
+    {
+      "id": 105,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 33.0,
+        "minY": 45.0,
+        "maxX": 34.0,
+        "maxY": 46.0
+      }
+    },
+    {
+      "id": 106,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 10.0,
+        "minY": 7.0,
+        "maxX": 11.0,
+        "maxY": 8.0
+      }
+    },
+    {
+      "id": 107,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 15.0,
+        "minY": 9.0,
+        "maxX": 16.0,
+        "maxY": 10.0
+      }
+    },
+    {
+      "id": 108,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 40.0,
+        "minY": 37.0,
+        "maxX": 41.0,
+        "maxY": 38.0
+      }
+    },
+    {
+      "id": 109,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 35.0,
+        "minY": 42.0,
+        "maxX": 36.0,
+        "maxY": 43.0
+      }
+    },
+    {
+      "id": 110,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 19.0,
+        "minY": 32.0,
+        "maxX": 20.0,
+        "maxY": 33.0
+      }
+    },
+    {
+      "id": 111,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 8.0,
+        "minY": 20.0,
+        "maxX": 9.0,
+        "maxY": 21.0
+      }
+    },
+    {
+      "id": 112,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 32.0,
+        "minY": 21.0,
+        "maxX": 33.0,
+        "maxY": 22.0
+      }
+    },
+    {
+      "id": 113,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 23.0,
+        "minY": 32.0,
+        "maxX": 24.0,
+        "maxY": 33.0
+      }
+    },
+    {
+      "id": 114,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 20.0,
+        "minY": 30.0,
+        "maxX": 21.0,
+        "maxY": 31.0
+      }
+    },
+    {
+      "id": 115,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 43.0,
+        "minY": 20.0,
+        "maxX": 44.0,
+        "maxY": 21.0
+      }
+    },
+    {
+      "id": 116,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 25.0,
+        "minY": 37.0,
+        "maxX": 26.0,
+        "maxY": 38.0
+      }
+    },
+    {
+      "id": 117,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 6.0,
+        "minY": 47.0,
+        "maxX": 7.0,
+        "maxY": 48.0
+      }
+    },
+    {
+      "id": 118,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 17.0,
+        "minY": 39.0,
+        "maxX": 18.0,
+        "maxY": 40.0
+      }
+    },
+    {
+      "id": 119,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 1.0,
+        "minY": 18.0,
+        "maxX": 2.0,
+        "maxY": 19.0
+      }
+    },
+    {
+      "id": 120,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 3.0,
+        "minY": 10.0,
+        "maxX": 4.0,
+        "maxY": 11.0
+      }
+    },
+    {
+      "id": 121,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 40.0,
+        "minY": 41.0,
+        "maxX": 41.0,
+        "maxY": 42.0
+      }
+    },
+    {
+      "id": 122,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 20.0,
+        "minY": 48.0,
+        "maxX": 21.0,
+        "maxY": 49.0
+      }
+    },
+    {
+      "id": 123,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 48.0,
+        "minY": 37.0,
+        "maxX": 49.0,
+        "maxY": 38.0
+      }
+    },
+    {
+      "id": 124,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 7.0,
+        "minY": 3.0,
+        "maxX": 8.0,
+        "maxY": 4.0
+      }
+    },
+    {
+      "id": 125,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 37.0,
+        "minY": 39.0,
+        "maxX": 38.0,
+        "maxY": 40.0
+      }
+    },
+    {
+      "id": 126,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 16.0,
+        "minY": 17.0,
+        "maxX": 17.0,
+        "maxY": 18.0
+      }
+    },
+    {
+      "id": 127,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 25.0,
+        "minY": 2.0,
+        "maxX": 26.0,
+        "maxY": 3.0
+      }
+    },
+    {
+      "id": 128,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 43.0,
+        "minY": 2.0,
+        "maxX": 44.0,
+        "maxY": 3.0
+      }
+    },
+    {
+      "id": 129,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 37.0,
+        "minY": 31.0,
+        "maxX": 38.0,
+        "maxY": 32.0
+      }
+    },
+    {
+      "id": 130,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 39.0,
+        "minY": 12.0,
+        "maxX": 40.0,
+        "maxY": 13.0
+      }
+    },
+    {
+      "id": 131,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 18.0,
+        "minY": 15.0,
+        "maxX": 19.0,
+        "maxY": 16.0
+      }
+    },
+    {
+      "id": 132,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 11.0,
+        "minY": 20.0,
+        "maxX": 12.0,
+        "maxY": 21.0
+      }
+    },
+    {
+      "id": 133,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 31.0,
+        "minY": 3.0,
+        "maxX": 32.0,
+        "maxY": 4.0
+      }
+    },
+    {
+      "id": 134,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 18.0,
+        "minY": 20.0,
+        "maxX": 19.0,
+        "maxY": 21.0
+      }
+    },
+    {
+      "id": 135,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 1.0,
+        "minY": 42.0,
+        "maxX": 2.0,
+        "maxY": 43.0
+      }
+    },
+    {
+      "id": 136,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 19.0,
+        "minY": 28.0,
+        "maxX": 20.0,
+        "maxY": 29.0
+      }
+    },
+    {
+      "id": 137,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 29.0,
+        "minY": 45.0,
+        "maxX": 30.0,
+        "maxY": 46.0
+      }
+    },
+    {
+      "id": 138,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 38.0,
+        "minY": 28.0,
+        "maxX": 39.0,
+        "maxY": 29.0
+      }
+    },
+    {
+      "id": 139,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 20.0,
+        "minY": 17.0,
+        "maxX": 21.0,
+        "maxY": 18.0
+      }
+    },
+    {
+      "id": 140,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 9.0,
+        "minY": 48.0,
+        "maxX": 10.0,
+        "maxY": 49.0
+      }
+    },
+    {
+      "id": 141,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 48.0,
+        "minY": 15.0,
+        "maxX": 49.0,
+        "maxY": 16.0
+      }
+    },
+    {
+      "id": 142,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 17.0,
+        "minY": 29.0,
+        "maxX": 18.0,
+        "maxY": 30.0
+      }
+    },
+    {
+      "id": 143,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 12.0,
+        "minY": 18.0,
+        "maxX": 13.0,
+        "maxY": 19.0
+      }
+    },
+    {
+      "id": 144,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 40.0,
+        "minY": 16.0,
+        "maxX": 41.0,
+        "maxY": 17.0
+      }
+    },
+    {
+      "id": 145,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 11.0,
+        "minY": 9.0,
+        "maxX": 12.0,
+        "maxY": 10.0
+      }
+    },
+    {
+      "id": 146,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 33.0,
+        "minY": 31.0,
+        "maxX": 34.0,
+        "maxY": 32.0
+      }
+    },
+    {
+      "id": 147,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 27.0,
+        "minY": 32.0,
+        "maxX": 28.0,
+        "maxY": 33.0
+      }
+    },
+    {
+      "id": 148,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 8.0,
+        "minY": 33.0,
+        "maxX": 9.0,
+        "maxY": 34.0
+      }
+    },
+    {
+      "id": 149,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 30.0,
+        "minY": 37.0,
+        "maxX": 31.0,
+        "maxY": 38.0
+      }
+    },
+    {
+      "id": 150,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 40.0,
+        "minY": 33.0,
+        "maxX": 41.0,
+        "maxY": 34.0
+      }
+    },
+    {
+      "id": 151,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 32.0,
+        "minY": 11.0,
+        "maxX": 33.0,
+        "maxY": 12.0
+      }
+    },
+    {
+      "id": 152,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 5.0,
+        "minY": 7.0,
+        "maxX": 6.0,
+        "maxY": 8.0
+      }
+    },
+    {
+      "id": 153,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 10.0,
+        "minY": 33.0,
+        "maxX": 11.0,
+        "maxY": 34.0
+      }
+    },
+    {
+      "id": 154,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 39.0,
+        "minY": 45.0,
+        "maxX": 40.0,
+        "maxY": 46.0
+      }
+    },
+    {
+      "id": 155,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 23.0,
+        "minY": 41.0,
+        "maxX": 24.0,
+        "maxY": 42.0
+      }
+    },
+    {
+      "id": 156,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 19.0,
+        "minY": 23.0,
+        "maxX": 20.0,
+        "maxY": 24.0
+      }
+    },
+    {
+      "id": 157,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 19.0,
+        "minY": 11.0,
+        "maxX": 20.0,
+        "maxY": 12.0
+      }
+    },
+    {
+      "id": 158,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 16.0,
+        "minY": 11.0,
+        "maxX": 17.0,
+        "maxY": 12.0
+      }
+    },
+    {
+      "id": 159,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 37.0,
+        "minY": 46.0,
+        "maxX": 38.0,
+        "maxY": 47.0
+      }
+    },
+    {
+      "id": 160,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 5.0,
+        "minY": 19.0,
+        "maxX": 6.0,
+        "maxY": 20.0
+      }
+    },
+    {
+      "id": 161,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 28.0,
+        "minY": 17.0,
+        "maxX": 29.0,
+        "maxY": 18.0
+      }
+    },
+    {
+      "id": 162,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 30.0,
+        "minY": 47.0,
+        "maxX": 31.0,
+        "maxY": 48.0
+      }
+    },
+    {
+      "id": 163,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 23.0,
+        "minY": 3.0,
+        "maxX": 24.0,
+        "maxY": 4.0
+      }
+    },
+    {
+      "id": 164,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 16.0,
+        "minY": 43.0,
+        "maxX": 17.0,
+        "maxY": 44.0
+      }
+    },
+    {
+      "id": 165,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 9.0,
+        "minY": 27.0,
+        "maxX": 10.0,
+        "maxY": 28.0
+      }
+    },
+    {
+      "id": 166,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 27.0,
+        "minY": 48.0,
+        "maxX": 28.0,
+        "maxY": 49.0
+      }
+    },
+    {
+      "id": 167,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 13.0,
+        "minY": 23.0,
+        "maxX": 14.0,
+        "maxY": 24.0
+      }
+    },
+    {
+      "id": 168,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 23.0,
+        "minY": 7.0,
+        "maxX": 24.0,
+        "maxY": 8.0
+      }
+    },
+    {
+      "id": 169,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 29.0,
+        "minY": 21.0,
+        "maxX": 30.0,
+        "maxY": 22.0
+      }
+    },
+    {
+      "id": 170,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 22.0,
+        "minY": 5.0,
+        "maxX": 23.0,
+        "maxY": 6.0
+      }
+    },
+    {
+      "id": 171,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 35.75,
+        "minY": 9.75,
+        "maxX": 37.25,
+        "maxY": 11.25
+      }
+    },
+    {
+      "id": 172,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 21.75,
+        "minY": 8.75,
+        "maxX": 23.25,
+        "maxY": 10.25
+      }
+    },
+    {
+      "id": 173,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 16.75,
+        "minY": 25.75,
+        "maxX": 18.25,
+        "maxY": 27.25
+      }
+    },
+    {
+      "id": 174,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 27.75,
+        "minY": 9.75,
+        "maxX": 29.25,
+        "maxY": 11.25
+      }
+    },
+    {
+      "id": 175,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 20.75,
+        "minY": 41.75,
+        "maxX": 22.25,
+        "maxY": 43.25
+      }
+    },
+    {
+      "id": 176,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 35.75,
+        "minY": 35.75,
+        "maxX": 37.25,
+        "maxY": 37.25
+      }
+    },
+    {
+      "id": 177,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 11.75,
+        "minY": 41.75,
+        "maxX": 13.25,
+        "maxY": 43.25
+      }
+    },
+    {
+      "id": 178,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 16.75,
+        "minY": 31.75,
+        "maxX": 18.25,
+        "maxY": 33.25
+      }
+    },
+    {
+      "id": 179,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 10.75,
+        "minY": 25.75,
+        "maxX": 12.25,
+        "maxY": 27.25
+      }
+    },
+    {
+      "id": 180,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 38.75,
+        "minY": 17.75,
+        "maxX": 40.25,
+        "maxY": 19.25
+      }
+    },
+    {
+      "id": 181,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 9.75,
+        "minY": 10.75,
+        "maxX": 11.25,
+        "maxY": 12.25
+      }
+    },
+    {
+      "id": 182,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 36.75,
+        "minY": 6.75,
+        "maxX": 38.25,
+        "maxY": 8.25
+      }
+    },
+    {
+      "id": 183,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 27.75,
+        "minY": 11.75,
+        "maxX": 29.25,
+        "maxY": 13.25
+      }
+    },
+    {
+      "id": 184,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 8.75,
+        "minY": 28.75,
+        "maxX": 10.25,
+        "maxY": 30.25
+      }
+    },
+    {
+      "id": 185,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 10.75,
+        "minY": 38.75,
+        "maxX": 12.25,
+        "maxY": 40.25
+      }
+    },
+    {
+      "id": 186,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 39.75,
+        "minY": 46.75,
+        "maxX": 41.25,
+        "maxY": 48.25
+      }
+    },
+    {
+      "id": 187,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 38.75,
+        "minY": 21.75,
+        "maxX": 40.25,
+        "maxY": 23.25
+      }
+    },
+    {
+      "id": 188,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 41.75,
+        "minY": 15.75,
+        "maxX": 43.25,
+        "maxY": 17.25
+      }
+    },
+    {
+      "id": 189,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 8.75,
+        "minY": 30.75,
+        "maxX": 10.25,
+        "maxY": 32.25
+      }
+    },
+    {
+      "id": 190,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 46.75,
+        "minY": 10.75,
+        "maxX": 48.25,
+        "maxY": 12.25
+      }
+    },
+    {
+      "id": 191,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 19.75,
+        "minY": 18.75,
+        "maxX": 21.25,
+        "maxY": 20.25
+      }
+    },
+    {
+      "id": 192,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 7.75,
+        "minY": 21.75,
+        "maxX": 9.25,
+        "maxY": 23.25
+      }
+    },
+    {
+      "id": 193,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 31.75,
+        "minY": 18.75,
+        "maxX": 33.25,
+        "maxY": 20.25
+      }
+    },
+    {
+      "id": 194,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 28.75,
+        "minY": 31.75,
+        "maxX": 30.25,
+        "maxY": 33.25
+      }
+    },
+    {
+      "id": 195,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 29.75,
+        "minY": 18.75,
+        "maxX": 31.25,
+        "maxY": 20.25
+      }
+    },
+    {
+      "id": 196,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 46.75,
+        "minY": 8.75,
+        "maxX": 48.25,
+        "maxY": 10.25
+      }
+    },
+    {
+      "id": 197,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 17.75,
+        "minY": 16.75,
+        "maxX": 19.25,
+        "maxY": 18.25
+      }
+    },
+    {
+      "id": 198,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 26.75,
+        "minY": 19.75,
+        "maxX": 28.25,
+        "maxY": 21.25
+      }
+    },
+    {
+      "id": 199,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 30.75,
+        "minY": 27.75,
+        "maxX": 32.25,
+        "maxY": 29.25
+      }
+    },
+    {
+      "id": 200,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 26.75,
+        "minY": 6.75,
+        "maxX": 28.25,
+        "maxY": 8.25
+      }
+    },
+    {
+      "id": 201,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 8.75,
+        "minY": 1.75,
+        "maxX": 10.25,
+        "maxY": 3.25
+      }
+    },
+    {
+      "id": 202,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 45.75,
+        "minY": 16.75,
+        "maxX": 47.25,
+        "maxY": 18.25
+      }
+    },
+    {
+      "id": 203,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 31.75,
+        "minY": 15.75,
+        "maxX": 33.25,
+        "maxY": 17.25
+      }
+    },
+    {
+      "id": 204,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 7.75,
+        "minY": 40.75,
+        "maxX": 9.25,
+        "maxY": 42.25
+      }
+    },
+    {
+      "id": 205,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 41.75,
+        "minY": 45.75,
+        "maxX": 43.25,
+        "maxY": 47.25
+      }
+    },
+    {
+      "id": 206,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 1.75,
+        "minY": 20.75,
+        "maxX": 3.25,
+        "maxY": 22.25
+      }
+    },
+    {
+      "id": 207,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 37.75,
+        "minY": 41.75,
+        "maxX": 39.25,
+        "maxY": 43.25
+      }
+    },
+    {
+      "id": 208,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 20.75,
+        "minY": 45.75,
+        "maxX": 22.25,
+        "maxY": 47.25
+      }
+    },
+    {
+      "id": 209,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 41.75,
+        "minY": 41.75,
+        "maxX": 43.25,
+        "maxY": 43.25
+      }
+    },
+    {
+      "id": 210,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 37.75,
+        "minY": 8.75,
+        "maxX": 39.25,
+        "maxY": 10.25
+      }
+    },
+    {
+      "id": 211,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 25.75,
+        "minY": 45.75,
+        "maxX": 27.25,
+        "maxY": 47.25
+      }
+    },
+    {
+      "id": 212,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 38.75,
+        "minY": 19.75,
+        "maxX": 40.25,
+        "maxY": 21.25
+      }
+    },
+    {
+      "id": 213,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 1.75,
+        "minY": 37.75,
+        "maxX": 3.25,
+        "maxY": 39.25
+      }
+    },
+    {
+      "id": 214,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 5.75,
+        "minY": 40.75,
+        "maxX": 7.25,
+        "maxY": 42.25
+      }
+    },
+    {
+      "id": 215,
+      "kind": "Bush",
+      "pairId": 0,
+      "bounds": {
+        "minX": 20.75,
+        "minY": 26.75,
+        "maxX": 22.25,
+        "maxY": 28.25
+      }
+    }
+  ]
+}
