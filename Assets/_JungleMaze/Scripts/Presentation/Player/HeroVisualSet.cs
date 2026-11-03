@@ -17,16 +17,30 @@ namespace JungleMaze.Presentation.Player
         {
             public string Name = "";
             public WorldVisualSet.Frames IdleBack, IdleSide, IdleFront, MoveBack, MoveSide, MoveFront;
+            /// <summary>One-shot attack swings per facing; null keeps the idle/move loop during an attack.</summary>
+            public WorldVisualSet.Frames AttackBack, AttackSide, AttackFront;
+
+            /// <summary>Attack clip for a facing, falling back to the side clip.</summary>
+            public WorldVisualSet.Frames GetAttack(HeroFacing facing)
+            {
+                var clip = facing == HeroFacing.Back ? AttackBack : facing == HeroFacing.Front ? AttackFront : AttackSide;
+                return Has(clip) ? clip : Has(AttackSide) ? AttackSide : null;
+            }
+
+            /// <summary>Unity deserializes a missing clip as an empty instance, so emptiness counts as missing.</summary>
+            public static bool Has(WorldVisualSet.Frames clip) => clip != null && clip.Sprites != null && clip.Sprites.Length > 0;
 
             /// <summary>Loop for a state and facing; null when the source clip was missing.</summary>
             public WorldVisualSet.Frames Get(bool moving, HeroFacing facing)
             {
+                WorldVisualSet.Frames clip;
                 switch (facing)
                 {
-                    case HeroFacing.Back: return moving ? MoveBack : IdleBack;
-                    case HeroFacing.Front: return moving ? MoveFront : IdleFront;
-                    default: return moving ? MoveSide : IdleSide;
+                    case HeroFacing.Back: clip = moving ? MoveBack : IdleBack; break;
+                    case HeroFacing.Front: clip = moving ? MoveFront : IdleFront; break;
+                    default: clip = moving ? MoveSide : IdleSide; break;
                 }
+                return Has(clip) ? clip : Has(IdleFront) ? IdleFront : null;
             }
         }
 

@@ -22,12 +22,30 @@ namespace JungleMaze.Presentation.Player
         private WorldVisualSet.Frames _frames;
         private Vector3 _lastRootPosition;
         private float _elapsed;
+        private float _attackElapsed, _attackDuration;
         private float _speed;
         private bool _hasLast;
 
         public bool HasVisuals => _hero != null;
         public HeroFacing Facing { get; private set; } = HeroFacing.Front;
         public bool Moving { get; private set; }
+
+        /// <summary>True while a one-shot attack swing is playing.</summary>
+        public bool Attacking { get; private set; }
+
+        /// <summary>
+        /// Plays the attack swing once for the current facing (it follows facing changes mid-swing), then returns to
+        /// idle/move. A new attack restarts the swing. Heroes without attack clips keep their loop.
+        /// </summary>
+        public void PlayAttack()
+        {
+            var clip = _hero?.GetAttack(Facing);
+            if (clip == null) return;
+            _attackDuration = clip.Duration > 0f ? clip.Duration : .3f;
+            _attackElapsed = 0f;
+            Attacking = true;
+            _frames = null;
+        }
 
         /// <summary>Chooses the look; the index wraps over the set.</summary>
         public void SetHero(int index)
@@ -79,8 +97,15 @@ namespace JungleMaze.Presentation.Player
             var angle = Mathf.DeltaAngle(0f, root.eulerAngles.z);
             Facing = angle > 45f && angle < 135f ? HeroFacing.Back : angle < -45f && angle > -135f ? HeroFacing.Front : HeroFacing.Side;
             Moving = _speed > moveThreshold;
-            var next = _hero.Get(Moving, Facing) ?? _hero.IdleFront;
-            if (next != _frames) { _frames = next; _elapsed = 0f; }
+            if (Attacking)
+            {
+                _attackElapsed += Mathf.Max(0f, seconds);
+                if (_attackElapsed >= _attackDuration) Attacking = false;
+            }
+            var attack = Attacking ? _hero.GetAttack(Facing) : null;
+            var next = attack ?? _hero.Get(Moving, Facing);
+            if (attack != null) { _frames = next; _elapsed = _attackElapsed; }
+            else if (next != _frames) { _frames = next; _elapsed = 0f; }
             else _elapsed += Mathf.Max(0f, seconds);
             _renderer.flipX = Facing == HeroFacing.Side && Mathf.Abs(angle) > 90f;
             var frame = _frames?.Sample(_elapsed);

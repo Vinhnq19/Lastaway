@@ -14,17 +14,18 @@ namespace JungleMaze.Tests.World
         private GameObject _root;
         private HeroSpriteAnimator _animator;
         private SpriteRenderer _body;
-        private Sprite _idleSide, _idleBack, _idleFront, _moveSide;
+        private Sprite _idleSide, _idleBack, _idleFront, _moveSide, _attackSide;
 
         [SetUp]
         public void SetUp()
         {
-            _idleSide = Frame(); _idleBack = Frame(); _idleFront = Frame(); _moveSide = Frame();
+            _idleSide = Frame(); _idleBack = Frame(); _idleFront = Frame(); _moveSide = Frame(); _attackSide = Frame();
             var set = Own(ScriptableObject.CreateInstance<HeroVisualSet>());
             set.FrameWorldHeight = 3f;
             set.Heroes = new[]
             {
-                new HeroVisualSet.Hero { Name = "a", IdleSide = Loop(_idleSide), IdleBack = Loop(_idleBack), IdleFront = Loop(_idleFront), MoveSide = Loop(_moveSide) },
+                new HeroVisualSet.Hero { Name = "a", IdleSide = Loop(_idleSide), IdleBack = Loop(_idleBack), IdleFront = Loop(_idleFront), MoveSide = Loop(_moveSide),
+                    AttackSide = new WorldVisualSet.Frames { Sprites = new[] { _attackSide }, Times = new[] { 0f }, Duration = .3f } },
                 new HeroVisualSet.Hero { Name = "b", IdleSide = Loop(_idleSide), IdleFront = Loop(_idleFront), MoveSide = Loop(_moveSide) },
             };
             _root = Own(new GameObject("hero root"));
@@ -74,6 +75,29 @@ namespace JungleMaze.Tests.World
             Assert.AreSame(_moveSide, _body.sprite);
             for (var i = 0; i < 30; i++) _animator.Step(.02f);
             Assert.IsFalse(_animator.Moving);
+            Assert.AreSame(_idleSide, _body.sprite);
+        }
+
+        [Test]
+        public void AttackPlaysOnceForTheFacing_ThenReturnsToIdle()
+        {
+            _animator.Step(.016f);
+            _animator.PlayAttack();
+            _animator.Step(.016f);
+            Assert.IsTrue(_animator.Attacking);
+            Assert.AreSame(_attackSide, _body.sprite);
+            for (var i = 0; i < 20; i++) _animator.Step(.02f);
+            Assert.IsFalse(_animator.Attacking);
+            Assert.AreSame(_idleSide, _body.sprite);
+        }
+
+        [Test]
+        public void HeroWithoutAttackClipsIgnoresAttack()
+        {
+            _animator.SetHero(1);
+            _animator.PlayAttack();
+            _animator.Step(.016f);
+            Assert.IsFalse(_animator.Attacking);
             Assert.AreSame(_idleSide, _body.sprite);
         }
 
