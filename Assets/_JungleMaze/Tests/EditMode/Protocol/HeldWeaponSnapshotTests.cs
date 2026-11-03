@@ -52,6 +52,65 @@ namespace JungleMaze.Tests.Protocol
         }
 
         [Test]
+        public void HeldItemsPacketRoundTripsTheFullList()
+        {
+            var packet = new HeldItemsPacket { MatchId = System.Guid.NewGuid(), Tick = 42 };
+            Assert.IsTrue(packet.TryAdd(2, "BANANA"));
+            Assert.IsTrue(packet.TryAdd(5, ""));
+            var writer = new NetDataWriter();
+            packet.Serialize(writer);
+            var read = new HeldItemsPacket();
+            read.Deserialize(new NetDataReader(writer.Data, 0, writer.Length));
+            Assert.AreEqual(packet.MatchId, read.MatchId);
+            Assert.AreEqual(42u, read.Tick);
+            Assert.AreEqual(2, read.Count);
+            Assert.AreEqual("BANANA", read.Get(0).ItemId);
+            Assert.AreEqual(5, read.Get(1).NetId);
+            Assert.AreEqual("", read.Get(1).ItemId);
+        }
+
+        [Test]
+        public void HeldItemsPacketHoldsAtMostTenPlayers()
+        {
+            var packet = new HeldItemsPacket();
+            for (byte i = 0; i < HeldItemsPacket.MaxPlayers; i++) Assert.IsTrue(packet.TryAdd(i, "SEED"));
+            Assert.IsFalse(packet.TryAdd(10, "SEED"));
+        }
+
+        [Test]
+        public void MatchSessionStoresHeldItemsForKnownPlayers_AndClearsPlayersLeftOutOfTheList()
+        {
+            using var live = new JungleMaze.Tests.MatchUi.LiveMatchHarness();
+            live.Start(0, 3);
+            var first = new HeldItemsPacket { MatchId = live.MatchId, Tick = live.Tick };
+            first.TryAdd(1, "BANANA");
+            first.TryAdd(2, "BELL");
+            first.TryAdd(7, "SMOKE");
+            live.Network.Push(first);
+            Assert.IsTrue(live.Players.TryGet(1, out var one));
+            Assert.AreEqual("BANANA", one.HeldItemId);
+            Assert.IsTrue(live.Players.TryGet(2, out var two));
+            Assert.AreEqual("BELL", two.HeldItemId);
+            Assert.IsFalse(live.Players.TryGet(7, out _), "an unknown NetId is not created by the held-items list");
+
+            var older = new HeldItemsPacket { MatchId = live.MatchId, Tick = live.Tick - 1 };
+            older.TryAdd(1, "SEED");
+            live.Network.Push(older);
+            Assert.AreEqual("BANANA", one.HeldItemId, "an older list never overwrites a newer one");
+
+            var next = new HeldItemsPacket { MatchId = live.MatchId, Tick = live.Tick + 1 };
+            next.TryAdd(1, "ROPE");
+            live.Network.Push(next);
+            Assert.AreEqual("ROPE", one.HeldItemId);
+            Assert.AreEqual("", two.HeldItemId, "a player missing from the full list holds nothing special");
+
+            var otherMatch = new HeldItemsPacket { MatchId = System.Guid.NewGuid(), Tick = live.Tick + 5 };
+            otherMatch.TryAdd(1, "CRYSTAL");
+            live.Network.Push(otherMatch);
+            Assert.AreEqual("ROPE", one.HeldItemId, "another match's list is ignored");
+        }
+
+        [Test]
         public void ReEquippingReplacesTheCodeInsteadOfMixingBits()
         {
             var packet = new PlayerStatePacket();

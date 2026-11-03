@@ -1,6 +1,7 @@
 using JungleMaze.App.Ports;
 using JungleMaze.Core.Pooling;
 using JungleMaze.Domain.Player;
+using JungleBackend.Protocol.Gameplay;
 using JungleMaze.Presentation.Combat;
 using JungleMaze.Presentation.Rendering;
 using UnityEngine;
@@ -20,6 +21,7 @@ namespace JungleMaze.Presentation.Player
         /// <summary>In-hand weapon that follows the server's held-weapon code; found among the children when empty.</summary>
         [SerializeField] private HeldWeaponView heldWeapon;
         private int _appliedHeldCode = -1;
+        private string _appliedHeldItem = "";
 
         private PlayerModel _model;
         private IPlayerPoseSource _poses;
@@ -76,14 +78,16 @@ namespace JungleMaze.Presentation.Player
         // LateUpdate: prediction/interpolation đã được tick trong Update của frame này.
         private void LateUpdate() => Refresh();
 
-        /// <summary>Applies the latest snapshot's held-weapon code once per change.</summary>
+        /// <summary>Applies the latest snapshot's held-weapon code (and, for "other item", the held item ID) once per change.</summary>
         private void SyncHeldWeapon()
         {
             if (heldWeapon == null || !_model.HasState) return;
             var code = _model.Current.HeldCode;
-            if (code == _appliedHeldCode) return;
+            var item = code == PlayerStatePacket.HeldOther ? _model.HeldItemId : "";
+            if (code == _appliedHeldCode && item == _appliedHeldItem) return;
             _appliedHeldCode = code;
-            heldWeapon.ShowServerCode(code);
+            _appliedHeldItem = item;
+            heldWeapon.ShowServerCode(code, item);
         }
 
         private void Refresh()

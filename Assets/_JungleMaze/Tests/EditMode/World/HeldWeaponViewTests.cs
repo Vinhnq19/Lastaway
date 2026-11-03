@@ -43,6 +43,7 @@ namespace JungleMaze.Tests.World
             catalog.Entries = new[]
             {
                 new HeldWeaponCatalog.Entry { ItemId = "AXE", Sprite = Art(32, 16, 16), Grip = new Vector2(0f, .5f), Length = .8f },
+                new HeldWeaponCatalog.Entry { ItemId = "BANANA", Sprite = Art(16, 16, 16), Grip = new Vector2(.5f, .5f), Length = .4f },
             };
             var so = new SerializedObject(_held);
             so.FindProperty("catalog").objectReferenceValue = catalog;
@@ -159,7 +160,13 @@ namespace JungleMaze.Tests.World
 
             model.Apply(new JungleMaze.Domain.Player.PlayerSnapshot { Tick = 2, Hp = 100, HeldCode = PlayerStatePacket.HeldOther });
             view.Bind(model);
-            Assert.IsNull(_held.ItemId);
+            Assert.IsNull(_held.ItemId, "other item without a held-items entry yet: hide");
+
+            model.SetHeldItem("BANANA");
+            view.Bind(model);
+            Assert.AreEqual("BANANA", _held.ItemId);
+            _held.Apply();
+            Assert.IsTrue(_held.Visible, "the throwable from the held-items list is drawn");
         }
 
         private Sprite Art(int w, int h, float ppu)

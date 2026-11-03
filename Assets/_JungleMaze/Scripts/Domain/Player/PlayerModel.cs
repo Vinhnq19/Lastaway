@@ -22,6 +22,12 @@ namespace JungleMaze.Domain.Player
         public bool HasState { get; private set; }
         public PlayerSnapshot Current { get; private set; }
 
+        /// <summary>Item ID the server says this player holds ("" when none). Used when the snapshot only says "other item".</summary>
+        public string HeldItemId { get; private set; } = "";
+
+        /// <summary>Applies a held item from the server's held-items list.</summary>
+        public void SetHeldItem(string itemId) => HeldItemId = itemId ?? "";
+
         /// <summary>Bỏ snapshot cũ/trùng (packet Unreliable có thể đến sai thứ tự). Trả true nếu đã áp.</summary>
         public bool Apply(in PlayerSnapshot snapshot)
         {

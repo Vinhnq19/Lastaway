@@ -76,13 +76,14 @@ namespace JungleMaze.Presentation.Combat
 
         /// <summary>
         /// Follows the server's held-weapon code for a remote player: 0 (older server) changes nothing, so the last
-        /// attack keeps driving the hand; 15 (an item with no combat art) hides it; 1..10 holds that combat weapon.
+        /// attack keeps driving the hand; 1..10 holds that combat weapon; 15 holds <paramref name="otherItemId"/> from the
+        /// server's held-items list (a throwable or special item), or hides the hand while that ID is not known yet.
         /// </summary>
-        public void ShowServerCode(byte code)
+        public void ShowServerCode(byte code, string otherItemId = null)
         {
             if (code == PlayerStatePacket.HeldUnknown) return;
             if (PlayerStatePacket.TryDecodeHeld(code, out var weapon)) Show(CombatWeaponIds.ToJsonId(weapon));
-            else Show(null);
+            else Show(string.IsNullOrEmpty(otherItemId) ? null : otherItemId);
         }
 
         /// <summary>Melee: hide while the swing visual draws the weapon. Otherwise: a short recoil.</summary>
