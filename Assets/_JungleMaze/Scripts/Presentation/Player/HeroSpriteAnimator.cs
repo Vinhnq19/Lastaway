@@ -27,6 +27,8 @@ namespace JungleMaze.Presentation.Player
         private bool _hasLast;
 
         public bool HasVisuals => _hero != null;
+        /// <summary>Hand sprite of the current hero (skin); null when the set has none.</summary>
+        public Sprite Hand => _hero != null ? _hero.Hand : null;
         public HeroFacing Facing { get; private set; } = HeroFacing.Front;
         public bool Moving { get; private set; }
 

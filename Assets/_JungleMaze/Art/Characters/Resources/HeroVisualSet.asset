@@ -162,6 +162,7 @@ MonoBehaviour:
       - 0.48333332
       Duration: 0.5
       Loop: 0
+    Hand: {fileID: 6165164026425242489, guid: af47429840fed1e42b04973a562b884d, type: 3}
   - Name: Hero_10
     IdleBack:
       Sprites:
@@ -310,6 +311,7 @@ MonoBehaviour:
       - 0.48333332
       Duration: 0.5
       Loop: 0
+    Hand: {fileID: 8259609883877558766, guid: 50f0c575bcb74b1458b15ce6d5a548ac, type: 3}
   - Name: Hero_11
     IdleBack:
       Sprites:
@@ -458,6 +460,7 @@ MonoBehaviour:
       - 0.48333332
       Duration: 0.5
       Loop: 0
+    Hand: {fileID: -306236386922676827, guid: d90e18a6f5a95bf41a8392ec54646a84, type: 3}
   - Name: Hero_2
     IdleBack:
       Sprites:
@@ -610,6 +613,7 @@ MonoBehaviour:
       - 1
       Duration: 1.0166667
       Loop: 0
+    Hand: {fileID: 3518116265383155385, guid: 6dc2e0fc07ec7754ab1d411404de5c21, type: 3}
   - Name: Hero_4
     IdleBack:
       Sprites:
@@ -758,6 +762,7 @@ MonoBehaviour:
       - 0.48333332
       Duration: 0.5
       Loop: 0
+    Hand: {fileID: 842609750876318565, guid: ee9ca43565364ee41a46b2c5b919f8ac, type: 3}
   - Name: Hero_5
     IdleBack:
       Sprites:
@@ -906,6 +911,7 @@ MonoBehaviour:
       - 0.48333332
       Duration: 0.5
       Loop: 0
+    Hand: {fileID: 5976279708838236383, guid: 396f5ceb14a94a443b4c50db6af17091, type: 3}
   - Name: Hero_6
     IdleBack:
       Sprites:
@@ -1054,6 +1060,7 @@ MonoBehaviour:
       - 0.48333332
       Duration: 0.5
       Loop: 0
+    Hand: {fileID: -4249112965773019261, guid: 14754aec342bdcd4ebbb269f2078572e, type: 3}
   - Name: Hero_7
     IdleBack:
       Sprites:
@@ -1202,6 +1209,7 @@ MonoBehaviour:
       - 0.48333332
       Duration: 0.5
       Loop: 0
+    Hand: {fileID: 1206244338608345232, guid: e0f5965aa054f7b4dab60476c72f5ba5, type: 3}
   - Name: Hero_8
     IdleBack:
       Sprites:
@@ -1350,3 +1358,4 @@ MonoBehaviour:
       - 0.48333332
       Duration: 0.5
       Loop: 0
+    Hand: {fileID: -6664549590061125387, guid: 6d3e46b7319839d45aceb59839f74a74, type: 3}
