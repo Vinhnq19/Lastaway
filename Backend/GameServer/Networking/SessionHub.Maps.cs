@@ -8,6 +8,13 @@ public sealed partial class SessionHub
 {
     private void SetupRoomMapSubscriptions()
     {
+        _frameValidator.Subscribe<RoomBotCommandPacket>(_ => { });
+        _gameplayRegistry.Subscribe<RoomBotCommandPacket, Session>((p, s) =>
+        {
+            if (s.PlayerId is null) return;
+            var result = new RoomBotCommandResultPacket { RoomId = s.Room.Id, RequestId = p.RequestId, Error = Rooms.ManageBots(s.Room, s.PlayerId, p) };
+            SendWorldPacket(s, ref result);
+        });
         _frameValidator.Subscribe<SelectRoomMapPacket>(_ => { });
         _frameValidator.Subscribe<RoomMapReadyPacket>(_ => { });
         _frameValidator.Subscribe<StartRoomMatchPacket>(_ => { });

@@ -56,7 +56,7 @@ public sealed record MatchParticipant(
     int Rank,
     int Kills,
     double SurvivalSeconds,
-    string? ProfileKey = null
+    string? ProfileKey = null, bool IsBot = false
 );
 
 public sealed record MatchResult(
@@ -67,7 +67,7 @@ public sealed record MatchResult(
     DateTimeOffset EndUtc,
     string Reason,
     IReadOnlyList<MatchParticipant> Participants,
-    string MapId = "", string MapVersion = "", string MapHash = "", string RulesHash = ""
+    string MapId = "", string MapVersion = "", string MapHash = "", string RulesHash = "", string MatchKind = "HumanOnly"
 );
 
 public sealed record KillcamReplayResult(

@@ -64,6 +64,7 @@ namespace JungleMaze.Composition
         private RoomMapSession _roomMaps;
         private bool _startRequested;
         private string _testMapId;
+        private int _testBotCount;
         private uint _testMapRevision;
         private bool _capturedLobby;
         [Inject] public void BindRoomMaps(RoomMapSession maps) => _roomMaps = maps;
@@ -90,6 +91,8 @@ namespace JungleMaze.Composition
         {
             _started = Time.realtimeSinceStartup;
             _testMapId = Environment.GetEnvironmentVariable("NET_TEST_MAP_ID");
+            var bots = Environment.GetEnvironmentVariable("NET_TEST_BOT_COUNT");
+            if (!string.IsNullOrEmpty(bots) && (!int.TryParse(bots, out _testBotCount) || _testBotCount < 0 || _testBotCount > 9)) throw new ArgumentException("NET_TEST_BOT_COUNT must be 0..9.");
             var args = Environment.GetCommandLineArgs(); string scenarioPath = null;
             for (var i = 0; i + 1 < args.Length; i++)
             { if (args[i] == "-onlineTest") scenarioPath = args[++i]; else if (args[i] == "-onlineEvidence") _output = args[++i]; }
@@ -151,6 +154,11 @@ namespace JungleMaze.Composition
                     var target = Array.Find(_roomMaps.Catalog?.Maps ?? Array.Empty<PublishedMap>(), map => map.Id == _testMapId);
                     if (target != null && _testMapRevision != _roomMaps.State.SelectionRevision)
                     { _testMapRevision = _roomMaps.State.SelectionRevision; _roomMaps.Select(target); }
+                    return;
+                }
+                if (_roomMaps.IsHost && _match.Phase == MatchPhase.Waiting && _roomMaps.State.BotCount < _testBotCount)
+                {
+                    if (_roomMaps.CanManageBots) _roomMaps.ManageBots(RoomBotAction.Add);
                     return;
                 }
                 if (!_roomMaps.CanStart || _match.Phase != MatchPhase.Waiting) _startRequested = false;

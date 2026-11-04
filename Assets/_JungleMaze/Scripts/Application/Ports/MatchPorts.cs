@@ -22,6 +22,8 @@ namespace JungleMaze.App.Ports
         public double SurvivalSeconds { get; set; }
         public DateTimeOffset EndedAt { get; set; }
         public string Reason { get; set; }
+        public string MatchKind { get; set; } = "HumanOnly";
+        public bool PvpEligible => MatchKind == "HumanOnly" && (Reason == "LastAlive" || Reason == "Tie");
     }
 
     public interface IPlayerHistory : IDisposable

@@ -24,7 +24,7 @@ namespace JungleMaze.Domain.Lobby
             NetId = netId;
             SessionId = sessionId ?? "";
             Name = name ?? "";
-            IsSelf = isSelf;
+            IsSelf = isSelf; IsBot = isBot;
             HasReady = hasReady;
             Ready = ready;
         }
@@ -37,16 +37,16 @@ namespace JungleMaze.Domain.Lobby
         public readonly int Kills;
         public readonly float SurvivalSeconds;
         public readonly string Name;
-        public readonly bool IsSelf;
+        public readonly bool IsSelf, IsBot;
 
-        public ResultRow(byte netId, byte rank, int kills, float survivalSeconds, string name, bool isSelf)
+        public ResultRow(byte netId, byte rank, int kills, float survivalSeconds, string name, bool isSelf, bool isBot = false)
         {
             NetId = netId;
             Rank = rank;
             Kills = kills;
             SurvivalSeconds = survivalSeconds;
             Name = name ?? "";
-            IsSelf = isSelf;
+            IsSelf = isSelf; IsBot = isBot;
         }
 
         /// <summary>"mm:ss", whole seconds rounded down.</summary>

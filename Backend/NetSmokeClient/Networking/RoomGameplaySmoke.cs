@@ -54,6 +54,10 @@ public sealed class RoomGameplaySmoke : IDisposable
     private uint _selectionRevision, _selectRevision = uint.MaxValue;
     private uint? _ackTick;
     private string _mapId = "", _mapHash = "", _mapVersion = "", _mapName = "", _rulesHash = "";
+    private uint _lobbyRevision, _botRequest;
+    private byte _botCount;
+    private bool _botPending;
+    private readonly int _desiredBots;
     private byte _hostNetId = 255;
     private int _ownNetId = -1;
     private MatchPhase? _phase;
@@ -76,12 +80,15 @@ public sealed class RoomGameplaySmoke : IDisposable
         _accountToken = accountToken;
         _send = send ?? throw new ArgumentNullException(nameof(send));
         _fail = fail ?? throw new ArgumentNullException(nameof(fail));
+        var bots = Environment.GetEnvironmentVariable("NET_SMOKE_BOTS");
+        if (!string.IsNullOrEmpty(bots) && (!int.TryParse(bots, out _desiredBots) || _desiredBots < 0 || _desiredBots > 9)) throw new ArgumentException("NET_SMOKE_BOTS must be 0..9.");
         var requestedMap = Environment.GetEnvironmentVariable("NET_SMOKE_MAP_ID");
         if (!string.IsNullOrEmpty(requestedMap))
         {
             if (!IdPattern.IsMatch(requestedMap)) throw new ArgumentException("NET_SMOKE_MAP_ID is not a valid map id.");
             _environmentMapId = requestedMap;
         }
+        _registry.Subscribe<RoomBotCommandResultPacket>(p => { _botPending = false; if (p.Error != RoomBotError.None) _fail("BotCommand:" + p.Error); });
         _registry.Subscribe<RoomMapStatePacket>(OnRoomMapState);
         _registry.Subscribe<MatchPhasePacket>(OnMatchPhase);
         _registry.Subscribe<ResumeTokenPacket>(OnResumeToken);
@@ -116,6 +123,11 @@ public sealed class RoomGameplaySmoke : IDisposable
         if (_verified && !_roomReadySent && SelectionSettled()) EmitRoomReady();
         EmitSnapshotAck();
         ApplyPhaseAcks();
+        if (_verified && _phase == MatchPhase.Waiting && _ownNetId == _hostNetId && _botCount < _desiredBots)
+        {
+            if (!_botPending) { var p = new RoomBotCommandPacket { RoomId = _roomId, Revision = _lobbyRevision, RequestId = ++_botRequest, Action = RoomBotAction.Add }; Emit(ref p, true, GameplayProtocol.GameplayChannel); _botPending = true; }
+            return;
+        }
         if (!_canStart) _startRequested = false;
         if (_canStart && _verified && _hostNetId != 255 && _ownNetId == _hostNetId && !_startRequested) EmitStart();
     }
@@ -123,7 +135,7 @@ public sealed class RoomGameplaySmoke : IDisposable
     public object Report => new
     {
         mapId = MapId, mapHash = MapHash, phase = Phase, snapshots = Snapshots, results = Results,
-        starts = Starts, mapVerified = MapVerified, canStart = _canStart,
+        botCount = _botCount, starts = Starts, mapVerified = MapVerified, canStart = _canStart,
         selectionRevision = _selectionRevision, ownNetId = _ownNetId >= 0 ? (int?)_ownNetId : null,
         lastMapError = _lastMapError, rulesValidation = RulesValidation,
         failed = _failed, failureReason = _failureReason
@@ -147,6 +159,7 @@ public sealed class RoomGameplaySmoke : IDisposable
 
     private void OnRoomMapState(RoomMapStatePacket packet)
     {
+        _lobbyRevision = packet.LobbyRevision; _botCount = packet.BotCount;
         _hostNetId = packet.HostNetId;
         _canStart = packet.CanStart;
         _rulesHash = packet.RulesHash ?? "";
@@ -463,7 +476,7 @@ public sealed class RoomGameplaySmoke : IDisposable
     {
         var known = new HashSet<Type>
         {
-            typeof(RoomMapStatePacket), typeof(MatchPhasePacket), typeof(ResumeTokenPacket),
+            typeof(RoomBotCommandResultPacket), typeof(RoomMapStatePacket), typeof(MatchPhasePacket), typeof(ResumeTokenPacket),
             typeof(WorldSnapshotPacket), typeof(MatchResultPacket), typeof(RoomMapCommandResultPacket)
         };
         var register = typeof(RoomGameplaySmoke).GetMethod(nameof(RegisterIgnore),

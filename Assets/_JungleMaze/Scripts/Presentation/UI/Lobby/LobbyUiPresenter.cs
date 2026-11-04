@@ -302,7 +302,7 @@ namespace JungleMaze.Presentation.UI.Lobby
                 if (!show) continue;
                 var e = b.Rows[i];
                 row.Rank.text = "#" + e.Rank;
-                row.PlayerName.text = e.Name;
+                row.PlayerName.text = (e.IsBot ? "[BOT] " : "") + e.Name;
                 row.Kills.gameObject.SetActive(_flow.Options.ShowKills);
                 row.Kills.text = e.Kills.ToString(CultureInfo.InvariantCulture);
                 row.Survival.text = ResultRow.Clock((float)e.SurvivalSeconds);
@@ -316,7 +316,7 @@ namespace JungleMaze.Presentation.UI.Lobby
             var slots = s.Slots;
             var key = Hash(s.MatchId, slots.Count, s.MaxPlayers, s.MinPlayers, _flow.HasCountdown ? _flow.CountdownSeconds : -1,
                 _flow.Notice, _flow.ReadyRequests, s.RoomCode, _maps?.State.SelectionRevision, _maps?.State.ReadyCount,
-                _maps?.State.HostNetId, _maps?.CanStart, _maps?.Busy, _maps?.Error, _maps?.Notice, _maps?.State.MapName);
+                _maps?.State.HostNetId, _maps?.CanStart, _maps?.Busy, _maps?.Error, _maps?.Notice, _maps?.State.MapName, _maps?.State.LobbyRevision);
             for (var i = 0; i < slots.Count; i++) key = key * 31 + slots[i].NetId * 7 + (slots[i].IsSelf ? 1 : 0) + (slots[i].Ready ? 2 : 0);
             if (!Changed(key)) return;
             var v = _root.Lobby;
@@ -332,19 +332,23 @@ namespace JungleMaze.Presentation.UI.Lobby
                 if (i < slots.Count)
                 {
                     var slot = slots[i];
+                    row.NetId = slot.NetId;
                     row.PlayerName.text = slot.Name;
                     row.Badge.text = slot.IsSelf ? SelfTag : o.ReadyEnabled && slot.HasReady && slot.Ready ? "Sẵn sàng" : "";
                     row.Tint(true, slot.IsSelf);
                 }
                 else
                 {
+                    row.NetId = 255;
                     row.PlayerName.text = EmptySlot;
                     row.Badge.text = "";
                     row.Tint(false, false);
                 }
             }
             var count = s.PlayerCount > 0 ? s.PlayerCount : slots.Count;
-            v.Count.text = count + "/" + s.MaxPlayers + " · tối thiểu " + s.MinPlayers;
+            v.Count.text = _maps != null && _maps.HasState
+                ? _maps.State.HumanCount + " người + " + _maps.State.BotCount + " bot / " + _maps.State.MaxPlayers + " · tối thiểu " + s.MinPlayers
+                : count + "/" + s.MaxPlayers + " · tối thiểu " + s.MinPlayers;
             v.Status.text = _flow.LobbyStatusText;
             v.Rule.text = o.ReadyEnabled ? "" : _flow.AutoStartText;
             v.Notice.text = _flow.Notice;
@@ -408,7 +412,7 @@ namespace JungleMaze.Presentation.UI.Lobby
                 if (!show) continue;
                 var e = r.Rows[i];
                 row.Rank.text = "#" + e.Rank;
-                row.PlayerName.text = e.Name;
+                row.PlayerName.text = (e.IsBot ? "[BOT] " : "") + e.Name;
                 row.Kills.gameObject.SetActive(_flow.Options.ShowKills);
                 row.Kills.text = e.Kills.ToString(CultureInfo.InvariantCulture);
                 row.Survival.text = ResultRow.Clock(e.SurvivalSeconds);
