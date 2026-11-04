@@ -13,9 +13,12 @@ namespace JungleMaze.EditorTools
     /// </summary>
     public static class HeroVisualBuild
     {
-        public const string SetPath = "Assets/_JungleMaze/Art/Characters/HeroVisualSet.asset";
+        public const string SetPath = "Assets/_JungleMaze/Art/Characters/Resources/HeroVisualSet.asset";
         private const string Clips = "Assets/_JungleMaze/Art/JSurviv/Characters/Heroes/Animations/hvu_Player/";
-        /// <summary>Hero_14 first (local default). Hero_1 is left out: it is a League of Legends character.</summary>
+        /// <summary>
+        /// Hero_14 first (local default). Hero_1 is left out: it is a League of Legends character. The position is the
+        /// skin index players save on Home (and the server will relay), so append new heroes instead of reordering.
+        /// </summary>
         private static readonly int[] Order = { 14, 10, 11, 2, 4, 5, 6, 7, 8 };
 
         [MenuItem("Jungle Maze/Art/Build Hero Visuals")]

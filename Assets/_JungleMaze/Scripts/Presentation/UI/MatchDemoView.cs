@@ -39,6 +39,9 @@ namespace JungleMaze.Presentation.UI
         private MatchOverlayFlow _overlayFlow;
         private string _worldHash;
         private HeroController _hero;
+        private HeroSpriteAnimator _heroBody;
+        private IHeroSkinPreference _skins;
+        private int _offlineSkin = int.MinValue;
         private RemotePlayerSpawner _spawner;
         private Camera _camera;
         private LineRenderer _currentRing, _nextRing;
@@ -100,6 +103,7 @@ namespace JungleMaze.Presentation.UI
                 {
                     if (_offlineRound != _offlineSession.MatchId) ResetOfflineHero();
                     _hero.enabled = !_offlineSession.IsDead && !(_menuState?.BlocksGameplayInput ?? false);
+                    SyncOfflineSkin();
                 }
                 if (_offlineSession.Zone != null)
                 {
@@ -245,6 +249,28 @@ namespace JungleMaze.Presentation.UI
                 _circle[i] = new Vector3(x + Mathf.Cos(angle) * radius, y + Mathf.Sin(angle) * radius, -.1f);
             }
             ring.SetPositions(_circle);
+        }
+
+        /// <summary>Home's skin choice for the offline hero (default hero when none). Optional: views built in tests skip it.</summary>
+        [Inject] public void BindSkins(IHeroSkinPreference skins) => _skins = skins;
+
+        /// <summary>
+        /// Draws the offline hero with the chosen skin; only touches the animator when the skin changes. A reloaded Game
+        /// scene brings a fresh Hero with the prefab's default skin, so finding a new body forgets the applied skin.
+        /// </summary>
+        private void SyncOfflineSkin()
+        {
+            if (_hero == null) return;
+            if (_heroBody == null)
+            {
+                _heroBody = _hero.GetComponentInChildren<HeroSpriteAnimator>(true);
+                _offlineSkin = int.MinValue;
+                if (_heroBody == null) return;
+            }
+            var skin = HeroSkinRules.Offline(_skins?.Selected ?? HeroSkinRules.Automatic);
+            if (skin == _offlineSkin) return;
+            _offlineSkin = skin;
+            _heroBody.SetHero(skin);
         }
 
         private void ResetOfflineHero()

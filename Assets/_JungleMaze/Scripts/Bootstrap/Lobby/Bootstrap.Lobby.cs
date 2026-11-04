@@ -14,6 +14,8 @@ using JungleMaze.Core.Ticking;
 using JungleMaze.Domain.Network;
 using JungleMaze.Infrastructure.Api;
 using JungleMaze.Infrastructure.Network;
+using JungleMaze.App.Player;
+using JungleMaze.Presentation.Player;
 using JungleMaze.Presentation.UI;
 using JungleMaze.Presentation.UI.Lobby;
 using UnityEngine;
@@ -140,6 +142,8 @@ namespace JungleMaze.Composition
             root.name = "LobbyUi";
             root.Bind(new LobbyUiPresenter(root, flow, menu, null, null, settingsOpen, roomMaps));
             root.Lobby.gameObject.AddComponent<RoomMapPanel>().Bind(roomMaps, match, root.Lobby);
+            if (_registry.TryResolve<IHeroSkinPreference>(out var skins))
+                HeroSkinPicker.Attach(root.MainMenu, skins, Resources.Load<HeroVisualSet>("HeroVisualSet"));
             gameObject.AddComponent<LegacyImguiToggle>().Construct(GetComponent<ConnectionMenuView>);
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
             gameObject.AddComponent<LobbyDebugPanel>().Construct(scenarios, flow);

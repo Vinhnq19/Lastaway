@@ -11,7 +11,9 @@
         "JungleMaze.Application",
         "JungleMaze.Infrastructure",
         "JungleMaze.Presentation",
-        "JungleMaze.LevelEditor"
+        "JungleMaze.LevelEditor",
+        "UnityEngine.UI",
+        "Unity.TextMeshPro"
     ],
     "includePlatforms": [
         "Editor"
