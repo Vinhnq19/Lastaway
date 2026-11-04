@@ -76,6 +76,7 @@ namespace JungleMaze.Presentation.World.Phase2
                 _offlineWorld.Teleported += Teleport;
             }
             SceneManager.sceneLoaded += SceneLoaded;
+            LevelArtView.Changed += Refresh;
             _visuals = visuals != null ? visuals : Resources.Load<WorldVisualSet>("WorldVisualSet");
             Refresh();
         }
@@ -89,6 +90,24 @@ namespace JungleMaze.Presentation.World.Phase2
             var states = isOffline ? _offlineWorld.Objects : (_world != null ? _world.Objects : System.Array.Empty<WorldObjectWire>());
             var destination = FindPortalDestination(states, source);
             if (destination != 0 && _views.TryGetValue(destination, out var pair)) pair.PlayCue(WorldVisualState.Teleported, sequence);
+        }
+
+        /// <summary>
+        /// Cửa tương tác gần nhất trong tầm tay (F khi không có đồ để nhặt). Cửa tương tác là cửa còn HP; cửa cũ (HP 0,
+        /// đóng/mở theo chu kỳ) và cửa đã vỡ bị bỏ qua. 0 nếu không có.
+        /// </summary>
+        public static ushort NearestDoor(WorldObjectWire[] states, Vector2 hero)
+        {
+            ushort best = 0; var bestDistance = JungleMaze.World.HazardService.DoorReach;
+            foreach (var s in states)
+            {
+                if (s.Kind != 12 || s.Hp == 0 || (s.Flags & 1) != 0) continue;
+                var dx = Mathf.Max(Mathf.Abs(hero.x - s.X) - s.Width / 2f, 0f);
+                var dy = Mathf.Max(Mathf.Abs(hero.y - s.Y) - s.Height / 2f, 0f);
+                var d = Mathf.Sqrt(dx * dx + dy * dy);
+                if (d <= bestDistance) { bestDistance = d; best = s.Id; }
+            }
+            return best;
         }
 
         /// <summary>Portal PairId is a group key, never a world instance ID.</summary>
@@ -123,6 +142,7 @@ namespace JungleMaze.Presentation.World.Phase2
                 foreach (var o in _world.Objects) if (o.Kind == 100 && Vector2.Distance(own, new Vector2(o.X, o.Y)) <= 1.2f)
                 { var d = ((Vector2)cursor - new Vector2(o.X, o.Y)).sqrMagnitude; if (d < best) { best = d; target = o.Id; } }
                 if (target != 0) _world.Send(WorldActionKind.Pickup, target);
+                else { var door = NearestDoor(_world.Objects, own); if (door != 0) _world.Send(WorldActionKind.Interact, door); }
             }
             for (var i = 0; i < 4; i++)
             {
@@ -196,6 +216,11 @@ namespace JungleMaze.Presentation.World.Phase2
                         }
                     }
                     if (target != 0) _offlineWorld.Pickup(target);
+                    else
+                    {
+                        var door = NearestDoor(_offlineWorld.Objects, own);
+                        if (door != 0) _offlineWorld.ToggleDoor(door);
+                    }
                 }
             }
 
@@ -252,9 +277,15 @@ namespace JungleMaze.Presentation.World.Phase2
             }
             var sourceObjects = isOffline ? _offlineWorld.Objects : _world.Objects;
             var dynamicStates = new List<WorldObjectWire>();
-            foreach (var state in sourceObjects) if (!isOffline || state.Kind > 4) dynamicStates.Add(state);
+            // Cover (kind 1–4): offline do scene vẽ; khi có art Level Editor thì LevelArtView đã vẽ hình Cainos.
+            var coversDrawn = isOffline || LevelArtView.CoversDrawn;
+            foreach (var state in sourceObjects) if (!coversDrawn || state.Kind > 4) dynamicStates.Add(state);
             var states = dynamicStates.ToArray();
-            ApplyViews(states, _root, _views, _visuals, _square, _icons);
+            // Vật thể có hình Level Editor (rương, bình, bụi, portal, cửa trong JSON) không vẽ thêm art kiểu cũ.
+            var drawn = new List<WorldObjectWire>(states.Length);
+            foreach (var state in states)
+                if (!LevelArtView.TryShowWorldObject(state.Kind, state.X, state.Y, state.Width, state.Height, state.Flags, state.Hp)) drawn.Add(state);
+            ApplyViews(drawn.ToArray(), _root, _views, _visuals, _square, _icons);
             ApplyCollision(states);
         }
 
@@ -310,6 +341,7 @@ namespace JungleMaze.Presentation.World.Phase2
             if (_world != null) { _world.Changed -= Refresh; _world.Teleported -= Teleport; }
             if (_offlineWorld != null) { _offlineWorld.Changed -= Refresh; _offlineWorld.Teleported -= Teleport; }
             SceneManager.sceneLoaded -= SceneLoaded;
+            LevelArtView.Changed -= Refresh;
             if (_root != null) Destroy(_root.gameObject);
             if (_square != null) Destroy(_square);
             if (_texture != null) Destroy(_texture);

@@ -66,13 +66,8 @@ namespace JungleMaze.Infrastructure.Config
                     }
                     if (Hex(aggregate.ComputeHash(stream.ToArray())) != expectedHash) return "Map/luật trận không khớp server; cập nhật client.";
                 }
-                var map = JObject.Parse(File.ReadAllText(Path.Combine(_directory, "map_demo.json")));
-                var bounds = map["mapBounds"];
-                Bounds = new RuntimeMapBounds { MinX = (float)bounds["minX"], MinY = (float)bounds["minY"], MaxX = (float)bounds["maxX"], MaxY = (float)bounds["maxY"] };
-                var covers = new List<RuntimeCover>();
-                foreach (var item in (JArray)map["obstacles"])
-                    covers.Add(new RuntimeCover { Name = (string)item["name"], MinX = (float)item["minX"], MinY = (float)item["minY"],
-                        MaxX = (float)item["maxX"], MaxY = (float)item["maxY"] });
+                var covers = ReadGeometry(Path.Combine(_directory, RuntimeDataFiles.ServerMap), out var mapBounds);
+                Bounds = mapBounds;
                 var settings = JObject.Parse(File.ReadAllText(Path.Combine(_directory, "match_settings.json")));
                 var speed = (float)settings["playerSpeed"];
                 var radius = (float)settings["playerRadius"];
@@ -102,10 +97,32 @@ namespace JungleMaze.Infrastructure.Config
                         var bytes = Encoding.UTF8.GetBytes(File.ReadAllText(Path.Combine(_directory, name)).Replace("\r\n", "\n"));
                         stream.Write(label, 0, label.Length); stream.Write(bytes, 0, bytes.Length);
                     }
-                    return Verify((string)manifest["version"], Hex(hash.ComputeHash(stream.ToArray())));
+                    var error = Verify((string)manifest["version"], Hex(hash.ComputeHash(stream.ToArray())));
+                    if (error != null) return error;
                 }
+                // Luyện tập offline chơi map offline riêng (nếu có): ranh giới và cover theo map đó, luật trận giữ nguyên.
+                var offline = Path.Combine(_directory, RuntimeDataFiles.OfflineMap);
+                if (File.Exists(offline))
+                {
+                    Covers = ReadGeometry(offline, out var bounds);
+                    Bounds = bounds;
+                }
+                return null;
             }
             catch (Exception e) when (!(e is OutOfMemoryException)) { return "Invalid offline data; Sync Runtime Data before playing."; }
+        }
+
+        /// <summary>Ranh giới map và các hard cover ("obstacles") của một file map.</summary>
+        private static List<RuntimeCover> ReadGeometry(string path, out RuntimeMapBounds bounds)
+        {
+            var map = JObject.Parse(File.ReadAllText(path));
+            var b = map["mapBounds"];
+            bounds = new RuntimeMapBounds { MinX = (float)b["minX"], MinY = (float)b["minY"], MaxX = (float)b["maxX"], MaxY = (float)b["maxY"] };
+            var covers = new List<RuntimeCover>();
+            foreach (var item in (JArray)map["obstacles"])
+                covers.Add(new RuntimeCover { Name = (string)item["name"], MinX = (float)item["minX"], MinY = (float)item["minY"],
+                    MaxX = (float)item["maxX"], MaxY = (float)item["maxY"] });
+            return covers;
         }
 
         private void TryLoadZoneSchedule()

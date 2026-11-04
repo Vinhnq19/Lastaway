@@ -94,7 +94,7 @@ namespace JungleMaze.Presentation.World.Phase2
                 {
                     var direction=new Vector2(Mathf.Cos(_pelletAngles[i]*Mathf.Deg2Rad),Mathf.Sin(_pelletAngles[i]*Mathf.Deg2Rad));
                     float distance;var hit=NearestHit(origin,direction,slot.Range,out distance);
-                    if(hit!=null&&hit.IsDestructible)_destructibles.DamageConfirmed(hit.Id,Mathf.RoundToInt(stats.Damage),0,++_hitSequence);
+                    if(hit!=null&&hit.IsBreakable)_destructibles.DamageConfirmed(hit.Id,Mathf.RoundToInt(stats.Damage),0,++_hitSequence);
                     var projectile=_projectiles.Create(in pose);projectile.Launch(in shot,direction);
                 }
                 return;
@@ -107,7 +107,7 @@ namespace JungleMaze.Presentation.World.Phase2
             _pool.Despawn(swing,duration+.05f);_swingUntil=Time.time+duration;
             foreach(var target in _map.Objects)
             {
-                if(!target.IsDestructible||_destructibles.IsBroken(target.Id))continue;
+                if(!target.IsBreakable||_destructibles.IsBroken(target.Id))continue;
                 var b=target.Bounds;var closest=new Vector2(Mathf.Clamp(origin.x,b.MinX,b.MaxX),Mathf.Clamp(origin.y,b.MinY,b.MaxY));
                 var delta=closest-origin;if(delta.magnitude>slot.Range||Vector2.Angle(aim,delta)>slot.ArcDegrees*.5f)continue;
                 float distance;var blocker=NearestHit(origin,delta.normalized,delta.magnitude+.001f,out distance);
@@ -121,7 +121,7 @@ namespace JungleMaze.Presentation.World.Phase2
             distance=range;WorldObjectDefinition hit=null;
             foreach(var item in _map.Objects)
             {
-                if(!item.IsHardCover&&!(item.IsDestructible&&!_destructibles.IsBroken(item.Id))&&!(item.Kind==WorldObjectKind.Door&&_hazards.DoorsClosed))continue;
+                if(!item.IsHardCover&&!(item.IsDestructible&&!_destructibles.IsBroken(item.Id))&&!(item.Kind==WorldObjectKind.Door&&_hazards.IsDoorClosed(item.Id)))continue;
                 var near=0f;var far=range;var b=item.Bounds;
                 if(!Clip(origin.x,direction.x,b.MinX,b.MaxX,ref near,ref far)||!Clip(origin.y,direction.y,b.MinY,b.MaxY,ref near,ref far)||near>=distance)continue;
                 distance=near;hit=item;
@@ -147,7 +147,7 @@ namespace JungleMaze.Presentation.World.Phase2
         {
             foreach(var item in _map.Objects)
             {
-                var solid=item.IsHardCover||(item.IsDestructible&&!_destructibles.IsBroken(item.Id))||(item.Kind==WorldObjectKind.Door&&_hazards.DoorsClosed);
+                var solid=item.IsHardCover||(item.IsDestructible&&!_destructibles.IsBroken(item.Id))||(item.Kind==WorldObjectKind.Door&&_hazards.IsDoorClosed(item.Id));
                 if(!solid){if(_demoCovers.TryGetValue(item.Id,out var old)){old.enabled=false;Destroy(old.gameObject);_demoCovers.Remove(item.Id);}continue;}
                 if(_demoCovers.ContainsKey(item.Id))continue;
                 var go=new GameObject("Demo collision "+item.Id){layer=LayerMask.NameToLayer("HardCover")};go.transform.SetParent(transform,false);

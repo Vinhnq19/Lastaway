@@ -49,6 +49,28 @@ namespace JungleMaze.App.Match
             if (previousRadius != 0) throw new ArgumentException("Final safe zone must shrink to zero.");
         }
 
+        /// <summary>
+        /// Lịch bo cho map cạnh <paramref name="mapSize"/>: tâm, bán kính và tốc độ co nhân theo tỉ lệ với map gốc của lịch
+        /// (cạnh = 2 × tâm đầu), thời gian giữ nguyên. Map cùng cỡ trả chính lịch này. Dùng cho map lớn chơi offline.
+        /// </summary>
+        public ZoneSchedule ScaledTo(float mapSize)
+        {
+            var baseSize = InitialCenter.X * 2f;
+            if (!(mapSize > 0f) || !(baseSize > 0f)) return this;
+            var k = mapSize / baseSize;
+            if (Math.Abs(k - 1f) < .001f) return this;
+            var s = new ZoneSchedule
+            {
+                Version = Version, InitialCenter = (InitialCenter.X * k, InitialCenter.Y * k), InitialRadius = InitialRadius * k,
+                WarningDurationSeconds = WarningDurationSeconds, ShrinkSpeedCellsPerSecond = ShrinkSpeedCellsPerSecond * k,
+                DamagePerSecond = DamagePerSecond,
+            };
+            foreach (var i in Intervals)
+                s.Intervals.Add(new ZoneInterval { Index = i.Index, StartSecond = i.StartSecond, EndSecond = i.EndSecond, StartRadius = i.StartRadius * k, EndRadius = i.EndRadius * k });
+            s.Validate();
+            return s;
+        }
+
         public static ZoneSchedule Default()
         {
             var s = new ZoneSchedule();

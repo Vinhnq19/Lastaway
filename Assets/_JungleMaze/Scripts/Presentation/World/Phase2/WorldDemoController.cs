@@ -118,7 +118,7 @@ namespace JungleMaze.Presentation.World.Phase2
         private void Render()
         {
             var states=new List<WorldObjectWire>();foreach(var o in _map.Objects)
-            {DestructibleState d;_destructibles.TryGet(o.Id,out d);var p=o.Bounds.Center;states.Add(new WorldObjectWire{Id=o.Id,Kind=(byte)o.Kind,X=p.X,Y=p.Y,Width=o.Bounds.MaxX-o.Bounds.MinX,Height=o.Bounds.MaxY-o.Bounds.MinY,Flags=(byte)((d!=null&&d.Broken?1:0)|(o.Kind==WorldObjectKind.Door&&_hazards.DoorsClosed?2:0)),Hp=(ushort)(d!=null?d.Hp:0)});}
+            {DestructibleState d;_destructibles.TryGet(o.Id,out d);var p=o.Bounds.Center;states.Add(new WorldObjectWire{Id=o.Id,Kind=(byte)o.Kind,X=p.X,Y=p.Y,Width=o.Bounds.MaxX-o.Bounds.MinX,Height=o.Bounds.MaxY-o.Bounds.MinY,Flags=(byte)((d!=null&&d.Broken?1:0)|(o.Kind==WorldObjectKind.Door&&_hazards.IsDoorClosed(o.Id)?2:0)),Hp=(ushort)(d!=null?d.Hp:0)});}
             foreach(var f in _floor.Items)states.Add(new WorldObjectWire{Id=f.Id,Kind=100,X=f.X,Y=f.Y,Width=.35f,Height=.35f,ItemId=f.Stack.ItemId,Count=(ushort)f.Stack.Count});
             WorldSceneView.ApplyViews(states.ToArray(),transform,_views,_visuals,_square);
             RenderItemIcons();

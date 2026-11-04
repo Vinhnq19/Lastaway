@@ -58,11 +58,33 @@ namespace JungleMaze.LevelEditor
         public int CellX, CellY;
         /// <summary>Collider chân theo góc dưới-trái footprint (chưa lật); null = cả footprint.</summary>
         public Rect[] Colliders;
+        /// <summary>Vật cản "Phá được": trong game thành vật thể phá được (loại = <see cref="Loot"/>) thay vì hard cover.</summary>
+        public bool Destructible;
+        /// <summary>HP riêng khi phá được (rương/bình/thùng tiếp tế hoặc cover phá được); 0 = HP mặc định của loại.</summary>
+        public ushort Hp;
+        /// <summary>Bảng loot rơi khi vỡ (cover phá được): Pot, Chest hoặc Supply.</summary>
+        public string Loot = nameof(WorldObjectKind.Pot);
+
+        public static readonly string[] LootKinds = { nameof(WorldObjectKind.Pot), nameof(WorldObjectKind.Chest), nameof(WorldObjectKind.Supply) };
 
         public float Width => (Rotation % 2 == 0 ? BaseWidth : BaseHeight) * Scale;
         public float Height => (Rotation % 2 == 0 ? BaseHeight : BaseWidth) * Scale;
         public WorldBounds Bounds => new WorldBounds(X, Y, Width, Height);
         public bool IsPortal => Group == LevelItemGroup.WorldObject && Type == nameof(WorldObjectKind.Portal);
+        /// <summary>HP mặc định của cửa đặt bằng Level Editor: mọi cửa như vậy là cửa tương tác (mở/đóng bằng F, đánh vỡ được).</summary>
+        public const ushort DefaultDoorHp = 60;
+
+        /// <summary>Rương, bình, thùng tiếp tế (phá được, rơi loot) và cửa (mở/đóng hoặc phá).</summary>
+        public bool IsDestructibleObject => Group == LevelItemGroup.WorldObject &&
+                                            (Array.IndexOf(LootKinds, Type) >= 0 || Type == nameof(WorldObjectKind.Door));
+
+        /// <summary>HP ghi ra JSON game: HP riêng, hoặc HP mặc định của cửa; 0 = HP mặc định của loại (không ghi).</summary>
+        public ushort GameHp => Hp != 0 ? Hp : Group == LevelItemGroup.WorldObject && Type == nameof(WorldObjectKind.Door) ? DefaultDoorHp : (ushort)0;
+        /// <summary>
+        /// Có HP/loot trong game: cover đánh dấu "Phá được" hoặc rương/bình/thùng tiếp tế. Vật phá được dùng cả footprint
+        /// làm bounds (giống rương/bình) để đánh trúng được; collider chân nhỏ chỉ dành cho hard cover.
+        /// </summary>
+        public bool BreaksInGame => (Group == LevelItemGroup.Cover && Destructible) || IsDestructibleObject;
 
         public LevelPlacement Clone() => (LevelPlacement)MemberwiseClone();
 
@@ -198,6 +220,20 @@ namespace JungleMaze.LevelEditor
                     case LevelItemGroup.Spawn:
                         spawns.Add(new JObject { ["x"] = R(p.X), ["y"] = R(p.Y) });
                         break;
+                    case LevelItemGroup.Cover when p.Destructible:
+                        // Cover phá được: một vật thể game có HP/loot (loại = bảng loot), bounds = footprint, tên hình trong "art".
+                        var d = new JObject
+                        {
+                            ["id"] = ++id,
+                            ["kind"] = Array.IndexOf(LevelPlacement.LootKinds, p.Loot) >= 0 ? p.Loot : LevelPlacement.LootKinds[0],
+                            ["pairId"] = 0,
+                            ["bounds"] = new JObject { ["minX"] = R(b.MinX), ["minY"] = R(b.MinY), ["maxX"] = R(b.MaxX), ["maxY"] = R(b.MaxY) },
+                            ["art"] = p.Type,
+                        };
+                        if (p.Hp != 0) d["hp"] = p.Hp;
+                        AddVisual(d, p);
+                        worldObjects.Add(d);
+                        break;
                     case LevelItemGroup.Cover:
                         foreach (var rect in p.GameRects()) obstacles.Add(Rect(p, rect));
                         break;
@@ -212,6 +248,7 @@ namespace JungleMaze.LevelEditor
                             ["pairId"] = p.PairId,
                             ["bounds"] = new JObject { ["minX"] = R(b.MinX), ["minY"] = R(b.MinY), ["maxX"] = R(b.MaxX), ["maxY"] = R(b.MaxY) },
                         };
+                        if (p.IsDestructibleObject && p.GameHp != 0) o["hp"] = p.GameHp;
                         AddVisual(o, p);
                         worldObjects.Add(o);
                         break;
@@ -278,6 +315,7 @@ namespace JungleMaze.LevelEditor
                 var minX = F(b, "minX"); var minY = F(b, "minY"); var maxX = F(b, "maxX"); var maxY = F(b, "maxY");
                 var p = Make(LevelItemGroup.WorldObject, kind, (minX + maxX) / 2f, (minY + maxY) / 2f, maxX - minX, maxY - minY, o, baseSize);
                 p.PairId = (ushort?)o["pairId"] ?? 0;
+                p.Hp = (ushort?)o["hp"] ?? 0;
                 doc.Placements.Add(p);
             }
             foreach (var o in Items(root, "spawnPoints"))
@@ -342,6 +380,12 @@ namespace JungleMaze.LevelEditor
             }
             if (p.FlipX) o["flipX"] = true;
             if (p.PairId != 0) o["pairId"] = p.PairId;
+            if (p.Group == LevelItemGroup.Cover && p.Destructible)
+            {
+                o["destructible"] = true;
+                o["loot"] = p.Loot;
+            }
+            if (p.BreaksInGame && p.Hp != 0) o["hp"] = p.Hp;
             return o;
         }
 
@@ -362,6 +406,9 @@ namespace JungleMaze.LevelEditor
                 };
             p.FlipX = (bool?)o["flipX"] ?? false;
             p.PairId = (ushort?)o["pairId"] ?? 0;
+            p.Destructible = group == LevelItemGroup.Cover && ((bool?)o["destructible"] ?? false);
+            p.Loot = (string)o["loot"] ?? p.Loot;
+            p.Hp = (ushort?)o["hp"] ?? 0;
             return p;
         }
 

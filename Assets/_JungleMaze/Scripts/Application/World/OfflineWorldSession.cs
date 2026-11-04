@@ -266,6 +266,17 @@ namespace JungleMaze.App.World
             return false;
         }
 
+        /// <summary>Mở/đóng cửa tương tác trong tầm người chơi (cùng luật HazardService như server).</summary>
+        public bool ToggleDoor(ushort doorId)
+        {
+            if (!IsActive || _hazards == null || _match.IsDead) return false;
+            var self = new WorldActor(0, _playerPose.X, _playerPose.Y, true);
+            if (!_hazards.TryToggleDoor(doorId, self.Position, new[] { self })) return false;
+            RebuildWireObjects();
+            Changed?.Invoke();
+            return true;
+        }
+
         public bool AutoPickup(ushort floorId)
         {
             if (!IsActive || _items == null || _match.IsDead) return false;
@@ -353,7 +364,7 @@ namespace JungleMaze.App.World
                 {
                     var direction = new WorldPoint((float)Math.Cos(_pelletAngles[i] * Math.PI / 180), (float)Math.Sin(_pelletAngles[i] * Math.PI / 180));
                     var hit = NearestHit(origin, direction, slot.Range, out _);
-                    if (hit != null && hit.IsDestructible)
+                    if (hit != null && hit.IsBreakable)
                     {
                         if (_destructibles.DamageConfirmed(hit.Id, (int)Math.Round(stats.Damage), 0, ++_hitSequence))
                         {
@@ -367,7 +378,7 @@ namespace JungleMaze.App.World
 
             foreach (var target in _map.Objects)
             {
-                if (!target.IsDestructible || _destructibles.IsBroken(target.Id)) continue;
+                if (!target.IsBreakable || _destructibles.IsBroken(target.Id)) continue;
                 var b = target.Bounds;
                 var dx = Math.Clamp(origin.X, b.MinX, b.MaxX) - origin.X;
                 var dy = Math.Clamp(origin.Y, b.MinY, b.MaxY) - origin.Y;
@@ -394,7 +405,7 @@ namespace JungleMaze.App.World
             foreach (var item in _map.Objects)
             {
                 if (!item.IsHardCover && !(item.IsDestructible && (_destructibles == null || !_destructibles.IsBroken(item.Id))) &&
-                    !(item.Kind == WorldObjectKind.Door && _hazards != null && _hazards.DoorsClosed)) continue;
+                    !(item.Kind == WorldObjectKind.Door && _hazards != null && _hazards.IsDoorClosed(item.Id))) continue;
                 var near = 0f; var far = range; var b = item.Bounds;
                 if (!Clip(origin.X, direction.X, b.MinX, b.MaxX, ref near, ref far) ||
                     !Clip(origin.Y, direction.Y, b.MinY, b.MaxY, ref near, ref far) || near >= distance) continue;
@@ -543,7 +554,7 @@ namespace JungleMaze.App.World
                     Y = center.Y,
                     Width = o.Bounds.MaxX - o.Bounds.MinX,
                     Height = o.Bounds.MaxY - o.Bounds.MinY,
-                    Flags = (byte)((d != null && d.Broken ? 1 : 0) | (o.Kind == WorldObjectKind.Door && _hazards != null && _hazards.DoorsClosed ? 2 : 0)),
+                    Flags = (byte)((d != null && d.Broken ? 1 : 0) | (o.Kind == WorldObjectKind.Door && _hazards != null && _hazards.IsDoorClosed(o.Id) ? 2 : 0)),
                     PairId = o.PairId,
                     Hp = (ushort)(d != null ? d.Hp : 0)
                 });

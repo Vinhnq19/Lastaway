@@ -33,14 +33,16 @@ namespace JungleMaze.World
                 map.Objects.Add(new WorldObjectDefinition { Id = ++id, Kind = kind,
                     Bounds = new WorldBounds { MinX = cover.MinX, MinY = cover.MinY, MaxX = cover.MaxX, MaxY = cover.MaxY } });
             }
-            var validation = new MapLayoutConfig { Version = map.Version, Size = map.Size, SpawnCount = map.Spawns.Count,
+            // Bo đầu tỉ lệ theo map (36 ô cho map 50 như world_settings): map lớn hơn được rải spawn rộng hơn.
+            var validation = new MapLayoutConfig { Version = map.Version, Size = map.Size, SpawnCount = map.Spawns.Count, InitialZoneRadius = map.Size * .72f,
                 ChestCount = 0, PotCount = 0, BushCount = 0, PortalPairs = 0, DoorCount = 0, SwampCount = 0, LavaCount = 0, PoisonCount = 0 };
             var portals = 0;
             foreach (var item in WorldObjects)
             {
                 if (item == null || item.Kind < WorldObjectKind.Chest || item.Kind > WorldObjectKind.Supply)
                     throw new ArgumentException("Only interactive objects belong in authored world placements.");
-                map.Objects.Add(new WorldObjectDefinition { Id = ++id, Kind = item.Kind, Bounds = item.Bounds, PairId = item.PairId });
+                if (item.Hp != 0 && !item.IsDestructible && item.Kind != WorldObjectKind.Door) throw new ArgumentException("Only destructible objects and doors may set hp.");
+                map.Objects.Add(new WorldObjectDefinition { Id = ++id, Kind = item.Kind, Bounds = item.Bounds, PairId = item.PairId, Hp = item.Hp });
                 switch (item.Kind)
                 {
                     case WorldObjectKind.Chest: validation.ChestCount++; break;

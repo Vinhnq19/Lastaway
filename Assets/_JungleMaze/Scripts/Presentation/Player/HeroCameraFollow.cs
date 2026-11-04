@@ -11,17 +11,24 @@ namespace JungleMaze.Presentation.Player
         [SerializeField] private Transform target;
         private Camera _camera;
         private float _mapSize = 50f;
+        private IBalanceConfigProvider _balance;
+        private IClientRuntimeData _runtime;
 
         public Transform Target { get => target; set => target = value; }
 
         [Inject]
-        public void Construct(IBalanceConfigProvider balance) => _mapSize = balance.Match.MapSizeCells;
+        public void Construct(IBalanceConfigProvider balance) { _balance = balance; _mapSize = balance.Match.MapSizeCells; }
+
+        /// <summary>Kẹp camera theo map đang chơi (map offline có thể lớn hơn 50).</summary>
+        [Inject]
+        public void ConstructRuntime(IClientRuntimeData runtime) => _runtime = runtime;
 
         private void Awake() => _camera = GetComponent<Camera>();
 
         private void LateUpdate()
         {
             if (target == null) return;
+            if (_runtime != null) _mapSize = JungleMaze.Presentation.World.MapGridView.MapSize(_runtime, _balance);
             var halfHeight = _camera.orthographicSize;
             var halfWidth = halfHeight * _camera.aspect;
             var p = target.position;

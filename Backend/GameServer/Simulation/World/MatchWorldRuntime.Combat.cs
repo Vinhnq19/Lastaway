@@ -61,7 +61,7 @@ public sealed partial class MatchWorldRuntime : IEffectService, GameServer.Simul
     {
         foreach (var definition in Layout.Objects)
         {
-            if (!definition.IsDestructible) continue;
+            if (!definition.IsBreakable) continue;
             var b = definition.Bounds;
             if (b.MinX == obstacle.MinX && b.MaxX == obstacle.MaxX && b.MinY == obstacle.MinY && b.MaxY == obstacle.MaxY)
             { id = definition.Id; return true; }

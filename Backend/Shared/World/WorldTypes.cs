@@ -17,7 +17,13 @@ namespace JungleMaze.World
     public sealed class WorldObjectDefinition
     {
         public ushort Id; public WorldObjectKind Kind; public WorldBounds Bounds; public ushort PairId;
+        /// <summary>HP riêng của vật phá được do map đặt (Level Editor "Phá được"); 0 = HP mặc định theo loại.</summary>
+        public ushort Hp;
         public bool IsDestructible {get{return Kind==WorldObjectKind.Chest||Kind==WorldObjectKind.Pot||Kind==WorldObjectKind.Supply;}}
+        /// <summary>Cửa có HP do map đặt: trạng thái riêng, người chơi mở/đóng (HazardService.TryToggleDoor) và đánh vỡ được. Cửa HP 0 giữ chu kỳ đóng/mở chung.</summary>
+        public bool IsInteractiveDoor {get{return Kind==WorldObjectKind.Door&&Hp!=0;}}
+        /// <summary>Nhận sát thương: vật phá được hoặc cửa tương tác. Việc chặn đường của cửa vẫn theo trạng thái đóng/mở.</summary>
+        public bool IsBreakable {get{return IsDestructible||IsInteractiveDoor;}}
         public bool IsHardCover {get{return Kind>=WorldObjectKind.Pillar&&Kind<=WorldObjectKind.Statue;}}
         public bool IsHazard {get{return Kind==WorldObjectKind.Swamp||Kind==WorldObjectKind.Lava||Kind==WorldObjectKind.Poison;}}
     }
@@ -25,7 +31,7 @@ namespace JungleMaze.World
     {
         public string Version="world-prototype-1"; public int Size=50,SpawnCount=10,ChestCount=60,PotCount=90,BushCount=45,PortalPairs=3,DoorCount=2,SwampCount=2,LavaCount=2,PoisonCount=4;
         public float SpawnMinDistance=6,HeroRadius=.4f,InitialZoneRadius=36;
-        public void Validate(){if(string.IsNullOrWhiteSpace(Version)||Size<30||Size>128||SpawnCount!=10||ChestCount<0||PotCount<0||BushCount<0||PortalPairs<0||PortalPairs>16||DoorCount<0||SwampCount<0||LavaCount<0||PoisonCount<0||!WorldMath.Finite(SpawnMinDistance)||SpawnMinDistance<1||!WorldMath.Finite(HeroRadius)||HeroRadius<=0||!WorldMath.Finite(InitialZoneRadius)||InitialZoneRadius<=0)throw new ArgumentException("Invalid world map configuration.");if((long)ChestCount+PotCount+BushCount+PortalPairs*2+DoorCount+SwampCount+LavaCount+PoisonCount>4096)throw new ArgumentException("World object capacity exceeded.");}
+        public void Validate(){if(string.IsNullOrWhiteSpace(Version)||Size<30||Size>256||SpawnCount!=10||ChestCount<0||PotCount<0||BushCount<0||PortalPairs<0||PortalPairs>16||DoorCount<0||SwampCount<0||LavaCount<0||PoisonCount<0||!WorldMath.Finite(SpawnMinDistance)||SpawnMinDistance<1||!WorldMath.Finite(HeroRadius)||HeroRadius<=0||!WorldMath.Finite(InitialZoneRadius)||InitialZoneRadius<=0)throw new ArgumentException("Invalid world map configuration.");if((long)ChestCount+PotCount+BushCount+PortalPairs*2+DoorCount+SwampCount+LavaCount+PoisonCount>4096)throw new ArgumentException("World object capacity exceeded.");}
     }
     public static class WorldMath {public static bool Finite(float n){return !float.IsNaN(n)&&!float.IsInfinity(n);} }
     public struct StableRandom

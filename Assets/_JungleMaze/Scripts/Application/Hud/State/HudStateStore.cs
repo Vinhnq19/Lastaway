@@ -73,7 +73,9 @@ namespace JungleMaze.App.Hud.State
         public HeldWeaponStatus HeldWeapon => _status.HeldWeapon;
         public AmmoStatus Ammo => _status.Ammo;
         public MatchStatusInfo MatchStatus => _status.MatchStatus;
-        public int MapSizeCells => _balance.Match.MapSizeCells;
+        /// <summary>Cạnh map đang chơi (Bootstrap nối với dữ liệu map đã nạp); ≤ 0 hoặc null thì dùng balance.</summary>
+        public Func<int> MapSizeSource { get; set; }
+        public int MapSizeCells { get { var size = MapSizeSource?.Invoke() ?? 0; return size > 0 ? size : _balance.Match.MapSizeCells; } }
         public bool HasPose => _status.HasPose;
         public HeroPose Pose => _status.Pose;
 

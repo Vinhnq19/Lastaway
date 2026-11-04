@@ -104,6 +104,8 @@ namespace JungleMaze.Composition
 
             // HUD state (UI-01): HUD reads the three ports, data owners write through the writer ports.
             var hudState = new HudStateStore(bus, balance, _log);
+            var runtimeData = _registry.Resolve<IClientRuntimeData>();
+            hudState.MapSizeSource = () => Mathf.RoundToInt(runtimeData.Bounds.MaxX - runtimeData.Bounds.MinX); // minimap theo map đang chơi
             var inventoryState = new InventoryStateStore(bus, balance, _log);
             var effectState = new EffectStateStore(bus);
             _registry.Register<IHudState>(hudState);

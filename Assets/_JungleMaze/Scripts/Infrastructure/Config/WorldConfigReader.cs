@@ -21,7 +21,10 @@ namespace JungleMaze.Infrastructure.Config
             data.Map.Version=data.Version;data.Map.Validate();data.Destructibles.Validate();data.Hazards.Validate();
             if(data.LayoutMode=="Authored")
             {
-                var map=JsonConvert.DeserializeObject<AuthoredMapDocument>(File.ReadAllText(Path.Combine(streamingAssets,"JungleMaze/runtime/map_demo.json")));
+                // World offline dùng map offline riêng nếu có (map lớn của Level Editor), không thì map_demo của server.
+                var offline=Path.Combine(streamingAssets,"JungleMaze/runtime",JungleMaze.App.Ports.RuntimeDataFiles.OfflineMap);
+                var mapPath=File.Exists(offline)?offline:Path.Combine(streamingAssets,"JungleMaze/runtime",JungleMaze.App.Ports.RuntimeDataFiles.ServerMap);
+                var map=JsonConvert.DeserializeObject<AuthoredMapDocument>(File.ReadAllText(mapPath));
                 if(map==null)throw new InvalidDataException("Missing authored map.");
                 data.Layout=map.Build(data.Version);
             }

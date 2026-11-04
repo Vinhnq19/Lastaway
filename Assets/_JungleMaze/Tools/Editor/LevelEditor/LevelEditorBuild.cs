@@ -124,7 +124,7 @@ namespace JungleMaze.EditorTools
                 S(nameof(WorldObjectKind.Supply), "Thùng tiếp tế", wo, "Destructible, HP 150, rơi 6–8 món.", "Props - Crate 01").Sized(1, 1),
                 S(nameof(WorldObjectKind.Bush), "Bụi rậm", wo, "Đi xuyên, bắn xuyên. Đứng trong bụi thì vô hình. Mẫu hình đổi theo seed.",
                     "Plant - Bush 01", "Plant - Bush 02", "Plant - Bush 03", "Plant - Bush 05", "Plant - Bush 06").Sized(1, 1),
-                S(nameof(WorldObjectKind.Door), "Cửa gỗ", wo, "Hard cover + tương tác: mở 20 s / đóng 20 s.", "Props - Wooden Gate 01").Sized(1, 1),
+                S(nameof(WorldObjectKind.Door), "Cửa gỗ", wo, "Cửa tương tác: F để mở/đóng, đánh vỡ được (HP mặc định 60, chỉnh ở cột phải). Đặt vào khe tường.", "Props - Wooden Gate 01").Sized(1, 1),
                 S(nameof(WorldObjectKind.Portal), "Portal (bệ rune)", wo, "Đi theo cặp (tự ghép theo thứ tự đặt; đổi số cặp ở cột phải). Cooldown 3 s.",
                     "Props - Altar 01").Sized(3, 2),
 
@@ -148,9 +148,18 @@ namespace JungleMaze.EditorTools
                 Tint = new Color(.3f, 1f, .45f), Flat = true,
                 Note = "Game cần đúng 10 spawn, cách nhau ≥ 6, trong bo đầu, không bị chặn, đi tới được nhau.",
             });
-            catalog.Items = items.ToArray();
             catalog.GrassGrid = SpriteGrid(Cainos + "Texture/TX Tileset Grass.png", LevelGround.GrassColumns);
             catalog.WallGrid = SpriteGrid(Cainos + "Texture/TX Tileset Wall.png", LevelGround.WallColumns);
+            // Tường gạch: không có prefab Cainos, hình lấy từ tileset tường và tự nối theo ô kề (LevelWalls).
+            items.Insert(0, new LevelItemType
+            {
+                Id = LevelWalls.Id, DisplayName = "Tường gạch", Group = LevelItemGroup.Cover, Footprint = Vector2Int.one,
+                Colliders = new[] { new Rect(0f, 0f, 1f, 1f) },
+                Variants = new[] { new LevelVisualVariant { Parts = LevelWalls.Parts(catalog.WallGrid, new HashSet<Vector2Int>(), 0, 0) } },
+                Sprite = catalog.WallGrid[7 * LevelGround.WallColumns + 2], Tint = new Color(.75f, .55f, .45f),
+                Note = "Hard cover kín cả ô. Xếp liền nhau thành tường/nhà; hình tự nối đầu trái/phải và tường dọc. Chừa ô cho Cửa gỗ.",
+            });
+            catalog.Items = items.ToArray();
             var sprinkles = new List<Sprite>();
             foreach (var name in GrassPrefabs())
             {

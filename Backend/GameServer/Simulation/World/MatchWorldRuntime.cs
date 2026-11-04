@@ -93,6 +93,11 @@ public sealed partial class MatchWorldRuntime : ITransactionalDestructibleLootSi
             case WorldActionKind.Select:result=Inventory.Select(MatchId,actor,request.RequestId,request.Slot==255?-1:request.Slot);break;
             case WorldActionKind.Use:result=Inventory.BeginUse(MatchId,actor,request.RequestId,request.Slot,_now);break;
             case WorldActionKind.CancelUse:Inventory.CancelForAction(actor,ItemCancelAction.Move);result=ItemResult.Ok;break;
+            case WorldActionKind.Interact:
+                // Mở/đóng cửa tương tác trong tầm tay; server kiểm khoảng cách và người đứng trong khung cửa.
+                if(!_entities.TryGet(actor,out var self)||self==null||!self.IsAlive){result=ItemResult.Invalid;break;}
+                var actors=_entities.All.Select(e=>new WorldActor(e.NetId,e.X,e.Y,e.IsAlive)).ToArray();
+                result=Hazards.TryToggleDoor(request.TargetId,new WorldPoint(self.X,self.Y),actors)?ItemResult.Ok:ItemResult.Invalid;break;
             default:return ItemResult.Invalid;
         }
         LastResult=result;
@@ -156,7 +161,7 @@ public sealed partial class MatchWorldRuntime : ITransactionalDestructibleLootSi
     public List<WorldObjectWire> SnapshotObjects()
     {
         var result=new List<WorldObjectWire>();
-        foreach(var o in Layout.Objects){Destructibles.TryGet(o.Id,out var d);var center=o.Bounds.Center;result.Add(new WorldObjectWire{Id=o.Id,Kind=(byte)o.Kind,Flags=(byte)((d?.Broken==true?1:0)|(o.Kind==WorldObjectKind.Door&&Hazards.DoorsClosed?2:0)),PairId=o.PairId,Hp=(ushort)(d?.Hp??0),X=center.X,Y=center.Y,Width=o.Bounds.MaxX-o.Bounds.MinX,Height=o.Bounds.MaxY-o.Bounds.MinY});}
+        foreach(var o in Layout.Objects){Destructibles.TryGet(o.Id,out var d);var center=o.Bounds.Center;result.Add(new WorldObjectWire{Id=o.Id,Kind=(byte)o.Kind,Flags=(byte)((d?.Broken==true?1:0)|(o.Kind==WorldObjectKind.Door&&Hazards.IsDoorClosed(o.Id)?2:0)),PairId=o.PairId,Hp=(ushort)(d?.Hp??0),X=center.X,Y=center.Y,Width=o.Bounds.MaxX-o.Bounds.MinX,Height=o.Bounds.MaxY-o.Bounds.MinY});}
         foreach(var floor in Floor.Items)result.Add(new WorldObjectWire{Id=floor.Id,Kind=100,X=floor.X,Y=floor.Y,Width=.4f,Height=.4f,ItemId=floor.Stack.ItemId,Count=(ushort)floor.Stack.Count});
         return result;
     }
