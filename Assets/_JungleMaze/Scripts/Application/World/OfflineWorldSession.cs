@@ -165,6 +165,8 @@ namespace JungleMaze.App.World
 
                 _playerPose = _map.Spawns != null && _map.Spawns.Count > 0 ? _map.Spawns[0] : new WorldPoint(25f, 25f);
                 _items.SetActorState(0, _playerPose.X, _playerPose.Y, true);
+                // Hero trong scene đứng sẵn ở tâm map: đưa về spawn đầu của map (cùng đường dịch chuyển như portal).
+                _pendingPortalDestination = _playerPose;
 
                 _ready = true;
                 RebuildWireObjects();

@@ -37,8 +37,37 @@ namespace JungleMaze.Tests.LevelEditor
             var walls = new HashSet<Vector2Int> { new Vector2Int(4, 4), new Vector2Int(5, 4), new Vector2Int(6, 4), new Vector2Int(4, 5) };
             Assert.AreSame(grid[7 * 16 + 1], LevelWalls.Parts(grid, walls, 4, 4)[0].Sprite, "đầu trái");
             Assert.AreSame(grid[7 * 16 + 4], LevelWalls.Parts(grid, walls, 6, 4)[0].Sprite, "đầu phải");
-            Assert.AreEqual(1, LevelWalls.Parts(grid, walls, 4, 4).Length, "có tường phía trên: không vẽ gờ");
+            Assert.AreEqual(2, LevelWalls.Parts(grid, walls, 4, 4).Length, "trên là tường dọc: góc vẫn có gờ để dải đá nối vào");
             Assert.AreEqual(2, LevelWalls.Parts(grid, walls, 5, 4).Length, "trên trống: có gờ");
+            var thick = new HashSet<Vector2Int> { new Vector2Int(4, 4), new Vector2Int(5, 4), new Vector2Int(4, 5), new Vector2Int(5, 5) };
+            Assert.AreEqual(1, LevelWalls.Parts(grid, thick, 4, 4).Length, "trên là tường ngang (tường dày): không vẽ gờ");
+        }
+
+        [Test] public void SideWallsUseStoneStrip()
+        {
+            var grid = new Sprite[LevelGround.WallColumns * LevelGround.WallColumns];
+            for (var i = 0; i < grid.Length; i++) grid[i] = Sprite.Create(Texture2D.whiteTexture, new Rect(0, 0, 1, 1), Vector2.one * .5f);
+            // Phòng 5×4: tường ngang y=28 và y=31, tường dọc x=28 và x=32; vách giữa x=30 nối hai tường ngang (chữ T).
+            var walls = new HashSet<Vector2Int>();
+            for (var x = 28; x <= 32; x++) { walls.Add(new Vector2Int(x, 28)); walls.Add(new Vector2Int(x, 31)); }
+            for (var y = 29; y <= 30; y++) { walls.Add(new Vector2Int(28, y)); walls.Add(new Vector2Int(32, y)); walls.Add(new Vector2Int(30, y)); }
+            Assert.AreEqual(WallSide.Left, LevelWalls.SideOf(walls, 28, 29));
+            Assert.AreEqual(WallSide.Right, LevelWalls.SideOf(walls, 32, 30));
+            Assert.AreEqual(WallSide.Middle, LevelWalls.SideOf(walls, 30, 29));
+            Assert.AreEqual(WallSide.None, LevelWalls.SideOf(walls, 29, 28), "tường ngang");
+            Assert.AreSame(grid[2 * 16 + 1], LevelWalls.Parts(grid, walls, 28, 29)[0].Sprite, "dải đá mép trái");
+            Assert.AreSame(grid[2 * 16 + 3], LevelWalls.Parts(grid, walls, 32, 29)[0].Sprite, "dải đá mép phải");
+            Assert.AreEqual(1, LevelWalls.Parts(grid, walls, 28, 29).Length);
+
+            var doc = NewMap();
+            foreach (var c in walls) doc.Placements.Add(LevelPlacement.OnCell(LevelWalls.Id, LevelItemGroup.Cover, c.x, c.y, WallShape));
+            var layout = Build(doc);
+            var left = layout.Objects.Find(o => o.IsHardCover && o.Bounds.Contains(new WorldPoint(28.1f, 29.5f)));
+            Assert.IsNotNull(left);
+            Assert.AreEqual(28f, left.Bounds.MinX, 1e-3f);
+            Assert.Less(left.Bounds.MaxX, 28.4f, "tường dọc chỉ chặn ở dải đá");
+            Assert.IsTrue(layout.IsWalkable(new WorldPoint(29.5f, 29.5f), .4f), "trong phòng sát tường dọc vẫn đi được");
+            Assert.IsFalse(layout.IsWalkable(new WorldPoint(28.5f, 29.5f), .4f), "tường dọc vẫn kín, không lách qua");
         }
 
         [Test] public void EditorDoorsAreInteractiveWithDefaultHp()

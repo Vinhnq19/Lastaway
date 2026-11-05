@@ -210,6 +210,7 @@ namespace JungleMaze.LevelEditor
             var decorations = new JArray();
             var spawns = new JArray();
             ushort id = 0;
+            HashSet<Vector2Int> wallCells = null;
             var placements = new JArray();
             foreach (var p in Placements)
             {
@@ -235,7 +236,17 @@ namespace JungleMaze.LevelEditor
                         worldObjects.Add(d);
                         break;
                     case LevelItemGroup.Cover:
-                        foreach (var rect in p.GameRects()) obstacles.Add(Rect(p, rect));
+                        // Tường dọc chỉ chặn ở dải đá mảnh của nó (khớp hình), không chặn cả ô.
+                        var side = p.Type == LevelWalls.Id && p.OnGrid
+                            ? LevelWalls.SideCollider(LevelWalls.SideOf(wallCells ??= LevelWalls.Cells(Placements), p.CellX, p.CellY))
+                            : null;
+                        if (side.HasValue)
+                        {
+                            var s = side.Value;
+                            obstacles.Add(Rect(p, new WorldBounds { MinX = p.CellX + s.xMin, MaxX = p.CellX + s.xMax, MinY = p.CellY + s.yMin, MaxY = p.CellY + s.yMax }));
+                        }
+                        else
+                            foreach (var rect in p.GameRects()) obstacles.Add(Rect(p, rect));
                         break;
                     case LevelItemGroup.Decoration:
                         decorations.Add(Rect(p, b));
