@@ -87,7 +87,7 @@ builder.Services.AddSwaggerGen(options =>
         Type = SecuritySchemeType.ApiKey,
         In = ParameterLocation.Header,
         Name = "X-Guest-Credential",
-        Description = "Opaque 256-bit credential từ POST /api/guests. Dùng làm proof cho /api/game-tickets và /api/me/matches."
+        Description = "Credential Guest cũ chỉ dùng xem lịch sử /api/me/matches. Không cấp vé chơi hoặc quyền quản lý phòng; /api/game-tickets bắt buộc account JWT."
     });
     options.OperationFilter<BearerSecurityOperationFilter>();
 });
