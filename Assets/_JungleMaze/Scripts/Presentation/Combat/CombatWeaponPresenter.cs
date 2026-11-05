@@ -13,6 +13,7 @@ using JungleMaze.Presentation.Player;
 using JungleMaze.Presentation.World;
 using JungleMaze.App.World;
 using JungleMaze.App.Flow;
+using JungleMaze.World.Throwables;
 using UnityEngine;
 
 namespace JungleMaze.Presentation.Combat
@@ -70,6 +71,8 @@ namespace JungleMaze.Presentation.Combat
         private OfflineWorldSession _offlineWorld;
         private OfflineMatchSession _offlineMatch;
         private GameFlow _flow;
+        private OnlineThrowableSession _throwables;
+        private ThrowableView _throwView;
 
         [Inject]
         public void Construct(IBalanceConfigProvider balance, IPoolService pool, IHudStateWriter hud,
@@ -88,6 +91,9 @@ namespace JungleMaze.Presentation.Combat
             _offlineMatch = offlineMatch;
             _flow = flow;
         }
+
+        /// <summary>WPN-03 thrown and special weapons in networked matches; optional for tools and tests.</summary>
+        [Inject] public void ConfigureThrowables(OnlineThrowableSession throwables) => _throwables = throwables;
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
         /// <summary>Only development previews receive a fake backend; release online injection never requires it.</summary>
@@ -115,6 +121,8 @@ namespace JungleMaze.Presentation.Combat
                 if (renderer != null) _weaponSprites[i] = renderer.sprite;
             }
 
+            _throwView = gameObject.AddComponent<ThrowableView>();
+            _throwView.Bind(hero, remotePlayers, _match, _throwables, _offlineWorld);
             if (!_match.Connected && _server!=null) CreateOfflineController();
             _online.Changed+=OnCombatEvent;
             if (_offlineWorld != null) _offlineWorld.CombatChanged += OnCombatEvent;
@@ -136,6 +144,7 @@ namespace JungleMaze.Presentation.Combat
             if (_online==null || _pool==null || _projectiles==null) return;
             if (_match.Connected)
             {
+                if (HandleThrowable(true)) return;
                 if (!_online.CanAct || (_menu?.BlocksGameplayInput??false)) return;
                 if (Input.GetKeyDown(KeyCode.R)) _online.TryReload();
                 if (Input.GetMouseButton(0))
@@ -149,6 +158,7 @@ namespace JungleMaze.Presentation.Combat
             {
                 if (_offlineMatch != null && _offlineMatch.IsDead) return;
                 if (_menu?.BlocksGameplayInput ?? false) return;
+                if (HandleThrowable(false)) return;
                 if (Input.GetKeyDown(KeyCode.R)) _offlineWorld.TryReload();
                 if (Input.GetMouseButton(0))
                 {
@@ -182,6 +192,25 @@ namespace JungleMaze.Presentation.Combat
                 _controller.TryAttack(_aimDegrees);
             }
             _controller.Tick(Time.deltaTime);
+        }
+
+        /// <summary>
+        /// WPN-03 input: with a thrown or special weapon in hand, a left click uses it toward the cursor (thrown items
+        /// land at the cursor, clamped by the server). Returns true when a throwable is held, so the normal weapon
+        /// path does not also fire.
+        /// </summary>
+        private bool HandleThrowable(bool online)
+        {
+            var kind = ThrowableRules.KindOf(_heroWeapon != null ? _heroWeapon.ItemId : null);
+            if (kind == ThrowableKind.None) return false;
+            if ((_menu?.BlocksGameplayInput ?? false) || !Input.GetMouseButtonDown(0)) return true;
+            var camera = Camera.main;
+            if (camera == null || !HeroAim.TryGetTargetDegrees(camera, hero.position, Input.mousePosition, out var aim)) return true;
+            var cursor = camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -camera.transform.position.z));
+            var distance = Vector2.Distance(hero.position, cursor);
+            if (online) _throwables?.TryUse(kind, aim, distance);
+            else _offlineWorld?.TryUseThrowable(aim, distance);
+            return true;
         }
 
         private void OnDestroy()
