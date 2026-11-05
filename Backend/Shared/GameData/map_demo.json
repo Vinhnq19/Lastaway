@@ -8,2383 +8,6635 @@
   },
   "obstacles": [
     {
-      "name": "AncientPillar",
-      "centerX": 23.0,
-      "centerY": 25.0,
+      "name": "Well",
+      "centerX": 24.9375,
+      "centerY": 26.5156,
+      "sizeX": 1.625,
+      "sizeY": 0.9688,
+      "minX": 24.125,
+      "maxX": 25.75,
+      "minY": 26.0312,
+      "maxY": 27.0,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Statue01",
+      "centerX": 22.5,
+      "centerY": 22.3438,
       "sizeX": 1.0,
-      "sizeY": 2.0,
-      "minX": 22.5,
-      "maxX": 23.5,
-      "minY": 24.0,
-      "maxY": 26.0
+      "sizeY": 0.625,
+      "minX": 22.0,
+      "maxX": 23.0,
+      "minY": 22.0312,
+      "maxY": 22.6562,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
-      "name": "AncientStatue",
-      "centerX": 25.0,
-      "centerY": 20.0,
-      "sizeX": 3.0,
-      "sizeY": 3.0,
-      "minX": 23.5,
-      "maxX": 26.5,
-      "minY": 18.5,
-      "maxY": 21.5
+      "name": "Statue01",
+      "centerX": 27.5,
+      "centerY": 22.3438,
+      "sizeX": 1.0,
+      "sizeY": 0.625,
+      "minX": 27.0,
+      "maxX": 28.0,
+      "minY": 22.0312,
+      "maxY": 22.6562,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     },
     {
-      "name": "BoulderRock",
-      "centerX": 30.0,
-      "centerY": 25.0,
-      "sizeX": 4.0,
-      "sizeY": 4.0,
-      "minX": 28.0,
-      "maxX": 32.0,
+      "name": "Statue01",
+      "centerX": 22.5,
+      "centerY": 27.3438,
+      "sizeX": 1.0,
+      "sizeY": 0.625,
+      "minX": 22.0,
+      "maxX": 23.0,
+      "minY": 27.0312,
+      "maxY": 27.6562,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Statue01",
+      "centerX": 27.5,
+      "centerY": 27.3438,
+      "sizeX": 1.0,
+      "sizeY": 0.625,
+      "minX": 27.0,
+      "maxX": 28.0,
+      "minY": 27.0312,
+      "maxY": 27.6562,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "StoneLantern",
+      "centerX": 20.5,
+      "centerY": 20.2344,
+      "sizeX": 0.625,
+      "sizeY": 0.3438,
+      "minX": 20.1875,
+      "maxX": 20.8125,
+      "minY": 20.0625,
+      "maxY": 20.4062,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "StoneLantern",
+      "centerX": 29.5,
+      "centerY": 20.2344,
+      "sizeX": 0.625,
+      "sizeY": 0.3438,
+      "minX": 29.1875,
+      "maxX": 29.8125,
+      "minY": 20.0625,
+      "maxY": 20.4062,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "StoneLantern",
+      "centerX": 29.5,
+      "centerY": 29.2344,
+      "sizeX": 0.625,
+      "sizeY": 0.3438,
+      "minX": 29.1875,
+      "maxX": 29.8125,
+      "minY": 29.0625,
+      "maxY": 29.4062,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "StoneLantern",
+      "centerX": 20.5,
+      "centerY": 29.2344,
+      "sizeX": 0.625,
+      "sizeY": 0.3438,
+      "minX": 20.1875,
+      "maxX": 20.8125,
+      "minY": 29.0625,
+      "maxY": 29.4062,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Gate01",
+      "centerX": 24.2344,
+      "centerY": 14.7188,
+      "sizeX": 0.4688,
+      "sizeY": 1.375,
+      "minX": 24.0,
+      "maxX": 24.4688,
+      "minY": 14.0312,
+      "maxY": 15.4062,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Gate01",
+      "centerX": 25.7656,
+      "centerY": 14.7188,
+      "sizeX": 0.4688,
+      "sizeY": 1.375,
+      "minX": 25.5312,
+      "maxX": 26.0,
+      "minY": 14.0312,
+      "maxY": 15.4062,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Gate01",
+      "centerX": 35.7656,
+      "centerY": 24.7188,
+      "sizeX": 0.4688,
+      "sizeY": 1.375,
+      "minX": 35.5312,
+      "maxX": 36.0,
+      "minY": 24.0312,
+      "maxY": 25.4062,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Gate01",
+      "centerX": 34.2344,
+      "centerY": 24.7188,
+      "sizeX": 0.4688,
+      "sizeY": 1.375,
+      "minX": 34.0,
+      "maxX": 34.4688,
+      "minY": 24.0312,
+      "maxY": 25.4062,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Gate01",
+      "centerX": 24.2344,
+      "centerY": 34.7188,
+      "sizeX": 0.4688,
+      "sizeY": 1.375,
+      "minX": 24.0,
+      "maxX": 24.4688,
+      "minY": 34.0312,
+      "maxY": 35.4062,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Gate01",
+      "centerX": 25.7656,
+      "centerY": 34.7188,
+      "sizeX": 0.4688,
+      "sizeY": 1.375,
+      "minX": 25.5312,
+      "maxX": 26.0,
+      "minY": 34.0312,
+      "maxY": 35.4062,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Gate01",
+      "centerX": 15.7656,
+      "centerY": 24.7188,
+      "sizeX": 0.4688,
+      "sizeY": 1.375,
+      "minX": 15.5312,
+      "maxX": 16.0,
+      "minY": 24.0312,
+      "maxY": 25.4062,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Gate01",
+      "centerX": 14.2344,
+      "centerY": 24.7188,
+      "sizeX": 0.4688,
+      "sizeY": 1.375,
+      "minX": 14.0,
+      "maxX": 14.4688,
+      "minY": 24.0312,
+      "maxY": 25.4062,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "StoneCube",
+      "centerX": 16.5,
+      "centerY": 14.3594,
+      "sizeX": 0.9375,
+      "sizeY": 0.7188,
+      "minX": 16.0312,
+      "maxX": 16.9688,
+      "minY": 14.0,
+      "maxY": 14.7188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "StoneCube",
+      "centerX": 35.5,
+      "centerY": 16.3594,
+      "sizeX": 0.9375,
+      "sizeY": 0.7188,
+      "minX": 35.0312,
+      "maxX": 35.9688,
+      "minY": 16.0,
+      "maxY": 16.7188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "StoneCube",
+      "centerX": 33.5,
+      "centerY": 35.3594,
+      "sizeX": 0.9375,
+      "sizeY": 0.7188,
+      "minX": 33.0312,
+      "maxX": 33.9688,
+      "minY": 35.0,
+      "maxY": 35.7188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "StoneCube",
+      "centerX": 14.5,
+      "centerY": 33.3594,
+      "sizeX": 0.9375,
+      "sizeY": 0.7188,
+      "minX": 14.0312,
+      "maxX": 14.9688,
+      "minY": 33.0,
+      "maxY": 33.7188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "StoneCube",
+      "centerX": 17.5,
+      "centerY": 14.3594,
+      "sizeX": 0.9375,
+      "sizeY": 0.7188,
+      "minX": 17.0312,
+      "maxX": 17.9688,
+      "minY": 14.0,
+      "maxY": 14.7188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "StoneCube",
+      "centerX": 35.5,
+      "centerY": 17.3594,
+      "sizeX": 0.9375,
+      "sizeY": 0.7188,
+      "minX": 35.0312,
+      "maxX": 35.9688,
+      "minY": 17.0,
+      "maxY": 17.7188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "StoneCube",
+      "centerX": 32.5,
+      "centerY": 35.3594,
+      "sizeX": 0.9375,
+      "sizeY": 0.7188,
+      "minX": 32.0312,
+      "maxX": 32.9688,
+      "minY": 35.0,
+      "maxY": 35.7188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "StoneCube",
+      "centerX": 14.5,
+      "centerY": 32.3594,
+      "sizeX": 0.9375,
+      "sizeY": 0.7188,
+      "minX": 14.0312,
+      "maxX": 14.9688,
+      "minY": 32.0,
+      "maxY": 32.7188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "StoneCube",
+      "centerX": 18.5,
+      "centerY": 14.3594,
+      "sizeX": 0.9375,
+      "sizeY": 0.7188,
+      "minX": 18.0312,
+      "maxX": 18.9688,
+      "minY": 14.0,
+      "maxY": 14.7188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "StoneCube",
+      "centerX": 35.5,
+      "centerY": 18.3594,
+      "sizeX": 0.9375,
+      "sizeY": 0.7188,
+      "minX": 35.0312,
+      "maxX": 35.9688,
+      "minY": 18.0,
+      "maxY": 18.7188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "StoneCube",
+      "centerX": 31.5,
+      "centerY": 35.3594,
+      "sizeX": 0.9375,
+      "sizeY": 0.7188,
+      "minX": 31.0312,
+      "maxX": 31.9688,
+      "minY": 35.0,
+      "maxY": 35.7188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "StoneCube",
+      "centerX": 14.5,
+      "centerY": 31.3594,
+      "sizeX": 0.9375,
+      "sizeY": 0.7188,
+      "minX": 14.0312,
+      "maxX": 14.9688,
+      "minY": 31.0,
+      "maxY": 31.7188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "StoneCube",
+      "centerX": 20.5,
+      "centerY": 14.3594,
+      "sizeX": 0.9375,
+      "sizeY": 0.7188,
+      "minX": 20.0312,
+      "maxX": 20.9688,
+      "minY": 14.0,
+      "maxY": 14.7188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "StoneCube",
+      "centerX": 35.5,
+      "centerY": 20.3594,
+      "sizeX": 0.9375,
+      "sizeY": 0.7188,
+      "minX": 35.0312,
+      "maxX": 35.9688,
+      "minY": 20.0,
+      "maxY": 20.7188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "StoneCube",
+      "centerX": 29.5,
+      "centerY": 35.3594,
+      "sizeX": 0.9375,
+      "sizeY": 0.7188,
+      "minX": 29.0312,
+      "maxX": 29.9688,
+      "minY": 35.0,
+      "maxY": 35.7188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "StoneCube",
+      "centerX": 14.5,
+      "centerY": 29.3594,
+      "sizeX": 0.9375,
+      "sizeY": 0.7188,
+      "minX": 14.0312,
+      "maxX": 14.9688,
+      "minY": 29.0,
+      "maxY": 29.7188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "StoneCube",
+      "centerX": 21.5,
+      "centerY": 14.3594,
+      "sizeX": 0.9375,
+      "sizeY": 0.7188,
+      "minX": 21.0312,
+      "maxX": 21.9688,
+      "minY": 14.0,
+      "maxY": 14.7188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "StoneCube",
+      "centerX": 35.5,
+      "centerY": 21.3594,
+      "sizeX": 0.9375,
+      "sizeY": 0.7188,
+      "minX": 35.0312,
+      "maxX": 35.9688,
+      "minY": 21.0,
+      "maxY": 21.7188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "StoneCube",
+      "centerX": 28.5,
+      "centerY": 35.3594,
+      "sizeX": 0.9375,
+      "sizeY": 0.7188,
+      "minX": 28.0312,
+      "maxX": 28.9688,
+      "minY": 35.0,
+      "maxY": 35.7188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "StoneCube",
+      "centerX": 14.5,
+      "centerY": 28.3594,
+      "sizeX": 0.9375,
+      "sizeY": 0.7188,
+      "minX": 14.0312,
+      "maxX": 14.9688,
+      "minY": 28.0,
+      "maxY": 28.7188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "StoneCube",
+      "centerX": 22.5,
+      "centerY": 14.3594,
+      "sizeX": 0.9375,
+      "sizeY": 0.7188,
+      "minX": 22.0312,
+      "maxX": 22.9688,
+      "minY": 14.0,
+      "maxY": 14.7188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "StoneCube",
+      "centerX": 35.5,
+      "centerY": 22.3594,
+      "sizeX": 0.9375,
+      "sizeY": 0.7188,
+      "minX": 35.0312,
+      "maxX": 35.9688,
+      "minY": 22.0,
+      "maxY": 22.7188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "StoneCube",
+      "centerX": 27.5,
+      "centerY": 35.3594,
+      "sizeX": 0.9375,
+      "sizeY": 0.7188,
+      "minX": 27.0312,
+      "maxX": 27.9688,
+      "minY": 35.0,
+      "maxY": 35.7188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "StoneCube",
+      "centerX": 14.5,
+      "centerY": 27.3594,
+      "sizeX": 0.9375,
+      "sizeY": 0.7188,
+      "minX": 14.0312,
+      "maxX": 14.9688,
+      "minY": 27.0,
+      "maxY": 27.7188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "StoneCube",
+      "centerX": 23.5,
+      "centerY": 14.3594,
+      "sizeX": 0.9375,
+      "sizeY": 0.7188,
+      "minX": 23.0312,
+      "maxX": 23.9688,
+      "minY": 14.0,
+      "maxY": 14.7188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "StoneCube",
+      "centerX": 35.5,
+      "centerY": 23.3594,
+      "sizeX": 0.9375,
+      "sizeY": 0.7188,
+      "minX": 35.0312,
+      "maxX": 35.9688,
       "minY": 23.0,
-      "maxY": 27.0
+      "maxY": 23.7188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     },
     {
-      "name": "CityWall",
-      "centerX": 25.0,
-      "centerY": 28.0,
-      "sizeX": 1.0,
-      "sizeY": 4.0,
-      "minX": 24.5,
-      "maxX": 25.5,
+      "name": "StoneCube",
+      "centerX": 26.5,
+      "centerY": 35.3594,
+      "sizeX": 0.9375,
+      "sizeY": 0.7188,
+      "minX": 26.0312,
+      "maxX": 26.9688,
+      "minY": 35.0,
+      "maxY": 35.7188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "StoneCube",
+      "centerX": 14.5,
+      "centerY": 26.3594,
+      "sizeX": 0.9375,
+      "sizeY": 0.7188,
+      "minX": 14.0312,
+      "maxX": 14.9688,
       "minY": 26.0,
-      "maxY": 30.0
+      "maxY": 26.7188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "RunePillarX3",
+      "centerX": 14.5,
+      "centerY": 14.25,
+      "sizeX": 0.75,
+      "sizeY": 0.5,
+      "minX": 14.125,
+      "maxX": 14.875,
+      "minY": 14.0,
+      "maxY": 14.5,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "RunePillarX3",
+      "centerX": 35.5,
+      "centerY": 14.25,
+      "sizeX": 0.75,
+      "sizeY": 0.5,
+      "minX": 35.125,
+      "maxX": 35.875,
+      "minY": 14.0,
+      "maxY": 14.5,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "RunePillarX3",
+      "centerX": 35.5,
+      "centerY": 35.25,
+      "sizeX": 0.75,
+      "sizeY": 0.5,
+      "minX": 35.125,
+      "maxX": 35.875,
+      "minY": 35.0,
+      "maxY": 35.5,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "RunePillarX3",
+      "centerX": 14.5,
+      "centerY": 35.25,
+      "sizeX": 0.75,
+      "sizeY": 0.5,
+      "minX": 14.125,
+      "maxX": 14.875,
+      "minY": 35.0,
+      "maxY": 35.5,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Pillar01",
+      "centerX": 17.5,
+      "centerY": 17.3594,
+      "sizeX": 0.9375,
+      "sizeY": 0.6562,
+      "minX": 17.0312,
+      "maxX": 17.9688,
+      "minY": 17.0312,
+      "maxY": 17.6875,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Pillar01",
+      "centerX": 32.5,
+      "centerY": 17.3594,
+      "sizeX": 0.9375,
+      "sizeY": 0.6562,
+      "minX": 32.0312,
+      "maxX": 32.9688,
+      "minY": 17.0312,
+      "maxY": 17.6875,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Pillar01",
+      "centerX": 32.5,
+      "centerY": 32.3594,
+      "sizeX": 0.9375,
+      "sizeY": 0.6562,
+      "minX": 32.0312,
+      "maxX": 32.9688,
+      "minY": 32.0312,
+      "maxY": 32.6875,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Pillar01",
+      "centerX": 17.5,
+      "centerY": 32.3594,
+      "sizeX": 0.9375,
+      "sizeY": 0.6562,
+      "minX": 17.0312,
+      "maxX": 17.9688,
+      "minY": 32.0312,
+      "maxY": 32.6875,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Pillar02",
+      "centerX": 17.5,
+      "centerY": 20.3594,
+      "sizeX": 0.9375,
+      "sizeY": 0.6562,
+      "minX": 17.0312,
+      "maxX": 17.9688,
+      "minY": 20.0312,
+      "maxY": 20.6875,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Pillar02",
+      "centerX": 29.5,
+      "centerY": 17.3594,
+      "sizeX": 0.9375,
+      "sizeY": 0.6562,
+      "minX": 29.0312,
+      "maxX": 29.9688,
+      "minY": 17.0312,
+      "maxY": 17.6875,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Pillar02",
+      "centerX": 32.5,
+      "centerY": 29.3594,
+      "sizeX": 0.9375,
+      "sizeY": 0.6562,
+      "minX": 32.0312,
+      "maxX": 32.9688,
+      "minY": 29.0312,
+      "maxY": 29.6875,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Pillar02",
+      "centerX": 20.5,
+      "centerY": 32.3594,
+      "sizeX": 0.9375,
+      "sizeY": 0.6562,
+      "minX": 20.0312,
+      "maxX": 20.9688,
+      "minY": 32.0312,
+      "maxY": 32.6875,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Rock07",
+      "centerX": 20.0469,
+      "centerY": 17.5469,
+      "sizeX": 1.6562,
+      "sizeY": 0.9062,
+      "minX": 19.2188,
+      "maxX": 20.875,
+      "minY": 17.0938,
+      "maxY": 18.0,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Rock07",
+      "centerX": 31.9531,
+      "centerY": 19.5469,
+      "sizeX": 1.6562,
+      "sizeY": 0.9062,
+      "minX": 31.125,
+      "maxX": 32.7812,
+      "minY": 19.0938,
+      "maxY": 20.0,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Rock07",
+      "centerX": 30.0469,
+      "centerY": 32.5469,
+      "sizeX": 1.6562,
+      "sizeY": 0.9062,
+      "minX": 29.2188,
+      "maxX": 30.875,
+      "minY": 32.0938,
+      "maxY": 33.0,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Rock07",
+      "centerX": 16.9531,
+      "centerY": 29.5469,
+      "sizeX": 1.6562,
+      "sizeY": 0.9062,
+      "minX": 16.125,
+      "maxX": 17.7812,
+      "minY": 29.0938,
+      "maxY": 30.0,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Rock07",
+      "centerX": 12.0469,
+      "centerY": 11.5469,
+      "sizeX": 1.6562,
+      "sizeY": 0.9062,
+      "minX": 11.2188,
+      "maxX": 12.875,
+      "minY": 11.0938,
+      "maxY": 12.0,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Rock07",
+      "centerX": 37.9531,
+      "centerY": 11.5469,
+      "sizeX": 1.6562,
+      "sizeY": 0.9062,
+      "minX": 37.125,
+      "maxX": 38.7812,
+      "minY": 11.0938,
+      "maxY": 12.0,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Rock07",
+      "centerX": 38.0469,
+      "centerY": 38.5469,
+      "sizeX": 1.6562,
+      "sizeY": 0.9062,
+      "minX": 37.2188,
+      "maxX": 38.875,
+      "minY": 38.0938,
+      "maxY": 39.0,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Rock07",
+      "centerX": 10.9531,
+      "centerY": 37.5469,
+      "sizeX": 1.6562,
+      "sizeY": 0.9062,
+      "minX": 10.125,
+      "maxX": 11.7812,
+      "minY": 37.0938,
+      "maxY": 38.0,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Tree01",
+      "centerX": 9.5156,
+      "centerY": 17.125,
+      "sizeX": 0.2812,
+      "sizeY": 0.1875,
+      "minX": 9.375,
+      "maxX": 9.6562,
+      "minY": 17.0312,
+      "maxY": 17.2188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Tree01",
+      "centerX": 32.4844,
+      "centerY": 9.125,
+      "sizeX": 0.2812,
+      "sizeY": 0.1875,
+      "minX": 32.3438,
+      "maxX": 32.625,
+      "minY": 9.0312,
+      "maxY": 9.2188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Tree01",
+      "centerX": 40.5156,
+      "centerY": 32.125,
+      "sizeX": 0.2812,
+      "sizeY": 0.1875,
+      "minX": 40.375,
+      "maxX": 40.6562,
+      "minY": 32.0312,
+      "maxY": 32.2188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Tree01",
+      "centerX": 17.4844,
+      "centerY": 40.125,
+      "sizeX": 0.2812,
+      "sizeY": 0.1875,
+      "minX": 17.3438,
+      "maxX": 17.625,
+      "minY": 40.0312,
+      "maxY": 40.2188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Tree02",
+      "centerX": 17.4219,
+      "centerY": 9.1094,
+      "sizeX": 0.2812,
+      "sizeY": 0.1562,
+      "minX": 17.2812,
+      "maxX": 17.5625,
+      "minY": 9.0312,
+      "maxY": 9.1875,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Tree02",
+      "centerX": 40.5781,
+      "centerY": 17.1094,
+      "sizeX": 0.2812,
+      "sizeY": 0.1562,
+      "minX": 40.4375,
+      "maxX": 40.7188,
+      "minY": 17.0312,
+      "maxY": 17.1875,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Tree02",
+      "centerX": 32.4219,
+      "centerY": 40.1094,
+      "sizeX": 0.2812,
+      "sizeY": 0.1562,
+      "minX": 32.2812,
+      "maxX": 32.5625,
+      "minY": 40.0312,
+      "maxY": 40.1875,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Tree02",
+      "centerX": 9.5781,
+      "centerY": 32.1094,
+      "sizeX": 0.2812,
+      "sizeY": 0.1562,
+      "minX": 9.4375,
+      "maxX": 9.7188,
+      "minY": 32.0312,
+      "maxY": 32.1875,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Tree03",
+      "centerX": 13.4844,
+      "centerY": 13.125,
+      "sizeX": 0.3438,
+      "sizeY": 0.25,
+      "minX": 13.3125,
+      "maxX": 13.6562,
+      "minY": 13.0,
+      "maxY": 13.25,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Tree03",
+      "centerX": 36.5156,
+      "centerY": 13.125,
+      "sizeX": 0.3438,
+      "sizeY": 0.25,
+      "minX": 36.3438,
+      "maxX": 36.6875,
+      "minY": 13.0,
+      "maxY": 13.25,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Tree03",
+      "centerX": 36.4844,
+      "centerY": 36.125,
+      "sizeX": 0.3438,
+      "sizeY": 0.25,
+      "minX": 36.3125,
+      "maxX": 36.6562,
+      "minY": 36.0,
+      "maxY": 36.25,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Tree03",
+      "centerX": 13.5156,
+      "centerY": 36.125,
+      "sizeX": 0.3438,
+      "sizeY": 0.25,
+      "minX": 13.3438,
+      "maxX": 13.6875,
+      "minY": 36.0,
+      "maxY": 36.25,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Rock06",
+      "centerX": 12.5156,
+      "centerY": 18.2344,
+      "sizeX": 0.7812,
+      "sizeY": 0.4688,
+      "minX": 12.125,
+      "maxX": 12.9062,
+      "minY": 18.0,
+      "maxY": 18.4688,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Rock06",
+      "centerX": 31.4844,
+      "centerY": 12.2344,
+      "sizeX": 0.7812,
+      "sizeY": 0.4688,
+      "minX": 31.0938,
+      "maxX": 31.875,
+      "minY": 12.0,
+      "maxY": 12.4688,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Rock06",
+      "centerX": 37.5156,
+      "centerY": 31.2344,
+      "sizeX": 0.7812,
+      "sizeY": 0.4688,
+      "minX": 37.125,
+      "maxX": 37.9062,
+      "minY": 31.0,
+      "maxY": 31.4688,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Rock06",
+      "centerX": 18.4844,
+      "centerY": 37.2344,
+      "sizeX": 0.7812,
+      "sizeY": 0.4688,
+      "minX": 18.0938,
+      "maxX": 18.875,
+      "minY": 37.0,
+      "maxY": 37.4688,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Rock05",
+      "centerX": 18.5156,
+      "centerY": 12.2344,
+      "sizeX": 0.5312,
+      "sizeY": 0.2188,
+      "minX": 18.25,
+      "maxX": 18.7812,
+      "minY": 12.125,
+      "maxY": 12.3438,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Rock05",
+      "centerX": 37.4844,
+      "centerY": 18.2344,
+      "sizeX": 0.5312,
+      "sizeY": 0.2188,
+      "minX": 37.2188,
+      "maxX": 37.75,
+      "minY": 18.125,
+      "maxY": 18.3438,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Rock05",
+      "centerX": 31.5156,
+      "centerY": 37.2344,
+      "sizeX": 0.5312,
+      "sizeY": 0.2188,
+      "minX": 31.25,
+      "maxX": 31.7812,
+      "minY": 37.125,
+      "maxY": 37.3438,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Rock05",
+      "centerX": 12.4844,
+      "centerY": 31.2344,
+      "sizeX": 0.5312,
+      "sizeY": 0.2188,
+      "minX": 12.2188,
+      "maxX": 12.75,
+      "minY": 31.125,
+      "maxY": 31.3438,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "RunePillarX2",
+      "centerX": 2.5,
+      "centerY": 7.25,
+      "sizeX": 0.75,
+      "sizeY": 0.5,
+      "minX": 2.125,
+      "maxX": 2.875,
+      "minY": 7.0,
+      "maxY": 7.5,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "RunePillarX2",
+      "centerX": 42.5,
+      "centerY": 2.25,
+      "sizeX": 0.75,
+      "sizeY": 0.5,
+      "minX": 42.125,
+      "maxX": 42.875,
+      "minY": 2.0,
+      "maxY": 2.5,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "RunePillarX2",
+      "centerX": 47.5,
+      "centerY": 42.25,
+      "sizeX": 0.75,
+      "sizeY": 0.5,
+      "minX": 47.125,
+      "maxX": 47.875,
+      "minY": 42.0,
+      "maxY": 42.5,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "RunePillarX2",
+      "centerX": 7.5,
+      "centerY": 47.25,
+      "sizeX": 0.75,
+      "sizeY": 0.5,
+      "minX": 7.125,
+      "maxX": 7.875,
+      "minY": 47.0,
+      "maxY": 47.5,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "RunePillarX2",
+      "centerX": 7.5,
+      "centerY": 2.25,
+      "sizeX": 0.75,
+      "sizeY": 0.5,
+      "minX": 7.125,
+      "maxX": 7.875,
+      "minY": 2.0,
+      "maxY": 2.5,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "RunePillarX2",
+      "centerX": 47.5,
+      "centerY": 7.25,
+      "sizeX": 0.75,
+      "sizeY": 0.5,
+      "minX": 47.125,
+      "maxX": 47.875,
+      "minY": 7.0,
+      "maxY": 7.5,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "RunePillarX2",
+      "centerX": 42.5,
+      "centerY": 47.25,
+      "sizeX": 0.75,
+      "sizeY": 0.5,
+      "minX": 42.125,
+      "maxX": 42.875,
+      "minY": 47.0,
+      "maxY": 47.5,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "RunePillarX2",
+      "centerX": 2.5,
+      "centerY": 42.25,
+      "sizeX": 0.75,
+      "sizeY": 0.5,
+      "minX": 2.125,
+      "maxX": 2.875,
+      "minY": 42.0,
+      "maxY": 42.5,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "RunePillarBroken",
+      "centerX": 7.5,
+      "centerY": 7.25,
+      "sizeX": 0.75,
+      "sizeY": 0.5,
+      "minX": 7.125,
+      "maxX": 7.875,
+      "minY": 7.0,
+      "maxY": 7.5,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "RunePillarBroken",
+      "centerX": 42.5,
+      "centerY": 7.25,
+      "sizeX": 0.75,
+      "sizeY": 0.5,
+      "minX": 42.125,
+      "maxX": 42.875,
+      "minY": 7.0,
+      "maxY": 7.5,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "RunePillarBroken",
+      "centerX": 42.5,
+      "centerY": 42.25,
+      "sizeX": 0.75,
+      "sizeY": 0.5,
+      "minX": 42.125,
+      "maxX": 42.875,
+      "minY": 42.0,
+      "maxY": 42.5,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "RunePillarBroken",
+      "centerX": 7.5,
+      "centerY": 42.25,
+      "sizeX": 0.75,
+      "sizeY": 0.5,
+      "minX": 7.125,
+      "maxX": 7.875,
+      "minY": 42.0,
+      "maxY": 42.5,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Tree01",
+      "centerX": 1.5156,
+      "centerY": 11.125,
+      "sizeX": 0.2812,
+      "sizeY": 0.1875,
+      "minX": 1.375,
+      "maxX": 1.6562,
+      "minY": 11.0312,
+      "maxY": 11.2188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Tree01",
+      "centerX": 38.4844,
+      "centerY": 1.125,
+      "sizeX": 0.2812,
+      "sizeY": 0.1875,
+      "minX": 38.3438,
+      "maxX": 38.625,
+      "minY": 1.0312,
+      "maxY": 1.2188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Tree01",
+      "centerX": 48.5156,
+      "centerY": 38.125,
+      "sizeX": 0.2812,
+      "sizeY": 0.1875,
+      "minX": 48.375,
+      "maxX": 48.6562,
+      "minY": 38.0312,
+      "maxY": 38.2188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Tree01",
+      "centerX": 11.4844,
+      "centerY": 48.125,
+      "sizeX": 0.2812,
+      "sizeY": 0.1875,
+      "minX": 11.3438,
+      "maxX": 11.625,
+      "minY": 48.0312,
+      "maxY": 48.2188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Tree01",
+      "centerX": 2.5156,
+      "centerY": 13.125,
+      "sizeX": 0.2812,
+      "sizeY": 0.1875,
+      "minX": 2.375,
+      "maxX": 2.6562,
+      "minY": 13.0312,
+      "maxY": 13.2188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Tree01",
+      "centerX": 36.4844,
+      "centerY": 2.125,
+      "sizeX": 0.2812,
+      "sizeY": 0.1875,
+      "minX": 36.3438,
+      "maxX": 36.625,
+      "minY": 2.0312,
+      "maxY": 2.2188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Tree01",
+      "centerX": 47.5156,
+      "centerY": 36.125,
+      "sizeX": 0.2812,
+      "sizeY": 0.1875,
+      "minX": 47.375,
+      "maxX": 47.6562,
+      "minY": 36.0312,
+      "maxY": 36.2188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Tree01",
+      "centerX": 13.4844,
+      "centerY": 47.125,
+      "sizeX": 0.2812,
+      "sizeY": 0.1875,
+      "minX": 13.3438,
+      "maxX": 13.625,
+      "minY": 47.0312,
+      "maxY": 47.2188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Tree03",
+      "centerX": 1.4844,
+      "centerY": 16.125,
+      "sizeX": 0.3438,
+      "sizeY": 0.25,
+      "minX": 1.3125,
+      "maxX": 1.6562,
+      "minY": 16.0,
+      "maxY": 16.25,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Tree03",
+      "centerX": 33.5156,
+      "centerY": 1.125,
+      "sizeX": 0.3438,
+      "sizeY": 0.25,
+      "minX": 33.3438,
+      "maxX": 33.6875,
+      "minY": 1.0,
+      "maxY": 1.25,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Tree03",
+      "centerX": 48.4844,
+      "centerY": 33.125,
+      "sizeX": 0.3438,
+      "sizeY": 0.25,
+      "minX": 48.3125,
+      "maxX": 48.6562,
+      "minY": 33.0,
+      "maxY": 33.25,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Tree03",
+      "centerX": 16.5156,
+      "centerY": 48.125,
+      "sizeX": 0.3438,
+      "sizeY": 0.25,
+      "minX": 16.3438,
+      "maxX": 16.6875,
+      "minY": 48.0,
+      "maxY": 48.25,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Tree02",
+      "centerX": 3.4219,
+      "centerY": 19.1094,
+      "sizeX": 0.2812,
+      "sizeY": 0.1562,
+      "minX": 3.2812,
+      "maxX": 3.5625,
+      "minY": 19.0312,
+      "maxY": 19.1875,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Tree02",
+      "centerX": 30.5781,
+      "centerY": 3.1094,
+      "sizeX": 0.2812,
+      "sizeY": 0.1562,
+      "minX": 30.4375,
+      "maxX": 30.7188,
+      "minY": 3.0312,
+      "maxY": 3.1875,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Tree02",
+      "centerX": 46.4219,
+      "centerY": 30.1094,
+      "sizeX": 0.2812,
+      "sizeY": 0.1562,
+      "minX": 46.2812,
+      "maxX": 46.5625,
+      "minY": 30.0312,
+      "maxY": 30.1875,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Tree02",
+      "centerX": 19.5781,
+      "centerY": 46.1094,
+      "sizeX": 0.2812,
+      "sizeY": 0.1562,
+      "minX": 19.4375,
+      "maxX": 19.7188,
+      "minY": 46.0312,
+      "maxY": 46.1875,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Tree03",
+      "centerX": 1.4844,
+      "centerY": 22.125,
+      "sizeX": 0.3438,
+      "sizeY": 0.25,
+      "minX": 1.3125,
+      "maxX": 1.6562,
+      "minY": 22.0,
+      "maxY": 22.25,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Tree03",
+      "centerX": 27.5156,
+      "centerY": 1.125,
+      "sizeX": 0.3438,
+      "sizeY": 0.25,
+      "minX": 27.3438,
+      "maxX": 27.6875,
+      "minY": 1.0,
+      "maxY": 1.25,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Tree03",
+      "centerX": 48.4844,
+      "centerY": 27.125,
+      "sizeX": 0.3438,
+      "sizeY": 0.25,
+      "minX": 48.3125,
+      "maxX": 48.6562,
+      "minY": 27.0,
+      "maxY": 27.25,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Tree03",
+      "centerX": 22.5156,
+      "centerY": 48.125,
+      "sizeX": 0.3438,
+      "sizeY": 0.25,
+      "minX": 22.3438,
+      "maxX": 22.6875,
+      "minY": 48.0,
+      "maxY": 48.25,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Tree01",
+      "centerX": 11.5156,
+      "centerY": 1.125,
+      "sizeX": 0.2812,
+      "sizeY": 0.1875,
+      "minX": 11.375,
+      "maxX": 11.6562,
+      "minY": 1.0312,
+      "maxY": 1.2188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Tree01",
+      "centerX": 48.4844,
+      "centerY": 11.125,
+      "sizeX": 0.2812,
+      "sizeY": 0.1875,
+      "minX": 48.3438,
+      "maxX": 48.625,
+      "minY": 11.0312,
+      "maxY": 11.2188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Tree01",
+      "centerX": 38.5156,
+      "centerY": 48.125,
+      "sizeX": 0.2812,
+      "sizeY": 0.1875,
+      "minX": 38.375,
+      "maxX": 38.6562,
+      "minY": 48.0312,
+      "maxY": 48.2188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Tree01",
+      "centerX": 1.4844,
+      "centerY": 38.125,
+      "sizeX": 0.2812,
+      "sizeY": 0.1875,
+      "minX": 1.3438,
+      "maxX": 1.625,
+      "minY": 38.0312,
+      "maxY": 38.2188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Tree01",
+      "centerX": 13.5156,
+      "centerY": 2.125,
+      "sizeX": 0.2812,
+      "sizeY": 0.1875,
+      "minX": 13.375,
+      "maxX": 13.6562,
+      "minY": 2.0312,
+      "maxY": 2.2188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Tree01",
+      "centerX": 47.4844,
+      "centerY": 13.125,
+      "sizeX": 0.2812,
+      "sizeY": 0.1875,
+      "minX": 47.3438,
+      "maxX": 47.625,
+      "minY": 13.0312,
+      "maxY": 13.2188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Tree01",
+      "centerX": 36.5156,
+      "centerY": 47.125,
+      "sizeX": 0.2812,
+      "sizeY": 0.1875,
+      "minX": 36.375,
+      "maxX": 36.6562,
+      "minY": 47.0312,
+      "maxY": 47.2188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Tree01",
+      "centerX": 2.4844,
+      "centerY": 36.125,
+      "sizeX": 0.2812,
+      "sizeY": 0.1875,
+      "minX": 2.3438,
+      "maxX": 2.625,
+      "minY": 36.0312,
+      "maxY": 36.2188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Tree03",
+      "centerX": 16.4844,
+      "centerY": 1.125,
+      "sizeX": 0.3438,
+      "sizeY": 0.25,
+      "minX": 16.3125,
+      "maxX": 16.6562,
+      "minY": 1.0,
+      "maxY": 1.25,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Tree03",
+      "centerX": 48.5156,
+      "centerY": 16.125,
+      "sizeX": 0.3438,
+      "sizeY": 0.25,
+      "minX": 48.3438,
+      "maxX": 48.6875,
+      "minY": 16.0,
+      "maxY": 16.25,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Tree03",
+      "centerX": 33.4844,
+      "centerY": 48.125,
+      "sizeX": 0.3438,
+      "sizeY": 0.25,
+      "minX": 33.3125,
+      "maxX": 33.6562,
+      "minY": 48.0,
+      "maxY": 48.25,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Tree03",
+      "centerX": 1.5156,
+      "centerY": 33.125,
+      "sizeX": 0.3438,
+      "sizeY": 0.25,
+      "minX": 1.3438,
+      "maxX": 1.6875,
+      "minY": 33.0,
+      "maxY": 33.25,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Tree03",
+      "centerX": 19.4844,
+      "centerY": 1.125,
+      "sizeX": 0.3438,
+      "sizeY": 0.25,
+      "minX": 19.3125,
+      "maxX": 19.6562,
+      "minY": 1.0,
+      "maxY": 1.25,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Tree03",
+      "centerX": 30.4844,
+      "centerY": 48.125,
+      "sizeX": 0.3438,
+      "sizeY": 0.25,
+      "minX": 30.3125,
+      "maxX": 30.6562,
+      "minY": 48.0,
+      "maxY": 48.25,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Tree03",
+      "centerX": 22.4844,
+      "centerY": 1.125,
+      "sizeX": 0.3438,
+      "sizeY": 0.25,
+      "minX": 22.3125,
+      "maxX": 22.6562,
+      "minY": 1.0,
+      "maxY": 1.25,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Tree03",
+      "centerX": 48.5156,
+      "centerY": 22.125,
+      "sizeX": 0.3438,
+      "sizeY": 0.25,
+      "minX": 48.3438,
+      "maxX": 48.6875,
+      "minY": 22.0,
+      "maxY": 22.25,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Tree03",
+      "centerX": 27.4844,
+      "centerY": 48.125,
+      "sizeX": 0.3438,
+      "sizeY": 0.25,
+      "minX": 27.3125,
+      "maxX": 27.6562,
+      "minY": 48.0,
+      "maxY": 48.25,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Tree03",
+      "centerX": 1.5156,
+      "centerY": 27.125,
+      "sizeX": 0.3438,
+      "sizeY": 0.25,
+      "minX": 1.3438,
+      "maxX": 1.6875,
+      "minY": 27.0,
+      "maxY": 27.25,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Tree02",
+      "centerX": 10.4219,
+      "centerY": 9.1094,
+      "sizeX": 0.2812,
+      "sizeY": 0.1562,
+      "minX": 10.2812,
+      "maxX": 10.5625,
+      "minY": 9.0312,
+      "maxY": 9.1875,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Tree02",
+      "centerX": 40.5781,
+      "centerY": 10.1094,
+      "sizeX": 0.2812,
+      "sizeY": 0.1562,
+      "minX": 40.4375,
+      "maxX": 40.7188,
+      "minY": 10.0312,
+      "maxY": 10.1875,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Tree02",
+      "centerX": 39.4219,
+      "centerY": 40.1094,
+      "sizeX": 0.2812,
+      "sizeY": 0.1562,
+      "minX": 39.2812,
+      "maxX": 39.5625,
+      "minY": 40.0312,
+      "maxY": 40.1875,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Tree02",
+      "centerX": 9.5781,
+      "centerY": 39.1094,
+      "sizeX": 0.2812,
+      "sizeY": 0.1562,
+      "minX": 9.4375,
+      "maxX": 9.7188,
+      "minY": 39.0312,
+      "maxY": 39.1875,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Tree02",
+      "centerX": 9.4219,
+      "centerY": 10.1094,
+      "sizeX": 0.2812,
+      "sizeY": 0.1562,
+      "minX": 9.2812,
+      "maxX": 9.5625,
+      "minY": 10.0312,
+      "maxY": 10.1875,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Tree02",
+      "centerX": 39.5781,
+      "centerY": 9.1094,
+      "sizeX": 0.2812,
+      "sizeY": 0.1562,
+      "minX": 39.4375,
+      "maxX": 39.7188,
+      "minY": 9.0312,
+      "maxY": 9.1875,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Tree02",
+      "centerX": 40.4219,
+      "centerY": 39.1094,
+      "sizeX": 0.2812,
+      "sizeY": 0.1562,
+      "minX": 40.2812,
+      "maxX": 40.5625,
+      "minY": 39.0312,
+      "maxY": 39.1875,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Tree02",
+      "centerX": 10.5781,
+      "centerY": 40.1094,
+      "sizeX": 0.2812,
+      "sizeY": 0.1562,
+      "minX": 10.4375,
+      "maxX": 10.7188,
+      "minY": 40.0312,
+      "maxY": 40.1875,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Tree01",
+      "centerX": 6.5156,
+      "centerY": 12.125,
+      "sizeX": 0.2812,
+      "sizeY": 0.1875,
+      "minX": 6.375,
+      "maxX": 6.6562,
+      "minY": 12.0312,
+      "maxY": 12.2188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Tree01",
+      "centerX": 37.4844,
+      "centerY": 6.125,
+      "sizeX": 0.2812,
+      "sizeY": 0.1875,
+      "minX": 37.3438,
+      "maxX": 37.625,
+      "minY": 6.0312,
+      "maxY": 6.2188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Tree01",
+      "centerX": 43.5156,
+      "centerY": 37.125,
+      "sizeX": 0.2812,
+      "sizeY": 0.1875,
+      "minX": 43.375,
+      "maxX": 43.6562,
+      "minY": 37.0312,
+      "maxY": 37.2188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Tree01",
+      "centerX": 12.4844,
+      "centerY": 43.125,
+      "sizeX": 0.2812,
+      "sizeY": 0.1875,
+      "minX": 12.3438,
+      "maxX": 12.625,
+      "minY": 43.0312,
+      "maxY": 43.2188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Tree01",
+      "centerX": 12.5156,
+      "centerY": 6.125,
+      "sizeX": 0.2812,
+      "sizeY": 0.1875,
+      "minX": 12.375,
+      "maxX": 12.6562,
+      "minY": 6.0312,
+      "maxY": 6.2188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Tree01",
+      "centerX": 43.4844,
+      "centerY": 12.125,
+      "sizeX": 0.2812,
+      "sizeY": 0.1875,
+      "minX": 43.3438,
+      "maxX": 43.625,
+      "minY": 12.0312,
+      "maxY": 12.2188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Tree01",
+      "centerX": 37.5156,
+      "centerY": 43.125,
+      "sizeX": 0.2812,
+      "sizeY": 0.1875,
+      "minX": 37.375,
+      "maxX": 37.6562,
+      "minY": 43.0312,
+      "maxY": 43.2188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Tree01",
+      "centerX": 6.4844,
+      "centerY": 37.125,
+      "sizeX": 0.2812,
+      "sizeY": 0.1875,
+      "minX": 6.3438,
+      "maxX": 6.625,
+      "minY": 37.0312,
+      "maxY": 37.2188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Tree02",
+      "centerX": 3.4219,
+      "centerY": 1.1094,
+      "sizeX": 0.2812,
+      "sizeY": 0.1562,
+      "minX": 3.2812,
+      "maxX": 3.5625,
+      "minY": 1.0312,
+      "maxY": 1.1875,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Tree02",
+      "centerX": 48.5781,
+      "centerY": 3.1094,
+      "sizeX": 0.2812,
+      "sizeY": 0.1562,
+      "minX": 48.4375,
+      "maxX": 48.7188,
+      "minY": 3.0312,
+      "maxY": 3.1875,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Tree02",
+      "centerX": 46.4219,
+      "centerY": 48.1094,
+      "sizeX": 0.2812,
+      "sizeY": 0.1562,
+      "minX": 46.2812,
+      "maxX": 46.5625,
+      "minY": 48.0312,
+      "maxY": 48.1875,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Tree02",
+      "centerX": 1.5781,
+      "centerY": 46.1094,
+      "sizeX": 0.2812,
+      "sizeY": 0.1562,
+      "minX": 1.4375,
+      "maxX": 1.7188,
+      "minY": 46.0312,
+      "maxY": 46.1875,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Tree02",
+      "centerX": 1.4219,
+      "centerY": 3.1094,
+      "sizeX": 0.2812,
+      "sizeY": 0.1562,
+      "minX": 1.2812,
+      "maxX": 1.5625,
+      "minY": 3.0312,
+      "maxY": 3.1875,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Tree02",
+      "centerX": 46.5781,
+      "centerY": 1.1094,
+      "sizeX": 0.2812,
+      "sizeY": 0.1562,
+      "minX": 46.4375,
+      "maxX": 46.7188,
+      "minY": 1.0312,
+      "maxY": 1.1875,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Tree02",
+      "centerX": 48.4219,
+      "centerY": 46.1094,
+      "sizeX": 0.2812,
+      "sizeY": 0.1562,
+      "minX": 48.2812,
+      "maxX": 48.5625,
+      "minY": 46.0312,
+      "maxY": 46.1875,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Tree02",
+      "centerX": 3.5781,
+      "centerY": 48.1094,
+      "sizeX": 0.2812,
+      "sizeY": 0.1562,
+      "minX": 3.4375,
+      "maxX": 3.7188,
+      "minY": 48.0312,
+      "maxY": 48.1875,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Tree01",
+      "centerX": 6.5156,
+      "centerY": 15.125,
+      "sizeX": 0.2812,
+      "sizeY": 0.1875,
+      "minX": 6.375,
+      "maxX": 6.6562,
+      "minY": 15.0312,
+      "maxY": 15.2188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Tree01",
+      "centerX": 34.4844,
+      "centerY": 6.125,
+      "sizeX": 0.2812,
+      "sizeY": 0.1875,
+      "minX": 34.3438,
+      "maxX": 34.625,
+      "minY": 6.0312,
+      "maxY": 6.2188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Tree01",
+      "centerX": 43.5156,
+      "centerY": 34.125,
+      "sizeX": 0.2812,
+      "sizeY": 0.1875,
+      "minX": 43.375,
+      "maxX": 43.6562,
+      "minY": 34.0312,
+      "maxY": 34.2188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Tree01",
+      "centerX": 15.4844,
+      "centerY": 43.125,
+      "sizeX": 0.2812,
+      "sizeY": 0.1875,
+      "minX": 15.3438,
+      "maxX": 15.625,
+      "minY": 43.0312,
+      "maxY": 43.2188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Tree01",
+      "centerX": 15.5156,
+      "centerY": 6.125,
+      "sizeX": 0.2812,
+      "sizeY": 0.1875,
+      "minX": 15.375,
+      "maxX": 15.6562,
+      "minY": 6.0312,
+      "maxY": 6.2188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Tree01",
+      "centerX": 43.4844,
+      "centerY": 15.125,
+      "sizeX": 0.2812,
+      "sizeY": 0.1875,
+      "minX": 43.3438,
+      "maxX": 43.625,
+      "minY": 15.0312,
+      "maxY": 15.2188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Tree01",
+      "centerX": 34.5156,
+      "centerY": 43.125,
+      "sizeX": 0.2812,
+      "sizeY": 0.1875,
+      "minX": 34.375,
+      "maxX": 34.6562,
+      "minY": 43.0312,
+      "maxY": 43.2188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Tree01",
+      "centerX": 6.4844,
+      "centerY": 34.125,
+      "sizeX": 0.2812,
+      "sizeY": 0.1875,
+      "minX": 6.3438,
+      "maxX": 6.625,
+      "minY": 34.0312,
+      "maxY": 34.2188,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     }
   ],
   "spawnPoints": [
-    { "x": 43.0, "y": 25.0 },
-    { "x": 39.562, "y": 35.580 },
-    { "x": 30.562, "y": 42.116 },
-    { "x": 19.438, "y": 42.116 },
-    { "x": 10.438, "y": 35.580 },
-    { "x": 7.0, "y": 25.0 },
-    { "x": 10.438, "y": 14.420 },
-    { "x": 19.438, "y": 7.884 },
-    { "x": 30.562, "y": 7.884 },
-    { "x": 39.562, "y": 14.420 }
+    {
+      "x": 43.5,
+      "y": 25.5
+    },
+    {
+      "x": 39.5,
+      "y": 35.5
+    },
+    {
+      "x": 30.5,
+      "y": 42.5
+    },
+    {
+      "x": 19.5,
+      "y": 42.5
+    },
+    {
+      "x": 10.5,
+      "y": 35.5
+    },
+    {
+      "x": 7.5,
+      "y": 24.5
+    },
+    {
+      "x": 10.5,
+      "y": 14.5
+    },
+    {
+      "x": 19.5,
+      "y": 7.5
+    },
+    {
+      "x": 30.5,
+      "y": 7.5
+    },
+    {
+      "x": 39.5,
+      "y": 14.5
+    }
   ],
   "worldObjects": [
     {
-      "id": 5,
-      "kind": "Swamp",
+      "id": 1,
+      "kind": "Chest",
       "pairId": 0,
       "bounds": {
-        "minX": 18.500,
-        "minY": 36.500,
-        "maxX": 22.500,
-        "maxY": 40.500
-      }
+        "minX": 23.0,
+        "minY": 23.0,
+        "maxX": 24.0,
+        "maxY": 24.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "id": 2,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 26.0,
+        "minY": 23.0,
+        "maxX": 27.0,
+        "maxY": 24.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "id": 3,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 26.0,
+        "minY": 26.0,
+        "maxX": 27.0,
+        "maxY": 27.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "id": 4,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 23.0,
+        "minY": 26.0,
+        "maxX": 24.0,
+        "maxY": 27.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "id": 5,
+      "kind": "Door",
+      "pairId": 0,
+      "bounds": {
+        "minX": 19.0,
+        "minY": 14.0,
+        "maxX": 20.0,
+        "maxY": 15.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 6,
-      "kind": "Swamp",
+      "kind": "Door",
       "pairId": 0,
       "bounds": {
-        "minX": 26.500,
-        "minY": 27.500,
-        "maxX": 30.500,
-        "maxY": 31.500
-      }
+        "minX": 35.0,
+        "minY": 19.0,
+        "maxX": 36.0,
+        "maxY": 20.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     },
     {
       "id": 7,
-      "kind": "Lava",
+      "kind": "Door",
       "pairId": 0,
       "bounds": {
-        "minX": 6.000,
-        "minY": 37.000,
-        "maxX": 9.000,
-        "maxY": 40.000
-      }
+        "minX": 30.0,
+        "minY": 35.0,
+        "maxX": 31.0,
+        "maxY": 36.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 8,
-      "kind": "Lava",
+      "kind": "Door",
       "pairId": 0,
       "bounds": {
-        "minX": 16.000,
-        "minY": 45.000,
-        "maxX": 19.000,
-        "maxY": 48.000
-      }
+        "minX": 14.0,
+        "minY": 30.0,
+        "maxX": 15.0,
+        "maxY": 31.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     },
     {
       "id": 9,
-      "kind": "Poison",
+      "kind": "Pot",
       "pairId": 0,
       "bounds": {
-        "minX": 20.000,
-        "minY": 13.000,
-        "maxX": 21.000,
-        "maxY": 14.000
-      }
+        "minX": 16.0,
+        "minY": 16.0,
+        "maxX": 17.0,
+        "maxY": 17.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 10,
-      "kind": "Poison",
+      "kind": "Pot",
       "pairId": 0,
       "bounds": {
-        "minX": 16.000,
-        "minY": 5.000,
-        "maxX": 17.000,
-        "maxY": 6.000
-      }
+        "minX": 33.0,
+        "minY": 16.0,
+        "maxX": 34.0,
+        "maxY": 17.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     },
     {
       "id": 11,
-      "kind": "Poison",
+      "kind": "Pot",
       "pairId": 0,
       "bounds": {
-        "minX": 37.000,
-        "minY": 33.000,
-        "maxX": 38.000,
-        "maxY": 34.000
-      }
+        "minX": 33.0,
+        "minY": 33.0,
+        "maxX": 34.0,
+        "maxY": 34.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 12,
-      "kind": "Poison",
+      "kind": "Pot",
       "pairId": 0,
       "bounds": {
-        "minX": 13.000,
-        "minY": 12.000,
-        "maxX": 14.000,
-        "maxY": 13.000
-      }
+        "minX": 16.0,
+        "minY": 33.0,
+        "maxX": 17.0,
+        "maxY": 34.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     },
     {
       "id": 13,
-      "kind": "Door",
+      "kind": "Pot",
       "pairId": 0,
       "bounds": {
-        "minX": 43.000,
-        "minY": 29.500,
-        "maxX": 44.000,
-        "maxY": 31.500
-      }
+        "minX": 21.0,
+        "minY": 16.0,
+        "maxX": 22.0,
+        "maxY": 17.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 14,
-      "kind": "Door",
+      "kind": "Pot",
       "pairId": 0,
       "bounds": {
-        "minX": 3.000,
-        "minY": 6.500,
-        "maxX": 4.000,
-        "maxY": 8.500
-      }
+        "minX": 33.0,
+        "minY": 21.0,
+        "maxX": 34.0,
+        "maxY": 22.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     },
     {
       "id": 15,
-      "kind": "Portal",
-      "pairId": 1,
+      "kind": "Pot",
+      "pairId": 0,
       "bounds": {
-        "minX": 9.000,
-        "minY": 45.000,
-        "maxX": 10.000,
-        "maxY": 46.000
-      }
+        "minX": 28.0,
+        "minY": 33.0,
+        "maxX": 29.0,
+        "maxY": 34.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 16,
-      "kind": "Portal",
-      "pairId": 1,
+      "kind": "Pot",
+      "pairId": 0,
       "bounds": {
-        "minX": 32.000,
-        "minY": 33.000,
-        "maxX": 33.000,
-        "maxY": 34.000
-      }
+        "minX": 16.0,
+        "minY": 28.0,
+        "maxX": 17.0,
+        "maxY": 29.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     },
     {
       "id": 17,
-      "kind": "Portal",
-      "pairId": 2,
+      "kind": "Chest",
+      "pairId": 0,
       "bounds": {
-        "minX": 40.000,
-        "minY": 5.000,
-        "maxX": 41.000,
-        "maxY": 6.000
-      }
+        "minX": 16.0,
+        "minY": 22.0,
+        "maxX": 17.0,
+        "maxY": 23.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 18,
-      "kind": "Portal",
-      "pairId": 2,
+      "kind": "Chest",
+      "pairId": 0,
       "bounds": {
-        "minX": 3.000,
-        "minY": 48.000,
-        "maxX": 4.000,
-        "maxY": 49.000
-      }
+        "minX": 27.0,
+        "minY": 16.0,
+        "maxX": 28.0,
+        "maxY": 17.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     },
     {
       "id": 19,
-      "kind": "Portal",
-      "pairId": 3,
+      "kind": "Chest",
+      "pairId": 0,
       "bounds": {
-        "minX": 43.000,
-        "minY": 7.000,
-        "maxX": 44.000,
-        "maxY": 8.000
-      }
+        "minX": 33.0,
+        "minY": 27.0,
+        "maxX": 34.0,
+        "maxY": 28.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 20,
-      "kind": "Portal",
-      "pairId": 3,
+      "kind": "Chest",
+      "pairId": 0,
       "bounds": {
-        "minX": 6.000,
-        "minY": 32.000,
-        "maxX": 7.000,
-        "maxY": 33.000
-      }
+        "minX": 22.0,
+        "minY": 33.0,
+        "maxX": 23.0,
+        "maxY": 34.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     },
     {
       "id": 21,
-      "kind": "Chest",
+      "kind": "Pot",
       "pairId": 0,
       "bounds": {
-        "minX": 13.000,
-        "minY": 29.000,
-        "maxX": 14.000,
-        "maxY": 30.000
-      }
+        "minX": 12.0,
+        "minY": 16.0,
+        "maxX": 13.0,
+        "maxY": 17.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 22,
-      "kind": "Chest",
+      "kind": "Pot",
       "pairId": 0,
       "bounds": {
-        "minX": 47.000,
-        "minY": 27.000,
-        "maxX": 48.000,
-        "maxY": 28.000
-      }
+        "minX": 33.0,
+        "minY": 12.0,
+        "maxX": 34.0,
+        "maxY": 13.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     },
     {
       "id": 23,
-      "kind": "Chest",
+      "kind": "Pot",
       "pairId": 0,
       "bounds": {
-        "minX": 20.000,
-        "minY": 1.000,
-        "maxX": 21.000,
-        "maxY": 2.000
-      }
+        "minX": 37.0,
+        "minY": 33.0,
+        "maxX": 38.0,
+        "maxY": 34.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 24,
-      "kind": "Chest",
+      "kind": "Pot",
       "pairId": 0,
       "bounds": {
-        "minX": 7.000,
-        "minY": 43.000,
-        "maxX": 8.000,
-        "maxY": 44.000
-      }
+        "minX": 16.0,
+        "minY": 37.0,
+        "maxX": 17.0,
+        "maxY": 38.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     },
     {
       "id": 25,
-      "kind": "Chest",
+      "kind": "Pot",
       "pairId": 0,
       "bounds": {
-        "minX": 17.000,
-        "minY": 37.000,
-        "maxX": 18.000,
-        "maxY": 38.000
-      }
+        "minX": 16.0,
+        "minY": 12.0,
+        "maxX": 17.0,
+        "maxY": 13.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 26,
-      "kind": "Chest",
+      "kind": "Pot",
       "pairId": 0,
       "bounds": {
-        "minX": 9.000,
-        "minY": 17.000,
-        "maxX": 10.000,
-        "maxY": 18.000
-      }
+        "minX": 37.0,
+        "minY": 16.0,
+        "maxX": 38.0,
+        "maxY": 17.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     },
     {
       "id": 27,
-      "kind": "Chest",
+      "kind": "Pot",
       "pairId": 0,
       "bounds": {
-        "minX": 26.000,
-        "minY": 17.000,
-        "maxX": 27.000,
-        "maxY": 18.000
-      }
+        "minX": 33.0,
+        "minY": 37.0,
+        "maxX": 34.0,
+        "maxY": 38.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 28,
-      "kind": "Chest",
+      "kind": "Pot",
       "pairId": 0,
       "bounds": {
-        "minX": 22.000,
-        "minY": 18.000,
-        "maxX": 23.000,
-        "maxY": 19.000
-      }
+        "minX": 12.0,
+        "minY": 33.0,
+        "maxX": 13.0,
+        "maxY": 34.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     },
     {
       "id": 29,
-      "kind": "Chest",
+      "kind": "Bush",
       "pairId": 0,
       "bounds": {
-        "minX": 1.000,
-        "minY": 5.000,
-        "maxX": 2.000,
-        "maxY": 6.000
-      }
+        "minX": 4.0,
+        "minY": 21.0,
+        "maxX": 5.0,
+        "maxY": 22.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 30,
-      "kind": "Chest",
+      "kind": "Bush",
       "pairId": 0,
       "bounds": {
-        "minX": 25.000,
-        "minY": 40.000,
-        "maxX": 26.000,
-        "maxY": 41.000
-      }
+        "minX": 28.0,
+        "minY": 4.0,
+        "maxX": 29.0,
+        "maxY": 5.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     },
     {
       "id": 31,
-      "kind": "Chest",
+      "kind": "Bush",
       "pairId": 0,
       "bounds": {
-        "minX": 42.000,
-        "minY": 13.000,
-        "maxX": 43.000,
-        "maxY": 14.000
-      }
+        "minX": 45.0,
+        "minY": 28.0,
+        "maxX": 46.0,
+        "maxY": 29.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 32,
-      "kind": "Chest",
+      "kind": "Bush",
       "pairId": 0,
       "bounds": {
-        "minX": 36.000,
-        "minY": 28.000,
-        "maxX": 37.000,
-        "maxY": 29.000
-      }
+        "minX": 21.0,
+        "minY": 45.0,
+        "maxX": 22.0,
+        "maxY": 46.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     },
     {
       "id": 33,
-      "kind": "Chest",
+      "kind": "Bush",
       "pairId": 0,
       "bounds": {
-        "minX": 26.000,
-        "minY": 26.000,
-        "maxX": 27.000,
-        "maxY": 27.000
-      }
+        "minX": 5.0,
+        "minY": 21.0,
+        "maxX": 6.0,
+        "maxY": 22.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 34,
-      "kind": "Chest",
+      "kind": "Bush",
       "pairId": 0,
       "bounds": {
-        "minX": 21.000,
-        "minY": 23.000,
-        "maxX": 22.000,
-        "maxY": 24.000
-      }
+        "minX": 28.0,
+        "minY": 5.0,
+        "maxX": 29.0,
+        "maxY": 6.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     },
     {
       "id": 35,
-      "kind": "Chest",
+      "kind": "Bush",
       "pairId": 0,
       "bounds": {
-        "minX": 16.000,
-        "minY": 3.000,
-        "maxX": 17.000,
-        "maxY": 4.000
-      }
+        "minX": 44.0,
+        "minY": 28.0,
+        "maxX": 45.0,
+        "maxY": 29.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 36,
-      "kind": "Chest",
+      "kind": "Bush",
       "pairId": 0,
       "bounds": {
-        "minX": 27.000,
-        "minY": 41.000,
-        "maxX": 28.000,
-        "maxY": 42.000
-      }
+        "minX": 21.0,
+        "minY": 44.0,
+        "maxX": 22.0,
+        "maxY": 45.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     },
     {
       "id": 37,
-      "kind": "Chest",
+      "kind": "Bush",
       "pairId": 0,
       "bounds": {
-        "minX": 27.000,
-        "minY": 37.000,
-        "maxX": 28.000,
-        "maxY": 38.000
-      }
+        "minX": 4.0,
+        "minY": 20.0,
+        "maxX": 5.0,
+        "maxY": 21.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 38,
-      "kind": "Chest",
+      "kind": "Bush",
       "pairId": 0,
       "bounds": {
-        "minX": 39.000,
-        "minY": 7.000,
-        "maxX": 40.000,
-        "maxY": 8.000
-      }
+        "minX": 29.0,
+        "minY": 4.0,
+        "maxX": 30.0,
+        "maxY": 5.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     },
     {
       "id": 39,
-      "kind": "Chest",
+      "kind": "Bush",
       "pairId": 0,
       "bounds": {
-        "minX": 7.000,
-        "minY": 12.000,
-        "maxX": 8.000,
-        "maxY": 13.000
-      }
+        "minX": 45.0,
+        "minY": 29.0,
+        "maxX": 46.0,
+        "maxY": 30.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 40,
-      "kind": "Chest",
+      "kind": "Bush",
       "pairId": 0,
       "bounds": {
-        "minX": 46.000,
-        "minY": 23.000,
-        "maxX": 47.000,
-        "maxY": 24.000
-      }
+        "minX": 20.0,
+        "minY": 45.0,
+        "maxX": 21.0,
+        "maxY": 46.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     },
     {
       "id": 41,
-      "kind": "Chest",
+      "kind": "Bush",
       "pairId": 0,
       "bounds": {
-        "minX": 35.000,
-        "minY": 13.000,
-        "maxX": 36.000,
-        "maxY": 14.000
-      }
+        "minX": 21.0,
+        "minY": 7.0,
+        "maxX": 22.0,
+        "maxY": 8.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 42,
-      "kind": "Chest",
+      "kind": "Bush",
       "pairId": 0,
       "bounds": {
-        "minX": 35.000,
-        "minY": 17.000,
-        "maxX": 36.000,
-        "maxY": 18.000
-      }
+        "minX": 42.0,
+        "minY": 21.0,
+        "maxX": 43.0,
+        "maxY": 22.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     },
     {
       "id": 43,
-      "kind": "Chest",
+      "kind": "Bush",
       "pairId": 0,
       "bounds": {
-        "minX": 2.000,
-        "minY": 27.000,
-        "maxX": 3.000,
-        "maxY": 28.000
-      }
+        "minX": 28.0,
+        "minY": 42.0,
+        "maxX": 29.0,
+        "maxY": 43.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 44,
-      "kind": "Chest",
+      "kind": "Bush",
       "pairId": 0,
       "bounds": {
-        "minX": 5.000,
-        "minY": 43.000,
-        "maxX": 6.000,
-        "maxY": 44.000
-      }
+        "minX": 7.0,
+        "minY": 28.0,
+        "maxX": 8.0,
+        "maxY": 29.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     },
     {
       "id": 45,
-      "kind": "Chest",
+      "kind": "Bush",
       "pairId": 0,
       "bounds": {
-        "minX": 41.000,
-        "minY": 1.000,
-        "maxX": 42.000,
-        "maxY": 2.000
-      }
+        "minX": 22.0,
+        "minY": 7.0,
+        "maxX": 23.0,
+        "maxY": 8.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 46,
-      "kind": "Chest",
+      "kind": "Bush",
       "pairId": 0,
       "bounds": {
-        "minX": 47.000,
-        "minY": 2.000,
-        "maxX": 48.000,
-        "maxY": 3.000
-      }
+        "minX": 42.0,
+        "minY": 22.0,
+        "maxX": 43.0,
+        "maxY": 23.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     },
     {
       "id": 47,
-      "kind": "Chest",
+      "kind": "Bush",
       "pairId": 0,
       "bounds": {
-        "minX": 41.000,
-        "minY": 31.000,
-        "maxX": 42.000,
-        "maxY": 32.000
-      }
+        "minX": 27.0,
+        "minY": 42.0,
+        "maxX": 28.0,
+        "maxY": 43.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 48,
-      "kind": "Chest",
+      "kind": "Bush",
       "pairId": 0,
       "bounds": {
-        "minX": 7.000,
-        "minY": 29.000,
-        "maxX": 8.000,
-        "maxY": 30.000
-      }
+        "minX": 7.0,
+        "minY": 27.0,
+        "maxX": 8.0,
+        "maxY": 28.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     },
     {
       "id": 49,
-      "kind": "Chest",
+      "kind": "Bush",
       "pairId": 0,
       "bounds": {
-        "minX": 15.000,
-        "minY": 28.000,
-        "maxX": 16.000,
-        "maxY": 29.000
-      }
+        "minX": 21.0,
+        "minY": 8.0,
+        "maxX": 22.0,
+        "maxY": 9.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 50,
-      "kind": "Chest",
+      "kind": "Bush",
       "pairId": 0,
       "bounds": {
-        "minX": 6.000,
-        "minY": 45.000,
-        "maxX": 7.000,
-        "maxY": 46.000
-      }
+        "minX": 41.0,
+        "minY": 21.0,
+        "maxX": 42.0,
+        "maxY": 22.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     },
     {
       "id": 51,
-      "kind": "Chest",
+      "kind": "Bush",
       "pairId": 0,
       "bounds": {
-        "minX": 9.000,
-        "minY": 9.000,
-        "maxX": 10.000,
-        "maxY": 10.000
-      }
+        "minX": 28.0,
+        "minY": 41.0,
+        "maxX": 29.0,
+        "maxY": 42.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 52,
-      "kind": "Chest",
+      "kind": "Bush",
       "pairId": 0,
       "bounds": {
-        "minX": 12.000,
-        "minY": 32.000,
-        "maxX": 13.000,
-        "maxY": 33.000
-      }
+        "minX": 8.0,
+        "minY": 28.0,
+        "maxX": 9.0,
+        "maxY": 29.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     },
     {
       "id": 53,
-      "kind": "Chest",
-      "pairId": 0,
+      "kind": "Portal",
+      "pairId": 1,
       "bounds": {
-        "minX": 46.000,
-        "minY": 15.000,
-        "maxX": 47.000,
-        "maxY": 16.000
-      }
+        "minX": 3.0,
+        "minY": 3.0,
+        "maxX": 6.0,
+        "maxY": 5.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 54,
-      "kind": "Chest",
-      "pairId": 0,
+      "kind": "Portal",
+      "pairId": 2,
       "bounds": {
-        "minX": 15.000,
-        "minY": 32.000,
-        "maxX": 16.000,
-        "maxY": 33.000
-      }
+        "minX": 44.0,
+        "minY": 3.0,
+        "maxX": 47.0,
+        "maxY": 5.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 55,
-      "kind": "Chest",
-      "pairId": 0,
+      "kind": "Portal",
+      "pairId": 1,
       "bounds": {
-        "minX": 25.000,
-        "minY": 22.000,
-        "maxX": 26.000,
-        "maxY": 23.000
-      }
+        "minX": 44.0,
+        "minY": 45.0,
+        "maxX": 47.0,
+        "maxY": 47.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 56,
-      "kind": "Chest",
-      "pairId": 0,
+      "kind": "Portal",
+      "pairId": 2,
       "bounds": {
-        "minX": 42.000,
-        "minY": 36.000,
-        "maxX": 43.000,
-        "maxY": 37.000
-      }
+        "minX": 2.0,
+        "minY": 44.0,
+        "maxX": 5.0,
+        "maxY": 46.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 57,
       "kind": "Chest",
       "pairId": 0,
       "bounds": {
-        "minX": 35.000,
-        "minY": 8.000,
-        "maxX": 36.000,
-        "maxY": 9.000
-      }
+        "minX": 8.0,
+        "minY": 5.0,
+        "maxX": 9.0,
+        "maxY": 6.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 58,
       "kind": "Chest",
       "pairId": 0,
       "bounds": {
-        "minX": 25.000,
-        "minY": 5.000,
-        "maxX": 26.000,
-        "maxY": 6.000
-      }
+        "minX": 44.0,
+        "minY": 8.0,
+        "maxX": 45.0,
+        "maxY": 9.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     },
     {
       "id": 59,
       "kind": "Chest",
       "pairId": 0,
       "bounds": {
-        "minX": 18.000,
-        "minY": 35.000,
-        "maxX": 19.000,
-        "maxY": 36.000
-      }
+        "minX": 41.0,
+        "minY": 44.0,
+        "maxX": 42.0,
+        "maxY": 45.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 60,
       "kind": "Chest",
       "pairId": 0,
       "bounds": {
-        "minX": 41.000,
-        "minY": 11.000,
-        "maxX": 42.000,
-        "maxY": 12.000
-      }
+        "minX": 5.0,
+        "minY": 41.0,
+        "maxX": 6.0,
+        "maxY": 42.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     },
     {
       "id": 61,
-      "kind": "Chest",
+      "kind": "Pot",
       "pairId": 0,
       "bounds": {
-        "minX": 2.000,
-        "minY": 13.000,
-        "maxX": 3.000,
-        "maxY": 14.000
-      }
+        "minX": 2.0,
+        "minY": 9.0,
+        "maxX": 3.0,
+        "maxY": 10.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 62,
-      "kind": "Chest",
+      "kind": "Pot",
       "pairId": 0,
       "bounds": {
-        "minX": 45.000,
-        "minY": 33.000,
-        "maxX": 46.000,
-        "maxY": 34.000
-      }
+        "minX": 40.0,
+        "minY": 2.0,
+        "maxX": 41.0,
+        "maxY": 3.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     },
     {
       "id": 63,
-      "kind": "Chest",
+      "kind": "Pot",
       "pairId": 0,
       "bounds": {
-        "minX": 17.000,
-        "minY": 13.000,
-        "maxX": 18.000,
-        "maxY": 14.000
-      }
+        "minX": 47.0,
+        "minY": 40.0,
+        "maxX": 48.0,
+        "maxY": 41.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 64,
-      "kind": "Chest",
+      "kind": "Pot",
       "pairId": 0,
       "bounds": {
-        "minX": 45.000,
-        "minY": 7.000,
-        "maxX": 46.000,
-        "maxY": 8.000
-      }
+        "minX": 9.0,
+        "minY": 47.0,
+        "maxX": 10.0,
+        "maxY": 48.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     },
     {
       "id": 65,
-      "kind": "Chest",
+      "kind": "Pot",
       "pairId": 0,
       "bounds": {
-        "minX": 11.000,
-        "minY": 46.000,
-        "maxX": 12.000,
-        "maxY": 47.000
-      }
+        "minX": 9.0,
+        "minY": 2.0,
+        "maxX": 10.0,
+        "maxY": 3.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 66,
-      "kind": "Chest",
+      "kind": "Pot",
       "pairId": 0,
       "bounds": {
-        "minX": 47.000,
-        "minY": 30.000,
-        "maxX": 48.000,
-        "maxY": 31.000
-      }
+        "minX": 47.0,
+        "minY": 9.0,
+        "maxX": 48.0,
+        "maxY": 10.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     },
     {
       "id": 67,
-      "kind": "Chest",
+      "kind": "Pot",
       "pairId": 0,
       "bounds": {
-        "minX": 32.000,
-        "minY": 43.000,
-        "maxX": 33.000,
-        "maxY": 44.000
-      }
+        "minX": 40.0,
+        "minY": 47.0,
+        "maxX": 41.0,
+        "maxY": 48.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 68,
-      "kind": "Chest",
+      "kind": "Pot",
       "pairId": 0,
       "bounds": {
-        "minX": 38.000,
-        "minY": 3.000,
-        "maxX": 39.000,
-        "maxY": 4.000
-      }
+        "minX": 2.0,
+        "minY": 40.0,
+        "maxX": 3.0,
+        "maxY": 41.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     },
     {
       "id": 69,
-      "kind": "Chest",
+      "kind": "Pot",
       "pairId": 0,
       "bounds": {
-        "minX": 6.000,
-        "minY": 1.000,
-        "maxX": 7.000,
-        "maxY": 2.000
-      }
+        "minX": 5.0,
+        "minY": 8.0,
+        "maxX": 6.0,
+        "maxY": 9.0
+      },
+      "art": "Barrel",
+      "hp": 15,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 70,
-      "kind": "Chest",
+      "kind": "Pot",
       "pairId": 0,
       "bounds": {
-        "minX": 28.000,
-        "minY": 2.000,
-        "maxX": 29.000,
-        "maxY": 3.000
-      }
+        "minX": 41.0,
+        "minY": 5.0,
+        "maxX": 42.0,
+        "maxY": 6.0
+      },
+      "art": "Barrel",
+      "hp": 15,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     },
     {
       "id": 71,
-      "kind": "Chest",
+      "kind": "Pot",
       "pairId": 0,
       "bounds": {
-        "minX": 12.000,
-        "minY": 1.000,
-        "maxX": 13.000,
-        "maxY": 2.000
-      }
+        "minX": 44.0,
+        "minY": 41.0,
+        "maxX": 45.0,
+        "maxY": 42.0
+      },
+      "art": "Barrel",
+      "hp": 15,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 72,
-      "kind": "Chest",
+      "kind": "Pot",
       "pairId": 0,
       "bounds": {
-        "minX": 7.000,
-        "minY": 10.000,
-        "maxX": 8.000,
-        "maxY": 11.000
-      }
+        "minX": 8.0,
+        "minY": 44.0,
+        "maxX": 9.0,
+        "maxY": 45.0
+      },
+      "art": "Barrel",
+      "hp": 15,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     },
     {
       "id": 73,
       "kind": "Chest",
       "pairId": 0,
       "bounds": {
-        "minX": 33.000,
-        "minY": 37.000,
-        "maxX": 34.000,
-        "maxY": 38.000
-      }
+        "minX": 4.0,
+        "minY": 8.0,
+        "maxX": 5.0,
+        "maxY": 9.0
+      },
+      "art": "CrateSmall",
+      "hp": 25,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 74,
       "kind": "Chest",
       "pairId": 0,
       "bounds": {
-        "minX": 37.000,
-        "minY": 21.000,
-        "maxX": 38.000,
-        "maxY": 22.000
-      }
+        "minX": 41.0,
+        "minY": 4.0,
+        "maxX": 42.0,
+        "maxY": 5.0
+      },
+      "art": "CrateSmall",
+      "hp": 25,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     },
     {
       "id": 75,
       "kind": "Chest",
       "pairId": 0,
       "bounds": {
-        "minX": 3.000,
-        "minY": 42.000,
-        "maxX": 4.000,
-        "maxY": 43.000
-      }
+        "minX": 45.0,
+        "minY": 41.0,
+        "maxX": 46.0,
+        "maxY": 42.0
+      },
+      "art": "CrateSmall",
+      "hp": 25,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 76,
       "kind": "Chest",
       "pairId": 0,
       "bounds": {
-        "minX": 23.000,
-        "minY": 37.000,
-        "maxX": 24.000,
-        "maxY": 38.000
-      }
+        "minX": 8.0,
+        "minY": 45.0,
+        "maxX": 9.0,
+        "maxY": 46.0
+      },
+      "art": "CrateSmall",
+      "hp": 25,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     },
     {
       "id": 77,
-      "kind": "Chest",
+      "kind": "Bush",
       "pairId": 0,
       "bounds": {
-        "minX": 1.000,
-        "minY": 46.000,
-        "maxX": 2.000,
-        "maxY": 47.000
-      }
+        "minX": 2.0,
+        "minY": 11.0,
+        "maxX": 3.0,
+        "maxY": 12.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 78,
-      "kind": "Chest",
+      "kind": "Bush",
       "pairId": 0,
       "bounds": {
-        "minX": 23.000,
-        "minY": 48.000,
-        "maxX": 24.000,
-        "maxY": 49.000
-      }
+        "minX": 38.0,
+        "minY": 2.0,
+        "maxX": 39.0,
+        "maxY": 3.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     },
     {
       "id": 79,
-      "kind": "Chest",
+      "kind": "Bush",
       "pairId": 0,
       "bounds": {
-        "minX": 3.000,
-        "minY": 46.000,
-        "maxX": 4.000,
-        "maxY": 47.000
-      }
+        "minX": 47.0,
+        "minY": 38.0,
+        "maxX": 48.0,
+        "maxY": 39.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 80,
-      "kind": "Chest",
+      "kind": "Bush",
       "pairId": 0,
       "bounds": {
-        "minX": 31.000,
-        "minY": 39.000,
-        "maxX": 32.000,
-        "maxY": 40.000
-      }
+        "minX": 11.0,
+        "minY": 47.0,
+        "maxX": 12.0,
+        "maxY": 48.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     },
     {
       "id": 81,
-      "kind": "Pot",
+      "kind": "Bush",
       "pairId": 0,
       "bounds": {
-        "minX": 47.000,
-        "minY": 40.000,
-        "maxX": 48.000,
-        "maxY": 41.000
-      }
+        "minX": 11.0,
+        "minY": 2.0,
+        "maxX": 12.0,
+        "maxY": 3.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 82,
-      "kind": "Pot",
+      "kind": "Bush",
       "pairId": 0,
       "bounds": {
-        "minX": 38.000,
-        "minY": 37.000,
-        "maxX": 39.000,
-        "maxY": 38.000
-      }
+        "minX": 47.0,
+        "minY": 11.0,
+        "maxX": 48.0,
+        "maxY": 12.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     },
     {
       "id": 83,
-      "kind": "Pot",
+      "kind": "Bush",
       "pairId": 0,
       "bounds": {
-        "minX": 45.000,
-        "minY": 25.000,
-        "maxX": 46.000,
-        "maxY": 26.000
-      }
+        "minX": 38.0,
+        "minY": 47.0,
+        "maxX": 39.0,
+        "maxY": 48.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 84,
-      "kind": "Pot",
+      "kind": "Bush",
       "pairId": 0,
       "bounds": {
-        "minX": 37.000,
-        "minY": 25.000,
-        "maxX": 38.000,
-        "maxY": 26.000
-      }
+        "minX": 2.0,
+        "minY": 38.0,
+        "maxX": 3.0,
+        "maxY": 39.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     },
     {
       "id": 85,
-      "kind": "Pot",
+      "kind": "Bush",
       "pairId": 0,
       "bounds": {
-        "minX": 36.000,
-        "minY": 15.000,
-        "maxX": 37.000,
-        "maxY": 16.000
-      }
+        "minX": 7.0,
+        "minY": 13.0,
+        "maxX": 8.0,
+        "maxY": 14.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 86,
-      "kind": "Pot",
+      "kind": "Bush",
       "pairId": 0,
       "bounds": {
-        "minX": 31.000,
-        "minY": 31.000,
-        "maxX": 32.000,
-        "maxY": 32.000
-      }
+        "minX": 36.0,
+        "minY": 7.0,
+        "maxX": 37.0,
+        "maxY": 8.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     },
     {
       "id": 87,
-      "kind": "Pot",
+      "kind": "Bush",
       "pairId": 0,
       "bounds": {
-        "minX": 22.000,
-        "minY": 11.000,
-        "maxX": 23.000,
-        "maxY": 12.000
-      }
+        "minX": 42.0,
+        "minY": 36.0,
+        "maxX": 43.0,
+        "maxY": 37.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 88,
-      "kind": "Pot",
+      "kind": "Bush",
       "pairId": 0,
       "bounds": {
-        "minX": 5.000,
-        "minY": 9.000,
-        "maxX": 6.000,
-        "maxY": 10.000
-      }
+        "minX": 13.0,
+        "minY": 42.0,
+        "maxX": 14.0,
+        "maxY": 43.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     },
     {
       "id": 89,
-      "kind": "Pot",
+      "kind": "Bush",
       "pairId": 0,
       "bounds": {
-        "minX": 29.000,
-        "minY": 35.000,
-        "maxX": 30.000,
-        "maxY": 36.000
-      }
+        "minX": 13.0,
+        "minY": 7.0,
+        "maxX": 14.0,
+        "maxY": 8.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 90,
-      "kind": "Pot",
+      "kind": "Bush",
       "pairId": 0,
       "bounds": {
-        "minX": 3.000,
-        "minY": 36.000,
-        "maxX": 4.000,
-        "maxY": 37.000
-      }
+        "minX": 42.0,
+        "minY": 13.0,
+        "maxX": 43.0,
+        "maxY": 14.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     },
     {
       "id": 91,
-      "kind": "Pot",
+      "kind": "Bush",
       "pairId": 0,
       "bounds": {
-        "minX": 46.000,
-        "minY": 19.000,
-        "maxX": 47.000,
-        "maxY": 20.000
-      }
+        "minX": 36.0,
+        "minY": 42.0,
+        "maxX": 37.0,
+        "maxY": 43.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
     },
     {
       "id": 92,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 23.000,
-        "minY": 35.000,
-        "maxX": 24.000,
-        "maxY": 36.000
-      }
-    },
-    {
-      "id": 93,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 38.000,
-        "minY": 16.000,
-        "maxX": 39.000,
-        "maxY": 17.000
-      }
-    },
-    {
-      "id": 94,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 45.000,
-        "minY": 46.000,
-        "maxX": 46.000,
-        "maxY": 47.000
-      }
-    },
-    {
-      "id": 95,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 47.000,
-        "minY": 5.000,
-        "maxX": 48.000,
-        "maxY": 6.000
-      }
-    },
-    {
-      "id": 96,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 45.000,
-        "minY": 10.000,
-        "maxX": 46.000,
-        "maxY": 11.000
-      }
-    },
-    {
-      "id": 97,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 48.000,
-        "minY": 22.000,
-        "maxX": 49.000,
-        "maxY": 23.000
-      }
-    },
-    {
-      "id": 98,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 5.000,
-        "minY": 21.000,
-        "maxX": 6.000,
-        "maxY": 22.000
-      }
-    },
-    {
-      "id": 99,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 20.000,
-        "minY": 25.000,
-        "maxX": 21.000,
-        "maxY": 26.000
-      }
-    },
-    {
-      "id": 100,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 41.000,
-        "minY": 18.000,
-        "maxX": 42.000,
-        "maxY": 19.000
-      }
-    },
-    {
-      "id": 101,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 30.000,
-        "minY": 16.000,
-        "maxX": 31.000,
-        "maxY": 17.000
-      }
-    },
-    {
-      "id": 102,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 7.000,
-        "minY": 7.000,
-        "maxX": 8.000,
-        "maxY": 8.000
-      }
-    },
-    {
-      "id": 103,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 11.000,
-        "minY": 28.000,
-        "maxX": 12.000,
-        "maxY": 29.000
-      }
-    },
-    {
-      "id": 104,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 1.000,
-        "minY": 36.000,
-        "maxX": 2.000,
-        "maxY": 37.000
-      }
-    },
-    {
-      "id": 105,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 33.000,
-        "minY": 45.000,
-        "maxX": 34.000,
-        "maxY": 46.000
-      }
-    },
-    {
-      "id": 106,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 10.000,
-        "minY": 7.000,
-        "maxX": 11.000,
-        "maxY": 8.000
-      }
-    },
-    {
-      "id": 107,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 15.000,
-        "minY": 9.000,
-        "maxX": 16.000,
-        "maxY": 10.000
-      }
-    },
-    {
-      "id": 108,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 40.000,
-        "minY": 37.000,
-        "maxX": 41.000,
-        "maxY": 38.000
-      }
-    },
-    {
-      "id": 109,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 35.000,
-        "minY": 42.000,
-        "maxX": 36.000,
-        "maxY": 43.000
-      }
-    },
-    {
-      "id": 110,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 19.000,
-        "minY": 32.000,
-        "maxX": 20.000,
-        "maxY": 33.000
-      }
-    },
-    {
-      "id": 111,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 8.000,
-        "minY": 20.000,
-        "maxX": 9.000,
-        "maxY": 21.000
-      }
-    },
-    {
-      "id": 112,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 32.000,
-        "minY": 21.000,
-        "maxX": 33.000,
-        "maxY": 22.000
-      }
-    },
-    {
-      "id": 113,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 23.000,
-        "minY": 32.000,
-        "maxX": 24.000,
-        "maxY": 33.000
-      }
-    },
-    {
-      "id": 114,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 20.000,
-        "minY": 30.000,
-        "maxX": 21.000,
-        "maxY": 31.000
-      }
-    },
-    {
-      "id": 115,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 43.000,
-        "minY": 20.000,
-        "maxX": 44.000,
-        "maxY": 21.000
-      }
-    },
-    {
-      "id": 116,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 25.000,
-        "minY": 37.000,
-        "maxX": 26.000,
-        "maxY": 38.000
-      }
-    },
-    {
-      "id": 117,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 6.000,
-        "minY": 47.000,
-        "maxX": 7.000,
-        "maxY": 48.000
-      }
-    },
-    {
-      "id": 118,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 17.000,
-        "minY": 39.000,
-        "maxX": 18.000,
-        "maxY": 40.000
-      }
-    },
-    {
-      "id": 119,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 1.000,
-        "minY": 18.000,
-        "maxX": 2.000,
-        "maxY": 19.000
-      }
-    },
-    {
-      "id": 120,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 3.000,
-        "minY": 10.000,
-        "maxX": 4.000,
-        "maxY": 11.000
-      }
-    },
-    {
-      "id": 121,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 40.000,
-        "minY": 41.000,
-        "maxX": 41.000,
-        "maxY": 42.000
-      }
-    },
-    {
-      "id": 122,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 20.000,
-        "minY": 48.000,
-        "maxX": 21.000,
-        "maxY": 49.000
-      }
-    },
-    {
-      "id": 123,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 48.000,
-        "minY": 37.000,
-        "maxX": 49.000,
-        "maxY": 38.000
-      }
-    },
-    {
-      "id": 124,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 7.000,
-        "minY": 3.000,
-        "maxX": 8.000,
-        "maxY": 4.000
-      }
-    },
-    {
-      "id": 125,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 37.000,
-        "minY": 39.000,
-        "maxX": 38.000,
-        "maxY": 40.000
-      }
-    },
-    {
-      "id": 126,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 16.000,
-        "minY": 17.000,
-        "maxX": 17.000,
-        "maxY": 18.000
-      }
-    },
-    {
-      "id": 127,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 25.000,
-        "minY": 2.000,
-        "maxX": 26.000,
-        "maxY": 3.000
-      }
-    },
-    {
-      "id": 128,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 43.000,
-        "minY": 2.000,
-        "maxX": 44.000,
-        "maxY": 3.000
-      }
-    },
-    {
-      "id": 129,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 37.000,
-        "minY": 31.000,
-        "maxX": 38.000,
-        "maxY": 32.000
-      }
-    },
-    {
-      "id": 130,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 39.000,
-        "minY": 12.000,
-        "maxX": 40.000,
-        "maxY": 13.000
-      }
-    },
-    {
-      "id": 131,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 18.000,
-        "minY": 15.000,
-        "maxX": 19.000,
-        "maxY": 16.000
-      }
-    },
-    {
-      "id": 132,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 11.000,
-        "minY": 20.000,
-        "maxX": 12.000,
-        "maxY": 21.000
-      }
-    },
-    {
-      "id": 133,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 31.000,
-        "minY": 3.000,
-        "maxX": 32.000,
-        "maxY": 4.000
-      }
-    },
-    {
-      "id": 134,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 18.000,
-        "minY": 20.000,
-        "maxX": 19.000,
-        "maxY": 21.000
-      }
-    },
-    {
-      "id": 135,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 1.000,
-        "minY": 42.000,
-        "maxX": 2.000,
-        "maxY": 43.000
-      }
-    },
-    {
-      "id": 136,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 19.000,
-        "minY": 28.000,
-        "maxX": 20.000,
-        "maxY": 29.000
-      }
-    },
-    {
-      "id": 137,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 29.000,
-        "minY": 45.000,
-        "maxX": 30.000,
-        "maxY": 46.000
-      }
-    },
-    {
-      "id": 138,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 38.000,
-        "minY": 28.000,
-        "maxX": 39.000,
-        "maxY": 29.000
-      }
-    },
-    {
-      "id": 139,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 20.000,
-        "minY": 17.000,
-        "maxX": 21.000,
-        "maxY": 18.000
-      }
-    },
-    {
-      "id": 140,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 9.000,
-        "minY": 48.000,
-        "maxX": 10.000,
-        "maxY": 49.000
-      }
-    },
-    {
-      "id": 141,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 48.000,
-        "minY": 15.000,
-        "maxX": 49.000,
-        "maxY": 16.000
-      }
-    },
-    {
-      "id": 142,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 17.000,
-        "minY": 29.000,
-        "maxX": 18.000,
-        "maxY": 30.000
-      }
-    },
-    {
-      "id": 143,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 12.000,
-        "minY": 18.000,
-        "maxX": 13.000,
-        "maxY": 19.000
-      }
-    },
-    {
-      "id": 144,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 40.000,
-        "minY": 16.000,
-        "maxX": 41.000,
-        "maxY": 17.000
-      }
-    },
-    {
-      "id": 145,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 11.000,
-        "minY": 9.000,
-        "maxX": 12.000,
-        "maxY": 10.000
-      }
-    },
-    {
-      "id": 146,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 33.000,
-        "minY": 31.000,
-        "maxX": 34.000,
-        "maxY": 32.000
-      }
-    },
-    {
-      "id": 147,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 27.000,
-        "minY": 32.000,
-        "maxX": 28.000,
-        "maxY": 33.000
-      }
-    },
-    {
-      "id": 148,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 8.000,
-        "minY": 33.000,
-        "maxX": 9.000,
-        "maxY": 34.000
-      }
-    },
-    {
-      "id": 149,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 30.000,
-        "minY": 37.000,
-        "maxX": 31.000,
-        "maxY": 38.000
-      }
-    },
-    {
-      "id": 150,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 40.000,
-        "minY": 33.000,
-        "maxX": 41.000,
-        "maxY": 34.000
-      }
-    },
-    {
-      "id": 151,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 32.000,
-        "minY": 11.000,
-        "maxX": 33.000,
-        "maxY": 12.000
-      }
-    },
-    {
-      "id": 152,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 5.000,
-        "minY": 7.000,
-        "maxX": 6.000,
-        "maxY": 8.000
-      }
-    },
-    {
-      "id": 153,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 10.000,
-        "minY": 33.000,
-        "maxX": 11.000,
-        "maxY": 34.000
-      }
-    },
-    {
-      "id": 154,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 39.000,
-        "minY": 45.000,
-        "maxX": 40.000,
-        "maxY": 46.000
-      }
-    },
-    {
-      "id": 155,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 23.000,
-        "minY": 41.000,
-        "maxX": 24.000,
-        "maxY": 42.000
-      }
-    },
-    {
-      "id": 156,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 19.000,
-        "minY": 23.000,
-        "maxX": 20.000,
-        "maxY": 24.000
-      }
-    },
-    {
-      "id": 157,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 19.000,
-        "minY": 11.000,
-        "maxX": 20.000,
-        "maxY": 12.000
-      }
-    },
-    {
-      "id": 158,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 16.000,
-        "minY": 11.000,
-        "maxX": 17.000,
-        "maxY": 12.000
-      }
-    },
-    {
-      "id": 159,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 37.000,
-        "minY": 46.000,
-        "maxX": 38.000,
-        "maxY": 47.000
-      }
-    },
-    {
-      "id": 160,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 5.000,
-        "minY": 19.000,
-        "maxX": 6.000,
-        "maxY": 20.000
-      }
-    },
-    {
-      "id": 161,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 28.000,
-        "minY": 17.000,
-        "maxX": 29.000,
-        "maxY": 18.000
-      }
-    },
-    {
-      "id": 162,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 30.000,
-        "minY": 47.000,
-        "maxX": 31.000,
-        "maxY": 48.000
-      }
-    },
-    {
-      "id": 163,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 23.000,
-        "minY": 3.000,
-        "maxX": 24.000,
-        "maxY": 4.000
-      }
-    },
-    {
-      "id": 164,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 16.000,
-        "minY": 43.000,
-        "maxX": 17.000,
-        "maxY": 44.000
-      }
-    },
-    {
-      "id": 165,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 9.000,
-        "minY": 27.000,
-        "maxX": 10.000,
-        "maxY": 28.000
-      }
-    },
-    {
-      "id": 166,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 27.000,
-        "minY": 48.000,
-        "maxX": 28.000,
-        "maxY": 49.000
-      }
-    },
-    {
-      "id": 167,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 13.000,
-        "minY": 23.000,
-        "maxX": 14.000,
-        "maxY": 24.000
-      }
-    },
-    {
-      "id": 168,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 23.000,
-        "minY": 7.000,
-        "maxX": 24.000,
-        "maxY": 8.000
-      }
-    },
-    {
-      "id": 169,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 29.000,
-        "minY": 21.000,
-        "maxX": 30.000,
-        "maxY": 22.000
-      }
-    },
-    {
-      "id": 170,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 22.000,
-        "minY": 5.000,
-        "maxX": 23.000,
-        "maxY": 6.000
-      }
-    },
-    {
-      "id": 171,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
-        "minX": 35.750,
-        "minY": 9.750,
-        "maxX": 37.250,
-        "maxY": 11.250
-      }
-    },
-    {
-      "id": 172,
-      "kind": "Bush",
-      "pairId": 0,
-      "bounds": {
-        "minX": 21.750,
-        "minY": 8.750,
-        "maxX": 23.250,
-        "maxY": 10.250
-      }
-    },
-    {
-      "id": 173,
-      "kind": "Bush",
-      "pairId": 0,
-      "bounds": {
-        "minX": 16.750,
-        "minY": 25.750,
-        "maxX": 18.250,
-        "maxY": 27.250
-      }
-    },
-    {
-      "id": 174,
-      "kind": "Bush",
-      "pairId": 0,
-      "bounds": {
-        "minX": 27.750,
-        "minY": 9.750,
-        "maxX": 29.250,
-        "maxY": 11.250
-      }
-    },
-    {
-      "id": 175,
-      "kind": "Bush",
-      "pairId": 0,
-      "bounds": {
-        "minX": 20.750,
-        "minY": 41.750,
-        "maxX": 22.250,
-        "maxY": 43.250
-      }
-    },
-    {
-      "id": 176,
-      "kind": "Bush",
-      "pairId": 0,
-      "bounds": {
-        "minX": 35.750,
-        "minY": 35.750,
-        "maxX": 37.250,
-        "maxY": 37.250
-      }
-    },
-    {
-      "id": 177,
-      "kind": "Bush",
-      "pairId": 0,
-      "bounds": {
-        "minX": 11.750,
-        "minY": 41.750,
-        "maxX": 13.250,
-        "maxY": 43.250
-      }
-    },
-    {
-      "id": 178,
-      "kind": "Bush",
-      "pairId": 0,
-      "bounds": {
-        "minX": 16.750,
-        "minY": 31.750,
-        "maxX": 18.250,
-        "maxY": 33.250
-      }
-    },
-    {
-      "id": 179,
-      "kind": "Bush",
-      "pairId": 0,
-      "bounds": {
-        "minX": 10.750,
-        "minY": 25.750,
-        "maxX": 12.250,
-        "maxY": 27.250
-      }
-    },
-    {
-      "id": 180,
-      "kind": "Bush",
-      "pairId": 0,
-      "bounds": {
-        "minX": 38.750,
-        "minY": 17.750,
-        "maxX": 40.250,
-        "maxY": 19.250
-      }
-    },
-    {
-      "id": 181,
-      "kind": "Bush",
-      "pairId": 0,
-      "bounds": {
-        "minX": 9.750,
-        "minY": 10.750,
-        "maxX": 11.250,
-        "maxY": 12.250
-      }
-    },
-    {
-      "id": 182,
-      "kind": "Bush",
-      "pairId": 0,
-      "bounds": {
-        "minX": 36.750,
-        "minY": 6.750,
-        "maxX": 38.250,
-        "maxY": 8.250
-      }
-    },
-    {
-      "id": 183,
-      "kind": "Bush",
-      "pairId": 0,
-      "bounds": {
-        "minX": 27.750,
-        "minY": 11.750,
-        "maxX": 29.250,
-        "maxY": 13.250
-      }
-    },
-    {
-      "id": 184,
-      "kind": "Bush",
-      "pairId": 0,
-      "bounds": {
-        "minX": 8.750,
-        "minY": 28.750,
-        "maxX": 10.250,
-        "maxY": 30.250
-      }
-    },
-    {
-      "id": 185,
-      "kind": "Bush",
-      "pairId": 0,
-      "bounds": {
-        "minX": 10.750,
-        "minY": 38.750,
-        "maxX": 12.250,
-        "maxY": 40.250
-      }
-    },
-    {
-      "id": 186,
-      "kind": "Bush",
-      "pairId": 0,
-      "bounds": {
-        "minX": 39.750,
-        "minY": 46.750,
-        "maxX": 41.250,
-        "maxY": 48.250
-      }
-    },
-    {
-      "id": 187,
-      "kind": "Bush",
-      "pairId": 0,
-      "bounds": {
-        "minX": 38.750,
-        "minY": 21.750,
-        "maxX": 40.250,
-        "maxY": 23.250
-      }
-    },
-    {
-      "id": 188,
-      "kind": "Bush",
-      "pairId": 0,
-      "bounds": {
-        "minX": 41.750,
-        "minY": 15.750,
-        "maxX": 43.250,
-        "maxY": 17.250
-      }
-    },
-    {
-      "id": 189,
-      "kind": "Bush",
-      "pairId": 0,
-      "bounds": {
-        "minX": 8.750,
-        "minY": 30.750,
-        "maxX": 10.250,
-        "maxY": 32.250
-      }
-    },
-    {
-      "id": 190,
-      "kind": "Bush",
-      "pairId": 0,
-      "bounds": {
-        "minX": 46.750,
-        "minY": 10.750,
-        "maxX": 48.250,
-        "maxY": 12.250
-      }
-    },
-    {
-      "id": 191,
-      "kind": "Bush",
-      "pairId": 0,
-      "bounds": {
-        "minX": 19.750,
-        "minY": 18.750,
-        "maxX": 21.250,
-        "maxY": 20.250
-      }
-    },
-    {
-      "id": 192,
-      "kind": "Bush",
-      "pairId": 0,
-      "bounds": {
-        "minX": 7.750,
-        "minY": 21.750,
-        "maxX": 9.250,
-        "maxY": 23.250
-      }
-    },
-    {
-      "id": 193,
-      "kind": "Bush",
-      "pairId": 0,
-      "bounds": {
-        "minX": 31.750,
-        "minY": 18.750,
-        "maxX": 33.250,
-        "maxY": 20.250
-      }
-    },
-    {
-      "id": 194,
-      "kind": "Bush",
-      "pairId": 0,
-      "bounds": {
-        "minX": 28.750,
-        "minY": 31.750,
-        "maxX": 30.250,
-        "maxY": 33.250
-      }
-    },
-    {
-      "id": 195,
-      "kind": "Bush",
-      "pairId": 0,
-      "bounds": {
-        "minX": 29.750,
-        "minY": 18.750,
-        "maxX": 31.250,
-        "maxY": 20.250
-      }
-    },
-    {
-      "id": 196,
-      "kind": "Bush",
-      "pairId": 0,
-      "bounds": {
-        "minX": 46.750,
-        "minY": 8.750,
-        "maxX": 48.250,
-        "maxY": 10.250
-      }
-    },
-    {
-      "id": 197,
-      "kind": "Bush",
-      "pairId": 0,
-      "bounds": {
-        "minX": 17.750,
-        "minY": 16.750,
-        "maxX": 19.250,
-        "maxY": 18.250
-      }
-    },
-    {
-      "id": 198,
-      "kind": "Bush",
-      "pairId": 0,
-      "bounds": {
-        "minX": 26.750,
-        "minY": 19.750,
-        "maxX": 28.250,
-        "maxY": 21.250
-      }
-    },
-    {
-      "id": 199,
-      "kind": "Bush",
-      "pairId": 0,
-      "bounds": {
-        "minX": 30.750,
-        "minY": 27.750,
-        "maxX": 32.250,
-        "maxY": 29.250
-      }
-    },
-    {
-      "id": 200,
-      "kind": "Bush",
-      "pairId": 0,
-      "bounds": {
-        "minX": 26.750,
-        "minY": 6.750,
-        "maxX": 28.250,
-        "maxY": 8.250
-      }
-    },
-    {
-      "id": 201,
-      "kind": "Bush",
-      "pairId": 0,
-      "bounds": {
-        "minX": 8.750,
-        "minY": 1.750,
-        "maxX": 10.250,
-        "maxY": 3.250
-      }
-    },
-    {
-      "id": 202,
-      "kind": "Bush",
-      "pairId": 0,
-      "bounds": {
-        "minX": 45.750,
-        "minY": 16.750,
-        "maxX": 47.250,
-        "maxY": 18.250
-      }
-    },
-    {
-      "id": 203,
-      "kind": "Bush",
-      "pairId": 0,
-      "bounds": {
-        "minX": 31.750,
-        "minY": 15.750,
-        "maxX": 33.250,
-        "maxY": 17.250
-      }
-    },
-    {
-      "id": 204,
-      "kind": "Bush",
-      "pairId": 0,
-      "bounds": {
-        "minX": 7.750,
-        "minY": 40.750,
-        "maxX": 9.250,
-        "maxY": 42.250
-      }
-    },
-    {
-      "id": 205,
-      "kind": "Bush",
-      "pairId": 0,
-      "bounds": {
-        "minX": 41.750,
-        "minY": 45.750,
-        "maxX": 43.250,
-        "maxY": 47.250
-      }
-    },
-    {
-      "id": 206,
-      "kind": "Bush",
-      "pairId": 0,
-      "bounds": {
-        "minX": 1.750,
-        "minY": 20.750,
-        "maxX": 3.250,
-        "maxY": 22.250
-      }
-    },
-    {
-      "id": 207,
-      "kind": "Bush",
-      "pairId": 0,
-      "bounds": {
-        "minX": 37.750,
-        "minY": 41.750,
-        "maxX": 39.250,
-        "maxY": 43.250
-      }
-    },
-    {
-      "id": 208,
-      "kind": "Bush",
-      "pairId": 0,
-      "bounds": {
-        "minX": 20.750,
-        "minY": 45.750,
-        "maxX": 22.250,
-        "maxY": 47.250
-      }
-    },
-    {
-      "id": 209,
-      "kind": "Bush",
-      "pairId": 0,
-      "bounds": {
-        "minX": 41.750,
-        "minY": 41.750,
-        "maxX": 43.250,
-        "maxY": 43.250
-      }
-    },
-    {
-      "id": 210,
-      "kind": "Bush",
-      "pairId": 0,
-      "bounds": {
-        "minX": 37.750,
-        "minY": 8.750,
-        "maxX": 39.250,
-        "maxY": 10.250
-      }
-    },
-    {
-      "id": 211,
-      "kind": "Bush",
-      "pairId": 0,
-      "bounds": {
-        "minX": 25.750,
-        "minY": 45.750,
-        "maxX": 27.250,
-        "maxY": 47.250
-      }
-    },
-    {
-      "id": 212,
-      "kind": "Bush",
-      "pairId": 0,
-      "bounds": {
-        "minX": 38.750,
-        "minY": 19.750,
-        "maxX": 40.250,
-        "maxY": 21.250
-      }
-    },
-    {
-      "id": 213,
-      "kind": "Bush",
-      "pairId": 0,
-      "bounds": {
-        "minX": 1.750,
-        "minY": 37.750,
-        "maxX": 3.250,
-        "maxY": 39.250
-      }
-    },
-    {
-      "id": 214,
-      "kind": "Bush",
-      "pairId": 0,
-      "bounds": {
-        "minX": 5.750,
-        "minY": 40.750,
-        "maxX": 7.250,
-        "maxY": 42.250
-      }
-    },
-    {
-      "id": 215,
-      "kind": "Bush",
-      "pairId": 0,
-      "bounds": {
-        "minX": 20.750,
-        "minY": 26.750,
-        "maxX": 22.250,
-        "maxY": 28.250
-      }
+        "minX": 7.0,
+        "minY": 36.0,
+        "maxX": 8.0,
+        "maxY": 37.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
     }
-  ]
+  ],
+  "decorations": [
+    {
+      "name": "Flower",
+      "centerX": 6.5,
+      "centerY": 22.5,
+      "sizeX": 1.0,
+      "sizeY": 1.0,
+      "minX": 6.0,
+      "maxX": 7.0,
+      "minY": 22.0,
+      "maxY": 23.0,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Flower",
+      "centerX": 27.5,
+      "centerY": 6.5,
+      "sizeX": 1.0,
+      "sizeY": 1.0,
+      "minX": 27.0,
+      "maxX": 28.0,
+      "minY": 6.0,
+      "maxY": 7.0,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Flower",
+      "centerX": 43.5,
+      "centerY": 27.5,
+      "sizeX": 1.0,
+      "sizeY": 1.0,
+      "minX": 43.0,
+      "maxX": 44.0,
+      "minY": 27.0,
+      "maxY": 28.0,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Flower",
+      "centerX": 22.5,
+      "centerY": 43.5,
+      "sizeX": 1.0,
+      "sizeY": 1.0,
+      "minX": 22.0,
+      "maxX": 23.0,
+      "minY": 43.0,
+      "maxY": 44.0,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "GrassTuft",
+      "centerX": 10.5,
+      "centerY": 20.5,
+      "sizeX": 1.0,
+      "sizeY": 1.0,
+      "minX": 10.0,
+      "maxX": 11.0,
+      "minY": 20.0,
+      "maxY": 21.0,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "GrassTuft",
+      "centerX": 29.5,
+      "centerY": 10.5,
+      "sizeX": 1.0,
+      "sizeY": 1.0,
+      "minX": 29.0,
+      "maxX": 30.0,
+      "minY": 10.0,
+      "maxY": 11.0,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "GrassTuft",
+      "centerX": 39.5,
+      "centerY": 29.5,
+      "sizeX": 1.0,
+      "sizeY": 1.0,
+      "minX": 39.0,
+      "maxX": 40.0,
+      "minY": 29.0,
+      "maxY": 30.0,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "GrassTuft",
+      "centerX": 20.5,
+      "centerY": 39.5,
+      "sizeX": 1.0,
+      "sizeY": 1.0,
+      "minX": 20.0,
+      "maxX": 21.0,
+      "minY": 39.0,
+      "maxY": 40.0,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Pebble",
+      "centerX": 20.5,
+      "centerY": 10.5,
+      "sizeX": 1.0,
+      "sizeY": 1.0,
+      "minX": 20.0,
+      "maxX": 21.0,
+      "minY": 10.0,
+      "maxY": 11.0,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Pebble",
+      "centerX": 39.5,
+      "centerY": 20.5,
+      "sizeX": 1.0,
+      "sizeY": 1.0,
+      "minX": 39.0,
+      "maxX": 40.0,
+      "minY": 20.0,
+      "maxY": 21.0,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "Pebble",
+      "centerX": 29.5,
+      "centerY": 39.5,
+      "sizeX": 1.0,
+      "sizeY": 1.0,
+      "minX": 29.0,
+      "maxX": 30.0,
+      "minY": 39.0,
+      "maxY": 40.0,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "Pebble",
+      "centerX": 10.5,
+      "centerY": 29.5,
+      "sizeX": 1.0,
+      "sizeY": 1.0,
+      "minX": 10.0,
+      "maxX": 11.0,
+      "minY": 29.0,
+      "maxY": 30.0,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "SignE",
+      "centerX": 23.5,
+      "centerY": 3.5,
+      "sizeX": 1.0,
+      "sizeY": 1.0,
+      "minX": 23.0,
+      "maxX": 24.0,
+      "minY": 3.0,
+      "maxY": 4.0,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "SignE",
+      "centerX": 46.5,
+      "centerY": 23.5,
+      "sizeX": 1.0,
+      "sizeY": 1.0,
+      "minX": 46.0,
+      "maxX": 47.0,
+      "minY": 23.0,
+      "maxY": 24.0,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    },
+    {
+      "name": "SignE",
+      "centerX": 26.5,
+      "centerY": 46.5,
+      "sizeX": 1.0,
+      "sizeY": 1.0,
+      "minX": 26.0,
+      "maxX": 27.0,
+      "minY": 46.0,
+      "maxY": 47.0,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "name": "SignE",
+      "centerX": 3.5,
+      "centerY": 26.5,
+      "sizeX": 1.0,
+      "sizeY": 1.0,
+      "minX": 3.0,
+      "maxX": 4.0,
+      "minY": 26.0,
+      "maxY": 27.0,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": true
+    }
+  ],
+  "editor": {
+    "tool": "JungleMaze.LevelEditor",
+    "seed": 2026,
+    "decor": 0.14,
+    "path": [
+      [
+        24,
+        1
+      ],
+      [
+        25,
+        1
+      ],
+      [
+        24,
+        2
+      ],
+      [
+        25,
+        2
+      ],
+      [
+        24,
+        3
+      ],
+      [
+        25,
+        3
+      ],
+      [
+        24,
+        4
+      ],
+      [
+        25,
+        4
+      ],
+      [
+        24,
+        5
+      ],
+      [
+        25,
+        5
+      ],
+      [
+        24,
+        6
+      ],
+      [
+        25,
+        6
+      ],
+      [
+        24,
+        7
+      ],
+      [
+        25,
+        7
+      ],
+      [
+        24,
+        8
+      ],
+      [
+        25,
+        8
+      ],
+      [
+        24,
+        9
+      ],
+      [
+        25,
+        9
+      ],
+      [
+        24,
+        10
+      ],
+      [
+        25,
+        10
+      ],
+      [
+        24,
+        11
+      ],
+      [
+        25,
+        11
+      ],
+      [
+        24,
+        12
+      ],
+      [
+        25,
+        12
+      ],
+      [
+        24,
+        13
+      ],
+      [
+        25,
+        13
+      ],
+      [
+        24,
+        14
+      ],
+      [
+        25,
+        14
+      ],
+      [
+        24,
+        15
+      ],
+      [
+        25,
+        15
+      ],
+      [
+        24,
+        16
+      ],
+      [
+        25,
+        16
+      ],
+      [
+        24,
+        17
+      ],
+      [
+        25,
+        17
+      ],
+      [
+        24,
+        18
+      ],
+      [
+        25,
+        18
+      ],
+      [
+        24,
+        19
+      ],
+      [
+        25,
+        19
+      ],
+      [
+        20,
+        20
+      ],
+      [
+        21,
+        20
+      ],
+      [
+        22,
+        20
+      ],
+      [
+        23,
+        20
+      ],
+      [
+        24,
+        20
+      ],
+      [
+        25,
+        20
+      ],
+      [
+        26,
+        20
+      ],
+      [
+        27,
+        20
+      ],
+      [
+        28,
+        20
+      ],
+      [
+        29,
+        20
+      ],
+      [
+        20,
+        21
+      ],
+      [
+        21,
+        21
+      ],
+      [
+        22,
+        21
+      ],
+      [
+        23,
+        21
+      ],
+      [
+        24,
+        21
+      ],
+      [
+        25,
+        21
+      ],
+      [
+        26,
+        21
+      ],
+      [
+        27,
+        21
+      ],
+      [
+        28,
+        21
+      ],
+      [
+        29,
+        21
+      ],
+      [
+        20,
+        22
+      ],
+      [
+        21,
+        22
+      ],
+      [
+        28,
+        22
+      ],
+      [
+        29,
+        22
+      ],
+      [
+        20,
+        23
+      ],
+      [
+        21,
+        23
+      ],
+      [
+        28,
+        23
+      ],
+      [
+        29,
+        23
+      ],
+      [
+        1,
+        24
+      ],
+      [
+        2,
+        24
+      ],
+      [
+        3,
+        24
+      ],
+      [
+        4,
+        24
+      ],
+      [
+        5,
+        24
+      ],
+      [
+        6,
+        24
+      ],
+      [
+        7,
+        24
+      ],
+      [
+        8,
+        24
+      ],
+      [
+        9,
+        24
+      ],
+      [
+        10,
+        24
+      ],
+      [
+        11,
+        24
+      ],
+      [
+        12,
+        24
+      ],
+      [
+        13,
+        24
+      ],
+      [
+        14,
+        24
+      ],
+      [
+        15,
+        24
+      ],
+      [
+        16,
+        24
+      ],
+      [
+        17,
+        24
+      ],
+      [
+        18,
+        24
+      ],
+      [
+        19,
+        24
+      ],
+      [
+        20,
+        24
+      ],
+      [
+        21,
+        24
+      ],
+      [
+        28,
+        24
+      ],
+      [
+        29,
+        24
+      ],
+      [
+        30,
+        24
+      ],
+      [
+        31,
+        24
+      ],
+      [
+        32,
+        24
+      ],
+      [
+        33,
+        24
+      ],
+      [
+        34,
+        24
+      ],
+      [
+        35,
+        24
+      ],
+      [
+        36,
+        24
+      ],
+      [
+        37,
+        24
+      ],
+      [
+        38,
+        24
+      ],
+      [
+        39,
+        24
+      ],
+      [
+        40,
+        24
+      ],
+      [
+        41,
+        24
+      ],
+      [
+        42,
+        24
+      ],
+      [
+        43,
+        24
+      ],
+      [
+        44,
+        24
+      ],
+      [
+        45,
+        24
+      ],
+      [
+        46,
+        24
+      ],
+      [
+        47,
+        24
+      ],
+      [
+        48,
+        24
+      ],
+      [
+        1,
+        25
+      ],
+      [
+        2,
+        25
+      ],
+      [
+        3,
+        25
+      ],
+      [
+        4,
+        25
+      ],
+      [
+        5,
+        25
+      ],
+      [
+        6,
+        25
+      ],
+      [
+        7,
+        25
+      ],
+      [
+        8,
+        25
+      ],
+      [
+        9,
+        25
+      ],
+      [
+        10,
+        25
+      ],
+      [
+        11,
+        25
+      ],
+      [
+        12,
+        25
+      ],
+      [
+        13,
+        25
+      ],
+      [
+        14,
+        25
+      ],
+      [
+        15,
+        25
+      ],
+      [
+        16,
+        25
+      ],
+      [
+        17,
+        25
+      ],
+      [
+        18,
+        25
+      ],
+      [
+        19,
+        25
+      ],
+      [
+        20,
+        25
+      ],
+      [
+        21,
+        25
+      ],
+      [
+        28,
+        25
+      ],
+      [
+        29,
+        25
+      ],
+      [
+        30,
+        25
+      ],
+      [
+        31,
+        25
+      ],
+      [
+        32,
+        25
+      ],
+      [
+        33,
+        25
+      ],
+      [
+        34,
+        25
+      ],
+      [
+        35,
+        25
+      ],
+      [
+        36,
+        25
+      ],
+      [
+        37,
+        25
+      ],
+      [
+        38,
+        25
+      ],
+      [
+        39,
+        25
+      ],
+      [
+        40,
+        25
+      ],
+      [
+        41,
+        25
+      ],
+      [
+        42,
+        25
+      ],
+      [
+        43,
+        25
+      ],
+      [
+        44,
+        25
+      ],
+      [
+        45,
+        25
+      ],
+      [
+        46,
+        25
+      ],
+      [
+        47,
+        25
+      ],
+      [
+        48,
+        25
+      ],
+      [
+        20,
+        26
+      ],
+      [
+        21,
+        26
+      ],
+      [
+        28,
+        26
+      ],
+      [
+        29,
+        26
+      ],
+      [
+        20,
+        27
+      ],
+      [
+        21,
+        27
+      ],
+      [
+        28,
+        27
+      ],
+      [
+        29,
+        27
+      ],
+      [
+        20,
+        28
+      ],
+      [
+        21,
+        28
+      ],
+      [
+        22,
+        28
+      ],
+      [
+        23,
+        28
+      ],
+      [
+        24,
+        28
+      ],
+      [
+        25,
+        28
+      ],
+      [
+        26,
+        28
+      ],
+      [
+        27,
+        28
+      ],
+      [
+        28,
+        28
+      ],
+      [
+        29,
+        28
+      ],
+      [
+        20,
+        29
+      ],
+      [
+        21,
+        29
+      ],
+      [
+        22,
+        29
+      ],
+      [
+        23,
+        29
+      ],
+      [
+        24,
+        29
+      ],
+      [
+        25,
+        29
+      ],
+      [
+        26,
+        29
+      ],
+      [
+        27,
+        29
+      ],
+      [
+        28,
+        29
+      ],
+      [
+        29,
+        29
+      ],
+      [
+        24,
+        30
+      ],
+      [
+        25,
+        30
+      ],
+      [
+        24,
+        31
+      ],
+      [
+        25,
+        31
+      ],
+      [
+        24,
+        32
+      ],
+      [
+        25,
+        32
+      ],
+      [
+        24,
+        33
+      ],
+      [
+        25,
+        33
+      ],
+      [
+        24,
+        34
+      ],
+      [
+        25,
+        34
+      ],
+      [
+        24,
+        35
+      ],
+      [
+        25,
+        35
+      ],
+      [
+        24,
+        36
+      ],
+      [
+        25,
+        36
+      ],
+      [
+        24,
+        37
+      ],
+      [
+        25,
+        37
+      ],
+      [
+        24,
+        38
+      ],
+      [
+        25,
+        38
+      ],
+      [
+        24,
+        39
+      ],
+      [
+        25,
+        39
+      ],
+      [
+        24,
+        40
+      ],
+      [
+        25,
+        40
+      ],
+      [
+        24,
+        41
+      ],
+      [
+        25,
+        41
+      ],
+      [
+        24,
+        42
+      ],
+      [
+        25,
+        42
+      ],
+      [
+        24,
+        43
+      ],
+      [
+        25,
+        43
+      ],
+      [
+        24,
+        44
+      ],
+      [
+        25,
+        44
+      ],
+      [
+        24,
+        45
+      ],
+      [
+        25,
+        45
+      ],
+      [
+        24,
+        46
+      ],
+      [
+        25,
+        46
+      ],
+      [
+        24,
+        47
+      ],
+      [
+        25,
+        47
+      ],
+      [
+        24,
+        48
+      ],
+      [
+        25,
+        48
+      ]
+    ],
+    "placements": [
+      {
+        "type": "Spawn",
+        "group": "Spawn",
+        "cellX": 43,
+        "cellY": 25
+      },
+      {
+        "type": "Spawn",
+        "group": "Spawn",
+        "cellX": 39,
+        "cellY": 35
+      },
+      {
+        "type": "Spawn",
+        "group": "Spawn",
+        "cellX": 30,
+        "cellY": 42
+      },
+      {
+        "type": "Spawn",
+        "group": "Spawn",
+        "cellX": 19,
+        "cellY": 42
+      },
+      {
+        "type": "Spawn",
+        "group": "Spawn",
+        "cellX": 10,
+        "cellY": 35
+      },
+      {
+        "type": "Spawn",
+        "group": "Spawn",
+        "cellX": 7,
+        "cellY": 24
+      },
+      {
+        "type": "Spawn",
+        "group": "Spawn",
+        "cellX": 10,
+        "cellY": 14
+      },
+      {
+        "type": "Spawn",
+        "group": "Spawn",
+        "cellX": 19,
+        "cellY": 7
+      },
+      {
+        "type": "Spawn",
+        "group": "Spawn",
+        "cellX": 30,
+        "cellY": 7
+      },
+      {
+        "type": "Spawn",
+        "group": "Spawn",
+        "cellX": 39,
+        "cellY": 14
+      },
+      {
+        "type": "Well",
+        "group": "Cover",
+        "cellX": 24,
+        "cellY": 26
+      },
+      {
+        "type": "Statue01",
+        "group": "Cover",
+        "cellX": 22,
+        "cellY": 22
+      },
+      {
+        "type": "Statue01",
+        "group": "Cover",
+        "cellX": 27,
+        "cellY": 22,
+        "flipX": true
+      },
+      {
+        "type": "Statue01",
+        "group": "Cover",
+        "cellX": 22,
+        "cellY": 27
+      },
+      {
+        "type": "Statue01",
+        "group": "Cover",
+        "cellX": 27,
+        "cellY": 27,
+        "flipX": true
+      },
+      {
+        "type": "StoneLantern",
+        "group": "Cover",
+        "cellX": 20,
+        "cellY": 20
+      },
+      {
+        "type": "StoneLantern",
+        "group": "Cover",
+        "cellX": 29,
+        "cellY": 20,
+        "flipX": true
+      },
+      {
+        "type": "StoneLantern",
+        "group": "Cover",
+        "cellX": 29,
+        "cellY": 29
+      },
+      {
+        "type": "StoneLantern",
+        "group": "Cover",
+        "cellX": 20,
+        "cellY": 29,
+        "flipX": true
+      },
+      {
+        "type": "Chest",
+        "group": "WorldObject",
+        "cellX": 23,
+        "cellY": 23
+      },
+      {
+        "type": "Chest",
+        "group": "WorldObject",
+        "cellX": 26,
+        "cellY": 23,
+        "flipX": true
+      },
+      {
+        "type": "Chest",
+        "group": "WorldObject",
+        "cellX": 26,
+        "cellY": 26
+      },
+      {
+        "type": "Chest",
+        "group": "WorldObject",
+        "cellX": 23,
+        "cellY": 26,
+        "flipX": true
+      },
+      {
+        "type": "Gate01",
+        "group": "Cover",
+        "cellX": 24,
+        "cellY": 14
+      },
+      {
+        "type": "Gate01",
+        "group": "Cover",
+        "cellX": 34,
+        "cellY": 24,
+        "flipX": true
+      },
+      {
+        "type": "Gate01",
+        "group": "Cover",
+        "cellX": 24,
+        "cellY": 34
+      },
+      {
+        "type": "Gate01",
+        "group": "Cover",
+        "cellX": 14,
+        "cellY": 24,
+        "flipX": true
+      },
+      {
+        "type": "StoneCube",
+        "group": "Cover",
+        "cellX": 16,
+        "cellY": 14
+      },
+      {
+        "type": "StoneCube",
+        "group": "Cover",
+        "cellX": 35,
+        "cellY": 16,
+        "flipX": true
+      },
+      {
+        "type": "StoneCube",
+        "group": "Cover",
+        "cellX": 33,
+        "cellY": 35
+      },
+      {
+        "type": "StoneCube",
+        "group": "Cover",
+        "cellX": 14,
+        "cellY": 33,
+        "flipX": true
+      },
+      {
+        "type": "StoneCube",
+        "group": "Cover",
+        "cellX": 17,
+        "cellY": 14
+      },
+      {
+        "type": "StoneCube",
+        "group": "Cover",
+        "cellX": 35,
+        "cellY": 17,
+        "flipX": true
+      },
+      {
+        "type": "StoneCube",
+        "group": "Cover",
+        "cellX": 32,
+        "cellY": 35
+      },
+      {
+        "type": "StoneCube",
+        "group": "Cover",
+        "cellX": 14,
+        "cellY": 32,
+        "flipX": true
+      },
+      {
+        "type": "StoneCube",
+        "group": "Cover",
+        "cellX": 18,
+        "cellY": 14
+      },
+      {
+        "type": "StoneCube",
+        "group": "Cover",
+        "cellX": 35,
+        "cellY": 18,
+        "flipX": true
+      },
+      {
+        "type": "StoneCube",
+        "group": "Cover",
+        "cellX": 31,
+        "cellY": 35
+      },
+      {
+        "type": "StoneCube",
+        "group": "Cover",
+        "cellX": 14,
+        "cellY": 31,
+        "flipX": true
+      },
+      {
+        "type": "Door",
+        "group": "WorldObject",
+        "cellX": 19,
+        "cellY": 14
+      },
+      {
+        "type": "Door",
+        "group": "WorldObject",
+        "cellX": 35,
+        "cellY": 19,
+        "flipX": true
+      },
+      {
+        "type": "Door",
+        "group": "WorldObject",
+        "cellX": 30,
+        "cellY": 35
+      },
+      {
+        "type": "Door",
+        "group": "WorldObject",
+        "cellX": 14,
+        "cellY": 30,
+        "flipX": true
+      },
+      {
+        "type": "StoneCube",
+        "group": "Cover",
+        "cellX": 20,
+        "cellY": 14
+      },
+      {
+        "type": "StoneCube",
+        "group": "Cover",
+        "cellX": 35,
+        "cellY": 20,
+        "flipX": true
+      },
+      {
+        "type": "StoneCube",
+        "group": "Cover",
+        "cellX": 29,
+        "cellY": 35
+      },
+      {
+        "type": "StoneCube",
+        "group": "Cover",
+        "cellX": 14,
+        "cellY": 29,
+        "flipX": true
+      },
+      {
+        "type": "StoneCube",
+        "group": "Cover",
+        "cellX": 21,
+        "cellY": 14
+      },
+      {
+        "type": "StoneCube",
+        "group": "Cover",
+        "cellX": 35,
+        "cellY": 21,
+        "flipX": true
+      },
+      {
+        "type": "StoneCube",
+        "group": "Cover",
+        "cellX": 28,
+        "cellY": 35
+      },
+      {
+        "type": "StoneCube",
+        "group": "Cover",
+        "cellX": 14,
+        "cellY": 28,
+        "flipX": true
+      },
+      {
+        "type": "StoneCube",
+        "group": "Cover",
+        "cellX": 22,
+        "cellY": 14
+      },
+      {
+        "type": "StoneCube",
+        "group": "Cover",
+        "cellX": 35,
+        "cellY": 22,
+        "flipX": true
+      },
+      {
+        "type": "StoneCube",
+        "group": "Cover",
+        "cellX": 27,
+        "cellY": 35
+      },
+      {
+        "type": "StoneCube",
+        "group": "Cover",
+        "cellX": 14,
+        "cellY": 27,
+        "flipX": true
+      },
+      {
+        "type": "StoneCube",
+        "group": "Cover",
+        "cellX": 23,
+        "cellY": 14
+      },
+      {
+        "type": "StoneCube",
+        "group": "Cover",
+        "cellX": 35,
+        "cellY": 23,
+        "flipX": true
+      },
+      {
+        "type": "StoneCube",
+        "group": "Cover",
+        "cellX": 26,
+        "cellY": 35
+      },
+      {
+        "type": "StoneCube",
+        "group": "Cover",
+        "cellX": 14,
+        "cellY": 26,
+        "flipX": true
+      },
+      {
+        "type": "RunePillarX3",
+        "group": "Cover",
+        "cellX": 14,
+        "cellY": 14
+      },
+      {
+        "type": "RunePillarX3",
+        "group": "Cover",
+        "cellX": 35,
+        "cellY": 14,
+        "flipX": true
+      },
+      {
+        "type": "RunePillarX3",
+        "group": "Cover",
+        "cellX": 35,
+        "cellY": 35
+      },
+      {
+        "type": "RunePillarX3",
+        "group": "Cover",
+        "cellX": 14,
+        "cellY": 35,
+        "flipX": true
+      },
+      {
+        "type": "Pillar01",
+        "group": "Cover",
+        "cellX": 17,
+        "cellY": 17
+      },
+      {
+        "type": "Pillar01",
+        "group": "Cover",
+        "cellX": 32,
+        "cellY": 17,
+        "flipX": true
+      },
+      {
+        "type": "Pillar01",
+        "group": "Cover",
+        "cellX": 32,
+        "cellY": 32
+      },
+      {
+        "type": "Pillar01",
+        "group": "Cover",
+        "cellX": 17,
+        "cellY": 32,
+        "flipX": true
+      },
+      {
+        "type": "Pillar02",
+        "group": "Cover",
+        "cellX": 17,
+        "cellY": 20
+      },
+      {
+        "type": "Pillar02",
+        "group": "Cover",
+        "cellX": 29,
+        "cellY": 17,
+        "flipX": true
+      },
+      {
+        "type": "Pillar02",
+        "group": "Cover",
+        "cellX": 32,
+        "cellY": 29
+      },
+      {
+        "type": "Pillar02",
+        "group": "Cover",
+        "cellX": 20,
+        "cellY": 32,
+        "flipX": true
+      },
+      {
+        "type": "Rock07",
+        "group": "Cover",
+        "cellX": 19,
+        "cellY": 17
+      },
+      {
+        "type": "Rock07",
+        "group": "Cover",
+        "cellX": 31,
+        "cellY": 19,
+        "flipX": true
+      },
+      {
+        "type": "Rock07",
+        "group": "Cover",
+        "cellX": 29,
+        "cellY": 32
+      },
+      {
+        "type": "Rock07",
+        "group": "Cover",
+        "cellX": 16,
+        "cellY": 29,
+        "flipX": true
+      },
+      {
+        "type": "Pot",
+        "group": "WorldObject",
+        "cellX": 16,
+        "cellY": 16
+      },
+      {
+        "type": "Pot",
+        "group": "WorldObject",
+        "cellX": 33,
+        "cellY": 16,
+        "flipX": true
+      },
+      {
+        "type": "Pot",
+        "group": "WorldObject",
+        "cellX": 33,
+        "cellY": 33
+      },
+      {
+        "type": "Pot",
+        "group": "WorldObject",
+        "cellX": 16,
+        "cellY": 33,
+        "flipX": true
+      },
+      {
+        "type": "Pot",
+        "group": "WorldObject",
+        "cellX": 21,
+        "cellY": 16
+      },
+      {
+        "type": "Pot",
+        "group": "WorldObject",
+        "cellX": 33,
+        "cellY": 21,
+        "flipX": true
+      },
+      {
+        "type": "Pot",
+        "group": "WorldObject",
+        "cellX": 28,
+        "cellY": 33
+      },
+      {
+        "type": "Pot",
+        "group": "WorldObject",
+        "cellX": 16,
+        "cellY": 28,
+        "flipX": true
+      },
+      {
+        "type": "Chest",
+        "group": "WorldObject",
+        "cellX": 16,
+        "cellY": 22
+      },
+      {
+        "type": "Chest",
+        "group": "WorldObject",
+        "cellX": 27,
+        "cellY": 16,
+        "flipX": true
+      },
+      {
+        "type": "Chest",
+        "group": "WorldObject",
+        "cellX": 33,
+        "cellY": 27
+      },
+      {
+        "type": "Chest",
+        "group": "WorldObject",
+        "cellX": 22,
+        "cellY": 33,
+        "flipX": true
+      },
+      {
+        "type": "Rock07",
+        "group": "Cover",
+        "cellX": 11,
+        "cellY": 11
+      },
+      {
+        "type": "Rock07",
+        "group": "Cover",
+        "cellX": 37,
+        "cellY": 11,
+        "flipX": true
+      },
+      {
+        "type": "Rock07",
+        "group": "Cover",
+        "cellX": 37,
+        "cellY": 38
+      },
+      {
+        "type": "Rock07",
+        "group": "Cover",
+        "cellX": 10,
+        "cellY": 37,
+        "flipX": true
+      },
+      {
+        "type": "Tree01",
+        "group": "Cover",
+        "cellX": 9,
+        "cellY": 17
+      },
+      {
+        "type": "Tree01",
+        "group": "Cover",
+        "cellX": 32,
+        "cellY": 9,
+        "flipX": true
+      },
+      {
+        "type": "Tree01",
+        "group": "Cover",
+        "cellX": 40,
+        "cellY": 32
+      },
+      {
+        "type": "Tree01",
+        "group": "Cover",
+        "cellX": 17,
+        "cellY": 40,
+        "flipX": true
+      },
+      {
+        "type": "Tree02",
+        "group": "Cover",
+        "cellX": 17,
+        "cellY": 9
+      },
+      {
+        "type": "Tree02",
+        "group": "Cover",
+        "cellX": 40,
+        "cellY": 17,
+        "flipX": true
+      },
+      {
+        "type": "Tree02",
+        "group": "Cover",
+        "cellX": 32,
+        "cellY": 40
+      },
+      {
+        "type": "Tree02",
+        "group": "Cover",
+        "cellX": 9,
+        "cellY": 32,
+        "flipX": true
+      },
+      {
+        "type": "Tree03",
+        "group": "Cover",
+        "cellX": 13,
+        "cellY": 13
+      },
+      {
+        "type": "Tree03",
+        "group": "Cover",
+        "cellX": 36,
+        "cellY": 13,
+        "flipX": true
+      },
+      {
+        "type": "Tree03",
+        "group": "Cover",
+        "cellX": 36,
+        "cellY": 36
+      },
+      {
+        "type": "Tree03",
+        "group": "Cover",
+        "cellX": 13,
+        "cellY": 36,
+        "flipX": true
+      },
+      {
+        "type": "Rock06",
+        "group": "Cover",
+        "cellX": 12,
+        "cellY": 18
+      },
+      {
+        "type": "Rock06",
+        "group": "Cover",
+        "cellX": 31,
+        "cellY": 12,
+        "flipX": true
+      },
+      {
+        "type": "Rock06",
+        "group": "Cover",
+        "cellX": 37,
+        "cellY": 31
+      },
+      {
+        "type": "Rock06",
+        "group": "Cover",
+        "cellX": 18,
+        "cellY": 37,
+        "flipX": true
+      },
+      {
+        "type": "Rock05",
+        "group": "Cover",
+        "cellX": 18,
+        "cellY": 12
+      },
+      {
+        "type": "Rock05",
+        "group": "Cover",
+        "cellX": 37,
+        "cellY": 18,
+        "flipX": true
+      },
+      {
+        "type": "Rock05",
+        "group": "Cover",
+        "cellX": 31,
+        "cellY": 37
+      },
+      {
+        "type": "Rock05",
+        "group": "Cover",
+        "cellX": 12,
+        "cellY": 31,
+        "flipX": true
+      },
+      {
+        "type": "Pot",
+        "group": "WorldObject",
+        "cellX": 12,
+        "cellY": 16
+      },
+      {
+        "type": "Pot",
+        "group": "WorldObject",
+        "cellX": 33,
+        "cellY": 12,
+        "flipX": true
+      },
+      {
+        "type": "Pot",
+        "group": "WorldObject",
+        "cellX": 37,
+        "cellY": 33
+      },
+      {
+        "type": "Pot",
+        "group": "WorldObject",
+        "cellX": 16,
+        "cellY": 37,
+        "flipX": true
+      },
+      {
+        "type": "Pot",
+        "group": "WorldObject",
+        "cellX": 16,
+        "cellY": 12
+      },
+      {
+        "type": "Pot",
+        "group": "WorldObject",
+        "cellX": 37,
+        "cellY": 16,
+        "flipX": true
+      },
+      {
+        "type": "Pot",
+        "group": "WorldObject",
+        "cellX": 33,
+        "cellY": 37
+      },
+      {
+        "type": "Pot",
+        "group": "WorldObject",
+        "cellX": 12,
+        "cellY": 33,
+        "flipX": true
+      },
+      {
+        "type": "Bush",
+        "group": "WorldObject",
+        "cellX": 4,
+        "cellY": 21
+      },
+      {
+        "type": "Bush",
+        "group": "WorldObject",
+        "cellX": 28,
+        "cellY": 4,
+        "flipX": true
+      },
+      {
+        "type": "Bush",
+        "group": "WorldObject",
+        "cellX": 45,
+        "cellY": 28
+      },
+      {
+        "type": "Bush",
+        "group": "WorldObject",
+        "cellX": 21,
+        "cellY": 45,
+        "flipX": true
+      },
+      {
+        "type": "Bush",
+        "group": "WorldObject",
+        "cellX": 5,
+        "cellY": 21
+      },
+      {
+        "type": "Bush",
+        "group": "WorldObject",
+        "cellX": 28,
+        "cellY": 5,
+        "flipX": true
+      },
+      {
+        "type": "Bush",
+        "group": "WorldObject",
+        "cellX": 44,
+        "cellY": 28
+      },
+      {
+        "type": "Bush",
+        "group": "WorldObject",
+        "cellX": 21,
+        "cellY": 44,
+        "flipX": true
+      },
+      {
+        "type": "Bush",
+        "group": "WorldObject",
+        "cellX": 4,
+        "cellY": 20
+      },
+      {
+        "type": "Bush",
+        "group": "WorldObject",
+        "cellX": 29,
+        "cellY": 4,
+        "flipX": true
+      },
+      {
+        "type": "Bush",
+        "group": "WorldObject",
+        "cellX": 45,
+        "cellY": 29
+      },
+      {
+        "type": "Bush",
+        "group": "WorldObject",
+        "cellX": 20,
+        "cellY": 45,
+        "flipX": true
+      },
+      {
+        "type": "Bush",
+        "group": "WorldObject",
+        "cellX": 21,
+        "cellY": 7
+      },
+      {
+        "type": "Bush",
+        "group": "WorldObject",
+        "cellX": 42,
+        "cellY": 21,
+        "flipX": true
+      },
+      {
+        "type": "Bush",
+        "group": "WorldObject",
+        "cellX": 28,
+        "cellY": 42
+      },
+      {
+        "type": "Bush",
+        "group": "WorldObject",
+        "cellX": 7,
+        "cellY": 28,
+        "flipX": true
+      },
+      {
+        "type": "Bush",
+        "group": "WorldObject",
+        "cellX": 22,
+        "cellY": 7
+      },
+      {
+        "type": "Bush",
+        "group": "WorldObject",
+        "cellX": 42,
+        "cellY": 22,
+        "flipX": true
+      },
+      {
+        "type": "Bush",
+        "group": "WorldObject",
+        "cellX": 27,
+        "cellY": 42
+      },
+      {
+        "type": "Bush",
+        "group": "WorldObject",
+        "cellX": 7,
+        "cellY": 27,
+        "flipX": true
+      },
+      {
+        "type": "Bush",
+        "group": "WorldObject",
+        "cellX": 21,
+        "cellY": 8
+      },
+      {
+        "type": "Bush",
+        "group": "WorldObject",
+        "cellX": 41,
+        "cellY": 21,
+        "flipX": true
+      },
+      {
+        "type": "Bush",
+        "group": "WorldObject",
+        "cellX": 28,
+        "cellY": 41
+      },
+      {
+        "type": "Bush",
+        "group": "WorldObject",
+        "cellX": 8,
+        "cellY": 28,
+        "flipX": true
+      },
+      {
+        "type": "Portal",
+        "group": "WorldObject",
+        "cellX": 3,
+        "cellY": 3,
+        "pairId": 1
+      },
+      {
+        "type": "Portal",
+        "group": "WorldObject",
+        "cellX": 44,
+        "cellY": 3,
+        "pairId": 2
+      },
+      {
+        "type": "Portal",
+        "group": "WorldObject",
+        "cellX": 44,
+        "cellY": 45,
+        "pairId": 1
+      },
+      {
+        "type": "Portal",
+        "group": "WorldObject",
+        "cellX": 2,
+        "cellY": 44,
+        "pairId": 2
+      },
+      {
+        "type": "RunePillarX2",
+        "group": "Cover",
+        "cellX": 2,
+        "cellY": 7
+      },
+      {
+        "type": "RunePillarX2",
+        "group": "Cover",
+        "cellX": 42,
+        "cellY": 2,
+        "flipX": true
+      },
+      {
+        "type": "RunePillarX2",
+        "group": "Cover",
+        "cellX": 47,
+        "cellY": 42
+      },
+      {
+        "type": "RunePillarX2",
+        "group": "Cover",
+        "cellX": 7,
+        "cellY": 47,
+        "flipX": true
+      },
+      {
+        "type": "RunePillarX2",
+        "group": "Cover",
+        "cellX": 7,
+        "cellY": 2
+      },
+      {
+        "type": "RunePillarX2",
+        "group": "Cover",
+        "cellX": 47,
+        "cellY": 7,
+        "flipX": true
+      },
+      {
+        "type": "RunePillarX2",
+        "group": "Cover",
+        "cellX": 42,
+        "cellY": 47
+      },
+      {
+        "type": "RunePillarX2",
+        "group": "Cover",
+        "cellX": 2,
+        "cellY": 42,
+        "flipX": true
+      },
+      {
+        "type": "RunePillarBroken",
+        "group": "Cover",
+        "cellX": 7,
+        "cellY": 7
+      },
+      {
+        "type": "RunePillarBroken",
+        "group": "Cover",
+        "cellX": 42,
+        "cellY": 7,
+        "flipX": true
+      },
+      {
+        "type": "RunePillarBroken",
+        "group": "Cover",
+        "cellX": 42,
+        "cellY": 42
+      },
+      {
+        "type": "RunePillarBroken",
+        "group": "Cover",
+        "cellX": 7,
+        "cellY": 42,
+        "flipX": true
+      },
+      {
+        "type": "Chest",
+        "group": "WorldObject",
+        "cellX": 8,
+        "cellY": 5
+      },
+      {
+        "type": "Chest",
+        "group": "WorldObject",
+        "cellX": 44,
+        "cellY": 8,
+        "flipX": true
+      },
+      {
+        "type": "Chest",
+        "group": "WorldObject",
+        "cellX": 41,
+        "cellY": 44
+      },
+      {
+        "type": "Chest",
+        "group": "WorldObject",
+        "cellX": 5,
+        "cellY": 41,
+        "flipX": true
+      },
+      {
+        "type": "Pot",
+        "group": "WorldObject",
+        "cellX": 2,
+        "cellY": 9
+      },
+      {
+        "type": "Pot",
+        "group": "WorldObject",
+        "cellX": 40,
+        "cellY": 2,
+        "flipX": true
+      },
+      {
+        "type": "Pot",
+        "group": "WorldObject",
+        "cellX": 47,
+        "cellY": 40
+      },
+      {
+        "type": "Pot",
+        "group": "WorldObject",
+        "cellX": 9,
+        "cellY": 47,
+        "flipX": true
+      },
+      {
+        "type": "Pot",
+        "group": "WorldObject",
+        "cellX": 9,
+        "cellY": 2
+      },
+      {
+        "type": "Pot",
+        "group": "WorldObject",
+        "cellX": 47,
+        "cellY": 9,
+        "flipX": true
+      },
+      {
+        "type": "Pot",
+        "group": "WorldObject",
+        "cellX": 40,
+        "cellY": 47
+      },
+      {
+        "type": "Pot",
+        "group": "WorldObject",
+        "cellX": 2,
+        "cellY": 40,
+        "flipX": true
+      },
+      {
+        "type": "Barrel",
+        "group": "Cover",
+        "cellX": 5,
+        "cellY": 8,
+        "destructible": true,
+        "loot": "Pot",
+        "hp": 15
+      },
+      {
+        "type": "Barrel",
+        "group": "Cover",
+        "cellX": 41,
+        "cellY": 5,
+        "flipX": true,
+        "destructible": true,
+        "loot": "Pot",
+        "hp": 15
+      },
+      {
+        "type": "Barrel",
+        "group": "Cover",
+        "cellX": 44,
+        "cellY": 41,
+        "destructible": true,
+        "loot": "Pot",
+        "hp": 15
+      },
+      {
+        "type": "Barrel",
+        "group": "Cover",
+        "cellX": 8,
+        "cellY": 44,
+        "flipX": true,
+        "destructible": true,
+        "loot": "Pot",
+        "hp": 15
+      },
+      {
+        "type": "CrateSmall",
+        "group": "Cover",
+        "cellX": 4,
+        "cellY": 8,
+        "destructible": true,
+        "loot": "Chest",
+        "hp": 25
+      },
+      {
+        "type": "CrateSmall",
+        "group": "Cover",
+        "cellX": 41,
+        "cellY": 4,
+        "flipX": true,
+        "destructible": true,
+        "loot": "Chest",
+        "hp": 25
+      },
+      {
+        "type": "CrateSmall",
+        "group": "Cover",
+        "cellX": 45,
+        "cellY": 41,
+        "destructible": true,
+        "loot": "Chest",
+        "hp": 25
+      },
+      {
+        "type": "CrateSmall",
+        "group": "Cover",
+        "cellX": 8,
+        "cellY": 45,
+        "flipX": true,
+        "destructible": true,
+        "loot": "Chest",
+        "hp": 25
+      },
+      {
+        "type": "Tree01",
+        "group": "Cover",
+        "cellX": 1,
+        "cellY": 11
+      },
+      {
+        "type": "Tree01",
+        "group": "Cover",
+        "cellX": 38,
+        "cellY": 1,
+        "flipX": true
+      },
+      {
+        "type": "Tree01",
+        "group": "Cover",
+        "cellX": 48,
+        "cellY": 38
+      },
+      {
+        "type": "Tree01",
+        "group": "Cover",
+        "cellX": 11,
+        "cellY": 48,
+        "flipX": true
+      },
+      {
+        "type": "Tree01",
+        "group": "Cover",
+        "cellX": 2,
+        "cellY": 13
+      },
+      {
+        "type": "Tree01",
+        "group": "Cover",
+        "cellX": 36,
+        "cellY": 2,
+        "flipX": true
+      },
+      {
+        "type": "Tree01",
+        "group": "Cover",
+        "cellX": 47,
+        "cellY": 36
+      },
+      {
+        "type": "Tree01",
+        "group": "Cover",
+        "cellX": 13,
+        "cellY": 47,
+        "flipX": true
+      },
+      {
+        "type": "Tree03",
+        "group": "Cover",
+        "cellX": 1,
+        "cellY": 16
+      },
+      {
+        "type": "Tree03",
+        "group": "Cover",
+        "cellX": 33,
+        "cellY": 1,
+        "flipX": true
+      },
+      {
+        "type": "Tree03",
+        "group": "Cover",
+        "cellX": 48,
+        "cellY": 33
+      },
+      {
+        "type": "Tree03",
+        "group": "Cover",
+        "cellX": 16,
+        "cellY": 48,
+        "flipX": true
+      },
+      {
+        "type": "Tree02",
+        "group": "Cover",
+        "cellX": 3,
+        "cellY": 19
+      },
+      {
+        "type": "Tree02",
+        "group": "Cover",
+        "cellX": 30,
+        "cellY": 3,
+        "flipX": true
+      },
+      {
+        "type": "Tree02",
+        "group": "Cover",
+        "cellX": 46,
+        "cellY": 30
+      },
+      {
+        "type": "Tree02",
+        "group": "Cover",
+        "cellX": 19,
+        "cellY": 46,
+        "flipX": true
+      },
+      {
+        "type": "Tree03",
+        "group": "Cover",
+        "cellX": 1,
+        "cellY": 22
+      },
+      {
+        "type": "Tree03",
+        "group": "Cover",
+        "cellX": 27,
+        "cellY": 1,
+        "flipX": true
+      },
+      {
+        "type": "Tree03",
+        "group": "Cover",
+        "cellX": 48,
+        "cellY": 27
+      },
+      {
+        "type": "Tree03",
+        "group": "Cover",
+        "cellX": 22,
+        "cellY": 48,
+        "flipX": true
+      },
+      {
+        "type": "Tree01",
+        "group": "Cover",
+        "cellX": 11,
+        "cellY": 1
+      },
+      {
+        "type": "Tree01",
+        "group": "Cover",
+        "cellX": 48,
+        "cellY": 11,
+        "flipX": true
+      },
+      {
+        "type": "Tree01",
+        "group": "Cover",
+        "cellX": 38,
+        "cellY": 48
+      },
+      {
+        "type": "Tree01",
+        "group": "Cover",
+        "cellX": 1,
+        "cellY": 38,
+        "flipX": true
+      },
+      {
+        "type": "Tree01",
+        "group": "Cover",
+        "cellX": 13,
+        "cellY": 2
+      },
+      {
+        "type": "Tree01",
+        "group": "Cover",
+        "cellX": 47,
+        "cellY": 13,
+        "flipX": true
+      },
+      {
+        "type": "Tree01",
+        "group": "Cover",
+        "cellX": 36,
+        "cellY": 47
+      },
+      {
+        "type": "Tree01",
+        "group": "Cover",
+        "cellX": 2,
+        "cellY": 36,
+        "flipX": true
+      },
+      {
+        "type": "Tree03",
+        "group": "Cover",
+        "cellX": 16,
+        "cellY": 1
+      },
+      {
+        "type": "Tree03",
+        "group": "Cover",
+        "cellX": 48,
+        "cellY": 16,
+        "flipX": true
+      },
+      {
+        "type": "Tree03",
+        "group": "Cover",
+        "cellX": 33,
+        "cellY": 48
+      },
+      {
+        "type": "Tree03",
+        "group": "Cover",
+        "cellX": 1,
+        "cellY": 33,
+        "flipX": true
+      },
+      {
+        "type": "Tree03",
+        "group": "Cover",
+        "cellX": 19,
+        "cellY": 1
+      },
+      {
+        "type": "Tree03",
+        "group": "Cover",
+        "cellX": 30,
+        "cellY": 48
+      },
+      {
+        "type": "Tree03",
+        "group": "Cover",
+        "cellX": 22,
+        "cellY": 1
+      },
+      {
+        "type": "Tree03",
+        "group": "Cover",
+        "cellX": 48,
+        "cellY": 22,
+        "flipX": true
+      },
+      {
+        "type": "Tree03",
+        "group": "Cover",
+        "cellX": 27,
+        "cellY": 48
+      },
+      {
+        "type": "Tree03",
+        "group": "Cover",
+        "cellX": 1,
+        "cellY": 27,
+        "flipX": true
+      },
+      {
+        "type": "Tree02",
+        "group": "Cover",
+        "cellX": 10,
+        "cellY": 9
+      },
+      {
+        "type": "Tree02",
+        "group": "Cover",
+        "cellX": 40,
+        "cellY": 10,
+        "flipX": true
+      },
+      {
+        "type": "Tree02",
+        "group": "Cover",
+        "cellX": 39,
+        "cellY": 40
+      },
+      {
+        "type": "Tree02",
+        "group": "Cover",
+        "cellX": 9,
+        "cellY": 39,
+        "flipX": true
+      },
+      {
+        "type": "Tree02",
+        "group": "Cover",
+        "cellX": 9,
+        "cellY": 10
+      },
+      {
+        "type": "Tree02",
+        "group": "Cover",
+        "cellX": 39,
+        "cellY": 9,
+        "flipX": true
+      },
+      {
+        "type": "Tree02",
+        "group": "Cover",
+        "cellX": 40,
+        "cellY": 39
+      },
+      {
+        "type": "Tree02",
+        "group": "Cover",
+        "cellX": 10,
+        "cellY": 40,
+        "flipX": true
+      },
+      {
+        "type": "Tree01",
+        "group": "Cover",
+        "cellX": 6,
+        "cellY": 12
+      },
+      {
+        "type": "Tree01",
+        "group": "Cover",
+        "cellX": 37,
+        "cellY": 6,
+        "flipX": true
+      },
+      {
+        "type": "Tree01",
+        "group": "Cover",
+        "cellX": 43,
+        "cellY": 37
+      },
+      {
+        "type": "Tree01",
+        "group": "Cover",
+        "cellX": 12,
+        "cellY": 43,
+        "flipX": true
+      },
+      {
+        "type": "Tree01",
+        "group": "Cover",
+        "cellX": 12,
+        "cellY": 6
+      },
+      {
+        "type": "Tree01",
+        "group": "Cover",
+        "cellX": 43,
+        "cellY": 12,
+        "flipX": true
+      },
+      {
+        "type": "Tree01",
+        "group": "Cover",
+        "cellX": 37,
+        "cellY": 43
+      },
+      {
+        "type": "Tree01",
+        "group": "Cover",
+        "cellX": 6,
+        "cellY": 37,
+        "flipX": true
+      },
+      {
+        "type": "Tree02",
+        "group": "Cover",
+        "cellX": 3,
+        "cellY": 1
+      },
+      {
+        "type": "Tree02",
+        "group": "Cover",
+        "cellX": 48,
+        "cellY": 3,
+        "flipX": true
+      },
+      {
+        "type": "Tree02",
+        "group": "Cover",
+        "cellX": 46,
+        "cellY": 48
+      },
+      {
+        "type": "Tree02",
+        "group": "Cover",
+        "cellX": 1,
+        "cellY": 46,
+        "flipX": true
+      },
+      {
+        "type": "Tree02",
+        "group": "Cover",
+        "cellX": 1,
+        "cellY": 3
+      },
+      {
+        "type": "Tree02",
+        "group": "Cover",
+        "cellX": 46,
+        "cellY": 1,
+        "flipX": true
+      },
+      {
+        "type": "Tree02",
+        "group": "Cover",
+        "cellX": 48,
+        "cellY": 46
+      },
+      {
+        "type": "Tree02",
+        "group": "Cover",
+        "cellX": 3,
+        "cellY": 48,
+        "flipX": true
+      },
+      {
+        "type": "Tree01",
+        "group": "Cover",
+        "cellX": 6,
+        "cellY": 15
+      },
+      {
+        "type": "Tree01",
+        "group": "Cover",
+        "cellX": 34,
+        "cellY": 6,
+        "flipX": true
+      },
+      {
+        "type": "Tree01",
+        "group": "Cover",
+        "cellX": 43,
+        "cellY": 34
+      },
+      {
+        "type": "Tree01",
+        "group": "Cover",
+        "cellX": 15,
+        "cellY": 43,
+        "flipX": true
+      },
+      {
+        "type": "Tree01",
+        "group": "Cover",
+        "cellX": 15,
+        "cellY": 6
+      },
+      {
+        "type": "Tree01",
+        "group": "Cover",
+        "cellX": 43,
+        "cellY": 15,
+        "flipX": true
+      },
+      {
+        "type": "Tree01",
+        "group": "Cover",
+        "cellX": 34,
+        "cellY": 43
+      },
+      {
+        "type": "Tree01",
+        "group": "Cover",
+        "cellX": 6,
+        "cellY": 34,
+        "flipX": true
+      },
+      {
+        "type": "Bush",
+        "group": "WorldObject",
+        "cellX": 2,
+        "cellY": 11
+      },
+      {
+        "type": "Bush",
+        "group": "WorldObject",
+        "cellX": 38,
+        "cellY": 2,
+        "flipX": true
+      },
+      {
+        "type": "Bush",
+        "group": "WorldObject",
+        "cellX": 47,
+        "cellY": 38
+      },
+      {
+        "type": "Bush",
+        "group": "WorldObject",
+        "cellX": 11,
+        "cellY": 47,
+        "flipX": true
+      },
+      {
+        "type": "Bush",
+        "group": "WorldObject",
+        "cellX": 11,
+        "cellY": 2
+      },
+      {
+        "type": "Bush",
+        "group": "WorldObject",
+        "cellX": 47,
+        "cellY": 11,
+        "flipX": true
+      },
+      {
+        "type": "Bush",
+        "group": "WorldObject",
+        "cellX": 38,
+        "cellY": 47
+      },
+      {
+        "type": "Bush",
+        "group": "WorldObject",
+        "cellX": 2,
+        "cellY": 38,
+        "flipX": true
+      },
+      {
+        "type": "Bush",
+        "group": "WorldObject",
+        "cellX": 7,
+        "cellY": 13
+      },
+      {
+        "type": "Bush",
+        "group": "WorldObject",
+        "cellX": 36,
+        "cellY": 7,
+        "flipX": true
+      },
+      {
+        "type": "Bush",
+        "group": "WorldObject",
+        "cellX": 42,
+        "cellY": 36
+      },
+      {
+        "type": "Bush",
+        "group": "WorldObject",
+        "cellX": 13,
+        "cellY": 42,
+        "flipX": true
+      },
+      {
+        "type": "Bush",
+        "group": "WorldObject",
+        "cellX": 13,
+        "cellY": 7
+      },
+      {
+        "type": "Bush",
+        "group": "WorldObject",
+        "cellX": 42,
+        "cellY": 13,
+        "flipX": true
+      },
+      {
+        "type": "Bush",
+        "group": "WorldObject",
+        "cellX": 36,
+        "cellY": 42
+      },
+      {
+        "type": "Bush",
+        "group": "WorldObject",
+        "cellX": 7,
+        "cellY": 36,
+        "flipX": true
+      },
+      {
+        "type": "Flower",
+        "group": "Decoration",
+        "cellX": 6,
+        "cellY": 22
+      },
+      {
+        "type": "Flower",
+        "group": "Decoration",
+        "cellX": 27,
+        "cellY": 6,
+        "flipX": true
+      },
+      {
+        "type": "Flower",
+        "group": "Decoration",
+        "cellX": 43,
+        "cellY": 27
+      },
+      {
+        "type": "Flower",
+        "group": "Decoration",
+        "cellX": 22,
+        "cellY": 43,
+        "flipX": true
+      },
+      {
+        "type": "GrassTuft",
+        "group": "Decoration",
+        "cellX": 10,
+        "cellY": 20
+      },
+      {
+        "type": "GrassTuft",
+        "group": "Decoration",
+        "cellX": 29,
+        "cellY": 10,
+        "flipX": true
+      },
+      {
+        "type": "GrassTuft",
+        "group": "Decoration",
+        "cellX": 39,
+        "cellY": 29
+      },
+      {
+        "type": "GrassTuft",
+        "group": "Decoration",
+        "cellX": 20,
+        "cellY": 39,
+        "flipX": true
+      },
+      {
+        "type": "Pebble",
+        "group": "Decoration",
+        "cellX": 20,
+        "cellY": 10
+      },
+      {
+        "type": "Pebble",
+        "group": "Decoration",
+        "cellX": 39,
+        "cellY": 20,
+        "flipX": true
+      },
+      {
+        "type": "Pebble",
+        "group": "Decoration",
+        "cellX": 29,
+        "cellY": 39
+      },
+      {
+        "type": "Pebble",
+        "group": "Decoration",
+        "cellX": 10,
+        "cellY": 29,
+        "flipX": true
+      },
+      {
+        "type": "SignE",
+        "group": "Decoration",
+        "cellX": 23,
+        "cellY": 3
+      },
+      {
+        "type": "SignE",
+        "group": "Decoration",
+        "cellX": 46,
+        "cellY": 23,
+        "flipX": true
+      },
+      {
+        "type": "SignE",
+        "group": "Decoration",
+        "cellX": 26,
+        "cellY": 46
+      },
+      {
+        "type": "SignE",
+        "group": "Decoration",
+        "cellX": 3,
+        "cellY": 26,
+        "flipX": true
+      }
+    ]
+  }
 }

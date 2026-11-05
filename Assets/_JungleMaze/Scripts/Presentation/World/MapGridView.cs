@@ -13,19 +13,33 @@ namespace JungleMaze.Presentation.World
     public sealed class MapGridView : MonoBehaviour
     {
         [SerializeField] private Sprite groundSprite;
+        /// <summary>Optional tileable art for the four boundary walls (Full Rect mesh); empty keeps the tinted grid cell.</summary>
+        [SerializeField] private Sprite wallSprite;
         private IBalanceConfigProvider _balance;
         private Texture2D _texture;
         private Sprite _sprite;
         public int MapSizeCells { get; private set; }
         public int CellSizePixels { get; private set; }
 
+        private IClientRuntimeData _runtime;
+
         [Inject]
         public void Construct(IBalanceConfigProvider balance) => _balance = balance;
 
+        /// <summary>Map đang chơi (offline/phòng mạng) quyết định kích thước; balance chỉ là mặc định.</summary>
+        [Inject]
+        public void ConstructRuntime(IClientRuntimeData runtime) => _runtime = runtime;
+
         private void Start()
         {
-            Build(_balance != null ? _balance.Match.MapSizeCells : 50,
-                _balance != null ? _balance.Match.CellSizePixels : 48);
+            Build(MapSize(_runtime, _balance), _balance != null ? _balance.Match.CellSizePixels : 48);
+        }
+
+        /// <summary>Cạnh map (ô): theo bounds của map đã nạp, nếu chưa có thì theo balance (50).</summary>
+        public static int MapSize(IClientRuntimeData runtime, IBalanceConfigProvider balance)
+        {
+            var size = runtime != null ? Mathf.RoundToInt(runtime.Bounds.MaxX - runtime.Bounds.MinX) : 0;
+            return size > 0 ? size : balance != null ? balance.Match.MapSizeCells : 50;
         }
 
         public void Build(int cells, int pixelsPerCell)
@@ -71,10 +85,10 @@ namespace JungleMaze.Presentation.World
             wall.transform.localPosition = position;
             wall.AddComponent<BoxCollider2D>().size = size;
             var renderer = wall.AddComponent<SpriteRenderer>();
-            renderer.sprite = _sprite;
+            renderer.sprite = wallSprite != null ? wallSprite : _sprite;
             renderer.drawMode = SpriteDrawMode.Tiled;
             renderer.size = size;
-            renderer.color = new Color(.7f, .65f, .5f);
+            renderer.color = wallSprite != null ? Color.white : new Color(.7f, .65f, .5f);
         }
 
         private void OnDestroy()

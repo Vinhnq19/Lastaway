@@ -28,7 +28,7 @@ namespace JungleMaze.Presentation.UI.Hud
         private readonly Action<HudStateChange> _onHud;
         private readonly Action<InventoryChange> _onInventory;
         private readonly Action<EffectChange> _onEffect;
-        private readonly MinimapProjection _projection;
+        private MinimapProjection _projection;
 
         private readonly SmoothedBar _hpBar, _armorBar, _helmetBar;
         private readonly DamageTrail _trail;
@@ -282,6 +282,8 @@ namespace JungleMaze.Presentation.UI.Hud
                 return;
             }
             var pose = _hud.Pose;
+            // Map offline có thể khác cỡ map lúc khởi tạo HUD: dựng lại phép chiếu khi cạnh map đổi.
+            if (_projection.MapSizeCells != _hud.MapSizeCells) _projection = new MinimapProjection(_hud.MapSizeCells, _minimap.SizePixels);
             _projection.Project(pose.X, pose.Y, out var x, out var y);
             var heading = MinimapProjection.HeadingDegrees(pose.RotationDegrees);
             if (_markerVisible && x == _markerX && y == _markerY && heading == _markerHeading) return;

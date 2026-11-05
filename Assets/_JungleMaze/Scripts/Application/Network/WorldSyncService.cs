@@ -56,7 +56,8 @@ namespace JungleMaze.App.Network
                 RotationDegrees = packet.RotationDegrees,
                 Hp = packet.Hp,
                 IsDead = packet.IsDead,
-                LastProcessedInputSeq = packet.LastProcessedInputSeq
+                LastProcessedInputSeq = packet.LastProcessedInputSeq,
+                HeldCode = packet.HeldCode
             };
             if (Players.GetOrAdd(packet.NetId).Apply(snapshot)) _bus.Publish(new PlayerStateUpdated(packet.NetId));
             else IgnoredPackets++;

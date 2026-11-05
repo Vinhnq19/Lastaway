@@ -70,6 +70,9 @@ public sealed class CombatService
         return true;
     }
 
+    /// <summary>Vũ khí đang cầm (Hand nếu người chơi chưa có trạng thái combat).</summary>
+    public CombatWeaponId HeldWeapon(byte netId) => _players.TryGetValue(netId, out var player) ? player.Held : CombatWeaponId.Hand;
+
     /// <summary>Xóa toàn bộ đạn, cooldown và passive đã dùng khi vào trận mới.</summary>
     public void Reset() => _players.Clear();
 

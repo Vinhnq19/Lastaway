@@ -36,6 +36,20 @@ namespace JungleMaze.Presentation.Combat
         [SerializeField] private MeleeSwingVisual swingPrefab;
         /// <summary>Index = CombatWeaponId. Entry 0 (Hand) may stay empty; weapon sprites are read from these prefabs.</summary>
         [SerializeField] private GameObject[] weaponPrefabs = new GameObject[CombatWeaponIds.Count];
+        /// <summary>Remote bodies to animate on confirmed attacks; found in the scene when left empty.</summary>
+        [SerializeField] private RemotePlayerSpawner remotePlayers;
+        /// <summary>Per-weapon shot art; empty keeps the plain tracer for every ranged weapon.</summary>
+        [SerializeField] private ProjectileArtCatalog projectileArt;
+        /// <summary>Optional muzzle flash prefab for weapons whose art has a muzzle clip.</summary>
+        [SerializeField] private ShotFlashVisual flashPrefab;
+
+        private PooledPrefabFactory<ShotFlashVisual> _flashes;
+        /// <summary>Distance from the wielder's centre to the barrel, where shots and flashes start.</summary>
+        private const float MuzzleReach = .45f;
+
+        private HeroSpriteAnimator _heroAnimator;
+        private HeldWeaponView _heroWeapon;
+        private HeldWeaponCatalog _heldCatalog;
 
         private IBalanceConfigProvider _balance;
         private IPoolService _pool;
@@ -89,6 +103,11 @@ namespace JungleMaze.Presentation.Combat
             }
             _projectiles = new PooledPrefabFactory<CoverProbeProjectile>(_pool, projectilePrefab, 16);
             _swings = new PooledPrefabFactory<MeleeSwingVisual>(_pool, swingPrefab, 4);
+            _heroAnimator = hero.GetComponentInChildren<HeroSpriteAnimator>(true);
+            _heroWeapon = hero.GetComponentInChildren<HeldWeaponView>(true);
+            _heldCatalog = _heroWeapon != null ? _heroWeapon.Catalog : null;
+            if (remotePlayers == null) remotePlayers = FindAnyObjectByType<RemotePlayerSpawner>();
+            if (flashPrefab != null) _flashes = new PooledPrefabFactory<ShotFlashVisual>(_pool, flashPrefab, 4);
             for (var i = 0; i < weaponPrefabs.Length && i < _weaponSprites.Length; i++)
             {
                 if (weaponPrefabs[i] == null) continue;
@@ -175,35 +194,69 @@ namespace JungleMaze.Presentation.Combat
         private void OnCombatEvent(CombatEvent combatEvent)
         {
             if (combatEvent.Kind == CombatEventKind.AttackPredicted)
-                SpawnAttackVisual(combatEvent.Weapon, combatEvent.AimDegrees, hero.position, hero);
+            {
+                var swing = SpawnAttackVisual(combatEvent.Weapon, combatEvent.AimDegrees, hero.position, hero);
+                Animate(_heroAnimator, _heroWeapon, combatEvent.Weapon, swing);
+            }
             else if (combatEvent.Kind == CombatEventKind.RemoteAttackConfirmed && _poses!=null && _poses.TryGetPose(combatEvent.NetId,out var pose))
-                SpawnAttackVisual(combatEvent.Weapon, pose.RotationDegrees, new Vector3(pose.X,pose.Y,0), null);
+            {
+                var swing = SpawnAttackVisual(combatEvent.Weapon, pose.RotationDegrees, new Vector3(pose.X,pose.Y,0), null);
+                var view = remotePlayers != null ? remotePlayers.GetView(combatEvent.NetId) : null;
+                if (view != null)
+                    Animate(view.GetComponentInChildren<HeroSpriteAnimator>(), view.GetComponentInChildren<HeldWeaponView>(), combatEvent.Weapon, swing);
+            }
         }
 
-        private void SpawnAttackVisual(CombatWeaponId weapon, float aimDegrees, Vector3 origin, Transform anchor)
+        /// <summary>Body attack swing plus in-hand weapon: remote hands switch to the weapon they attacked with.</summary>
+        private static void Animate(HeroSpriteAnimator body, HeldWeaponView held, CombatWeaponId weapon, float swingSeconds)
+        {
+            if (swingSeconds < 0f) return;
+            if (body != null) body.PlayAttack();
+            if (held == null) return;
+            held.Show(CombatWeaponIds.ToJsonId(weapon));
+            held.OnAttack(swingSeconds > 0f, swingSeconds);
+        }
+
+        /// <summary>Spawns the projectile or swing. Returns the swing length (0 for ranged, -1 when nothing was shown).</summary>
+        private float SpawnAttackVisual(CombatWeaponId weapon, float aimDegrees, Vector3 origin, Transform anchor)
         {
             var controller = _match.Connected ? _online.Controller : (_flow != null && _flow.IsOffline && _offlineWorld != null ? _offlineWorld.Combat?.Controller : _controller);
-            if (controller==null) return;
+            if (controller==null) return -1f;
             var slot = controller.Slot(weapon);
             if (slot.IsRanged)
             {
-                var shot = new ConfiguredShot(_balance, CombatWeaponIds.ToJsonId(weapon));
+                var itemId = CombatWeaponIds.ToJsonId(weapon);
+                var shot = new ConfiguredShot(_balance, itemId);
                 var count = CombatShotMath.PelletAngles(aimDegrees, slot.Pellets, slot.SpreadDegrees, _pelletAngles);
                 var pose = new SpawnPose(origin, Quaternion.identity);
+                var art = default(ProjectileArtCatalog.Entry);
+                var hasArt = projectileArt != null && projectileArt.TryGet(itemId, out art);
                 for (var i = 0; i < count; i++)
                 {
                     var radians = _pelletAngles[i] * Mathf.Deg2Rad;
                     var direction = new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
                     var projectile = _projectiles.Create(in pose);
+                    if (hasArt) projectile.SetLook(art.HasFlight ? art.Flight : null, art.FlightScale, art.AngleOffset, art.Spin, art.TracerColor);
                     projectile.Launch(in shot, direction);
                 }
-                return;
+                if (hasArt && art.HasMuzzle && _flashes != null)
+                {
+                    var aim = aimDegrees * Mathf.Deg2Rad;
+                    var flash = _flashes.Create(SpawnPose.At(origin));
+                    flash.Play(art.Muzzle, origin + new Vector3(Mathf.Cos(aim), Mathf.Sin(aim), 0f) * MuzzleReach, aimDegrees, art.MuzzleScale);
+                    _pool.Despawn(flash, flash.Duration + .05f);
+                }
+                return 0f;
             }
 
             var swing = _swings.Create(SpawnPose.At(origin));
             var duration = Mathf.Max(0.1f, slot.CadenceSeconds * 0.6f);
-            swing.Play(_weaponSprites[(int)weapon], anchor, aimDegrees, slot.ArcDegrees, slot.Range, duration);
+            if (_heldCatalog != null && _heldCatalog.TryGet(CombatWeaponIds.ToJsonId(weapon), out var held))
+                swing.Play(held.Sprite, anchor, aimDegrees, slot.ArcDegrees, slot.Range, duration, held.Scale, held.AngleOffset);
+            else
+                swing.Play(_weaponSprites[(int)weapon], anchor, aimDegrees, slot.ArcDegrees, slot.Range, duration);
             _pool.Despawn(swing, duration + 0.05f);
+            return duration;
         }
     }
 }

@@ -621,6 +621,47 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
 
         // 6. Broadcast 30Hz snapshot (using SetPlayer to avoid heap allocation)
         BroadcastSnapshot();
+        BroadcastHeldItems();
+    }
+
+    /// <summary>Resend period for <see cref="HeldItemsPacket"/> so late joiners and resumed peers catch up (2 s at 30 Hz).</summary>
+    private const int HeldItemsResendTicks = 60;
+    private readonly string[] _heldItems = new string[256];
+    private uint _heldItemsTick;
+    private bool _heldItemsSent;
+    private Guid _heldItemsMatch;
+
+    /// <summary>
+    /// Sends the item every player holds (reliable, own frame) when one changes or the resend period passes. Only
+    /// matches with a world map have items beyond combat weapons, so others send nothing.
+    /// </summary>
+    private void BroadcastHeldItems()
+    {
+        if (World == null) return;
+        if (_heldItemsMatch != MatchId)
+        {
+            Array.Clear(_heldItems, 0, _heldItems.Length);
+            _heldItemsMatch = MatchId;
+            _heldItemsSent = false;
+        }
+        var elapsed = unchecked((int)(CurrentTick - _heldItemsTick));
+        var due = !_heldItemsSent || elapsed < 0 || elapsed >= HeldItemsResendTicks;
+        foreach (var e in _entities.Values)
+        {
+            var id = World.Inventory.HeldWeapon(e.NetId).ItemId ?? "";
+            if (_heldItems[e.NetId] == id) continue;
+            _heldItems[e.NetId] = id;
+            due = true;
+        }
+        if (!due) return;
+        var packet = new HeldItemsPacket { MatchId = MatchId, Tick = CurrentTick };
+        foreach (var e in _entities.Values) packet.TryAdd(e.NetId, _heldItems[e.NetId]);
+        var writer = new NetDataWriter();
+        PacketRegistry.BeginFrame(writer);
+        _packets.Write(writer, ref packet);
+        ReliableBroadcast?.Invoke(writer.CopyData());
+        _heldItemsTick = CurrentTick;
+        _heldItemsSent = true;
     }
 
     private void TickEnding(double dt)
@@ -872,6 +913,21 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
         _replayIndex++;
     }
 
+    /// <summary>
+    /// Puts the weapon each player holds into its snapshot so others can draw it. With a world map the inventory is
+    /// the truth (an item with no combat id is sent as "other"); without one, the combat loadout is.
+    /// </summary>
+    private void WriteHeldWeapon(ref PlayerStatePacket state, byte netId)
+    {
+        if (World != null)
+        {
+            if (World.TryGetHeld(netId, out var held)) state.SetHeldWeapon(held);
+            else state.SetHeldOther();
+            return;
+        }
+        state.SetHeldWeapon(_combat.HeldWeapon(netId));
+    }
+
     private void BroadcastSnapshot()
     {
         var snapshot = new WorldSnapshotPacket
@@ -884,7 +940,7 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
         var i = 0;
         foreach (var e in _entities.Values)
         {
-            snapshot.SetPlayer(i++, new PlayerStatePacket
+            var state = new PlayerStatePacket
             {
                 Tick = CurrentTick,
                 NetId = e.NetId,
@@ -894,7 +950,9 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
                 LastProcessedInputSeq = e.LastProcessedInputSeq,
                 Hp = e.Hp,
                 Flags = e.Flags
-            });
+            };
+            WriteHeldWeapon(ref state, e.NetId);
+            snapshot.SetPlayer(i++, state);
         }
 
         var writer = _snapshotWriter;

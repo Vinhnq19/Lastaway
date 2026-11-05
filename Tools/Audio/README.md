@@ -22,7 +22,7 @@ python -m venv %TEMP%\audio_venv; %TEMP%\audio_venv\Scripts\pip install soundfil
 
 | Bước | Lệnh | Kết quả |
 | --- | --- | --- |
-| 1. Dựng clip | `<venv>\python Tools/Audio/process_clips.py` | `%TEMP%/art05_stage/Sfx/*.wav`, `Music/*.ogg`, `process_report.csv`. Chỉ đọc nguồn (`Tools/Audio/Sources/ART-05/`, `Assets/Imported/JSurviv/Sound/`), không ghi vào `Assets/` |
+| 1. Dựng clip | `<venv>\python Tools/Audio/process_clips.py` | `%TEMP%/art05_stage/Sfx/*.wav`, `Music/*.ogg`, `process_report.csv`. Chỉ đọc nguồn (`Tools/Audio/Sources/ART-05/`, `Assets/_JungleMaze/Art/JSurviv/Audio/`), không ghi vào `Assets/` |
 | 2. Chép vào Unity | Chép `Sfx/`, `Music/` vào `Assets/_JungleMaze/Art/Audio/` khi đang giữ Unity Editor (ghi đè đúng tên để giữ GUID) | |
 | 3. Đo | `python -I Tools/Audio/measure_clips.py [thư mục] [--csv out.csv]` | Đỉnh, L, 2 ms đầu/cuối, chuỗi chạm trần (thư viện chuẩn, WAV 16-bit) |
 | 4. Manifest | `<venv>\python Tools/Audio/build_manifest.py` | `Docs/Tickets/ART-05_audio_manifest.csv` từ công thức, kiểm kê và file trong repo |

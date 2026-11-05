@@ -30,6 +30,8 @@ namespace JungleMaze.LevelEditor
         }
 
         private readonly List<PlacementView> _views = new List<PlacementView>();
+        /// <summary>Ô có tường (để tường tự nối); tính lại khi đồng bộ view hoặc khi một ô tường đổi.</summary>
+        private HashSet<Vector2Int> _wallCells;
         private Transform _objectsRoot, _sprinkleRoot;
         private readonly List<SpriteRenderer> _sprinkles = new List<SpriteRenderer>();
         private PlacementView _ghost;
@@ -166,17 +168,32 @@ namespace JungleMaze.LevelEditor
         /// <summary>Đồng bộ số view với số placement rồi vẽ lại tất cả; O(n), gọi sau mỗi thao tác.</summary>
         private void SyncViews()
         {
+            _wallCells = LevelWalls.Cells(_doc.Placements);
             while (_views.Count < _doc.Placements.Count) _views.Add(CreateView(_objectsRoot, "Placement"));
             for (var i = 0; i < _views.Count; i++)
             {
                 var active = i < _doc.Placements.Count;
                 _views[i].Root.SetActive(active);
-                if (active) RefreshView(i);
+                if (active) DrawView(i);
             }
             RebuildSprinkles();
         }
 
         private void RefreshView(int index)
+        {
+            var p = _doc.Placements[index];
+            if (p.Type == LevelWalls.Id)
+            {
+                // Tường tự nối theo ô kề: đổi một ô thì vẽ lại mọi ô tường.
+                _wallCells = LevelWalls.Cells(_doc.Placements);
+                for (var i = 0; i < _doc.Placements.Count && i < _views.Count; i++)
+                    if (_doc.Placements[i].Type == LevelWalls.Id) DrawView(i);
+                return;
+            }
+            DrawView(index);
+        }
+
+        private void DrawView(int index)
         {
             var p = _doc.Placements[index];
             var view = _views[index];
@@ -282,6 +299,8 @@ namespace JungleMaze.LevelEditor
         private LevelVisualPart[] PartsFor(LevelPlacement p, LevelItemType type)
         {
             if (type == null || type.Variants == null || type.Variants.Length == 0) return null;
+            if (p.Type == LevelWalls.Id && p.OnGrid)
+                return LevelWalls.Parts(catalog.WallGrid, _wallCells ?? (_wallCells = LevelWalls.Cells(_doc.Placements)), p.CellX, p.CellY);
             var cellX = p.OnGrid ? p.CellX : Mathf.FloorToInt(p.X);
             var cellY = p.OnGrid ? p.CellY : Mathf.FloorToInt(p.Y);
             var pick = LevelGround.Hash01(_doc.Seed, cellX, cellY, 77);

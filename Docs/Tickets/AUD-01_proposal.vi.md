@@ -8,7 +8,7 @@ Ticket: AudioManager và phản hồi âm thanh trong game. PIC V.Huy, P1, Giai 
 
 - Chưa có code audio nào trong `Assets/_JungleMaze`.
 - UI-01 phần 2 đã phát đủ sự kiện phản hồi qua `IHudState` (`ItemPicked`, `HitDealt`, `DamageTaken`, `DangerChanged`) và `IInventoryState` (`UseChanged`). Core có `EventBus` và `ObjectPool`.
-- `Assets/Imported/JSurviv/Sound` có khoảng 20 file dùng tạm được: súng bắn, melee chém, Đập, bomb nổ, Bo co, countdown, TimeOver, nhặt súng, Gun Put On, Helmet Put On, gauze, cola, bleed, button, revive, và 3 bài nhạc (Loading, ParkingMap, Waiting Room).
+- `Assets/_JungleMaze/Art/JSurviv/Audio` có khoảng 20 file dùng tạm được: súng bắn, melee chém, Đập, bomb nổ, Bo co, countdown, TimeOver, nhặt súng, Gun Put On, Helmet Put On, gauze, cola, bleed, button, revive, và 3 bài nhạc (Loading, ParkingMap, Waiting Room).
 - GDD **không có danh sách 26 SFX**. Sheet Assets dòng 9–14 chỉ ghi nhóm, nên danh sách do AUD-01 đề xuất.
 
 ## Kiến trúc

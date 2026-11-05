@@ -16,8 +16,25 @@ namespace JungleMaze.World
         public uint CollisionRevision {get;private set;} public bool DoorsClosed {get{return _doorsClosed;}}
         public event Action<uint,bool> DoorChanged;
         public uint BlockedDoorClosures {get;private set;}
-        public HazardService(MapLayout map,HazardConfig config,IEnvironmentDamageSink damage,IEnvironmentEffectSink effects,IEnvironmentMovementSink movement,Func<ushort,bool> broken=null){if(map==null||damage==null||effects==null||movement==null)throw new ArgumentNullException();config.Validate();_map=map;_config=config;_damage=damage;_effects=effects;_movement=movement;_broken=broken;}
-        public bool IsDoorClosed(ushort id){return _doorsClosed;}
+        /// <summary>Khoảng cách tối đa từ tâm hero tới cửa để mở/đóng.</summary>
+        public const float DoorReach=1.6f;
+        /// <summary>Cửa tương tác (HP do map đặt): true = đang mở. Mặc định đóng.</summary>
+        private readonly Dictionary<ushort,bool> _openDoors=new Dictionary<ushort,bool>();
+        public HazardService(MapLayout map,HazardConfig config,IEnvironmentDamageSink damage,IEnvironmentEffectSink effects,IEnvironmentMovementSink movement,Func<ushort,bool> broken=null){if(map==null||damage==null||effects==null||movement==null)throw new ArgumentNullException();config.Validate();_map=map;_config=config;_damage=damage;_effects=effects;_movement=movement;_broken=broken;foreach(var o in map.Objects)if(o.IsInteractiveDoor)_openDoors[o.Id]=false;}
+        /// <summary>Cửa tương tác: đóng khi chưa mở và chưa vỡ. Cửa cũ: theo chu kỳ chung.</summary>
+        public bool IsDoorClosed(ushort id){if(_openDoors.TryGetValue(id,out var open))return !open&&(_broken==null||!_broken(id));return _doorsClosed;}
+        /// <summary>
+        /// Người chơi mở/đóng cửa tương tác trong tầm <see cref="DoorReach"/>. Không đóng khi có hero đang đứng trong khung
+        /// cửa; cửa đã vỡ thì luôn mở. Trả true khi trạng thái đổi.
+        /// </summary>
+        public bool TryToggleDoor(ushort id,WorldPoint actor,IReadOnlyList<WorldActor> actors)
+        {
+            if(!_openDoors.TryGetValue(id,out var open)||(_broken!=null&&_broken(id)))return false;
+            WorldObjectDefinition door=null;foreach(var o in _map.Objects)if(o.Id==id){door=o;break;}
+            if(door==null||!door.Bounds.IntersectsCircle(actor,DoorReach))return false;
+            if(open&&actors!=null)foreach(var a in actors)if(a.Alive&&door.Bounds.IntersectsCircle(a.Position,_config.HeroRadius))return false;
+            _openDoors[id]=!open;CollisionRevision++;DoorChanged?.Invoke(CollisionRevision,open);return true;
+        }
         public void Tick(uint tick,IReadOnlyList<WorldActor> actors)
         {
             if(actors==null)throw new ArgumentNullException(nameof(actors));
@@ -38,7 +55,7 @@ namespace JungleMaze.World
                         case WorldObjectKind.Portal:
                             if(teleported||(_portalDue.TryGetValue(actor.Id,out var ready)&&unchecked((int)(tick-ready))<0))break;
                             foreach(var other in _map.Objects)if(other.Kind==WorldObjectKind.Portal&&other.PairId==o.PairId&&other.Id!=o.Id){var destination=other.Bounds.Center;if(_map.IsWalkable(destination,_config.HeroRadius,_broken,IsDoorClosed)&&_movement.TryMove(actor.Id,destination,o.Id,tick)){_portalDue[actor.Id]=tick+ToTicks(_config.PortalCooldownSeconds);teleported=true;}break;}break;
-                        case WorldObjectKind.Door:if(justClosed){WorldPoint destination;if(TryFindFree(actor.Position,out destination))_movement.TryMove(actor.Id,destination,o.Id,tick);else{_doorsClosed=false;CollisionRevision++;BlockedDoorClosures++;DoorChanged?.Invoke(CollisionRevision,false);}}break;
+                        case WorldObjectKind.Door:if(justClosed&&!o.IsInteractiveDoor){WorldPoint destination;if(TryFindFree(actor.Position,out destination))_movement.TryMove(actor.Id,destination,o.Id,tick);else{_doorsClosed=false;CollisionRevision++;BlockedDoorClosures++;DoorChanged?.Invoke(CollisionRevision,false);}}break;
                     }
                 }
             }

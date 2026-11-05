@@ -32,6 +32,8 @@ namespace JungleMaze.LevelEditor
         private Rect _topRect, _leftRect, _rightRect, _bottomRect;
         private Vector2 _leftScroll, _rightScroll;
         private string _widthText, _heightText, _versionText, _seedText;
+        private string _hpText = "";
+        private int _hpTextFor = -1;
         private string _path = "";
         private string _status = "";
         private string _validation;
@@ -247,7 +249,7 @@ namespace JungleMaze.LevelEditor
             GUILayout.Label($"Spawn {_doc.Count(LevelItemGroup.Spawn)}/10 · Cover {_doc.Count(LevelItemGroup.Cover)} · " +
                             $"Vật thể {_doc.Count(LevelItemGroup.WorldObject)} · Trang trí {_doc.Count(LevelItemGroup.Decoration)}", _small);
             if (_validation == null) GUILayout.Label("Chưa kiểm tra (bấm \"Kiểm tra\").", _small);
-            else if (_validation.Length == 0) GUILayout.Label($"<color=#7CFC7C>Hợp lệ — game đọc được.</color>\nhash {_validationHash?.Substring(0, 12)}…", _wrap);
+            else if (_validation.Length == 0) GUILayout.Label($"<color=#7CFC7C>Hợp lệ — game đọc được.</color>\nhash {(_validationHash ?? "").Substring(0, Math.Min(12, (_validationHash ?? "").Length))}…", _wrap);
             else GUILayout.Label($"<color=#FF7B6B>{_validation}</color>", _wrap);
 
             GUILayout.Space(8);
@@ -293,9 +295,42 @@ namespace JungleMaze.LevelEditor
                 if (GUILayout.Button("+")) Defer(() => SetPortalPair(_selected, 1));
                 GUILayout.EndHorizontal();
             }
+            DrawDestructible(p);
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("Nhân bản (Ctrl+D)")) Defer(DuplicateSelected);
             if (GUILayout.Button("Xóa (Del)")) Defer(() => RemoveAt(_selected));
+            GUILayout.EndHorizontal();
+        }
+
+        private static readonly string[] LootLabels = { "Bình", "Rương", "Tiếp tế" };
+
+        /// <summary>
+        /// Cover: bật "Phá được" để trong game vật này có HP, nháy sáng khi trúng đòn và rơi loot khi vỡ (không còn là hard
+        /// cover). Rương/bình/thùng tiếp tế vốn phá được: chỉ chỉnh HP. HP 0 = HP mặc định của loại loot.
+        /// </summary>
+        private void DrawDestructible(LevelPlacement p)
+        {
+            if (p.Group == LevelItemGroup.Cover)
+            {
+                var breakable = GUILayout.Toggle(p.Destructible, " Phá được (có HP, rơi loot)");
+                if (breakable != p.Destructible) Defer(() => SetDestructible(_selected, breakable));
+            }
+            if (!p.BreaksInGame) return;
+            if (_hpTextFor != _selected) { _hpTextFor = _selected; _hpText = p.Hp.ToString(); }
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("HP", GUILayout.Width(28));
+            var text = GUILayout.TextField(_hpText, 5, GUILayout.Width(60));
+            if (text != _hpText) { _hpText = text; Defer(() => ApplyHpText(_selected, text)); }
+            GUILayout.Label(p.Hp == 0 ? "0 = mặc định" : "", _small);
+            GUILayout.EndHorizontal();
+            if (p.Group != LevelItemGroup.Cover) return;
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Loot", GUILayout.Width(36));
+            for (var i = 0; i < LevelPlacement.LootKinds.Length; i++)
+            {
+                var kind = LevelPlacement.LootKinds[i];
+                if (GUILayout.Toggle(p.Loot == kind, LootLabels[i], GUI.skin.button) && p.Loot != kind) Defer(() => SetLoot(_selected, kind));
+            }
             GUILayout.EndHorizontal();
         }
 
@@ -317,6 +352,7 @@ namespace JungleMaze.LevelEditor
                 string text;
                 if (p.Group == LevelItemGroup.Spawn) text = "S" + ++spawn;
                 else if (p.IsPortal) text = "P" + p.PairId;
+                else if (p.Group == LevelItemGroup.Cover && p.Destructible) text = p.Hp == 0 ? "Vỡ" : "Vỡ " + p.Hp;
                 else continue;
                 var screen = viewCamera.WorldToScreenPoint(new Vector3(p.X, p.Y + p.Height / 2f + .2f, 0f));
                 if (screen.z < 0) continue;

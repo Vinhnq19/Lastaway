@@ -3,7 +3,7 @@
 Three kinds of row (column row_type):
   sfx      26 rows in SfxId order: inventory status of 27/10 (2.2), JSurviv source facts, final clips,
            catalog volume and effective level E = mean L + 20*log10(volume).
-  jsurviv  30 rows: the 21 files of Assets/Imported/JSurviv/Sound and the 9 zip members, with class, md5,
+  jsurviv  30 rows: the 21 files of Assets/_JungleMaze/Art/JSurviv/Audio and the 9 zip members, with class, md5,
            and for the 14 AUD-01 copies whether the copy is still byte-identical (AC38).
   clip     one row per file in Art/Audio/Sfx and Art/Audio/Music: source, licence, cut, gain, levels before
            and after (after = the file in the repo), size and md5.
@@ -33,7 +33,7 @@ import measure_clips
 ROOT = Path(__file__).resolve().parents[2]
 RECIPE = ROOT / 'Tools/Audio/art05_recipe.csv'
 INVENTORY = ROOT / 'Tools/Audio/art05_jsurviv_inventory.csv'
-JSURVIV = ROOT / 'Assets/Imported/JSurviv/Sound'
+JSURVIV = ROOT / 'Assets/_JungleMaze/Art/JSurviv/Audio'
 COPIES = ROOT / 'Assets/_JungleMaze/Art/Audio/Placeholder/JSurviv'
 AUDIO = ROOT / 'Assets/_JungleMaze/Art/Audio'
 OUT = ROOT / 'Docs/Tickets/ART-05_audio_manifest.csv'

@@ -1,6 +1,8 @@
 using JungleMaze.App.Ports;
 using JungleMaze.Core.Pooling;
 using JungleMaze.Domain.Player;
+using JungleBackend.Protocol.Gameplay;
+using JungleMaze.Presentation.Combat;
 using JungleMaze.Presentation.Rendering;
 using UnityEngine;
 
@@ -10,11 +12,16 @@ namespace JungleMaze.Presentation.Player
     /// Hiển thị một người chơi (không đọc packet). Vị trí lấy từ <see cref="IPlayerPoseSource"/>: prediction cho nhân vật
     /// của mình (MOV-02), interpolation cho người khác (MOV-03). Chưa có pose thì đặt thẳng theo snapshot mới nhất.
     /// Được lấy từ pool nên reset trạng thái trong OnSpawned/OnDespawned.
+    /// Body có <see cref="HeroSpriteAnimator"/> thì mỗi NetId nhận một hero riêng (không tô màu, animator giữ scale).
     /// </summary>
     public sealed class PlayerView : MonoBehaviour, IPoolable
     {
         [SerializeField] private SpriteRenderer body;
         [SerializeField] private float followSharpness = 15f;
+        /// <summary>In-hand weapon that follows the server's held-weapon code; found among the children when empty.</summary>
+        [SerializeField] private HeldWeaponView heldWeapon;
+        private int _appliedHeldCode = -1;
+        private string _appliedHeldItem = "";
 
         private PlayerModel _model;
         private IPlayerPoseSource _poses;
@@ -29,6 +36,12 @@ namespace JungleMaze.Presentation.Player
             _model = model;
             _poses = poses;
             _snapNext = true;
+            if (body != null && body.TryGetComponent<HeroSpriteAnimator>(out var hero) && hero.enabled)
+            {
+                body.color = Color.white;
+                hero.SetHero(model.NetId);
+                if (hero.HasVisuals) { Refresh(); return; }
+            }
             if (body != null)
             {
                 body.color = Color.HSVToRGB(model.NetId * 0.1f % 1f, 0.6f, 1f);
@@ -42,22 +55,45 @@ namespace JungleMaze.Presentation.Player
             Refresh();
         }
 
-        private void Awake() => TryGetComponent(out _depth); // tùy chọn, xem DepthSortable
+        private void Awake()
+        {
+            TryGetComponent(out _depth); // tùy chọn, xem DepthSortable
+            if (heldWeapon == null) heldWeapon = GetComponentInChildren<HeldWeaponView>(true);
+        }
 
-        public void OnSpawned() => _snapNext = true;
+        public void OnSpawned()
+        {
+            _snapNext = true;
+            _appliedHeldCode = -1;
+        }
 
         public void OnDespawned()
         {
             _model = null;
             _poses = null;
+            _appliedHeldCode = -1;
+            if (heldWeapon != null) heldWeapon.Show(null);
         }
 
         // LateUpdate: prediction/interpolation đã được tick trong Update của frame này.
         private void LateUpdate() => Refresh();
 
+        /// <summary>Applies the latest snapshot's held-weapon code (and, for "other item", the held item ID) once per change.</summary>
+        private void SyncHeldWeapon()
+        {
+            if (heldWeapon == null || !_model.HasState) return;
+            var code = _model.Current.HeldCode;
+            var item = code == PlayerStatePacket.HeldOther ? _model.HeldItemId : "";
+            if (code == _appliedHeldCode && item == _appliedHeldItem) return;
+            _appliedHeldCode = code;
+            _appliedHeldItem = item;
+            heldWeapon.ShowServerCode(code, item);
+        }
+
         private void Refresh()
         {
             if (_model == null) return;
+            SyncHeldWeapon();
             if (_poses != null && _poses.TryGetPose(_model.NetId, out var pose))
             {
                 // Pose đã mượt sẵn: đặt thẳng, không làm mượt thêm (sẽ cộng độ trễ).

@@ -75,8 +75,10 @@ namespace JungleMaze.App.Match
             SurvivalSeconds = 0f;
             DisplayName = _config?.CommandLineDisplayName ?? "Player";
 
-            var schedule = _data?.ZoneSchedule ?? ZoneSchedule.Default();
             var bounds = _data?.Bounds;
+            var schedule = _data?.ZoneSchedule ?? ZoneSchedule.Default();
+            // Map offline có thể lớn hơn map 50 của lịch bo: co giãn bo theo cạnh map.
+            if (bounds.HasValue) schedule = schedule.ScaledTo(bounds.Value.MaxX - bounds.Value.MinX);
             Zone = new ZoneSimulation(schedule, seed: MatchId.GetHashCode(), margin: 2.0f, bounds: bounds);
 
             _hudWriter.SetHp(PlayerHp);

@@ -90,8 +90,9 @@ Mọi vật **đặt theo ô**: không có vị trí lẻ, không phóng to/thu 
 - Footprint ô của vật cản lấy từ collider (làm tròn). Vật thể game làm tròn theo ô (rương/bình/bụi/cửa 1×1, portal 3×2).
 - Đầm lầy, lava, ổ gai đã bỏ khỏi bảng vì Cainos không có art. File cũ có các vật này vẫn mở được (hiện thành khối giữ đúng bounds).
 - Portal tự ghép cặp theo thứ tự đặt (1-1, 2-2, ...). Đổi số cặp ở cột phải.
+- **Phá được** (cột phải, mục ĐANG CHỌN của một vật che chắn): bật để vật đó trong game có **HP** riêng, **nháy sáng** khi trúng đòn (shader `JungleMaze/Sprite Hit Flash`) và **rơi loot** khi vỡ theo bảng **Loot** chọn (Bình / Rương / Tiếp tế). Vật phá được không còn là hard cover: ghi vào `worldObjects` với `kind` = bảng loot, `hp`, `art` = tên vật, bounds = cả footprint (dễ đánh trúng). Rương/bình/thùng tiếp tế cũng chỉnh được HP. HP 0 = HP mặc định của loại (`world_settings.json`). Trên map, vật phá được có nhãn "Vỡ <hp>"; Ctrl+D nhân bản giữ nguyên thiết lập. Hash map chỉ đổi khi có `hp` khác 0, nên map cũ giữ nguyên hash.
 
-> **Trong trận** game vẫn vẽ map như cũ (chưa vẽ art Cainos). Vật cản Cainos sẽ hiện thành khối cover cỡ collider chân cho tới khi làm phần hiển thị trong trận.
+> **Trong trận** `LevelArtView` (Game scene, `Scripts/Presentation/World/LevelArtView.cs`) đọc khối `editor` của `map_demo.json` và vẽ giống Level Editor: ground cỏ theo seed, đường đá, viền/tường mép, cỏ rải, hình Cainos của cover/decor (Y-sort theo chân, material Unlit như editor). Nó hiện khi chơi offline, hoặc khi phòng mạng chọn đúng map có cùng hash với `map_demo.json`; map khác giữ cách vẽ cũ. Vật thể game (rương, bình, bụi, portal, cửa, hazard) vẫn dùng art game theo trạng thái. Đổi `map_demo.json` thì phải dựng lại collider `Obstacles` trong `Game.unity` cho khớp từng collider chân (tên = type), nếu không màn Game báo lệch vật cản.
 
 ## 5. File JSON
 

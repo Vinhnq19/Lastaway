@@ -22,6 +22,8 @@ namespace JungleMaze.LevelEditor
         private Tool _tool = Tool.Select;
         private LevelItemType _brush;
         private bool _brushFlip;
+        /// <summary>Vật được nhân bản (Ctrl+D): bản đặt mới lấy thiết lập phá được/HP/loot của nó.</summary>
+        private LevelPlacement _brushSource;
         private int _selected = -1;
         private int _hover = -1;
         private bool _dragging, _dragRecorded;
@@ -173,6 +175,12 @@ namespace JungleMaze.LevelEditor
             var placement = LevelPlacement.OnCell(_brush.Id, _brush.Group, origin.x, origin.y, _brush.Shape);
             placement.FlipX = _brush.Group != LevelItemGroup.Spawn && _brushFlip;
             if (placement.IsPortal) placement.PairId = _doc.NextPortalPair();
+            if (_brushSource != null && _brushSource.Type == _brush.Id)
+            {
+                placement.Destructible = _brushSource.Destructible;
+                placement.Hp = _brushSource.Hp;
+                placement.Loot = _brushSource.Loot;
+            }
             return placement;
         }
 
@@ -219,6 +227,7 @@ namespace JungleMaze.LevelEditor
         {
             _tool = tool;
             _brush = tool == Tool.Place ? brush : null;
+            _brushSource = null;
             if (_brush != null || tool == Tool.Path) Select(-1);
             if (tool == Tool.Path) SetStatus("Đường đá: giữ chuột trái để tô, chuột phải để xoá. P hoặc Q để thoát.");
             UpdateGhost();
@@ -227,6 +236,7 @@ namespace JungleMaze.LevelEditor
         private void Select(int index)
         {
             _selected = index >= 0 && index < _doc.Placements.Count ? index : -1;
+            _hpTextFor = -1;
             RefreshHighlights();
         }
 
@@ -283,6 +293,7 @@ namespace JungleMaze.LevelEditor
             if (type == null) return;
             _brushFlip = p.FlipX;
             SetTool(Tool.Place, type);
+            _brushSource = p.Clone(); // bản sao giữ "Phá được", HP và loot
             SetStatus($"Nhân bản {type.DisplayName}: click để đặt bản sao.");
         }
 
@@ -293,6 +304,38 @@ namespace JungleMaze.LevelEditor
             if (next == p.PairId) return;
             RecordHistory();
             p.PairId = (ushort)next;
+            MarkDirty();
+        }
+
+        private void SetDestructible(int index, bool value)
+        {
+            if (index < 0 || index >= _doc.Placements.Count) return;
+            var p = _doc.Placements[index];
+            if (p.Group != LevelItemGroup.Cover || p.Destructible == value) return;
+            RecordHistory();
+            p.Destructible = value;
+            _hpTextFor = -1;
+            MarkDirty();
+            SetStatus(value ? "Phá được: trong game có HP, nháy sáng khi trúng đòn, rơi loot khi vỡ." : "Về hard cover (không phá được).");
+        }
+
+        private void ApplyHpText(int index, string text)
+        {
+            if (index < 0 || index >= _doc.Placements.Count) return;
+            var p = _doc.Placements[index];
+            if (!p.BreaksInGame || !ushort.TryParse(text.Trim(), out var hp) || hp == p.Hp) return;
+            RecordHistory();
+            p.Hp = hp;
+            MarkDirty();
+        }
+
+        private void SetLoot(int index, string loot)
+        {
+            if (index < 0 || index >= _doc.Placements.Count) return;
+            var p = _doc.Placements[index];
+            if (p.Loot == loot) return;
+            RecordHistory();
+            p.Loot = loot;
             MarkDirty();
         }
 

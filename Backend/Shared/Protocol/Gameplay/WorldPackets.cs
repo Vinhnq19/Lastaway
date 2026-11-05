@@ -3,7 +3,7 @@ using System;
 using LiteNetLib.Utils;
 namespace JungleBackend.Protocol.Gameplay
 {
-    public enum WorldActionKind:byte { Resync=0,Pickup=1,Drop=2,Select=3,Use=4,CancelUse=5 }
+    public enum WorldActionKind:byte { Resync=0,Pickup=1,Drop=2,Select=3,Use=4,CancelUse=5,Interact=6 }
     public static class WorldWire
     {
         public const byte Version=2;public const int PageSize=24,MaxObjects=4096;
@@ -22,7 +22,7 @@ namespace JungleBackend.Protocol.Gameplay
     {
         public Guid MatchId;public uint RequestId;public WorldActionKind Action;public ushort TargetId;public byte Slot;
         public void Serialize(NetDataWriter w){WorldWire.Header(w,MatchId);w.Put(RequestId);w.Put((byte)Action);w.Put(TargetId);w.Put(Slot);}
-        public void Deserialize(NetDataReader r){MatchId=WorldWire.Header(r);RequestId=r.GetUInt();Action=(WorldActionKind)r.GetByte();TargetId=r.GetUShort();Slot=r.GetByte();WorldWire.Check(RequestId!=0&&Action<=WorldActionKind.CancelUse&&(Slot<8||Slot==255));}
+        public void Deserialize(NetDataReader r){MatchId=WorldWire.Header(r);RequestId=r.GetUInt();Action=(WorldActionKind)r.GetByte();TargetId=r.GetUShort();Slot=r.GetByte();WorldWire.Check(RequestId!=0&&Action<=WorldActionKind.Interact&&(Slot<8||Slot==255));}
     }
     public struct WorldManifestPacket:INetSerializable
     {

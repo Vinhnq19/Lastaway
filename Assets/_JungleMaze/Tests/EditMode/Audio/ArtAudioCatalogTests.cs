@@ -56,7 +56,10 @@ namespace JungleMaze.Tests.Audio
         {
             foreach (var row in ArtAudioSpec.Table)
                 foreach (var clip in Clips(row.Id))
+                {
                     StringAssert.DoesNotStartWith("Assets/Imported/", AssetDatabase.GetAssetPath(clip));
+                    StringAssert.DoesNotStartWith("Assets/_JungleMaze/Art/JSurviv/", AssetDatabase.GetAssetPath(clip));
+                }
             var files = 0;
             foreach (var folder in new[] { ArtAudioSpec.SfxFolder, ArtAudioSpec.MusicFolder })
                 foreach (var meta in Directory.GetFiles(ArtAudioSpec.ProjectPath(folder), "*.meta"))

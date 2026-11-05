@@ -74,7 +74,7 @@ public sealed partial class MatchRuntime
         if(World==null||_worldMap==null)return;
         _worldMap.Obstacles.Clear();
         foreach(var o in World.Layout.Objects)
-            if(o.IsHardCover||(o.IsDestructible&&!World.Destructibles.IsBroken(o.Id))||(o.Kind==WorldObjectKind.Door&&World.Hazards.DoorsClosed))
+            if(o.IsHardCover||(o.IsDestructible&&!World.Destructibles.IsBroken(o.Id))||(o.Kind==WorldObjectKind.Door&&World.Hazards.IsDoorClosed(o.Id)))
                 _worldMap.Obstacles.Add(new AABB(o.Kind+"-"+o.Id,o.Bounds.MinX,o.Bounds.MaxX,o.Bounds.MinY,o.Bounds.MaxY));
     }
     private void ResetWorld(){World=null;_worldMap=null;_worldPhysics=null;}

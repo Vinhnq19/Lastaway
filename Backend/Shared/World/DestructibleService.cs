@@ -16,7 +16,7 @@ namespace JungleMaze.World
         private readonly Dictionary<ulong,uint> _lastAction=new Dictionary<ulong,uint>();
         private readonly IDestructibleLootSink _loot;private readonly uint _seed;
         public event Action<DestructibleState> Changed;
-        public DestructibleService(MapLayout layout,DestructibleConfig config,IDestructibleLootSink loot){if(layout==null||loot==null)throw new ArgumentNullException();config.Validate();_loot=loot;_seed=layout.Seed;foreach(var o in layout.Objects)if(o.IsDestructible){_objects.Add(o.Id,o);_states.Add(o.Id,new DestructibleState{Id=o.Id,Hp=o.Kind==WorldObjectKind.Chest?config.ChestHp:o.Kind==WorldObjectKind.Pot?config.PotHp:config.SupplyHp});}}
+        public DestructibleService(MapLayout layout,DestructibleConfig config,IDestructibleLootSink loot){if(layout==null||loot==null)throw new ArgumentNullException();config.Validate();_loot=loot;_seed=layout.Seed;foreach(var o in layout.Objects)if(o.IsBreakable){_objects.Add(o.Id,o);_states.Add(o.Id,new DestructibleState{Id=o.Id,Hp=o.Hp!=0?o.Hp:o.Kind==WorldObjectKind.Chest?config.ChestHp:o.Kind==WorldObjectKind.Pot?config.PotHp:config.SupplyHp});}}
         public IEnumerable<DestructibleState> States {get{foreach(var s in _states.Values)yield return Copy(s);}}
         public bool IsBroken(ushort id){return _states.TryGetValue(id,out var state)&&state.Broken;}
         public bool TryGet(ushort id,out DestructibleState state){if(_states.TryGetValue(id,out var found)){state=Copy(found);return true;}state=null;return false;}
@@ -25,10 +25,11 @@ namespace JungleMaze.World
         {
             if(damage<=0||actionSequence==0||!_states.TryGetValue(id,out var state)||state.Broken)return false;
             var key=((ulong)id<<8)|source;if(_lastAction.TryGetValue(key,out var last)&&unchecked((int)(actionSequence-last))<=0)return false;
-            if(damage>=state.Hp&&_loot is ITransactionalDestructibleLootSink transactional){var o=_objects[id];if(!transactional.CanSpawnLoot(o.Kind,id,_seed^((uint)id*2654435761u)))return false;}
+            var drops=_objects[id].IsDestructible; // cửa tương tác vỡ thì mở đường, không rơi loot
+            if(drops&&damage>=state.Hp&&_loot is ITransactionalDestructibleLootSink transactional){var o=_objects[id];if(!transactional.CanSpawnLoot(o.Kind,id,_seed^((uint)id*2654435761u)))return false;}
             _lastAction[key]=actionSequence;
             state.Hp=Math.Max(0,state.Hp-damage);state.Broken=state.Hp==0;state.Revision++;
-            if(state.Broken){var o=_objects[id];_loot.SpawnLoot(o.Kind,id,o.Bounds.Center,_seed^((uint)id*2654435761u));}
+            if(state.Broken&&drops){var o=_objects[id];_loot.SpawnLoot(o.Kind,id,o.Bounds.Center,_seed^((uint)id*2654435761u));}
             Changed?.Invoke(Copy(state));return true;
         }
     }

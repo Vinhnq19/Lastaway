@@ -1,0 +1,1352 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7337a8417a963b941bb42eb5468f8b83, type: 3}
+  m_Name: HeroVisualSet
+  m_EditorClassIdentifier: JungleMaze.Presentation::JungleMaze.Presentation.Player.HeroVisualSet
+  FrameWorldHeight: 3
+  Heroes:
+  - Name: Hero_14
+    IdleBack:
+      Sprites:
+      - {fileID: 2882420173269749542, guid: 572a9610b89414341b7498e160254345, type: 3}
+      - {fileID: -9158514971632744460, guid: 572a9610b89414341b7498e160254345, type: 3}
+      - {fileID: -163987690517855034, guid: 572a9610b89414341b7498e160254345, type: 3}
+      - {fileID: 5177638261920367060, guid: 572a9610b89414341b7498e160254345, type: 3}
+      - {fileID: 1311880728476780695, guid: 572a9610b89414341b7498e160254345, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      - 0.6666667
+      Duration: 0.68333334
+      Loop: 1
+    IdleSide:
+      Sprites:
+      - {fileID: -2872162265378599279, guid: 572a9610b89414341b7498e160254345, type: 3}
+      - {fileID: 402200273077143531, guid: 572a9610b89414341b7498e160254345, type: 3}
+      - {fileID: -2032237554275080426, guid: 572a9610b89414341b7498e160254345, type: 3}
+      - {fileID: -1058410437882430240, guid: 572a9610b89414341b7498e160254345, type: 3}
+      - {fileID: -2678099055336301169, guid: 572a9610b89414341b7498e160254345, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      - 0.6666667
+      Duration: 0.68333334
+      Loop: 1
+    IdleFront:
+      Sprites:
+      - {fileID: 6518368477050014531, guid: 572a9610b89414341b7498e160254345, type: 3}
+      - {fileID: 4989735071865389277, guid: 572a9610b89414341b7498e160254345, type: 3}
+      - {fileID: 2059738106735574338, guid: 572a9610b89414341b7498e160254345, type: 3}
+      - {fileID: -5399160356854391539, guid: 572a9610b89414341b7498e160254345, type: 3}
+      - {fileID: 104633682693728466, guid: 572a9610b89414341b7498e160254345, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      - 0.6666667
+      Duration: 0.68333334
+      Loop: 1
+    MoveBack:
+      Sprites:
+      - {fileID: 6448947695305566145, guid: c11dc639b26ddd54fb96f9edaa2fff8b, type: 3}
+      - {fileID: -3240751438828834823, guid: c11dc639b26ddd54fb96f9edaa2fff8b, type: 3}
+      - {fileID: 6423123483680010762, guid: c11dc639b26ddd54fb96f9edaa2fff8b, type: 3}
+      - {fileID: -8743074123979505257, guid: c11dc639b26ddd54fb96f9edaa2fff8b, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      Duration: 0.51666665
+      Loop: 1
+    MoveSide:
+      Sprites:
+      - {fileID: -2272667917599492880, guid: c11dc639b26ddd54fb96f9edaa2fff8b, type: 3}
+      - {fileID: -7626670399534357928, guid: c11dc639b26ddd54fb96f9edaa2fff8b, type: 3}
+      - {fileID: 4442030521927426190, guid: c11dc639b26ddd54fb96f9edaa2fff8b, type: 3}
+      - {fileID: -2765545973297137287, guid: c11dc639b26ddd54fb96f9edaa2fff8b, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      Duration: 0.51666665
+      Loop: 1
+    MoveFront:
+      Sprites:
+      - {fileID: -7456998237532899044, guid: c11dc639b26ddd54fb96f9edaa2fff8b, type: 3}
+      - {fileID: 2601645788744090935, guid: c11dc639b26ddd54fb96f9edaa2fff8b, type: 3}
+      - {fileID: -121687284705073703, guid: c11dc639b26ddd54fb96f9edaa2fff8b, type: 3}
+      - {fileID: -7697215123815541322, guid: c11dc639b26ddd54fb96f9edaa2fff8b, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      Duration: 0.51666665
+      Loop: 1
+    AttackBack:
+      Sprites:
+      - {fileID: -4311255653700094383, guid: a331e0fcb6e1b82409079911278d6a78, type: 3}
+      - {fileID: -7088821633973864853, guid: a331e0fcb6e1b82409079911278d6a78, type: 3}
+      - {fileID: 9153659922599774601, guid: a331e0fcb6e1b82409079911278d6a78, type: 3}
+      - {fileID: -8906228385692371836, guid: a331e0fcb6e1b82409079911278d6a78, type: 3}
+      - {fileID: 5934902800277997648, guid: a331e0fcb6e1b82409079911278d6a78, type: 3}
+      - {fileID: -6393865776183693520, guid: a331e0fcb6e1b82409079911278d6a78, type: 3}
+      - {fileID: 122532502834392331, guid: a331e0fcb6e1b82409079911278d6a78, type: 3}
+      - {fileID: -8300163799361425994, guid: a331e0fcb6e1b82409079911278d6a78, type: 3}
+      Times:
+      - 0
+      - 0.06666667
+      - 0.13333334
+      - 0.2
+      - 0.28333333
+      - 0.35
+      - 0.41666666
+      - 0.48333332
+      Duration: 0.5
+      Loop: 0
+    AttackSide:
+      Sprites:
+      - {fileID: 388232445546076796, guid: a331e0fcb6e1b82409079911278d6a78, type: 3}
+      - {fileID: 6629371798670990900, guid: a331e0fcb6e1b82409079911278d6a78, type: 3}
+      - {fileID: -1203712183431452614, guid: a331e0fcb6e1b82409079911278d6a78, type: 3}
+      - {fileID: -4215967473973803085, guid: a331e0fcb6e1b82409079911278d6a78, type: 3}
+      - {fileID: 5209004598934389351, guid: a331e0fcb6e1b82409079911278d6a78, type: 3}
+      - {fileID: -8370201979505801636, guid: a331e0fcb6e1b82409079911278d6a78, type: 3}
+      - {fileID: 343665817725916900, guid: a331e0fcb6e1b82409079911278d6a78, type: 3}
+      - {fileID: 2227682306055603255, guid: a331e0fcb6e1b82409079911278d6a78, type: 3}
+      Times:
+      - 0
+      - 0.06666667
+      - 0.13333334
+      - 0.2
+      - 0.28333333
+      - 0.35
+      - 0.41666666
+      - 0.48333332
+      Duration: 0.5
+      Loop: 0
+    AttackFront:
+      Sprites:
+      - {fileID: 282393708151126213, guid: a331e0fcb6e1b82409079911278d6a78, type: 3}
+      - {fileID: 5183946919742883135, guid: a331e0fcb6e1b82409079911278d6a78, type: 3}
+      - {fileID: 1465563574038558672, guid: a331e0fcb6e1b82409079911278d6a78, type: 3}
+      - {fileID: -7354148297722106583, guid: a331e0fcb6e1b82409079911278d6a78, type: 3}
+      - {fileID: -9109954337311777257, guid: a331e0fcb6e1b82409079911278d6a78, type: 3}
+      - {fileID: 6511844863537399581, guid: a331e0fcb6e1b82409079911278d6a78, type: 3}
+      - {fileID: 5429696278811314632, guid: a331e0fcb6e1b82409079911278d6a78, type: 3}
+      - {fileID: 2051992131384540432, guid: a331e0fcb6e1b82409079911278d6a78, type: 3}
+      Times:
+      - 0
+      - 0.06666667
+      - 0.13333334
+      - 0.2
+      - 0.28333333
+      - 0.35
+      - 0.41666666
+      - 0.48333332
+      Duration: 0.5
+      Loop: 0
+  - Name: Hero_10
+    IdleBack:
+      Sprites:
+      - {fileID: 4040542893785237362, guid: 5af2598e5fc4b8b49996455c49ccc7d6, type: 3}
+      - {fileID: -8525225873241279577, guid: 5af2598e5fc4b8b49996455c49ccc7d6, type: 3}
+      - {fileID: 5061786560320497698, guid: 5af2598e5fc4b8b49996455c49ccc7d6, type: 3}
+      - {fileID: 5111457181784640029, guid: 5af2598e5fc4b8b49996455c49ccc7d6, type: 3}
+      - {fileID: -1247111565630418074, guid: 5af2598e5fc4b8b49996455c49ccc7d6, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      - 0.6666667
+      Duration: 0.68333334
+      Loop: 1
+    IdleSide:
+      Sprites:
+      - {fileID: -4125054360868483457, guid: 5af2598e5fc4b8b49996455c49ccc7d6, type: 3}
+      - {fileID: -1094028209898217585, guid: 5af2598e5fc4b8b49996455c49ccc7d6, type: 3}
+      - {fileID: -6086808333811702635, guid: 5af2598e5fc4b8b49996455c49ccc7d6, type: 3}
+      - {fileID: 6116974587906884505, guid: 5af2598e5fc4b8b49996455c49ccc7d6, type: 3}
+      - {fileID: -3135965557740796346, guid: 5af2598e5fc4b8b49996455c49ccc7d6, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      - 0.6666667
+      Duration: 0.68333334
+      Loop: 1
+    IdleFront:
+      Sprites:
+      - {fileID: 8303766247889883589, guid: 5af2598e5fc4b8b49996455c49ccc7d6, type: 3}
+      - {fileID: -2204901271532296952, guid: 5af2598e5fc4b8b49996455c49ccc7d6, type: 3}
+      - {fileID: 5774353803676299825, guid: 5af2598e5fc4b8b49996455c49ccc7d6, type: 3}
+      - {fileID: 2115189501851065308, guid: 5af2598e5fc4b8b49996455c49ccc7d6, type: 3}
+      - {fileID: -4623522314802698304, guid: 5af2598e5fc4b8b49996455c49ccc7d6, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      - 0.6666667
+      Duration: 0.68333334
+      Loop: 1
+    MoveBack:
+      Sprites:
+      - {fileID: 6787010867780672864, guid: d8878ea40372f5a4695cf281e598a69f, type: 3}
+      - {fileID: 4201909823947986627, guid: d8878ea40372f5a4695cf281e598a69f, type: 3}
+      - {fileID: -2327409787252763681, guid: d8878ea40372f5a4695cf281e598a69f, type: 3}
+      - {fileID: -5534582896191618599, guid: d8878ea40372f5a4695cf281e598a69f, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      Duration: 0.51666665
+      Loop: 1
+    MoveSide:
+      Sprites:
+      - {fileID: -8957231504282133423, guid: d8878ea40372f5a4695cf281e598a69f, type: 3}
+      - {fileID: 2457723184829113550, guid: d8878ea40372f5a4695cf281e598a69f, type: 3}
+      - {fileID: -4594824962916052807, guid: d8878ea40372f5a4695cf281e598a69f, type: 3}
+      - {fileID: -737425153619090666, guid: d8878ea40372f5a4695cf281e598a69f, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      Duration: 0.51666665
+      Loop: 1
+    MoveFront:
+      Sprites:
+      - {fileID: 7552245880497660392, guid: d8878ea40372f5a4695cf281e598a69f, type: 3}
+      - {fileID: 8587902562102613055, guid: d8878ea40372f5a4695cf281e598a69f, type: 3}
+      - {fileID: 4698202782630790212, guid: d8878ea40372f5a4695cf281e598a69f, type: 3}
+      - {fileID: 603536491135643776, guid: d8878ea40372f5a4695cf281e598a69f, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      Duration: 0.51666665
+      Loop: 1
+    AttackBack:
+      Sprites:
+      - {fileID: -3925085593015020507, guid: 00a1ddc4147af38408fb58e7bb7a0123, type: 3}
+      - {fileID: 6729125830447541960, guid: 00a1ddc4147af38408fb58e7bb7a0123, type: 3}
+      - {fileID: -3286502026666464183, guid: 00a1ddc4147af38408fb58e7bb7a0123, type: 3}
+      - {fileID: -3797506392754941038, guid: 00a1ddc4147af38408fb58e7bb7a0123, type: 3}
+      - {fileID: 5750984564979863186, guid: 00a1ddc4147af38408fb58e7bb7a0123, type: 3}
+      - {fileID: -378567257685477506, guid: 00a1ddc4147af38408fb58e7bb7a0123, type: 3}
+      - {fileID: -2040133517738433912, guid: 00a1ddc4147af38408fb58e7bb7a0123, type: 3}
+      - {fileID: 1675990072984951421, guid: 00a1ddc4147af38408fb58e7bb7a0123, type: 3}
+      Times:
+      - 0
+      - 0.06666667
+      - 0.13333334
+      - 0.2
+      - 0.28333333
+      - 0.35
+      - 0.41666666
+      - 0.48333332
+      Duration: 0.5
+      Loop: 0
+    AttackSide:
+      Sprites:
+      - {fileID: -564096889395427475, guid: 00a1ddc4147af38408fb58e7bb7a0123, type: 3}
+      - {fileID: 1967183056349185032, guid: 00a1ddc4147af38408fb58e7bb7a0123, type: 3}
+      - {fileID: 2592281240638868283, guid: 00a1ddc4147af38408fb58e7bb7a0123, type: 3}
+      - {fileID: -5585877483092140921, guid: 00a1ddc4147af38408fb58e7bb7a0123, type: 3}
+      - {fileID: -7491337754173059733, guid: 00a1ddc4147af38408fb58e7bb7a0123, type: 3}
+      - {fileID: 8274522045742164061, guid: 00a1ddc4147af38408fb58e7bb7a0123, type: 3}
+      - {fileID: -4859168619278758684, guid: 00a1ddc4147af38408fb58e7bb7a0123, type: 3}
+      - {fileID: 5486001202025042026, guid: 00a1ddc4147af38408fb58e7bb7a0123, type: 3}
+      Times:
+      - 0
+      - 0.06666667
+      - 0.13333334
+      - 0.2
+      - 0.28333333
+      - 0.35
+      - 0.41666666
+      - 0.48333332
+      Duration: 0.5
+      Loop: 0
+    AttackFront:
+      Sprites:
+      - {fileID: -4445633549351325658, guid: 00a1ddc4147af38408fb58e7bb7a0123, type: 3}
+      - {fileID: 4951800583156872413, guid: 00a1ddc4147af38408fb58e7bb7a0123, type: 3}
+      - {fileID: 6130570751537579220, guid: 00a1ddc4147af38408fb58e7bb7a0123, type: 3}
+      - {fileID: 3061080146814665321, guid: 00a1ddc4147af38408fb58e7bb7a0123, type: 3}
+      - {fileID: -7610643072753116708, guid: 00a1ddc4147af38408fb58e7bb7a0123, type: 3}
+      - {fileID: -8352392119251509156, guid: 00a1ddc4147af38408fb58e7bb7a0123, type: 3}
+      - {fileID: -6282998192693246437, guid: 00a1ddc4147af38408fb58e7bb7a0123, type: 3}
+      - {fileID: 3089682627130356680, guid: 00a1ddc4147af38408fb58e7bb7a0123, type: 3}
+      Times:
+      - 0
+      - 0.06666667
+      - 0.13333334
+      - 0.2
+      - 0.28333333
+      - 0.35
+      - 0.41666666
+      - 0.48333332
+      Duration: 0.5
+      Loop: 0
+  - Name: Hero_11
+    IdleBack:
+      Sprites:
+      - {fileID: -2557694351309896327, guid: 8b63da23a3f1c5c49b1077117cb46e5e, type: 3}
+      - {fileID: 6679489497291666801, guid: 8b63da23a3f1c5c49b1077117cb46e5e, type: 3}
+      - {fileID: 2870741275760862842, guid: 8b63da23a3f1c5c49b1077117cb46e5e, type: 3}
+      - {fileID: -405602173647259294, guid: 8b63da23a3f1c5c49b1077117cb46e5e, type: 3}
+      - {fileID: -2485280146111947098, guid: 8b63da23a3f1c5c49b1077117cb46e5e, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      - 0.6666667
+      Duration: 0.68333334
+      Loop: 1
+    IdleSide:
+      Sprites:
+      - {fileID: -1133483228847584675, guid: 8b63da23a3f1c5c49b1077117cb46e5e, type: 3}
+      - {fileID: 2492344095457636672, guid: 8b63da23a3f1c5c49b1077117cb46e5e, type: 3}
+      - {fileID: -6203437519983005749, guid: 8b63da23a3f1c5c49b1077117cb46e5e, type: 3}
+      - {fileID: -3383954991272993951, guid: 8b63da23a3f1c5c49b1077117cb46e5e, type: 3}
+      - {fileID: -1557085106616991154, guid: 8b63da23a3f1c5c49b1077117cb46e5e, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      - 0.6666667
+      Duration: 0.68333334
+      Loop: 1
+    IdleFront:
+      Sprites:
+      - {fileID: 7737955870004444168, guid: 8b63da23a3f1c5c49b1077117cb46e5e, type: 3}
+      - {fileID: 6460182514180358269, guid: 8b63da23a3f1c5c49b1077117cb46e5e, type: 3}
+      - {fileID: -3311725470261760110, guid: 8b63da23a3f1c5c49b1077117cb46e5e, type: 3}
+      - {fileID: -4646865875143839060, guid: 8b63da23a3f1c5c49b1077117cb46e5e, type: 3}
+      - {fileID: 2404668951212668464, guid: 8b63da23a3f1c5c49b1077117cb46e5e, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      - 0.6666667
+      Duration: 0.68333334
+      Loop: 1
+    MoveBack:
+      Sprites:
+      - {fileID: 4765034481262639444, guid: be414495846f42a408ff1b1188f78c63, type: 3}
+      - {fileID: 544370493278961811, guid: be414495846f42a408ff1b1188f78c63, type: 3}
+      - {fileID: -4767265603832714511, guid: be414495846f42a408ff1b1188f78c63, type: 3}
+      - {fileID: 4817660880433442747, guid: be414495846f42a408ff1b1188f78c63, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      Duration: 0.51666665
+      Loop: 1
+    MoveSide:
+      Sprites:
+      - {fileID: -3906629964158077092, guid: be414495846f42a408ff1b1188f78c63, type: 3}
+      - {fileID: -818745485937996883, guid: be414495846f42a408ff1b1188f78c63, type: 3}
+      - {fileID: -7926217980597244185, guid: be414495846f42a408ff1b1188f78c63, type: 3}
+      - {fileID: 1018488578525081188, guid: be414495846f42a408ff1b1188f78c63, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      Duration: 0.51666665
+      Loop: 1
+    MoveFront:
+      Sprites:
+      - {fileID: -2294964227769398434, guid: be414495846f42a408ff1b1188f78c63, type: 3}
+      - {fileID: 4871352236118033579, guid: be414495846f42a408ff1b1188f78c63, type: 3}
+      - {fileID: -4060512595308472517, guid: be414495846f42a408ff1b1188f78c63, type: 3}
+      - {fileID: 5005615484805274373, guid: be414495846f42a408ff1b1188f78c63, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      Duration: 0.51666665
+      Loop: 1
+    AttackBack:
+      Sprites:
+      - {fileID: 2518314948989853904, guid: 35ff196d04dce044e8acf288fef2f1b6, type: 3}
+      - {fileID: 6939203182314005108, guid: 35ff196d04dce044e8acf288fef2f1b6, type: 3}
+      - {fileID: 481193495962130369, guid: 35ff196d04dce044e8acf288fef2f1b6, type: 3}
+      - {fileID: -3117001930277986083, guid: 35ff196d04dce044e8acf288fef2f1b6, type: 3}
+      - {fileID: 2222977096233046721, guid: 35ff196d04dce044e8acf288fef2f1b6, type: 3}
+      - {fileID: -8854363568590749717, guid: 35ff196d04dce044e8acf288fef2f1b6, type: 3}
+      - {fileID: -424715261040208830, guid: 35ff196d04dce044e8acf288fef2f1b6, type: 3}
+      - {fileID: 3149260337605091100, guid: 35ff196d04dce044e8acf288fef2f1b6, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      - 0.6666667
+      - 0.8333333
+      - 1
+      - 1.1666666
+      Duration: 1.1833333
+      Loop: 0
+    AttackSide:
+      Sprites:
+      - {fileID: 6920250693593167086, guid: 35ff196d04dce044e8acf288fef2f1b6, type: 3}
+      - {fileID: -8366377221170596958, guid: 35ff196d04dce044e8acf288fef2f1b6, type: 3}
+      - {fileID: 7113576239804301584, guid: 35ff196d04dce044e8acf288fef2f1b6, type: 3}
+      - {fileID: 2726536383980896731, guid: 35ff196d04dce044e8acf288fef2f1b6, type: 3}
+      - {fileID: 7328143969816161503, guid: 35ff196d04dce044e8acf288fef2f1b6, type: 3}
+      - {fileID: -7278921646077415639, guid: 35ff196d04dce044e8acf288fef2f1b6, type: 3}
+      - {fileID: -2000694252665618963, guid: 35ff196d04dce044e8acf288fef2f1b6, type: 3}
+      - {fileID: 6314546685585437598, guid: 35ff196d04dce044e8acf288fef2f1b6, type: 3}
+      Times:
+      - 0
+      - 0.06666667
+      - 0.13333334
+      - 0.2
+      - 0.28333333
+      - 0.35
+      - 0.41666666
+      - 0.48333332
+      Duration: 0.5
+      Loop: 0
+    AttackFront:
+      Sprites:
+      - {fileID: 3089943956991604392, guid: 35ff196d04dce044e8acf288fef2f1b6, type: 3}
+      - {fileID: -4093188526104314341, guid: 35ff196d04dce044e8acf288fef2f1b6, type: 3}
+      - {fileID: -5728067618315058179, guid: 35ff196d04dce044e8acf288fef2f1b6, type: 3}
+      - {fileID: -3797571843831340285, guid: 35ff196d04dce044e8acf288fef2f1b6, type: 3}
+      - {fileID: 7622389714769478539, guid: 35ff196d04dce044e8acf288fef2f1b6, type: 3}
+      - {fileID: 7977515727153304781, guid: 35ff196d04dce044e8acf288fef2f1b6, type: 3}
+      - {fileID: -3016326908703054658, guid: 35ff196d04dce044e8acf288fef2f1b6, type: 3}
+      - {fileID: 4600366667292606000, guid: 35ff196d04dce044e8acf288fef2f1b6, type: 3}
+      Times:
+      - 0
+      - 0.06666667
+      - 0.13333334
+      - 0.2
+      - 0.28333333
+      - 0.35
+      - 0.41666666
+      - 0.48333332
+      Duration: 0.5
+      Loop: 0
+  - Name: Hero_2
+    IdleBack:
+      Sprites:
+      - {fileID: 8232581997447109187, guid: f6e95cd93d4d6d74d9d46eb93ce06768, type: 3}
+      - {fileID: 2661376157027351386, guid: f6e95cd93d4d6d74d9d46eb93ce06768, type: 3}
+      - {fileID: 5102609750539633369, guid: f6e95cd93d4d6d74d9d46eb93ce06768, type: 3}
+      - {fileID: -8800743957318441337, guid: f6e95cd93d4d6d74d9d46eb93ce06768, type: 3}
+      - {fileID: 2260848015770723917, guid: f6e95cd93d4d6d74d9d46eb93ce06768, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      - 0.6666667
+      Duration: 0.68333334
+      Loop: 1
+    IdleSide:
+      Sprites:
+      - {fileID: -5605692669045236977, guid: f6e95cd93d4d6d74d9d46eb93ce06768, type: 3}
+      - {fileID: 2952968354657521453, guid: f6e95cd93d4d6d74d9d46eb93ce06768, type: 3}
+      - {fileID: -8856814749138255718, guid: f6e95cd93d4d6d74d9d46eb93ce06768, type: 3}
+      - {fileID: -814288214025999562, guid: f6e95cd93d4d6d74d9d46eb93ce06768, type: 3}
+      - {fileID: -8553839905235166027, guid: f6e95cd93d4d6d74d9d46eb93ce06768, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      - 0.6666667
+      Duration: 0.68333334
+      Loop: 1
+    IdleFront:
+      Sprites:
+      - {fileID: 3083719003115593065, guid: f6e95cd93d4d6d74d9d46eb93ce06768, type: 3}
+      - {fileID: -5861851430617998994, guid: f6e95cd93d4d6d74d9d46eb93ce06768, type: 3}
+      - {fileID: -1344424678076316704, guid: f6e95cd93d4d6d74d9d46eb93ce06768, type: 3}
+      - {fileID: 5938366063260698093, guid: f6e95cd93d4d6d74d9d46eb93ce06768, type: 3}
+      - {fileID: 1392576035625545101, guid: f6e95cd93d4d6d74d9d46eb93ce06768, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      - 0.6666667
+      Duration: 0.68333334
+      Loop: 1
+    MoveBack:
+      Sprites:
+      - {fileID: 6890994156855342837, guid: b4d706f06cde284469ade489f9d7af01, type: 3}
+      - {fileID: -7054406331965824148, guid: b4d706f06cde284469ade489f9d7af01, type: 3}
+      - {fileID: -1348924707143600927, guid: b4d706f06cde284469ade489f9d7af01, type: 3}
+      - {fileID: -4224875219506721469, guid: b4d706f06cde284469ade489f9d7af01, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.48333332
+      Duration: 0.5
+      Loop: 1
+    MoveSide:
+      Sprites:
+      - {fileID: -5063598492215048535, guid: b4d706f06cde284469ade489f9d7af01, type: 3}
+      - {fileID: 2015964064184595032, guid: b4d706f06cde284469ade489f9d7af01, type: 3}
+      - {fileID: -2392524326292039836, guid: b4d706f06cde284469ade489f9d7af01, type: 3}
+      - {fileID: -6733262742563950347, guid: b4d706f06cde284469ade489f9d7af01, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.48333332
+      Duration: 0.5
+      Loop: 1
+    MoveFront:
+      Sprites:
+      - {fileID: -9145494950381478297, guid: b4d706f06cde284469ade489f9d7af01, type: 3}
+      - {fileID: 7684441387481086998, guid: b4d706f06cde284469ade489f9d7af01, type: 3}
+      - {fileID: 524102423358188090, guid: b4d706f06cde284469ade489f9d7af01, type: 3}
+      - {fileID: -7070378083172327027, guid: b4d706f06cde284469ade489f9d7af01, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.48333332
+      Duration: 0.5
+      Loop: 1
+    AttackBack:
+      Sprites:
+      - {fileID: 5463304263043718240, guid: cc0f40f95bf807548873278576142fa3, type: 3}
+      - {fileID: -6159026553372194884, guid: cc0f40f95bf807548873278576142fa3, type: 3}
+      - {fileID: 5787362134911437370, guid: cc0f40f95bf807548873278576142fa3, type: 3}
+      - {fileID: 8227175959681409327, guid: cc0f40f95bf807548873278576142fa3, type: 3}
+      - {fileID: -2604984842987465799, guid: cc0f40f95bf807548873278576142fa3, type: 3}
+      - {fileID: -5296754306094470315, guid: cc0f40f95bf807548873278576142fa3, type: 3}
+      - {fileID: -5174217415568645626, guid: cc0f40f95bf807548873278576142fa3, type: 3}
+      - {fileID: -2553327049294942639, guid: cc0f40f95bf807548873278576142fa3, type: 3}
+      Times:
+      - 0
+      - 0.06666667
+      - 0.13333334
+      - 0.2
+      - 0.28333333
+      - 0.35
+      - 0.4
+      - 0.48333332
+      Duration: 0.5
+      Loop: 0
+    AttackSide:
+      Sprites:
+      - {fileID: -6943896045255910426, guid: cc0f40f95bf807548873278576142fa3, type: 3}
+      - {fileID: -3349933702953400223, guid: cc0f40f95bf807548873278576142fa3, type: 3}
+      - {fileID: -4494848661956023169, guid: cc0f40f95bf807548873278576142fa3, type: 3}
+      - {fileID: 435932105832704375, guid: cc0f40f95bf807548873278576142fa3, type: 3}
+      - {fileID: -7833939479500436449, guid: cc0f40f95bf807548873278576142fa3, type: 3}
+      - {fileID: 4944392948838291778, guid: cc0f40f95bf807548873278576142fa3, type: 3}
+      - {fileID: 954613471139398879, guid: cc0f40f95bf807548873278576142fa3, type: 3}
+      - {fileID: -5839509745491168180, guid: cc0f40f95bf807548873278576142fa3, type: 3}
+      - {fileID: -5839509745491168180, guid: cc0f40f95bf807548873278576142fa3, type: 3}
+      Times:
+      - 0
+      - 0.06666667
+      - 0.13333334
+      - 0.2
+      - 0.26666668
+      - 0.33333334
+      - 0.4
+      - 0.46666667
+      - 1
+      Duration: 1.0166667
+      Loop: 0
+    AttackFront:
+      Sprites:
+      - {fileID: -5790090854948451133, guid: cc0f40f95bf807548873278576142fa3, type: 3}
+      - {fileID: -7492732912554894315, guid: cc0f40f95bf807548873278576142fa3, type: 3}
+      - {fileID: 339836541067210172, guid: cc0f40f95bf807548873278576142fa3, type: 3}
+      - {fileID: 3586491892995983864, guid: cc0f40f95bf807548873278576142fa3, type: 3}
+      - {fileID: -9005082534222156761, guid: cc0f40f95bf807548873278576142fa3, type: 3}
+      - {fileID: -2133034277953162281, guid: cc0f40f95bf807548873278576142fa3, type: 3}
+      - {fileID: -6430849837885980497, guid: cc0f40f95bf807548873278576142fa3, type: 3}
+      - {fileID: 1105083710763181566, guid: cc0f40f95bf807548873278576142fa3, type: 3}
+      - {fileID: 1105083710763181566, guid: cc0f40f95bf807548873278576142fa3, type: 3}
+      Times:
+      - 0
+      - 0.06666667
+      - 0.13333334
+      - 0.2
+      - 0.28333333
+      - 0.35
+      - 0.41666666
+      - 0.48333332
+      - 1
+      Duration: 1.0166667
+      Loop: 0
+  - Name: Hero_4
+    IdleBack:
+      Sprites:
+      - {fileID: -4725424392390970531, guid: c24f316e2f854fb48ba35f3f34b81d96, type: 3}
+      - {fileID: -710764184087825866, guid: c24f316e2f854fb48ba35f3f34b81d96, type: 3}
+      - {fileID: -4420640439639558030, guid: c24f316e2f854fb48ba35f3f34b81d96, type: 3}
+      - {fileID: -6023949332803354307, guid: c24f316e2f854fb48ba35f3f34b81d96, type: 3}
+      - {fileID: -647263606024031785, guid: c24f316e2f854fb48ba35f3f34b81d96, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      - 0.6666667
+      Duration: 0.68333334
+      Loop: 1
+    IdleSide:
+      Sprites:
+      - {fileID: 731052745105690510, guid: c24f316e2f854fb48ba35f3f34b81d96, type: 3}
+      - {fileID: 5161049527904338539, guid: c24f316e2f854fb48ba35f3f34b81d96, type: 3}
+      - {fileID: 5569213865228183821, guid: c24f316e2f854fb48ba35f3f34b81d96, type: 3}
+      - {fileID: 7938207466090278376, guid: c24f316e2f854fb48ba35f3f34b81d96, type: 3}
+      - {fileID: 8708532645388296561, guid: c24f316e2f854fb48ba35f3f34b81d96, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      - 0.6666667
+      Duration: 0.68333334
+      Loop: 1
+    IdleFront:
+      Sprites:
+      - {fileID: 6064076271899049881, guid: c24f316e2f854fb48ba35f3f34b81d96, type: 3}
+      - {fileID: -4085128264241049344, guid: c24f316e2f854fb48ba35f3f34b81d96, type: 3}
+      - {fileID: -6678746503426764274, guid: c24f316e2f854fb48ba35f3f34b81d96, type: 3}
+      - {fileID: -3227493347398361647, guid: c24f316e2f854fb48ba35f3f34b81d96, type: 3}
+      - {fileID: -3816232602822442396, guid: c24f316e2f854fb48ba35f3f34b81d96, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      - 0.6666667
+      Duration: 0.68333334
+      Loop: 1
+    MoveBack:
+      Sprites:
+      - {fileID: 347747687373059985, guid: 00cad60106dafa3448891955dbc9e875, type: 3}
+      - {fileID: -1988271393591914716, guid: 00cad60106dafa3448891955dbc9e875, type: 3}
+      - {fileID: 8607203315970669492, guid: 00cad60106dafa3448891955dbc9e875, type: 3}
+      - {fileID: 969478072075115078, guid: 00cad60106dafa3448891955dbc9e875, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      Duration: 0.51666665
+      Loop: 1
+    MoveSide:
+      Sprites:
+      - {fileID: 1736801176735141855, guid: 00cad60106dafa3448891955dbc9e875, type: 3}
+      - {fileID: 5345275198932558579, guid: 00cad60106dafa3448891955dbc9e875, type: 3}
+      - {fileID: 8987941022189440510, guid: 00cad60106dafa3448891955dbc9e875, type: 3}
+      - {fileID: 8138400346586294959, guid: 00cad60106dafa3448891955dbc9e875, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      Duration: 0.51666665
+      Loop: 1
+    MoveFront:
+      Sprites:
+      - {fileID: -3661371324949295328, guid: 00cad60106dafa3448891955dbc9e875, type: 3}
+      - {fileID: -1067388146325826047, guid: 00cad60106dafa3448891955dbc9e875, type: 3}
+      - {fileID: -3182153684744810960, guid: 00cad60106dafa3448891955dbc9e875, type: 3}
+      - {fileID: 7541072584320418085, guid: 00cad60106dafa3448891955dbc9e875, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      Duration: 0.51666665
+      Loop: 1
+    AttackBack:
+      Sprites:
+      - {fileID: 4943598824157138259, guid: 299b974ea32746d41bda54ee0d2598a9, type: 3}
+      - {fileID: 3313767062570801751, guid: 299b974ea32746d41bda54ee0d2598a9, type: 3}
+      - {fileID: 1684694135123837904, guid: 299b974ea32746d41bda54ee0d2598a9, type: 3}
+      - {fileID: 373786923964620174, guid: 299b974ea32746d41bda54ee0d2598a9, type: 3}
+      - {fileID: -1104278408119202463, guid: 299b974ea32746d41bda54ee0d2598a9, type: 3}
+      - {fileID: -7967986261543695479, guid: 299b974ea32746d41bda54ee0d2598a9, type: 3}
+      - {fileID: -6631631547095943960, guid: 299b974ea32746d41bda54ee0d2598a9, type: 3}
+      - {fileID: 3330599837130103039, guid: 299b974ea32746d41bda54ee0d2598a9, type: 3}
+      Times:
+      - 0
+      - 0.06666667
+      - 0.13333334
+      - 0.2
+      - 0.28333333
+      - 0.35
+      - 0.41666666
+      - 0.48333332
+      Duration: 0.5
+      Loop: 0
+    AttackSide:
+      Sprites:
+      - {fileID: 8348674744749475225, guid: 299b974ea32746d41bda54ee0d2598a9, type: 3}
+      - {fileID: 8786045216151174612, guid: 299b974ea32746d41bda54ee0d2598a9, type: 3}
+      - {fileID: 6675344660133534324, guid: 299b974ea32746d41bda54ee0d2598a9, type: 3}
+      - {fileID: 7745138419126039569, guid: 299b974ea32746d41bda54ee0d2598a9, type: 3}
+      - {fileID: 6969903248650413762, guid: 299b974ea32746d41bda54ee0d2598a9, type: 3}
+      - {fileID: 2742885405445104950, guid: 299b974ea32746d41bda54ee0d2598a9, type: 3}
+      - {fileID: -9041730105555692469, guid: 299b974ea32746d41bda54ee0d2598a9, type: 3}
+      - {fileID: 1070115561421838850, guid: 299b974ea32746d41bda54ee0d2598a9, type: 3}
+      Times:
+      - 0
+      - 0.06666667
+      - 0.13333334
+      - 0.2
+      - 0.28333333
+      - 0.35
+      - 0.41666666
+      - 0.48333332
+      Duration: 0.5
+      Loop: 0
+    AttackFront:
+      Sprites:
+      - {fileID: 5181683933227895736, guid: 299b974ea32746d41bda54ee0d2598a9, type: 3}
+      - {fileID: 708406092633714275, guid: 299b974ea32746d41bda54ee0d2598a9, type: 3}
+      - {fileID: -1468946279296234269, guid: 299b974ea32746d41bda54ee0d2598a9, type: 3}
+      - {fileID: 4884680032886837658, guid: 299b974ea32746d41bda54ee0d2598a9, type: 3}
+      - {fileID: -1918723658782822874, guid: 299b974ea32746d41bda54ee0d2598a9, type: 3}
+      - {fileID: 1219784881650483314, guid: 299b974ea32746d41bda54ee0d2598a9, type: 3}
+      - {fileID: -7569491041340462725, guid: 299b974ea32746d41bda54ee0d2598a9, type: 3}
+      - {fileID: -1595045633413639558, guid: 299b974ea32746d41bda54ee0d2598a9, type: 3}
+      Times:
+      - 0
+      - 0.06666667
+      - 0.13333334
+      - 0.2
+      - 0.28333333
+      - 0.35
+      - 0.41666666
+      - 0.48333332
+      Duration: 0.5
+      Loop: 0
+  - Name: Hero_5
+    IdleBack:
+      Sprites:
+      - {fileID: -7764059748437089821, guid: 9cb1944a08128b446991e6584db64a2c, type: 3}
+      - {fileID: 1561708736916163111, guid: 9cb1944a08128b446991e6584db64a2c, type: 3}
+      - {fileID: 6015100569064209264, guid: 9cb1944a08128b446991e6584db64a2c, type: 3}
+      - {fileID: 862966543864976663, guid: 9cb1944a08128b446991e6584db64a2c, type: 3}
+      - {fileID: -8453118721193229813, guid: 9cb1944a08128b446991e6584db64a2c, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      - 0.6666667
+      Duration: 0.68333334
+      Loop: 1
+    IdleSide:
+      Sprites:
+      - {fileID: -4302493150935592325, guid: 9cb1944a08128b446991e6584db64a2c, type: 3}
+      - {fileID: 707494878215658851, guid: 9cb1944a08128b446991e6584db64a2c, type: 3}
+      - {fileID: -5003410376695137228, guid: 9cb1944a08128b446991e6584db64a2c, type: 3}
+      - {fileID: 3628912043275000960, guid: 9cb1944a08128b446991e6584db64a2c, type: 3}
+      - {fileID: 3986903026032635778, guid: 9cb1944a08128b446991e6584db64a2c, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      - 0.6666667
+      Duration: 0.68333334
+      Loop: 1
+    IdleFront:
+      Sprites:
+      - {fileID: 5417843354106784980, guid: 9cb1944a08128b446991e6584db64a2c, type: 3}
+      - {fileID: 4303768890590367890, guid: 9cb1944a08128b446991e6584db64a2c, type: 3}
+      - {fileID: 6900774511609755528, guid: 9cb1944a08128b446991e6584db64a2c, type: 3}
+      - {fileID: -1536453486915796500, guid: 9cb1944a08128b446991e6584db64a2c, type: 3}
+      - {fileID: -3121173120397521715, guid: 9cb1944a08128b446991e6584db64a2c, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      - 0.6666667
+      Duration: 0.68333334
+      Loop: 1
+    MoveBack:
+      Sprites:
+      - {fileID: -2009573841377133375, guid: dcff7db0fed3f614a89b2744cf3b8204, type: 3}
+      - {fileID: 8219281186923819807, guid: dcff7db0fed3f614a89b2744cf3b8204, type: 3}
+      - {fileID: 4888248863617040953, guid: dcff7db0fed3f614a89b2744cf3b8204, type: 3}
+      - {fileID: -2052483690624338353, guid: dcff7db0fed3f614a89b2744cf3b8204, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      Duration: 0.51666665
+      Loop: 1
+    MoveSide:
+      Sprites:
+      - {fileID: 6283485163128820097, guid: dcff7db0fed3f614a89b2744cf3b8204, type: 3}
+      - {fileID: -6837615606625516799, guid: dcff7db0fed3f614a89b2744cf3b8204, type: 3}
+      - {fileID: 906755980885812757, guid: dcff7db0fed3f614a89b2744cf3b8204, type: 3}
+      - {fileID: 6023819951273075233, guid: dcff7db0fed3f614a89b2744cf3b8204, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      Duration: 0.51666665
+      Loop: 1
+    MoveFront:
+      Sprites:
+      - {fileID: 5853108912042872513, guid: dcff7db0fed3f614a89b2744cf3b8204, type: 3}
+      - {fileID: -119163710650072810, guid: dcff7db0fed3f614a89b2744cf3b8204, type: 3}
+      - {fileID: -7699271619632124171, guid: dcff7db0fed3f614a89b2744cf3b8204, type: 3}
+      - {fileID: -5486322435914871405, guid: dcff7db0fed3f614a89b2744cf3b8204, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      Duration: 0.51666665
+      Loop: 1
+    AttackBack:
+      Sprites:
+      - {fileID: -4028577861957741095, guid: 5de8b5476ee79fa4686bd7dc771ff160, type: 3}
+      - {fileID: 872463092469287124, guid: 5de8b5476ee79fa4686bd7dc771ff160, type: 3}
+      - {fileID: -3179820536277771373, guid: 5de8b5476ee79fa4686bd7dc771ff160, type: 3}
+      - {fileID: 5554432333602197190, guid: 5de8b5476ee79fa4686bd7dc771ff160, type: 3}
+      - {fileID: 565690317477300216, guid: 5de8b5476ee79fa4686bd7dc771ff160, type: 3}
+      - {fileID: 6754848967596379404, guid: 5de8b5476ee79fa4686bd7dc771ff160, type: 3}
+      - {fileID: -2357708670876328522, guid: 5de8b5476ee79fa4686bd7dc771ff160, type: 3}
+      - {fileID: 6093678310820027782, guid: 5de8b5476ee79fa4686bd7dc771ff160, type: 3}
+      Times:
+      - 0
+      - 0.06666667
+      - 0.13333334
+      - 0.2
+      - 0.28333333
+      - 0.35
+      - 0.41666666
+      - 0.48333332
+      Duration: 0.5
+      Loop: 0
+    AttackSide:
+      Sprites:
+      - {fileID: 7630293010654697300, guid: 5de8b5476ee79fa4686bd7dc771ff160, type: 3}
+      - {fileID: -7432226782676941850, guid: 5de8b5476ee79fa4686bd7dc771ff160, type: 3}
+      - {fileID: -8001710348823116747, guid: 5de8b5476ee79fa4686bd7dc771ff160, type: 3}
+      - {fileID: 47326900603067193, guid: 5de8b5476ee79fa4686bd7dc771ff160, type: 3}
+      - {fileID: 8686505828351666564, guid: 5de8b5476ee79fa4686bd7dc771ff160, type: 3}
+      - {fileID: -4111742504381202197, guid: 5de8b5476ee79fa4686bd7dc771ff160, type: 3}
+      - {fileID: -7754207148497303273, guid: 5de8b5476ee79fa4686bd7dc771ff160, type: 3}
+      - {fileID: 7948775435267511129, guid: 5de8b5476ee79fa4686bd7dc771ff160, type: 3}
+      Times:
+      - 0
+      - 0.06666667
+      - 0.13333334
+      - 0.2
+      - 0.28333333
+      - 0.35
+      - 0.41666666
+      - 0.48333332
+      Duration: 0.5
+      Loop: 0
+    AttackFront:
+      Sprites:
+      - {fileID: 1574866046485411019, guid: 5de8b5476ee79fa4686bd7dc771ff160, type: 3}
+      - {fileID: -173753156039979378, guid: 5de8b5476ee79fa4686bd7dc771ff160, type: 3}
+      - {fileID: 8630353912607885637, guid: 5de8b5476ee79fa4686bd7dc771ff160, type: 3}
+      - {fileID: 5030927582947422160, guid: 5de8b5476ee79fa4686bd7dc771ff160, type: 3}
+      - {fileID: 7427528391102772617, guid: 5de8b5476ee79fa4686bd7dc771ff160, type: 3}
+      - {fileID: 2979600233983175406, guid: 5de8b5476ee79fa4686bd7dc771ff160, type: 3}
+      - {fileID: -7417400109048267250, guid: 5de8b5476ee79fa4686bd7dc771ff160, type: 3}
+      - {fileID: -8438388138116661123, guid: 5de8b5476ee79fa4686bd7dc771ff160, type: 3}
+      Times:
+      - 0
+      - 0.06666667
+      - 0.13333334
+      - 0.2
+      - 0.28333333
+      - 0.35
+      - 0.41666666
+      - 0.48333332
+      Duration: 0.5
+      Loop: 0
+  - Name: Hero_6
+    IdleBack:
+      Sprites:
+      - {fileID: 6850076480964564811, guid: 1c6ce714af346e7409c4684693d7e4e7, type: 3}
+      - {fileID: -1699873205157934140, guid: 1c6ce714af346e7409c4684693d7e4e7, type: 3}
+      - {fileID: 808888113166880728, guid: 1c6ce714af346e7409c4684693d7e4e7, type: 3}
+      - {fileID: 5288252610503799990, guid: 1c6ce714af346e7409c4684693d7e4e7, type: 3}
+      - {fileID: 8828706255094783066, guid: 1c6ce714af346e7409c4684693d7e4e7, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      - 0.6666667
+      Duration: 0.68333334
+      Loop: 1
+    IdleSide:
+      Sprites:
+      - {fileID: -4116185659185802818, guid: 1c6ce714af346e7409c4684693d7e4e7, type: 3}
+      - {fileID: 2082021370415215498, guid: 1c6ce714af346e7409c4684693d7e4e7, type: 3}
+      - {fileID: 7695218330681231754, guid: 1c6ce714af346e7409c4684693d7e4e7, type: 3}
+      - {fileID: 8471790852192612049, guid: 1c6ce714af346e7409c4684693d7e4e7, type: 3}
+      - {fileID: 4332718762067822893, guid: 1c6ce714af346e7409c4684693d7e4e7, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      - 0.6666667
+      Duration: 0.68333334
+      Loop: 1
+    IdleFront:
+      Sprites:
+      - {fileID: -5716718970671151701, guid: 1c6ce714af346e7409c4684693d7e4e7, type: 3}
+      - {fileID: 8711360824565212371, guid: 1c6ce714af346e7409c4684693d7e4e7, type: 3}
+      - {fileID: -6645680378146707675, guid: 1c6ce714af346e7409c4684693d7e4e7, type: 3}
+      - {fileID: 4707810675629134802, guid: 1c6ce714af346e7409c4684693d7e4e7, type: 3}
+      - {fileID: 5721115208325574929, guid: 1c6ce714af346e7409c4684693d7e4e7, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      - 0.6666667
+      Duration: 0.68333334
+      Loop: 1
+    MoveBack:
+      Sprites:
+      - {fileID: -5729982252781717901, guid: c8c121f8e63b4804f84f2084e60541e5, type: 3}
+      - {fileID: 1644141891525070546, guid: c8c121f8e63b4804f84f2084e60541e5, type: 3}
+      - {fileID: 5557676730530953228, guid: c8c121f8e63b4804f84f2084e60541e5, type: 3}
+      - {fileID: -4847224997743611763, guid: c8c121f8e63b4804f84f2084e60541e5, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      Duration: 0.51666665
+      Loop: 1
+    MoveSide:
+      Sprites:
+      - {fileID: 3033068915519735590, guid: c8c121f8e63b4804f84f2084e60541e5, type: 3}
+      - {fileID: -1190669499629730425, guid: c8c121f8e63b4804f84f2084e60541e5, type: 3}
+      - {fileID: -8839421786855465930, guid: c8c121f8e63b4804f84f2084e60541e5, type: 3}
+      - {fileID: 2880246705675794671, guid: c8c121f8e63b4804f84f2084e60541e5, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      Duration: 0.51666665
+      Loop: 1
+    MoveFront:
+      Sprites:
+      - {fileID: -3269633202918807316, guid: c8c121f8e63b4804f84f2084e60541e5, type: 3}
+      - {fileID: 665765461562033532, guid: c8c121f8e63b4804f84f2084e60541e5, type: 3}
+      - {fileID: 8077256706246899728, guid: c8c121f8e63b4804f84f2084e60541e5, type: 3}
+      - {fileID: 7954019297887580537, guid: c8c121f8e63b4804f84f2084e60541e5, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      Duration: 0.51666665
+      Loop: 1
+    AttackBack:
+      Sprites:
+      - {fileID: 2862244431303047007, guid: f81e86f17b05e2c44ac96e41d3e588e0, type: 3}
+      - {fileID: 8071198350373203168, guid: f81e86f17b05e2c44ac96e41d3e588e0, type: 3}
+      - {fileID: -2940410484677799542, guid: f81e86f17b05e2c44ac96e41d3e588e0, type: 3}
+      - {fileID: 1218237643498026929, guid: f81e86f17b05e2c44ac96e41d3e588e0, type: 3}
+      - {fileID: -2279093495218738476, guid: f81e86f17b05e2c44ac96e41d3e588e0, type: 3}
+      - {fileID: -3286446976288107626, guid: f81e86f17b05e2c44ac96e41d3e588e0, type: 3}
+      - {fileID: 4987301790887217347, guid: f81e86f17b05e2c44ac96e41d3e588e0, type: 3}
+      - {fileID: 5056935280384616977, guid: f81e86f17b05e2c44ac96e41d3e588e0, type: 3}
+      Times:
+      - 0
+      - 0.06666667
+      - 0.13333334
+      - 0.2
+      - 0.28333333
+      - 0.35
+      - 0.41666666
+      - 0.48333332
+      Duration: 0.5
+      Loop: 0
+    AttackSide:
+      Sprites:
+      - {fileID: 5471360740825903123, guid: f81e86f17b05e2c44ac96e41d3e588e0, type: 3}
+      - {fileID: 459368202612003618, guid: f81e86f17b05e2c44ac96e41d3e588e0, type: 3}
+      - {fileID: 1570930469940060240, guid: f81e86f17b05e2c44ac96e41d3e588e0, type: 3}
+      - {fileID: -109893240018653997, guid: f81e86f17b05e2c44ac96e41d3e588e0, type: 3}
+      - {fileID: 6506967122921918406, guid: f81e86f17b05e2c44ac96e41d3e588e0, type: 3}
+      - {fileID: 3003979712980591166, guid: f81e86f17b05e2c44ac96e41d3e588e0, type: 3}
+      - {fileID: -7123808939375633999, guid: f81e86f17b05e2c44ac96e41d3e588e0, type: 3}
+      - {fileID: -500025940098373808, guid: f81e86f17b05e2c44ac96e41d3e588e0, type: 3}
+      Times:
+      - 0
+      - 0.06666667
+      - 0.13333334
+      - 0.2
+      - 0.28333333
+      - 0.35
+      - 0.41666666
+      - 0.48333332
+      Duration: 0.5
+      Loop: 0
+    AttackFront:
+      Sprites:
+      - {fileID: -4640204310786324563, guid: f81e86f17b05e2c44ac96e41d3e588e0, type: 3}
+      - {fileID: -4324906107374752689, guid: f81e86f17b05e2c44ac96e41d3e588e0, type: 3}
+      - {fileID: -335681522688785804, guid: f81e86f17b05e2c44ac96e41d3e588e0, type: 3}
+      - {fileID: 8485813600941337120, guid: f81e86f17b05e2c44ac96e41d3e588e0, type: 3}
+      - {fileID: -5429927594638479452, guid: f81e86f17b05e2c44ac96e41d3e588e0, type: 3}
+      - {fileID: 552726775224915215, guid: f81e86f17b05e2c44ac96e41d3e588e0, type: 3}
+      - {fileID: -2349858076865253198, guid: f81e86f17b05e2c44ac96e41d3e588e0, type: 3}
+      - {fileID: 5969376325863736683, guid: f81e86f17b05e2c44ac96e41d3e588e0, type: 3}
+      Times:
+      - 0
+      - 0.06666667
+      - 0.13333334
+      - 0.2
+      - 0.28333333
+      - 0.35
+      - 0.41666666
+      - 0.48333332
+      Duration: 0.5
+      Loop: 0
+  - Name: Hero_7
+    IdleBack:
+      Sprites:
+      - {fileID: -6206157234480733671, guid: d9f98902f6215e347b1450bb377d9914, type: 3}
+      - {fileID: -1685376390028073964, guid: d9f98902f6215e347b1450bb377d9914, type: 3}
+      - {fileID: 2057574638130352039, guid: d9f98902f6215e347b1450bb377d9914, type: 3}
+      - {fileID: 3693534127888546268, guid: d9f98902f6215e347b1450bb377d9914, type: 3}
+      - {fileID: -4227486354070911364, guid: d9f98902f6215e347b1450bb377d9914, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      - 0.6666667
+      Duration: 0.68333334
+      Loop: 1
+    IdleSide:
+      Sprites:
+      - {fileID: 472327992320902584, guid: d9f98902f6215e347b1450bb377d9914, type: 3}
+      - {fileID: -8594144873268483862, guid: d9f98902f6215e347b1450bb377d9914, type: 3}
+      - {fileID: -6798374179942854390, guid: d9f98902f6215e347b1450bb377d9914, type: 3}
+      - {fileID: 5307813813409107453, guid: d9f98902f6215e347b1450bb377d9914, type: 3}
+      - {fileID: -8661965211256332613, guid: d9f98902f6215e347b1450bb377d9914, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      - 0.6666667
+      Duration: 0.68333334
+      Loop: 1
+    IdleFront:
+      Sprites:
+      - {fileID: -68429187742572938, guid: d9f98902f6215e347b1450bb377d9914, type: 3}
+      - {fileID: -8220846779542306633, guid: d9f98902f6215e347b1450bb377d9914, type: 3}
+      - {fileID: -1357780711056927092, guid: d9f98902f6215e347b1450bb377d9914, type: 3}
+      - {fileID: -4058927509038108553, guid: d9f98902f6215e347b1450bb377d9914, type: 3}
+      - {fileID: -4736495500204144506, guid: d9f98902f6215e347b1450bb377d9914, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      - 0.6666667
+      Duration: 0.68333334
+      Loop: 1
+    MoveBack:
+      Sprites:
+      - {fileID: 7745208914178014775, guid: 7734720624e84804d9ce60afae674dcd, type: 3}
+      - {fileID: -723511175991229593, guid: 7734720624e84804d9ce60afae674dcd, type: 3}
+      - {fileID: -5863718309774396278, guid: 7734720624e84804d9ce60afae674dcd, type: 3}
+      - {fileID: 3385097206511272035, guid: 7734720624e84804d9ce60afae674dcd, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      Duration: 0.51666665
+      Loop: 1
+    MoveSide:
+      Sprites:
+      - {fileID: -5976997162461694178, guid: 7734720624e84804d9ce60afae674dcd, type: 3}
+      - {fileID: -3556656040030111642, guid: 7734720624e84804d9ce60afae674dcd, type: 3}
+      - {fileID: 2655855032056713811, guid: 7734720624e84804d9ce60afae674dcd, type: 3}
+      - {fileID: -6540915264063568233, guid: 7734720624e84804d9ce60afae674dcd, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      Duration: 0.51666665
+      Loop: 1
+    MoveFront:
+      Sprites:
+      - {fileID: 4407093187943707854, guid: 7734720624e84804d9ce60afae674dcd, type: 3}
+      - {fileID: 7034160326041977259, guid: 7734720624e84804d9ce60afae674dcd, type: 3}
+      - {fileID: -3449798584709574383, guid: 7734720624e84804d9ce60afae674dcd, type: 3}
+      - {fileID: 6905029817673868406, guid: 7734720624e84804d9ce60afae674dcd, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      Duration: 0.51666665
+      Loop: 1
+    AttackBack:
+      Sprites:
+      - {fileID: 3436178154050835766, guid: 4764b4ffa8b6667458a7988b25941657, type: 3}
+      - {fileID: 617804391940123924, guid: 4764b4ffa8b6667458a7988b25941657, type: 3}
+      - {fileID: -6538258487716100640, guid: 4764b4ffa8b6667458a7988b25941657, type: 3}
+      - {fileID: 9178478102945659731, guid: 4764b4ffa8b6667458a7988b25941657, type: 3}
+      - {fileID: 5482878716000806379, guid: 4764b4ffa8b6667458a7988b25941657, type: 3}
+      - {fileID: -5447281318525735834, guid: 4764b4ffa8b6667458a7988b25941657, type: 3}
+      - {fileID: -3258096480021039711, guid: 4764b4ffa8b6667458a7988b25941657, type: 3}
+      - {fileID: -6102351232397270112, guid: 4764b4ffa8b6667458a7988b25941657, type: 3}
+      Times:
+      - 0
+      - 0.06666667
+      - 0.13333334
+      - 0.2
+      - 0.28333333
+      - 0.35
+      - 0.41666666
+      - 0.48333332
+      Duration: 0.5
+      Loop: 0
+    AttackSide:
+      Sprites:
+      - {fileID: -3718617312744200317, guid: 4764b4ffa8b6667458a7988b25941657, type: 3}
+      - {fileID: 696485598472997658, guid: 4764b4ffa8b6667458a7988b25941657, type: 3}
+      - {fileID: 8621230822356129904, guid: 4764b4ffa8b6667458a7988b25941657, type: 3}
+      - {fileID: 4726385703713164829, guid: 4764b4ffa8b6667458a7988b25941657, type: 3}
+      - {fileID: 6496284557963400944, guid: 4764b4ffa8b6667458a7988b25941657, type: 3}
+      - {fileID: 2167213244537389053, guid: 4764b4ffa8b6667458a7988b25941657, type: 3}
+      - {fileID: 4653166091583024133, guid: 4764b4ffa8b6667458a7988b25941657, type: 3}
+      - {fileID: -8902524612657844404, guid: 4764b4ffa8b6667458a7988b25941657, type: 3}
+      Times:
+      - 0
+      - 0.06666667
+      - 0.13333334
+      - 0.2
+      - 0.28333333
+      - 0.35
+      - 0.41666666
+      - 0.48333332
+      Duration: 0.5
+      Loop: 0
+    AttackFront:
+      Sprites:
+      - {fileID: 2494108567269149726, guid: 4764b4ffa8b6667458a7988b25941657, type: 3}
+      - {fileID: -4051745238989753, guid: 4764b4ffa8b6667458a7988b25941657, type: 3}
+      - {fileID: 590976880998551608, guid: 4764b4ffa8b6667458a7988b25941657, type: 3}
+      - {fileID: -3697355392648716598, guid: 4764b4ffa8b6667458a7988b25941657, type: 3}
+      - {fileID: -3027857686739929058, guid: 4764b4ffa8b6667458a7988b25941657, type: 3}
+      - {fileID: 6896833431198873698, guid: 4764b4ffa8b6667458a7988b25941657, type: 3}
+      - {fileID: 5831068014332768277, guid: 4764b4ffa8b6667458a7988b25941657, type: 3}
+      - {fileID: -7874643897670077910, guid: 4764b4ffa8b6667458a7988b25941657, type: 3}
+      Times:
+      - 0
+      - 0.06666667
+      - 0.13333334
+      - 0.2
+      - 0.28333333
+      - 0.35
+      - 0.41666666
+      - 0.48333332
+      Duration: 0.5
+      Loop: 0
+  - Name: Hero_8
+    IdleBack:
+      Sprites:
+      - {fileID: 2352776008309252466, guid: 38dd2207e287e894299410f39c27138f, type: 3}
+      - {fileID: 4065281126990768788, guid: 38dd2207e287e894299410f39c27138f, type: 3}
+      - {fileID: -3326644554176444149, guid: 38dd2207e287e894299410f39c27138f, type: 3}
+      - {fileID: 3498990025516880804, guid: 38dd2207e287e894299410f39c27138f, type: 3}
+      - {fileID: -2516366577091698598, guid: 38dd2207e287e894299410f39c27138f, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      - 0.6666667
+      Duration: 0.68333334
+      Loop: 1
+    IdleSide:
+      Sprites:
+      - {fileID: 1449533743455690472, guid: 38dd2207e287e894299410f39c27138f, type: 3}
+      - {fileID: 6647628376860342811, guid: 38dd2207e287e894299410f39c27138f, type: 3}
+      - {fileID: 5131218500345709339, guid: 38dd2207e287e894299410f39c27138f, type: 3}
+      - {fileID: -7505051322794206029, guid: 38dd2207e287e894299410f39c27138f, type: 3}
+      - {fileID: 1229322763914246754, guid: 38dd2207e287e894299410f39c27138f, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      - 0.6666667
+      Duration: 0.68333334
+      Loop: 1
+    IdleFront:
+      Sprites:
+      - {fileID: 8271483690269821731, guid: 38dd2207e287e894299410f39c27138f, type: 3}
+      - {fileID: 1203623827580874720, guid: 38dd2207e287e894299410f39c27138f, type: 3}
+      - {fileID: 6652777585232183083, guid: 38dd2207e287e894299410f39c27138f, type: 3}
+      - {fileID: 7430084269121205876, guid: 38dd2207e287e894299410f39c27138f, type: 3}
+      - {fileID: -2658185850364797537, guid: 38dd2207e287e894299410f39c27138f, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      - 0.6666667
+      Duration: 0.68333334
+      Loop: 1
+    MoveBack:
+      Sprites:
+      - {fileID: 1162737286313842579, guid: ebeecccc830a6e946998e994a27c640a, type: 3}
+      - {fileID: 8426780094284615423, guid: ebeecccc830a6e946998e994a27c640a, type: 3}
+      - {fileID: -2665513119153383189, guid: ebeecccc830a6e946998e994a27c640a, type: 3}
+      - {fileID: -6724170253865333749, guid: ebeecccc830a6e946998e994a27c640a, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      Duration: 0.51666665
+      Loop: 1
+    MoveSide:
+      Sprites:
+      - {fileID: -1795274846633192401, guid: ebeecccc830a6e946998e994a27c640a, type: 3}
+      - {fileID: -3566272629679465058, guid: ebeecccc830a6e946998e994a27c640a, type: 3}
+      - {fileID: -6887185929314643386, guid: ebeecccc830a6e946998e994a27c640a, type: 3}
+      - {fileID: 1755284681218578135, guid: ebeecccc830a6e946998e994a27c640a, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      Duration: 0.51666665
+      Loop: 1
+    MoveFront:
+      Sprites:
+      - {fileID: -7088641947412479513, guid: ebeecccc830a6e946998e994a27c640a, type: 3}
+      - {fileID: -2758882105779903291, guid: ebeecccc830a6e946998e994a27c640a, type: 3}
+      - {fileID: 449159650641087373, guid: ebeecccc830a6e946998e994a27c640a, type: 3}
+      - {fileID: 1854889520932831021, guid: ebeecccc830a6e946998e994a27c640a, type: 3}
+      Times:
+      - 0
+      - 0.16666667
+      - 0.33333334
+      - 0.5
+      Duration: 0.51666665
+      Loop: 1
+    AttackBack:
+      Sprites:
+      - {fileID: -5929437116882044907, guid: ecb08a84c2349be4bbf24b7e3d25d5f3, type: 3}
+      - {fileID: 1439782637577472957, guid: ecb08a84c2349be4bbf24b7e3d25d5f3, type: 3}
+      - {fileID: 8022391265289653969, guid: ecb08a84c2349be4bbf24b7e3d25d5f3, type: 3}
+      - {fileID: -2530660328150586540, guid: ecb08a84c2349be4bbf24b7e3d25d5f3, type: 3}
+      - {fileID: -5650368942089696517, guid: ecb08a84c2349be4bbf24b7e3d25d5f3, type: 3}
+      - {fileID: 6003826301613111081, guid: ecb08a84c2349be4bbf24b7e3d25d5f3, type: 3}
+      - {fileID: -1540078892893382045, guid: ecb08a84c2349be4bbf24b7e3d25d5f3, type: 3}
+      - {fileID: -7972736204190808310, guid: ecb08a84c2349be4bbf24b7e3d25d5f3, type: 3}
+      Times:
+      - 0
+      - 0.06666667
+      - 0.13333334
+      - 0.2
+      - 0.28333333
+      - 0.35
+      - 0.41666666
+      - 0.48333332
+      Duration: 0.5
+      Loop: 0
+    AttackSide:
+      Sprites:
+      - {fileID: -8622994229774050205, guid: ecb08a84c2349be4bbf24b7e3d25d5f3, type: 3}
+      - {fileID: 7218275321333854676, guid: ecb08a84c2349be4bbf24b7e3d25d5f3, type: 3}
+      - {fileID: 2411038758154127989, guid: ecb08a84c2349be4bbf24b7e3d25d5f3, type: 3}
+      - {fileID: -2251171906138397243, guid: ecb08a84c2349be4bbf24b7e3d25d5f3, type: 3}
+      - {fileID: 8151445811030139506, guid: ecb08a84c2349be4bbf24b7e3d25d5f3, type: 3}
+      - {fileID: 658993318033878486, guid: ecb08a84c2349be4bbf24b7e3d25d5f3, type: 3}
+      - {fileID: -8237996179553838133, guid: ecb08a84c2349be4bbf24b7e3d25d5f3, type: 3}
+      - {fileID: 2842690774693114846, guid: ecb08a84c2349be4bbf24b7e3d25d5f3, type: 3}
+      Times:
+      - 0
+      - 0.06666667
+      - 0.13333334
+      - 0.2
+      - 0.28333333
+      - 0.35
+      - 0.41666666
+      - 0.48333332
+      Duration: 0.5
+      Loop: 0
+    AttackFront:
+      Sprites:
+      - {fileID: -1197359161499501581, guid: ecb08a84c2349be4bbf24b7e3d25d5f3, type: 3}
+      - {fileID: -5689449758400109956, guid: ecb08a84c2349be4bbf24b7e3d25d5f3, type: 3}
+      - {fileID: -56801936617201279, guid: ecb08a84c2349be4bbf24b7e3d25d5f3, type: 3}
+      - {fileID: 4233178739724688969, guid: ecb08a84c2349be4bbf24b7e3d25d5f3, type: 3}
+      - {fileID: 2974909975828882034, guid: ecb08a84c2349be4bbf24b7e3d25d5f3, type: 3}
+      - {fileID: 3740524129576559695, guid: ecb08a84c2349be4bbf24b7e3d25d5f3, type: 3}
+      - {fileID: -5473004227145355174, guid: ecb08a84c2349be4bbf24b7e3d25d5f3, type: 3}
+      - {fileID: 2386036030346144102, guid: ecb08a84c2349be4bbf24b7e3d25d5f3, type: 3}
+      Times:
+      - 0
+      - 0.06666667
+      - 0.13333334
+      - 0.2
+      - 0.28333333
+      - 0.35
+      - 0.41666666
+      - 0.48333332
+      Duration: 0.5
+      Loop: 0

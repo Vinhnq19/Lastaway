@@ -13,7 +13,7 @@ import shutil
 import sys
 
 ROOT = Path(__file__).resolve().parents[2]
-SOURCE = ROOT / 'Assets/Imported/JSurviv/Sound'
+SOURCE = ROOT / 'Assets/_JungleMaze/Art/JSurviv/Audio'
 TARGET = ROOT / 'Assets/_JungleMaze/Art/Audio/Placeholder/JSurviv'
 
 # (source relative to SOURCE, target relative to TARGET, SfxId or music track using it)

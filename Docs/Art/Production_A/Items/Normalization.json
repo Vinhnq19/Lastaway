@@ -92,7 +92,7 @@
       "id": "TREE_BRANCH",
       "kind": "Weapon",
       "target": "Assets/_JungleMaze/Art/UI/Icons/Weapons/TREE_BRANCH.png",
-      "source": "Assets/Imported/JSurviv/Sprites/WEAPONS/Cành Cây/stick.png",
+      "source": "Assets/_JungleMaze/Art/JSurviv/Weapons/Sprites/Cành Cây/stick.png",
       "source_kind": "JSurviv nearest + shared palette",
       "slice": "full image",
       "slice_rect_png": [
@@ -170,7 +170,7 @@
       "id": "KNIFE",
       "kind": "Weapon",
       "target": "Assets/_JungleMaze/Art/UI/Icons/Weapons/KNIFE.png",
-      "source": "Assets/Imported/JSurviv/Sprites/WEAPONS/Dao/knife.png",
+      "source": "Assets/_JungleMaze/Art/JSurviv/Weapons/Sprites/Dao/knife.png",
       "source_kind": "JSurviv nearest + shared palette",
       "slice": "full image",
       "slice_rect_png": [
@@ -250,7 +250,7 @@
       "id": "BONE",
       "kind": "Weapon",
       "target": "Assets/_JungleMaze/Art/UI/Icons/Weapons/BONE.png",
-      "source": "Assets/Imported/JSurviv/Sprites/WEAPONS/Xương/bone.png",
+      "source": "Assets/_JungleMaze/Art/JSurviv/Weapons/Sprites/Xương/bone.png",
       "source_kind": "JSurviv nearest + shared palette",
       "slice": "full image",
       "slice_rect_png": [
@@ -327,7 +327,7 @@
       "id": "AXE",
       "kind": "Weapon",
       "target": "Assets/_JungleMaze/Art/UI/Icons/Weapons/AXE.png",
-      "source": "Assets/Imported/JSurviv/Sprites/WEAPONS/Riuf/axe.png",
+      "source": "Assets/_JungleMaze/Art/JSurviv/Weapons/Sprites/Riuf/axe.png",
       "source_kind": "JSurviv nearest + shared palette",
       "slice": "full image",
       "slice_rect_png": [
@@ -406,7 +406,7 @@
       "id": "MACE",
       "kind": "Weapon",
       "target": "Assets/_JungleMaze/Art/UI/Icons/Weapons/MACE.png",
-      "source": "Assets/Imported/JSurviv/Sprites/WEAPONS/Chùy gaii/mace.png",
+      "source": "Assets/_JungleMaze/Art/JSurviv/Weapons/Sprites/Chùy gaii/mace.png",
       "source_kind": "JSurviv nearest + shared palette",
       "slice": "full image",
       "slice_rect_png": [
@@ -486,7 +486,7 @@
       "id": "RUBBER_GUN",
       "kind": "Weapon",
       "target": "Assets/_JungleMaze/Art/UI/Icons/Weapons/RUBBER_GUN.png",
-      "source": "Assets/Imported/JSurviv/Sprites/WEAPONS/Ná cao su/2-NaCaoSu_normal.png",
+      "source": "Assets/_JungleMaze/Art/JSurviv/Weapons/Sprites/Ná cao su/2-NaCaoSu_normal.png",
       "source_kind": "JSurviv nearest + shared palette",
       "slice": "full image",
       "slice_rect_png": [
@@ -568,7 +568,7 @@
       "source_kind": "Hand-authored native32 recipe",
       "slice": "draw_item(SCEPTER)",
       "source_sha256": "e911f3bf85c960370cd9b4ce37ae9fd95428fe8a474188a9fe832ef28af93df6",
-      "reference_source": "Assets/Imported/JSurviv/Sprites/WEAPONS/Quyền trượng/quyen_truong.png",
+      "reference_source": "Assets/_JungleMaze/Art/JSurviv/Weapons/Sprites/Quyền trượng/quyen_truong.png",
       "replacement_reason": "Direct 32px redraw: generated/undersized/misleading legacy art; no source resampling",
       "source_alpha_bbox": [
         7,
@@ -643,7 +643,7 @@
       "source_kind": "Hand-authored native32 recipe",
       "slice": "draw_item(CROSSBOW)",
       "source_sha256": "e911f3bf85c960370cd9b4ce37ae9fd95428fe8a474188a9fe832ef28af93df6",
-      "reference_source": "Assets/Imported/JSurviv/Sprites/WEAPONS/Nỏ/no.png",
+      "reference_source": "Assets/_JungleMaze/Art/JSurviv/Weapons/Sprites/Nỏ/no.png",
       "replacement_reason": "Direct 32px redraw: generated/undersized/misleading legacy art; no source resampling",
       "source_alpha_bbox": [
         3,
@@ -713,7 +713,7 @@
       "id": "SHOTGUN",
       "kind": "Weapon",
       "target": "Assets/_JungleMaze/Art/UI/Icons/Weapons/SHOTGUN.png",
-      "source": "Assets/Imported/JSurviv/Sprites/WEAPONS/Shotgun/shotgun.png",
+      "source": "Assets/_JungleMaze/Art/JSurviv/Weapons/Sprites/Shotgun/shotgun.png",
       "source_kind": "JSurviv nearest + shared palette",
       "slice": "shotgun 1_0",
       "slice_rect_png": [
@@ -793,7 +793,7 @@
       "id": "BANANA",
       "kind": "Weapon",
       "target": "Assets/_JungleMaze/Art/UI/Icons/Weapons/BANANA.png",
-      "source": "Assets/Imported/JSurviv/Sprites/WEAPONS/Chuối/Banana.png",
+      "source": "Assets/_JungleMaze/Art/JSurviv/Weapons/Sprites/Chuối/Banana.png",
       "source_kind": "JSurviv nearest + shared palette",
       "slice": "full image",
       "slice_rect_png": [
@@ -873,7 +873,7 @@
       "id": "SMOKE",
       "kind": "Weapon",
       "target": "Assets/_JungleMaze/Art/UI/Icons/Weapons/SMOKE.png",
-      "source": "Assets/Imported/JSurviv/Sprites/WEAPONS/Bom khói/smoke-grenade.png",
+      "source": "Assets/_JungleMaze/Art/JSurviv/Weapons/Sprites/Bom khói/smoke-grenade.png",
       "source_kind": "JSurviv nearest + shared palette",
       "slice": "full image",
       "slice_rect_png": [
@@ -953,7 +953,7 @@
       "id": "METEORITE_FRAGMENT",
       "kind": "Weapon",
       "target": "Assets/_JungleMaze/Art/UI/Icons/Weapons/METEORITE_FRAGMENT.png",
-      "source": "Assets/Imported/JSurviv/Sprites/WEAPONS/Mảnh thiên thạch/meteorite_throwing-Sheet.png",
+      "source": "Assets/_JungleMaze/Art/JSurviv/Weapons/Sprites/Mảnh thiên thạch/meteorite_throwing-Sheet.png",
       "source_kind": "JSurviv nearest + shared palette",
       "slice": "meteorite_throwing-Sheet_2",
       "slice_rect_png": [
@@ -1030,7 +1030,7 @@
       "id": "CRYSTAL",
       "kind": "Weapon",
       "target": "Assets/_JungleMaze/Art/UI/Icons/Weapons/CRYSTAL.png",
-      "source": "Assets/Imported/JSurviv/Sprites/WEAPONS/Crystal/crystal.png",
+      "source": "Assets/_JungleMaze/Art/JSurviv/Weapons/Sprites/Crystal/crystal.png",
       "source_kind": "JSurviv nearest + shared palette",
       "slice": "full image",
       "slice_rect_png": [
@@ -1112,7 +1112,7 @@
       "source_kind": "Hand-authored native32 recipe",
       "slice": "draw_item(SEED)",
       "source_sha256": "e911f3bf85c960370cd9b4ce37ae9fd95428fe8a474188a9fe832ef28af93df6",
-      "reference_source": "Assets/Imported/JSurviv/Sprites/WEAPONS/Hạt/seed.png",
+      "reference_source": "Assets/_JungleMaze/Art/JSurviv/Weapons/Sprites/Hạt/seed.png",
       "replacement_reason": "Direct 32px redraw: generated/undersized/misleading legacy art; no source resampling",
       "source_alpha_bbox": [
         6,
@@ -1186,7 +1186,7 @@
       "source_kind": "Hand-authored native32 recipe",
       "slice": "draw_item(ROPE)",
       "source_sha256": "e911f3bf85c960370cd9b4ce37ae9fd95428fe8a474188a9fe832ef28af93df6",
-      "reference_source": "Assets/Imported/JSurviv/Sprites/WEAPONS/Dây thừng/day_thung-Sheet.png",
+      "reference_source": "Assets/_JungleMaze/Art/JSurviv/Weapons/Sprites/Dây thừng/day_thung-Sheet.png",
       "replacement_reason": "Direct 32px redraw: generated/undersized/misleading legacy art; no source resampling",
       "source_alpha_bbox": [
         3,
@@ -1254,7 +1254,7 @@
       "id": "BELL",
       "kind": "Weapon",
       "target": "Assets/_JungleMaze/Art/UI/Icons/Weapons/BELL.png",
-      "source": "Assets/Imported/JSurviv/Sprites/WEAPONS/Chuông/bell.png",
+      "source": "Assets/_JungleMaze/Art/JSurviv/Weapons/Sprites/Chuông/bell.png",
       "source_kind": "JSurviv nearest + shared palette",
       "slice": "bell_2",
       "slice_rect_png": [
@@ -1334,7 +1334,7 @@
       "id": "SAHUR_BAT",
       "kind": "Weapon",
       "target": "Assets/_JungleMaze/Art/UI/Icons/Weapons/SAHUR_BAT.png",
-      "source": "Assets/Imported/JSurviv/Sprites/WEAPONS/Gậy sahur/sahurbat.png",
+      "source": "Assets/_JungleMaze/Art/JSurviv/Weapons/Sprites/Gậy sahur/sahurbat.png",
       "source_kind": "JSurviv nearest + shared palette",
       "slice": "full image",
       "slice_rect_png": [
@@ -1415,7 +1415,7 @@
       "source_kind": "Hand-authored native32 recipe",
       "slice": "draw_item(WOODEN_HELMET)",
       "source_sha256": "e911f3bf85c960370cd9b4ce37ae9fd95428fe8a474188a9fe832ef28af93df6",
-      "reference_source": "Assets/Imported/JSurviv/Sprites/EQUIPMENTS/Armor/Mũ gỗ/mu_go.png",
+      "reference_source": "Assets/_JungleMaze/Art/JSurviv/Equipments/Armor/Mũ gỗ/mu_go.png",
       "replacement_reason": "Direct 32px redraw: generated/undersized/misleading legacy art; no source resampling",
       "source_alpha_bbox": [
         3,
@@ -1487,7 +1487,7 @@
       "source_kind": "Hand-authored native32 recipe",
       "slice": "draw_item(SPIKE_HELMET)",
       "source_sha256": "e911f3bf85c960370cd9b4ce37ae9fd95428fe8a474188a9fe832ef28af93df6",
-      "reference_source": "Assets/Imported/JSurviv/Sprites/EQUIPMENTS/Armor/03. Mũ cối/MuCoi1.png",
+      "reference_source": "Assets/_JungleMaze/Art/JSurviv/Legacy2024/Equipments/Armor/03. Mũ cối/MuCoi1.png",
       "replacement_reason": "Direct 32px redraw: generated/undersized/misleading legacy art; no source resampling",
       "source_alpha_bbox": [
         3,
@@ -1560,7 +1560,7 @@
       "source_kind": "Hand-authored native32 recipe",
       "slice": "draw_item(MAGIC_HELMET)",
       "source_sha256": "e911f3bf85c960370cd9b4ce37ae9fd95428fe8a474188a9fe832ef28af93df6",
-      "reference_source": "Assets/Imported/JSurviv/Sprites/EQUIPMENTS/Armor/Mũ phù thủy/Mũ phù thủy.png",
+      "reference_source": "Assets/_JungleMaze/Art/JSurviv/Equipments/Armor/Mũ phù thủy/Mũ phù thủy.png",
       "replacement_reason": "Direct 32px redraw: generated/undersized/misleading legacy art; no source resampling",
       "source_alpha_bbox": [
         3,
@@ -1635,7 +1635,7 @@
       "source_kind": "Hand-authored native32 recipe",
       "slice": "draw_item(WOODEN_ARMOR)",
       "source_sha256": "e911f3bf85c960370cd9b4ce37ae9fd95428fe8a474188a9fe832ef28af93df6",
-      "reference_source": "Assets/Imported/JSurviv/Sprites/EQUIPMENTS/Armor/01. Vest/Vest.png",
+      "reference_source": "Assets/_JungleMaze/Art/JSurviv/Legacy2024/Equipments/Armor/01. Vest/Vest.png",
       "replacement_reason": "Direct 32px redraw: generated/undersized/misleading legacy art; no source resampling",
       "source_alpha_bbox": [
         3,
@@ -1708,7 +1708,7 @@
       "source_kind": "Hand-authored native32 recipe",
       "slice": "draw_item(ARMOR)",
       "source_sha256": "e911f3bf85c960370cd9b4ce37ae9fd95428fe8a474188a9fe832ef28af93df6",
-      "reference_source": "Assets/Imported/JSurviv/Sprites/EQUIPMENTS/Armor/Giáp gai/Giap_gai.png",
+      "reference_source": "Assets/_JungleMaze/Art/JSurviv/Equipments/Armor/Giáp gai/Giap_gai.png",
       "replacement_reason": "Direct 32px redraw: generated/undersized/misleading legacy art; no source resampling",
       "source_alpha_bbox": [
         3,
@@ -1781,7 +1781,7 @@
       "source_kind": "Hand-authored native32 recipe",
       "slice": "draw_item(MAGIC_ARMOR)",
       "source_sha256": "e911f3bf85c960370cd9b4ce37ae9fd95428fe8a474188a9fe832ef28af93df6",
-      "reference_source": "Assets/Imported/JSurviv/Sprites/EQUIPMENTS/Armor/Giáp phù thủy/Giáp phù thủy.png",
+      "reference_source": "Assets/_JungleMaze/Art/JSurviv/Equipments/Armor/Giáp phù thủy/Giáp phù thủy.png",
       "replacement_reason": "Direct 32px redraw: generated/undersized/misleading legacy art; no source resampling",
       "source_alpha_bbox": [
         3,
@@ -1855,7 +1855,7 @@
       "source_kind": "Hand-authored native32 recipe",
       "slice": "draw_item(GOD_LEAF)",
       "source_sha256": "e911f3bf85c960370cd9b4ce37ae9fd95428fe8a474188a9fe832ef28af93df6",
-      "reference_source": "Assets/Imported/JSurviv/Sprites/EQUIPMENTS/Healing items/Lá thần mộc/la_than.png",
+      "reference_source": "Assets/_JungleMaze/Art/JSurviv/Equipments/Consumables/Lá thần mộc/la_than.png",
       "replacement_reason": "Direct 32px redraw: generated/undersized/misleading legacy art; no source resampling",
       "source_alpha_bbox": [
         4,
@@ -1927,7 +1927,7 @@
       "source_kind": "Hand-authored native32 recipe",
       "slice": "draw_item(SPIRIT_TEAR)",
       "source_sha256": "e911f3bf85c960370cd9b4ce37ae9fd95428fe8a474188a9fe832ef28af93df6",
-      "reference_source": "Assets/Imported/JSurviv/Sprites/EQUIPMENTS/Healing items/Nước mắt tinh linh/Nước mắt linh tinh.png",
+      "reference_source": "Assets/_JungleMaze/Art/JSurviv/Equipments/Consumables/Nước mắt tinh linh/Nước mắt linh tinh.png",
       "replacement_reason": "Direct 32px redraw: generated/undersized/misleading legacy art; no source resampling",
       "source_alpha_bbox": [
         7,
@@ -2000,7 +2000,7 @@
       "source_kind": "Hand-authored native32 recipe",
       "slice": "draw_item(MERMAID_TAIL)",
       "source_sha256": "e911f3bf85c960370cd9b4ce37ae9fd95428fe8a474188a9fe832ef28af93df6",
-      "reference_source": "Assets/Imported/JSurviv/Sprites/EQUIPMENTS/Healing items/Vảy đuôi tiên cá/Vảy đuôi tiên cá.png",
+      "reference_source": "Assets/_JungleMaze/Art/JSurviv/Equipments/Consumables/Vảy đuôi tiên cá/Vảy đuôi tiên cá.png",
       "replacement_reason": "Direct 32px redraw: generated/undersized/misleading legacy art; no source resampling",
       "source_alpha_bbox": [
         3,
@@ -2072,7 +2072,7 @@
       "source_kind": "Hand-authored native32 recipe",
       "slice": "draw_item(PHOENIX_FEATHERS)",
       "source_sha256": "e911f3bf85c960370cd9b4ce37ae9fd95428fe8a474188a9fe832ef28af93df6",
-      "reference_source": "Assets/Imported/JSurviv/Sprites/EQUIPMENTS/Healing items/Lông vũ phượng hoàng lửa/Lông vũ.png",
+      "reference_source": "Assets/_JungleMaze/Art/JSurviv/Equipments/Consumables/Lông vũ phượng hoàng lửa/Lông vũ.png",
       "replacement_reason": "Direct 32px redraw: generated/undersized/misleading legacy art; no source resampling",
       "source_alpha_bbox": [
         5,
@@ -2145,7 +2145,7 @@
       "source_kind": "Hand-authored native32 recipe",
       "slice": "draw_item(UNICORN_BLOOD)",
       "source_sha256": "e911f3bf85c960370cd9b4ce37ae9fd95428fe8a474188a9fe832ef28af93df6",
-      "reference_source": "Assets/Imported/JSurviv/Sprites/EQUIPMENTS/Healing items/Máu kỳ lân/Máu kỳ lân.png",
+      "reference_source": "Assets/_JungleMaze/Art/JSurviv/Equipments/Consumables/Máu kỳ lân/Máu kỳ lân.png",
       "replacement_reason": "Direct 32px redraw: generated/undersized/misleading legacy art; no source resampling",
       "source_alpha_bbox": [
         3,
@@ -2220,7 +2220,7 @@
       "source_kind": "Hand-authored native32 recipe",
       "slice": "draw_item(ADRENALINE)",
       "source_sha256": "e911f3bf85c960370cd9b4ce37ae9fd95428fe8a474188a9fe832ef28af93df6",
-      "reference_source": "Assets/Imported/JSurviv/Sprites/EQUIPMENTS/Healing items/05. Nước ngọt/nuoc ngot.png",
+      "reference_source": "Assets/_JungleMaze/Art/JSurviv/Legacy2024/Equipments/Healing/05. Nước ngọt/nuoc ngot.png",
       "replacement_reason": "Direct 32px redraw: generated/undersized/misleading legacy art; no source resampling",
       "source_alpha_bbox": [
         8,
@@ -2294,7 +2294,7 @@
       "source_kind": "Hand-authored native32 recipe",
       "slice": "draw_item(ELIXIR)",
       "source_sha256": "e911f3bf85c960370cd9b4ce37ae9fd95428fe8a474188a9fe832ef28af93df6",
-      "reference_source": "Assets/Imported/JSurviv/Sprites/EQUIPMENTS/Healing items/Thần dược/thanduoc.png",
+      "reference_source": "Assets/_JungleMaze/Art/JSurviv/Equipments/Consumables/Thần dược/thanduoc.png",
       "replacement_reason": "Direct 32px redraw: generated/undersized/misleading legacy art; no source resampling",
       "source_alpha_bbox": [
         5,
@@ -2368,7 +2368,7 @@
       "source_kind": "Hand-authored native32 recipe",
       "slice": "draw_item(MAGIC)",
       "source_sha256": "e911f3bf85c960370cd9b4ce37ae9fd95428fe8a474188a9fe832ef28af93df6",
-      "reference_source": "Assets/Imported/JSurviv/Sprites/EQUIPMENTS/Healing items/Gậy thần/gaythan.png",
+      "reference_source": "Assets/_JungleMaze/Art/JSurviv/Equipments/Consumables/Gậy thần/gaythan.png",
       "replacement_reason": "Direct 32px redraw: generated/undersized/misleading legacy art; no source resampling",
       "source_alpha_bbox": [
         5,
@@ -2442,7 +2442,7 @@
       "source_kind": "Hand-authored native32 recipe",
       "slice": "draw_item(ELIXIR_OF_LIFE)",
       "source_sha256": "e911f3bf85c960370cd9b4ce37ae9fd95428fe8a474188a9fe832ef28af93df6",
-      "reference_source": "Assets/Imported/JSurviv/Sprites/EQUIPMENTS/Healing items/Tiên dược sự sống/tienduocsusong.png",
+      "reference_source": "Assets/_JungleMaze/Art/JSurviv/Equipments/Consumables/Tiên dược sự sống/tienduocsusong.png",
       "replacement_reason": "Direct 32px redraw: generated/undersized/misleading legacy art; no source resampling",
       "source_alpha_bbox": [
         5,
@@ -2517,7 +2517,7 @@
       "source_kind": "Hand-authored native32 recipe",
       "slice": "draw_item(COMPASS)",
       "source_sha256": "e911f3bf85c960370cd9b4ce37ae9fd95428fe8a474188a9fe832ef28af93df6",
-      "reference_source": "Assets/Imported/JSurviv/Sprites/EQUIPMENTS/Healing items/La bàn/laban.png",
+      "reference_source": "Assets/_JungleMaze/Art/JSurviv/Equipments/Consumables/La bàn/laban.png",
       "replacement_reason": "Direct 32px redraw: generated/undersized/misleading legacy art; no source resampling",
       "source_alpha_bbox": [
         3,

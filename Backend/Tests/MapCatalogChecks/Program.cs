@@ -134,7 +134,8 @@ try
     }
     var worldVersion = WorldSettings.Load(GameDataLoader.ReadGameDataFile("world_settings.json")).Version;
     var store = new MapCatalogStore(live, worldVersion);
-    Check(store.Current.Maps.Count == 2, "two bundled maps pass authoritative validation");
+    var bundledCount = JsonDocument.Parse(File.ReadAllText(Path.Combine(bundled, "catalog.json"))).RootElement.GetProperty("maps").GetArrayLength();
+    Check(bundledCount >= 2 && store.Current.Maps.Count == bundledCount, "every bundled map passes authoritative validation");
     var profile = MatchProfile.CreateTestProfile();
     Environment.SetEnvironmentVariable("WORLD_ENABLED", "1"); // Explicitly exercise the real world with accelerated match timers.
     var options = new GameServer.Configuration.ServerOptions(System.Net.IPAddress.Loopback, 7777, 10, 30, 5, "RoomCode", "FixtureCode");
@@ -256,7 +257,7 @@ try
     // ---- failure cases: each throws before any snapshot is returned ----
     var publishedRoot = Root("published");
     var publishedGeneration = MapPublisher.Publish(bundled, publishedRoot, "world-prototype-1");
-    Check(MapCatalogSnapshot.Load(publishedRoot,"world-prototype-1").Maps.Count==2,"publish validates and installs complete immutable payloads");
+    Check(MapCatalogSnapshot.Load(publishedRoot,"world-prototype-1").Maps.Count==bundledCount,"publish validates and installs complete immutable payloads");
     Check(MapPublisher.Publish(bundled,publishedRoot,"world-prototype-1")>publishedGeneration,"repeat publish advances generation without replacing immutable map bytes");
     var publishedPointer=File.ReadAllBytes(Path.Combine(publishedRoot,"catalog.json"));
     var invalidPackage=Root("invalid-publish");

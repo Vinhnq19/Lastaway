@@ -27,7 +27,8 @@ namespace JungleMaze.Presentation.World.Phase2
         public void Configure(WorldVisualSet set) { _set = set; }
 
         /// <summary>Applies a replicated state; repeated snapshots never replay damage or restart ambient frames.</summary>
-        public void Apply(WorldObjectWire state,Sprite sprite)
+        /// <param name="spriteIsArt">True when <paramref name="sprite"/> is real artwork (e.g. a ground item icon) rather than the blank fallback square.</param>
+        public void Apply(WorldObjectWire state,Sprite sprite,bool spriteIsArt=false)
         {
             var fresh = !_applied || WorldId != state.Id || _kind != state.Kind;
             var broken = (state.Flags & 1) != 0;
@@ -47,10 +48,12 @@ namespace JungleMaze.Presentation.World.Phase2
             var flat=state.Kind>=8&&state.Kind<=10; // swamp/lava/poison nằm dưới mọi entity Y-sort
             _renderer.sortingLayerID=SortingLayers.IdOf(flat?SortingLayers.Ground:SortingLayers.Default);
             _renderer.sortingOrder=state.Kind==100?8:flat?-1:1;
-            transform.position=new Vector3(state.X,state.Y,0);
             var reference=_entry.Sprite!=null?_entry.Sprite:sprite;
-            if(reference!=null){var s=reference.bounds.size;transform.localScale=new Vector3(state.Width/Mathf.Max(.01f,s.x),state.Height/Mathf.Max(.01f,s.y),1);}
-            _baseColor=_hasSource?Color.white:ColorFor(state.Kind);
+            transform.position=new Vector3(state.X,state.Y,0);
+            transform.localScale=Vector3.one;
+            _renderer.drawMode=SpriteDrawMode.Simple;
+            if(reference!=null)Fit(state,reference,_hasSource||spriteIsArt);
+            _baseColor=_hasSource||spriteIsArt?Color.white:ColorFor(state.Kind);
             if(state.Kind==12&&!closed)_baseColor.a=.25f;
             Render();
         }
@@ -83,6 +86,26 @@ namespace JungleMaze.Presentation.World.Phase2
             _renderer.enabled=frame!=null;
             _renderer.color=_flashRemaining>0?(VisualState==WorldVisualState.Teleported?new Color(.5f,.9f,1):new Color(1,.55f,.5f)):_baseColor;
         }
+        /// <summary>
+        /// Places artwork on the footprint without distorting it. Walls tile at 1:1. Upright objects keep their aspect,
+        /// fill the footprint width (capped at <see cref="MaxRise"/> footprint heights) and stand on its bottom edge. Flat or floor art fits
+        /// inside the footprint, centred. The blank fallback square still stretches to the footprint.
+        /// </summary>
+        /// <summary>Upright art may rise at most this many footprint heights, so a tall statue never covers the screen.</summary>
+        public const float MaxRise=1.6f;
+
+        private void Fit(WorldObjectWire state,Sprite reference,bool art)
+        {
+            var size=reference.bounds.size;
+            if(size.x<=0||size.y<=0)return;
+            if(!art){transform.localScale=new Vector3(state.Width/size.x,state.Height/size.y,1);return;}
+            if(state.Kind==2){_renderer.sprite=reference;_renderer.drawMode=SpriteDrawMode.Tiled;_renderer.size=new Vector2(state.Width,state.Height);return;}
+            var upright=state.Kind<=7||state.Kind==12||state.Kind==13;
+            var scale=upright?Mathf.Min(state.Width/size.x,state.Height*MaxRise/size.y):Mathf.Min(state.Width/size.x,state.Height/size.y);
+            transform.localScale=new Vector3(scale,scale,1);
+            if(upright)transform.position=new Vector3(state.X,state.Y-state.Height*.5f-reference.bounds.min.y*scale,0);
+        }
+
         public static Color ColorFor(byte kind)
         {
             switch(kind){case 5:return new Color(.75f,.45f,.16f);case 6:return new Color(.65f,.37f,.3f);case 7:return new Color(.2f,.5f,.22f,.8f);

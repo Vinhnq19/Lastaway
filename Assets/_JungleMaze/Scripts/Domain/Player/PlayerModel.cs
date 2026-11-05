@@ -9,6 +9,8 @@ namespace JungleMaze.Domain.Player
         public byte Hp;
         public bool IsDead;
         public ushort LastProcessedInputSeq;
+        /// <summary>Held weapon code from the server: 0 unknown, 1..10 combat weapon + 1, 15 a non-combat item.</summary>
+        public byte HeldCode;
     }
 
     /// <summary>Model phía client của một người chơi. Server authoritative: client chỉ áp snapshot mới hơn.</summary>
@@ -19,6 +21,12 @@ namespace JungleMaze.Domain.Player
         public byte NetId { get; }
         public bool HasState { get; private set; }
         public PlayerSnapshot Current { get; private set; }
+
+        /// <summary>Item ID the server says this player holds ("" when none). Used when the snapshot only says "other item".</summary>
+        public string HeldItemId { get; private set; } = "";
+
+        /// <summary>Applies a held item from the server's held-items list.</summary>
+        public void SetHeldItem(string itemId) => HeldItemId = itemId ?? "";
 
         /// <summary>Bỏ snapshot cũ/trùng (packet Unreliable có thể đến sai thứ tự). Trả true nếu đã áp.</summary>
         public bool Apply(in PlayerSnapshot snapshot)

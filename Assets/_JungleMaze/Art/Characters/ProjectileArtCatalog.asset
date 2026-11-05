@@ -1,0 +1,117 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6d9b84da3ca8a2409e44db9f3cf5462, type: 3}
+  m_Name: ProjectileArtCatalog
+  m_EditorClassIdentifier: JungleMaze.Presentation::JungleMaze.Presentation.Combat.ProjectileArtCatalog
+  Entries:
+  - ItemId: RUBBER_GUN
+    Flight:
+      Sprites:
+      - {fileID: 21300000, guid: 1508b1b25ce982840b9f34764b80e5db, type: 3}
+      - {fileID: 21300000, guid: 8ce1dcd98f8901543b88124a55d15d92, type: 3}
+      - {fileID: 21300000, guid: 5b786fe8f3453c4448b071c5b680596c, type: 3}
+      - {fileID: 21300000, guid: 157f1af8d4faff541b331c4371fb8f6b, type: 3}
+      - {fileID: 21300000, guid: 53f1b133667c54741ad24ce041743bc5, type: 3}
+      - {fileID: 21300000, guid: d466d7d4d6893ff4a8c6e19296e1cae3, type: 3}
+      - {fileID: 21300000, guid: 7a4b787919a46564da92ed0ef0f89cd4, type: 3}
+      Times:
+      - 0.016666668
+      - 0.11666667
+      - 0.2
+      - 0.28333333
+      - 0.38333333
+      - 0.46666667
+      - 0.56666666
+      Duration: 0.5833333
+      Loop: 1
+    AngleOffset: 0
+    Length: 0.28
+    Spin: 0
+    FlightContent: 0.96875
+    TracerColor: {r: 1, g: 1, b: 1, a: 1}
+    Muzzle:
+      Sprites: []
+      Times: []
+      Duration: 0
+      Loop: 0
+    MuzzleLength: 0
+    MuzzleContent: 0
+  - ItemId: SCEPTER
+    Flight:
+      Sprites:
+      - {fileID: 3245615989051835899, guid: fe6fab1096c63fa4fb97d442290d1b3b, type: 3}
+      Times:
+      - 0
+      Duration: 1
+      Loop: 1
+    AngleOffset: 0
+    Length: 0.3
+    Spin: 0
+    FlightContent: 1
+    TracerColor: {r: 1, g: 1, b: 1, a: 1}
+    Muzzle:
+      Sprites: []
+      Times: []
+      Duration: 0
+      Loop: 0
+    MuzzleLength: 0
+    MuzzleContent: 0
+  - ItemId: CROSSBOW
+    Flight:
+      Sprites:
+      - {fileID: -3118038337272148560, guid: 1e955bc2bcb82e5429008b95569cef14, type: 3}
+      Times:
+      - 0
+      Duration: 1
+      Loop: 1
+    AngleOffset: -45
+    Length: 0.5
+    Spin: 0
+    FlightContent: 0.46875
+    TracerColor: {r: 1, g: 1, b: 1, a: 1}
+    Muzzle:
+      Sprites: []
+      Times: []
+      Duration: 0
+      Loop: 0
+    MuzzleLength: 0
+    MuzzleContent: 0
+  - ItemId: SHOTGUN
+    Flight:
+      Sprites: []
+      Times: []
+      Duration: 0
+      Loop: 0
+    AngleOffset: 0
+    Length: 0
+    Spin: 0
+    FlightContent: 0
+    TracerColor: {r: 1, g: 0.62, b: 0.22, a: 1}
+    Muzzle:
+      Sprites:
+      - {fileID: 8314954782896826632, guid: 4641ee45f17a4e146884cb217fd8d774, type: 3}
+      - {fileID: 6407289887904246934, guid: 4641ee45f17a4e146884cb217fd8d774, type: 3}
+      - {fileID: -8041881728109839169, guid: 4641ee45f17a4e146884cb217fd8d774, type: 3}
+      - {fileID: -6247942537747664911, guid: 4641ee45f17a4e146884cb217fd8d774, type: 3}
+      - {fileID: 3892384101687334285, guid: 4641ee45f17a4e146884cb217fd8d774, type: 3}
+      - {fileID: -1962337690843302532, guid: 4641ee45f17a4e146884cb217fd8d774, type: 3}
+      Times:
+      - 0
+      - 0.040000003
+      - 0.080000006
+      - 0.120000005
+      - 0.16000001
+      - 0.2
+      Duration: 0.24000001
+      Loop: 0
+    MuzzleLength: 1.4
+    MuzzleContent: 1.5625

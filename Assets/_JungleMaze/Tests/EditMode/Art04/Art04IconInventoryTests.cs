@@ -20,6 +20,8 @@ namespace JungleMaze.Tests.Art04
     {
         private const string CsvPath = "Docs/Tickets/ART-04_icon_inventory.csv";
         private const string Ui = "Assets/_JungleMaze/Prefabs/UI/";
+        /// <summary>JSurviv art moved out of Imported keeps the AC17 ban: HUD icons must stay the normalized copies.</summary>
+        private const string JSurvivArt = "Assets/_JungleMaze/Art/JSurviv/";
         private const int Canvas = 64;
         private const int VisibleAlpha = 8;
         private const int MinPadding = 3;
@@ -117,7 +119,8 @@ namespace JungleMaze.Tests.Art04
             var offenders = new List<string>();
             foreach (var path in AssetDatabase.GetDependencies(roots, true))
             {
-                if (!path.StartsWith("Assets/Imported/", StringComparison.Ordinal)) continue;
+                if (!path.StartsWith("Assets/Imported/", StringComparison.Ordinal)
+                    && !path.StartsWith(JSurvivArt, StringComparison.Ordinal)) continue;
                 // CPO decision on AC17: only images count. The TMP shader under Imported/JSurviv has been a dependency of
                 // the HUD fonts since UI-01 and is excluded on purpose; any texture or sprite from there is a failure.
                 var ext = Path.GetExtension(path).ToLowerInvariant();

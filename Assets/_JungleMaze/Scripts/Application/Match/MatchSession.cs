@@ -30,6 +30,9 @@ namespace JungleMaze.App.Match
         private readonly Action<MatchResultPacket> _onResult;
         private readonly Action<MatchRosterPacket> _onRoster;
         private readonly Action<MatchEntityEventPacket> _onEntity;
+        private readonly Action<HeldItemsPacket> _onHeldItems;
+        private bool _hasHeldItems;
+        private uint _heldItemsTick;
         private PlayerIntent _intent;
         private float _sendElapsed, _tickFraction;
         private ushort _inputSequence;
@@ -48,6 +51,27 @@ namespace JungleMaze.App.Match
             _onResult = p => { if (p.MatchId == MatchId) { Result = p; HasResult = true; } };
             _onRoster = p => { if (p.MatchId == MatchId) Roster = p.Players ?? Array.Empty<MatchParticipantState>(); };
             _onEntity = p => { if (p.MatchId == MatchId && p.Kind == MatchEntityEvent.Despawn) RemovePlayer(p.NetId); };
+            _onHeldItems = HeldItems;
+        }
+
+        /// <summary>
+        /// Held items of known players (the list is complete, so a player missing from it holds nothing special).
+        /// Players not seen in a snapshot yet are skipped; the server resends the list every couple of seconds.
+        /// </summary>
+        private void HeldItems(HeldItemsPacket packet)
+        {
+            if (packet.MatchId != MatchId || (_hasHeldItems && unchecked((int)(packet.Tick - _heldItemsTick)) < 0)) return;
+            _hasHeldItems = true; _heldItemsTick = packet.Tick;
+            ushort listed = 0;
+            for (var i = 0; i < packet.Count; i++)
+            {
+                var entry = packet.Get(i);
+                if (entry.NetId >= 16) continue;
+                listed |= (ushort)(1 << entry.NetId);
+                if (_players.TryGet(entry.NetId, out var player)) player.SetHeldItem(entry.ItemId);
+            }
+            foreach (var id in _players.ActiveIds)
+                if (id < 16 && (listed & (1 << id)) == 0 && _players.TryGet(id, out var player)) player.SetHeldItem("");
         }
 
         public event Action<MatchPhasePacket> PhaseUpdated;
@@ -86,12 +110,14 @@ namespace JungleMaze.App.Match
             _bus.Subscribe(_onNetwork);
             _receiver.Subscribe(_onPhase); _receiver.Subscribe(_onSnapshot); _receiver.Subscribe(_onZone);
             _receiver.Subscribe(_onWelcome); _receiver.Subscribe(_onResult); _receiver.Subscribe(_onRoster); _receiver.Subscribe(_onEntity);
+            _receiver.Subscribe(_onHeldItems);
         }
         public void Dispose()
         {
             _bus.Unsubscribe(_onNetwork);
             _receiver.Unsubscribe(_onPhase); _receiver.Unsubscribe(_onSnapshot); _receiver.Unsubscribe(_onZone);
             _receiver.Unsubscribe(_onWelcome); _receiver.Unsubscribe(_onResult); _receiver.Unsubscribe(_onRoster); _receiver.Unsubscribe(_onEntity);
+            _receiver.Unsubscribe(_onHeldItems);
         }
         public void SetIntent(in PlayerIntent intent) => _intent = intent;
         public void Tick(float deltaTime)
@@ -140,7 +166,7 @@ namespace JungleMaze.App.Match
             if (change.Current == NetworkState.Failed || change.Current == NetworkState.Disconnected)
             {
                 // Retain only the short-lived resume proof; scene state is repopulated by the server.
-                ClearPlayers(); _intent = default; _sendElapsed = 0; _hasSnapshot = false; _helloSent = false; _snapshotAckPending = false; Prediction.Reset();
+                ClearPlayers(); _intent = default; _sendElapsed = 0; _hasSnapshot = false; _hasHeldItems = false; _helloSent = false; _snapshotAckPending = false; Prediction.Reset();
             }
         }
         private void PhaseChanged(MatchPhasePacket packet)
@@ -150,7 +176,7 @@ namespace JungleMaze.App.Match
             {
                 if (_retiredMatches.Contains(packet.MatchId)) { IgnoredPackets++; return; }
                 if (MatchId != Guid.Empty) { _retiredMatches.Enqueue(MatchId); if (_retiredMatches.Count > 8) _retiredMatches.Dequeue(); }
-                ClearPlayers(); MatchId = packet.MatchId; _hasSnapshot = false; _snapshotAckPending = false; HasResult = false; _hasZone = false;
+                ClearPlayers(); MatchId = packet.MatchId; _hasSnapshot = false; _snapshotAckPending = false; HasResult = false; _hasZone = false; _hasHeldItems = false;
                 Roster = Array.Empty<MatchParticipantState>(); OwnNetId = 255; ResumeProof = Guid.Empty; _inputSequence = 0;
                 Prediction.Reset();
             }
@@ -176,7 +202,7 @@ namespace JungleMaze.App.Match
                 var state = packet.GetPlayer(i); seen |= (ushort)(1 << state.NetId);
                 var model = new PlayerSnapshot { Tick = packet.ServerTick, X = state.X, Y = state.Y,
                     RotationDegrees = state.RotationDegrees, Hp = state.Hp, IsDead = state.IsDead,
-                    LastProcessedInputSeq = state.LastProcessedInputSeq };
+                    LastProcessedInputSeq = state.LastProcessedInputSeq, HeldCode = state.HeldCode };
                 if (state.NetId == OwnNetId) Prediction.Reconcile(model);
                 if (_players.GetOrAdd(state.NetId).Apply(model)) _bus.Publish(new PlayerStateUpdated(state.NetId));
             }
