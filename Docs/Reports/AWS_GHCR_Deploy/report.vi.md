@@ -18,9 +18,11 @@ Publish khởi tạo đo khi layer đã ấm cache: API7,624s/GameServer7,198s, 
 
 ## 4. Local và build
 
-Backend0error/0warning, Network148/Bot187/World168 assertions PASS; DualTransport/MapCatalog/MatchResult/Combat/Inventory/MatchChecks PASS. Pipeline hiện**21 tests**, reporter**37 kiểm launcher bằng fixture** PASS, gồm hash vector độc lập, tắt cmdlet autoload, xóa public function binding nhưng cached command vẫn chạy, và không nhận crash/thiếu evidence thành PASS. Hai fixture map cũ đã pin Di tích cổ sau merge để giữ golden/collision test.
+Backend0error/0warning, Network148/Bot187/World168 assertions PASS; DualTransport/MapCatalog/MatchResult/Combat/Inventory/MatchChecks PASS. Pipeline hiện**22 tests**, reporter**37 kiểm launcher bằng fixture** PASS, gồm hash vector độc lập, tắt cmdlet autoload, xóa public function binding nhưng cached command vẫn chạy, và không nhận crash/thiếu evidence thành PASS. Hai fixture map cũ đã pin Di tích cổ sau merge để giữ golden/collision test.
 
 Build6000.3.15f1 đã thành công192,63s,0error/6warning; receipt/source/binary hash được kiểm, không đổi Editor. Full Local bản sửa checksum trước đó PASS: WSS401,86s,402/402pong, RTT33,35/33,76/34,17ms p50/p95/p99, input29,86Hz trong51,51s điều khiển và snapshot30,00Hz; có spectator, không suy10nhân vật đều sống suốt402s. Auto2+4bot, kết quả/history/replay và UDP/WSS smoke riêng PASS. Server256MiB: tick29,924Hz, CPUmax23%, DockerMemPerc22,33%,0drop/OOM/restart,101cửa sổ/101mẫu RAM. Docker CLI MemPerc loại inactive file cache, không phải RSS/tổng cgroup. Giới hạn dev được trả0. **Full Local reporter mới đã PASS**: WSS300.02s, exit0, 300/300pong, RTTp50/p95/p99=33.34/33.71/34.07ms, input29.97Hz/snapshot30.00Hz. Auto2client exit0 và report tổng hợp PASS; UDP/WSS smoke PASS. Server tick29.914Hz, CPUmax24.18%, DockerMemPerc21.86%,0drop/OOM/restart. Cấu hình dev đã khôi phục. Lượt75s cũ giữ FAIL.
+
+Guard cuối so sánh image trong **Compose đã resolve** với manifest, chặn `.env.aws`/config ghi đè digest. Cấu hình đúng và hai trường hợp API/GameServer bị ghi đè đã qua unit test. Full Local cuối: WSS300.03s exit0, 300/301pong, input29.97Hz, snapshot30.00Hz; Auto hai client khoảng96,9s exit0 và UDP/WSS smoke PASS. Server89cửa sổ/89mẫu RAM: tick29.944Hz, CPUmax21.60%, DockerMemPerc22.20%,0drop/OOM/restart; cấu hình dev đã khôi phục.
 
 ## 5. Hai lượt AWS và dữ liệu từ PC
 
@@ -34,7 +36,7 @@ Sau player, reporter gặp`System.Management.Automation.CommandNotFoundException
 
 Tự rollback thật đã PASS: image API/GameServer khôi phục đúng, current/previous trở về bản cũ, config hash/Mongo ID/volume/Caddy ID không đổi. Smoke lại từ PC sau rollback PASS: HTTPS/JWT, tạo/list/xóa phòng, UDP7777 và WSS443 trong21,12s; phòng/client test đã dọn. Không biến rollback do PC gate lỗi thành bài cố ý healthcheck failure; bài riêng đó chưa chạy.
 
-Controller chính kết thúc sau466,80s; tính tới lần can thiệp AWS cuối là**1011.18s**, trong1200s đã duyệt. Các bước API-only update, explicit registry-to-registry rollback, deploy lại cùng release và Auto2 AWS **chưa chạy** vì gate đầu thất bại. Fresh Full Local/report fix đã đạt; commit/publish release mới trước khi xin lượt AWS tiếp. Hai PC vật lý NOT_TESTED; không suy diễn số đo thành gameplay capacity vô hạn. Quick không thay combat/history/performance.
+Controller chính kết thúc sau466,80s; tính tới lần can thiệp AWS cuối là**1011.18s**, trong1200s đã duyệt. Các bước API-only update, explicit registry-to-registry rollback, deploy lại cùng release và Auto2 AWS **chưa chạy** vì gate đầu thất bại. Fresh Full Local/report fix và guard actual-image đã đạt; cần lượt AWS mới được duyệt để kiểm release cuối. Hai PC vật lý NOT_TESTED; không suy diễn số đo thành gameplay capacity vô hạn. Quick không thay combat/history/performance.
 
 ## 7. Bàn giao và vận hành
 

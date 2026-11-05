@@ -164,6 +164,21 @@ class ReleaseTests(unittest.TestCase):
         with patch.object(host, 'configured_services', side_effect=[before, after]):
             with self.assertRaisesRegex(RuntimeError, 'Mongo'): host.plan(a,b)
 
+    def test_rendered_compose_cannot_override_manifest_images(self):
+        old, target = self.root/'old', self.root/'target'
+        old.mkdir(); bundle(target)
+        before = {s: {'image': s, 'volumes': []} for s in ('mongo','api','game-server','caddy')}
+        (old/'Caddyfile').write_bytes((target/'Caddyfile').read_bytes())
+        valid = copy.deepcopy(before)
+        for name in ('api','game-server'): valid[name]['image'] = manifest()['services'][name]['image']
+        with patch.object(host,'configured_services',side_effect=[before,valid]):
+            self.assertEqual(host.plan(old,target), ['api','game-server'])
+        for service in ('api','game-server'):
+            after = copy.deepcopy(valid)
+            after[service]['image'] = 'legacy-image:latest'
+            with patch.object(host,'configured_services',side_effect=[before,after]):
+                with self.assertRaisesRegex(RuntimeError,'overrides immutable image: '+service): host.plan(old,target)
+
     def test_occupied_snapshot_denies_without_exposing_secret(self):
         with patch.object(host, 'status', return_value={'schemaVersion': 1, 'safeToDeploy': False}):
             with self.assertRaisesRegex(RuntimeError, 'unfinished match'): host.require_empty(self.root)

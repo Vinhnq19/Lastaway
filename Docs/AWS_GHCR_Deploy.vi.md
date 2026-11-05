@@ -94,6 +94,8 @@ Lần chuyển đổi từ image cũ chưa có deployment-status: chỉ sau khi 
 
 Remote giữ `flock` suốt pull, switch và kiểm từ PC. HTTP control `/internal/deployment-status` chỉ đọc qua queue ứng dụng, cần secret riêng; không public 7780 và Caddy chặn `/internal/*`. Snapshot gồm active/pending/grace, bot, entity và phase, không trả RoomCode/credential. Có participant hoặc trận chưa dọn thì không cập nhật GameServer.
 
+Không thêm `API_IMAGE`/`GAME_IMAGE` vào `.env.aws`: image ứng dụng lấy từ release đã pin. Root so sánh image của Compose đã resolve với manifest; khác digest sẽ bị chặn trước pull hoặc đổi service.
+
 Pull digest trước khi đổi service; kiểm Linux AMD64, image cũ để rollback, đĩa trống và Mongo config hiệu lực. Chỉ force-recreate service thay đổi, `--no-deps`; Caddy chỉ khi proxy/config của nó đổi. Mongo không restart. Secret/outbox/maps giữ nguyên. Health kiểm container, image thực tế, status server và public PC tests. Chỉ sau PASS mới đổi current/previous.
 
 Guard chạy bằng **transient systemd unit**, không phải timer Stop EC2. PC Sleep/mất SSH/không gửi chấp nhận đúng hạn sẽ rollback service đã thay. Không có việc tự tắt EC2. Nếu không xác nhận được kết quả remote, report ghi unit/staging để admin kiểm qua SSM trước khi deploy lại.

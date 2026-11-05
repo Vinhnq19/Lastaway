@@ -79,6 +79,12 @@ def configured_services(release):
 
 def plan(old, target):
     before = configured_services(old); after = configured_services(target)
+    manifest_path = target / "manifest.json"
+    manifest = read_json(manifest_path) if manifest_path.is_file() else {}
+    if manifest.get("format") == "ghcr":
+        for service in ("api", "game-server"):
+            if after[service].get("image") != manifest["services"][service]["image"]:
+                raise RuntimeError("Compose/private config overrides immutable image: " + service)
     # Never silently migrate Mongo, storage or base image, including inherited AppsOnly env.
     if before["mongo"] != after["mongo"]: raise RuntimeError("Mongo configuration changed; separate migration required")
     changed = []

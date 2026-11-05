@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "status": "LOCAL_REPORTING_FIX_PASS_AWS_ROLLBACK_VERIFIED_RETRY_PENDING",
+  "status": "LOCAL_FINAL_PASS_AWS_RETRY_PENDING_AFTER_VERIFIED_ROLLBACK",
   "scope": "Private GHCR deployment pipeline; EC2 lifecycle unchanged",
   "checks": [
     {
@@ -12,7 +12,7 @@
     {
       "name": "Pipeline fault tests",
       "status": "PASS",
-      "tests": 21
+      "tests": 22
     },
     {
       "name": "NetworkChecks",
@@ -84,8 +84,8 @@
     {
       "name": "Full Local current build",
       "status": "PASS",
-      "evidence": "local-full/report-fix/",
-      "note": "Reporter fix WSS300.02s exit0, Auto two clients exit0, UDP/WSS smoke and metrics PASS"
+      "evidence": "local-full/pinned-final/",
+      "note": "Final rendered-image guard: WSS300.03s exit0, Auto two clients exit0, UDP/WSS smoke and metrics PASS"
     },
     {
       "name": "Reporter fixture/hash checks",
@@ -113,21 +113,20 @@
     "candidateActive": false
   },
   "pending": [
-    "Commit and publish checked reporter fix; no Git push",
-    "Fresh AWS window approval before another migration attempt",
-    "API-only update, explicit registry-to-registry rollback, no-change deployment not reached",
+    "Fresh AWS window approval before retry of the final checked release",
+    "API-only update, explicit registry-to-registry rollback and no-change deployment not reached",
     "Two physical PCs NOT_TESTED"
   ],
   "localFull": {
     "status": "PASS",
     "windowsUnity": "6000.3.15f1",
-    "wssConnectedSeconds": 300.0153503417969,
-    "wssInputHz": 29.97072766330046,
-    "wssSnapshotHz": 30.000041537340714,
-    "rttP50Ms": 33.3366,
-    "rttP95Ms": 33.7142,
-    "rttP99Ms": 34.0741,
-    "pings": 300,
+    "wssConnectedSeconds": 300.0300598144531,
+    "wssInputHz": 29.967191204880343,
+    "wssSnapshotHz": 30.000678196292498,
+    "rttP50Ms": 33.343,
+    "rttP95Ms": 33.8366,
+    "rttP99Ms": 34.0266,
+    "pings": 301,
     "pongs": 300,
     "pongTimeouts": 0,
     "spawnedViews": 10,
@@ -135,11 +134,11 @@
     "maxOnScreenPlayers": 4,
     "server": {
       "status": "PASS",
-      "samples": 81,
-      "memorySamples": 81,
-      "meanTickHz": 29.91432098765432,
-      "maxCpuOneCorePercent": 24.18,
-      "peakContainerMemoryPercent": 21.86,
+      "samples": 89,
+      "memorySamples": 89,
+      "meanTickHz": 29.9438202247191,
+      "maxCpuOneCorePercent": 21.6,
+      "peakContainerMemoryPercent": 22.2,
       "droppedTicks": 0,
       "restartDelta": 0,
       "oom": false
@@ -148,15 +147,15 @@
       {
         "id": "Player1",
         "index": 1,
-        "pid": 21996,
+        "pid": 46708,
         "exitCode": 0,
         "status": "PASS",
         "evidenceStatus": "PASS",
         "selectedTransport": "Wss",
         "fallbackReason": "ConnectTimeout",
-        "connectedSeconds": 53.8,
-        "p50RttMs": 33.34,
-        "p99RttMs": 41.3,
+        "connectedSeconds": 96.89,
+        "p50RttMs": 33.35,
+        "p99RttMs": 66.73,
         "assertionsPassed": 8,
         "assertionsTotal": 8,
         "reason": "Required observations and rates verified",
@@ -166,15 +165,15 @@
       {
         "id": "Player2",
         "index": 2,
-        "pid": 44128,
+        "pid": 18016,
         "exitCode": 0,
         "status": "PASS",
         "evidenceStatus": "PASS",
         "selectedTransport": "Wss",
         "fallbackReason": "ConnectTimeout",
-        "connectedSeconds": 53.77,
-        "p50RttMs": 33.34,
-        "p99RttMs": 33.86,
+        "connectedSeconds": 96.76,
+        "p50RttMs": 33.37,
+        "p99RttMs": 65.68,
         "assertionsPassed": 8,
         "assertionsTotal": 8,
         "reason": "Required observations and rates verified",
@@ -184,11 +183,11 @@
     ],
     "udpAndWssSmoke": "PASS",
     "configRestoredAfterTest": true,
-    "activeInputSeconds": 167.89715807139874,
-    "evidence": "local-full/report-fix/",
+    "activeInputSeconds": 246.83661372959614,
+    "evidence": "local-full/pinned-final/",
     "playerExitCode": 0
   },
-  "updatedUtc": "2026-11-05T10:47:02.368876+00:00",
+  "updatedUtc": "2026-11-05T11:12:22.229185+00:00",
   "publishedReleases": [
     {
       "releaseId": "ghcr-20261105-093239-7aa6360b",
@@ -262,6 +261,56 @@
       ],
       "images": {
         "api": "ghcr.io/vinhnq19/lastaway-api@sha256:675a9fb62872b0c0d91ee7006d44696847b9066f6d339e3561e1db5db0817a54",
+        "game-server": "ghcr.io/vinhnq19/lastaway-game-server@sha256:3ef0878bbb2aaf643e8f71c63bc15e5d337663147aa80162fbba77253307899e"
+      }
+    },
+    {
+      "releaseId": "ghcr-20261105-105144-d2945be0",
+      "commit": "d2945be0eafc9faf9a147726b04bfb1330f0aa5a",
+      "testPolicy": "Full",
+      "publishSteps": [
+        {
+          "service": "api",
+          "reused": true,
+          "seconds": 5.593,
+          "newLayerBytes": 0,
+          "byteMeasure": "compressed OCI layer delta, excludes TLS/retries; not wire traffic"
+        },
+        {
+          "service": "game-server",
+          "reused": true,
+          "seconds": 5.515,
+          "newLayerBytes": 0,
+          "byteMeasure": "compressed OCI layer delta, excludes TLS/retries; not wire traffic"
+        }
+      ],
+      "images": {
+        "api": "ghcr.io/vinhnq19/lastaway-api@sha256:8b9598792fcdc3d383bac79000067ccf16e8820841a4b90590897f01ec8b6965",
+        "game-server": "ghcr.io/vinhnq19/lastaway-game-server@sha256:3ef0878bbb2aaf643e8f71c63bc15e5d337663147aa80162fbba77253307899e"
+      }
+    },
+    {
+      "releaseId": "ghcr-20261105-105621-1e9a93e8",
+      "commit": "1e9a93e8500bda30d9d2eb98061b93f73ed03d35",
+      "testPolicy": "Quick",
+      "publishSteps": [
+        {
+          "service": "api",
+          "reused": false,
+          "seconds": 18.879,
+          "newLayerBytes": 3798685,
+          "byteMeasure": "compressed OCI layer delta, excludes TLS/retries; not wire traffic"
+        },
+        {
+          "service": "game-server",
+          "reused": true,
+          "seconds": 5.512,
+          "newLayerBytes": 0,
+          "byteMeasure": "compressed OCI layer delta, excludes TLS/retries; not wire traffic"
+        }
+      ],
+      "images": {
+        "api": "ghcr.io/vinhnq19/lastaway-api@sha256:119298bf4c0266378e951b96a138dbed4c3db945a9ae54706af52e80be2e4cd4",
         "game-server": "ghcr.io/vinhnq19/lastaway-game-server@sha256:3ef0878bbb2aaf643e8f71c63bc15e5d337663147aa80162fbba77253307899e"
       }
     }
@@ -466,7 +515,7 @@
   },
   "localReportingFix": {
     "status": "PASS_LOCAL",
-    "pipelineUnitTests": 21,
+    "pipelineUnitTests": 22,
     "staticAndActualLauncherChecks": 37,
     "changes": [
       "Native .NET SHA256 without cmdlet auto-loading",
@@ -549,5 +598,80 @@
     "activeInputSeconds": 167.89715807139874,
     "evidence": "local-full/report-fix/",
     "playerExitCode": 0
+  },
+  "localReporterOnlyFull": {
+    "status": "PASS",
+    "windowsUnity": "6000.3.15f1",
+    "wssConnectedSeconds": 300.0153503417969,
+    "wssInputHz": 29.97072766330046,
+    "wssSnapshotHz": 30.000041537340714,
+    "rttP50Ms": 33.3366,
+    "rttP95Ms": 33.7142,
+    "rttP99Ms": 34.0741,
+    "pings": 300,
+    "pongs": 300,
+    "pongTimeouts": 0,
+    "spawnedViews": 10,
+    "roster": 10,
+    "maxOnScreenPlayers": 4,
+    "server": {
+      "status": "PASS",
+      "samples": 81,
+      "memorySamples": 81,
+      "meanTickHz": 29.91432098765432,
+      "maxCpuOneCorePercent": 24.18,
+      "peakContainerMemoryPercent": 21.86,
+      "droppedTicks": 0,
+      "restartDelta": 0,
+      "oom": false
+    },
+    "autoClients": [
+      {
+        "id": "Player1",
+        "index": 1,
+        "pid": 21996,
+        "exitCode": 0,
+        "status": "PASS",
+        "evidenceStatus": "PASS",
+        "selectedTransport": "Wss",
+        "fallbackReason": "ConnectTimeout",
+        "connectedSeconds": 53.8,
+        "p50RttMs": 33.34,
+        "p99RttMs": 41.3,
+        "assertionsPassed": 8,
+        "assertionsTotal": 8,
+        "reason": "Required observations and rates verified",
+        "evidenceFile": "evidence-client-1.json",
+        "logFile": "unity-client-1.log"
+      },
+      {
+        "id": "Player2",
+        "index": 2,
+        "pid": 44128,
+        "exitCode": 0,
+        "status": "PASS",
+        "evidenceStatus": "PASS",
+        "selectedTransport": "Wss",
+        "fallbackReason": "ConnectTimeout",
+        "connectedSeconds": 53.77,
+        "p50RttMs": 33.34,
+        "p99RttMs": 33.86,
+        "assertionsPassed": 8,
+        "assertionsTotal": 8,
+        "reason": "Required observations and rates verified",
+        "evidenceFile": "evidence-client-2.json",
+        "logFile": "unity-client-2.log"
+      }
+    ],
+    "udpAndWssSmoke": "PASS",
+    "configRestoredAfterTest": true,
+    "activeInputSeconds": 167.89715807139874,
+    "evidence": "local-full/report-fix/",
+    "playerExitCode": 0
+  },
+  "renderedImagePinGuard": {
+    "status": "PASS_LOCAL",
+    "behavior": "Rendered Compose API/GameServer images must exactly equal manifest digests before planning/pulling; includes private config overrides",
+    "tests": "Correct config allowed; wrong API/GameServer images refused; full Local rerun PASS"
   }
 }
