@@ -335,14 +335,14 @@ namespace JungleMaze.Presentation.Combat
         {
             HeroSpriteAnimator body;
             HeldWeaponView hands;
-            if (IsLocal(actor)) { body = _heroBody; hands = _heroHands; }
-            else
+            var view = ViewOf(actor);
+            if (view != null)
             {
-                var view = _remotes != null ? _remotes.GetView(actor) : null;
-                if (view == null) return;
                 body = view.GetComponentInChildren<HeroSpriteAnimator>();
                 hands = view.GetComponentInChildren<HeldWeaponView>();
             }
+            else if (IsLocal(actor)) { body = _heroBody; hands = _heroHands; }
+            else return;
             if (body != null) body.PlayAttack();
             if (hands == null) return;
             hands.Show(itemId);
@@ -351,9 +351,21 @@ namespace JungleMaze.Presentation.Combat
 
         private Vector3 ActorPosition(byte actor, Vector3 fallback)
         {
+            var view = ViewOf(actor);
+            if (view != null) return view.transform.position;
             if (IsLocal(actor)) return _hero != null ? _hero.position : fallback;
-            var view = _remotes != null ? _remotes.GetView(actor) : null;
-            return view != null ? view.transform.position : fallback;
+            return fallback;
+        }
+
+        /// <summary>
+        /// The networked view drawing this player, own player included (online the Hero is only a hidden camera proxy).
+        /// Null offline.
+        /// </summary>
+        private PlayerView ViewOf(byte actor)
+        {
+            if (_match == null || !_match.Connected || _remotes == null || actor == ThrowableEvent.NoTarget) return null;
+            var view = _remotes.GetView(actor);
+            return view != null && view.isActiveAndEnabled ? view : null;
         }
 
         /// <summary>Offline the local player is actor 0; online it is the server-assigned NetId.</summary>

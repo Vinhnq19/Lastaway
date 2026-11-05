@@ -224,8 +224,9 @@ namespace JungleMaze.Presentation.Combat
         {
             if (combatEvent.Kind == CombatEventKind.AttackPredicted)
             {
-                var swing = SpawnAttackVisual(combatEvent.Weapon, combatEvent.AimDegrees, hero.position, hero, _heroWeapon, out var arc);
-                Animate(_heroAnimator, _heroWeapon, combatEvent.Weapon, swing, arc);
+                var self = LocalVisual(out var body, out var hands);
+                var swing = SpawnAttackVisual(combatEvent.Weapon, combatEvent.AimDegrees, self.position, self, hands, out var arc);
+                Animate(body, hands, combatEvent.Weapon, swing, arc);
             }
             else if (combatEvent.Kind == CombatEventKind.RemoteAttackConfirmed && _poses!=null && _poses.TryGetPose(combatEvent.NetId,out var pose))
             {
@@ -238,13 +239,35 @@ namespace JungleMaze.Presentation.Combat
             }
             else if (combatEvent.Kind == CombatEventKind.ReloadStarted)
             {
-                AnimateReload(_heroWeapon, combatEvent.Weapon);
+                LocalVisual(out _, out var hands);
+                AnimateReload(hands, combatEvent.Weapon);
             }
             else if (combatEvent.Kind == CombatEventKind.RemoteReloadStarted)
             {
                 var view = remotePlayers != null ? remotePlayers.GetView(combatEvent.NetId) : null;
                 if (view != null) AnimateReload(view.GetComponentInChildren<HeldWeaponView>(), combatEvent.Weapon);
             }
+        }
+
+        /// <summary>
+        /// The character the player sees as themselves. Offline that is the Hero; online the Hero is a hidden camera
+        /// proxy and the own PlayerView draws the player, so attacks must animate that view's body and hands.
+        /// </summary>
+        private Transform LocalVisual(out HeroSpriteAnimator body, out HeldWeaponView hands)
+        {
+            if (_match != null && _match.Connected && _match.OwnNetId != 255 && remotePlayers != null)
+            {
+                var view = remotePlayers.GetView(_match.OwnNetId);
+                if (view != null && view.isActiveAndEnabled)
+                {
+                    body = view.GetComponentInChildren<HeroSpriteAnimator>();
+                    hands = view.GetComponentInChildren<HeldWeaponView>();
+                    return view.transform;
+                }
+            }
+            body = _heroAnimator;
+            hands = _heroWeapon;
+            return hero;
         }
 
         /// <summary>Dips the held weapon for the weapon's reload time. Melee and unknown weapons have no reload.</summary>
