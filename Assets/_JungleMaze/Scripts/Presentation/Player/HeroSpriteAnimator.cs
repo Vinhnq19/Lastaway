@@ -10,6 +10,8 @@ namespace JungleMaze.Presentation.Player
     /// </summary>
     [DisallowMultipleComponent]
     [RequireComponent(typeof(SpriteRenderer))]
+    // Reads the root's movement and aim after the player view applied them this frame.
+    [DefaultExecutionOrder(400)]
     public sealed class HeroSpriteAnimator : MonoBehaviour
     {
         [SerializeField] private HeroVisualSet visuals;

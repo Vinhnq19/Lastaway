@@ -19,6 +19,8 @@ namespace JungleMaze.Presentation.Combat
     /// (<see cref="ShowServerCode"/>), falling back to what they last attacked with on servers that do not send it.
     /// </summary>
     [DisallowMultipleComponent]
+    // After the player view has moved this frame (it moves in LateUpdate), so the hands never trail the body.
+    [DefaultExecutionOrder(500)]
     public sealed class HeldWeaponView : MonoBehaviour
     {
         [SerializeField] private HeldWeaponCatalog catalog;

@@ -44,6 +44,7 @@ namespace JungleMaze.Presentation.UI
         private int _offlineSkin = int.MinValue;
         private RemotePlayerSpawner _spawner;
         private Camera _camera;
+        private HeroCameraFollow _follow;
         private LineRenderer _currentRing, _nextRing;
         private Material _ringMaterial;
         private readonly Vector3[] _circle = new Vector3[96];
@@ -105,6 +106,7 @@ namespace JungleMaze.Presentation.UI
                     _hero.enabled = !_offlineSession.IsDead && !(_menuState?.BlocksGameplayInput ?? false);
                     SyncOfflineSkin();
                 }
+                FollowOwnView(null);
                 if (_offlineSession.Zone != null)
                 {
                     DrawRing(ref _currentRing, "Current offline zone", _offlineSession.Zone.CurrentCenter.X, _offlineSession.Zone.CurrentCenter.Y, _offlineSession.Zone.CurrentRadius, Color.red);
@@ -148,6 +150,7 @@ namespace JungleMaze.Presentation.UI
             {
                 var view = _spawner != null ? _spawner.GetView(_session.OwnNetId) : null;
                 _hero.transform.position = view != null ? view.transform.position : origin;
+                FollowOwnView(view != null ? view.transform : null);
             }
             if (_session.HasZone && _session.Phase == MatchPhase.InGame)
             {
@@ -155,6 +158,17 @@ namespace JungleMaze.Presentation.UI
                 DrawRing(ref _nextRing, "Next server zone", _session.Zone.TargetCenterX, _session.Zone.TargetCenterY, _session.Zone.TargetRadius, Color.yellow);
             }
             else HideRings();
+        }
+
+        /// <summary>Points the camera at the own PlayerView online (null: back to the Hero).</summary>
+        private void FollowOwnView(Transform view)
+        {
+            if (_follow == null)
+            {
+                if (_camera == null) _camera = Camera.main;
+                if (_camera == null || !_camera.TryGetComponent(out _follow)) return;
+            }
+            _follow.FollowOverride = view;
         }
 
         private void PrepareScene()
