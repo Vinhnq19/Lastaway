@@ -1,3 +1,4 @@
+using GameServer.Diagnostics;
 using GameServer.Simulation.Combat;
 using JungleBackend.Protocol.Gameplay;
 using LiteNetLib.Utils;
@@ -7,6 +8,7 @@ namespace GameServer.Simulation;
 
 public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityRegistry
 {
+    internal ServerMetrics? PerformanceMetrics { get; set; }
     private sealed class Entity : IEntity
     {
         public uint BotId;
@@ -434,6 +436,7 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
 
     public void Tick(double deltaTime)
     {
+        using var lifecycle = new ServerMetrics.StageTiming(Phase == MatchPhase.InGame ? null : PerformanceMetrics, TickWorkStage.Lifecycle);
         DeltaTime = deltaTime;
         CurrentTick++;
         _combat.Tick(CurrentTick);
@@ -521,7 +524,7 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
     private void TickInGame(double dt)
     {
         _matchElapsedSeconds += dt;
-        TickBots();
+        using (new ServerMetrics.StageTiming(PerformanceMetrics, TickWorkStage.Bots)) TickBots();
         if (Phase != MatchPhase.InGame) return;
 
         // 1. Process disconnect grace timeout
@@ -536,6 +539,7 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
 
         // 2. Process physics & movement (input stale >= 8 ticks stops)
         var staleTicks = (uint)Math.Ceiling(_profile.InputStaleMs * 30.0 / 1000.0); // 250ms at 30Hz ~ 7.5 ticks -> stale if >= 8 ticks
+        using (new ServerMetrics.StageTiming(PerformanceMetrics, TickWorkStage.Movement))
         foreach (var entity in _entities.Values.Where(e => e.IsAlive))
         {
             var isStale = (CurrentTick - entity.LastInputTick >= staleTicks) || entity.IsDisconnected;
@@ -550,78 +554,84 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
             entity.Y = newY;
         }
 
-        TickWorld();
+        using (new ServerMetrics.StageTiming(PerformanceMetrics, TickWorkStage.World)) TickWorld();
 
-        // 3. Zone simulation & zone damage
-        if (_zone != null)
+        using (new ServerMetrics.StageTiming(PerformanceMetrics, TickWorkStage.Resolution))
         {
-            _zone.Update(_matchElapsedSeconds / _profile.ZoneTimeScale, CurrentTick);
-
-            // Whole-tick damage: applied once each second (every 30 ticks)
-            if (unchecked(CurrentTick - _inGameStartTick) % 30 == 0)
+            // 3. Zone simulation & zone damage
+            if (_zone != null)
             {
-                foreach (var entity in _entities.Values.Where(e => e.IsAlive))
+                _zone.Update(_matchElapsedSeconds / _profile.ZoneTimeScale, CurrentTick);
+
+                // Whole-tick damage: applied once each second (every 30 ticks)
+                if (unchecked(CurrentTick - _inGameStartTick) % 30 == 0)
                 {
-                    if (_zone.IsOutside(entity.X, entity.Y))
+                    foreach (var entity in _entities.Values.Where(e => e.IsAlive))
                     {
-                        _health.ApplyZoneDamage(entity.NetId, CurrentTick, (byte)_zone.Schedule.DamagePerSecond);
+                        if (_zone.IsOutside(entity.X, entity.Y))
+                        {
+                            _health.ApplyZoneDamage(entity.NetId, CurrentTick, (byte)_zone.Schedule.DamagePerSecond);
+                        }
                     }
                 }
             }
+
+            // 4. Whole-tick elimination processing & winner check
+            var aliveBeforeTick = _entities.Values.Count(e => e.IsAlive);
+            var newlyDied = _entities.Values.Where(e => !e.IsAlive && e.Rank == 0).ToArray();
+
+            if (newlyDied.Length > 0)
+            {
+                EnsureReplayFrameRecorded();
+                var sharedRank = aliveBeforeTick + 1; // Same-tick elimination shares rank
+                foreach (var dead in newlyDied)
+                {
+                    dead.Rank = sharedRank;
+                    dead.SurvivalSeconds = _matchElapsedSeconds;
+                    if (dead.EliminationTick == 0) dead.EliminationTick = CurrentTick;
+
+                    CaptureReplayForVictim(dead);
+                    BroadcastElimination(dead);
+                    BroadcastEntityEvent(dead.NetId, MatchEntityEvent.Eliminated);
+                    BroadcastPlayerDiedEvent(dead);
+                }
+                BroadcastRoster();
+            }
+
+            // No human audience is left (disconnected grace expired or humans lost this tick):
+            // bots must not be awarded a win nobody can observe.
+            if (_bots.Count > 0 && !HasHumanAudience())
+            {
+                EndMatch(MatchEndReason.NoHumans, 255);
+                return;
+            }
+
+            var aliveNow = _entities.Values.Count(e => e.IsAlive);
+            if (aliveNow <= 1 && _entities.Count > 1)
+            {
+                if (aliveNow == 1)
+                {
+                    var winner = _entities.Values.First(e => e.IsAlive);
+                    winner.Rank = 1;
+                    winner.SurvivalSeconds = _matchElapsedSeconds;
+                    EndMatch(MatchEndReason.LastAlive, winner.NetId);
+                }
+                else // aliveNow == 0: tie
+                {
+                    EndMatch(MatchEndReason.Tie, 255);
+                }
+            }
+
         }
-
-        // 4. Whole-tick elimination processing & winner check
-        var aliveBeforeTick = _entities.Values.Count(e => e.IsAlive);
-        var newlyDied = _entities.Values.Where(e => !e.IsAlive && e.Rank == 0).ToArray();
-
-        if (newlyDied.Length > 0)
+        using (new ServerMetrics.StageTiming(PerformanceMetrics, TickWorkStage.Snapshot))
         {
+            // 5. Store frame in private Replay Ring Buffer
             EnsureReplayFrameRecorded();
-            var sharedRank = aliveBeforeTick + 1; // Same-tick elimination shares rank
-            foreach (var dead in newlyDied)
-            {
-                dead.Rank = sharedRank;
-                dead.SurvivalSeconds = _matchElapsedSeconds;
-                if (dead.EliminationTick == 0) dead.EliminationTick = CurrentTick;
 
-                CaptureReplayForVictim(dead);
-                BroadcastElimination(dead);
-                BroadcastEntityEvent(dead.NetId, MatchEntityEvent.Eliminated);
-                BroadcastPlayerDiedEvent(dead);
-            }
-            BroadcastRoster();
+            // 6. Broadcast 30Hz snapshot (using SetPlayer to avoid heap allocation)
+            BroadcastSnapshot();
+            BroadcastHeldItems();
         }
-
-        // No human audience is left (disconnected grace expired or humans lost this tick):
-        // bots must not be awarded a win nobody can observe.
-        if (_bots.Count > 0 && !HasHumanAudience())
-        {
-            EndMatch(MatchEndReason.NoHumans, 255);
-            return;
-        }
-
-        var aliveNow = _entities.Values.Count(e => e.IsAlive);
-        if (aliveNow <= 1 && _entities.Count > 1)
-        {
-            if (aliveNow == 1)
-            {
-                var winner = _entities.Values.First(e => e.IsAlive);
-                winner.Rank = 1;
-                winner.SurvivalSeconds = _matchElapsedSeconds;
-                EndMatch(MatchEndReason.LastAlive, winner.NetId);
-            }
-            else // aliveNow == 0: tie
-            {
-                EndMatch(MatchEndReason.Tie, 255);
-            }
-        }
-
-        // 5. Store frame in private Replay Ring Buffer
-        EnsureReplayFrameRecorded();
-
-        // 6. Broadcast 30Hz snapshot (using SetPlayer to avoid heap allocation)
-        BroadcastSnapshot();
-        BroadcastHeldItems();
     }
 
     /// <summary>Resend period for <see cref="HeldItemsPacket"/> so late joiners and resumed peers catch up (2 s at 30 Hz).</summary>

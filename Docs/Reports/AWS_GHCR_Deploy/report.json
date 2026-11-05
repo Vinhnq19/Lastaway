@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "status": "AWS_FUNCTIONAL_PASS_RELEASE_REJECTED_PERFORMANCE_ROLLED_BACK",
+  "status": "REPAIR_FULL_LOCAL_PASS_AWS_PENDING",
   "scope": "Private GHCR deployment pipeline; EC2 lifecycle unchanged",
   "checks": [
     {
@@ -17,12 +17,12 @@
     {
       "name": "NetworkChecks",
       "status": "PASS",
-      "assertions": 148
+      "assertions": 149
     },
     {
       "name": "BotChecks",
       "status": "PASS",
-      "assertions": 187,
+      "assertions": 192,
       "note": "Old geometry fixtures now explicitly select di-tich-co"
     },
     {
@@ -112,6 +112,12 @@
     {
       "name": "AWS real rollback and public smoke",
       "status": "PASS"
+    },
+    {
+      "name": "Tick repair Full Local",
+      "status": "PASS",
+      "evidence": "tick-repair/local-r2/",
+      "note": "WSS300 + Auto2 + account/history/replay + UDP/WSS; fixed thresholds"
     }
   ],
   "measurements": {
@@ -138,9 +144,8 @@
     "mongoContainerPreserved": true
   },
   "pending": [
-    "Profile the isolated 392ms loop gap/175ms tick before another Full rollout; keep thresholds unchanged",
-    "AWS API-only selective recreate, explicit registry-to-registry rollback and no-change transaction not reached",
-    "Two physical PCs NOT_TESTED; dedicated AWS health-failure injection NOT_TESTED"
+    "AWS Full fixed release, API-only, explicit rollback, restore, no-change",
+    "Two physical PCs and dedicated AWS health-failure injection NOT_TESTED"
   ],
   "localFull": {
     "status": "PASS",
@@ -212,7 +217,7 @@
     "evidence": "local-full/pinned-final/",
     "playerExitCode": 0
   },
-  "updatedUtc": "2026-11-05T12:42:59.364415+00:00",
+  "updatedUtc": "2026-11-05T13:50:39.426628+00:00",
   "publishedReleases": [
     {
       "releaseId": "ghcr-20261105-093239-7aa6360b",
@@ -3784,5 +3789,134 @@
     "apiOnly": "NOT_TESTED",
     "noChange": "NOT_TESTED",
     "dedicatedHealthFault": "NOT_TESTED"
+  },
+  "tickSpikeRepair": {
+    "changes": [
+      "Resumable endpoint probes and monotonic soft4ms shared A* work budget; node limits unchanged",
+      "LinuxAMD64 ReadyToRun publish",
+      "Bounded per-stage timing; accumulator/drop thresholds unchanged"
+    ],
+    "profiles": {
+      "baseline": {
+        "samples": 20,
+        "droppedTicks": 0,
+        "maxima": {
+          "tickMaxMs": 51.272,
+          "botMaxMs": 47.373,
+          "botDecisionMaxMs": 0.0,
+          "botPathMaxMs": 0.0,
+          "worldMaxMs": 6.868,
+          "lifecycleMaxMs": 51.209,
+          "pollMaxMs": 15.224
+        }
+      },
+      "sliced": {
+        "samples": 46,
+        "droppedTicks": 0,
+        "maxima": {
+          "tickMaxMs": 39.887,
+          "botMaxMs": 13.05,
+          "botDecisionMaxMs": 9.013,
+          "botPathMaxMs": 5.089,
+          "worldMaxMs": 6.48,
+          "lifecycleMaxMs": 39.852,
+          "pollMaxMs": 16.914
+        }
+      },
+      "readyToRun": {
+        "samples": 41,
+        "droppedTicks": 0,
+        "maxima": {
+          "tickMaxMs": 23.329,
+          "botMaxMs": 6.324,
+          "botDecisionMaxMs": 2.738,
+          "botPathMaxMs": 6.214,
+          "worldMaxMs": 1.918,
+          "lifecycleMaxMs": 23.305,
+          "pollMaxMs": 12.35
+        }
+      }
+    },
+    "profileLimit": "Different match seeds; representative observations, not a paired causal benchmark",
+    "firstFullLocal": {
+      "status": "FAIL",
+      "reason": "10 dropped ticks while peers/bots=0; loop327ms, tick<0.1ms, GC0; retained, not overwritten",
+      "overruns": [
+        {
+          "peers": "0",
+          "active": "0",
+          "pending": "0",
+          "ticks": "809",
+          "ticksPerSecond": "27.97",
+          "tickP95Ms": "0.017",
+          "tickP99Ms": "0.059",
+          "tickMaxMs": "0.087",
+          "loopMaxMs": "327.102",
+          "loopGapMaxMs": "338.332",
+          "pollMaxMs": "0.153",
+          "simulationMaxMs": "0.083",
+          "botMaxMs": "0.000",
+          "movementMaxMs": "0.000",
+          "worldMaxMs": "0.000",
+          "resolutionMaxMs": "0.000",
+          "snapshotMaxMs": "0.000",
+          "streamsMaxMs": "0.001",
+          "lifecycleMaxMs": "0.040",
+          "botDecisionMaxMs": "0.000",
+          "botPathMaxMs": "0.000",
+          "gcPauseMs": "0.000",
+          "previousReportMs": "1.314",
+          "loopP95Ms": "0.045",
+          "loopP99Ms": "0.085",
+          "cpuOneCorePercent": "13.79",
+          "tickOverruns": "0",
+          "droppedTicks": "10",
+          "pings": "0",
+          "invalidPackets": "0",
+          "historyUnavailable": "0",
+          "rejected": "0",
+          "rooms": "2",
+          "workingSetMiB": "97.46",
+          "roomSlots": "6e18419c-5833-4656-b779-521f9c842642:0/10,0bcd09c4-c52e-4b52-9a0c-488edcb84fa6:0/10",
+          "bots": "0",
+          "botPathNodesMax": "0",
+          "botPathPendingMax": "0",
+          "utc": "2026-11-05T13:21:50.0356475Z"
+        }
+      ]
+    },
+    "fullLocal": {
+      "schemaVersion": 1,
+      "status": "PASS",
+      "sourceHash": "8bca6c42c6d407946f6318ce248549701a9a6f819ea77831ecf17788601b9f45",
+      "playerFingerprint": "746e1114bd44e27ddb371bf366e8c692764ecd6b0800ca516958e5c3a8f5e90b",
+      "bases": {
+        "build": "mcr.microsoft.com/dotnet/sdk:8.0@sha256:458bbff44a116eaa8bc91ed43ecb4da4d0dd5cddc977585ad831185e466183c1",
+        "runtime": "mcr.microsoft.com/dotnet/aspnet:8.0@sha256:0e274f165134f4a7802017c33a11afcb12b3d480de644d56d5ec4a41a5194ca9"
+      },
+      "services": {
+        "api": "0b65e85cace3de396a094946c6b9319b003a2dba1e297a3c60d006ed3fc961ad",
+        "game-server": "66363178f3142c7e1a9c9d30b7acc9e4fe5bf7e4e43a49c54779af142145f492"
+      },
+      "connectionConfigHash": "75b5c92ec3ecee2839c1f491560b04e9ad79b4033b8b12ff8bb5ee87079e8862",
+      "physicalTwoPc": "NOT_TESTED",
+      "serverMetrics": {
+        "status": "PASS",
+        "samples": 110,
+        "memorySamples": 110,
+        "meanTickHz": 29.957727272727272,
+        "maxCpuOneCorePercent": 30.17,
+        "peakContainerMemoryPercent": 20.76,
+        "droppedTicks": 0,
+        "restartDelta": 0,
+        "oom": false
+      },
+      "checks": {
+        "wss300": "PASS",
+        "auto2ResultHistoryReplay": "PASS",
+        "udp": "PASS"
+      }
+    },
+    "newAws": "NOT_TESTED"
   }
 }

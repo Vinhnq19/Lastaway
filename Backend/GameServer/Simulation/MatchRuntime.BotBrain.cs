@@ -1,3 +1,4 @@
+using GameServer.Diagnostics;
 using System.Numerics;
 using GameServer.Simulation.Bots;
 using GameServer.Simulation.Combat;
@@ -66,7 +67,7 @@ public sealed partial class MatchRuntime
             if (match.CurrentTick >= _nextThink)
             {
                 _nextThink = match.CurrentTick + period;
-                Think(match, actor, position, settings);
+                using (new ServerMetrics.StageTiming(match.PerformanceMetrics, TickWorkStage.BotDecision)) Think(match, actor, position, settings);
             }
 
             var move = Vector2.Zero;
@@ -82,6 +83,7 @@ public sealed partial class MatchRuntime
                         _pathIndex = 0; _repathAt = now + settings.RepathSeconds;
                     }
                     if (_search is { Finished: false })
+                        using (new ServerMetrics.StageTiming(match.PerformanceMetrics, TickWorkStage.BotPath))
                         _search.Advance(match.NavigationBudget, settings.PathNodesPerTick, actor.Radius,
                             p => Walkable(match, p, actor.Radius, allowHazards),
                             (a,b) => SegmentWalkable(match,a,b,actor.Radius,allowHazards), p => Penalty(match,p));

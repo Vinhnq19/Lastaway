@@ -111,6 +111,10 @@ Runtime tạo từ biến môi trường luôn yêu cầu account-ticket v4; kh�
 
 ## 6. Tick, Safe Zone và kết quả
 
+GameServer giữ fixed tick30Hz và single writer. A* dùng trần500 node/request và1.500 node/tick toàn server, đồng thời có budget mềm mặc định4ms trong `BotSettings.GlobalPathMillisecondsPerTick`. Kiểm thời gian trước mỗi endpoint probe/node; đơn vị đang xử lý chạy xong rồi mới nhường. Endpoint probing và frontier giữ tiến độ qua tick; luân phiên bot/phòng để tránh độc chiếm. Không tăng tốc/teleport bot để bù thời gian lập đường.
+
+Bản LinuxAMD64 publish ReadyToRun để giảm JIT khi dùng đường code lần đầu; đây không phải bảo đảm không có stall. Metrics bounded theo cửa sổ ghi poll/simulation/bot decision/path/movement/world/resolution/snapshot/streams/lifecycle cùng GC, CPU, loop gap và dropped tick. Không bỏ mẫu khởi động hoặc hạ ngưỡng0drop để chấp nhận release.
+
 Chỉ vòng ứng dụng thay đổi room/session/world. Input chuẩn hóa đường chéo, speed4 cell/s, ngừng khi thiếu input250ms; từ chối input trùng/cũ/sai trận và giới hạn tốc độ. Snapshot/ack30Hz chứa vị trí, aim, HP và sequence đã xử lý. Replay buffer riêng ít nhất5s; UI-03 chỉ đọc theo quyền phiên như mục0, không công khai toàn bộ buffer.
 
 | Co bo từ lúc InGame | Bán kính |

@@ -33,7 +33,7 @@ public sealed partial class RoomManager
         public override string ToString() => $"Room(id={Id}, peers={Peers.Count})";
     }
     private readonly GameServer.Simulation.Bots.BotNavigationBudget _botNavigationBudget = new() { Shared = true };
-    private readonly int _botPathLimit = GameServer.Simulation.Bots.BotSettings.Load(GameDataLoader.ReadGameDataFile("bot_settings.json")).GlobalPathNodesPerTick;
+    private readonly GameServer.Simulation.Bots.BotSettings _botWorkSettings = GameServer.Simulation.Bots.BotSettings.Load(GameDataLoader.ReadGameDataFile("bot_settings.json"));
     private readonly RoomOptions _options;
     private int _roomCursor;
     public int BotCount => _byCode.Values.Sum(r => r.Match.BotCount);
@@ -104,7 +104,7 @@ public sealed partial class RoomManager
 
     public void Tick(double dt)
     {
-        _botNavigationBudget.Reset(_botPathLimit);
+        _botNavigationBudget.Reset(_botWorkSettings.GlobalPathNodesPerTick, _botWorkSettings.GlobalPathMillisecondsPerTick);
         // Rotate the first room so a busy room cannot monopolise the shared A* budget.
         var rooms = _byCode.Values.ToArray();
         for (var index = 0; index < rooms.Length; index++)

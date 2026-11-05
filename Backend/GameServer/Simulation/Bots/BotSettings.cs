@@ -16,6 +16,7 @@ public sealed class BotSettings
     public float GridStep { get; init; } = .5f;
     public int PathNodesPerTick { get; init; } = 500;
     public int GlobalPathNodesPerTick { get; init; } = 1500;
+    public double GlobalPathMillisecondsPerTick { get; init; } = 4;
     public double RepathSeconds { get; init; } = 1;
     public double StuckSeconds { get; init; } = 2;
     public int FailedPathLimit { get; init; } = 3;
@@ -33,6 +34,7 @@ public sealed class BotSettings
             !float.IsFinite(v.HealHpFraction) || v.HealHpFraction is <= 0 or > 1 ||
             !float.IsFinite(v.RetreatHpFraction) || v.RetreatHpFraction <= 0 || v.RetreatHpFraction > v.HealHpFraction ||
             v.GridStep != .5f || v.PathNodesPerTick is < 1 or > 500 || v.GlobalPathNodesPerTick is < 1 or > 1500 ||
+            !double.IsFinite(v.GlobalPathMillisecondsPerTick) || v.GlobalPathMillisecondsPerTick is <= 0 or > 10 ||
             !double.IsFinite(v.RepathSeconds) || v.RepathSeconds is < 1 or > 30 ||
             !double.IsFinite(v.StuckSeconds) || v.StuckSeconds is <= 0 or > 30 || v.FailedPathLimit is < 1 or > 10 ||
             !double.IsFinite(v.BlacklistSeconds) || v.BlacklistSeconds is <= 0 or > 60)

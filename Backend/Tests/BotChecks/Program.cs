@@ -154,7 +154,8 @@ var reload=Fixture();world=reload.Room.Match.World!;
 Check(world.Floor.TrySpawn(new ItemStack("SHOTGUN",1,0,10,1),reload.Bot.X,reload.Bot.Y,out _),"partly loaded gun fixture");
 for(var t=0;t<30&&!world.Inventory.GetSnapshot(reload.Bot.NetId).Weapons.Any(w=>w.ItemId=="SHOTGUN");t++)reload.Manager.Tick(1d/30);
 Check(world.Inventory.GetSnapshot(reload.Bot.NetId).Weapons.Any(w=>w.ItemId=="SHOTGUN"),"bot acquires reload fixture gun before opponent is introduced");
-lane=Lane(reload.Room.Match,4);Position(reload.Room.Match,reload.Bot,lane.A);Position(reload.Room.Match,reload.Human,lane.B);
+// Keep the opponent inside firing range: this assertion measures reload, not A* travel time.
+lane=Lane(reload.Room.Match,2.5f);Position(reload.Room.Match,reload.Bot,lane.A);Position(reload.Room.Match,reload.Human,lane.B);
 var reloaded=false;
 for(var t=0;t<150&&reload.Room.Match.Phase==MatchPhase.InGame;t++)
 {
@@ -261,6 +262,25 @@ bool NavSegment(Vector2 a,Vector2 b)=>Enumerable.Range(0,21).All(i=>NavWalk(Vect
 for(var t=0;t<100&&!job.Finished;t++){budget.Reset(7);job.Advance(budget,500,.4f,NavWalk,NavSegment,_=>1);Check(budget.Used<=7,"resumable navigation respects tick slice");}
 Check(job.ReachedGoal&&job.Expanded<=500,"bounded A star routes around cover");
 Check(job.Path.Zip(job.Path.Skip(1)).All(pair=>NavSegment(pair.First,pair.Second)),"path segments do not cut cover corners");
+
+foreach (var invalidMs in new[] { 0, 11 })
+{
+    var rejected = false;
+    try { BotSettings.Load("{\"GlobalPathMillisecondsPerTick\":" + invalidMs + "}"); }
+    catch (InvalidDataException) { rejected = true; }
+    Check(rejected, "invalid production navigation wall-time budget rejected");
+}
+
+// A time slice can expire during endpoint selection, not only during node expansion.
+var sliced = new BotPathSearch(grid,new Vector2(1.25f,2.25f),new Vector2(8.25f,2.25f));
+var probes = 0;
+budget.Reset(500, 1);
+sliced.Advance(budget,500,.4f,p=>{probes++;Thread.Sleep(2);return NavWalk(p);},NavSegment,_=>1);
+Check(!sliced.Finished && sliced.Expanded == 0 && probes <= 1,"endpoint preparation yields when wall-time slice expires");
+for(var t=0;t<100&&!sliced.Finished;t++){budget.Reset(7);sliced.Advance(budget,500,.4f,NavWalk,NavSegment,_=>1);}
+Check(sliced.ReachedGoal && sliced.Path.SequenceEqual(job.Path),"time-sliced endpoints preserve deterministic path/frontier");
+budget.Reset(3,1);Thread.Sleep(3);
+Check(!budget.CanWork&&!budget.Take()&&budget.Used==0,"expired time budget cannot consume a node");
 
 if(args.Contains("--stress"))
 {

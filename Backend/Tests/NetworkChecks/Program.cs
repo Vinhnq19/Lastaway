@@ -262,6 +262,9 @@ try
     Check(loopMaxMatch.Success && double.Parse(loopMaxMatch.Groups[1].Value, System.Globalization.CultureInfo.InvariantCulture) >= 250 &&
         gapMaxMatch.Success && double.Parse(gapMaxMatch.Groups[1].Value, System.Globalization.CultureInfo.InvariantCulture) >= 250,
         "Stall diagnostics preserve max work/loop spacing even when p99 hides a rare pause");
+    var pollMax = Regex.Match(output.ToString(), @"pollMaxMs=([0-9.]+)");
+    Check(pollMax.Success && double.Parse(pollMax.Groups[1].Value, System.Globalization.CultureInfo.InvariantCulture) >= 250,
+        "Stage timing identifies the deliberately stalled network poll");
     Check(Regex.IsMatch(output.ToString(), @"gcPauseMs=[0-9.]+ previousReportMs=[0-9.]+"),
         "Window reports distinguish GC pause and previous metric-output time without dropping counters");
 

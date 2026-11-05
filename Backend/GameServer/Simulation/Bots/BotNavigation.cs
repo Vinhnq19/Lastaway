@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Numerics;
 using JungleMaze.World;
 
@@ -30,10 +31,17 @@ public sealed class BotNavigationBudget
     public int Remaining { get; private set; }
     public int Used { get; private set; }
     internal bool Shared;
-    public void Reset(int limit) { Remaining = limit; Used = 0; }
+    private long _deadline;
+    public bool CanWork => Remaining > 0 && (_deadline == 0 || Stopwatch.GetTimestamp() < _deadline);
+    // Zero disables the wall-time limit for deterministic algorithm tests; production supplies BotSettings.
+    public void Reset(int limit, double milliseconds = 0)
+    {
+        Remaining = limit; Used = 0;
+        _deadline = milliseconds > 0 ? Stopwatch.GetTimestamp() + Math.Max(1, (long)(Stopwatch.Frequency * milliseconds / 1000)) : 0;
+    }
     public bool Take()
     {
-        if (Remaining <= 0) return false;
+        if (!CanWork) return false;
         Remaining--; Used++; return true;
     }
 }
@@ -45,6 +53,8 @@ public sealed class BotPathSearch
     private int _goal;
     private readonly Vector2 _destination, _start;
     private bool _initialised;
+    private int _initialisationIndex, _bestGoal = -1, _bestStart = -1;
+    private float _goalDistance = float.MaxValue, _startDistance = float.MaxValue;
     private readonly PriorityQueue<int, float> _open = new();
     private readonly Dictionary<int, float> _cost = new();
     private readonly Dictionary<int, int> _parent = new();
@@ -63,30 +73,32 @@ public sealed class BotPathSearch
     {
         if (!_initialised)
         {
-            _initialised = true;
-            // Interaction points near a wall need a reachable grid centre, not the blocked rounded cell.
-            var bestGoal = -1; var bestStart = -1; var goalDistance = float.MaxValue; var startDistance = float.MaxValue;
-            for (var dy = -2; dy <= 2; dy++) for (var dx = -2; dx <= 2; dx++)
+            // The 50 endpoint probes are work too: retain progress instead of doing all of them in one tick.
+            while (_initialisationIndex < 50)
             {
-                foreach (var origin in new[] { _destination, _start })
-                {
-                    var cx = (int)(origin.X / BotNavigationGrid.Step) + dx; var cy = (int)(origin.Y / BotNavigationGrid.Step) + dy;
-                    if (cx < 0 || cy < 0 || cx >= _grid.Width || cy >= _grid.Width) continue;
-                    var id = cy * _grid.Width + cx; var point = _grid.Point(id);
-                    if (!_grid.Walkable(id, radius) || !walkable(point) || !segment(origin, point)) continue;
-                    var distance = Vector2.DistanceSquared(point, origin);
-                    if (origin == _destination && distance < goalDistance) { bestGoal = id; goalDistance = distance; }
-                    if (origin == _start && distance < startDistance) { bestStart = id; startDistance = distance; }
-                }
+                if (!budget.CanWork) return;
+                var index = _initialisationIndex++;
+                var origin = index % 2 == 0 ? _destination : _start;
+                var dx = index / 2 % 5 - 2; var dy = index / 10 - 2;
+                var cx = (int)(origin.X / BotNavigationGrid.Step) + dx; var cy = (int)(origin.Y / BotNavigationGrid.Step) + dy;
+                if (cx < 0 || cy < 0 || cx >= _grid.Width || cy >= _grid.Width) continue;
+                var id = cy * _grid.Width + cx; var point = _grid.Point(id);
+                if (!_grid.Walkable(id, radius) || !walkable(point) || !segment(origin, point)) continue;
+                var distance = Vector2.DistanceSquared(point, origin);
+                if (origin == _destination && distance < _goalDistance) { _bestGoal = id; _goalDistance = distance; }
+                if (origin == _start && distance < _startDistance) { _bestStart = id; _startDistance = distance; }
             }
-            if (bestStart < 0 || bestGoal < 0) { Finished = true; return; }
-            _goal = bestGoal; _cost[bestStart] = 0; _open.Enqueue(bestStart, 0);
+            _initialised = true;
+            if (_bestStart < 0 || _bestGoal < 0) { Finished = true; return; }
+            _goal = _bestGoal; _cost[_bestStart] = 0; _open.Enqueue(_bestStart, 0);
         }
-        while (!Finished && _open.Count > 0 && budget.Remaining > 0)
+        while (!Finished && _open.Count > 0 && budget.CanWork)
         {
-            var current = _open.Dequeue();
-            if (!_closed.Add(current)) continue;
+            var current = _open.Peek();
+            if (_closed.Contains(current)) { _open.Dequeue(); continue; }
+            // Do not consume the frontier node until both shared budgets allow processing it.
             if (!budget.Take()) return;
+            _open.Dequeue(); _closed.Add(current);
             Expanded++;
             if (current == _goal) { ReachedGoal = true; Complete(current); return; }
             var p = _grid.Point(current); var cx = current % _grid.Width; var cy = current / _grid.Width;

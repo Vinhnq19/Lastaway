@@ -54,7 +54,7 @@ public sealed partial class MatchRuntime
             EndMatch(MatchEndReason.NoHumans, 255);
             return;
         }
-        if (!NavigationBudget.Shared) NavigationBudget.Reset(Settings.Value.GlobalPathNodesPerTick);
+        if (!NavigationBudget.Shared) NavigationBudget.Reset(Settings.Value.GlobalPathNodesPerTick, Settings.Value.GlobalPathMillisecondsPerTick);
         var brains = _bots.Values.ToArray();
         for (var i = 0; i < brains.Length; i++)
         {

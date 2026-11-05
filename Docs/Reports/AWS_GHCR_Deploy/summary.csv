@@ -1,4 +1,4 @@
-﻿check,status,scope_or_note
+check,status,scope_or_note
 Backend compile,PASS,
 Pipeline fault tests,PASS,
 NetworkChecks,PASS,
@@ -17,9 +17,4 @@ AWS final reporter and WSS300s,PASS,
 AWS two-client Auto result/history/replay,PASS,
 AWS performance gate,FAIL,
 AWS real rollback and public smoke,PASS,
-AWS images and readiness,PASS,Actual digest checked; Mongo/Caddy unchanged
-AWS performance,FAIL,7 dropped ticks; release rejected
-AWS API-only update,NOT_TESTED,Blocked by first release performance failure
-AWS explicit registry rollback/no-change,NOT_TESTED,Automatic legacy rollback verified instead
-AWS dedicated health-failure injection,NOT_TESTED,Not run after gate failure
-Two physical PCs,NOT_TESTED,One physical PC only
+Tick repair Full Local,PASS,WSS300 + Auto2 + account/history/replay + UDP/WSS; fixed thresholds

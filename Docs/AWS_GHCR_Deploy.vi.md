@@ -138,3 +138,7 @@ Giữ current + previous cùng image tương ứng. Chưa tự xóa GHCR package
 Output runner có report JSON/CSV/log, remote-ready/final, server metrics và trạng thái lifecycle. Báo cáo chung ghi rõ phần nào PASS module, PASS flow, BLOCKED hoặc NOT_TESTED. Cần đo riêng first publish/deploy, cập nhật nhỏ và no-change sau khi có quyền GHCR; chưa có số đo thì không hứa thời gian. Client Windows phát hành riêng; publish map dùng catalog ngoài image như trước.
 
 Kết thúc xác nhận EC2 vẫn Running. Chi phí EC2/EBS vẫn phát sinh theo tài khoản AWS dù không còn client. Camera bàn giao phải Follow Player; không dùng bản build thất bại hoặc cũ làm bằng chứng bản mới.
+
+### Khi gate bị từ chối vì spike tick
+
+Đọc `server-metrics.json` và `remote-final.json.failureMetrics` để đối chiếu các stage `botDecisionMaxMs`, `botPathMaxMs`, `worldMaxMs`, `lifecycleMaxMs`, `pollMaxMs` với `tickMaxMs`, GC và loop gap. Không tự đổi0drop thành ngưỡng dễ hơn. A* hiện chia endpoint probes và node expansion qua tick, có budget mềm4ms toàn server ngoài cap node. LinuxAMD64 dùng [ReadyToRun của .NET](https://learn.microsoft.com/en-us/dotnet/core/deploying/ready-to-run) để giảm chi phí JIT ở lần dùng đầu; vẫn phải chạy Full Local và PC→AWS300s trước khi giữ release.

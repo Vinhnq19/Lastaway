@@ -4,7 +4,7 @@
 
 **Chưa nghiệm thu đầy đủ rollout AWS.** Pipeline private GHCR đã publish/pull, kiểm image thực tế và chạy game từ PC; reporter mới hoạt động, WSS300giây/Auto hai client/UDP/JWT đều PASS. Gate hiệu năng ghi7dropped tick nên từ chối candidate và rollback đúng. EC2 cuối lượt vẫn **Running**, current là`bots-20261105-r2`; thay đổi candidate chưa được giữ trên AWS.
 
-Lượt cuối bắt đầu19:15:03 và kết thúc can thiệp19:32:44 ngày05/11/2026 (UTC+7), **1060.95s <1200s** đã duyệt. Không tự Start/Stop/nâng máy hoặc bật Unlimited. Cần profile spike trước khi thử tiếp; không chạy lặp tới khi may mắn đạt hoặc hạ ngưỡng.
+Lượt cuối bắt đầu19:15:03 và kết thúc can thiệp19:32:44 ngày05/11/2026 (UTC+7), **1060.95s <1200s** đã duyệt. Không tự Start/Stop/nâng máy hoặc bật Unlimited. Đã bổ sung stage profiling, sửa ngân sách tìm đường và ReadyToRun; Full Local bản sửa PASS. Lượt AWS mới đang chuẩn bị, chưa kết luận bản sửa đạt AWS.
 
 ## 2. Những gì đã triển khai
 
@@ -24,11 +24,14 @@ AWS cuối truyền bundle**23,057byte**, EC2 pull image mất**4,140s**. Không
 
 ## 4. Local, build và kiểm thử lỗi
 
-Backend0error/0warning; Network148/Bot187/World168 assertions PASS, DualTransport/MapCatalog/MatchResult/Combat/Inventory/MatchChecks PASS. Pipeline**22 tests**, launcher**37 kiểm bằng fixture** PASS, gồm checksum/tamper, digest/architecture, credentials/private visibility, env/image overrides, dirty tree, lock, occupancy, selective plan, rollback failure, metrics trước recreate và hash không phụ thuộc cmdlet autoload/public function binding. Fixture không được diễn giải thành gameplay thực.
+Bộ kiểm trước sửa spike: Backend0error/0warning; Network148/Bot187/World168 assertions PASS, DualTransport/MapCatalog/MatchResult/Combat/Inventory/MatchChecks PASS. Pipeline**22 tests**, launcher**37 kiểm bằng fixture** PASS, gồm checksum/tamper, digest/architecture, credentials/private visibility, env/image overrides, dirty tree, lock, occupancy, selective plan, rollback failure, metrics trước recreate và hash không phụ thuộc cmdlet autoload/public function binding. Fixture không được diễn giải thành gameplay thực.
 
 Windows6000.3.15f1 đã build192,63s,0error/6warning; receipt/source/binary được kiểm. Client code không đổi trong các sửa reporter/guard cuối nên dùng đúng artifact đã xác minh. Camera Follow Player, spectator giữ đúng. Hai fixture map cũ sau merge đã pin Di tích cổ để giữ golden/collision assertions.
 
 Full Local cuối PASS: WSS300,03s exit0, Auto hai client khoảng96,9s exit0, result/history/replay và UDP/WSS smoke. Server256MiB,89cửa sổ/89mẫu RAM: tick29,944Hz, CPUmax21,60%, DockerMemPerc22,20%,0drop/OOM/restart; dev memory limit trả0. Docker CLI MemPerc loại inactive file cache, không phải RSS/tổng mọi trang cgroup. Archive giữ cả lượt Local75s FAIL và các lượt PASS sau, không viết lại kết quả cũ.
+
+
+Bản sửa tick: endpoint probing A* có tiến độ qua nhiều tick, dùng chung soft budget4ms và trần1500node; không đổi MaxCatchUpSteps/drop counters. Docker LinuxAMD64 publish ReadyToRun. Profile ngắn cùng loại workload nhưng khác seed: tickmax51,272 →39,887 →23,329ms; botmax47,373 →13,050 →6,324ms, không suy phần trăm cải thiện nhân quả. Full Local lần đầu FAIL10drop lúc0peer/0bot (loop327ms, tick<0,1ms, GC0), giữ bằng chứng; lần kiểm lại PASS: 110cửa sổ, tick29.958Hz, CPUmax30.17%, RAM20.76%,0drop/OOM/restart. BotChecks192 assertions, giữ fixture reload trong tầm bắn để đo reload thay vì thời gian tìm đường. Build Windows/source không đổi; reuse đúng artifact có receipt. AWS bản sửa chưa kiểm.
 
 ## 5. AWS cuối từ PC thật
 

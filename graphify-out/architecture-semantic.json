@@ -277,10 +277,10 @@
     },
     {
       "id": "docs_network_architecture_vi_runtime_metrics",
-      "label": "Tick loop GC and metrics-output diagnostics",
+      "label": "Bounded tick-stage, GC and loop-gap diagnostics",
       "file_type": "concept",
       "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
-      "source_location": "§1",
+      "source_location": "§6 Tick, Safe Zone và kết quả",
       "source_url": null,
       "captured_at": null,
       "author": null,
@@ -442,10 +442,10 @@
     },
     {
       "id": "docs_network_architecture_vi_bot_navigation",
-      "label": "Bounded A-star bot navigation",
+      "label": "Resumable A-star: node limits plus shared soft 4ms budget",
       "file_type": "concept",
       "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
-      "source_location": "Bot trong phòng mạng"
+      "source_location": "§6 Tick, Safe Zone và kết quả"
     },
     {
       "id": "docs_network_architecture_vi_with_bots",
@@ -515,6 +515,17 @@
       "file_type": "concept",
       "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
       "source_location": "§10 Deploy bằng registry private",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_readytorun",
+      "label": "Linux AMD64 ReadyToRun publish",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§6 Tick, Safe Zone và kết quả",
       "source_url": null,
       "captured_at": null,
       "author": null,
@@ -1192,16 +1203,46 @@
       "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
       "source_location": "§10 Deploy bằng registry private",
       "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_bot_navigation",
+      "target": "docs_network_architecture_vi_bot_settings",
+      "relation": "uses_node_and_wall_time_limits",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§6 Tick, Safe Zone và kết quả",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_gameserver",
+      "target": "docs_network_architecture_vi_readytorun",
+      "relation": "publishes_precompiled_first_use_code",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§6 Tick, Safe Zone và kết quả",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_gameserver",
+      "target": "docs_network_architecture_vi_runtime_metrics",
+      "relation": "measures_work_stages_before_release_acceptance",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§6 Tick, Safe Zone và kết quả",
+      "weight": 1.0
     }
   ],
   "hyperedges": [],
   "input_tokens": 6370,
   "output_tokens": 3260,
   "coverage": {
-    "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md": 159
+    "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md": 163
   },
-  "source_sha256": "8a347be9f4ab506485c986784382b94c03ddc2d58f2234c3df074655d48a7564",
+  "source_sha256": "3d94c614f3135beb4860b4de55b00e716346c6ebc7bd508621a983f5790613d8",
   "usage_note": "6370/3260 are historical extraction-agent self-reported tokens retained from the prior fragment; this Codex re-extraction and supervision are unmetered, not zero-cost or provider billing metadata.",
-  "extracted_at": "2026-11-05T07:35:58.218398+00:00",
-  "extraction_note": "Codex reviewed unchanged sections and re-extracted §10: private GHCR/digest manifest, per-service updates, internal occupancy snapshot, flock/systemd acceptance guard, Quick/Full PC tests, preserved Mongo and no EC2 lifecycle. These are documented pipeline relations, not evidence of a successful GHCR/AWS rollout. Prior map/bot relations retained."
+  "extracted_at": "2026-11-05T13:22:14.395330+00:00",
+  "extraction_note": "Codex reviewed unchanged sections and re-extracted §10: private GHCR/digest manifest, per-service updates, internal occupancy snapshot, flock/systemd acceptance guard, Quick/Full PC tests, preserved Mongo and no EC2 lifecycle. These are documented pipeline relations, not evidence of a successful GHCR/AWS rollout. Prior map/bot relations retained. Codex refreshed §6 for resumable endpoint probes, node+soft wall-time budgets, stage metrics and Linux R2R; other sections reviewed unchanged. Token counters remain previous agent-reported estimates; this manual update is not separately metered."
 }

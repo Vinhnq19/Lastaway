@@ -2,9 +2,21 @@ using System.Diagnostics;
 
 namespace GameServer.Diagnostics;
 
+public enum TickWorkStage { Poll, Simulation, Bots, Movement, World, Resolution, Snapshot, Streams, Lifecycle, BotDecision, BotPath }
+
 /// <summary>Số đo theo cửa sổ vài giây; không log từng tick hoặc giữ mẫu vô hạn.</summary>
 public sealed class ServerMetrics
 {
+    private readonly double[] _stageMaxMs = new double[11];
+    public readonly struct StageTiming(ServerMetrics? metrics, TickWorkStage stage) : IDisposable
+    {
+        private readonly long _started = metrics is null ? 0 : Stopwatch.GetTimestamp();
+        public void Dispose()
+        {
+            if (metrics is not null) metrics._stageMaxMs[(int)stage] = Math.Max(metrics._stageMaxMs[(int)stage], Stopwatch.GetElapsedTime(_started).TotalMilliseconds);
+        }
+    }
+
     private readonly List<double> _tickMs = new();
     private readonly List<double> _loopMs = new();
     private long _totalTicks;
@@ -55,7 +67,8 @@ public sealed class ServerMetrics
         // CPU một core: 100% = một core bận toàn thời gian, có thể >100%.
         using var process = Process.GetCurrentProcess();
         Console.WriteLine(FormattableString.Invariant(
-            $"[metrics] peers={peers} active={active} pending={pending} ticks={_totalTicks} ticksPerSecond={_tickMs.Count / seconds:F2} tickP95Ms={Percentile(_tickMs, .95):F3} tickP99Ms={Percentile(_tickMs, .99):F3} tickMaxMs={(_tickMs.Count == 0 ? 0 : _tickMs.Max()):F3} loopMaxMs={(_loopMs.Count == 0 ? 0 : _loopMs.Max()):F3} loopGapMaxMs={_loopGapMaxMs:F3} gcPauseMs={(gcPause - _gcPauseStarted).TotalMilliseconds:F3} previousReportMs={_previousReportMs:F3} loopP95Ms={Percentile(_loopMs, .95):F3} loopP99Ms={Percentile(_loopMs, .99):F3} cpuOneCorePercent={cpuPercent:F2} tickOverruns={_tickOverruns} droppedTicks={_droppedTicks} pings={_pings} invalidPackets={_invalidPackets} historyUnavailable={Interlocked.Read(ref _historyUnavailable)} rejected={_rejections} rooms={rooms} workingSetMiB={process.WorkingSet64 / 1048576.0:F2} roomSlots={roomSlots} bots={bots} botPathNodesMax={_botPathNodesMax} botPathPendingMax={_botPathPendingMax} utc={DateTime.UtcNow:O}"));
+            $"[metrics] peers={peers} active={active} pending={pending} ticks={_totalTicks} ticksPerSecond={_tickMs.Count / seconds:F2} tickP95Ms={Percentile(_tickMs, .95):F3} tickP99Ms={Percentile(_tickMs, .99):F3} tickMaxMs={(_tickMs.Count == 0 ? 0 : _tickMs.Max()):F3} loopMaxMs={(_loopMs.Count == 0 ? 0 : _loopMs.Max()):F3} loopGapMaxMs={_loopGapMaxMs:F3} pollMaxMs={_stageMaxMs[0]:F3} simulationMaxMs={_stageMaxMs[1]:F3} botMaxMs={_stageMaxMs[2]:F3} movementMaxMs={_stageMaxMs[3]:F3} worldMaxMs={_stageMaxMs[4]:F3} resolutionMaxMs={_stageMaxMs[5]:F3} snapshotMaxMs={_stageMaxMs[6]:F3} streamsMaxMs={_stageMaxMs[7]:F3} lifecycleMaxMs={_stageMaxMs[8]:F3} botDecisionMaxMs={_stageMaxMs[9]:F3} botPathMaxMs={_stageMaxMs[10]:F3} gcPauseMs={(gcPause - _gcPauseStarted).TotalMilliseconds:F3} previousReportMs={_previousReportMs:F3} loopP95Ms={Percentile(_loopMs, .95):F3} loopP99Ms={Percentile(_loopMs, .99):F3} cpuOneCorePercent={cpuPercent:F2} tickOverruns={_tickOverruns} droppedTicks={_droppedTicks} pings={_pings} invalidPackets={_invalidPackets} historyUnavailable={Interlocked.Read(ref _historyUnavailable)} rejected={_rejections} rooms={rooms} workingSetMiB={process.WorkingSet64 / 1048576.0:F2} roomSlots={roomSlots} bots={bots} botPathNodesMax={_botPathNodesMax} botPathPendingMax={_botPathPendingMax} utc={DateTime.UtcNow:O}"));
+        Array.Clear(_stageMaxMs);
         _tickMs.Clear();
         _loopMs.Clear();
         _pings = _invalidPackets = _rejections = _tickOverruns = _droppedTicks = 0;
