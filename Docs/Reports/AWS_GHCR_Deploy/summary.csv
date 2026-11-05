@@ -1,0 +1,14 @@
+check,status,detail
+Backend compile,PASS,
+Pipeline fault tests,PASS,
+NetworkChecks,PASS,
+BotChecks,PASS,Old geometry fixtures now explicitly select di-tich-co
+WorldChecks,PASS,Old golden vector now explicitly selects di-tich-co
+DualTransportChecks / MapCatalogChecks / MatchResultChecks / CombatChecks / InventoryChecks / MatchChecks,PASS,
+Windows build 6000.3.15f1,PASS,Current rebuilt runner supports Follow Player and records unexpected disconnect caller.
+GHCR PC publish credential,PASS,
+GHCR EC2 pull credential,PASS,
+Full Local attempt 1,FAIL,Unexpected UserRequested disconnect; old viewport assertion also incompatible with Follow Player
+GHCR push / EC2 registry deploy / real AWS rollback,NOT_TESTED,Local Full gate and clean reviewed commit required first
+Two physical PCs,NOT_TESTED,
+Full Local current build,PASS,"1 human+9 bots WSS300s, Auto2+4 bots, UDP/WSS smoke, result/history/replay and256MiB server metrics"

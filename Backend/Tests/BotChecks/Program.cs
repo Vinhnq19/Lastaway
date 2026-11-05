@@ -89,6 +89,11 @@ Check(pickRoom.Match.World.Floor.TryGet(disabledId,out _)&&!pickRoom.Match.World
 (RoomManager Manager, RoomManager.Room Room, IEntity Human, IEntity Bot) Fixture(int botCount=1)
 {
     var m=Manager(pickProfile);var r=m.AllRooms.Single();Human(m,r,"fixture",1);
+    // Geometry-specific perception fixtures use the stable ruins map, not the developer's catalog default.
+    var map=maps.Current.Find("di-tich-co")!;var selection=m.GetMapState(r);
+    Check(m.SelectMap(r,"fixture",new SelectRoomMapPacket{RoomId=r.Id,SelectionRevision=selection.SelectionRevision,MapId=map.Entry.Id,MapHash=map.Entry.MapHash})==RoomMapError.None,"fixture selects deterministic geometry");
+    selection=m.GetMapState(r);
+    Check(m.AcknowledgeMap(r,"fixture",new RoomMapReadyPacket{RoomId=r.Id,SelectionRevision=selection.SelectionRevision,MapHash=selection.MapHash,RulesHash=selection.RulesHash})==RoomMapError.None,"fixture verifies selected geometry");
     for(var i=0;i<botCount;i++)Check(m.ManageBots(r,"fixture",Command(r,m,RoomBotAction.Add))==RoomBotError.None,"fixture adds bot");
     Check(m.StartMatch(r,"fixture",new StartRoomMatchPacket{RoomId=r.Id,SelectionRevision=m.GetMapState(r).SelectionRevision})==RoomMapError.None,"fixture starts");
     for(var t=0;t<60&&r.Match.Phase!=MatchPhase.InGame;t++){r.Match.SetPlayerLoaded("fixture",r.Match.MatchId);m.Tick(1d/30);}

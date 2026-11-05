@@ -25,14 +25,14 @@ namespace JungleMaze.Composition
         [Serializable] public sealed class Metrics
         {
             public float elapsedSeconds, connectedSeconds;
-            public int snapshots, inputs, ignoredPackets, catchupDrops, maxPlayers, completedMatches;
+            public int snapshots, inputs, ignoredPackets, catchupDrops, maxPlayers, maxRosterPlayers, maxOnScreenPlayers, completedMatches;
             public double inputHz, activeInputSeconds, snapshotHz, snapshotSeconds, rttP50Ms, rttP95Ms, rttP99Ms;
             public int pings, pongs, pongTimeouts;
         }
         [Serializable] public sealed class Evidence
         {
             public int schemaVersion = 1, physicalDeviceCount = 1;
-            public string scenarioId, status, reason, selectedTransport, fallbackReason, endpoint, matchId;
+            public string scenarioId, status, reason, selectedTransport, fallbackReason, endpoint, matchId, disconnectCallSite;
             public Metrics metrics = new Metrics();
             public Assertion[] assertions;
         }
@@ -82,9 +82,10 @@ namespace JungleMaze.Composition
 
         private void NetworkChanged(NetworkStateChanged change)
         {
-            if (_finished || !_wasJoined || _failureStats.HasValue || change.Current != NetworkState.Failed) return;
+            if (_finished || !_wasJoined || _failureStats.HasValue || (change.Current != NetworkState.Failed && change.Current != NetworkState.Disconnected)) return;
             // Reconnect can reset LastReason/stats in the same frame; retain the original transport failure.
             _failureStats = _network.Stats; _failureEndpoint = _network.Endpoint; _failureReason = change.Reason.ToString();
+            _evidence.disconnectCallSite = Environment.StackTrace; // Only this opt-in test component records caller frames, never auth payloads.
         }
 
         private IEnumerator Start()
@@ -207,15 +208,20 @@ namespace JungleMaze.Composition
                     if (Vector2.Distance(position, _firstPosition.Value) > .5f) Mark("movement");
                     if (own.Current.Hp < 100) Mark("hpDamage");
                 }
-                var visible = 0; var spawner = FindAnyObjectByType<RemotePlayerSpawner>();
-                if (spawner != null && Camera.main != null) foreach (var id in _match.Players.ActiveIds)
+                var spawned = 0; var visible = 0; var spawner = FindAnyObjectByType<RemotePlayerSpawner>();
+                if (spawner != null) foreach (var id in _match.Players.ActiveIds)
                 {
-                    var view = spawner.GetView(id); if (view == null) continue;
-                    var p = Camera.main.WorldToViewportPoint(view.transform.position);
-                    if (p.z > 0 && p.x >= 0 && p.x <= 1 && p.y >= 0 && p.y <= 1) visible++;
+                    var view = spawner.GetView(id); if (view == null || !view.transform.gameObject.activeInHierarchy) continue;
+                    spawned++;
+                    if (Camera.main == null) continue;
+                    var point = Camera.main.WorldToViewportPoint(view.transform.position);
+                    if (point.z > 0 && point.x >= 0 && point.x <= 1 && point.y >= 0 && point.y <= 1) visible++;
                 }
-                _evidence.metrics.maxPlayers = Math.Max(_evidence.metrics.maxPlayers, visible);
-                if (visible >= _scenario.expectedPlayers) Mark("playersVisible");
+                _evidence.metrics.maxPlayers = Math.Max(_evidence.metrics.maxPlayers, spawned);
+                _evidence.metrics.maxRosterPlayers = Math.Max(_evidence.metrics.maxRosterPlayers, _match.Roster.Length);
+                _evidence.metrics.maxOnScreenPlayers = Math.Max(_evidence.metrics.maxOnScreenPlayers, visible);
+                // Follow Player intentionally cannot show a whole FFA map at once; require the roster and every network view instead.
+                if (spawned >= _scenario.expectedPlayers && _match.Roster.Length >= _scenario.expectedPlayers) Mark("playersVisible");
                 if (!_capturedView && Seen("playersVisible") && Seen("movement"))
                 { ScreenCapture.CaptureScreenshot(_output + ".png"); _capturedView = true; }
                 if (_match.HasZone) Mark("zone");
@@ -295,7 +301,7 @@ namespace JungleMaze.Composition
             }
             var assertions = new List<Assertion>();
             foreach (var id in new[] { "joined", "playersVisible", "movement", "zone", "hpDamage", "result", "replay", "history" })
-                assertions.Add(new Assertion { id = id, status = Seen(id) ? "PASS" : "NOT_OBSERVED", detail = "Observed during this run" });
+                assertions.Add(new Assertion { id = id, status = Seen(id) ? "PASS" : "NOT_OBSERVED", detail = id == "playersVisible" ? "Roster and network views confirmed; Follow Player viewport count is separate" : "Observed during this run" });
             foreach (var pair in _checkResults) assertions.Add(new Assertion { id = pair.Key, status = pair.Value.Status, detail = pair.Value.Detail });
             _evidence.assertions = assertions.ToArray();
             try

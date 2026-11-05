@@ -51,10 +51,16 @@ try {
     # Allowlist: chỉ chép cấu hình không secret, script và docs. Không chép Backend/.env hoặc source cache.
     Copy-Item -LiteralPath (Join-Path $taskBackend 'compose.aws.yaml') -Destination $taskStage
     Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'Aws/Caddyfile') -Destination $taskStage
-    Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'Aws/scripts') -Destination $taskStage -Recurse
+    $taskScriptStage = Join-Path $taskStage 'scripts'
+    New-Item -ItemType Directory -Path $taskScriptStage | Out-Null
+    # Flat script allowlist: never copy Python import caches into the text-normalized recovery bundle.
+    foreach ($taskScript in Get-ChildItem -LiteralPath (Join-Path $PSScriptRoot 'Aws/scripts') -File) {
+        if ($taskScript.Extension -in @('.sh', '.py')) { Copy-Item -LiteralPath $taskScript.FullName -Destination $taskScriptStage }
+    }
+    Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'registry_release.py') -Destination (Join-Path $taskStage 'scripts/registry_release.py')
     New-Item -ItemType Directory -Path (Join-Path $taskStage 'docs') | Out-Null
     # Kèm tài liệu assets vì hai hướng dẫn chính có liên kết tới bản đồ module JSurviv.
-    foreach ($taskDocName in @('Phase1_First4Tasks.vi.md', 'Phase2_Match_Guest_Zone.vi.md', 'Network_Architecture.vi.md', 'AWS_SSH_Swagger_Compass.vi.md', 'JSurviv_Integration.vi.md', 'JSurviv_Verification.vi.md')) {
+    foreach ($taskDocName in @('AWS_GHCR_Deploy.vi.md', 'Phase1_First4Tasks.vi.md', 'Phase2_Match_Guest_Zone.vi.md', 'Network_Architecture.vi.md', 'AWS_SSH_Swagger_Compass.vi.md', 'JSurviv_Integration.vi.md', 'JSurviv_Verification.vi.md')) {
         Copy-Item -LiteralPath (Join-Path $taskBackend "../Docs/$taskDocName") -Destination (Join-Path $taskStage 'docs')
     }
     $taskClient = [ordered]@{ mode='Online'; apiBaseUrl="https://$Domain"; gameServerHost=$Domain; gameServerPort=7777; authMode='RoomCode'; protocolVersion=4; connectTimeoutMs=5000 }

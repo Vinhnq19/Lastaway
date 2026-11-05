@@ -35,6 +35,8 @@ services:
         condition: service_healthy
 
   game-server:
+    # Acceptance can match the AWS 256MiB limit without changing the dev default.
+    mem_limit: "${GAME_MEMORY_LIMIT:-0}"
     build:
       context: .
       dockerfile: GameServer/Dockerfile

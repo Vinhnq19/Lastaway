@@ -453,6 +453,72 @@
       "file_type": "concept",
       "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
       "source_location": "Bot trong phòng mạng"
+    },
+    {
+      "id": "docs_network_architecture_vi_ghcr",
+      "label": "GHCR private",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§10 Deploy bằng registry private",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_registry_deployer",
+      "label": "deploy-aws.ps1 / registry deployment",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§10 Deploy bằng registry private",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_deployment_status",
+      "label": "Private deployment-status app-queue snapshot",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§10 Deploy bằng registry private",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_registry_guard",
+      "label": "flock + transient systemd rollback guard",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§10 Deploy bằng registry private",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_registry_manifest",
+      "label": "Immutable release digest manifest",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§10 Deploy bằng registry private",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_registry_pc_tests",
+      "label": "PC Quick / Full acceptance",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§10 Deploy bằng registry private",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
     }
   ],
   "edges": [
@@ -1036,16 +1102,106 @@
       "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
       "source_location": "Bot trong phòng mạng",
       "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_registry_deployer",
+      "target": "docs_network_architecture_vi_ghcr",
+      "relation": "publishes_private_service_images",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§10 Deploy bằng registry private",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_registry_manifest",
+      "target": "docs_network_architecture_vi_ghcr",
+      "relation": "pins_service_digests",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§10 Deploy bằng registry private",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_registry_deployer",
+      "target": "docs_network_architecture_vi_registry_manifest",
+      "relation": "validates_and_transfers",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§10 Deploy bằng registry private",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_registry_deployer",
+      "target": "docs_network_architecture_vi_registry_guard",
+      "relation": "runs_locked_transaction",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§10 Deploy bằng registry private",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_registry_guard",
+      "target": "docs_network_architecture_vi_deployment_status",
+      "relation": "checks_no_participants_or_match",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§10 Deploy bằng registry private",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_registry_guard",
+      "target": "docs_network_architecture_vi_registry_pc_tests",
+      "relation": "awaits_acceptance_or_rolls_back",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§10 Deploy bằng registry private",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_registry_deployer",
+      "target": "docs_network_architecture_vi_api",
+      "relation": "recreates_only_if_changed",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§10 Deploy bằng registry private",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_registry_deployer",
+      "target": "docs_network_architecture_vi_gameserver",
+      "relation": "recreates_only_if_changed",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§10 Deploy bằng registry private",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_registry_deployer",
+      "target": "docs_network_architecture_vi_mongodb",
+      "relation": "preserves_container_and_storage",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§10 Deploy bằng registry private",
+      "weight": 1.0
     }
   ],
   "hyperedges": [],
   "input_tokens": 6370,
   "output_tokens": 3260,
   "coverage": {
-    "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md": 134
+    "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md": 159
   },
-  "source_sha256": "49a06ffcd683c79a84fcf2518aa3590975c9f070e892f1e0df1115b38fdb21bb",
+  "source_sha256": "8a347be9f4ab506485c986784382b94c03ddc2d58f2234c3df074655d48a7564",
   "usage_note": "6370/3260 are historical extraction-agent self-reported tokens retained from the prior fragment; this Codex re-extraction and supervision are unmetered, not zero-cost or provider billing metadata.",
-  "extracted_at": "2026-11-05T03:15:55.699490+00:00",
-  "extraction_note": "Codex re-extracted changed map-version/bot section, retaining reviewed unchanged document relations. Added documented server FSM/settings/shared gameplay/navigation/WithBots persistence; migrated v2 concept to v3. No paid semantic API. Runtime PASS is evidence in report, not inferred from graph. Updated only evidence/release status after rollback; documented structural bot relations unchanged. Re-read final hazard/acceptance paragraph: local safe-edge exit, no normal hazard traversal. AWS release status updated from final evidence; no additional structural relations invented. Reviewed countdown change15s→5s; structural relations unchanged."
+  "extracted_at": "2026-11-05T07:35:58.218398+00:00",
+  "extraction_note": "Codex reviewed unchanged sections and re-extracted §10: private GHCR/digest manifest, per-service updates, internal occupancy snapshot, flock/systemd acceptance guard, Quick/Full PC tests, preserved Mongo and no EC2 lifecycle. These are documented pipeline relations, not evidence of a successful GHCR/AWS rollout. Prior map/bot relations retained."
 }
