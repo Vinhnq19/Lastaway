@@ -545,6 +545,8 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
             var isStale = (CurrentTick - entity.LastInputTick >= staleTicks) || entity.IsDisconnected;
             var mx = isStale ? 0f : (entity.MoveX / 127f);
             var my = isStale ? 0f : (entity.MoveY / 127f);
+            // WPN-03 bell: reversed controls invert the movement input (clients mirror it in prediction).
+            if (World?.IsReversed(entity.NetId) == true) { mx = -mx; my = -my; }
 
             if (World != null && (mx != 0 || my != 0)) World.Inventory.CancelForAction(entity.NetId, JungleMaze.World.Inventory.ItemCancelAction.Move);
             var speed = World?.SpeedMultiplier(entity.NetId) ?? 1f;
