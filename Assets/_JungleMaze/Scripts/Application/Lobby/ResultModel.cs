@@ -21,6 +21,7 @@ namespace JungleMaze.App.Lobby
         public Guid MatchId { get; private set; }
         public bool HasData { get; private set; }
         public bool IsOffline { get; private set; }
+        public bool HasBots { get; private set; }
         public ResultHeadline Headline { get; private set; }
         public string Title { get; private set; } = "";
         /// <summary>"#n / N"; null when the own row is missing.</summary>
@@ -44,8 +45,9 @@ namespace JungleMaze.App.Lobby
             for (var i = 0; i < count; i++)
             {
                 var p = participants[i];
+                HasBots |= p.IsBot;
                 var row = new ResultRow(p.NetId, p.Rank, p.Kills, p.SurvivalTicks / (float)LobbyCountdown.TickRate,
-                    p.DisplayName, p.NetId == result.OwnNetId);
+                    p.DisplayName, p.NetId == result.OwnNetId, p.IsBot);
                 _rows.Add(row);
                 if (row.IsSelf) self = row;
             }
@@ -79,13 +81,14 @@ namespace JungleMaze.App.Lobby
                 if (showKills) KillsText = "Hạ gục: " + self.Value.Kills;
                 SurvivalText = "Sống sót: " + ResultRow.Clock(self.Value.SurvivalSeconds);
             }
+            if (HasBots) Title += " · CÓ BOT";
             CauseText = string.IsNullOrEmpty(cause) ? null : cause;
         }
 
         public static ResultHeadline HeadlineFor(MatchResultView r)
         {
             if (r.Reason == MatchEndReason.Tie) return ResultHeadline.Tie;
-            if (r.Reason == MatchEndReason.Cancelled) return ResultHeadline.Cancelled;
+            if (r.Reason == MatchEndReason.Cancelled || r.Reason == MatchEndReason.NoHumans) return ResultHeadline.Cancelled;
             return r.Reason == MatchEndReason.LastAlive && r.WinnerNetId == r.OwnNetId && r.OwnNetId != 255
                 ? ResultHeadline.Victory : ResultHeadline.Ranked;
         }
@@ -94,7 +97,7 @@ namespace JungleMaze.App.Lobby
         {
             _rows.Clear();
             HasData = false;
-            IsOffline = false;
+            IsOffline = false; HasBots = false;
             MatchId = Guid.Empty;
             Title = "";
             RankText = KillsText = SurvivalText = CauseText = null;

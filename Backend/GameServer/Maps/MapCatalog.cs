@@ -47,6 +47,7 @@ public sealed class MapDefinition
     public string Json { get; }
     public MapData Data { get; }
     public MapLayout Layout { get; }
+    public GameServer.Simulation.Bots.BotNavigationGrid Navigation { get; }
     public byte[] Preview { get; }
 
     internal MapDefinition(MapCatalogEntry entry, string json, MapData data, MapLayout layout, byte[] preview)
@@ -55,6 +56,7 @@ public sealed class MapDefinition
         Json = json;
         Data = data;
         Layout = layout;
+        Navigation = new GameServer.Simulation.Bots.BotNavigationGrid(layout);
         Preview = preview;
     }
 }

@@ -17,7 +17,7 @@
       "worldEnabled": true,
       "minPlayers": 6,
       "maxPlayers": 10,
-      "lobbyDurationSeconds": 15,
+      "lobbyDurationSeconds": 5,
       "loadingTimeoutSeconds": 30,
       "disconnectGraceSeconds": 15,
       "endingDurationSeconds": 10,

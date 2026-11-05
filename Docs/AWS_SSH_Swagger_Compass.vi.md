@@ -440,3 +440,8 @@ try {
 NET_WS_CONNECT_IP pin TCP tới IP đó, vẫn dùng URI/SNI và certificate `junglemaze.duckdns.org` hợp lệ; không tắt TLS. Hai endpoint phải là cùng EC2. Config/report ghi IP pin; không coi kết quả đó là DNS hệ thống đã được sửa. Nếu HTTPS/WSS tới IP cũng bị mạng chặn thì BLOCKED. Tester có DNS hoạt động dùng profile mặc định, không cần pin.
 
 Setup, test có watchdog, kiểm hosts/IP cũ và bật theo lịch bằng `open-aws-session.ps1 -Minutes 60` nằm ở **mục 16 hướng dẫn chính**. SSM giữ vai trò quản trị. Kết quả WSS thực phải xem báo cáo mới nhất; HTTPS /health đơn thuần chưa chứng minh WebSocket join thành công.
+
+
+## Deploy bằng GHCR private
+
+Luồng publish/deploy mới, setup PAT, kiểm Local, Full/Quick và rollback nằm trong [Hướng dẫn GHCR](AWS_GHCR_Deploy.vi.md). Không upload image archive trong deploy thường ngày; SSH/Swagger/Compass và secret/DB vẫn giữ nguyên. Pipeline này không tự Start/Stop EC2.

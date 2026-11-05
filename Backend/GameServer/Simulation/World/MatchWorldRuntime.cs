@@ -63,6 +63,7 @@ public sealed partial class MatchWorldRuntime : ITransactionalDestructibleLootSi
         var slow=1f;foreach(var e in _effects)if(e.Key.Actor==actor&&e.Value.End>_now){if(e.Key.Effect=="Slow")slow=Math.Min(slow,e.Value.Magnitude);else if(e.Key.Effect=="Speed")value*=e.Value.Magnitude;else if(e.Key.Effect=="Stun")return 0;}
         return value*slow;
     }
+    internal bool InvisibleToBots(byte actor) => _effects.Any(e => e.Key.Actor == actor && e.Key.Effect == "Invisible" && e.Value.End > _now);
     public bool Using(byte actor){return _registered.Contains(actor)&&Inventory.IsUsing(actor);}
     public void Tick(uint tick,double now)
     {

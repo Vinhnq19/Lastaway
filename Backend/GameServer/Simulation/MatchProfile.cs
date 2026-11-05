@@ -9,7 +9,7 @@ public sealed class MatchProfile
     public string ConfigHash { get; init; } = "";
     public int MinPlayers { get; init; } = 6;
     public int MaxPlayers { get; init; } = 10;
-    public double LobbyDurationSeconds { get; init; } = 15;
+    public double LobbyDurationSeconds { get; init; } = 5;
     public double LoadingTimeoutSeconds { get; init; } = 30;
     public double DisconnectGraceSeconds { get; init; } = 15;
     public double EndingDurationSeconds { get; init; } = 10;

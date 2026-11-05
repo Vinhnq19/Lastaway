@@ -277,10 +277,10 @@
     },
     {
       "id": "docs_network_architecture_vi_runtime_metrics",
-      "label": "Tick loop GC and metrics-output diagnostics",
+      "label": "Bounded tick-stage, GC and loop-gap diagnostics",
       "file_type": "concept",
       "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
-      "source_location": "§1",
+      "source_location": "§6 Tick, Safe Zone và kết quả",
       "source_url": null,
       "captured_at": null,
       "author": null,
@@ -375,11 +375,11 @@
       "contributor": null
     },
     {
-      "id": "docs_network_architecture_vi_gameplay_v2",
-      "label": "Gameplay protocol v2",
+      "id": "docs_network_architecture_vi_gameplay_v3",
+      "label": "Gameplay protocol v3",
       "file_type": "concept",
       "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
-      "source_location": "Chọn map theo phòng",
+      "source_location": "Chọn map / Bot trong phòng mạng",
       "source_url": null,
       "captured_at": null,
       "author": null,
@@ -425,6 +425,111 @@
       "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
       "source_location": "Chọn map theo phòng",
       "_origin": "semantic"
+    },
+    {
+      "id": "docs_network_architecture_vi_bot_fsm",
+      "label": "Server-authoritative bot FSM",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Bot trong phòng mạng"
+    },
+    {
+      "id": "docs_network_architecture_vi_bot_settings",
+      "label": "bot_settings.json: bots-normal-1",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Bot trong phòng mạng"
+    },
+    {
+      "id": "docs_network_architecture_vi_bot_navigation",
+      "label": "Resumable A-star: node limits plus shared soft 4ms budget",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§6 Tick, Safe Zone và kết quả"
+    },
+    {
+      "id": "docs_network_architecture_vi_with_bots",
+      "label": "WithBots result metadata",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Bot trong phòng mạng"
+    },
+    {
+      "id": "docs_network_architecture_vi_ghcr",
+      "label": "GHCR private",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§10 Deploy bằng registry private",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_registry_deployer",
+      "label": "deploy-aws.ps1 / registry deployment",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§10 Deploy bằng registry private",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_deployment_status",
+      "label": "Private deployment-status app-queue snapshot",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§10 Deploy bằng registry private",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_registry_guard",
+      "label": "flock + transient systemd rollback guard",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§10 Deploy bằng registry private",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_registry_manifest",
+      "label": "Immutable release digest manifest",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§10 Deploy bằng registry private",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_registry_pc_tests",
+      "label": "PC Quick / Full acceptance",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§10 Deploy bằng registry private",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "docs_network_architecture_vi_readytorun",
+      "label": "Linux AMD64 ReadyToRun publish",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§6 Tick, Safe Zone và kết quả",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
     }
   ],
   "edges": [
@@ -830,7 +935,7 @@
     },
     {
       "source": "docs_network_architecture_vi_room_maps",
-      "target": "docs_network_architecture_vi_gameplay_v2",
+      "target": "docs_network_architecture_vi_gameplay_v3",
       "relation": "uses",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
@@ -840,7 +945,7 @@
     },
     {
       "source": "docs_network_architecture_vi_room_manager",
-      "target": "docs_network_architecture_vi_gameplay_v2",
+      "target": "docs_network_architecture_vi_gameplay_v3",
       "relation": "broadcasts",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
@@ -908,16 +1013,236 @@
       "source_location": "Chọn map theo phòng",
       "weight": 1.0,
       "_origin": "semantic"
+    },
+    {
+      "source": "docs_network_architecture_vi_simulation",
+      "target": "docs_network_architecture_vi_bot_fsm",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Bot trong phòng mạng",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_bot_fsm",
+      "target": "docs_network_architecture_vi_bot_settings",
+      "relation": "configured_by",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Bot trong phòng mạng",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_bot_fsm",
+      "target": "docs_network_architecture_vi_bot_navigation",
+      "relation": "depends_on",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Bot trong phòng mạng",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_bot_navigation",
+      "target": "docs_network_architecture_vi_authored_map",
+      "relation": "reads",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Bot trong phòng mạng",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_room_host",
+      "target": "docs_network_architecture_vi_bot_fsm",
+      "relation": "manages_in_waiting",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Bot trong phòng mạng",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_bot_fsm",
+      "target": "docs_network_architecture_vi_healthservice",
+      "relation": "uses_shared_rules",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Bot trong phòng mạng",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_bot_fsm",
+      "target": "docs_network_architecture_vi_with_bots",
+      "relation": "produces",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Bot trong phòng mạng",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_with_bots",
+      "target": "docs_network_architecture_vi_outbox",
+      "relation": "persisted_through",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Bot trong phòng mạng",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_with_bots",
+      "target": "docs_network_architecture_vi_mongodb",
+      "relation": "persisted_in",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Bot trong phòng mạng",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_gameplay_v3",
+      "target": "docs_network_architecture_vi_bot_fsm",
+      "relation": "carries_management_and_participant_metadata",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Bot trong phòng mạng",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_registry_deployer",
+      "target": "docs_network_architecture_vi_ghcr",
+      "relation": "publishes_private_service_images",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§10 Deploy bằng registry private",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_registry_manifest",
+      "target": "docs_network_architecture_vi_ghcr",
+      "relation": "pins_service_digests",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§10 Deploy bằng registry private",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_registry_deployer",
+      "target": "docs_network_architecture_vi_registry_manifest",
+      "relation": "validates_and_transfers",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§10 Deploy bằng registry private",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_registry_deployer",
+      "target": "docs_network_architecture_vi_registry_guard",
+      "relation": "runs_locked_transaction",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§10 Deploy bằng registry private",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_registry_guard",
+      "target": "docs_network_architecture_vi_deployment_status",
+      "relation": "checks_no_participants_or_match",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§10 Deploy bằng registry private",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_registry_guard",
+      "target": "docs_network_architecture_vi_registry_pc_tests",
+      "relation": "awaits_acceptance_or_rolls_back",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§10 Deploy bằng registry private",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_registry_deployer",
+      "target": "docs_network_architecture_vi_api",
+      "relation": "recreates_only_if_changed",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§10 Deploy bằng registry private",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_registry_deployer",
+      "target": "docs_network_architecture_vi_gameserver",
+      "relation": "recreates_only_if_changed",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§10 Deploy bằng registry private",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_registry_deployer",
+      "target": "docs_network_architecture_vi_mongodb",
+      "relation": "preserves_container_and_storage",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§10 Deploy bằng registry private",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_bot_navigation",
+      "target": "docs_network_architecture_vi_bot_settings",
+      "relation": "uses_node_and_wall_time_limits",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§6 Tick, Safe Zone và kết quả",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_gameserver",
+      "target": "docs_network_architecture_vi_readytorun",
+      "relation": "publishes_precompiled_first_use_code",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§6 Tick, Safe Zone và kết quả",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_gameserver",
+      "target": "docs_network_architecture_vi_runtime_metrics",
+      "relation": "measures_work_stages_before_release_acceptance",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§6 Tick, Safe Zone và kết quả",
+      "weight": 1.0
     }
   ],
   "hyperedges": [],
   "input_tokens": 6370,
   "output_tokens": 3260,
   "coverage": {
-    "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md": 134
+    "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md": 163
   },
-  "source_sha256": "3f4208701127a4d23cc628e8c6bf83d33c5cd7bba16def195808816ff3314348",
+  "source_sha256": "3d94c614f3135beb4860b4de55b00e716346c6ebc7bd508621a983f5790613d8",
   "usage_note": "6370/3260 are historical extraction-agent self-reported tokens retained from the prior fragment; this Codex re-extraction and supervision are unmetered, not zero-cost or provider billing metadata.",
-  "extracted_at": "2026-11-03T09:27:19.542914+00:00",
-  "extraction_note": "Codex re-read network architecture for hvu integration and verified deployment path; added documented exporter→LevelCatalog geometry dependency. Retained unchanged statements/relations. No paid semantic API. Updated evidence links after reading final AWS report; no new architecture relation inferred from test status."
+  "extracted_at": "2026-11-05T13:22:14.395330+00:00",
+  "extraction_note": "Codex reviewed unchanged sections and re-extracted §10: private GHCR/digest manifest, per-service updates, internal occupancy snapshot, flock/systemd acceptance guard, Quick/Full PC tests, preserved Mongo and no EC2 lifecycle. These are documented pipeline relations, not evidence of a successful GHCR/AWS rollout. Prior map/bot relations retained. Codex refreshed §6 for resumable endpoint probes, node+soft wall-time budgets, stage metrics and Linux R2R; other sections reviewed unchanged. Token counters remain previous agent-reported estimates; this manual update is not separately metered."
 }

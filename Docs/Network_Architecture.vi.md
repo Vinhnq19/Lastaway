@@ -6,13 +6,25 @@ Nguồn map phát hành là catalog `Backend/Shared/GameData/Maps/`; production 
 
 Mỗi room giữ MapDefinition riêng. Bộ luật dùng RulesHash độc lập với MapHash. Trận được chốt bằng **MapId + MapHash + RulesHash** và ghi bộ khóa này vào kết quả/outbox/Mongo/lịch sử. Hai map khởi đầu cùng luật, khác bố cục: Di tích cổ và Bãi đá. World, movement/collision, spawn, loot/portal đều nhận map của room. Trận đang chạy không đổi dữ liệu khi reload; phòng chờ chuyển bản mới hoặc map mặc định còn được phát hành.
 
-Gameplay protocol **2** bổ sung RoomMapState/SelectRoomMap/RoomMapReady/StartRoomMatch và metadata kết quả; client cũ nhận `GameplayVersionMismatch`. Handshake account-ticket vẫn **v4**, không gửi JWT qua UDP. Trưởng phòng phiên tách khỏi account owner quản lý/xóa room. Phòng tạo thêm chờ chủ account vào làm trưởng phòng đầu tiên; phòng mặc định lấy người vào đầu; khi trưởng phòng rời phòng chờ, quyền chuyển cho người còn kết nối sớm nhất.
+Gameplay protocol **3** giữ RoomMapState/SelectRoomMap/RoomMapReady/StartRoomMatch của v2 và thêm quản lý bot, loại participant/metadata kết quả; client cũ nhận `GameplayVersionMismatch`. Handshake account-ticket vẫn **v4**, không gửi JWT qua UDP. Trưởng phòng phiên tách khỏi account owner quản lý/xóa room. Phòng tạo thêm chờ chủ account vào làm trưởng phòng đầu tiên; phòng mặc định lấy người vào đầu; khi trưởng phòng rời phòng chờ, quyền chuyển cho người còn kết nối sớm nhất.
 
 Client lấy catalog, JSON và preview qua `/api/maps` yêu cầu JWT. JSON tối đa 2 MiB, PNG tối đa 512 KiB; remote HTTPS, HTTP chỉ loopback. Cache tách origin/hash, payload kiểm hash/schema trước khi nhận; tải bằng file tạm, lỗi không dùng map khác. Generation/revision và cancellation chặn callback cũ. Offline vẫn dùng bundle, không gọi API. Trưởng phòng chỉ Bắt đầu sau khi đủ người và mọi client đã xác minh; vào/rời countdown hủy lượt bắt đầu. Sau kết quả giữ kết nối về phòng chờ để chọn map/lượt mới.
 
 Quy trình dev xuất/publish/rollback và kiểm hai máy nằm ở [Level Editor](hvu/06_Level_Editor.vi.md). Editor từ nhánh `hvu` đặt vật theo ô, dùng catalog Cainos; exporter phải giữ footprint và collider chân từ catalog khi tạo JSON authoritative. Art/đường đá của Editor không tự trở thành visual trong trận. NetSmokeClient có `--gameplay` để tải/ack map, trưởng phòng gửi Start và kiểm vòng trận; `NET_SMOKE_MAP_ID` chọn map cho lượt smoke. Đây là kiểm protocol/backend, không thay nghiệm thu gameplay Unity. Không chạy tải hoặc deploy AWS tự động.
 
-Cập nhật Phase 2 ngày **03/11/2026**. Tài liệu mô tả kiến trúc dùng để triển khai game và ranh giới giữa các module. Setup nền nằm trong [hướng dẫn Phase 1](Phase1_First4Tasks.vi.md); chạy trận/account/bo theo [hướng dẫn Phase 2](Phase2_Match_Guest_Zone.vi.md). Bằng chứng nghiệm thu nằm trong [báo cáo Phase 2](Reports/Phase2_Local/report.vi.md); số liệu mạng các lượt trước ở [báo cáo Phase 1](Reports/Local_Capacity_Retest_2026-10-14/report.vi.md).
+Cập nhật Phase 2 ngày **05/11/2026**. Tài liệu mô tả kiến trúc dùng để triển khai game và ranh giới giữa các module. Setup nền nằm trong [hướng dẫn Phase 1](Phase1_First4Tasks.vi.md); chạy trận/account/bo theo [hướng dẫn Phase 2](Phase2_Match_Guest_Zone.vi.md). Bằng chứng nghiệm thu nằm trong [báo cáo Phase 2](Reports/Phase2_Local/report.vi.md); số liệu mạng các lượt trước ở [báo cáo Phase 1](Reports/Local_Capacity_Retest_2026-10-14/report.vi.md).
+
+## Bot trong phòng mạng
+
+Bot FFA được tạo nội bộ trên GameServer, không có socket, tài khoản hay JWT giả. Chủ phòng thêm/xóa/điền đủ người tối thiểu ở Waiting bằng lệnh reliable có RoomId, lobby revision và request ID chống lặp. Bot tính vào cả hạn mức 10 participant/phòng và 50 slot toàn server; không tự thay bot để nhận người mới. Người thật vẫn phải xác thực account-ticket v4. Một người +5 bot đủ min6 nhưng vẫn phải xác minh map và bấm Bắt đầu.
+
+Mỗi bot có FSM/bộ nhớ/seed riêng trong RAM; cấu hình bot server tại Backend/Shared/GameData/bot_settings.json. Perception/decision5Hz lệch lịch, intent movement/combat30Hz đi qua các service gameplay chung. Không I/O hoặc HTTP/Mongo trong tick. Tìm đường A* lưới0,5cell dùng map đã validate và trạng thái vật/cửa từng room, budget500node/yêu cầu và1500node/tick dùng chung, luân phiên giữa bot/phòng. Bot không được biết inventory đối thủ hoặc vị trí sau khi mất dấu quá3s.
+
+Bot tự hoàn tất loading ở server; chỉ người thật tải/xác minh map. Số bot giữ qua đổi map/chơi lại, AI/HP/inventory/input reset ở trận mới. Không còn người thật kết nối và không còn grace hợp lệ thì dừng NoHumans, không trao win; người đã chết nhưng còn xem vẫn là người kết nối. Hết người thật ở Waiting dọn bot và trả slot. Restart không phục hồi bot/trận cũ.
+
+Roster/result bổ sung loại participant; kết quả có MatchKind HumanOnly hoặc WithBots và IsBot, bot không có ProfileKey. Lịch sử của người thật vẫn lưu trận WithBots và ghi nhãn; không coi đó là thành tích PvP thuần người. Dữ liệu HumanOnly cũ và canonical hash của nó được giữ. Không có aggregate điểm PvP mới trong đợt này. Bot đang trong lava/poison chọn lối ra gần đã kiểm geometry rồi mới quay lại đường vào bo; bot ở ngoài vẫn tránh hazard. Metrics server ghi số bot, node mở rộng lớn nhất/tick và số yêu cầu đường còn chờ; ngân sách AI không tăng hạn mức phòng/phiên.
+
+Bằng chứng bot và mức độ nghiệm thu nằm ở [báo cáo bot](Reports/Server_Bots/report.vi.md). Local đã qua module/flow trên hai map, hai transport và lượt đo1+9; AWS baseline `bots-20261105` có dropped tick và đã rollback; lượt bổ sung được duyệt sau đó chạy `bots-20261105-r2`, WSS1+9/300s và Auto2+4 hoàn tất flow từ PC, UDP7777 smoke thông. EC2 giữ Running. 50 participant mới stress runtime Local, chưa xác nhận50 người chơi WAN. Trạng thái nghiệm thu và các lượt không đạt phải theo báo cáo, không suy từ việc code đã deploy.
 
 ## 0. Đường chơi và phạm vi thẩm quyền
 
@@ -24,7 +36,7 @@ Replay có packet riêng version1, giữ nguyên layout packet cũ. SessionHub x
 
 ## 1. Định hướng và trạng thái triển khai
 
-Game dùng **server authoritative**: client gửi input; GameServer quyết định vị trí, va chạm, HP, bo, vòng đời và kết quả trận. Mỗi phòng có runtime riêng. Hạn mức cấu hình: **10 người/phòng, 5 phòng gồm mặc định, tổng 50 slot active/pending/grace**, mỗi account tạo tối đa 2 phòng bổ sung. Đây là hạn mức, không phải cam kết hiệu năng gameplay cho 50 người.
+Game dùng **server authoritative**: client gửi input; GameServer quyết định vị trí, va chạm, HP, bo, vòng đời và kết quả trận. Mỗi phòng có runtime riêng. Hạn mức cấu hình: **10 người/phòng, 5 phòng gồm mặc định, tổng 50 slot active/pending/grace/bot**, mỗi account tạo tối đa 2 phòng bổ sung. Đây là hạn mức, không phải cam kết hiệu năng gameplay cho 50 người.
 
 Phase 2 gồm SRV-03, NET-02, ZON-01 và demo Unity UDP/WebSocket/Auto. Prediction/reconciliation/interpolation đầy đủ thuộc MOV-02/03. Các module vũ khí, inventory, world và HUD được ghép qua các service đang có. Audio dùng MatchAudioEventSource nhận combat online/offline và pose/địa hình thật; không phát lặp shot dự đoán khi nhận confirmation. Bảng chẩn đoán chỉ bật bằng F3, tách khỏi Lobby/HUD/kết quả chính. UI-03 dùng replay server theo quyền phiên. DRG-01, ART-06, Game-10 tạm ngoài phạm vi; không dùng sự kiện rồng giả để nghiệm thu audio.
 
@@ -89,7 +101,7 @@ API: `POST /api/guests`, `POST /api/game-tickets`, `GET /api/me/matches`, `GET /
 
 `Waiting → Lobby → Loading → InGame → Ending → Cleanup → Waiting`.
 
-Main: min6/max10. Trưởng phòng chọn map, tất cả client xác minh đúng MapId/MapHash/RulesHash, rồi trưởng phòng bấm Bắt đầu; countdown 15s không có nút Ready. Vào/rời trong countdown hủy về Waiting và cần Bắt đầu lại. Hello là xác nhận khả năng gameplay; client chỉ ping không được tính vào người đủ điều kiện bắt đầu. Thiếu người hủy countdown. Loading chốt roster, tối đa30s, loại người không xác nhận; dưới min quay về Waiting. Profile `test` dùng min2 và tăng tốc bo/timer, chỉ cho nghiệm thu Local, không dùng public hosting.
+Main: min6/max10. Trưởng phòng chọn map, tất cả client xác minh đúng MapId/MapHash/RulesHash, rồi trưởng phòng bấm Bắt đầu; countdown 5s không có nút Ready. Vào/rời trong countdown hủy về Waiting và cần Bắt đầu lại. Hello là xác nhận khả năng gameplay; client chỉ ping không được tính vào người đủ điều kiện bắt đầu. Thiếu người hủy countdown. Loading chốt roster, tối đa30s, loại người không xác nhận; dưới min quay về Waiting. Profile `test` dùng min2 và tăng tốc bo/timer, chỉ cho nghiệm thu Local, không dùng public hosting.
 
 Loading/InGame/Ending từ chối người mới `MatchInProgress`. Mất mạng trong trận giữ avatar/slot15s từ lúc server phát hiện; avatar đứng yên, vẫn bị damage. Resume dùng proof ngẫu nhiên riêng, luân chuyển sau mỗi lần dùng, giữ PlayerId/slot và chỉ một kết nối điều khiển. Hết grace hoặc chủ động thoát bị loại; callback cũ không giải phóng slot mới.
 
@@ -98,6 +110,10 @@ Server xử lý toàn bộ damage của tick rồi xét thắng. Còn một ngư
 Runtime tạo từ biến môi trường luôn yêu cầu account-ticket v4; không có env tắt guard. v1/v2/v3 chỉ còn fixture riêng tạo trực tiếp trong test, không bypass LAN/AWS. v4 thêm ticket vào v3, payload connect tối đa512 byte. Auto giữ cùng attempt/ticket, chỉ chuyển UDP→WSS một lần trước thông điệp ứng dụng đầu tiên; callback UDP muộn không tạo lại slot. Resume cần proof còn hạn và ticket mới của cùng account, proof xoay sau khi xác minh. Gameplay có version riêng, MatchId, input sequence/tick và snapshot ack. Phase/roster/spawn/despawn/elimination/result gửi reliable; snapshot+zone30Hz có thể bỏ gói cũ. Client bỏ dữ liệu thuộc trận cũ. Binary WebSocket tối đa4KiB sau ghép fragment, hàng gửi có giới hạn; client chậm bị ngắt. Không gửi JWT hoặc credential Guest dài hạn qua UDP public.
 
 ## 6. Tick, Safe Zone và kết quả
+
+GameServer giữ fixed tick30Hz và single writer. A* dùng trần500 node/request và1.500 node/tick toàn server, đồng thời có budget mềm mặc định4ms trong `BotSettings.GlobalPathMillisecondsPerTick`. Kiểm thời gian trước mỗi endpoint probe/node; đơn vị đang xử lý chạy xong rồi mới nhường. Endpoint probing và frontier giữ tiến độ qua tick; luân phiên bot/phòng để tránh độc chiếm. Không tăng tốc/teleport bot để bù thời gian lập đường.
+
+Bản LinuxAMD64 publish ReadyToRun để giảm JIT khi dùng đường code lần đầu; đây không phải bảo đảm không có stall. Metrics bounded theo cửa sổ ghi poll/simulation/bot decision/path/movement/world/resolution/snapshot/streams/lifecycle cùng GC, CPU, loop gap và dropped tick. Không bỏ mẫu khởi động hoặc hạ ngưỡng0drop để chấp nhận release.
 
 Chỉ vòng ứng dụng thay đổi room/session/world. Input chuẩn hóa đường chéo, speed4 cell/s, ngừng khi thiếu input250ms; từ chối input trùng/cũ/sai trận và giới hạn tốc độ. Snapshot/ack30Hz chứa vị trí, aim, HP và sequence đã xử lý. Replay buffer riêng ít nhất5s; UI-03 chỉ đọc theo quyền phiên như mục0, không công khai toàn bộ buffer.
 
@@ -132,3 +148,16 @@ Không suy diễn bài ping/pong cũ thành sức chứa gameplay. Khi bổ sung
 [Báo cáo chọn map Local](Reports/Map_Selection_Local/report.vi.md) ghi phần triển khai ban đầu. [Báo cáo merge hvu và AWS](Reports/Map_Selection_AWS/report.vi.md) ghi bản build mới, 6 client WSS/Auto trong 5 phút và lượt UDP/WSS trên hai map. [Báo cáo chung Phase2 trước đó](Reports/Phase2_Local/report.vi.md) phân biệt các lượt cũ. Nhiều process Unity trên cùng PC không thay nghiệm thu hai máy vật lý.
 
 Các dev tích hợp gameplay qua contract runtime/health/registry; combat phát damage, không tự ghi HP từ client. MOV-02/03, combat/world và UI được ghép qua các service hiện có. Trạng thái nghiệm thu từng module và toàn flow phải theo bằng chứng bản mới trong báo cáo, không suy từ demo Phase2 cũ. Khung `Application/Testing`, `OnlineScenarioRunner` và launcher `test-unity-online.ps1` nhận scenario JSON và check/driver đăng ký qua Bootstrap, dùng lại cho feature mới. Test không đủ tốc độ phát phải ghi INVALID; [checklist hai PC](../Backend/Tests/OnlineReadiness/PHYSICAL_TWO_PC_CHECKLIST.md) ghi rõ LAN/VPN/public/AWS và phần cần nghiệm thu bằng thiết bị thật.
+
+
+## 10. Deploy bằng registry private
+
+PC dùng PAT publish trong Docker Desktop credential store; GHCR private giữ hai package API/GameServer liên kết repository Lastaway. EC2 dùng PAT khác chỉ read:packages, config root-only. Publish cần commit sạch, không tự commit/push Git. SDK/runtime base image Linux AMD64 và các đầu vào compile được fingerprint riêng từng service; image không đổi reuse digest, deploy pin digest thay vì latest. Bundle chỉ chứa manifest/checksum/script/config không secret, không chứa image archive hoặc DB.
+
+`deploy-aws.ps1` có PrepareOnly (không truy cập EC2), Deploy và Rollback. Deploy kiểm Running/SSM/DNS/TLS/đĩa và đúng instance SSH; không tự Start/Stop. Transient systemd unit giữ flock trong suốt pull → switch → kiểm từ PC → accept/rollback; mất PC/SSH không làm mất guard. Chỉ service đổi được recreate với no-deps; Caddy chỉ đổi khi config proxy đổi, Mongo giữ nguyên. Config bí mật, volume outbox/Mongo và catalog map ngoài image không bị ghi đè. Rollback đọc cấu hình base images kế thừa của cả archive/registry và chặn đổi major Mongo.
+
+Control endpoint `/internal/deployment-status` dùng secret control hiện có, chỉ đọc snapshot qua queue ứng dụng. Human active/pending/grace, bot/entity hoặc trận chưa Waiting đều chặn đổi GameServer. Không public endpoint/cổng control. Client mới không được bypass account-ticket để phục vụ deploy tests. Đây là bảo trì có gián đoạn; session/phòng RAM mất khi restart.
+
+Auto dùng Quick cho API-only; thay server/protocol/rules/shared contract hoặc deploy connection config buộc Full và bằng chứng Local/build client tương ứng. Full đo PC thật WSS một người +9 bot đủ 300s, Auto hai client, kết quả/history/replay và UDP thật; không ghi Quick thành PASS gameplay. Giữ ngưỡng tick/input/timeout/CPU/RAM hiện hành. Cửa sổ AWS 20 phút dành thời gian rollback, deadline không tắt instance. Hai PC vật lý vẫn NOT_TESTED khi chưa có thiết bị.
+
+[Hướng dẫn và giới hạn triển khai](AWS_GHCR_Deploy.vi.md) phân biệt code pipeline với bằng chứng GHCR/AWS thực. Chuẩn bị được khi EC2 tắt; chỉ deploy khi người quản trị đã dành riêng cửa sổ trống. Giữ current/previous và ảnh còn tham chiếu; không prune toàn hệ thống, không xóa volume. Archive image cũ chỉ dùng phục hồi chủ động. Camera client bàn giao giữ Follow Player, spectator giữ hành vi riêng.

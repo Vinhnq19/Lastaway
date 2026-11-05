@@ -67,12 +67,14 @@ namespace JungleMaze.App.Lobby
     /// <summary>One leaderboard row of a stored match; keyed by session, not by name (AC37).</summary>
     public readonly struct LeaderboardEntry
     {
+        public readonly bool IsBot;
         public readonly string SessionId, Name;
         public readonly int Rank, Kills;
         public readonly double SurvivalSeconds;
 
-        public LeaderboardEntry(string sessionId, string name, int rank, int kills, double survivalSeconds)
+        public LeaderboardEntry(string sessionId, string name, int rank, int kills, double survivalSeconds, bool isBot = false)
         {
+            IsBot = isBot;
             SessionId = sessionId ?? "";
             Name = name ?? "";
             Rank = rank;

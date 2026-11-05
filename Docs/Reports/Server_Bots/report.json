@@ -1,0 +1,2801 @@
+{
+  "schemaVersion": 1,
+  "updatedUtc": "2026-11-05T03:28:51.205285+00:00",
+  "status": "PASS_WITH_LIMITS",
+  "botModuleChecks": 159,
+  "matchResultChecks": 85,
+  "unityEditMode": {
+    "passed": 910,
+    "total": 910
+  },
+  "unityPlayMode": {
+    "passed": 133,
+    "total": 133
+  },
+  "configuration": {
+    "roomCapacity": 10,
+    "rooms": 5,
+    "totalParticipants": 50,
+    "minPlayers": 6,
+    "accountHandshake": 4,
+    "gameplayProtocol": 3,
+    "offlineBots": false
+  },
+  "environment": {
+    "os": "Windows-11-10.0.26300-SP0",
+    "logicalCpu": 16,
+    "dotnetSdk": "10.0.401",
+    "gitHead": "abc83657668ce87e557cc5504b5ddea19e89efbd",
+    "branch": "codex/server-bots-20261103",
+    "uncommittedChanges": true,
+    "unity": "6000.3.15f1",
+    "playerFingerprint": "d731a1b9a33a006ddcbca581d346a591117d8434256aecd30ed5777adf2b2bf1",
+    "playerSha256": "4e33a14c3ec94bf336fcdef8e56429f865a2bf5fef67261aa64713b15bf75d0b",
+    "release": "bots-20261105-r2",
+    "releaseSha256": "97a230a9495caa5bd715d7ae771d9025acc09580ca9ebf15c90e15e22c32be1c",
+    "graphNodes": 19379,
+    "graphEdges": 73467,
+    "physicalTwoPc": "NOT_TESTED"
+  },
+  "backendRegression": [
+    {
+      "suite": "MatchChecks",
+      "status": "PASS",
+      "exitCode": 0,
+      "seconds": 7.65
+    },
+    {
+      "suite": "MatchResultChecks",
+      "status": "PASS",
+      "exitCode": 0,
+      "seconds": 11.58
+    },
+    {
+      "suite": "InventoryChecks",
+      "status": "PASS",
+      "exitCode": 0,
+      "seconds": 3.17
+    },
+    {
+      "suite": "CombatChecks",
+      "status": "PASS",
+      "exitCode": 0,
+      "seconds": 4.04
+    },
+    {
+      "suite": "WorldChecks",
+      "status": "PASS",
+      "exitCode": 0,
+      "seconds": 5.07
+    },
+    {
+      "suite": "MapCatalogChecks",
+      "status": "PASS",
+      "exitCode": 0,
+      "seconds": 6.09
+    },
+    {
+      "suite": "TelemetryChecks",
+      "status": "PASS",
+      "exitCode": 0,
+      "seconds": 7.6
+    },
+    {
+      "suite": "NetworkChecks",
+      "status": "PASS",
+      "exitCode": 0,
+      "seconds": 44.52
+    },
+    {
+      "suite": "DualTransportChecks",
+      "status": "PASS",
+      "exitCode": 0,
+      "seconds": 17.19
+    },
+    {
+      "suite": "GameplayNetworkChecks",
+      "status": "PASS",
+      "exitCode": 0,
+      "seconds": 41.4
+    },
+    {
+      "suite": "WorldNetworkChecks",
+      "status": "PASS",
+      "exitCode": 0,
+      "seconds": 11.69
+    }
+  ],
+  "performance": {
+    "localUdp": {
+      "windows": 60,
+      "minHz": 29.97,
+      "maxHz": 30.2,
+      "cpuOneCorePercent": 6.6,
+      "workingSetMiB": 111.21,
+      "droppedTicks": 0.0,
+      "botPathNodesMax": 483.0,
+      "botPathPendingMax": 0.0,
+      "tickMaxMs": 34.992
+    },
+    "localWs": {
+      "windows": 60,
+      "minHz": 29.97,
+      "maxHz": 30.2,
+      "dropped": 0,
+      "cpuOneCorePercent": 8.4,
+      "workingSetMiB": 122.96,
+      "tickMaxMs": 43.019,
+      "botPathNodesMax": 663.0,
+      "botPathPendingMax": 0.0
+    },
+    "localStressFailed": {
+      "windows": 11,
+      "participants": 50,
+      "bots": 45,
+      "durationSeconds": 60,
+      "memoryLimitMiB": 256,
+      "minHz": 29.59,
+      "maxHz": 30.16,
+      "droppedTicks": 1,
+      "cpuOneCorePercent": 25.39,
+      "workingSetMiB": 74.07,
+      "tickMaxMs": 87.063,
+      "botPathNodesMax": 908.0,
+      "botPathPendingMax": 0.0
+    },
+    "localStressLatest": {
+      "windows": 11,
+      "participants": 50,
+      "bots": 45,
+      "durationSeconds": 60,
+      "memoryLimitMiB": 256,
+      "minHz": 29.79,
+      "maxHz": 30.18,
+      "droppedTicks": 0,
+      "cpuOneCorePercent": 25.6,
+      "workingSetMiB": 72.83,
+      "tickMaxMs": 74.436,
+      "botPathNodesMax": 925.0,
+      "botPathPendingMax": 0.0
+    },
+    "awsBaselineFailed": {
+      "windows": 59,
+      "minHz": 29.38,
+      "maxHz": 30.2,
+      "dropped": 3,
+      "cpuOneCorePercent": 20.19,
+      "workingSetMiB": 118.29,
+      "tickMaxMs": 139.174,
+      "botPathNodesMax": 586.0,
+      "botPathPendingMax": 0.0,
+      "memoryLimitMiB": 256.0,
+      "cgroupPeakMiB": 67.14453125,
+      "restarts": 0,
+      "oom": false
+    },
+    "awsLatest": {
+      "windows": 59,
+      "minHz": 29.96,
+      "maxHz": 30.19,
+      "droppedTicks": 0,
+      "cpuOneCorePercent": 20.0,
+      "workingSetMiB": 120.43,
+      "tickMaxMs": 130.97,
+      "botPathNodesMax": 500.0,
+      "botPathPendingMax": 0.0,
+      "memoryLimitMiB": 256.0,
+      "cgroupPeakMiB": 65.76171875,
+      "restarts": 0,
+      "oom": false
+    }
+  },
+  "persistence": {
+    "local": {
+      "status": "PASS",
+      "checks": [
+        {
+          "name": "actual Mongo insert",
+          "status": "PASS"
+        },
+        {
+          "name": "identical replay idempotent",
+          "status": "PASS"
+        },
+        {
+          "name": "same MatchId changed result conflict",
+          "status": "PASS"
+        },
+        {
+          "name": "bot cannot own account profile",
+          "status": "PASS"
+        },
+        {
+          "name": "HumanOnly cannot contain bots",
+          "status": "PASS"
+        },
+        {
+          "name": "one Mongo document",
+          "status": "PASS"
+        },
+        {
+          "name": "public leaderboard WithBots/BOT winner",
+          "status": "PASS"
+        },
+        {
+          "name": "public leaderboard hides profiles",
+          "status": "PASS"
+        },
+        {
+          "name": "real Unity rounds persisted WithBots",
+          "status": "PASS"
+        },
+        {
+          "name": "real bots have no profile key",
+          "status": "PASS"
+        }
+      ],
+      "recentUnityRounds": [
+        {
+          "kind": "WithBots",
+          "count": 10,
+          "bots": 9,
+          "botProfiles": 0
+        },
+        {
+          "kind": "WithBots",
+          "count": 10,
+          "bots": 9,
+          "botProfiles": 0
+        },
+        {
+          "kind": "WithBots",
+          "count": 10,
+          "bots": 9,
+          "botProfiles": 0
+        }
+      ],
+      "fixtureRemoved": true
+    },
+    "aws": {
+      "status": "PASS",
+      "newWithBotsResults": 2,
+      "oldResultsPreserved": 2,
+      "botProfilesAbsent": true,
+      "accountProfilesPresent": true,
+      "secretFileUnchanged": true,
+      "mongoMountsUnchanged": true
+    }
+  },
+  "accountGuard": {
+    "status": "PASS",
+    "transport": "Wss",
+    "endpoint": "junglemaze.duckdns.org",
+    "checks": [
+      {
+        "version": 3,
+        "expected": "AuthRequired",
+        "status": "PASS"
+      },
+      {
+        "version": 4,
+        "expected": "InvalidTicket",
+        "status": "PASS"
+      }
+    ]
+  },
+  "awsClosure": {
+    "startedUtc": "2026-11-05T02:56:01.184419+00:00",
+    "softDeadlineUtc": "2026-11-05T03:11:01.184419+00:00",
+    "hardDeadlineUtc": "2026-11-05T03:16:01.184419+00:00",
+    "keepInstanceRunning": true,
+    "userApprovedAdditionalWindow": true,
+    "finishedUtc": "2026-11-05T03:15:16.625803+00:00",
+    "runningConfirmed": true,
+    "allOwnedClientsClosed": true,
+    "testRoomsRemoved": true,
+    "collectorStopped": true,
+    "finalRelease": "bots-20261105-r2"
+  },
+  "runs": [
+    {
+      "case": "local-1plus5-preflight",
+      "environment": "Local",
+      "serverStage": "pre-hotfix",
+      "status": "FAIL",
+      "clients": [
+        {
+          "status": "FAIL",
+          "exitCode": -1073741819,
+          "transport": "Udp",
+          "fallbackReason": "",
+          "metrics": {
+            "elapsedSeconds": 26.41349220275879,
+            "connectedSeconds": 25.00567054748535,
+            "snapshots": 283,
+            "inputs": 262,
+            "ignoredPackets": 0,
+            "catchupDrops": 1,
+            "maxPlayers": 6,
+            "completedMatches": 0,
+            "inputHz": 29.14298720005746,
+            "activeInputSeconds": 8.990155957639217,
+            "snapshotHz": 29.97991560529991,
+            "snapshotSeconds": 9.439652990549803,
+            "rttP50Ms": 33.3482,
+            "rttP95Ms": 66.6481,
+            "rttP99Ms": 70.0975,
+            "pings": 25,
+            "pongs": 25,
+            "pongTimeouts": 0
+          },
+          "assertions": [
+            {
+              "id": "joined",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "playersVisible",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "movement",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "zone",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "hpDamage",
+              "status": "NOT_OBSERVED",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "result",
+              "status": "NOT_OBSERVED",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "replay",
+              "status": "NOT_OBSERVED",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "history",
+              "status": "NOT_OBSERVED",
+              "detail": "Observed during this run"
+            }
+          ]
+        }
+      ],
+      "apiChecks": {
+        "schemaVersion": 1,
+        "status": "FAIL",
+        "endpoint": "http://127.0.0.1:5000",
+        "physicalDeviceCount": 1,
+        "startupStaggerMs": 100,
+        "checks": [
+          {
+            "name": "HTTPS certificate and API health",
+            "status": "PASS"
+          },
+          {
+            "name": "Room creation without JWT denied",
+            "status": "PASS"
+          },
+          {
+            "name": "Invalid JWT denied",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest profile over HTTPS",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest credential present",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest cannot obtain game ticket",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest cannot create rooms",
+            "status": "PASS"
+          },
+          {
+            "name": "Register test account",
+            "status": "PASS"
+          },
+          {
+            "name": "Login after verified registration",
+            "status": "PASS"
+          },
+          {
+            "name": "JWT creates room",
+            "status": "PASS"
+          },
+          {
+            "name": "Six character join code",
+            "status": "PASS"
+          },
+          {
+            "name": "Actual Windows players completed scenario",
+            "status": "FAIL"
+          }
+        ],
+        "cleanupErrors": [],
+        "reason": "Remote test failed; see sanitized check list and player evidence. DNS/TLS/connectivity failures are BLOCKED.",
+        "errorType": "System.Management.Automation.RuntimeException"
+      }
+    },
+    {
+      "case": "local-1plus5-no-uia",
+      "environment": "Local",
+      "serverStage": "pre-hotfix",
+      "status": "PASS",
+      "clients": [
+        {
+          "status": "PASS",
+          "exitCode": 0,
+          "transport": "Udp",
+          "fallbackReason": "",
+          "metrics": {
+            "elapsedSeconds": 26.345117568969727,
+            "connectedSeconds": 25.015932083129883,
+            "snapshots": 285,
+            "inputs": 281,
+            "ignoredPackets": 0,
+            "catchupDrops": 1,
+            "maxPlayers": 6,
+            "completedMatches": 0,
+            "inputHz": 29.586088231572337,
+            "activeInputSeconds": 9.497707091271877,
+            "snapshotHz": 29.90227278462498,
+            "snapshotSeconds": 9.531048092991114,
+            "rttP50Ms": 33.3821,
+            "rttP95Ms": 34.5694,
+            "rttP99Ms": 38.004,
+            "pings": 25,
+            "pongs": 25,
+            "pongTimeouts": 0
+          },
+          "assertions": [
+            {
+              "id": "joined",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "playersVisible",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "movement",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "zone",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "hpDamage",
+              "status": "NOT_OBSERVED",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "result",
+              "status": "NOT_OBSERVED",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "replay",
+              "status": "NOT_OBSERVED",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "history",
+              "status": "NOT_OBSERVED",
+              "detail": "Observed during this run"
+            }
+          ]
+        }
+      ],
+      "apiChecks": {
+        "schemaVersion": 1,
+        "status": "PASS",
+        "endpoint": "http://127.0.0.1:5000",
+        "physicalDeviceCount": 1,
+        "startupStaggerMs": 100,
+        "checks": [
+          {
+            "name": "HTTPS certificate and API health",
+            "status": "PASS"
+          },
+          {
+            "name": "Room creation without JWT denied",
+            "status": "PASS"
+          },
+          {
+            "name": "Invalid JWT denied",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest profile over HTTPS",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest credential present",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest cannot obtain game ticket",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest cannot create rooms",
+            "status": "PASS"
+          },
+          {
+            "name": "Register test account",
+            "status": "PASS"
+          },
+          {
+            "name": "Login after verified registration",
+            "status": "PASS"
+          },
+          {
+            "name": "JWT creates room",
+            "status": "PASS"
+          },
+          {
+            "name": "Six character join code",
+            "status": "PASS"
+          },
+          {
+            "name": "Actual Windows players completed scenario",
+            "status": "PASS"
+          },
+          {
+            "name": "Forced WSS players actually joined through WSS",
+            "status": "PASS"
+          }
+        ],
+        "cleanupErrors": []
+      }
+    },
+    {
+      "case": "local-1plus9-main",
+      "environment": "Local",
+      "serverStage": "pre-hotfix",
+      "status": "FAIL",
+      "clients": [
+        {
+          "status": "FAIL",
+          "exitCode": 1,
+          "transport": "Wss",
+          "fallbackReason": "ConnectTimeout",
+          "metrics": {
+            "elapsedSeconds": 163.6542205810547,
+            "connectedSeconds": 133.69082641601562,
+            "snapshots": 3488,
+            "inputs": 1498,
+            "ignoredPackets": 0,
+            "catchupDrops": 2,
+            "maxPlayers": 10,
+            "completedMatches": 0,
+            "inputHz": 29.717570810435056,
+            "activeInputSeconds": 50.40788863785565,
+            "snapshotHz": 29.570388217570304,
+            "snapshotSeconds": 117.95584063138813,
+            "rttP50Ms": 33.3662,
+            "rttP95Ms": 109.6687,
+            "rttP99Ms": 430.9854,
+            "pings": 134,
+            "pongs": 133,
+            "pongTimeouts": 0
+          },
+          "assertions": [
+            {
+              "id": "joined",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "playersVisible",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "movement",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "zone",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "hpDamage",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "result",
+              "status": "NOT_OBSERVED",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "replay",
+              "status": "NOT_OBSERVED",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "history",
+              "status": "NOT_OBSERVED",
+              "detail": "Observed during this run"
+            }
+          ]
+        }
+      ],
+      "apiChecks": {
+        "schemaVersion": 1,
+        "status": "FAIL",
+        "endpoint": "http://127.0.0.1:5000",
+        "physicalDeviceCount": 1,
+        "startupStaggerMs": 100,
+        "checks": [
+          {
+            "name": "HTTPS certificate and API health",
+            "status": "PASS"
+          },
+          {
+            "name": "Room creation without JWT denied",
+            "status": "PASS"
+          },
+          {
+            "name": "Invalid JWT denied",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest profile over HTTPS",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest credential present",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest cannot obtain game ticket",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest cannot create rooms",
+            "status": "PASS"
+          },
+          {
+            "name": "Register test account",
+            "status": "PASS"
+          },
+          {
+            "name": "Login after verified registration",
+            "status": "PASS"
+          },
+          {
+            "name": "JWT creates room",
+            "status": "PASS"
+          },
+          {
+            "name": "Six character join code",
+            "status": "PASS"
+          },
+          {
+            "name": "Actual Windows players completed scenario",
+            "status": "FAIL"
+          }
+        ],
+        "cleanupErrors": [],
+        "fallbackTest": "Unused UDP7779, same real WSS443 endpoint; no firewall changes",
+        "reason": "Remote test failed; see sanitized check list and player evidence. DNS/TLS/connectivity failures are BLOCKED.",
+        "errorType": "System.Management.Automation.RuntimeException"
+      }
+    },
+    {
+      "case": "local-1plus9-udp",
+      "environment": "Local",
+      "serverStage": "pre-hotfix",
+      "status": "PASS",
+      "clients": [
+        {
+          "status": "PASS",
+          "exitCode": 0,
+          "transport": "Udp",
+          "fallbackReason": "",
+          "metrics": {
+            "elapsedSeconds": 301.41326904296875,
+            "connectedSeconds": 300.0312194824219,
+            "snapshots": 7622,
+            "inputs": 5866,
+            "ignoredPackets": 0,
+            "catchupDrops": 0,
+            "maxPlayers": 10,
+            "completedMatches": 2,
+            "inputHz": 29.995675182311736,
+            "activeInputSeconds": 195.56152559816837,
+            "snapshotHz": 30.00300067220488,
+            "snapshotSeconds": 254.0412568487227,
+            "rttP50Ms": 33.3311,
+            "rttP95Ms": 33.4379,
+            "rttP99Ms": 66.406,
+            "pings": 301,
+            "pongs": 300,
+            "pongTimeouts": 0
+          },
+          "assertions": [
+            {
+              "id": "joined",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "playersVisible",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "movement",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "zone",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "hpDamage",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "result",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "replay",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "history",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            }
+          ]
+        }
+      ],
+      "apiChecks": {
+        "schemaVersion": 1,
+        "status": "PASS",
+        "endpoint": "http://127.0.0.1:5000",
+        "physicalDeviceCount": 1,
+        "startupStaggerMs": 100,
+        "checks": [
+          {
+            "name": "HTTPS certificate and API health",
+            "status": "PASS"
+          },
+          {
+            "name": "Room creation without JWT denied",
+            "status": "PASS"
+          },
+          {
+            "name": "Invalid JWT denied",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest profile over HTTPS",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest credential present",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest cannot obtain game ticket",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest cannot create rooms",
+            "status": "PASS"
+          },
+          {
+            "name": "Register test account",
+            "status": "PASS"
+          },
+          {
+            "name": "Login after verified registration",
+            "status": "PASS"
+          },
+          {
+            "name": "JWT creates room",
+            "status": "PASS"
+          },
+          {
+            "name": "Six character join code",
+            "status": "PASS"
+          },
+          {
+            "name": "Actual Windows players completed scenario",
+            "status": "PASS"
+          },
+          {
+            "name": "Forced WSS players actually joined through WSS",
+            "status": "PASS"
+          }
+        ],
+        "cleanupErrors": []
+      }
+    },
+    {
+      "case": "local-1plus9-ws-keepawake",
+      "environment": "Local",
+      "serverStage": "pre-hotfix",
+      "status": "PASS",
+      "clients": [
+        {
+          "status": "PASS",
+          "exitCode": 0,
+          "transport": "Wss",
+          "fallbackReason": "ConnectTimeout",
+          "metrics": {
+            "elapsedSeconds": 307.3812561035156,
+            "connectedSeconds": 300.00665283203125,
+            "snapshots": 8059,
+            "inputs": 4858,
+            "ignoredPackets": 0,
+            "catchupDrops": 1,
+            "maxPlayers": 10,
+            "completedMatches": 1,
+            "inputHz": 29.952420525256322,
+            "activeInputSeconds": 162.19056472927332,
+            "snapshotHz": 29.995364314433285,
+            "snapshotSeconds": 268.6748497374356,
+            "rttP50Ms": 33.3423,
+            "rttP95Ms": 33.4636,
+            "rttP99Ms": 33.9821,
+            "pings": 299,
+            "pongs": 299,
+            "pongTimeouts": 0
+          },
+          "assertions": [
+            {
+              "id": "joined",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "playersVisible",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "movement",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "zone",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "hpDamage",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "result",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "replay",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "history",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            }
+          ]
+        }
+      ],
+      "apiChecks": {
+        "schemaVersion": 1,
+        "status": "PASS",
+        "endpoint": "http://127.0.0.1:5000",
+        "physicalDeviceCount": 1,
+        "startupStaggerMs": 100,
+        "checks": [
+          {
+            "name": "HTTPS certificate and API health",
+            "status": "PASS"
+          },
+          {
+            "name": "Room creation without JWT denied",
+            "status": "PASS"
+          },
+          {
+            "name": "Invalid JWT denied",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest profile over HTTPS",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest credential present",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest cannot obtain game ticket",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest cannot create rooms",
+            "status": "PASS"
+          },
+          {
+            "name": "Register test account",
+            "status": "PASS"
+          },
+          {
+            "name": "Login after verified registration",
+            "status": "PASS"
+          },
+          {
+            "name": "JWT creates room",
+            "status": "PASS"
+          },
+          {
+            "name": "Six character join code",
+            "status": "PASS"
+          },
+          {
+            "name": "Actual Windows players completed scenario",
+            "status": "PASS"
+          },
+          {
+            "name": "Auto selected WSS after deliberate UDP failure",
+            "status": "PASS"
+          }
+        ],
+        "cleanupErrors": [],
+        "fallbackTest": "Unused UDP7779, same real WSS443 endpoint; no firewall changes"
+      }
+    },
+    {
+      "case": "local-1plus9-ws-isolated",
+      "environment": "Local",
+      "serverStage": "pre-hotfix",
+      "status": "PASS",
+      "clients": [
+        {
+          "status": "PASS",
+          "exitCode": 0,
+          "transport": "Wss",
+          "fallbackReason": "ConnectTimeout",
+          "metrics": {
+            "elapsedSeconds": 306.4373779296875,
+            "connectedSeconds": 300.0226745605469,
+            "snapshots": 8077,
+            "inputs": 4947,
+            "ignoredPackets": 0,
+            "catchupDrops": 0,
+            "maxPlayers": 10,
+            "completedMatches": 1,
+            "inputHz": 29.99525402877116,
+            "activeInputSeconds": 164.92609114944935,
+            "snapshotHz": 29.999047482305535,
+            "snapshotSeconds": 269.2418819218874,
+            "rttP50Ms": 33.3418,
+            "rttP95Ms": 33.4394,
+            "rttP99Ms": 33.5576,
+            "pings": 300,
+            "pongs": 300,
+            "pongTimeouts": 0
+          },
+          "assertions": [
+            {
+              "id": "joined",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "playersVisible",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "movement",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "zone",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "hpDamage",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "result",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "replay",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "history",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            }
+          ]
+        }
+      ],
+      "apiChecks": {
+        "schemaVersion": 1,
+        "status": "PASS",
+        "endpoint": "http://127.0.0.1:5000",
+        "physicalDeviceCount": 1,
+        "startupStaggerMs": 100,
+        "checks": [
+          {
+            "name": "HTTPS certificate and API health",
+            "status": "PASS"
+          },
+          {
+            "name": "Room creation without JWT denied",
+            "status": "PASS"
+          },
+          {
+            "name": "Invalid JWT denied",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest profile over HTTPS",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest credential present",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest cannot obtain game ticket",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest cannot create rooms",
+            "status": "PASS"
+          },
+          {
+            "name": "Register test account",
+            "status": "PASS"
+          },
+          {
+            "name": "Login after verified registration",
+            "status": "PASS"
+          },
+          {
+            "name": "JWT creates room",
+            "status": "PASS"
+          },
+          {
+            "name": "Six character join code",
+            "status": "PASS"
+          },
+          {
+            "name": "Actual Windows players completed scenario",
+            "status": "PASS"
+          },
+          {
+            "name": "Auto selected WSS after deliberate UDP failure",
+            "status": "PASS"
+          }
+        ],
+        "cleanupErrors": [],
+        "fallbackTest": "Unused UDP7779, same real WSS443 endpoint; no firewall changes"
+      }
+    },
+    {
+      "case": "local-ancient-1plus5-after-quota",
+      "environment": "Local",
+      "serverStage": "pre-hotfix",
+      "status": "PASS",
+      "clients": [
+        {
+          "status": "PASS",
+          "exitCode": 0,
+          "transport": "Udp",
+          "fallbackReason": "",
+          "metrics": {
+            "elapsedSeconds": 222.06724548339844,
+            "connectedSeconds": 220.68417358398438,
+            "snapshots": 5700,
+            "inputs": 1546,
+            "ignoredPackets": 0,
+            "catchupDrops": 1,
+            "maxPlayers": 6,
+            "completedMatches": 1,
+            "inputHz": 29.854161232615258,
+            "activeInputSeconds": 51.78507572039962,
+            "snapshotHz": 29.996811185410163,
+            "snapshotSeconds": 190.0201979726553,
+            "rttP50Ms": 33.3277,
+            "rttP95Ms": 33.4784,
+            "rttP99Ms": 66.7058,
+            "pings": 221,
+            "pongs": 221,
+            "pongTimeouts": 0
+          },
+          "assertions": [
+            {
+              "id": "joined",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "playersVisible",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "movement",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "zone",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "hpDamage",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "result",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "replay",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "history",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            }
+          ]
+        }
+      ],
+      "apiChecks": {
+        "schemaVersion": 1,
+        "status": "PASS",
+        "endpoint": "http://127.0.0.1:5000",
+        "physicalDeviceCount": 1,
+        "startupStaggerMs": 100,
+        "checks": [
+          {
+            "name": "HTTPS certificate and API health",
+            "status": "PASS"
+          },
+          {
+            "name": "Room creation without JWT denied",
+            "status": "PASS"
+          },
+          {
+            "name": "Invalid JWT denied",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest profile over HTTPS",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest credential present",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest cannot obtain game ticket",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest cannot create rooms",
+            "status": "PASS"
+          },
+          {
+            "name": "Register test account",
+            "status": "PASS"
+          },
+          {
+            "name": "Login after verified registration",
+            "status": "PASS"
+          },
+          {
+            "name": "JWT creates room",
+            "status": "PASS"
+          },
+          {
+            "name": "Six character join code",
+            "status": "PASS"
+          },
+          {
+            "name": "Actual Windows players completed scenario",
+            "status": "PASS"
+          },
+          {
+            "name": "Forced WSS players actually joined through WSS",
+            "status": "PASS"
+          }
+        ],
+        "cleanupErrors": []
+      }
+    },
+    {
+      "case": "local-ancient-2plus4",
+      "environment": "Local",
+      "serverStage": "pre-hotfix",
+      "status": "PASS",
+      "clients": [
+        {
+          "status": "PASS",
+          "exitCode": 0,
+          "transport": "Wss",
+          "fallbackReason": "",
+          "metrics": {
+            "elapsedSeconds": 75.48509216308594,
+            "connectedSeconds": 74.06873321533203,
+            "snapshots": 1302,
+            "inputs": 548,
+            "ignoredPackets": 0,
+            "catchupDrops": 1,
+            "maxPlayers": 6,
+            "completedMatches": 1,
+            "inputHz": 29.61712770549945,
+            "activeInputSeconds": 18.502807073295116,
+            "snapshotHz": 29.991771399685895,
+            "snapshotSeconds": 43.41190730780363,
+            "rttP50Ms": 33.3553,
+            "rttP95Ms": 35.3764,
+            "rttP99Ms": 66.6569,
+            "pings": 75,
+            "pongs": 75,
+            "pongTimeouts": 0
+          },
+          "assertions": [
+            {
+              "id": "joined",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "playersVisible",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "movement",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "zone",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "hpDamage",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "result",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "replay",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "history",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            }
+          ]
+        },
+        {
+          "status": "PASS",
+          "exitCode": 0,
+          "transport": "Udp",
+          "fallbackReason": "",
+          "metrics": {
+            "elapsedSeconds": 75.52224731445312,
+            "connectedSeconds": 74.05680084228516,
+            "snapshots": 1302,
+            "inputs": 241,
+            "ignoredPackets": 0,
+            "catchupDrops": 1,
+            "maxPlayers": 6,
+            "completedMatches": 1,
+            "inputHz": 29.072373910400938,
+            "activeInputSeconds": 8.289656728506088,
+            "snapshotHz": 29.9775202679255,
+            "snapshotSeconds": 43.43254506587982,
+            "rttP50Ms": 33.0893,
+            "rttP95Ms": 64.5339,
+            "rttP99Ms": 66.9219,
+            "pings": 75,
+            "pongs": 74,
+            "pongTimeouts": 0
+          },
+          "assertions": [
+            {
+              "id": "joined",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "playersVisible",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "movement",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "zone",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "hpDamage",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "result",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "replay",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "history",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            }
+          ]
+        }
+      ],
+      "apiChecks": {
+        "schemaVersion": 1,
+        "status": "PASS",
+        "endpoint": "http://127.0.0.1:5000",
+        "physicalDeviceCount": 1,
+        "startupStaggerMs": 100,
+        "checks": [
+          {
+            "name": "HTTPS certificate and API health",
+            "status": "PASS"
+          },
+          {
+            "name": "Room creation without JWT denied",
+            "status": "PASS"
+          },
+          {
+            "name": "Invalid JWT denied",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest profile over HTTPS",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest credential present",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest cannot obtain game ticket",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest cannot create rooms",
+            "status": "PASS"
+          },
+          {
+            "name": "Register test account",
+            "status": "PASS"
+          },
+          {
+            "name": "Login after verified registration",
+            "status": "PASS"
+          },
+          {
+            "name": "JWT creates room",
+            "status": "PASS"
+          },
+          {
+            "name": "Six character join code",
+            "status": "PASS"
+          },
+          {
+            "name": "Actual Windows players completed scenario",
+            "status": "PASS"
+          },
+          {
+            "name": "Forced WSS players actually joined through WSS",
+            "status": "PASS"
+          }
+        ],
+        "cleanupErrors": []
+      }
+    },
+    {
+      "case": "local-rocks-1plus5",
+      "environment": "Local",
+      "serverStage": "pre-hotfix",
+      "status": "PASS",
+      "clients": [
+        {
+          "status": "PASS",
+          "exitCode": 0,
+          "transport": "Wss",
+          "fallbackReason": "ConnectTimeout",
+          "metrics": {
+            "elapsedSeconds": 131.76109313964844,
+            "connectedSeconds": 125.29940795898438,
+            "snapshots": 2838,
+            "inputs": 1515,
+            "ignoredPackets": 0,
+            "catchupDrops": 1,
+            "maxPlayers": 6,
+            "completedMatches": 1,
+            "inputHz": 29.849724164894134,
+            "activeInputSeconds": 50.75423784926534,
+            "snapshotHz": 29.994469303480304,
+            "snapshotSeconds": 94.61744334548712,
+            "rttP50Ms": 33.3373,
+            "rttP95Ms": 33.4662,
+            "rttP99Ms": 33.6202,
+            "pings": 126,
+            "pongs": 126,
+            "pongTimeouts": 0
+          },
+          "assertions": [
+            {
+              "id": "joined",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "playersVisible",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "movement",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "zone",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "hpDamage",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "result",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "replay",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "history",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            }
+          ]
+        }
+      ],
+      "apiChecks": {
+        "schemaVersion": 1,
+        "status": "PASS",
+        "endpoint": "http://127.0.0.1:5000",
+        "physicalDeviceCount": 1,
+        "startupStaggerMs": 100,
+        "checks": [
+          {
+            "name": "HTTPS certificate and API health",
+            "status": "PASS"
+          },
+          {
+            "name": "Room creation without JWT denied",
+            "status": "PASS"
+          },
+          {
+            "name": "Invalid JWT denied",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest profile over HTTPS",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest credential present",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest cannot obtain game ticket",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest cannot create rooms",
+            "status": "PASS"
+          },
+          {
+            "name": "Register test account",
+            "status": "PASS"
+          },
+          {
+            "name": "Login after verified registration",
+            "status": "PASS"
+          },
+          {
+            "name": "JWT creates room",
+            "status": "PASS"
+          },
+          {
+            "name": "Six character join code",
+            "status": "PASS"
+          },
+          {
+            "name": "Actual Windows players completed scenario",
+            "status": "PASS"
+          },
+          {
+            "name": "Auto selected WSS after deliberate UDP failure",
+            "status": "PASS"
+          }
+        ],
+        "cleanupErrors": [],
+        "fallbackTest": "Unused UDP7779, same real WSS443 endpoint; no firewall changes"
+      }
+    },
+    {
+      "case": "local-rocks-2plus4",
+      "environment": "Local",
+      "serverStage": "pre-hotfix",
+      "status": "PASS",
+      "clients": [
+        {
+          "status": "PASS",
+          "exitCode": 0,
+          "transport": "Wss",
+          "fallbackReason": "ConnectTimeout",
+          "metrics": {
+            "elapsedSeconds": 91.23611450195312,
+            "connectedSeconds": 84.8083267211914,
+            "snapshots": 1620,
+            "inputs": 1513,
+            "ignoredPackets": 0,
+            "catchupDrops": 1,
+            "maxPlayers": 6,
+            "completedMatches": 1,
+            "inputHz": 29.858079161005975,
+            "activeInputSeconds": 50.673052068799734,
+            "snapshotHz": 29.99451114346354,
+            "snapshotSeconds": 54.009881749749184,
+            "rttP50Ms": 33.3401,
+            "rttP95Ms": 33.4478,
+            "rttP99Ms": 60.7531,
+            "pings": 85,
+            "pongs": 85,
+            "pongTimeouts": 0
+          },
+          "assertions": [
+            {
+              "id": "joined",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "playersVisible",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "movement",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "zone",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "hpDamage",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "result",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "replay",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "history",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            }
+          ]
+        },
+        {
+          "status": "PASS",
+          "exitCode": 0,
+          "transport": "Wss",
+          "fallbackReason": "ConnectTimeout",
+          "metrics": {
+            "elapsedSeconds": 91.08744812011719,
+            "connectedSeconds": 84.63185119628906,
+            "snapshots": 1620,
+            "inputs": 279,
+            "ignoredPackets": 0,
+            "catchupDrops": 1,
+            "maxPlayers": 6,
+            "completedMatches": 1,
+            "inputHz": 29.171458418387875,
+            "activeInputSeconds": 9.564143005758524,
+            "snapshotHz": 29.986954565651015,
+            "snapshotSeconds": 54.023491997271776,
+            "rttP50Ms": 33.3372,
+            "rttP95Ms": 33.4087,
+            "rttP99Ms": 63.1389,
+            "pings": 85,
+            "pongs": 85,
+            "pongTimeouts": 0
+          },
+          "assertions": [
+            {
+              "id": "joined",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "playersVisible",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "movement",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "zone",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "hpDamage",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "result",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "replay",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "history",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            }
+          ]
+        }
+      ],
+      "apiChecks": {
+        "schemaVersion": 1,
+        "status": "PASS",
+        "endpoint": "http://127.0.0.1:5000",
+        "physicalDeviceCount": 1,
+        "startupStaggerMs": 100,
+        "checks": [
+          {
+            "name": "HTTPS certificate and API health",
+            "status": "PASS"
+          },
+          {
+            "name": "Room creation without JWT denied",
+            "status": "PASS"
+          },
+          {
+            "name": "Invalid JWT denied",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest profile over HTTPS",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest credential present",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest cannot obtain game ticket",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest cannot create rooms",
+            "status": "PASS"
+          },
+          {
+            "name": "Register test account",
+            "status": "PASS"
+          },
+          {
+            "name": "Login after verified registration",
+            "status": "PASS"
+          },
+          {
+            "name": "JWT creates room",
+            "status": "PASS"
+          },
+          {
+            "name": "Six character join code",
+            "status": "PASS"
+          },
+          {
+            "name": "Actual Windows players completed scenario",
+            "status": "PASS"
+          },
+          {
+            "name": "Auto selected WSS after deliberate UDP failure",
+            "status": "PASS"
+          }
+        ],
+        "cleanupErrors": [],
+        "fallbackTest": "Unused UDP7779, same real WSS443 endpoint; no firewall changes"
+      }
+    },
+    {
+      "case": "local-hazard-flow",
+      "environment": "Local",
+      "serverStage": "r2",
+      "status": "PASS",
+      "clients": [
+        {
+          "status": "PASS",
+          "exitCode": 0,
+          "transport": "Wss",
+          "fallbackReason": "ConnectTimeout",
+          "metrics": {
+            "elapsedSeconds": 73.06719207763672,
+            "connectedSeconds": 66.61845397949219,
+            "snapshots": 1074,
+            "inputs": 1072,
+            "ignoredPackets": 0,
+            "catchupDrops": 0,
+            "maxPlayers": 6,
+            "completedMatches": 1,
+            "inputHz": 29.998922212712483,
+            "activeInputSeconds": 35.7346171438694,
+            "snapshotHz": 29.99892637687713,
+            "snapshotSeconds": 35.80128123611212,
+            "rttP50Ms": 33.3361,
+            "rttP95Ms": 33.4438,
+            "rttP99Ms": 35.242,
+            "pings": 67,
+            "pongs": 67,
+            "pongTimeouts": 0
+          },
+          "assertions": [
+            {
+              "id": "joined",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "playersVisible",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "movement",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "zone",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "hpDamage",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "result",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "replay",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "history",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            }
+          ]
+        }
+      ],
+      "apiChecks": {
+        "schemaVersion": 1,
+        "status": "PASS",
+        "endpoint": "http://127.0.0.1:5000",
+        "physicalDeviceCount": 1,
+        "startupStaggerMs": 100,
+        "checks": [
+          {
+            "name": "HTTPS certificate and API health",
+            "status": "PASS"
+          },
+          {
+            "name": "Room creation without JWT denied",
+            "status": "PASS"
+          },
+          {
+            "name": "Invalid JWT denied",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest profile over HTTPS",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest credential present",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest cannot obtain game ticket",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest cannot create rooms",
+            "status": "PASS"
+          },
+          {
+            "name": "Register test account",
+            "status": "PASS"
+          },
+          {
+            "name": "Login after verified registration",
+            "status": "PASS"
+          },
+          {
+            "name": "JWT creates room",
+            "status": "PASS"
+          },
+          {
+            "name": "Six character join code",
+            "status": "PASS"
+          },
+          {
+            "name": "Actual Windows players completed scenario",
+            "status": "PASS"
+          },
+          {
+            "name": "Auto selected WSS after deliberate UDP failure",
+            "status": "PASS"
+          }
+        ],
+        "cleanupErrors": [],
+        "fallbackTest": "Unused UDP7779, same real WSS443 endpoint; no firewall changes"
+      }
+    },
+    {
+      "case": "aws-1plus9-wss",
+      "environment": "AWS",
+      "serverStage": "r1",
+      "status": "PASS",
+      "clients": [
+        {
+          "status": "PASS",
+          "exitCode": 0,
+          "transport": "Wss",
+          "fallbackReason": "",
+          "metrics": {
+            "elapsedSeconds": 304.1894836425781,
+            "connectedSeconds": 300.0082702636719,
+            "snapshots": 7930,
+            "inputs": 4906,
+            "ignoredPackets": 0,
+            "catchupDrops": 0,
+            "maxPlayers": 10,
+            "completedMatches": 1,
+            "inputHz": 29.99474181812963,
+            "activeInputSeconds": 163.56200129166245,
+            "snapshotHz": 29.971263966439942,
+            "snapshotSeconds": 264.5867724791169,
+            "rttP50Ms": 266.6134,
+            "rttP95Ms": 267.0352,
+            "rttP99Ms": 400.0929,
+            "pings": 300,
+            "pongs": 300,
+            "pongTimeouts": 0
+          },
+          "assertions": [
+            {
+              "id": "joined",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "playersVisible",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "movement",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "zone",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "hpDamage",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "result",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "replay",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "history",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            }
+          ]
+        }
+      ],
+      "apiChecks": {
+        "schemaVersion": 1,
+        "status": "PASS",
+        "endpoint": "https://junglemaze.duckdns.org",
+        "physicalDeviceCount": 1,
+        "startupStaggerMs": 100,
+        "checks": [
+          {
+            "name": "HTTPS certificate and API health",
+            "status": "PASS"
+          },
+          {
+            "name": "Room creation without JWT denied",
+            "status": "PASS"
+          },
+          {
+            "name": "Invalid JWT denied",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest profile over HTTPS",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest credential present",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest cannot obtain game ticket",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest cannot create rooms",
+            "status": "PASS"
+          },
+          {
+            "name": "Register test account",
+            "status": "PASS"
+          },
+          {
+            "name": "Login after verified registration",
+            "status": "PASS"
+          },
+          {
+            "name": "JWT creates room",
+            "status": "PASS"
+          },
+          {
+            "name": "Six character join code",
+            "status": "PASS"
+          },
+          {
+            "name": "Actual Windows players completed scenario",
+            "status": "PASS"
+          },
+          {
+            "name": "Forced WSS players actually joined through WSS",
+            "status": "PASS"
+          }
+        ],
+        "cleanupErrors": []
+      }
+    },
+    {
+      "case": "aws-2plus4-auto",
+      "environment": "AWS",
+      "serverStage": "r1",
+      "status": "PASS",
+      "clients": [
+        {
+          "status": "PASS",
+          "exitCode": 0,
+          "transport": "Wss",
+          "fallbackReason": "ConnectTimeout",
+          "metrics": {
+            "elapsedSeconds": 92.37501525878906,
+            "connectedSeconds": 83.81848907470703,
+            "snapshots": 1531,
+            "inputs": 1529,
+            "ignoredPackets": 0,
+            "catchupDrops": 0,
+            "maxPlayers": 6,
+            "completedMatches": 1,
+            "inputHz": 29.99043114433877,
+            "activeInputSeconds": 50.98292827606201,
+            "snapshotHz": 29.990402673772877,
+            "snapshotSeconds": 51.04966467618942,
+            "rttP50Ms": 166.7129,
+            "rttP95Ms": 199.9516,
+            "rttP99Ms": 366.7123,
+            "pings": 84,
+            "pongs": 84,
+            "pongTimeouts": 0
+          },
+          "assertions": [
+            {
+              "id": "joined",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "playersVisible",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "movement",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "zone",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "hpDamage",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "result",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "replay",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "history",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            }
+          ]
+        },
+        {
+          "status": "PASS",
+          "exitCode": 0,
+          "transport": "Wss",
+          "fallbackReason": "ConnectTimeout",
+          "metrics": {
+            "elapsedSeconds": 92.11882019042969,
+            "connectedSeconds": 83.61354064941406,
+            "snapshots": 1530,
+            "inputs": 1529,
+            "ignoredPackets": 0,
+            "catchupDrops": 0,
+            "maxPlayers": 6,
+            "completedMatches": 1,
+            "inputHz": 29.996948026972447,
+            "activeInputSeconds": 50.97185215726495,
+            "snapshotHz": 29.977359360196594,
+            "snapshotSeconds": 51.0385181568563,
+            "rttP50Ms": 166.7275,
+            "rttP95Ms": 433.315,
+            "rttP99Ms": 466.79,
+            "pings": 84,
+            "pongs": 84,
+            "pongTimeouts": 0
+          },
+          "assertions": [
+            {
+              "id": "joined",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "playersVisible",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "movement",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "zone",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "hpDamage",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "result",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "replay",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "history",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            }
+          ]
+        }
+      ],
+      "apiChecks": {
+        "schemaVersion": 1,
+        "status": "PASS",
+        "endpoint": "https://junglemaze.duckdns.org",
+        "physicalDeviceCount": 1,
+        "startupStaggerMs": 100,
+        "checks": [
+          {
+            "name": "HTTPS certificate and API health",
+            "status": "PASS"
+          },
+          {
+            "name": "Room creation without JWT denied",
+            "status": "PASS"
+          },
+          {
+            "name": "Invalid JWT denied",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest profile over HTTPS",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest credential present",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest cannot obtain game ticket",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest cannot create rooms",
+            "status": "PASS"
+          },
+          {
+            "name": "Register test account",
+            "status": "PASS"
+          },
+          {
+            "name": "Login after verified registration",
+            "status": "PASS"
+          },
+          {
+            "name": "JWT creates room",
+            "status": "PASS"
+          },
+          {
+            "name": "Six character join code",
+            "status": "PASS"
+          },
+          {
+            "name": "Actual Windows players completed scenario",
+            "status": "PASS"
+          },
+          {
+            "name": "Auto selected WSS after deliberate UDP failure",
+            "status": "PASS"
+          }
+        ],
+        "cleanupErrors": [],
+        "fallbackTest": "Unused UDP7779, same real WSS443 endpoint; no firewall changes"
+      }
+    },
+    {
+      "case": "aws-r2-1plus9-wss",
+      "environment": "AWS",
+      "serverStage": "r2",
+      "status": "PASS",
+      "clients": [
+        {
+          "status": "PASS",
+          "exitCode": 0,
+          "transport": "Wss",
+          "fallbackReason": "",
+          "metrics": {
+            "elapsedSeconds": 303.8460998535156,
+            "connectedSeconds": 300.00921630859375,
+            "snapshots": 7911,
+            "inputs": 4901,
+            "ignoredPackets": 0,
+            "catchupDrops": 0,
+            "maxPlayers": 10,
+            "completedMatches": 1,
+            "inputHz": 29.994071631043457,
+            "activeInputSeconds": 163.398956310004,
+            "snapshotHz": 29.9756183546531,
+            "snapshotSeconds": 263.91448898240924,
+            "rttP50Ms": 266.6823,
+            "rttP95Ms": 300.0271,
+            "rttP99Ms": 300.408,
+            "pings": 300,
+            "pongs": 300,
+            "pongTimeouts": 0
+          },
+          "assertions": [
+            {
+              "id": "joined",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "playersVisible",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "movement",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "zone",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "hpDamage",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "result",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "replay",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "history",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            }
+          ]
+        }
+      ],
+      "apiChecks": {
+        "schemaVersion": 1,
+        "status": "PASS",
+        "endpoint": "https://junglemaze.duckdns.org",
+        "physicalDeviceCount": 1,
+        "startupStaggerMs": 100,
+        "checks": [
+          {
+            "name": "HTTPS certificate and API health",
+            "status": "PASS"
+          },
+          {
+            "name": "Room creation without JWT denied",
+            "status": "PASS"
+          },
+          {
+            "name": "Invalid JWT denied",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest profile over HTTPS",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest credential present",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest cannot obtain game ticket",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest cannot create rooms",
+            "status": "PASS"
+          },
+          {
+            "name": "Register test account",
+            "status": "PASS"
+          },
+          {
+            "name": "Login after verified registration",
+            "status": "PASS"
+          },
+          {
+            "name": "JWT creates room",
+            "status": "PASS"
+          },
+          {
+            "name": "Six character join code",
+            "status": "PASS"
+          },
+          {
+            "name": "Actual Windows players completed scenario",
+            "status": "PASS"
+          },
+          {
+            "name": "Forced WSS players actually joined through WSS",
+            "status": "PASS"
+          }
+        ],
+        "cleanupErrors": []
+      }
+    },
+    {
+      "case": "aws-r2-2plus4-auto",
+      "environment": "AWS",
+      "serverStage": "r2",
+      "status": "PASS",
+      "clients": [
+        {
+          "status": "PASS",
+          "exitCode": 0,
+          "transport": "Wss",
+          "fallbackReason": "ConnectTimeout",
+          "metrics": {
+            "elapsedSeconds": 129.62188720703125,
+            "connectedSeconds": 120.61886596679688,
+            "snapshots": 2600,
+            "inputs": 1522,
+            "ignoredPackets": 0,
+            "catchupDrops": 0,
+            "maxPlayers": 6,
+            "completedMatches": 1,
+            "inputHz": 29.99305227753013,
+            "activeInputSeconds": 50.745085425674915,
+            "snapshotHz": 29.975882500005483,
+            "snapshotSeconds": 86.73639550060034,
+            "rttP50Ms": 299.9833,
+            "rttP95Ms": 300.3847,
+            "rttP99Ms": 333.3395,
+            "pings": 121,
+            "pongs": 121,
+            "pongTimeouts": 0
+          },
+          "assertions": [
+            {
+              "id": "joined",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "playersVisible",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "movement",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "zone",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "hpDamage",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "result",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "replay",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "history",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            }
+          ]
+        },
+        {
+          "status": "PASS",
+          "exitCode": 0,
+          "transport": "Wss",
+          "fallbackReason": "ConnectTimeout",
+          "metrics": {
+            "elapsedSeconds": 129.46240234375,
+            "connectedSeconds": 120.88439178466797,
+            "snapshots": 2600,
+            "inputs": 372,
+            "ignoredPackets": 0,
+            "catchupDrops": 0,
+            "maxPlayers": 6,
+            "completedMatches": 1,
+            "inputHz": 29.991394132275783,
+            "activeInputSeconds": 12.403558112680912,
+            "snapshotHz": 29.988697114858166,
+            "snapshotSeconds": 86.69933175295591,
+            "rttP50Ms": 233.4198,
+            "rttP95Ms": 266.8243,
+            "rttP99Ms": 433.5441,
+            "pings": 121,
+            "pongs": 121,
+            "pongTimeouts": 0
+          },
+          "assertions": [
+            {
+              "id": "joined",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "playersVisible",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "movement",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "zone",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "hpDamage",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "result",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "replay",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "history",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            }
+          ]
+        }
+      ],
+      "apiChecks": {
+        "schemaVersion": 1,
+        "status": "PASS",
+        "endpoint": "https://junglemaze.duckdns.org",
+        "physicalDeviceCount": 1,
+        "startupStaggerMs": 100,
+        "checks": [
+          {
+            "name": "HTTPS certificate and API health",
+            "status": "PASS"
+          },
+          {
+            "name": "Room creation without JWT denied",
+            "status": "PASS"
+          },
+          {
+            "name": "Invalid JWT denied",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest profile over HTTPS",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest credential present",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest cannot obtain game ticket",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest cannot create rooms",
+            "status": "PASS"
+          },
+          {
+            "name": "Register test account",
+            "status": "PASS"
+          },
+          {
+            "name": "Login after verified registration",
+            "status": "PASS"
+          },
+          {
+            "name": "JWT creates room",
+            "status": "PASS"
+          },
+          {
+            "name": "Six character join code",
+            "status": "PASS"
+          },
+          {
+            "name": "Actual Windows players completed scenario",
+            "status": "PASS"
+          },
+          {
+            "name": "Auto selected WSS after deliberate UDP failure",
+            "status": "PASS"
+          }
+        ],
+        "cleanupErrors": [],
+        "fallbackTest": "Unused UDP7779, same real WSS443 endpoint; no firewall changes"
+      }
+    },
+    {
+      "case": "aws-r2-udp-probe",
+      "environment": "AWS",
+      "serverStage": "r2",
+      "status": "PASS",
+      "clients": [
+        {
+          "status": "PASS",
+          "exitCode": 0,
+          "transport": "Udp",
+          "fallbackReason": "",
+          "metrics": {
+            "elapsedSeconds": 7.626515865325928,
+            "connectedSeconds": 5.019172191619873,
+            "snapshots": 0,
+            "inputs": 0,
+            "ignoredPackets": 0,
+            "catchupDrops": 0,
+            "maxPlayers": 0,
+            "completedMatches": 0,
+            "inputHz": 0.0,
+            "activeInputSeconds": 0.0,
+            "snapshotHz": 0.0,
+            "snapshotSeconds": 0.0,
+            "rttP50Ms": 300.0874,
+            "rttP95Ms": 304.3189,
+            "rttP99Ms": 304.3189,
+            "pings": 5,
+            "pongs": 5,
+            "pongTimeouts": 0
+          },
+          "assertions": [
+            {
+              "id": "joined",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "playersVisible",
+              "status": "NOT_OBSERVED",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "movement",
+              "status": "NOT_OBSERVED",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "zone",
+              "status": "NOT_OBSERVED",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "hpDamage",
+              "status": "NOT_OBSERVED",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "result",
+              "status": "NOT_OBSERVED",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "replay",
+              "status": "NOT_OBSERVED",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "history",
+              "status": "NOT_OBSERVED",
+              "detail": "Observed during this run"
+            }
+          ]
+        }
+      ],
+      "apiChecks": {
+        "schemaVersion": 1,
+        "status": "PASS",
+        "endpoint": "https://junglemaze.duckdns.org",
+        "physicalDeviceCount": 1,
+        "startupStaggerMs": 100,
+        "checks": [
+          {
+            "name": "HTTPS certificate and API health",
+            "status": "PASS"
+          },
+          {
+            "name": "Room creation without JWT denied",
+            "status": "PASS"
+          },
+          {
+            "name": "Invalid JWT denied",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest profile over HTTPS",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest credential present",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest cannot obtain game ticket",
+            "status": "PASS"
+          },
+          {
+            "name": "Guest cannot create rooms",
+            "status": "PASS"
+          },
+          {
+            "name": "Register test account",
+            "status": "PASS"
+          },
+          {
+            "name": "Login after verified registration",
+            "status": "PASS"
+          },
+          {
+            "name": "JWT creates room",
+            "status": "PASS"
+          },
+          {
+            "name": "Six character join code",
+            "status": "PASS"
+          },
+          {
+            "name": "Actual Windows players completed scenario",
+            "status": "PASS"
+          }
+        ],
+        "cleanupErrors": []
+      }
+    }
+  ],
+  "notTested": [
+    "Two physical PCs and separate-account end-to-end play",
+    "Human judgement of bot difficulty/fun",
+    "Five rooms / fifty participants on AWS",
+    "Offline bots, teams and multiple difficulties"
+  ],
+  "limits": [
+    "Connected300s includes lobby/results/replay; input rate measured only while actor sends input.",
+    "Older failed/contaminated runs retained; latest PASS does not erase them.",
+    "Tick spikes and WAN RTT remain; this is not a guarantee of unlimited load or perfectly smooth play.",
+    "Automated multi-client launcher uses a shared QA account per run; distinct physical players/accounts need checklist."
+  ],
+  "cleanup": {
+    "target": "D:\\Unity\\Lastaway\\.utmp\\server-bots-20261103",
+    "candidateBytes": 40959126,
+    "candidateFiles": 432,
+    "evidenceVerified": true,
+    "completed": true,
+    "freedBytes": 40959126
+  }
+}

@@ -110,6 +110,9 @@ try {
     # Never persist HTTP bodies, tokens, roomCode or exceptions containing request objects.
     $taskReport.reason='Remote test failed; see sanitized check list and player evidence. DNS/TLS/connectivity failures are BLOCKED.'
     $taskReport.errorType=$_.Exception.GetType().FullName
+    if ($_.Exception -is [Management.Automation.CommandNotFoundException] -and $_.Exception.CommandName -match '^[A-Za-z][A-Za-z0-9_.-]{0,127}$') { $taskReport.missingCommand=$_.Exception.CommandName }
+    $taskReport.errorScript=[IO.Path]::GetFileName($_.InvocationInfo.ScriptName)
+    $taskReport.errorLine=$_.InvocationInfo.ScriptLineNumber
     if ($taskReport.checks.Count -eq 0) { $taskReport.status='BLOCKED' }
 } finally {
     $env:NET_ROOM_CODE=$taskPreviousCode

@@ -1,0 +1,18 @@
+{
+  "version": "bots-normal-1",
+  "thinkHz": 5,
+  "detectRadius": 12,
+  "bushRevealRadius": 2,
+  "reactionSeconds": 0.35,
+  "memorySeconds": 3,
+  "aimErrorDegrees": 6,
+  "healHpFraction": 0.4,
+  "retreatHpFraction": 0.25,
+  "gridStep": 0.5,
+  "pathNodesPerTick": 500,
+  "globalPathNodesPerTick": 1500,
+  "repathSeconds": 1,
+  "stuckSeconds": 2,
+  "failedPathLimit": 3,
+  "blacklistSeconds": 5
+}

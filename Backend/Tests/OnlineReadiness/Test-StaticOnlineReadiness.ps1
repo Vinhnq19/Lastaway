@@ -24,6 +24,23 @@ $e.metrics.inputHz=0;Check ((Test-OnlineEvidence $e $scenario 0).status -eq 'INV
 Check ((Test-OnlineEvidence $e $scenario 3).status -eq 'FAIL') 'Crash with PASS JSON cannot pass'
 $e.scenarioId='wrong';Check ((Test-OnlineEvidence $e $scenario 0).status -eq 'FAIL') 'Stale scenario evidence rejected';$e.scenarioId='evidence-test'
 $e.assertions=@($asserts | Where-Object {$_.id -ne 'history'});Check ((Test-OnlineEvidence $e $scenario 0).status -eq 'FAIL') 'Missing required history rejected'
+# Hash/report commands must survive command-table changes without cmdlet auto-loading.
+$hashRoot=[IO.Path]::Combine([IO.Path]::GetFullPath($OutputDirectory),'hash-fixture')
+$null=[IO.Directory]::CreateDirectory([IO.Path]::Combine($hashRoot,'fake_Data/assets'))
+[IO.File]::WriteAllText([IO.Path]::Combine($hashRoot,'fake.exe'),'exe')
+[IO.File]::WriteAllText([IO.Path]::Combine($hashRoot,'UnityPlayer.dll'),'unity')
+[IO.File]::WriteAllText([IO.Path]::Combine($hashRoot,'fake_Data/assets/file.bin'),'payload')
+$heldFingerprint=Get-Command Get-OnlineBuildFingerprint
+$previousAutoLoad=$PSModuleAutoLoadingPreference
+try {
+    $PSModuleAutoLoadingPreference='None'
+    $hashWithoutAutoLoad=& $heldFingerprint ([IO.Path]::Combine($hashRoot,'fake.exe'))
+} finally { $PSModuleAutoLoadingPreference=$previousAutoLoad }
+Check ($hashWithoutAutoLoad -eq '7d83299beb1dc97ff3c256f881e0fc1b5ea1fa0cfee64d20eb3a8bc434af3e61') 'Build hash matches independent SHA256 vector without cmdlet auto-loading'
+Remove-Item Function:\Get-OnlineBuildFingerprint
+$heldResult=& $heldFingerprint ([IO.Path]::Combine($hashRoot,'fake.exe'))
+Check ($heldResult -eq $hashWithoutAutoLoad) 'Captured report command survives removal of public function binding'
+Import-Module (Join-Path $repo 'Backend/Tests/OnlineReadiness/OnlineReadiness.psm1') -Force
 $fixture=Join-Path $OutputDirectory 'fake-player.exe'
 $source=@'
 using System;

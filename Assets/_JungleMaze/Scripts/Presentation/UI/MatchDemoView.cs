@@ -163,14 +163,6 @@ namespace JungleMaze.Presentation.UI
                         foreach (var visual in collider.GetComponentsInChildren<SpriteRenderer>()) visual.enabled = false;
                     }
             if (_camera == null) _camera = Camera.main;
-            if (_camera != null)
-            {
-                // Overview for the networking demo: safe spawns are at least six cells apart.
-                // A narrow local camera can hide the other player even when snapshots are correct.
-                if (_camera.TryGetComponent<HeroCameraFollow>(out var follow)) follow.enabled = false;
-                _camera.orthographicSize = 28;
-                _camera.transform.position = new Vector3(25, 25, -10);
-            }
             if (_spawner == null) _spawner = FindAnyObjectByType<RemotePlayerSpawner>();
             if (_hero != null) return;
             _hero = FindAnyObjectByType<HeroController>();

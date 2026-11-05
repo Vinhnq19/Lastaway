@@ -56,9 +56,13 @@ try
     try {
         loop.Run(
             () => { webSocket?.PollEvents(); network.PollEvents(); },
-            deltaSeconds => network.Hub.Tick(deltaSeconds),
+            deltaSeconds =>
+            {
+                network.Hub.Tick(deltaSeconds);
+                metrics.RecordBotWork(network.Rooms.BotPathNodes, network.Rooms.PendingBotPaths);
+            },
             () => metrics.ReportIfDue(network.ReservedPeers, options.MetricsIntervalSeconds,
-                network.ActivePeers, network.PendingPeers, network.Rooms.Count, network.Rooms.Occupancy()),
+                network.ActivePeers, network.PendingPeers, network.Rooms.Count, network.Rooms.Occupancy(), network.Rooms.BotCount),
             shutdown.Token);
     }
     finally {
