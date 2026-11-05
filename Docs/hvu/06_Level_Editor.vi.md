@@ -91,6 +91,7 @@ Mọi vật **đặt theo ô**: không có vị trí lẻ, không phóng to/thu 
 - Đầm lầy, lava, ổ gai đã bỏ khỏi bảng vì Cainos không có art. File cũ có các vật này vẫn mở được (hiện thành khối giữ đúng bounds).
 - Portal tự ghép cặp theo thứ tự đặt (1-1, 2-2, ...). Đổi số cặp ở cột phải.
 - **Phá được** (cột phải, mục ĐANG CHỌN của một vật che chắn): bật để vật đó trong game có **HP** riêng, **nháy sáng** khi trúng đòn (shader `JungleMaze/Sprite Hit Flash`) và **rơi loot** khi vỡ theo bảng **Loot** chọn (Bình / Rương / Tiếp tế). Vật phá được không còn là hard cover: ghi vào `worldObjects` với `kind` = bảng loot, `hp`, `art` = tên vật, bounds = cả footprint (dễ đánh trúng). Rương/bình/thùng tiếp tế cũng chỉnh được HP. HP 0 = HP mặc định của loại (`world_settings.json`). Trên map, vật phá được có nhãn "Vỡ <hp>"; Ctrl+D nhân bản giữ nguyên thiết lập. Hash map chỉ đổi khi có `hp` khác 0, nên map cũ giữ nguyên hash.
+- **Tường gạch** tự nối theo ô kề. Tường ngang (có tường trái/phải) vẽ mặt gạch + gờ. Tường **dọc** (chỉ nối trên/dưới, cạnh bên của phòng) vẽ bằng **dải đá mảnh** như viền map: sát mép trái (ô `2,1` của `TX Tileset Wall`) nếu đoạn dọc nối vào tường ngang chạy sang phải, sát mép phải (ô `2,3`) nếu nối sang trái, giữa ô nếu là vách chữ T. Collider của tường dọc trong JSON game chỉ là dải đó (rộng 0.31/0.25 ô), không phải cả ô, để không có tường vô hình. Lát sàn nhà tới sát ô tường dọc để không lộ cỏ.
 
 > **Trong trận** `LevelArtView` (Game scene, `Scripts/Presentation/World/LevelArtView.cs`) đọc khối `editor` của `map_demo.json` và vẽ giống Level Editor: ground cỏ theo seed, đường đá, viền/tường mép, cỏ rải, hình Cainos của cover/decor (Y-sort theo chân, material Unlit như editor). Nó hiện khi chơi offline, hoặc khi phòng mạng chọn đúng map có cùng hash với `map_demo.json`; map khác giữ cách vẽ cũ. Vật thể game (rương, bình, bụi, portal, cửa, hazard) vẫn dùng art game theo trạng thái. Đổi `map_demo.json` thì phải dựng lại collider `Obstacles` trong `Game.unity` cho khớp từng collider chân (tên = type), nếu không màn Game báo lệch vật cản.
 
@@ -122,3 +123,31 @@ Mọi vật **đặt theo ô**: không có vị trí lẻ, không phóng to/thu 
 Assembly `JungleMaze.LevelEditor` chỉ phụ thuộc `JungleMaze.World` và Newtonsoft, không đụng vào gameplay.
 
 > Project còn một bản Cainos **1.0.1 cũ** ở `Imported/JSurviv/.../Cainos` (PPU 64, team đã chỉnh). Bản đó giữ nguyên. **Không** import file `.unitypackage` Cainos bằng Assets → Import Package: gói này chứa cả `ProjectSettings` và sẽ ghi đè tags/layers/sorting layers/Graphics của project.
+
+## 7. Map sinh tồn 150×150 "Rừng Sinh Tồn" (Luyện tập offline)
+
+`Levels/map3_rung_sinh_ton.json` là map Luyện tập offline (`Levels/offline_map.txt` = `map3_rung_sinh_ton`, chép vào `StreamingAssets/JungleMaze/runtime/offline_map.json` bằng **Sync Runtime Data**). Hero bắt đầu ở spawn đầu tiên (S1, tây nam), không phải tâm map.
+
+Bản nháp sinh bằng `Tools/Level/survival_map_150.py` (tất định theo seed 5150), rồi Level Editor dựng JSON game (`LevelDocument.FromJson` → `Validate` → `ToJson`, giống bấm Lưu). Mở file trong Level Editor để sửa tay tiếp; chạy lại script sẽ ghi đè bản sửa tay.
+
+| Khu | Vị trí | Vai trò |
+|---|---|---|
+| Đền trung tâm 28×28 | tâm | Hot drop: 2 thùng tiếp tế, 4 phòng góc có rương, 4 cổng rộng 2 ô |
+| Làng (4 nhà) | bắc | Rương + bình trong nhà |
+| Nghĩa địa + hầm mộ | đông bắc | Bia mộ làm cover, rương trong hầm |
+| Trang trại | đông | Kho lớn 3 lối vào, bãi thùng |
+| Mỏ đá | đông nam | Cover dày, ít loot |
+| Chợ (3 nhà) | nam | Sạp thùng phá được |
+| Phế tích | tây nam | Lưới cột/cổng đá, chiến tầm trung |
+| Trại thợ săn | tây | Trong rừng dày |
+| Vòng đá rune | tây bắc | Thùng tiếp tế thứ 3, trống trải → phải liều |
+
+Luật cân bằng (số đo lúc tạo):
+- Bo đầu là hình tròn r=75 quanh tâm (lịch bo map 50 nhân 3), nên góc map nằm ngoài bo ngay từ đầu: loot/portal/khu chỉ đặt trong r ≤ 68; góc là rừng rậm không loot.
+- 10 spawn quanh vòng r≈57, giữa các khu. Mỗi spawn có 3–5 bình trong 6 ô; rương gần nhất cách ≥ 9 ô. Giá trị loot trong 25 ô (bình 1, rương 3, tiếp tế 8) lệch tối đa **1.17 lần** giữa các spawn (map1 cũ: 2.24).
+- Cover thật (đá, khối đá, tường, tượng, cột; không tính cây vì gốc cây chỉ ~0.3 ô): ô trống trong bo cách cover gần nhất trung vị 2 ô, p90 5 ô; chỉ 4.9% ô xa hơn 6 ô (tầm súng ngắn nhất).
+- 3 cặp portal (r=37) nối hai phía đối diện để xoay vòng nhanh khi bo co.
+- Tổng: 64 rương, 201 bình (+ thùng gỗ/thùng tròn phá được), 3 thùng tiếp tế, 340 bụi.
+- Không có cửa: lối vào nhà/đền/phòng là khe tường để trống, lát đá liền sàn; không vật nào được đặt chắn khe (map sinh tồn cần vào/ra nhanh, cửa gỗ chỉ làm chậm và che tầm nhìn). Trước đây có 36 cửa.
+
+`MapLayoutGenerator.Validate` tính trước ô bị chặn cho bước kiểm spawn thông nhau (cùng luật `IsWalkable`), nên `Build` map này mất 0.14 s thay vì 6.4 s, hash không đổi.
