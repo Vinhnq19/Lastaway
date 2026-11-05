@@ -22,6 +22,7 @@ public sealed partial class RoomManager
     {
         if (room.Match.Phase != MatchPhase.Waiting) return RoomBotError.MatchLocked;
         if (request.Revision != room.LobbyRevision) return RoomBotError.StaleRoom;
+        if (!room.Match.BotsSupported) return RoomBotError.InvalidRequest;
         if (request.Action == RoomBotAction.Remove)
         {
             if (!room.Match.RemoveBot(request.BotId)) return RoomBotError.UnknownBot;
@@ -32,6 +33,7 @@ public sealed partial class RoomManager
             // Validate the complete fill before adding any actor, including pending and grace slots.
             if (room.Peers.Count + room.Match.BotCount + count > room.MaxPlayers) return RoomBotError.RoomFull;
             if (ReservedPeers + count > _options.MaxTotalPlayers) return RoomBotError.ServerFull;
+            if ((ulong)room.NextBotId + (ulong)count > uint.MaxValue) return RoomBotError.InvalidRequest;
             for (var i = 0; i < count; i++)
                 if (!room.Match.AddBot(++room.NextBotId)) throw new InvalidOperationException("Bot reservation and runtime capacity diverged.");
         }

@@ -1,8 +1,8 @@
-<#
+﻿<#
 .SYNOPSIS
     Reusable multi-client online readiness test launcher for JungleMaze Unity Windows standalone builds.
 .DESCRIPTION
-    Launches 2..10 Unity Windows clients to execute automated online readiness scenarios.
+    Launches 1..10 Unity Windows clients to execute automated online readiness scenarios.
     Adheres strictly to the specification contract:
       - Unity CLI args: -onlineTest <scenario> -onlineEvidence <output> -clientConfig <config> -name <name>
       - Screen size: 640x360 windowed mode
@@ -18,7 +18,7 @@
 .PARAMETER Scenario
     Path to the scenario JSON file (e.g. local2-accelerated.json or main6-smoke.json).
 .PARAMETER Clients
-    Number of clients to launch (2..10). If 0 or omitted, uses scenario's expectedPlayers.
+    Number of clients to launch (1..10). If 0 or omitted, uses scenario's expectedPlayers.
 .PARAMETER OutputDirectory
     Directory where evidence, logs, report.json, and summary.csv will be saved.
 .PARAMETER RoomCode
@@ -138,9 +138,25 @@ $trackedClients = [System.Collections.Generic.List[PSCustomObject]]::new()
 $overallStatus = "FAIL"
 $timedOut=$false
 $launcherFailure=$null
+$previousExecutionState = [uint32]0
 
 try {
-    # 8. Launch Clients (2..10, 640x360 windows, unique evidence and log paths)
+    # Keep only the test run awake; restore the thread's previous request in finally.
+    if ([Environment]::OSVersion.Platform -eq [PlatformID]::Win32NT) {
+        if (-not ('JungleMaze.TestExecutionState' -as [type])) {
+            Add-Type -TypeDefinition @'
+using System.Runtime.InteropServices;
+namespace JungleMaze {
+    public static class TestExecutionState {
+        [DllImport("kernel32.dll")] public static extern uint SetThreadExecutionState(uint flags);
+    }
+}
+'@
+        }
+        $previousExecutionState = [JungleMaze.TestExecutionState]::SetThreadExecutionState([uint32]2147483649)
+        if ($previousExecutionState -eq 0) { throw 'Could not keep the test host awake.' }
+    }
+    # 8. Launch Clients (1..10, 640x360 windows, unique evidence and log paths)
     for ($i = 1; $i -le $clientCount; $i++) {
         $clientName = "Player$i"
         if ($ClientConfigs.Count) { $configPath=(Resolve-Path -LiteralPath $ClientConfigs[$i-1]).Path }
@@ -284,6 +300,7 @@ try {
             }
         }
     }
+    if ($previousExecutionState -ne 0) { $null = [JungleMaze.TestExecutionState]::SetThreadExecutionState($previousExecutionState) }
 }
 
 foreach ($c in $trackedClients) {

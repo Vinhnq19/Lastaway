@@ -48,6 +48,7 @@ public sealed class WebSocketHost : IAsyncDisposable
         public void Close(string reason)
         {
             if (!_open) return;
+            Console.WriteLine($"[ws-close] reason={reason} controlQueued={(_controlSend.Reader.CanCount ? _controlSend.Reader.Count : 0)}");
             _controlSend.Writer.TryWrite(NetworkProtocol.StringMessage(NetworkProtocol.JoinRejected, reason).CopyData());
             _signal.Release();
             _open = false;
@@ -93,7 +94,10 @@ public sealed class WebSocketHost : IAsyncDisposable
                 if (socket.State == WebSocketState.Open)
                     await socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closed", closing.Token);
             }
-            catch (Exception error) when (error is OperationCanceledException or WebSocketException or IOException) { }
+            catch (Exception error) when (error is OperationCanceledException or WebSocketException or IOException)
+            {
+                if (_open && !Stop.IsCancellationRequested) Console.WriteLine($"[ws-send-error] type={error.GetType().Name}");
+            }
             finally { Abort(); }
         }
     }
@@ -178,7 +182,11 @@ public sealed class WebSocketHost : IAsyncDisposable
                 else if (!Post(peer, () => _hub.Receive(peer, packet, true, true))) return;
             }
         }
-        catch (Exception error) when (error is OperationCanceledException or WebSocketException or IOException) { peer.Close("ConnectionTimeout"); }
+        catch (Exception error) when (error is OperationCanceledException or WebSocketException or IOException)
+        {
+            if (peer.IsOpen) Console.WriteLine($"[ws-receive-error] type={error.GetType().Name}");
+            peer.Close("ConnectionTimeout");
+        }
         finally
         {
             peer.Close("Disconnected");

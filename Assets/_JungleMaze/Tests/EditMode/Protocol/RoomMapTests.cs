@@ -43,7 +43,40 @@ namespace JungleMaze.Tests.Protocol
             public void Clear() { Cleared = true; Activated = null; }
         }
         private static RoomMapStatePacket State(Guid room, uint revision, char hash) => new RoomMapStatePacket
-        { RoomId = room, SelectionRevision = revision, CatalogGeneration = 1, MapId = "map-" + hash, MapHash = new string(hash, 64), RulesHash = new string('c', 64), HostNetId = 0, PlayerCount = 2 };
+        {
+            RoomId = room, SelectionRevision = revision, CatalogGeneration = 1, MapId = "map-" + hash,
+            MapHash = new string(hash, 64), RulesHash = new string('c', 64), HostNetId = 0,
+            ReadyCount = 0, PlayerCount = 2, LobbyRevision = 1, HumanCount = 2, BotCount = 0,
+            MaxPlayers = 10, MinPlayers = 6, CanStart = false
+        };
+        private static T RoundTrip<T>(T packet) where T : struct, INetSerializable
+        {
+            var writer = new NetDataWriter();
+            packet.Serialize(writer);
+            var reader = new NetDataReader(writer.Data, 0, writer.Length);
+            var copy = default(T);
+            copy.Deserialize(reader);
+            return copy;
+        }
+        private static void RejectsState(Func<RoomMapStatePacket, RoomMapStatePacket> mutate)
+        {
+            var packet = State(Guid.NewGuid(), 1, 'a');
+            packet = mutate(packet);
+            Assert.Throws<InvalidOperationException>(() => RoundTrip(packet));
+        }
+        private static void RejectsBotCommand(Func<RoomBotCommandPacket, RoomBotCommandPacket> mutate)
+        {
+            var packet = new RoomBotCommandPacket
+            { RoomId = Guid.NewGuid(), Revision = 1, RequestId = 1, BotId = 0, Action = RoomBotAction.Add };
+            packet = mutate(packet);
+            Assert.Throws<InvalidOperationException>(() => RoundTrip(packet));
+        }
+        private static void RejectsBotResult(Func<RoomBotCommandResultPacket, RoomBotCommandResultPacket> mutate)
+        {
+            var packet = new RoomBotCommandResultPacket { RoomId = Guid.NewGuid(), RequestId = 1, Error = RoomBotError.None };
+            packet = mutate(packet);
+            Assert.Throws<InvalidOperationException>(() => RoundTrip(packet));
+        }
 
         [Test]
         public async Task SupersededDownloadCannotActivateOrAcknowledgePreviousRoomSelection()
@@ -76,6 +109,106 @@ namespace JungleMaze.Tests.Protocol
             Assert.IsNull(maps.Error); Assert.AreEqual("valid", files.Activated);
         }
         [Test]
+        public void RoomGameplayPacketsRoundTripOnTheWire()
+        {
+            var room = Guid.NewGuid();
+            var state = State(room, 3, 'a');
+            state.MapName = "Map A"; state.MapVersion = "1"; state.CanStart = true;
+            var stateCopy = RoundTrip(state);
+            Assert.AreEqual(state.RoomId, stateCopy.RoomId);
+            Assert.AreEqual(state.SelectionRevision, stateCopy.SelectionRevision);
+            Assert.AreEqual(state.CatalogGeneration, stateCopy.CatalogGeneration);
+            Assert.AreEqual(state.MapId, stateCopy.MapId);
+            Assert.AreEqual(state.MapName, stateCopy.MapName);
+            Assert.AreEqual(state.MapVersion, stateCopy.MapVersion);
+            Assert.AreEqual(state.MapHash, stateCopy.MapHash);
+            Assert.AreEqual(state.RulesHash, stateCopy.RulesHash);
+            Assert.AreEqual(state.HostNetId, stateCopy.HostNetId);
+            Assert.AreEqual(state.ReadyCount, stateCopy.ReadyCount);
+            Assert.AreEqual(state.PlayerCount, stateCopy.PlayerCount);
+            Assert.AreEqual(state.CanStart, stateCopy.CanStart);
+            Assert.AreEqual(state.LobbyRevision, stateCopy.LobbyRevision);
+            Assert.AreEqual(state.HumanCount, stateCopy.HumanCount);
+            Assert.AreEqual(state.BotCount, stateCopy.BotCount);
+            Assert.AreEqual(state.MaxPlayers, stateCopy.MaxPlayers);
+            Assert.AreEqual(state.MinPlayers, stateCopy.MinPlayers);
+
+            var select = new SelectRoomMapPacket { RoomId = room, SelectionRevision = 3, MapId = "map-a", MapHash = new string('a', 64) };
+            var selectCopy = RoundTrip(select);
+            Assert.AreEqual(select.RoomId, selectCopy.RoomId); Assert.AreEqual(select.SelectionRevision, selectCopy.SelectionRevision);
+            Assert.AreEqual(select.MapId, selectCopy.MapId); Assert.AreEqual(select.MapHash, selectCopy.MapHash);
+
+            var ready = new RoomMapReadyPacket { RoomId = room, SelectionRevision = 3, MapHash = new string('a', 64), RulesHash = new string('c', 64) };
+            var readyCopy = RoundTrip(ready);
+            Assert.AreEqual(ready.RoomId, readyCopy.RoomId); Assert.AreEqual(ready.SelectionRevision, readyCopy.SelectionRevision);
+            Assert.AreEqual(ready.MapHash, readyCopy.MapHash); Assert.AreEqual(ready.RulesHash, readyCopy.RulesHash);
+
+            var start = new StartRoomMatchPacket { RoomId = room, SelectionRevision = 3 };
+            var startCopy = RoundTrip(start);
+            Assert.AreEqual(start.RoomId, startCopy.RoomId); Assert.AreEqual(start.SelectionRevision, startCopy.SelectionRevision);
+
+            var mapResult = new RoomMapCommandResultPacket { RoomId = room, Error = RoomMapError.SelectionChanged };
+            var mapResultCopy = RoundTrip(mapResult);
+            Assert.AreEqual(mapResult.RoomId, mapResultCopy.RoomId); Assert.AreEqual(mapResult.Error, mapResultCopy.Error);
+
+            foreach (var action in new[] { RoomBotAction.Add, RoomBotAction.Remove, RoomBotAction.FillMinimum })
+            {
+                var command = new RoomBotCommandPacket
+                {
+                    RoomId = room, Revision = 4, RequestId = 2, Action = action,
+                    BotId = action == RoomBotAction.Remove ? 7u : 0u
+                };
+                var commandCopy = RoundTrip(command);
+                Assert.AreEqual(command.RoomId, commandCopy.RoomId); Assert.AreEqual(command.Revision, commandCopy.Revision);
+                Assert.AreEqual(command.RequestId, commandCopy.RequestId); Assert.AreEqual(command.BotId, commandCopy.BotId);
+                Assert.AreEqual(command.Action, commandCopy.Action);
+            }
+
+            var botResult = new RoomBotCommandResultPacket { RoomId = room, RequestId = 2, Error = RoomBotError.RoomFull };
+            var botResultCopy = RoundTrip(botResult);
+            Assert.AreEqual(botResult.RoomId, botResultCopy.RoomId); Assert.AreEqual(botResult.RequestId, botResultCopy.RequestId);
+            Assert.AreEqual(botResult.Error, botResultCopy.Error);
+        }
+        [Test]
+        public void RoomMapStateRejectsInvalidV3WireCounts()
+        {
+            RejectsState(p => { p.RoomId = Guid.Empty; return p; });
+            RejectsState(p => { p.LobbyRevision = 0; return p; });
+            RejectsState(p => { p.MaxPlayers = 0; return p; });
+            RejectsState(p => { p.MaxPlayers = 11; return p; });
+            RejectsState(p => { p.MinPlayers = 1; return p; });
+            RejectsState(p => { p.MinPlayers = 11; return p; });
+            RejectsState(p => { p.PlayerCount = 3; return p; });
+            RejectsState(p => { p.BotCount = 1; return p; });
+            RejectsState(p => { p.PlayerCount = 11; return p; });
+            RejectsState(p => { p.ReadyCount = 3; return p; });
+            RejectsState(p => { p.CatalogGeneration = 0; return p; });
+            RejectsState(p => { p.HostNetId = 10; return p; });
+        }
+        [Test]
+        public void RoomMapStateAllowsMinimumAboveMaximumForSmallRoomButNotStartable()
+        {
+            var small = State(Guid.NewGuid(), 1, 'a');
+            small.MaxPlayers = 5; small.MinPlayers = 6; small.CanStart = false;
+            var copy = RoundTrip(small);
+            Assert.AreEqual(5, copy.MaxPlayers); Assert.AreEqual(6, copy.MinPlayers);
+            Assert.IsFalse(copy.CanStart, "A room smaller than its minimum is valid state but cannot start.");
+        }
+        [Test]
+        public void RoomBotPacketsRejectInvalidWireValues()
+        {
+            RejectsBotCommand(p => { p.RoomId = Guid.Empty; return p; });
+            RejectsBotCommand(p => { p.RequestId = 0; return p; });
+            RejectsBotCommand(p => { p.Action = (RoomBotAction)255; return p; });
+            RejectsBotCommand(p => { p.Action = RoomBotAction.Add; p.BotId = 3; return p; });
+            RejectsBotCommand(p => { p.Action = RoomBotAction.FillMinimum; p.BotId = 3; return p; });
+            RejectsBotCommand(p => { p.Action = RoomBotAction.Remove; p.BotId = 0; return p; });
+
+            RejectsBotResult(p => { p.RoomId = Guid.Empty; return p; });
+            RejectsBotResult(p => { p.RequestId = 0; return p; });
+            RejectsBotResult(p => { p.Error = (RoomBotError)255; return p; });
+        }
+        [Test]
         public void BothPublishedMapsActivateWithSameRulesAndInvalidReplacementPreservesCurrentMap()
         {
             var rules = Path.GetFullPath(Path.Combine(Application.dataPath, "../Backend/Shared/GameData"));
@@ -85,9 +218,10 @@ namespace JungleMaze.Tests.Protocol
             foreach (var entry in (JArray)catalog["maps"])
             {
                 var json = File.ReadAllText(Path.Combine(rules, "Maps", (string)entry["id"], (string)entry["mapHash"], "map.json"));
-                Assert.IsNull(data.ActivateSelectedMap("\uFEFF" + json.Replace("\n", "\r\n"), (string)entry["mapHash"], hash));
+                var crlf = "\uFEFF" + json.Replace("\r\n", "\n").Replace("\n", "\r\n");
+                Assert.IsNull(data.ActivateSelectedMap(crlf, (string)entry["mapHash"], hash));
                 Assert.AreEqual((string)entry["mapHash"], data.SelectedMapHash); Assert.AreEqual(10, data.SelectedLayout.Spawns.Count);
-                Assert.IsNull(data.Verify((string)JObject.Parse(File.ReadAllText(Path.Combine(rules,"match_settings.json")))["version"], hash));
+                Assert.IsNull(data.Verify((string)JObject.Parse(File.ReadAllText(Path.Combine(rules, "match_settings.json")))["version"], hash));
                 var previous = data.SelectedLayout;
                 Assert.IsNotNull(data.ActivateSelectedMap("{}", (string)entry["mapHash"], hash));
                 Assert.AreSame(previous, data.SelectedLayout);

@@ -380,7 +380,7 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
 
         foreach (var e in _entities.Values)
         {
-            if (e.IsDisconnected && e.IsAlive && e.ResumeToken == resumeToken)
+            if (!e.IsBot && e.IsDisconnected && e.IsAlive && e.ResumeToken == resumeToken)
             {
                 if (_matchElapsedSeconds - (e.DisconnectedAtSecond ?? 0.0) < _profile.DisconnectGraceSeconds)
                 {
@@ -507,7 +507,7 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
                 BroadcastRoster();
             }
 
-            if (_entities.Count < _profile.MinPlayers)
+            if (_entities.Count < _profile.MinPlayers || !_entities.Values.Any(e => !e.IsBot && !e.IsDisconnected))
             {
                 TransitionTo(MatchPhase.Waiting);
             }
@@ -590,6 +590,14 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
                 BroadcastPlayerDiedEvent(dead);
             }
             BroadcastRoster();
+        }
+
+        // No human audience is left (disconnected grace expired or humans lost this tick):
+        // bots must not be awarded a win nobody can observe.
+        if (_bots.Count > 0 && !HasHumanAudience())
+        {
+            EndMatch(MatchEndReason.NoHumans, 255);
+            return;
         }
 
         var aliveNow = _entities.Values.Count(e => e.IsAlive);

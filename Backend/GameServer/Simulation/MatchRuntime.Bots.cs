@@ -11,11 +11,13 @@ public sealed partial class MatchRuntime
     public BotNavigationBudget NavigationBudget { get; internal set; } = new();
     private int _botCursor;
     public int BotCount => _bots.Count;
+    public bool BotsSupported => SelectedMap is not null && _worldSettings is not null;
+    public int PendingBotPaths => _bots.Values.Count(b => b.HasPendingPath);
     public IReadOnlyDictionary<uint, BotState> BotStates => _bots.ToDictionary(p => p.Key, p => p.Value.State);
 
     internal bool AddBot(uint botId)
     {
-        if (Phase != MatchPhase.Waiting || botId == 0 || _bots.ContainsKey(botId)) return false;
+        if (!BotsSupported || Phase != MatchPhase.Waiting || botId == 0 || _bots.ContainsKey(botId)) return false;
         var session = $"bot:{RoomId}:{botId}";
         if (!RegisterParticipant(session, "BOT " + botId, botId, out _)) return false;
         _bots.Add(botId, new BotBrain(botId, session, Settings.Value));
@@ -41,11 +43,13 @@ public sealed partial class MatchRuntime
             brain.Reset(unchecked((uint)MatchId.GetHashCode() ^ brain.Id));
     }
 
+    private bool HasHumanAudience() => _entities.Values.Any(e => !e.IsBot && (!e.IsDisconnected ||
+        (e.IsAlive && _matchElapsedSeconds - (e.DisconnectedAtSecond ?? 0) < _profile.DisconnectGraceSeconds)));
+
     private void TickBots()
     {
         if (_bots.Count == 0) return;
-        if (!_entities.Values.Any(e => !e.IsBot && (!e.IsDisconnected ||
-            (e.IsAlive && _matchElapsedSeconds - (e.DisconnectedAtSecond ?? 0) < _profile.DisconnectGraceSeconds))))
+        if (!HasHumanAudience())
         {
             EndMatch(MatchEndReason.NoHumans, 255);
             return;

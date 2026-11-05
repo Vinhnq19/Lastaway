@@ -24,7 +24,7 @@ namespace JungleMaze.Domain.Lobby
             NetId = netId;
             SessionId = sessionId ?? "";
             Name = name ?? "";
-            IsSelf = isSelf; IsBot = isBot;
+            IsSelf = isSelf;
             HasReady = hasReady;
             Ready = ready;
         }

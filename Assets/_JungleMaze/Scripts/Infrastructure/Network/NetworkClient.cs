@@ -507,6 +507,7 @@ namespace JungleMaze.Infrastructure.Network
             if (_webSocket.Error != null)
             {
                 var err = _webSocket.Error;
+                _log.Warn("[websocket-error] code=" + err);
                 DisconnectReason reason;
                 if (err == "WssConnectFailed") reason = DisconnectReason.ConnectTimeout;
                 else if (err == "MalformedMessage" || err == "PayloadTooLarge") reason = DisconnectReason.ProtocolError;

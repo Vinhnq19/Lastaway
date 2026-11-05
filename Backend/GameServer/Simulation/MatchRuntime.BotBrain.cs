@@ -14,18 +14,21 @@ public sealed partial class MatchRuntime
         public uint Id { get; }
         public string SessionId { get; }
         public BotState State { get; private set; } = BotState.Idle;
+        public bool HasPendingPath => _search is { Finished: false };
         private StableRandom _random;
         private uint _nextThink;
         private ushort _inputSequence, _combatSequence;
         private uint _itemSequence;
         private byte _enemy = 255;
         private double _seenAt = -100, _reactAt, _repathAt, _progressAt, _ignoreUntil;
-        private Vector2 _lastSeen, _goal, _progressPosition;
+        private Vector2 _lastSeen, _goal, _progressPosition, _previousPosition;
         private Vector2? _ignoredGoal;
         private BotPathSearch? _search;
         private int _pathIndex, _failedPaths;
-        private ushort _floorId, _containerId;
-        private bool _hasGoal;
+        private bool _hasGoal, _thinkInitialised, _hasPreviousPosition;
+        // Cached combat intent: decided at ThinkHz, executed every tick so authoritative combat rules apply at the tick rate.
+        private bool _attackWanted;
+        private CombatWeaponId _attackWeapon;
 
         public BotBrain(uint id, string session, BotSettings settings) { Id = id; SessionId = session; Reset(id); }
         public void Reset(uint seed)
@@ -33,26 +36,44 @@ public sealed partial class MatchRuntime
             _random = new StableRandom(seed); State = BotState.Idle; _nextThink = 0;
             _inputSequence = _combatSequence = 0; _itemSequence = 0; _enemy = 255;
             _seenAt = -100; _reactAt = _repathAt = _progressAt = _ignoreUntil = 0;
-            _hasGoal = false; _search = null; _floorId = _containerId = 0; _failedPaths = 0; _ignoredGoal = null;
+            _hasGoal = false; _search = null; _failedPaths = 0; _ignoredGoal = null;
+            _pathIndex = 0; _thinkInitialised = false; _hasPreviousPosition = false; _previousPosition = default;
+            _attackWanted = false; _attackWeapon = CombatWeaponId.Hand;
         }
 
         public void Tick(MatchRuntime match, Entity actor, BotSettings settings)
         {
-            if (!actor.IsAlive) { State = BotState.Dead; return; }
+            if (!actor.IsAlive) { State = BotState.Dead; _attackWanted = false; return; }
             if (match.World is null || match.SelectedMap is null) return;
             var now = match.ElapsedSeconds;
             var position = new Vector2(actor.X, actor.Y);
+            // A bot already standing in a hazard may traverse hazards to escape; normal pathing still rejects them.
+            var allowHazards = Dangerous(match.World, position);
+            // Large displacement invalidates stale path; drop it without touching position.
+            if (_hasPreviousPosition && Vector2.DistanceSquared(position, _previousPosition) > 4f)
+            {
+                _search = null; _pathIndex = 0; _repathAt = now;
+                _progressPosition = position; _progressAt = now;
+            }
+            _previousPosition = position; _hasPreviousPosition = true;
+
+            var period = (uint)Math.Max(1, 30 / settings.ThinkHz);
+            if (!_thinkInitialised)
+            {
+                _thinkInitialised = true;
+                _nextThink = match.CurrentTick + Id % period;
+            }
             if (match.CurrentTick >= _nextThink)
             {
-                _nextThink = match.CurrentTick + (uint)Math.Max(1, 30 / settings.ThinkHz);
-                if (_nextThink == (uint)(30 / settings.ThinkHz) + 1) _nextThink += Id % (uint)(30 / settings.ThinkHz);
+                _nextThink = match.CurrentTick + period;
                 Think(match, actor, position, settings);
             }
 
             var move = Vector2.Zero;
             if (_hasGoal && !match.World.Using(actor.NetId))
             {
-                if (Vector2.DistanceSquared(position, _goal) < .15f) _hasGoal = false;
+                // Container attacks begin at .25 cells, so arrival must allow reaching that range instead of stopping at ~.387 cells.
+                if (Vector2.DistanceSquared(position, _goal) < .04f) _hasGoal = false;
                 else
                 {
                     if (_search is null && now >= _repathAt)
@@ -62,8 +83,8 @@ public sealed partial class MatchRuntime
                     }
                     if (_search is { Finished: false })
                         _search.Advance(match.NavigationBudget, settings.PathNodesPerTick, actor.Radius,
-                            p => Walkable(match, p, actor.Radius),
-                            (a,b) => SegmentWalkable(match,a,b,actor.Radius), p => Penalty(match,p));
+                            p => Walkable(match, p, actor.Radius, allowHazards),
+                            (a,b) => SegmentWalkable(match,a,b,actor.Radius,allowHazards), p => Penalty(match,p));
                     if (_search is { Finished: true, ReachedGoal: false })
                     { FailPath(now, settings); }
                     else if (_search is { ReachedGoal: true })
@@ -71,7 +92,7 @@ public sealed partial class MatchRuntime
                         var path = _search.Path;
                         while (_pathIndex < path.Count && Vector2.DistanceSquared(position,path[_pathIndex]) < .09f) _pathIndex++;
                         var next = _pathIndex < path.Count ? path[_pathIndex] : _goal;
-                        if (SegmentWalkable(match,position,next,actor.Radius)) move = Direction(next-position);
+                        if (SegmentWalkable(match,position,next,actor.Radius,allowHazards)) move = Direction(next-position);
                         else { _search = null; _repathAt = now; }
                     }
                     if (Vector2.DistanceSquared(position,_progressPosition) > .16f)
@@ -83,11 +104,22 @@ public sealed partial class MatchRuntime
             var input = new PlayerInputPacket { Tick = match.CurrentTick, InputSeq = ++_inputSequence,
                 MoveX = (sbyte)Math.Clamp((int)(move.X*127),-127,127), MoveY = (sbyte)Math.Clamp((int)(move.Y*127),-127,127), Aim = actor.Rotation };
             match.ProcessInput(SessionId,input);
+
+            // Combat intent cached by Think is replayed every tick, so the server validates cooldown, ammo,
+            // range and collision at the tick rate instead of once per decision.
+            if (_attackWanted && actor.IsAlive && !match.World.Using(actor.NetId))
+            {
+                match.TryProcessAttack(SessionId,new AttackRequestPacket { RequestSeq=++_combatSequence,Weapon=_attackWeapon,Aim=actor.Rotation },out var attackResult);
+                if (attackResult.Outcome == CombatOutcome.NoAmmo)
+                    match.TryProcessReload(SessionId,new ReloadRequestPacket { RequestSeq=++_combatSequence,Weapon=_attackWeapon },out _);
+            }
         }
 
         private void Think(MatchRuntime match, Entity actor, Vector2 position, BotSettings settings)
         {
             var world = match.World!; var now = match.ElapsedSeconds;
+            // Every non-combat path leaves the cached intent cleared, so attacks stop as soon as the decision changes.
+            _attackWanted = false;
             var enemy = FindEnemy(match,actor,position,settings);
             if (enemy != null)
             {
@@ -98,7 +130,33 @@ public sealed partial class MatchRuntime
             var zoneState = zone?.GetStatePacket(match.CurrentTick) ?? default;
             var outside = zone != null && zone.IsOutside(position.X,position.Y);
             var unsafeSoon = zoneState.InWarning && Vector2.Distance(position,new Vector2(zoneState.TargetCenterX,zoneState.TargetCenterY)) > zoneState.TargetRadius-actor.Radius;
-            if (outside || unsafeSoon || Dangerous(world,position))
+            // Leave the current hazard before planning the longer route back into the zone.
+            if (Dangerous(world,position))
+            {
+                State = BotState.EscapeZone;
+                var radius = actor.Radius; var margin = radius + .1f;
+                var exitDistance = float.MaxValue; var exit = position;
+                void Consider(Vector2 candidate)
+                {
+                    var distance = Vector2.DistanceSquared(position,candidate);
+                    if (distance >= exitDistance) return;
+                    if (!Walkable(match,candidate,radius) || !SegmentWalkable(match,position,candidate,radius,true)) return;
+                    exitDistance = distance; exit = candidate;
+                }
+                foreach (var hazard in world.Layout.Objects)
+                {
+                    if (hazard.Kind != WorldObjectKind.Lava && hazard.Kind != WorldObjectKind.Poison) continue;
+                    var bounds = hazard.Bounds;
+                    if (!bounds.Contains(new WorldPoint(position.X,position.Y))) continue;
+                    Consider(new Vector2(bounds.MinX-margin,position.Y));
+                    Consider(new Vector2(bounds.MaxX+margin,position.Y));
+                    Consider(new Vector2(position.X,bounds.MinY-margin));
+                    Consider(new Vector2(position.X,bounds.MaxY+margin));
+                }
+                if (exitDistance < float.MaxValue) { Goal(exit,now,settings); return; }
+                SeekSafe(match,actor,position,settings); return;
+            }
+            if (outside || unsafeSoon)
             {
                 State = BotState.EscapeZone;
                 var center = zoneState.InWarning ? new Vector2(zoneState.TargetCenterX,zoneState.TargetCenterY) : new Vector2(zoneState.CurrentCenterX,zoneState.CurrentCenterY);
@@ -110,6 +168,7 @@ public sealed partial class MatchRuntime
                 State = BotState.Retreat;
                 SeekSafe(match,actor,position+Direction(position-_lastSeen)*5,settings); return;
             }
+            if (enemy != null && now < _reactAt) { State=BotState.Idle; _hasGoal=false; return; }
             if (enemy != null && now >= _reactAt)
             {
                 world.Inventory.CancelForAction(actor.NetId,ItemCancelAction.Attack);
@@ -126,9 +185,8 @@ public sealed partial class MatchRuntime
                     State = BotState.Combat;
                     _hasGoal = false;
                     if (rule.IsRanged && distance < Math.Min(3,rule.Range*.4f)) Goal(position+Direction(position-_lastSeen)*2,now,settings);
-                    match.TryProcessAttack(SessionId,new AttackRequestPacket { RequestSeq=++_combatSequence,Weapon=weapon,Aim=actor.Rotation },out var result);
-                    if (result.Outcome == CombatOutcome.NoAmmo)
-                        match.TryProcessReload(SessionId,new ReloadRequestPacket { RequestSeq=++_combatSequence,Weapon=weapon },out _);
+                    // Cache the intent; the tick loop executes it at 30Hz against authoritative combat rules.
+                    _attackWanted = true; _attackWeapon = weapon;
                 }
                 return;
             }
@@ -157,9 +215,12 @@ public sealed partial class MatchRuntime
             }
             if(floorTarget.HasValue)
             {
-                var floor=floorTarget.Value;State=BotState.Loot;_floorId=floor.Id;
+                var floor=floorTarget.Value;State=BotState.Loot;
                 if(best <= world.Inventory.PickupRadius*world.Inventory.PickupRadius)
-                { Item(match,WorldActionKind.Pickup,floor.Id);_hasGoal=false; }
+                {
+                    if(SelectReplaceSlot(match,actor,floor.Stack))Item(match,WorldActionKind.Pickup,floor.Id);
+                    _hasGoal=false;
+                }
                 else Goal(new Vector2(floor.X,floor.Y),now,settings);
                 return;
             }
@@ -176,7 +237,7 @@ public sealed partial class MatchRuntime
             }
             if(container!=null)
             {
-                State=BotState.BreakContainer;_containerId=container.Id;
+                State=BotState.BreakContainer;
                 var center=container.Bounds.Center;var target=new Vector2(center.X,center.Y);
                 var approach=Approach(container.Bounds,position,actor.Radius+.1f);
                 var weapon=SelectWeapon(match,actor,0,meleeOnly:true);
@@ -186,7 +247,8 @@ public sealed partial class MatchRuntime
                 {
                     _hasGoal=false;var aim=MathF.Atan2(target.Y-position.Y,target.X-position.X);
                     actor.Rotation=unchecked((ushort)(int)(aim/(2*MathF.PI)*65536));
-                    match.TryProcessAttack(SessionId,new AttackRequestPacket{RequestSeq=++_combatSequence,Weapon=weapon,Aim=actor.Rotation},out _);
+                    // Cache the intent; the tick loop swings at the container 30Hz with normal cooldown/range checks.
+                    _attackWanted=true;_attackWeapon=weapon;
                 }
                 return;
             }
@@ -229,13 +291,72 @@ public sealed partial class MatchRuntime
             if(inventory.ActiveWeapon!=selected)Item(match,WorldActionKind.Select,0,(byte)(selected<0?255:selected));
             return weapon;
         }
+        private static double WeaponScore(WeaponRule rule) => rule.Damage*(double)rule.Pellets/rule.CooldownSeconds*Math.Max(1f,rule.Range);
+        // Reuses the existing ItemId mapping; unknown ids yield no rule here.
+        private static WeaponRule? RuleFor(string itemId)
+        {
+            for(var id=1;id<10;id++)
+            {
+                var candidate=(CombatWeaponId)id;
+                if(itemId==MatchWorldRuntime.WeaponItemId(candidate)&&CombatWeaponRules.Value.TryGet(candidate,out var rule))return rule;
+            }
+            return null;
+        }
+        // A ranged weapon known to have no loaded rounds and no reserve cannot be fired.
+        private static bool DryRanged(WeaponRule rule,ItemStack stack) =>
+            rule.IsRanged&&stack.MagazineKnown&&stack.Magazine==0&&stack.Ammo==0;
+        // Valuates a carried stack; unknown ids and dry ranged weapons are worth nothing.
+        private static double CarriedWeaponScore(ItemStack stack)
+        {
+            if(stack.IsEmpty)return 0;
+            var rule=RuleFor(stack.ItemId);
+            return rule is null||DryRanged(rule,stack)?0:WeaponScore(rule);
+        }
+        // Floor guns keep picked-up ammo state, so a dry ranged candidate is unusable and must not displace a working weapon.
+        private static double FloorWeaponScore(MatchRuntime match,ItemStack stack) =>
+            match._worldCatalog!.TryGet(stack.ItemId,out var item)&&item.Enabled&&item.Kind==ItemKind.Weapon&&RuleFor(stack.ItemId) is { } rule&&!DryRanged(rule,stack)
+                ?WeaponScore(rule):0;
+        // Usable weapon that beats the weakest carried weapon; unusable weapons never qualify.
+        private static bool BetterWeapon(MatchRuntime match,InventorySnapshot inv,ItemStack stack)
+        {
+            var value=FloorWeaponScore(match,stack);if(value<=0)return false;
+            var weakest=double.MaxValue;
+            foreach(var weapon in inv.Weapons)weakest=Math.Min(weakest,CarriedWeaponScore(weapon));
+            return value>weakest;
+        }
+        // Swapping is handed to InventoryService, which drops the replaced weapon: no direct state writes here.
+        private static int WeakestWeaponSlot(InventorySnapshot inv)
+        {
+            var slot=-1;var weakest=double.MaxValue;
+            for(var i=0;i<inv.Weapons.Length;i++)
+            {
+                var value=CarriedWeaponScore(inv.Weapons[i]);
+                if(value<weakest){weakest=value;slot=i;}
+            }
+            return slot;
+        }
+        // Pre-select the weakest weapon because InventoryService replaces the active slot on pickup; the Select
+        // command only toggles/replaces the active slot, so a rejected Select must block the following pickup.
+        // Returns true when a following pickup is safe: no swap needed, weakest active, or the Select succeeded.
+        private bool SelectReplaceSlot(MatchRuntime match,Entity actor,ItemStack stack)
+        {
+            if(!match._worldCatalog!.TryGet(stack.ItemId,out var definition)||definition.Kind!=ItemKind.Weapon)return true;
+            var inv=match.World!.Inventory.GetSnapshot(actor.NetId);
+            if(inv.Weapons.Any(s=>s.IsEmpty))return true;
+            if(!BetterWeapon(match,inv,stack))return false;
+            var slot=WeakestWeaponSlot(inv);
+            if(slot<0)return false;
+            if(slot==inv.ActiveWeapon)return true;
+            return Item(match,WorldActionKind.Select,0,(byte)slot);
+        }
         private bool Wants(MatchRuntime match,Entity actor,ItemStack stack)
         {
-            if(!match._worldCatalog!.TryGet(stack.ItemId,out var rule))return false;
+            if(!match._worldCatalog!.TryGet(stack.ItemId,out var rule)||!rule.Enabled)return false;
             var inv=match.World!.Inventory.GetSnapshot(actor.NetId);
             return rule.Kind switch
             {
-                ItemKind.Weapon=>inv.Weapons.Any(s=>s.IsEmpty),
+                // Empty slot or a strictly better weapon; SelectReplaceSlot below preselects the replaced slot.
+                ItemKind.Weapon=>inv.Weapons.Any(s=>s.IsEmpty)||BetterWeapon(match,inv,stack),
                 ItemKind.Ammo=>inv.Weapons.Any(s=>!s.IsEmpty&&match._worldCatalog.TryGet(s.ItemId,out var w)&&w.MagazineSize>0&&s.Ammo<w.ReserveCapacity),
                 ItemKind.Helmet=>inv.Helmet.IsEmpty||rule.Reduction>match._worldCatalog.Get(inv.Helmet.ItemId).Reduction,
                 ItemKind.Armor=>inv.Armor.IsEmpty||rule.Reduction>match._worldCatalog.Get(inv.Armor.ItemId).Reduction,
@@ -253,7 +374,7 @@ public sealed partial class MatchRuntime
         }
         private void FailPath(double now,BotSettings settings)
         {
-            _search=null;_failedPaths++;
+            _search=null;_repathAt=now+settings.RepathSeconds;_failedPaths++;
             if(_failedPaths>=settings.FailedPathLimit){_ignoredGoal=_goal;_ignoreUntil=now+settings.BlacklistSeconds;_hasGoal=false;_failedPaths=0;State=BotState.Idle;}
         }
         private void SeekSafe(MatchRuntime match,Entity actor,Vector2 desired,BotSettings settings)
@@ -268,16 +389,17 @@ public sealed partial class MatchRuntime
             }
             _hasGoal=false;
         }
-        private static bool Walkable(MatchRuntime match,Vector2 p,float radius) =>
-            match.World!.Layout.IsWalkable(new WorldPoint(p.X,p.Y),radius,match.World.Destructibles.IsBroken,match.World.Hazards.IsDoorClosed)&&!Dangerous(match.World,p);
+        private static bool Walkable(MatchRuntime match,Vector2 p,float radius,bool allowHazards=false) =>
+            match.World!.Layout.IsWalkable(new WorldPoint(p.X,p.Y),radius,match.World.Destructibles.IsBroken,match.World.Hazards.IsDoorClosed)&&(allowHazards||!Dangerous(match.World,p));
         private static bool Dangerous(MatchWorldRuntime world,Vector2 p) => world.Layout.Objects.Any(o=>
             (o.Kind==WorldObjectKind.Lava||o.Kind==WorldObjectKind.Poison)&&o.Bounds.Contains(new WorldPoint(p.X,p.Y)));
         private static float Penalty(MatchRuntime match,Vector2 p) => (match.Zone?.IsOutside(p.X,p.Y)==true?10:1)*
-            (match.World!.Layout.Objects.Any(o=>o.Kind==WorldObjectKind.Swamp&&o.Bounds.Contains(new WorldPoint(p.X,p.Y)))?3:1);
-        private static bool SegmentWalkable(MatchRuntime match,Vector2 a,Vector2 b,float radius)
+            (match.World!.Layout.Objects.Any(o=>o.Kind==WorldObjectKind.Swamp&&o.Bounds.Contains(new WorldPoint(p.X,p.Y)))?3:1)*
+            (Dangerous(match.World,p)?20:1);
+        private static bool SegmentWalkable(MatchRuntime match,Vector2 a,Vector2 b,float radius,bool allowHazards=false)
         {
             var steps=Math.Max(1,(int)MathF.Ceiling(Vector2.Distance(a,b)/.2f));
-            for(var i=1;i<=steps;i++)if(!Walkable(match,Vector2.Lerp(a,b,i/(float)steps),radius))return false;
+            for(var i=1;i<=steps;i++)if(!Walkable(match,Vector2.Lerp(a,b,i/(float)steps),radius,allowHazards))return false;
             return true;
         }
         private static bool Visible(MatchRuntime match,Vector2 a,Vector2 b)

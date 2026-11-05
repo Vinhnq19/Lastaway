@@ -345,7 +345,7 @@ namespace JungleMaze.Presentation.UI.Lobby
                     row.Tint(false, false);
                 }
             }
-            var count = s.PlayerCount > 0 ? s.PlayerCount : slots.Count;
+            var count = _maps != null && _maps.HasState ? _maps.State.PlayerCount : s.PlayerCount > 0 ? s.PlayerCount : slots.Count;
             v.Count.text = _maps != null && _maps.HasState
                 ? _maps.State.HumanCount + " người + " + _maps.State.BotCount + " bot / " + _maps.State.MaxPlayers + " · tối thiểu " + s.MinPlayers
                 : count + "/" + s.MaxPlayers + " · tối thiểu " + s.MinPlayers;
@@ -356,7 +356,7 @@ namespace JungleMaze.Presentation.UI.Lobby
             v.Ready.interactable = _flow.ReadyRequests == 0;
             v.ReadyLabel.text = _flow.ReadyRequests > 0 ? "Đã sẵn sàng" : "Sẵn sàng";
             v.Start.gameObject.SetActive(o.StartEnabled);
-            v.Start.interactable = false; // T-6: the server has no start command
+            v.Start.interactable = false;
             if (_maps != null && _maps.HasState)
             {
                 v.Ready.gameObject.SetActive(false);

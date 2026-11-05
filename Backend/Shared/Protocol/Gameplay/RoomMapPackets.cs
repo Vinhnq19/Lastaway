@@ -31,15 +31,17 @@ namespace JungleBackend.Protocol.Gameplay
             MapId = MatchWire.ReadString(r, 32); MapName = MatchWire.ReadString(r, 64); MapVersion = MatchWire.ReadString(r, 32);
             MapHash = MatchWire.ReadString(r, 64); RulesHash = MatchWire.ReadString(r, 64);
             HostNetId = r.GetByte(); ReadyCount = r.GetByte(); PlayerCount = r.GetByte(); CanStart = r.GetBool(); LobbyRevision = r.GetUInt(); HumanCount = r.GetByte(); BotCount = r.GetByte(); MaxPlayers = r.GetByte(); MinPlayers = r.GetByte();
-            if ((HostNetId != 255 && HostNetId >= 10) || PlayerCount > 10 || HumanCount + BotCount != PlayerCount || ReadyCount > PlayerCount || CatalogGeneration < 1)
+            if (RoomId == Guid.Empty || LobbyRevision == 0 || MaxPlayers < 1 || MaxPlayers > 10 || MinPlayers < 2 || MinPlayers > 10 ||
+                PlayerCount > MaxPlayers || HumanCount + BotCount != PlayerCount ||
+                ReadyCount > PlayerCount || CatalogGeneration < 1 ||
+                (HostNetId != 255 && HostNetId >= 10))
                 throw new InvalidOperationException("Invalid room map state.");
         }
     }
 
     public struct SelectRoomMapPacket : INetSerializable
     {
-        public Guid RoomId; public uint SelectionRevision, LobbyRevision;
-        public byte HumanCount, BotCount, MaxPlayers, MinPlayers; public string MapId, MapHash;
+        public Guid RoomId; public uint SelectionRevision; public string MapId, MapHash;
         public void Serialize(NetDataWriter w)
         { MatchWire.WriteGuid(w, RoomId); w.Put(SelectionRevision); w.Put(MapId ?? ""); w.Put(MapHash ?? ""); }
         public void Deserialize(NetDataReader r)
@@ -48,8 +50,7 @@ namespace JungleBackend.Protocol.Gameplay
 
     public struct RoomMapReadyPacket : INetSerializable
     {
-        public Guid RoomId; public uint SelectionRevision, LobbyRevision;
-        public byte HumanCount, BotCount, MaxPlayers, MinPlayers; public string MapHash, RulesHash;
+        public Guid RoomId; public uint SelectionRevision; public string MapHash, RulesHash;
         public void Serialize(NetDataWriter w)
         { MatchWire.WriteGuid(w, RoomId); w.Put(SelectionRevision); w.Put(MapHash ?? ""); w.Put(RulesHash ?? ""); }
         public void Deserialize(NetDataReader r)
@@ -58,8 +59,7 @@ namespace JungleBackend.Protocol.Gameplay
 
     public struct StartRoomMatchPacket : INetSerializable
     {
-        public Guid RoomId; public uint SelectionRevision, LobbyRevision;
-        public byte HumanCount, BotCount, MaxPlayers, MinPlayers;
+        public Guid RoomId; public uint SelectionRevision;
         public void Serialize(NetDataWriter w) { MatchWire.WriteGuid(w, RoomId); w.Put(SelectionRevision); }
         public void Deserialize(NetDataReader r) { RoomId = MatchWire.ReadGuid(r); SelectionRevision = r.GetUInt(); }
     }

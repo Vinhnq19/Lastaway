@@ -31,20 +31,20 @@ namespace JungleMaze.Presentation.UI.Lobby
             if (info != null) info.sizeDelta = new Vector2(info.sizeDelta.x, 560);
             Place(view.Start.GetComponent<RectTransform>(), 300, 500, 276, 44);
             Place(view.Leave.GetComponent<RectTransform>(), 24, 500, 260, 44);
-            var viewport = Rect("Map cards", view.transform, 104, 435, 552, 165);
+            var viewport = Rect("Map cards", view.transform, 104, 467, 552, 150);
             var background = viewport.gameObject.AddComponent<Image>(); background.color = new Color(.06f, .1f, .1f, .98f);
             viewport.gameObject.AddComponent<RectMask2D>();
             _content = Rect("Content", viewport, 0, 0, 552, 150);
             var scroll = viewport.gameObject.AddComponent<ScrollRect>();
             scroll.viewport = viewport; scroll.content = _content; scroll.horizontal = true; scroll.vertical = false;
             scroll.movementType = ScrollRect.MovementType.Clamped; scroll.scrollSensitivity = 28;
-            _retry = Rect("Retry map", view.transform, 104, 603, 220, 20).gameObject.AddComponent<Button>();
+            _retry = Rect("Retry map", view.transform, 408, 427, 220, 32).gameObject.AddComponent<Button>();
             _retry.gameObject.AddComponent<Image>().color = new Color(.18f, .26f, .23f);
-            Label(_retry.transform, "Thử tải map lại", 0, 0, 220, 20, 14);
+            Label(_retry.transform, "Thử tải map lại", 0, 0, 220, 32, 14);
             _retry.onClick.AddListener(_maps.Retry);
-            _addBot = BotButton(view.transform, "+ Bot", 104, 396, 124, 32);
+            _addBot = BotButton(view.transform, "+ Bot", 104, 427, 124, 32);
             _addBot.onClick.AddListener(() => _maps.ManageBots(RoomBotAction.Add));
-            _fillBots = BotButton(view.transform, "Điền đủ 6", 238, 396, 160, 32);
+            _fillBots = BotButton(view.transform, "Điền đủ 6", 238, 427, 160, 32);
             _fillText = _fillBots.GetComponentInChildren<TMP_Text>();
             _fillBots.onClick.AddListener(() => _maps.ManageBots(RoomBotAction.FillMinimum));
             foreach (var slot in view.Slots)

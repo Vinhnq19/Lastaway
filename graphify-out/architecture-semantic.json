@@ -375,11 +375,11 @@
       "contributor": null
     },
     {
-      "id": "docs_network_architecture_vi_gameplay_v2",
-      "label": "Gameplay protocol v2",
+      "id": "docs_network_architecture_vi_gameplay_v3",
+      "label": "Gameplay protocol v3",
       "file_type": "concept",
       "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
-      "source_location": "Chọn map theo phòng",
+      "source_location": "Chọn map / Bot trong phòng mạng",
       "source_url": null,
       "captured_at": null,
       "author": null,
@@ -425,6 +425,34 @@
       "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
       "source_location": "Chọn map theo phòng",
       "_origin": "semantic"
+    },
+    {
+      "id": "docs_network_architecture_vi_bot_fsm",
+      "label": "Server-authoritative bot FSM",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Bot trong phòng mạng"
+    },
+    {
+      "id": "docs_network_architecture_vi_bot_settings",
+      "label": "bot_settings.json: bots-normal-1",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Bot trong phòng mạng"
+    },
+    {
+      "id": "docs_network_architecture_vi_bot_navigation",
+      "label": "Bounded A-star bot navigation",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Bot trong phòng mạng"
+    },
+    {
+      "id": "docs_network_architecture_vi_with_bots",
+      "label": "WithBots result metadata",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Bot trong phòng mạng"
     }
   ],
   "edges": [
@@ -830,7 +858,7 @@
     },
     {
       "source": "docs_network_architecture_vi_room_maps",
-      "target": "docs_network_architecture_vi_gameplay_v2",
+      "target": "docs_network_architecture_vi_gameplay_v3",
       "relation": "uses",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
@@ -840,7 +868,7 @@
     },
     {
       "source": "docs_network_architecture_vi_room_manager",
-      "target": "docs_network_architecture_vi_gameplay_v2",
+      "target": "docs_network_architecture_vi_gameplay_v3",
       "relation": "broadcasts",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
@@ -908,6 +936,106 @@
       "source_location": "Chọn map theo phòng",
       "weight": 1.0,
       "_origin": "semantic"
+    },
+    {
+      "source": "docs_network_architecture_vi_simulation",
+      "target": "docs_network_architecture_vi_bot_fsm",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Bot trong phòng mạng",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_bot_fsm",
+      "target": "docs_network_architecture_vi_bot_settings",
+      "relation": "configured_by",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Bot trong phòng mạng",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_bot_fsm",
+      "target": "docs_network_architecture_vi_bot_navigation",
+      "relation": "depends_on",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Bot trong phòng mạng",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_bot_navigation",
+      "target": "docs_network_architecture_vi_authored_map",
+      "relation": "reads",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Bot trong phòng mạng",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_room_host",
+      "target": "docs_network_architecture_vi_bot_fsm",
+      "relation": "manages_in_waiting",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Bot trong phòng mạng",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_bot_fsm",
+      "target": "docs_network_architecture_vi_healthservice",
+      "relation": "uses_shared_rules",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Bot trong phòng mạng",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_bot_fsm",
+      "target": "docs_network_architecture_vi_with_bots",
+      "relation": "produces",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Bot trong phòng mạng",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_with_bots",
+      "target": "docs_network_architecture_vi_outbox",
+      "relation": "persisted_through",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Bot trong phòng mạng",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_with_bots",
+      "target": "docs_network_architecture_vi_mongodb",
+      "relation": "persisted_in",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Bot trong phòng mạng",
+      "weight": 1.0
+    },
+    {
+      "source": "docs_network_architecture_vi_gameplay_v3",
+      "target": "docs_network_architecture_vi_bot_fsm",
+      "relation": "carries_management_and_participant_metadata",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "Bot trong phòng mạng",
+      "weight": 1.0
     }
   ],
   "hyperedges": [],
@@ -916,8 +1044,8 @@
   "coverage": {
     "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md": 134
   },
-  "source_sha256": "3f4208701127a4d23cc628e8c6bf83d33c5cd7bba16def195808816ff3314348",
+  "source_sha256": "49a06ffcd683c79a84fcf2518aa3590975c9f070e892f1e0df1115b38fdb21bb",
   "usage_note": "6370/3260 are historical extraction-agent self-reported tokens retained from the prior fragment; this Codex re-extraction and supervision are unmetered, not zero-cost or provider billing metadata.",
-  "extracted_at": "2026-11-03T09:27:19.542914+00:00",
-  "extraction_note": "Codex re-read network architecture for hvu integration and verified deployment path; added documented exporter→LevelCatalog geometry dependency. Retained unchanged statements/relations. No paid semantic API. Updated evidence links after reading final AWS report; no new architecture relation inferred from test status."
+  "extracted_at": "2026-11-05T03:15:55.699490+00:00",
+  "extraction_note": "Codex re-extracted changed map-version/bot section, retaining reviewed unchanged document relations. Added documented server FSM/settings/shared gameplay/navigation/WithBots persistence; migrated v2 concept to v3. No paid semantic API. Runtime PASS is evidence in report, not inferred from graph. Updated only evidence/release status after rollback; documented structural bot relations unchanged. Re-read final hazard/acceptance paragraph: local safe-edge exit, no normal hazard traversal. AWS release status updated from final evidence; no additional structural relations invented. Reviewed countdown change15s→5s; structural relations unchanged."
 }

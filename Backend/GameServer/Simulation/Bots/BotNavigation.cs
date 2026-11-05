@@ -42,7 +42,9 @@ public sealed class BotNavigationBudget
 public sealed class BotPathSearch
 {
     private readonly BotNavigationGrid _grid;
-    private readonly int _goal;
+    private int _goal;
+    private readonly Vector2 _destination, _start;
+    private bool _initialised;
     private readonly PriorityQueue<int, float> _open = new();
     private readonly Dictionary<int, float> _cost = new();
     private readonly Dictionary<int, int> _parent = new();
@@ -54,12 +56,32 @@ public sealed class BotPathSearch
     public IReadOnlyList<Vector2> Path => _path;
     public BotPathSearch(BotNavigationGrid grid, Vector2 start, Vector2 goal)
     {
-        _grid = grid; _goal = grid.Cell(goal);
-        var first = grid.Cell(start); _cost[first] = 0; _open.Enqueue(first, 0);
+        _grid = grid; _destination = goal; _start = start; _goal = grid.Cell(goal);
     }
     public void Advance(BotNavigationBudget budget, int requestLimit, float radius,
         Func<Vector2, bool> walkable, Func<Vector2, Vector2, bool> segment, Func<Vector2, float> penalty)
     {
+        if (!_initialised)
+        {
+            _initialised = true;
+            // Interaction points near a wall need a reachable grid centre, not the blocked rounded cell.
+            var bestGoal = -1; var bestStart = -1; var goalDistance = float.MaxValue; var startDistance = float.MaxValue;
+            for (var dy = -2; dy <= 2; dy++) for (var dx = -2; dx <= 2; dx++)
+            {
+                foreach (var origin in new[] { _destination, _start })
+                {
+                    var cx = (int)(origin.X / BotNavigationGrid.Step) + dx; var cy = (int)(origin.Y / BotNavigationGrid.Step) + dy;
+                    if (cx < 0 || cy < 0 || cx >= _grid.Width || cy >= _grid.Width) continue;
+                    var id = cy * _grid.Width + cx; var point = _grid.Point(id);
+                    if (!_grid.Walkable(id, radius) || !walkable(point) || !segment(origin, point)) continue;
+                    var distance = Vector2.DistanceSquared(point, origin);
+                    if (origin == _destination && distance < goalDistance) { bestGoal = id; goalDistance = distance; }
+                    if (origin == _start && distance < startDistance) { bestStart = id; startDistance = distance; }
+                }
+            }
+            if (bestStart < 0 || bestGoal < 0) { Finished = true; return; }
+            _goal = bestGoal; _cost[bestStart] = 0; _open.Enqueue(bestStart, 0);
+        }
         while (!Finished && _open.Count > 0 && budget.Remaining > 0)
         {
             var current = _open.Dequeue();

@@ -147,7 +147,7 @@ namespace JungleMaze.Composition
             var context = new OnlineTestContext(_match, _network, _history, _sender, elapsed);
             if (_roomMaps != null && _roomMaps.HasState)
             {
-                if (_roomMaps.Verified && !_capturedLobby)
+                if (_roomMaps.Verified && _roomMaps.State.BotCount >= _testBotCount && (string.IsNullOrEmpty(_testMapId) || _roomMaps.State.MapId == _testMapId) && !_capturedLobby)
                 { ScreenCapture.CaptureScreenshot(_output + ".lobby.png"); _capturedLobby = true; }
                 if (_roomMaps.IsHost && _match.Phase == MatchPhase.Waiting && !string.IsNullOrEmpty(_testMapId) && _roomMaps.State.MapId != _testMapId)
                 {
