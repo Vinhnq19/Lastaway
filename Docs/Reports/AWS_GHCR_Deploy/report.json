@@ -113,7 +113,7 @@
     "candidateActive": false
   },
   "pending": [
-    "Fresh AWS window approval before retry of the final checked release",
+    "New AWS window approved; prepare API-only comparison then run <=20m; no Start/Stop",
     "API-only update, explicit registry-to-registry rollback and no-change deployment not reached",
     "Two physical PCs NOT_TESTED"
   ],
@@ -673,5 +673,28 @@
     "status": "PASS_LOCAL",
     "behavior": "Rendered Compose API/GameServer images must exactly equal manifest digests before planning/pulling; includes private config overrides",
     "tests": "Correct config allowed; wrong API/GameServer images refused; full Local rerun PASS"
+  },
+  "readyRetryRelease": {
+    "releaseId": "ghcr-20261105-111555-b3be0ead",
+    "commit": "b3be0eadaf08fc9d9fd8a4db5f4ca2aef9e791bb",
+    "testPolicy": "Full",
+    "publishSteps": [
+      {
+        "service": "api",
+        "reused": true,
+        "seconds": 5.767,
+        "newLayerBytes": 0,
+        "byteMeasure": "compressed OCI layer delta, excludes TLS/retries; not wire traffic"
+      },
+      {
+        "service": "game-server",
+        "reused": true,
+        "seconds": 5.54,
+        "newLayerBytes": 0,
+        "byteMeasure": "compressed OCI layer delta, excludes TLS/retries; not wire traffic"
+      }
+    ],
+    "prepareWallSeconds": 113.41487350000534,
+    "activeOnEc2": false
   }
 }

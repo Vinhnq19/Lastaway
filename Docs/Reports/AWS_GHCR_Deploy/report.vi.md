@@ -38,6 +38,8 @@ Tự rollback thật đã PASS: image API/GameServer khôi phục đúng, curren
 
 Controller chính kết thúc sau466,80s; tính tới lần can thiệp AWS cuối là**1011.18s**, trong1200s đã duyệt. Các bước API-only update, explicit registry-to-registry rollback, deploy lại cùng release và Auto2 AWS **chưa chạy** vì gate đầu thất bại. Fresh Full Local/report fix và guard actual-image đã đạt; cần lượt AWS mới được duyệt để kiểm release cuối. Hai PC vật lý NOT_TESTED; không suy diễn số đo thành gameplay capacity vô hạn. Quick không thay combat/history/performance.
 
+Release retry `ghcr-20261105-111555-b3be0ead` đã chuẩn bị xong từ commit `b3be0ead`, reuse hai image và có Full Local mới khớp. Người dùng đã duyệt thêm một lượt AWS tối đa20phút; chưa đánh dấu nghiệm thu trước khi thực hiện.
+
 ## 7. Bàn giao và vận hành
 
 [Hướng dẫn GHCR](../../AWS_GHCR_Deploy.vi.md), [Network Architecture](../../Network_Architecture.vi.md). Một báo cáo JSON/CSV/evidence.zip+SHA256 giữ cả FAIL và PASS. Các commit trước đã được người dùng duyệt; không push Git. Camera Follow Player và spectator giữ đúng; build client không đổi gameplay trong lượt này. EC2 giữ Running theo lựa chọn, credits tiếp tục phát sinh. Giữ secret, Mongo/outbox/map volumes và image/release phục hồi; không prune toàn hệ thống.

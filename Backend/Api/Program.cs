@@ -72,7 +72,7 @@ builder.Services.AddSwaggerGen(options =>
     {
         Title = "Jungle Maze Account, Rooms & Maps API",
         Version = "v1",
-        Description = "Test: register → login → Authorize → POST /api/rooms → POST /api/game-tickets → handshake v4 UDP/WSS để vào phòng. Swagger quản lý phòng/cấp vé; client mới thực hiện join game. Tạo/list/xóa phòng và cấp vé chơi bắt buộc account JWT; Guest cũ chỉ dùng để xem lịch sử. Local luyện tập không cần API."
+        Description = "Test: register → login → Authorize → POST /api/rooms → POST /api/game-tickets → handshake v4 UDP/WSS để vào phòng. Swagger quản lý phòng/cấp vé; client mới thực hiện join game. Vé chơi dùng một lần, hết hạn sau 30 giây; không gửi JWT qua UDP. Tạo/list/xóa phòng và cấp vé chơi bắt buộc account JWT; Guest cũ chỉ dùng để xem lịch sử. Local luyện tập không cần API."
     });
     options.IncludeXmlComments(typeof(AuthService).Assembly);
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
