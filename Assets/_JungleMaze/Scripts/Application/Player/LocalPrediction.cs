@@ -64,6 +64,8 @@ namespace JungleMaze.App.Player
         public float PredictedY => _y;
         /// <summary>Authoritative status multiplier applied to new inputs and retained separately in replay history.</summary>
         public float MovementMultiplier { get; set; } = 1f;
+        /// <summary>Bell (WPN-03): the server inverts movement input while this is set, so prediction does too.</summary>
+        public bool Reversed { get; set; }
 
         public PredictionStats Stats
         {
@@ -91,6 +93,7 @@ namespace JungleMaze.App.Player
             _offsetX = _offsetY = 0f;
             _sinceInput = 0f;
             MovementMultiplier=1f;
+            Reversed=false;
         }
 
         public void ResetStats()
@@ -112,6 +115,7 @@ namespace JungleMaze.App.Player
             }
             var mx = MovementSimulation.Dequantize(input.MoveX);
             var my = MovementSimulation.Dequantize(input.MoveY);
+            if (Reversed) { mx = -mx; my = -my; }
             _pending[(_head + _count) % Capacity] = new PendingInput { Seq = input.InputSeq, MoveX = mx, MoveY = my, SentAt = _now, MovementMultiplier=MovementMultiplier };
             _count++;
             _prevX = _x; _prevY = _y;
