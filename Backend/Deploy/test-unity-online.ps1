@@ -59,6 +59,9 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 Import-Module (Join-Path $PSScriptRoot '../Tests/OnlineReadiness/OnlineReadiness.psm1') -Force
+# Resolve report helpers before launch and retain their module-bound commands for the full run.
+$onlineFingerprintCommand=Get-Command Get-OnlineBuildFingerprint -ErrorAction Stop
+$onlineFileHashCommand=Get-Command Get-OnlineFileSha256 -ErrorAction Stop
 
 # 1. Validate Player Executable
 if (-not (Test-Path -LiteralPath $Player)) {
@@ -139,6 +142,7 @@ $overallStatus = "FAIL"
 $timedOut=$false
 $launcherFailure=$null
 $previousExecutionState = [uint32]0
+$playerFingerprintBefore=& $onlineFingerprintCommand $playerExe
 
 try {
     # Keep only the test run awake; restore the thread's previous request in finally.
@@ -329,6 +333,9 @@ foreach ($c in $trackedClients) {
 }
 $overallStatus=if ($launcherFailure -or $trackedClients.Count -ne $clientCount -or @($trackedClients | Where-Object {$_.EvaluatedStatus -eq 'FAIL'}).Count) {'FAIL'} elseif (@($trackedClients | Where-Object {$_.EvaluatedStatus -eq 'INVALID'}).Count) {'INVALID'} elseif (@($trackedClients | Where-Object {$_.EvaluatedStatus -eq 'BLOCKED'}).Count) {'BLOCKED'} else {'PASS'}
 
+$playerFingerprintAfter=& $onlineFingerprintCommand $playerExe
+if ($playerFingerprintAfter -ne $playerFingerprintBefore) { $overallStatus='FAIL';$launcherFailure='Player artifacts changed during run' }
+
 # 12. Generate report.json ({ status, clients: [...] })
 $reportClients = @()
 foreach ($c in $trackedClients) {
@@ -358,8 +365,8 @@ $reportObject = [ordered]@{
     schemaVersion = 1
     timestampUtc = [DateTime]::UtcNow.ToString("o")
     reason = $launcherFailure
-    playerSha256 = (Get-FileHash -LiteralPath $playerExe -Algorithm SHA256).Hash.ToLowerInvariant()
-    playerFingerprint = Get-OnlineBuildFingerprint $playerExe
+    playerSha256 = & $onlineFileHashCommand $playerExe
+    playerFingerprint = $playerFingerprintAfter
     clientCount = $clientCount
     passedCount = $passCount
     physicalDeviceCount = 1

@@ -125,6 +125,8 @@ sudo journalctl -u lastaway-deploy-<id> --no-pager -n 30
 sudo docker ps --format 'table {{.Names}}\t{{.Status}}'
 ```
 
+Nếu kiểm từ PC lỗi sau readiness, root transaction chụp `failureMetrics` trước khi recreate GameServer cũ vì Docker có thể xóa log container candidate khi rollback. Đọc trong `remote-final.json`; `UNAVAILABLE` là thiếu bằng chứng, không được đổi thành PASS. Reporter ghi tên lệnh PowerShell bị thiếu và vị trí script, không ghi token hoặc HTTP body. Client có evidence PASS nhưng thiếu exit code/report tổng hợp vẫn chưa đủ để chấp nhận release.
+
 Token sai/hết hạn, thiếu digest, checksum sai, sai architecture, đĩa thấp hoặc đang deploy/bận sẽ bị chặn. Token chỉ nhập lại bằng setup; không chép Docker config root vào repo. Không mở Mongo/control ra Internet để debug.
 
 Giữ current + previous cùng image tương ứng. Chưa tự xóa GHCR package. Không `docker system prune -a`, không xóa volume; chỉ dọn staging thuộc tác vụ đã kết thúc và image đã chứng minh không còn tham chiếu. Caddy không đổi có thể còn bind file từ release cũ, nên không xóa cả thư mục release chỉ theo tuổi. Archive cũ `build-aws-release.ps1` vẫn là đường phục hồi chủ động, không tự fallback upload image khi registry lỗi.

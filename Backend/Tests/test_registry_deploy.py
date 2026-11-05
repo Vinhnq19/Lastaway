@@ -176,7 +176,7 @@ class ReleaseTests(unittest.TestCase):
         with patch.object(host, 'run', return_value=json.dumps([image])):
             with self.assertRaisesRegex(RuntimeError, 'digest mismatch'): host.cached_image('ghcr.io/x@sha256:'+'f'*64)
 
-    def transaction(self, *, pull_fail=False, health_fail=False, rollback_fail=False, busy=False, no_change=False):
+    def transaction(self, *, pull_fail=False, health_fail=False, rollback_fail=False, busy=False, no_change=False, accept_fail=False):
         root = self.root / 'host'; (root / 'releases/old').mkdir(parents=True)
         old = root / 'releases/old'; bundle(old)
         (old / 'release.env').write_text('API_IMAGE=api-old\nGAME_IMAGE=game-old\nMONGO_MAJOR=7\nMONGO_IMAGE=mongo-stays\nCADDY_IMAGE=caddy-stays\n')
@@ -199,18 +199,22 @@ class ReleaseTests(unittest.TestCase):
         def fail_pull(*a, **kw):
             if pull_fail: raise RuntimeError('Registry auth expired')
             return ''
+        candidate_health_calls = []
         def health(folder, services):
-            if health_fail and (folder.name != 'old' or rollback_fail): raise RuntimeError('Injected readiness failure')
+            if folder.name != 'old': candidate_health_calls.append(folder.name)
+            if health_fail and (folder.name != 'old' or rollback_fail) or accept_fail and folder.name != 'old' and len(candidate_health_calls) == 2:
+                raise RuntimeError('Injected readiness failure')
         def sleep(_):
             state = release.read_json(root / 'deploy-state/state.json')
             release.write_json(root / 'deploy-state/decision.json', {'transactionId': state['transactionId'], 'accept': True})
         with patch.multiple(host, ROOT=root, CONFIG=cfg, fcntl=fake_lock), \
              patch.object(host, 'plan', return_value=[] if no_change else ['api']), \
              patch.object(host, 'compose', side_effect=compose), patch.object(host, 'health', side_effect=health), patch.object(host, 'link', side_effect=test_link), \
+             patch.object(host, 'metrics', side_effect=lambda *a: operations.append(('metrics', ())) or {'candidateSamplesRetained':True}), \
              patch.object(host, 'cached_image', return_value='id'), patch.object(host, 'run', side_effect=fail_pull), patch.object(host, 'service_id', side_effect=lambda folder, service: service), patch.object(host, 'inspect', return_value={'RestartCount':0}), \
              patch.object(host.time, 'sleep', side_effect=sleep), \
              patch.object(host.shutil, 'disk_usage', return_value=types.SimpleNamespace(free=2*1024**3)):
-            if pull_fail or health_fail:
+            if pull_fail or health_fail or accept_fail:
                 with self.assertRaises(RuntimeError): host.transaction(new)
             else: host.transaction(new)
         return root, operations, release.read_json(root / 'deploy-state/state.json')
@@ -225,6 +229,12 @@ class ReleaseTests(unittest.TestCase):
         self.assertEqual([x[0] for x in operations], ['test-1','old'])
         self.assertTrue(all(x[1][-1] == 'api' and '--no-deps' in x[1] for x in operations))
         self.assertEqual(state['status'], 'ROLLED_BACK'); self.assertEqual((root/'current').resolve().name, 'old')
+
+    def test_failure_retains_candidate_metrics_before_recreate(self):
+        _, operations, state = self.transaction(accept_fail=True)
+        self.assertEqual(state['status'], 'ROLLED_BACK')
+        self.assertEqual(state['failureMetrics'], {'candidateSamplesRetained':True})
+        self.assertEqual([x[0] for x in operations], ['test-1', 'metrics', 'old'])
 
     def test_rollback_failure_reported_separately(self):
         _, _, state = self.transaction(health_fail=True, rollback_fail=True)

@@ -244,6 +244,10 @@ def transaction(bundle, rollback=False, migration=False, seconds=1200, min_test_
     except Exception as exc:
         # No daemon restart, DB mutation, secret rewrite, or instance lifecycle calls.
         result["error"] = str(exc) if isinstance(exc, (RuntimeError, ValueError)) else type(exc).__name__
+        # Recreating the old GameServer removes candidate logs; retain them before rollback.
+        if applied and result.get("measurementSince"):
+            try: result["failureMetrics"] = metrics(target, result["measurementSince"])
+            except Exception: result["failureMetrics"] = {"status": "UNAVAILABLE"}
         try:
             for service in reversed(applied):
                 compose(old, "up", "-d", "--no-build", "--pull", "never", "--no-deps", "--force-recreate", service)
