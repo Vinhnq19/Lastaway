@@ -1131,3 +1131,8 @@ Tài liệu này và Network Architecture là hướng dẫn chuẩn; số liệ
 ## 17. Tài liệu Phase 2 đã tách riêng
 
 Hướng dẫn chạy trận, Guest, Safe Zone và lịch sử chuyển sang [Phase2_Match_Guest_Zone.vi.md](Phase2_Match_Guest_Zone.vi.md). Kết quả nghiệm thu và bằng chứng nằm trong [báo cáo Phase 2](Reports/Phase2_Local/report.vi.md).
+
+
+## Deploy bằng GHCR private
+
+Luồng publish/deploy mới, setup PAT, kiểm Local, Full/Quick và rollback nằm trong [Hướng dẫn GHCR](AWS_GHCR_Deploy.vi.md). Không upload image archive trong deploy thường ngày; SSH/Swagger/Compass và secret/DB vẫn giữ nguyên. Pipeline này không tự Start/Stop EC2.

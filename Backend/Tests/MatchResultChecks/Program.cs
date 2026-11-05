@@ -61,6 +61,7 @@ public static class Program
         TestForbidRelinkingDuringLoadingAndInGame();
         TestCannotOverwriteDifferentProfile();
         TestCanonicalMatchHasherAndParticipantNormalization();
+        TestBotResultMetadata();
         TestStandaloneMongoIdempotenceAndConflictHandling();
         TestPublicLeaderboardSanitization();
         TestMatchHistoryPagination();
@@ -393,6 +394,79 @@ public static class Program
         var hash3 = MatchCanonicalHasher.ComputeCanonicalHash(sub3);
 
         Check(hash1 != hash3, "Modified participant payload yields distinct canonical hash");
+    }
+
+    /// <summary>
+    /// 12. Bot result metadata: canonical hash binds IsBot + MatchKind, while legacy HumanOnly
+    /// payloads keep the exact pre-bot binary layout so old outbox files still dedupe.
+    /// </summary>
+    private static void TestBotResultMetadata()
+    {
+        Console.WriteLine("\n--- Check 12: Bot Result Metadata & Legacy Hash Compatibility ---");
+
+        var matchId = Guid.NewGuid();
+        var startUtc = DateTimeOffset.UtcNow.AddMinutes(-4);
+        var endUtc = DateTimeOffset.UtcNow;
+
+        var human = new MatchParticipantSubmission("session-human", "Human", 1, 3, 140.0, "account:one");
+        var bot = new MatchParticipantSubmission("session-bot", "Bot", 2, 0, 90.0, null, IsBot: true);
+
+        var withBots = new MatchResultSubmission(matchId, "ROOM", "v1", startUtc, endUtc, "LastAlive",
+            new[] { human, bot }, MatchKind: "WithBots");
+        var withBotsReordered = new MatchResultSubmission(matchId, "ROOM", "v1", startUtc, endUtc, "LastAlive",
+            new[] { bot, human }, MatchKind: "WithBots");
+
+        var hashBots = MatchCanonicalHasher.ComputeCanonicalHash(withBots);
+        Check(hashBots == MatchCanonicalHasher.ComputeCanonicalHash(withBotsReordered),
+            "Bot match canonical hash is invariant to participant ordering");
+
+        var flipped = new MatchResultSubmission(matchId, "ROOM", "v1", startUtc, endUtc, "LastAlive",
+            new[] { human with { IsBot = true }, bot }, MatchKind: "WithBots");
+        Check(hashBots != MatchCanonicalHasher.ComputeCanonicalHash(flipped),
+            "Flipping IsBot changes the canonical hash");
+
+        var kindChanged = new MatchResultSubmission(matchId, "ROOM", "v1", startUtc, endUtc, "LastAlive",
+            new[] { human, bot }, MatchKind: "HumanOnly");
+        Check(hashBots != MatchCanonicalHasher.ComputeCanonicalHash(kindChanged),
+            "Changing MatchKind changes the canonical hash");
+
+        var human2 = new MatchParticipantSubmission("session-two", "Human2", 2, 1, 100.0, null);
+        var legacy = new MatchResultSubmission(matchId, "ROOM", "v1", startUtc, endUtc, "LastAlive",
+            new[] { human2, human });
+        using var legacyStream = new MemoryStream();
+        using (var writer = new BinaryWriter(legacyStream, Encoding.UTF8, true))
+        {
+            writer.Write(matchId.ToByteArray());
+            writer.Write("ROOM");
+            writer.Write("v1");
+            writer.Write(startUtc.UtcTicks);
+            writer.Write(endUtc.UtcTicks);
+            writer.Write("LastAlive");
+            var ordered = new[] { human, human2 }.OrderBy(p => p.PlayerSessionId, StringComparer.Ordinal).ToArray();
+            writer.Write(ordered.Length);
+            foreach (var p in ordered)
+            {
+                writer.Write(p.PlayerSessionId);
+                writer.Write(p.DisplayName);
+                writer.Write(p.Rank);
+                writer.Write(p.Kills);
+                writer.Write(p.SurvivalSeconds == 0 ? 0 : p.SurvivalSeconds);
+                writer.Write(p.ProfileKey != null);
+                if (p.ProfileKey != null) writer.Write(p.ProfileKey);
+            }
+        }
+        var legacyFixtureHash = Convert.ToHexString(SHA256.HashData(legacyStream.ToArray())).ToLowerInvariant();
+        Check(MatchCanonicalHasher.ComputeCanonicalHash(legacy) == legacyFixtureHash,
+            "HumanOnly result hash matches independent pre-bot binary layout (legacy outbox compatible)");
+
+        Check(new MatchRecord().MatchKind == "HumanOnly", "MatchRecord defaults to HumanOnly match kind");
+        Check(new MatchRecord { MatchKind = "HumanOnly", Reason = "LastAlive" }.PvpEligible
+            && new MatchRecord { MatchKind = "HumanOnly", Reason = "Tie" }.PvpEligible,
+            "HumanOnly LastAlive/Tie records are PvP-eligible");
+        Check(!new MatchRecord { MatchKind = "WithBots", Reason = "LastAlive" }.PvpEligible,
+            "WithBots LastAlive record is not PvP-eligible");
+        Check(!new MatchRecord { MatchKind = "HumanOnly", Reason = "NoHumans" }.PvpEligible,
+            "NoHumans record is not PvP-eligible");
     }
 
     /// <summary>

@@ -13,6 +13,7 @@ public sealed class MatchParticipantRecord
     public int Kills { get; set; }
     public double SurvivalSeconds { get; set; }
     public string? ProfileKey { get; set; }
+    public bool IsBot { get; set; }
 }
 
 [BsonIgnoreExtraElements]
@@ -43,6 +44,8 @@ public sealed class MatchRecord
     public DateTime EndUtc { get; set; }
 
     public string Reason { get; set; } = string.Empty;
+    public string MatchKind { get; set; } = "HumanOnly";
+    [BsonIgnore] public bool PvpEligible => MatchKind == "HumanOnly" && Reason is "LastAlive" or "Tie";
 
     public List<MatchParticipantRecord> Participants { get; set; } = new();
 }

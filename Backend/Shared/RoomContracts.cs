@@ -21,6 +21,8 @@ public sealed class RoomView
     public int MaxPlayers { get; init; }
     public int ActivePlayers { get; init; }
     public int PendingPlayers { get; init; }
+    public int BotCount { get; init; }
+    public int TotalPlayers { get; init; }
     public string? RoomCode { get; init; }
     public string MapId { get; init; } = "";
     public string MapName { get; init; } = "";

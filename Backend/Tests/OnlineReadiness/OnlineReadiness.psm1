@@ -54,18 +54,24 @@ function Test-OnlineEvidence($Evidence,$Scenario,[int]$ExitCode) {
     }
     $result.status='PASS';$result.reason='Required observations and rates verified';return [pscustomobject]$result
 }
+function Get-OnlineFileSha256([string]$Path) {
+    $stream=[IO.File]::OpenRead([IO.Path]::GetFullPath($Path))
+    $algorithm=[Security.Cryptography.SHA256]::Create()
+    try { return [BitConverter]::ToString($algorithm.ComputeHash($stream)).Replace('-','').ToLowerInvariant() }
+    finally { $stream.Dispose();$algorithm.Dispose() }
+}
 function Get-OnlineBuildFingerprint([string]$Player) {
-    $exe=(Resolve-Path -LiteralPath $Player).Path
+    $exe=[IO.Path]::GetFullPath($Player)
     $root=[IO.Path]::GetDirectoryName($exe)
     $files=[Collections.Generic.List[string]]::new();$files.Add($exe)
-    foreach ($name in @('UnityPlayer.dll','UnityCrashHandler64.exe')) { $f=Join-Path $root $name;if (Test-Path -LiteralPath $f) {$files.Add($f)} }
-    $data=Join-Path $root (([IO.Path]::GetFileNameWithoutExtension($exe))+'_Data')
-    if (Test-Path -LiteralPath $data) { foreach ($f in Get-ChildItem -LiteralPath $data -File -Recurse) {$files.Add($f.FullName)} }
+    foreach ($name in @('UnityPlayer.dll','UnityCrashHandler64.exe')) { $f=[IO.Path]::Combine($root,$name);if ([IO.File]::Exists($f)) {$files.Add($f)} }
+    $data=[IO.Path]::Combine($root,([IO.Path]::GetFileNameWithoutExtension($exe))+'_Data')
+    if ([IO.Directory]::Exists($data)) { foreach ($f in [IO.Directory]::EnumerateFiles($data,'*',[IO.SearchOption]::AllDirectories)) {$files.Add($f)} }
     $text=[Text.StringBuilder]::new()
-    # Ordinal ordering is identical in Windows PowerShell5 and PowerShell7.
+    # Hashing remains available after a long player run without cmdlet auto-loading.
     $files.Sort([StringComparer]::Ordinal)
-    foreach ($f in $files) { $relative=$f.Substring($root.Length+1).Replace('\','/');$hash=(Get-FileHash -LiteralPath $f -Algorithm SHA256).Hash.ToLowerInvariant();$null=$text.Append($relative+':'+$hash+"`n") }
+    foreach ($f in $files) { $relative=$f.Substring($root.Length+1).Replace('\','/');$hash=Get-OnlineFileSha256 $f;$null=$text.Append($relative+':'+$hash+"`n") }
     $algorithm=[Security.Cryptography.SHA256]::Create()
     try { return [BitConverter]::ToString($algorithm.ComputeHash([Text.Encoding]::UTF8.GetBytes($text.ToString()))).Replace('-','').ToLowerInvariant() } finally {$algorithm.Dispose()}
 }
-Export-ModuleMember -Function Get-OnlineField,Test-OnlineScenario,Get-OnlineRequiredAssertions,Test-OnlineEvidence,Get-OnlineBuildFingerprint
+Export-ModuleMember -Function Get-OnlineField,Test-OnlineScenario,Get-OnlineRequiredAssertions,Test-OnlineEvidence,Get-OnlineFileSha256,Get-OnlineBuildFingerprint

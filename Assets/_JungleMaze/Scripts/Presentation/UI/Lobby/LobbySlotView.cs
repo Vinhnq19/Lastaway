@@ -15,6 +15,7 @@ namespace JungleMaze.Presentation.UI.Lobby
         [SerializeField] private Color filledColor = new Color(0.12f, 0.17f, 0.16f);
         [SerializeField] private Color emptyColor = new Color(0.09f, 0.12f, 0.11f);
 
+        public byte NetId { get; set; } = 255;
         public Image Background => background;
         public TMP_Text PlayerName => playerName;
         public TMP_Text Badge => badge;

@@ -44,6 +44,8 @@ public static class RoomControlHost
 
         if (hub is not null)
         {
+            app.MapGet("/internal/deployment-status", async (CancellationToken ct) =>
+                Respond(await commands.Submit(_ => new RoomResult(200, hub.GetDeploymentStatus()), ct)));
             if (hub.Rooms.Catalog is { } maps)
             {
                 app.MapGet("/internal/maps", () => Results.Json(maps.View()));

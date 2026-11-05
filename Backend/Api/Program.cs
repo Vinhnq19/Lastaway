@@ -70,9 +70,9 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "Jungle Maze Account, Guests & Rooms API",
+        Title = "Lastaway Account, Rooms & Maps API",
         Version = "v1",
-        Description = "Test: register → login → Authorize → tạo/vào phòng → POST /api/game-tickets → handshake v4 UDP/WSS. Tạo/list/xóa phòng và cấp vé chơi bắt buộc account JWT; Guest cũ chỉ dùng để xem lịch sử. Local luyện tập không cần API."
+        Description = "Test: register → login → Authorize → POST /api/rooms → POST /api/game-tickets → handshake v4 UDP/WSS để vào phòng. Swagger quản lý phòng/cấp vé; client mới thực hiện join game. Vé chơi dùng một lần, hết hạn sau 30 giây; không gửi JWT qua UDP. Tạo/list/xóa phòng và cấp vé chơi bắt buộc account JWT; Guest cũ chỉ dùng để xem lịch sử. Local luyện tập không cần API."
     });
     options.IncludeXmlComments(typeof(AuthService).Assembly);
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -87,7 +87,7 @@ builder.Services.AddSwaggerGen(options =>
         Type = SecuritySchemeType.ApiKey,
         In = ParameterLocation.Header,
         Name = "X-Guest-Credential",
-        Description = "Opaque 256-bit credential từ POST /api/guests. Dùng làm proof cho /api/game-tickets và /api/me/matches."
+        Description = "Credential Guest cũ chỉ dùng xem lịch sử /api/me/matches. Không cấp vé chơi hoặc quyền quản lý phòng; /api/game-tickets bắt buộc account JWT."
     });
     options.OperationFilter<BearerSecurityOperationFilter>();
 });
@@ -151,7 +151,7 @@ if (app.Configuration.GetValue<bool?>("Swagger:Enabled") ?? app.Environment.IsDe
     app.UseSwaggerUI(options =>
     {
         options.SwaggerEndpoint("v1/swagger.json", "Jungle Maze API v1");
-        options.DocumentTitle = "Jungle Maze — Test API";
+        options.DocumentTitle = "Lastaway — Test API";
         options.EnableTryItOutByDefault();
         // Không bật EnablePersistAuthorization: JWT chỉ giữ trong phiên UI, không lưu localStorage.
     });

@@ -84,7 +84,7 @@ namespace JungleMaze.Infrastructure.Api
                 {
                     var p = (JObject)players[i];
                     rows[i] = new LeaderboardEntry(p.Value<string>("playerSessionId"), p.Value<string>("displayName"),
-                        p.Value<int>("rank"), p.Value<int>("kills"), p.Value<double>("survivalSeconds"));
+                        p.Value<int>("rank"), p.Value<int>("kills"), p.Value<double>("survivalSeconds"), p.Value<bool>("isBot"));
                 }
                 done(ApiResult<LeaderboardEntry[]>.Success(rows));
             });

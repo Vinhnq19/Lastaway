@@ -11,7 +11,7 @@ using UnityEngine;
 namespace JungleMaze.EditorTools
 {
     /// <summary>Canonical backend data is copied explicitly, then verified before every player build.</summary>
-    public sealed class RuntimeDataBuild : IPreprocessBuildWithReport
+    public sealed class RuntimeDataBuild : IPreprocessBuildWithReport, IPostprocessBuildWithReport
     {
         private static readonly string[] Files = { "map_demo.json", "match_settings.json", "zone_schedule.json", "world_settings.json", "items_catalog.json", "weapons.json" };
         private static string Source => Path.GetFullPath(Path.Combine(Application.dataPath, "../Backend/Shared/GameData"));
@@ -72,7 +72,77 @@ namespace JungleMaze.EditorTools
                 throw new BuildFailedException("Offline map is outdated; sync runtime data first.");
         }
 
-        public void OnPreprocessBuild(BuildReport report) => Verify();
+        private static string _registrySourceHash;
+
+        public void OnPreprocessBuild(BuildReport report)
+        {
+            Verify();
+            if (report.summary.platform == BuildTarget.StandaloneWindows64) _registrySourceHash = RegistrySourceHash();
+        }
+
+        public void OnPostprocessBuild(BuildReport report)
+        {
+            if (report.summary.platform != BuildTarget.StandaloneWindows64) return;
+            // Unity may still hold temporary build settings here; Local/publish gates compare these pre-build inputs after the Editor restores them.
+            if (string.IsNullOrEmpty(_registrySourceHash))
+                throw new BuildFailedException("Missing pre-build source fingerprint; rebuild before registry acceptance.");
+            var player = Path.GetFullPath(report.summary.outputPath);
+            var root = Path.GetDirectoryName(player);
+            var files = new System.Collections.Generic.List<string> { player };
+            foreach (var name in new[] { "UnityPlayer.dll", "UnityCrashHandler64.exe" })
+                if (File.Exists(Path.Combine(root, name))) files.Add(Path.Combine(root, name));
+            var data = Path.Combine(root, Path.GetFileNameWithoutExtension(player) + "_Data");
+            if (Directory.Exists(data)) files.AddRange(Directory.GetFiles(data, "*", SearchOption.AllDirectories));
+            var evidence = new RegistryBuildInfo { schemaVersion = 1, sourceHash = _registrySourceHash,
+                playerFingerprint = RegistryHash(root, files.ToArray()), unityVersion = Application.unityVersion };
+            File.WriteAllText(Path.Combine(root, "registry-build.json"), JsonUtility.ToJson(evidence, true), new UTF8Encoding(false));
+        }
+
+        private static string RegistrySourceHash()
+        {
+            var root = Path.GetFullPath(Path.Combine(Application.dataPath, ".."));
+            var files = new System.Collections.Generic.List<string>();
+            var extensions = new System.Collections.Generic.HashSet<string>(new[] { ".cs", ".asmdef", ".asmref", ".unity", ".prefab", ".asset", ".json", ".shader", ".hlsl", ".cginc", ".uss", ".uxml", ".txt", ".bytes", ".csv", ".xml", ".dll" });
+            files.AddRange(Directory.GetFiles(Path.Combine(root, "Assets"), "*", SearchOption.AllDirectories)
+                .Where(path => extensions.Contains(Path.GetExtension(path)) || path.EndsWith(".cs.meta") || path.EndsWith(".asmdef.meta") || path.EndsWith(".asmref.meta")));
+            foreach (var folder in new[] { "Packages", "ProjectSettings", "Backend/Shared" })
+                files.AddRange(Directory.GetFiles(Path.Combine(root, folder), "*", SearchOption.AllDirectories)
+                    .Where(path => !path.Replace('\\', '/').Split('/').Any(part => part == "bin" || part == "obj" || part == "__pycache__" || part == ".git")));
+            return RegistryHash(root, files.ToArray());
+        }
+
+        private static byte[] RegistryBytes(string file)
+        {
+            var bytes = File.ReadAllBytes(file);
+            if (!file.EndsWith(".meta", StringComparison.Ordinal)) return bytes;
+            // These disabled non-Windows64 platform entries are added by Unity while building; they cannot affect this player.
+            var text = Encoding.UTF8.GetString(bytes).TrimStart('\uFEFF').Replace("\r\n", "\n");
+            text = System.Text.RegularExpressions.Regex.Replace(text,
+                @"  - serializedVersion: 4\n    buildTarget: (?:WebGL|WindowsStoreApps)\n(?:    [^\n]*\n)*",
+                match => match.Value.Contains("    overridden: 0\n") ? "" : match.Value);
+            return Encoding.UTF8.GetBytes(text);
+        }
+
+        private static string RegistryHash(string root, string[] files)
+        {
+            Array.Sort(files, StringComparer.Ordinal);
+            var text = new StringBuilder();
+            using (var sha = SHA256.Create())
+            {
+                foreach (var file in files)
+                {
+                    var relative = file.Substring(root.TrimEnd(Path.DirectorySeparatorChar).Length + 1).Replace('\\', '/');
+                    text.Append(relative).Append(':').Append(BitConverter.ToString(sha.ComputeHash(RegistryBytes(file))).Replace("-", "").ToLowerInvariant()).Append('\n');
+                }
+                return BitConverter.ToString(sha.ComputeHash(Encoding.UTF8.GetBytes(text.ToString()))).Replace("-", "").ToLowerInvariant();
+            }
+        }
+
+        [Serializable] private sealed class RegistryBuildInfo
+        {
+            public int schemaVersion;
+            public string sourceHash, playerFingerprint, unityVersion;
+        }
 
         private static string Manifest()
         {

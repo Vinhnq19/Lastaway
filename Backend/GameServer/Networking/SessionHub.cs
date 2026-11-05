@@ -105,6 +105,7 @@ public sealed partial class SessionHub
     {
         if (!_hookedRooms.Add(room)) return;
 
+        room.Match.PerformanceMetrics = _metrics;
         room.Match.SnapshotGenerated += bytes =>
         {
             List<IGamePeer>? slowPeers = null;
@@ -715,8 +716,8 @@ public sealed partial class SessionHub
 
     public void Tick(double dt)
     {
-        Rooms.Tick(dt);
-        TickWorldStreams();
+        using (new ServerMetrics.StageTiming(_metrics, TickWorkStage.Simulation)) Rooms.Tick(dt);
+        using (new ServerMetrics.StageTiming(_metrics, TickWorkStage.Streams)) TickWorldStreams();
     }
 
     public void CloseAll()

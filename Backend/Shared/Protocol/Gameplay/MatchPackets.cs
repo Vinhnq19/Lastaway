@@ -4,9 +4,9 @@ using LiteNetLib.Utils;
 
 namespace JungleBackend.Protocol.Gameplay
 {
-    public static class MatchProtocol { public const ushort Version = 2; public const int MaxPlayers = 10; }
+    public static class MatchProtocol { public const ushort Version = 3; public const int MaxPlayers = 10; }
     public enum MatchPhase : byte { Waiting, Lobby, Loading, InGame, Ending, Cleanup }
-    public enum MatchEndReason : byte { None, LastAlive, Tie, Timeout, Cancelled }
+    public enum MatchEndReason : byte { None, LastAlive, Tie, Timeout, Cancelled, NoHumans }
     public enum MatchEntityEvent : byte { Spawn, Despawn, Eliminated }
     public enum EliminationCauseWire : byte { Unknown = 0, Player = 1, Zone = 2, LeftMatch = 3, Disconnected = 4, Environment = 5 }
 
@@ -149,12 +149,13 @@ namespace JungleBackend.Protocol.Gameplay
     }
     public struct MatchParticipantState : INetSerializable
     {
+        public bool IsBot; public uint BotId;
         public byte NetId,Rank;public ushort Kills;public uint SurvivalTicks;
         public string PlayerSessionId,DisplayName;
         public void Serialize(NetDataWriter w)
-        { w.Put(NetId);w.Put(PlayerSessionId??"");w.Put(DisplayName??"");w.Put(Rank);w.Put(Kills);w.Put(SurvivalTicks); }
+        { w.Put(NetId);w.Put(PlayerSessionId??"");w.Put(DisplayName??"");w.Put(Rank);w.Put(Kills);w.Put(SurvivalTicks);w.Put(IsBot);w.Put(BotId); }
         public void Deserialize(NetDataReader r)
-        { NetId=r.GetByte();PlayerSessionId=MatchWire.ReadString(r,64);DisplayName=MatchWire.ReadString(r,32);Rank=r.GetByte();Kills=r.GetUShort();SurvivalTicks=r.GetUInt();if(NetId>=10||Rank>10)throw new InvalidOperationException("Invalid participant."); }
+        { NetId=r.GetByte();PlayerSessionId=MatchWire.ReadString(r,64);DisplayName=MatchWire.ReadString(r,32);Rank=r.GetByte();Kills=r.GetUShort();SurvivalTicks=r.GetUInt();IsBot=r.GetBool();BotId=r.GetUInt();if(NetId>=10||Rank>10||IsBot!=(BotId!=0))throw new InvalidOperationException("Invalid participant."); }
     }
     public struct MatchRosterPacket : INetSerializable
     {
@@ -184,7 +185,7 @@ namespace JungleBackend.Protocol.Gameplay
         public void Deserialize(NetDataReader r)
         {
             MatchId=MatchWire.ReadGuid(r);Reason=(MatchEndReason)r.GetByte();WinnerNetId=r.GetByte();ParticipantCount=r.GetByte();MatchWire.Count(ParticipantCount);
-            if(Reason>MatchEndReason.Cancelled)throw new InvalidOperationException("Invalid match result.");
+            if(Reason>MatchEndReason.NoHumans)throw new InvalidOperationException("Invalid match result.");
             Participants=new MatchParticipantState[ParticipantCount];for(var i=0;i<ParticipantCount;i++)Participants[i].Deserialize(r);
             MapId=MatchWire.ReadString(r,32); MapVersion=MatchWire.ReadString(r,32); MapHash=MatchWire.ReadString(r,64); RulesHash=MatchWire.ReadString(r,64);
         }

@@ -21,7 +21,7 @@ public sealed class FixedTickLoop(int tickRate, ServerMetrics metrics)
             metrics.RecordLoopSpacing(spacing * 1000);
             accumulator += spacing;
             previous = loopStarted;
-            pollNetwork();
+            using (new ServerMetrics.StageTiming(metrics, TickWorkStage.Poll)) pollNetwork();
             var steps = 0;
             while (accumulator >= step && steps < MaxCatchUpSteps)
             {

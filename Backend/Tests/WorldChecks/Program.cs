@@ -1,3 +1,4 @@
+using GameServer.Maps;
 using JungleMaze.World;
 using JungleBackend.Protocol.Gameplay;
 using GameServer.Simulation;
@@ -85,14 +86,17 @@ try
 {
     Environment.SetEnvironmentVariable("WORLD_ENABLED","1");
     Environment.SetEnvironmentVariable("WORLD_LAYOUT_MODE","Prototype");
-    var canonical=MapData.Load(GameDataLoader.ReadGameDataFile("map_demo.json"));
+    // This golden vector describes the shipped ruins map, independently of the developer-selected default.
+    var definition=new MapCatalogStore(Path.Combine(AppContext.BaseDirectory,"GameData","Maps"),"world-prototype-1").Current.Find("di-tich-co")!;
+    var canonical=definition.Data;
     var schedule=ZoneSchedule.Load(GameDataLoader.ReadGameDataFile("zone_schedule.json"));
     var profile=new MatchProfile{Version=canonical.Version,MinPlayers=2,LobbyDurationSeconds=.01,LoadingTimeoutSeconds=1,ZoneTimeScale=1000,TargetMatchDurationSeconds=10000};
     MatchRuntime Start(string room,byte hp=100)
     {
         var p=hp==100?profile:new MatchProfile{Version=canonical.Version,MinPlayers=2,LobbyDurationSeconds=.01,LoadingTimeoutSeconds=1,PlayerHp=hp,ZoneTimeScale=1000,TargetMatchDurationSeconds=10000};
-        var m=new MatchRuntime(room,canonical,schedule,p);
+        var m=new MatchRuntime(room,canonical,schedule,p,selectedMap:definition);
         m.TryRegisterPlayer("p0","Hero0",out _);m.TryRegisterPlayer("p1","Hero1",out _);m.SetPlayerReady("p0");m.SetPlayerReady("p1");
+        m.StartFromRoom();
         for(var i=0;i<4;i++)m.Tick(1.0/30);
         m.SetPlayerLoaded("p0",m.MatchId);m.SetPlayerLoaded("p1",m.MatchId);m.Tick(1.0/30);
         return m;
