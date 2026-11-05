@@ -1,42 +1,39 @@
-# Pipeline AWS qua GHCR private — Local đã đạt, chờ commit/publish
+# Pipeline AWS qua GHCR private — release sửa lỗi đã sẵn sàng
 
-## 1. Phạm vi
+## 1. Phạm vi và kết luận hiện tại
 
-Thêm PrepareOnly/Deploy/Rollback, image pin digest, update riêng service và giữ Mongo/secret/outbox/map. Không tự Start/Stop EC2, nâng máy, tạo instance hoặc push Git. **Chưa nghiệm thu toàn pipeline AWS.**
+Đã commit pipeline, publish hai package private và hoàn tất Full Local. **Chưa nghiệm thu deploy GHCR trên AWS**: lượt đầu bị guard checksum chặn trước khi thay service. Đã sửa nguyên nhân, thêm test tái hiện, chạy lại Full Local và publish release sửa lỗi `ghcr-20261105-100410-d81eb2b6`. Đang xin lượt AWS mới tối đa20phút theo giới hạn kế hoạch; không tự kéo dài cửa sổ cũ. Không push Git, Start/Stop hoặc nâng EC2.
 
-## 2. Code đã triển khai
+## 2. Những gì đã lập trình
 
-- Fingerprint API/GameServer theo code compile, dependency, Dockerfile và base image digest; reuse digest cho phần không đổi.
-- Manifest đầy đủ hai service, checksum và bundle nhỏ không image archive/DB/secret.
-- Internal deployment-status qua queue có giới hạn; kiểm active/pending/grace/bot/entity/phase.
-- Root transaction giữ flock qua pull, switch và kiểm từ PC; systemd guard sống qua mất SSH/PC, tự rollback service khi thiếu acceptance.
-- Kiểm đúng instance, DNS/TLS, architecture/digest, đĩa, health và giữ container không đổi. Không restart Mongo trong luồng mới; rollback đọc đúng base-images.env của legacy apps-only.
-- Gate Full có artifact Windows đúng nguồn, WSS 300s, Auto hai client, UDP thật và server metrics; Local tạm giới hạn 256MiB rồi trả cấu hình dev.
+PrepareOnly/Deploy/Rollback; fingerprint riêng API/GameServer và base digest LinuxAMD64; manifest đầy đủ hai image pin digest; bundle chỉ script/config/checksum, không image archive/secret/DB. EC2 pull trước khi switch, chỉ recreate service thay đổi với `--no-deps`; Mongo không restart. Flock và systemd guard giữ transaction qua kiểm từ PC, thiếu acceptance thì rollback. Deployment-status nội bộ đọc snapshot qua queue, bảo vệ secret và từ chối GameServer còn participant/trận.
 
-## 3. Setup GHCR
+Sửa hai fixture map cũ sau merge để chọn Di tích cổ; giữ golden/collision assertions. Build receipt và gate đối chiếu source/binary6000.3.15f1. Runner đếm roster/network view riêng với viewport Follow Player. Swagger sửa mô tả Guest: chỉ đọc lịch sử cũ, không lấy vé chơi/quản lý phòng.
 
-Đã quan sát PC đăng nhập trong Docker Desktop credential store, đúng owner và chỉ package scopes. EC2 có token riêng **chỉ read:packages**, root config **600**, thư mục **700**. Không lưu hoặc in token trong repo/report. Antigravity dừng tại GitHub Confirm access và thiếu browser evaluate; người dùng đã tự xác thực/nhập token trực tiếp. Chưa ghi PASS cho package publish/pull thực từ registry.
+## 3. GHCR và đóng gói
+
+PC dùng Docker Desktop credential store, PAT package scopes; EC2 token riêng chỉ read:packages, thư mục700/file600. Người dùng tự xác thực/nhập token; không đưa token vào chat hoặc repository. Hai package đã quan sát **Private** và liên kết Vinhnq19/Lastaway qua browser, rồi kiểm lại GitHub API. Publish digest thực PASS.
+
+Lần publish khởi tạo được đo sau khi layer đã ấm cache: API7,624s, GameServer7,198s; không coi đây là cold-push benchmark. Bản sửa Swagger riêng API: build/push22,226s, GameServer reuse5,701s, deltaAPI3.798.597byte compressed OCI. Các số này là bước service, không bao gồm toàn bộ hồi quy. Bản sửa script checksum tái sử dụng cả hai image; xem manifest/JSON cho digest. Compressed layer delta **không phải** traffic mạng thực; wire bytes chưa đo. Không dùng `latest` để deploy.
 
 ## 4. Kiểm thử Local
 
-Backend build 0 lỗi/0 warning. Pipeline 19 tests, NetworkChecks148, BotChecks187 và WorldChecks168 PASS. DualTransport, MapCatalog, MatchResult, Combat, Inventory và MatchChecks PASS. Hai fixture cũ hỏng sau merge do map mặc định đổi; đã pin chúng vào map Di tích cổ để giữ golden test, không đổi map sản xuất.
+Backend build0lỗi/0warning; **20 pipeline tests** PASS, gồm subprocess import bundle đã seal mà không được tạo bytecode. Network148, Bot187, World168 assertions PASS; DualTransport/MapCatalog/MatchResult/Combat/Inventory/MatchChecks PASS. Windows6000.3.15f1 đã build thành công192,63s,0error/6warning; build hiện tại được đối chiếu receipt và hash. Không đổi Editor.
 
-Windows 6000.3.15f1 đã build thành công. Build hook chụp source trước build, cổng Local/publish đối chiếu khi Editor trả các thiết lập tạm; không stamp EXE cũ. Build mới đã gồm sửa test runner: đủ roster/network view thay vì đòi cả map nằm trên viewport Follow Player; ghi riêng số view trên màn hình và call site của disconnect.
+Lượt sửa checksum mới: WSS1người+9bot **401.86s**, 402/402pong, timeout0; RTTp50/p95/p99=33.35/33.76/34.17ms. Input29.86Hz trong 51.51s có điều khiển, snapshot30.00Hz; đủ10roster/view, tối đa4trên viewport. Có bị loại/spectator, kết quả, lịch sử và chơi lại; không suy rằng cả10nhân vật đều sống/đánh nhau suốt402giây. Auto2client+4bot, fallback sau UDP không listener, kết quả/history/replay PASS. UDP7777/WSS smoke riêng PASS.
 
-Lượt Local WSS đầu chỉ đạt75,11s rồi FAIL `UserRequested`, **không tính thành300s PASS**. Login/JWT/tạo phòng PASS, WSS có74/74pong, timeout0; RTTp50=33,35ms/p95=34,13ms/p99=66,99ms; input29,86Hz/snapshot30,00Hz. Việc đủ10 view chưa được assertion cũ xác nhận do chỉ2 view cùng nằm trong camera. Bằng chứng thất bại giữ trong evidence.zip; không dùng lại số liệu75s làm nghiệm thu hiệu năng.
+Server256MiB: 101cửa sổ tick/101mẫu RAM; ticktrungbình29.924Hz, CPUmộtcore max23.00%, DockerMemPerc max22.33%,0dropped/OOM/restart. Docker CLI MemPerc loại inactive file cache, không phải RSS hay tổng mọi trang cgroup. Cấu hình dev được trả memory limit0 như trước. Lượt75s cũ vẫn giữ FAIL trong bằng chứng, không đổi thành PASS.
 
-Lượt mới dùng thư mục bằng chứng riêng đã **PASS Full Local**: WSS1người+9bot đủ300.01s,300/300pong,timeout0,input29.91Hz,snapshot30.00Hz. RTTp50/p95/p99=33.34/33.52/33.93ms. Đủ10roster và10networkview, tối đa3cùng trên viewport Follow Player. Trận có loại nhân vật/spectator; không diễn giải thành10nhân vật sống và chạyAI suốt300s.
+## 5. Lượt AWS đầu và lỗi đã sửa
 
-Auto2client+4bot PASS, cả hai fallbackWSS sau UDP thử7779, process exit0; kết quả/history/replay PASS. Smoke UDP7777 và WSS riêng PASS. Server256MiB: ticktrungbình29.942Hz,0dropped/restart/OOM; CPUmộtcore cao nhất22.18%, RAMtheoDockerstats cao nhất23.50%. Đây là MemPerc CLI Docker (working set, có loại cache), không phải số đo RSS hoặc mọi trang cache của cgroup. Cấu hình GameServer dev thường được khôi phục sau test. Lượt75s cũ vẫn giữ FAIL, không đổi kết quả cũ; UserRequested không tái hiện trong lượt300s mới.
+EC2 Running13.239.10.69; DNS khớp, HTTPS200. Lượt đầu bị chặn sau53,40s trong entrypoint/76,01s cả wrapper, lỗi `Release checksum/file inventory mismatch`. Python import helper sinh `scripts/__pycache__` trong bundle đã seal; guard từ chối trước pull/switch. Sửa tại owner bằng `sys.dont_write_bytecode = True`, commit`d81eb2b6`, có test subprocess không dùng `-B`. Không bỏ checksum hoặc nới whitelist để che lỗi.
 
-## 5. AWS và thời gian/byte truyền
+Snapshot trước/sau bằng nhau: release vẫn`bots-20261105-r2`, mọi container ID/config hash/volumeMongo giữ nguyên. Chưa có rollback thực vì chưa thay service. Smoke từ PC trên bản AWS cũ: UDP7777 và WSS443 đều PASS, phòng test đã dọn; không thay bằng generator trong EC2. Tool không tự bật/tắt máy.
 
-EC2 quan sát Running tại13.239.10.69. Tác vụ chỉ kiểm tra trạng thái và setup quyền đọc registry; chưa deploy/start/stop. First/small/no-change GHCR timings và traffic thực **NOT_TESTED/NOT_MEASURED**. Layer compressed delta được tool ghi riêng, không coi là traffic TLS chính xác. Rollback fault-injection PASS ở module; rollback AWS thật chưa kiểm.
+## 6. Cổng còn lại và giới hạn
 
-## 6. Cổng còn lại
+Release sửa lỗi đã sẵn sàng; chờ chấp thuận lượt AWS mới20phút. Sau đó kiểm Full từ PC, cập nhật riêng API, rollback thật, deploy lại cùng release không recreate; ghi thời gian/byte và dữ liệu bảo toàn. Chưa đánh PASS các bước này từ unit test/mock. Hai PC vật lý NOT_TESTED; không suy diễn ping/pong thành sức chứa gameplay vô hạn. Quick không thay nghiệm thu combat/history/performance.
 
-Windows rebuild và Full Local đã đạt. Lượt retry từng bị chặn bởi thư mục bằng chứng đã tồn tại; đã thêm chặn sớm và dùng thư mục mới, không coi dữ liệu cũ là lượt mới. Review rồi được phép commit để working tree sạch theo kế hoạch đã chốt; tool không tự commit. Sau đó mới publish, đo và chạy một cửa sổ AWS tối đa20phút, giữ Running. Hai PC vật lý vẫn NOT_TESTED.
+## 7. Bàn giao và vận hành
 
-## 7. Bàn giao hiện tại
-
-[Hướng dẫn setup/deploy](../../AWS_GHCR_Deploy.vi.md), [Network Architecture](../../Network_Architecture.vi.md). Camera scene giữ Follow Player; spectator không đổi. Không phát hành build cũ/failed làm bằng chứng mới. EC2 vẫn phát sinh credits khi Running; chưa có hành động tự tắt máy trong pipeline.
+[Hướng dẫn setup/deploy](../../AWS_GHCR_Deploy.vi.md), [Network Architecture](../../Network_Architecture.vi.md). Các commit đã được người dùng cho phép; không push Git. Camera bàn giao Follow Player, spectator giữ nguyên. Evidence.zip giữ cả lần FAIL và các lần PASS; JSON/CSV/checksum đi kèm. EC2 hiện vẫn Running theo yêu cầu, credits tiếp tục phát sinh. Giữ secret, volume, release hiện tại/bản trước và GHCR package; không prune toàn hệ thống.
