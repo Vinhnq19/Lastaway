@@ -50,6 +50,19 @@ class ReleaseTests(unittest.TestCase):
         bundle(self.root); (self.root / '.env.aws').write_text('secret')
         with self.assertRaises(ValueError): release.verify(self.root)
 
+    def test_sealed_host_bundle_import_does_not_create_bytecode(self):
+        bundle(self.root)
+        scripts = self.root / 'scripts'; scripts.mkdir()
+        for source in (DEPLOY / 'Aws/scripts/registry_host.py', DEPLOY / 'registry_release.py'):
+            (scripts / source.name).write_bytes(source.read_bytes())
+        release.seal(self.root)
+        # Fresh process without -B reproduces the real Linux systemd entrypoint.
+        env = os.environ.copy(); env.pop('PYTHONDONTWRITEBYTECODE', None)
+        code = "import runpy; runpy.run_path(" + repr(str(scripts / 'registry_host.py')) + ")"
+        subprocess.run([sys.executable, '-c', code], env=env, check=True, capture_output=True)
+        self.assertFalse((scripts / '__pycache__').exists())
+        self.assertEqual(release.verify(self.root)['releaseId'], 'test-1')
+
     def test_full_metrics_require_coverage_and_real_thresholds(self):
         rows=[{'ticksPerSecond':'30','droppedTicks':'0','cpuOneCorePercent':'20'} for _ in range(60)]
         self.assertEqual(release.validate_metrics(rows,[50]*60,0,False)['status'],'PASS')

@@ -16,6 +16,8 @@ import tempfile
 import urllib.request
 import urllib.error
 
+# The sealed bundle must remain byte-for-byte unchanged when Python imports its helper.
+sys.dont_write_bytecode = True
 sys.path.insert(0, str(Path(__file__).parent))
 from registry_release import effective_env, read_json, run, verify, write_json, sha
 
@@ -127,7 +129,7 @@ def metrics(release, since):
     rows = run(["docker", "logs", "--since", str(since), service_id(release, "game-server")]).splitlines()
     samples = [dict(re.findall(r"(\w+)=([^ ]+)", line)) for line in rows if "[metrics]" in line]
     state = inspect(release, "game-server")
-    # Docker stats includes cgroup cache; do not substitute process RSS for container usage.
+    # Docker CLI MemPerc excludes inactive file cache; it is not process RSS or total cgroup usage.
     stats = json.loads(run(["docker", "stats", "--no-stream", "--format", "{{json .}}", state["Id"]]))
     mem = float(stats["MemPerc"].rstrip("%"))
     return {"samples": samples, "containerMemoryPercent": mem, "restartCount": state.get("RestartCount", 0) - read_json(ROOT / "deploy-state/state.json").get("restartCounts", {}).get("game-server", 0), "oom": state["State"].get("OOMKilled", False)}
