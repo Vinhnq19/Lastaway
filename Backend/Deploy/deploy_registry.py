@@ -388,14 +388,21 @@ a.unlink()
                 if candidate.get('status') == 'PASS' and args.mode == 'Rollback':
                     state = candidate; finished = True; break
                 if candidate.get('status') in ('BLOCKED', 'ROLLED_BACK', 'ROLLBACK_FAILED'): raise RuntimeError('Remote ' + candidate['status'])
-            active = ssh(args, 'systemctl show ' + unit + '.service -p ActiveState --value', timeout=25).strip()
+            try: active = ssh(args, 'systemctl show ' + unit + '.service -p ActiveState --value', timeout=25).strip()
+            except RuntimeError: active = ''  # --collect may already have removed a successful unit.
             if active not in ('active', 'activating'):
+                # A fast rollback can finish after the status read but before the unit-state read.
+                terminal = json.loads(ssh(args, 'sudo python3 ' + remote_script + ' status', timeout=25))
+                if (args.mode == 'Rollback' and terminal.get('releaseId') == target_release
+                        and terminal.get('transactionId') == transaction_id and terminal.get('status') == 'PASS'):
+                    state = terminal; finished = True; break
                 finished = True
                 raise RuntimeError('Remote deployment failed before readiness; inspect journalctl -u ' + unit)
             time.sleep(3)
         if state is None: raise RuntimeError('Remote readiness deadline; remote rollback guard remains active')
         write_json(output / 'remote-ready.json', state)
         if args.mode == 'Rollback':
+            write_json(output / 'remote-final.json', state)
             write_json(output / 'deployment.json', {'status': 'PASS', 'action': 'Rollback', 'release': target_release,
                 'serverHealth': 'PASS', 'publicAcceptance': 'NOT_TESTED', 'ec2Lifecycle': 'unchanged', 'seconds': time.monotonic() - started})
             return

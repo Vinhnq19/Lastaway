@@ -9,12 +9,17 @@ Windows build 6000.3.15f1,PASS,Current rebuilt runner supports Follow Player and
 GHCR PC publish credential,PASS,
 GHCR EC2 pull credential,PASS,
 Full Local attempt 1,FAIL,Unexpected UserRequested disconnect; old viewport assertion also incompatible with Follow Player
-GHCR push / EC2 registry deploy / real AWS rollback,PARTIAL,Private pull/readiness/image pin and real rollback PASS. WSS/Auto/UDP/JWT PASS. Candidate rejected by seven dropped ticks; API-only/no-change NOT_TESTED.
+GHCR push / EC2 registry deploy / real AWS rollback,PARTIAL,Full fixed release active PASS; API-only and server rollback PASS. PC observer false failure fixed locally. AWS no-change NOT_TESTED.
 Two physical PCs,NOT_TESTED,
-Full Local current build,PASS,"Final rendered-image guard: WSS300.03s exit0, Auto two clients exit0, UDP/WSS smoke and metrics PASS"
+Full Local before tick repair,PASS,"Final rendered-image guard: WSS300.03s exit0, Auto two clients exit0, UDP/WSS smoke and metrics PASS"
 Reporter fixture/hash checks,PASS,
 AWS final reporter and WSS300s,PASS,
 AWS two-client Auto result/history/replay,PASS,
 AWS performance gate,FAIL,
 AWS real rollback and public smoke,PASS,
 Tick repair Full Local,PASS,WSS300 + Auto2 + account/history/replay + UDP/WSS; fixed thresholds
+AWS fixed release Full,PASS,Real PC WSS300/Auto2/UDP/JWT and server0drop; GS unchanged after API rollback
+AWS API-only selective update,PASS,Only API replaced; same-account login succeeds
+AWS explicit rollback server,PASS,"Matching root transaction PASS, successful systemd exit and public smoke; original PC observer falsely failed"
+Rollback completion observer,PASS_LOCAL_FIXTURES,26 pipeline tests; matching terminal nonce/release required; new AWS invocation NOT_TESTED
+AWS same-release no-change,NOT_TESTED,Later steps stopped after PC observer failure; no new transaction without enough budget

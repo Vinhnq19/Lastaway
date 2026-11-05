@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "status": "REPAIR_FULL_LOCAL_PASS_AWS_PENDING",
+  "status": "AWS_FIXED_RELEASE_ACTIVE_FULL_PASS_PIPELINE_PARTIAL",
   "scope": "Private GHCR deployment pipeline; EC2 lifecycle unchanged",
   "checks": [
     {
@@ -12,7 +12,7 @@
     {
       "name": "Pipeline fault tests",
       "status": "PASS",
-      "tests": 22
+      "tests": 26
     },
     {
       "name": "NetworkChecks",
@@ -75,14 +75,14 @@
     {
       "name": "GHCR push / EC2 registry deploy / real AWS rollback",
       "status": "PARTIAL",
-      "reason": "Private pull/readiness/image pin and real rollback PASS. WSS/Auto/UDP/JWT PASS. Candidate rejected by seven dropped ticks; API-only/no-change NOT_TESTED."
+      "reason": "Full fixed release active PASS; API-only and server rollback PASS. PC observer false failure fixed locally. AWS no-change NOT_TESTED."
     },
     {
       "name": "Two physical PCs",
       "status": "NOT_TESTED"
     },
     {
-      "name": "Full Local current build",
+      "name": "Full Local before tick repair",
       "status": "PASS",
       "evidence": "local-full/pinned-final/",
       "note": "Final rendered-image guard: WSS300.03s exit0, Auto two clients exit0, UDP/WSS smoke and metrics PASS"
@@ -118,6 +118,31 @@
       "status": "PASS",
       "evidence": "tick-repair/local-r2/",
       "note": "WSS300 + Auto2 + account/history/replay + UDP/WSS; fixed thresholds"
+    },
+    {
+      "name": "AWS fixed release Full",
+      "status": "PASS",
+      "note": "Real PC WSS300/Auto2/UDP/JWT and server0drop; GS unchanged after API rollback"
+    },
+    {
+      "name": "AWS API-only selective update",
+      "status": "PASS",
+      "note": "Only API replaced; same-account login succeeds"
+    },
+    {
+      "name": "AWS explicit rollback server",
+      "status": "PASS",
+      "note": "Matching root transaction PASS, successful systemd exit and public smoke; original PC observer falsely failed"
+    },
+    {
+      "name": "Rollback completion observer",
+      "status": "PASS_LOCAL_FIXTURES",
+      "note": "26 pipeline tests; matching terminal nonce/release required; new AWS invocation NOT_TESTED"
+    },
+    {
+      "name": "AWS same-release no-change",
+      "status": "NOT_TESTED",
+      "note": "Later steps stopped after PC observer failure; no new transaction without enough budget"
     }
   ],
   "measurements": {
@@ -137,15 +162,17 @@
     "startedByThisTask": false,
     "stoppedByThisTask": false,
     "deployedByThisTask": true,
-    "activeRelease": "bots-20261105-r2",
+    "activeRelease": "ghcr-20261105-135413-1215f52f",
     "rollbackVerified": true,
-    "candidateActive": false,
+    "candidateActive": true,
     "privateConfigPreserved": true,
-    "mongoContainerPreserved": true
+    "mongoContainerPreserved": true,
+    "lastObservedUtc": "2026-11-05T14:18:51.688783+00:00"
   },
   "pending": [
-    "AWS Full fixed release, API-only, explicit rollback, restore, no-change",
-    "Two physical PCs and dedicated AWS health-failure injection NOT_TESTED"
+    "AWS same-release/no-change transaction NOT_TESTED",
+    "New PC rollback observer has 26 local pipeline tests, not a fresh AWS rollback invocation",
+    "Dedicated AWS health-failure injection and two physical PCs NOT_TESTED"
   ],
   "localFull": {
     "status": "PASS",
@@ -217,7 +244,7 @@
     "evidence": "local-full/pinned-final/",
     "playerExitCode": 0
   },
-  "updatedUtc": "2026-11-05T13:50:39.426628+00:00",
+  "updatedUtc": "2026-11-05T14:26:13.377574+00:00",
   "publishedReleases": [
     {
       "releaseId": "ghcr-20261105-093239-7aa6360b",
@@ -777,7 +804,7 @@
     "prepareWallSeconds": 113.41487350000534,
     "activeOnEc2": false
   },
-  "implementationStatus": "COMMITTED; AWS acceptance incomplete",
+  "implementationStatus": "FIXED SERVER DEPLOYED; PC rollback observer fixed/tested locally; AWS no-change pending",
   "awsFinalWindow": {
     "controller": {
       "startedUtc": "2026-11-05T12:15:03.275090+00:00",
@@ -3917,6 +3944,597 @@
         "udp": "PASS"
       }
     },
-    "newAws": "NOT_TESTED"
+    "newAws": "PASS; fixed server release retained after API-only rollback"
+  },
+  "awsTickRepairWindow": {
+    "controllerUnmodified": {
+      "startedUtc": "2026-11-05T14:02:13.328421+00:00",
+      "status": "BLOCKED",
+      "steps": [
+        {
+          "name": "01-first-full",
+          "mode": "Deploy",
+          "exitCode": 0,
+          "seconds": 536.475,
+          "sameAccountLoginAfterStep": "PASS"
+        },
+        {
+          "name": "02-api-small",
+          "mode": "Deploy",
+          "exitCode": 0,
+          "seconds": 107.397,
+          "sameAccountLoginAfterStep": "PASS"
+        },
+        {
+          "name": "03-explicit-rollback",
+          "mode": "Rollback",
+          "exitCode": 1,
+          "seconds": 55.555
+        }
+      ],
+      "deadlineSeconds": 1200,
+      "ec2Lifecycle": "unchanged",
+      "elapsedSeconds": 734.072,
+      "reason": "03-explicit-rollback failed; later steps stopped",
+      "ec2State": "running",
+      "finalRelease": "ghcr-20261105-135413-1215f52f"
+    },
+    "closure": {
+      "status": "PASS",
+      "publicSmoke": "JWT/rooms/UDP/WSS",
+      "seconds": 28.492,
+      "ec2State": "running",
+      "current": "ghcr-20261105-135413-1215f52f",
+      "previous": "ghcr-20261105-135847-83678135",
+      "finishedUtc": "2026-11-05T14:18:51.688783+00:00",
+      "originalWindowElapsedSeconds": 998.360382
+    },
+    "full": {
+      "deployment": {
+        "status": "PASS",
+        "tier": "Full",
+        "seconds": 530.339267399977,
+        "bundleBytes": 23086,
+        "imageLayerDeltaBytes": 1284257,
+        "wireBytes": "NOT_MEASURED: OCI compressed layer sizes exclude protocol overhead/cache/retries",
+        "untested": [],
+        "physicalTwoPc": "NOT_TESTED",
+        "ec2": "running",
+        "ec2Lifecycle": "unchanged"
+      },
+      "remote": {
+        "transactionId": "cc602a3bcfc72bda2ab3fc7665d25e06",
+        "releaseId": "ghcr-20261105-135413-1215f52f",
+        "previous": "bots-20261105-r2",
+        "changedServices": [
+          "api",
+          "game-server"
+        ],
+        "status": "PASS",
+        "steps": {
+          "pullSeconds": 5.868,
+          "totalSeconds": 490.525
+        },
+        "ec2Lifecycle": "unchanged",
+        "restartCounts": {
+          "mongo": 0,
+          "api": 0,
+          "game-server": 0,
+          "caddy": 0
+        },
+        "preserved": {
+          "privateConfig": true,
+          "mongoContainer": true,
+          "unchangedServices": [
+            "mongo",
+            "caddy"
+          ]
+        },
+        "measurementSince": 1793887427,
+        "memorySamples": 85,
+        "peakContainerMemoryPercent": 25.59
+      },
+      "serverSummary": {
+        "samples": 85,
+        "meanTickHz": 30.000941176470587,
+        "droppedTicks": 0,
+        "maxCpuOneCorePercent": 19.99,
+        "maxTickMs": 36.46,
+        "memorySamples": 83,
+        "peakContainerMemoryPercent": 25.59,
+        "oom": false,
+        "restartCount": 0
+      },
+      "wss": {
+        "schemaVersion": 1,
+        "physicalDeviceCount": 1,
+        "scenarioId": "registry-wss10",
+        "status": "PASS",
+        "reason": "All scenario assertions observed",
+        "selectedTransport": "Wss",
+        "fallbackReason": "",
+        "endpoint": "wss://junglemaze.duckdns.org/game",
+        "matchId": "1764f3fb-cc87-4557-a873-2a0aa795d184",
+        "disconnectCallSite": "",
+        "metrics": {
+          "elapsedSeconds": 303.5093688964844,
+          "connectedSeconds": 300.0052185058594,
+          "snapshots": 8427,
+          "inputs": 4062,
+          "ignoredPackets": 0,
+          "catchupDrops": 1,
+          "maxPlayers": 10,
+          "maxRosterPlayers": 10,
+          "maxOnScreenPlayers": 4,
+          "completedMatches": 2,
+          "inputHz": 29.942813666648572,
+          "activeInputSeconds": 135.65859391912818,
+          "snapshotHz": 29.997216050296526,
+          "snapshotSeconds": 280.9260694682598,
+          "rttP50Ms": 166.7238,
+          "rttP95Ms": 200.1543,
+          "rttP99Ms": 233.4358,
+          "pings": 300,
+          "pongs": 300,
+          "pongTimeouts": 0
+        },
+        "assertions": [
+          {
+            "id": "joined",
+            "status": "PASS",
+            "detail": "Observed during this run"
+          },
+          {
+            "id": "playersVisible",
+            "status": "PASS",
+            "detail": "Roster and network views confirmed; Follow Player viewport count is separate"
+          },
+          {
+            "id": "movement",
+            "status": "PASS",
+            "detail": "Observed during this run"
+          },
+          {
+            "id": "zone",
+            "status": "PASS",
+            "detail": "Observed during this run"
+          },
+          {
+            "id": "hpDamage",
+            "status": "PASS",
+            "detail": "Observed during this run"
+          },
+          {
+            "id": "result",
+            "status": "PASS",
+            "detail": "Observed during this run"
+          },
+          {
+            "id": "replay",
+            "status": "PASS",
+            "detail": "Observed during this run"
+          },
+          {
+            "id": "history",
+            "status": "PASS",
+            "detail": "Observed during this run"
+          }
+        ]
+      },
+      "auto": {
+        "status": "PASS",
+        "scenarioId": "registry-auto2",
+        "schemaVersion": 1,
+        "timestampUtc": "2026-11-05T14:10:21.4081082Z",
+        "reason": null,
+        "playerSha256": "04a137e8f3c105937a1cb13fc57300734117f5874292ee9c764bda7537d8aef2",
+        "playerFingerprint": "746e1114bd44e27ddb371bf366e8c692764ecd6b0800ca516958e5c3a8f5e90b",
+        "clientCount": 2,
+        "passedCount": 2,
+        "physicalDeviceCount": 1,
+        "physicalTwoPc": "NOT_TESTED",
+        "clients": [
+          {
+            "id": "Player1",
+            "index": 1,
+            "pid": 26712,
+            "exitCode": 0,
+            "status": "PASS",
+            "evidenceStatus": "PASS",
+            "selectedTransport": "Wss",
+            "fallbackReason": "ConnectTimeout",
+            "connectedSeconds": 49.86,
+            "p50RttMs": 166.71,
+            "p99RttMs": 392.24,
+            "assertionsPassed": 8,
+            "assertionsTotal": 8,
+            "reason": "Required observations and rates verified",
+            "evidenceFile": "evidence-client-1.json",
+            "logFile": "unity-client-1.log"
+          },
+          {
+            "id": "Player2",
+            "index": 2,
+            "pid": 45720,
+            "exitCode": 0,
+            "status": "PASS",
+            "evidenceStatus": "PASS",
+            "selectedTransport": "Wss",
+            "fallbackReason": "ConnectTimeout",
+            "connectedSeconds": 50.23,
+            "p50RttMs": 166.84,
+            "p99RttMs": 422.76,
+            "assertionsPassed": 8,
+            "assertionsTotal": 8,
+            "reason": "Required observations and rates verified",
+            "evidenceFile": "evidence-client-2.json",
+            "logFile": "unity-client-2.log"
+          }
+        ]
+      }
+    },
+    "apiOnly": {
+      "status": "PASS",
+      "tier": "Quick",
+      "seconds": 101.56630339997355,
+      "bundleBytes": 22744,
+      "imageLayerDeltaBytes": 3798709,
+      "wireBytes": "NOT_MEASURED: OCI compressed layer sizes exclude protocol overhead/cache/retries",
+      "untested": [
+        "combat",
+        "results/history",
+        "performance"
+      ],
+      "physicalTwoPc": "NOT_TESTED",
+      "ec2": "running",
+      "ec2Lifecycle": "unchanged"
+    },
+    "rollback": {
+      "server": "PASS",
+      "pcOriginalObserver": "FAIL",
+      "state": {
+        "transactionId": "53e7b9aea1974d98e9388fd4b4e1a5fa",
+        "releaseId": "ghcr-20261105-135413-1215f52f",
+        "previous": "ghcr-20261105-135847-83678135",
+        "changedServices": [
+          "api"
+        ],
+        "status": "PASS",
+        "steps": {
+          "pullSeconds": 0.099
+        },
+        "ec2Lifecycle": "unchanged",
+        "restartCounts": {
+          "mongo": 0,
+          "api": 0,
+          "game-server": 0,
+          "caddy": 0
+        },
+        "preserved": {
+          "privateConfig": true,
+          "mongoContainer": true,
+          "unchangedServices": [
+            "mongo",
+            "game-server",
+            "caddy"
+          ]
+        }
+      },
+      "journal": "tick-repair/aws/rollback-journal.log",
+      "publicAfterRollback": {
+        "status": "PASS",
+        "publicSmoke": "JWT/rooms/UDP/WSS",
+        "seconds": 28.492,
+        "ec2State": "running",
+        "current": "ghcr-20261105-135413-1215f52f",
+        "previous": "ghcr-20261105-135847-83678135",
+        "finishedUtc": "2026-11-05T14:18:51.688783+00:00",
+        "originalWindowElapsedSeconds": 998.360382
+      }
+    },
+    "preservation": {
+      "privateConfigHash": true,
+      "mongoContainer": true,
+      "mongoVolumes": true,
+      "apiOnlyPreservedGameServer": true,
+      "rollbackPreservedGameServer": true,
+      "caddyContainer": true
+    },
+    "observerFix": {
+      "status": "PASS_LOCAL_FIXTURES",
+      "tests": 26,
+      "realNewRollbackInvocation": "NOT_TESTED",
+      "change": "Re-read matching terminal transaction/release after inactive worker; retain remote-final.json"
+    },
+    "restoreApiSmall": "NOT_RUN_AFTER_OBSERVER_FAILURE",
+    "noChangeAws": "NOT_TESTED",
+    "published": [
+      {
+        "schemaVersion": 1,
+        "format": "ghcr",
+        "releaseId": "ghcr-20261105-135413-1215f52f",
+        "commit": "1215f52f8425f9df8531b52152a5c211276d651d",
+        "platform": "linux/amd64",
+        "source": "https://github.com/Vinhnq19/Lastaway",
+        "bases": {
+          "build": "mcr.microsoft.com/dotnet/sdk:8.0@sha256:458bbff44a116eaa8bc91ed43ecb4da4d0dd5cddc977585ad831185e466183c1",
+          "runtime": "mcr.microsoft.com/dotnet/aspnet:8.0@sha256:0e274f165134f4a7802017c33a11afcb12b3d480de644d56d5ec4a41a5194ca9"
+        },
+        "services": {
+          "api": {
+            "fingerprint": "0b65e85cace3de396a094946c6b9319b003a2dba1e297a3c60d006ed3fc961ad",
+            "image": "ghcr.io/vinhnq19/lastaway-api@sha256:08a5e8d56756f75d2c31aed2d11b2f77b8da08a1efe2d333fd5efb4a9ac79af4",
+            "digest": "sha256:08a5e8d56756f75d2c31aed2d11b2f77b8da08a1efe2d333fd5efb4a9ac79af4",
+            "tag": "ghcr.io/vinhnq19/lastaway-api:cf721f385a45-0b65e85cace3",
+            "layers": [
+              {
+                "digest": "sha256:3c5439d0ae62993af4cc4e21b8c777297e81bc40e200d4633c85a3e0f977a3bc",
+                "size": 28247437
+              },
+              {
+                "digest": "sha256:cae11abef92c80a9309381b21bafeb87003b32e96246eda99a866c7b594513db",
+                "size": 19180518
+              },
+              {
+                "digest": "sha256:9de2710fcf2ee522b18d90068ca3a3d48dcc8e534cbf8ea76bc17bdfc66070d9",
+                "size": 3365
+              },
+              {
+                "digest": "sha256:3126f446b61ecc5ce9622c9f353f87dc84c88bf7600e0c37aaef93951c9f8a7d",
+                "size": 33135602
+              },
+              {
+                "digest": "sha256:84747fafb7855e318a90e1e787e56cc4da90a5440aa2f5902bcad479b8a2c873",
+                "size": 170
+              },
+              {
+                "digest": "sha256:c2d4d11210c86f1c32f90dca4eadd340e4bf8e75c1f5c1f7096d0ab62a6661bb",
+                "size": 11443364
+              },
+              {
+                "digest": "sha256:09bae0859d32968520574aa6deb3aa8e427acf16ce2d92e4b26dd3bb7770c675",
+                "size": 93
+              },
+              {
+                "digest": "sha256:287810ddb5382ed039d6a9ff06c45e471e3ed3f6149431ac3873988ba536c7dc",
+                "size": 3798703
+              }
+            ]
+          },
+          "game-server": {
+            "fingerprint": "66363178f3142c7e1a9c9d30b7acc9e4fe5bf7e4e43a49c54779af142145f492",
+            "image": "ghcr.io/vinhnq19/lastaway-game-server@sha256:3d21e856474548b135b1849bdb85c9c0835c165300bff1d8c85200c1e4e48046",
+            "digest": "sha256:3d21e856474548b135b1849bdb85c9c0835c165300bff1d8c85200c1e4e48046",
+            "tag": "ghcr.io/vinhnq19/lastaway-game-server:1215f52f8425-66363178f314",
+            "layers": [
+              {
+                "digest": "sha256:3c5439d0ae62993af4cc4e21b8c777297e81bc40e200d4633c85a3e0f977a3bc",
+                "size": 28247437
+              },
+              {
+                "digest": "sha256:cae11abef92c80a9309381b21bafeb87003b32e96246eda99a866c7b594513db",
+                "size": 19180518
+              },
+              {
+                "digest": "sha256:9de2710fcf2ee522b18d90068ca3a3d48dcc8e534cbf8ea76bc17bdfc66070d9",
+                "size": 3365
+              },
+              {
+                "digest": "sha256:3126f446b61ecc5ce9622c9f353f87dc84c88bf7600e0c37aaef93951c9f8a7d",
+                "size": 33135602
+              },
+              {
+                "digest": "sha256:84747fafb7855e318a90e1e787e56cc4da90a5440aa2f5902bcad479b8a2c873",
+                "size": 170
+              },
+              {
+                "digest": "sha256:c2d4d11210c86f1c32f90dca4eadd340e4bf8e75c1f5c1f7096d0ab62a6661bb",
+                "size": 11443364
+              },
+              {
+                "digest": "sha256:09bae0859d32968520574aa6deb3aa8e427acf16ce2d92e4b26dd3bb7770c675",
+                "size": 93
+              },
+              {
+                "digest": "sha256:db7f01dfa147f0d987e712c4c3ee6a33ff2725ed6b1d646fd032475d424df264",
+                "size": 1284257
+              }
+            ]
+          }
+        },
+        "connectionConfigHash": "75b5c92ec3ecee2839c1f491560b04e9ad79b4033b8b12ff8bb5ee87079e8862",
+        "data": {
+          "matchVersion": "1.1.0",
+          "worldVersion": "world-prototype-1",
+          "catalogGeneration": 2
+        },
+        "protocol": {
+          "accountHandshake": 4,
+          "gameplay": 3
+        },
+        "protocolSourceHash": "b9df450fcc828b1fcc5a8f88970d8e33c213929e4c138f7a1e8071d8f4befc42",
+        "localEvidence": {
+          "schemaVersion": 1,
+          "status": "PASS",
+          "sourceHash": "8bca6c42c6d407946f6318ce248549701a9a6f819ea77831ecf17788601b9f45",
+          "playerFingerprint": "746e1114bd44e27ddb371bf366e8c692764ecd6b0800ca516958e5c3a8f5e90b",
+          "bases": {
+            "build": "mcr.microsoft.com/dotnet/sdk:8.0@sha256:458bbff44a116eaa8bc91ed43ecb4da4d0dd5cddc977585ad831185e466183c1",
+            "runtime": "mcr.microsoft.com/dotnet/aspnet:8.0@sha256:0e274f165134f4a7802017c33a11afcb12b3d480de644d56d5ec4a41a5194ca9"
+          },
+          "services": {
+            "api": "0b65e85cace3de396a094946c6b9319b003a2dba1e297a3c60d006ed3fc961ad",
+            "game-server": "66363178f3142c7e1a9c9d30b7acc9e4fe5bf7e4e43a49c54779af142145f492"
+          },
+          "connectionConfigHash": "75b5c92ec3ecee2839c1f491560b04e9ad79b4033b8b12ff8bb5ee87079e8862",
+          "physicalTwoPc": "NOT_TESTED",
+          "serverMetrics": {
+            "status": "PASS",
+            "samples": 110,
+            "memorySamples": 110,
+            "meanTickHz": 29.957727272727272,
+            "maxCpuOneCorePercent": 30.17,
+            "peakContainerMemoryPercent": 20.76,
+            "droppedTicks": 0,
+            "restartDelta": 0,
+            "oom": false
+          },
+          "checks": {
+            "wss300": "PASS",
+            "auto2ResultHistoryReplay": "PASS",
+            "udp": "PASS"
+          }
+        },
+        "testPolicy": "Full",
+        "publishSteps": [
+          {
+            "service": "api",
+            "reused": true,
+            "seconds": 5.783,
+            "newLayerBytes": 0,
+            "byteMeasure": "compressed OCI layer delta, excludes TLS/retries; not wire traffic"
+          },
+          {
+            "service": "game-server",
+            "reused": false,
+            "seconds": 10.584,
+            "newLayerBytes": 1284257,
+            "byteMeasure": "compressed OCI layer delta, excludes TLS/retries; not wire traffic"
+          }
+        ]
+      },
+      {
+        "schemaVersion": 1,
+        "format": "ghcr",
+        "releaseId": "ghcr-20261105-135847-83678135",
+        "commit": "836781359fb182f3d974bc971dd7a9229a4609f1",
+        "platform": "linux/amd64",
+        "source": "https://github.com/Vinhnq19/Lastaway",
+        "bases": {
+          "build": "mcr.microsoft.com/dotnet/sdk:8.0@sha256:458bbff44a116eaa8bc91ed43ecb4da4d0dd5cddc977585ad831185e466183c1",
+          "runtime": "mcr.microsoft.com/dotnet/aspnet:8.0@sha256:0e274f165134f4a7802017c33a11afcb12b3d480de644d56d5ec4a41a5194ca9"
+        },
+        "services": {
+          "api": {
+            "fingerprint": "48961266393a04853f5e0d54358fb57a2ce759d65924e0bb5d4833ccb980fab2",
+            "image": "ghcr.io/vinhnq19/lastaway-api@sha256:bbdf0f460086a510ce038c5c699413b73f76cb2850ce856ef0a08b3034340c74",
+            "digest": "sha256:bbdf0f460086a510ce038c5c699413b73f76cb2850ce856ef0a08b3034340c74",
+            "tag": "ghcr.io/vinhnq19/lastaway-api:836781359fb1-48961266393a",
+            "layers": [
+              {
+                "digest": "sha256:3c5439d0ae62993af4cc4e21b8c777297e81bc40e200d4633c85a3e0f977a3bc",
+                "size": 28247437
+              },
+              {
+                "digest": "sha256:cae11abef92c80a9309381b21bafeb87003b32e96246eda99a866c7b594513db",
+                "size": 19180518
+              },
+              {
+                "digest": "sha256:9de2710fcf2ee522b18d90068ca3a3d48dcc8e534cbf8ea76bc17bdfc66070d9",
+                "size": 3365
+              },
+              {
+                "digest": "sha256:3126f446b61ecc5ce9622c9f353f87dc84c88bf7600e0c37aaef93951c9f8a7d",
+                "size": 33135602
+              },
+              {
+                "digest": "sha256:84747fafb7855e318a90e1e787e56cc4da90a5440aa2f5902bcad479b8a2c873",
+                "size": 170
+              },
+              {
+                "digest": "sha256:c2d4d11210c86f1c32f90dca4eadd340e4bf8e75c1f5c1f7096d0ab62a6661bb",
+                "size": 11443364
+              },
+              {
+                "digest": "sha256:09bae0859d32968520574aa6deb3aa8e427acf16ce2d92e4b26dd3bb7770c675",
+                "size": 93
+              },
+              {
+                "digest": "sha256:ed4f9b34a62cc3f3fe253820789807eac667731a99144493e8cad6dad402b984",
+                "size": 3798709
+              }
+            ]
+          },
+          "game-server": {
+            "fingerprint": "66363178f3142c7e1a9c9d30b7acc9e4fe5bf7e4e43a49c54779af142145f492",
+            "image": "ghcr.io/vinhnq19/lastaway-game-server@sha256:3d21e856474548b135b1849bdb85c9c0835c165300bff1d8c85200c1e4e48046",
+            "digest": "sha256:3d21e856474548b135b1849bdb85c9c0835c165300bff1d8c85200c1e4e48046",
+            "tag": "ghcr.io/vinhnq19/lastaway-game-server:1215f52f8425-66363178f314",
+            "layers": [
+              {
+                "digest": "sha256:3c5439d0ae62993af4cc4e21b8c777297e81bc40e200d4633c85a3e0f977a3bc",
+                "size": 28247437
+              },
+              {
+                "digest": "sha256:cae11abef92c80a9309381b21bafeb87003b32e96246eda99a866c7b594513db",
+                "size": 19180518
+              },
+              {
+                "digest": "sha256:9de2710fcf2ee522b18d90068ca3a3d48dcc8e534cbf8ea76bc17bdfc66070d9",
+                "size": 3365
+              },
+              {
+                "digest": "sha256:3126f446b61ecc5ce9622c9f353f87dc84c88bf7600e0c37aaef93951c9f8a7d",
+                "size": 33135602
+              },
+              {
+                "digest": "sha256:84747fafb7855e318a90e1e787e56cc4da90a5440aa2f5902bcad479b8a2c873",
+                "size": 170
+              },
+              {
+                "digest": "sha256:c2d4d11210c86f1c32f90dca4eadd340e4bf8e75c1f5c1f7096d0ab62a6661bb",
+                "size": 11443364
+              },
+              {
+                "digest": "sha256:09bae0859d32968520574aa6deb3aa8e427acf16ce2d92e4b26dd3bb7770c675",
+                "size": 93
+              },
+              {
+                "digest": "sha256:db7f01dfa147f0d987e712c4c3ee6a33ff2725ed6b1d646fd032475d424df264",
+                "size": 1284257
+              }
+            ]
+          }
+        },
+        "connectionConfigHash": "75b5c92ec3ecee2839c1f491560b04e9ad79b4033b8b12ff8bb5ee87079e8862",
+        "data": {
+          "matchVersion": "1.1.0",
+          "worldVersion": "world-prototype-1",
+          "catalogGeneration": 2
+        },
+        "protocol": {
+          "accountHandshake": 4,
+          "gameplay": 3
+        },
+        "protocolSourceHash": "b9df450fcc828b1fcc5a8f88970d8e33c213929e4c138f7a1e8071d8f4befc42",
+        "testPolicy": "Quick",
+        "publishSteps": [
+          {
+            "service": "api",
+            "reused": false,
+            "seconds": 21.455,
+            "newLayerBytes": 3798709,
+            "byteMeasure": "compressed OCI layer delta, excludes TLS/retries; not wire traffic"
+          },
+          {
+            "service": "game-server",
+            "reused": true,
+            "seconds": 5.68,
+            "newLayerBytes": 0,
+            "byteMeasure": "compressed OCI layer delta, excludes TLS/retries; not wire traffic"
+          }
+        ]
+      }
+    ],
+    "authPreflight": {
+      "startedUtc": "2026-11-05T13:59:39.899513+00:00",
+      "status": "BLOCKED",
+      "steps": [],
+      "deadlineSeconds": 1200,
+      "ec2Lifecycle": "unchanged",
+      "reason": "ssh operation failed (exit 255); no service changed unless rollback is reported",
+      "finalState": "NOT_CONFIRMED",
+      "elapsedSeconds": 5.034
+    }
   }
 }

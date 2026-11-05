@@ -142,3 +142,9 @@ Kết thúc xác nhận EC2 vẫn Running. Chi phí EC2/EBS vẫn phát sinh the
 ### Khi gate bị từ chối vì spike tick
 
 Đọc `server-metrics.json` và `remote-final.json.failureMetrics` để đối chiếu các stage `botDecisionMaxMs`, `botPathMaxMs`, `worldMaxMs`, `lifecycleMaxMs`, `pollMaxMs` với `tickMaxMs`, GC và loop gap. Không tự đổi0drop thành ngưỡng dễ hơn. A* hiện chia endpoint probes và node expansion qua tick, có budget mềm4ms toàn server ngoài cap node. LinuxAMD64 dùng [ReadyToRun của .NET](https://learn.microsoft.com/en-us/dotnet/core/deploying/ready-to-run) để giảm chi phí JIT ở lần dùng đầu; vẫn phải chạy Full Local và PC→AWS300s trước khi giữ release.
+
+### Xác nhận rollback nhanh
+
+Worker rollback có thể hoàn tất giữa hai lần PC đọc trạng thái. Công cụ đã được sửa để đọc lại kết quả cuối và chỉ chấp nhận `PASS` khi **transactionId và releaseId đều khớp**; trạng thái của lượt cũ không đủ bằng chứng. Kết quả rollback được giữ trong `remote-final.json`.
+
+Nếu dùng công cụ cũ và thấy lỗi “failed before readiness”, kiểm tra journal của đúng unit cùng `/opt/junglemaze/deploy-state/state.json` trước. Không chạy Rollback lặp lại ngay: sau một rollback thành công, `previous` đã đổi và lần bấm tiếp có thể đưa máy về bản vừa bỏ.

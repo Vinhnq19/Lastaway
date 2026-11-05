@@ -260,6 +260,51 @@ class ReleaseTests(unittest.TestCase):
         self.assertEqual(state['status'], 'PASS'); self.assertEqual(operations, [])
         self.assertEqual((root/'current').resolve().name, 'test-1')
 
+    def rollback_exit_race(self, stale=False, wrong_release=False, unit_collected=False):
+        output=self.root/'pc-output';output.mkdir()
+        archive=self.root/'release.tar.gz';archive.write_bytes(b'fixture')
+        args=types.SimpleNamespace(budget_minutes=20,instance_id='instance',mode='Rollback',
+            test_mode='Auto',ssh_alias='fixture',confirm_empty_migration=False)
+        status_reads=0;transaction_id='1'*32
+        terminal={'status':'PASS','releaseId':'old','transactionId':transaction_id}
+        if stale:terminal['transactionId']='2'*32
+        if wrong_release:terminal['releaseId']='other'
+        def ssh(_,command,**kwargs):
+            nonlocal status_reads
+            if command.startswith('sudo python3 -c '):
+                return json.dumps({'instanceId':'instance','current':manifest('current'),
+                    'targetRelease':'old','target':manifest('old')})
+            if command.endswith(' status'):
+                status_reads+=1
+                return json.dumps({'transactionId':'earlier','status':'PASS'} if status_reads==1 else terminal)
+            if command.startswith('systemctl show '):
+                if unit_collected:raise RuntimeError('Unit collected')
+                return 'inactive'
+            return ''
+        def aws(_,service,*args):
+            if service=='ec2':return {'Reservations':[{'Instances':[{'State':{'Name':'running'},'InstanceType':'t3.small','Architecture':'x86_64'}]}]}
+            return {'InstanceInformationList':[{'PingStatus':'Online'}]}
+        with patch.object(pc,'ssh',side_effect=ssh),patch.object(pc,'aws',side_effect=aws), \
+             patch.object(pc,'run',return_value=''),patch.object(pc.secrets,'token_hex',side_effect=['a'*16,transaction_id]):
+            pc.deploy(args,self.root,manifest(),archive,output)
+        self.assertEqual(status_reads,2)
+        self.assertEqual(release.read_json(output/'remote-final.json'),terminal)
+        self.assertEqual(release.read_json(output/'deployment.json')['status'],'PASS')
+
+    def test_rollback_exit_race_rechecks_matching_terminal_state(self):
+        self.rollback_exit_race()
+
+    def test_collected_rollback_unit_requires_matching_terminal_result(self):
+        self.rollback_exit_race(unit_collected=True)
+
+    def test_inactive_worker_rejects_stale_transaction(self):
+        with self.assertRaisesRegex(RuntimeError,'before readiness'):
+            self.rollback_exit_race(stale=True)
+
+    def test_inactive_worker_rejects_wrong_release(self):
+        with self.assertRaisesRegex(RuntimeError,'before readiness'):
+            self.rollback_exit_race(wrong_release=True)
+
     def test_duplicate_admin_flock(self):
         root = self.root / 'lockhost'
         fake_lock = types.SimpleNamespace(LOCK_EX=1, LOCK_NB=2, LOCK_UN=3, flock=unittest.mock.Mock(side_effect=BlockingIOError))
