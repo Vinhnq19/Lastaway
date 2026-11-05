@@ -1,7 +1,7 @@
 # Graph Report - Lastaway  (2026-11-05)
 
 ## Corpus Check
-- 1302 files · ~1,139,519 words
+- 1302 files · ~1,139,517 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Extraction-agent self-reported tokens (not metered billing; supervision excluded): 6,370 input · 3,260 output
 
 ## Graph Freshness
-- Built from commit: `dac58b6a`
+- Built from commit: `003fb1f9`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `Tools/update_project_map.py` with the configured graphify Python after code/config changes; unchanged hashes skip rebuilding.
 

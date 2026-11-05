@@ -70,7 +70,7 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "Jungle Maze Account, Rooms & Maps API",
+        Title = "Lastaway Account, Rooms & Maps API",
         Version = "v1",
         Description = "Test: register → login → Authorize → POST /api/rooms → POST /api/game-tickets → handshake v4 UDP/WSS để vào phòng. Swagger quản lý phòng/cấp vé; client mới thực hiện join game. Vé chơi dùng một lần, hết hạn sau 30 giây; không gửi JWT qua UDP. Tạo/list/xóa phòng và cấp vé chơi bắt buộc account JWT; Guest cũ chỉ dùng để xem lịch sử. Local luyện tập không cần API."
     });
@@ -151,7 +151,7 @@ if (app.Configuration.GetValue<bool?>("Swagger:Enabled") ?? app.Environment.IsDe
     app.UseSwaggerUI(options =>
     {
         options.SwaggerEndpoint("v1/swagger.json", "Jungle Maze API v1");
-        options.DocumentTitle = "Jungle Maze — Test API";
+        options.DocumentTitle = "Lastaway — Test API";
         options.EnableTryItOutByDefault();
         // Không bật EnablePersistAuthorization: JWT chỉ giữ trong phiên UI, không lưu localStorage.
     });
