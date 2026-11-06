@@ -9,7 +9,7 @@ HUD icons: heart-organ, breastplate, barbute, lightning-helix, hourglass,
 skull-crossed-bones, crested-helmet by Lorc; person by Delapouite.
 Source: https://game-icons.net
 Licensed under CC BY 3.0: https://creativecommons.org/licenses/by/3.0/
-Icons were recolored and resized for use in the game.
+Icons were recolored with metallic shading and outline, and resized for use in the game.
 ```
 
 ## Chi tiết

@@ -125,6 +125,5 @@ Nền lấy từ chính sprite (điểm sáng p95 và p99 của mặt đá trong
 ## 9. Khác concept và chưa kiểm
 
 - Khác concept A: lòng đá tối hơn (để đạt tương phản) và không có đường chia hàng khắc giữa các hàng của Vitals (concept có). Vòng đá ngoài 13 đến 14 px như yêu cầu, cả viền 16 đến 19 px nếu tính viền trong.
-- Icon máu thiếu 0,02 ở p99 (mục 5).
 - Chưa qua qa chấm chéo, chưa xem trong Unity: NOT VERIFIED. Chưa có cảnh bo thu, máu thấp, nhặt đồ với skin A.
 - `src/v2` và thư mục `debug/` chứa ảnh phụ, xóa được.

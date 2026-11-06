@@ -96,18 +96,18 @@ Một hàng ngang, padding 10 u, căn giữa dọc. Bỏ nhãn chữ "Bo thu sau
 
 ## 8. Icon (PNG)
 
-Thư mục: `projects/lastaway/art/inbox/hud-icons/png/` (inbox, chưa qua cổng duyệt; unity chưa nhập cho tới khi art-ux chuyển `art/final/`). PNG RGBA, nền trong suốt, **màu đã nướng theo token** ở bảng; `Image.color` phải để **trắng** (không tint lại). Xuất bằng Microsoft Edge headless từ SVG, cắt đúng cỡ; đã kiểm kênh alpha: góc trong suốt, thân đặc.
+Thư mục: `projects/lastaway/art/inbox/hud-icons/png/` (inbox, chưa qua cổng duyệt; unity chưa nhập cho tới khi art-ux chuyển `art/final/`). PNG RGBA, nền trong suốt, **màu kim loại ấm đã nướng** (cập nhật T-015, 06/11/2026; chi tiết `art/inbox/hud-icons/metal.json`, bản vector cũ ở `png-vector-goc/`); `Image.color` phải để **trắng** (không tint lại). Xuất từ SVG bằng Microsoft Edge headless, tô kim loại và viền tối 1 px (@1x) bằng `T-015/src/tools/recolor_icons_t015.py`.
 
-| Dùng ở | File @1x (px) | File @2x (px) | Nguồn SVG (tác giả) | Màu nướng | Size hiển thị (u) |
+| Dùng ở | File @1x (px) | File @2x (px) | Nguồn SVG (tác giả) | Màu nướng (sáng / tối) | Size hiển thị (u) |
 |---|---|---|---|---|---|
-| Vitals hàng 1, HP | `icon_hp.png` (40) | `icon_hp@2x.png` (80) | heart-organ (Lorc) | Red | 26 x 26 |
-| Vitals hàng 2, giáp | `icon_armor.png` (40) | `icon_armor@2x.png` (80) | breastplate (Lorc) | Blue | 26 x 26 |
-| Vitals hàng 2, mũ | `icon_helmet.png` (40) | `icon_helmet@2x.png` (80) | barbute (Lorc) | Blue | 26 x 26 |
-| Vitals hàng 3, Adrenaline | `icon_adrenaline.png` (36) | `icon_adrenaline@2x.png` (72) | lightning-helix (Lorc) | Yellow | 24 x 24 |
-| Match status, còn sống | `icon_alive.png` (36) | `icon_alive@2x.png` (72) | person (Delapouite) | Text | 24 x 24 |
-| Match status, bo | `icon_zone-timer.png` (36) | `icon_zone-timer@2x.png` (72) | hourglass (Lorc) | Purple | 24 x 24 |
-| Dự phòng (killfeed, kết quả) | `icon_kill.png` (32) | `icon_kill@2x.png` (64) | skull-crossed-bones (Lorc) | Text | chưa dùng |
-| Phương án mũ 2 | `icon_helmet-alt.png` (40) | `icon_helmet-alt@2x.png` (80) | crested-helmet (Lorc) | Blue | chưa dùng |
+| Vitals hàng 1, HP | `icon_hp.png` (40) | `icon_hp@2x.png` (80) | heart-organ (Lorc) | đồng đỏ `FFAA84` / `EE8F68` | 26 x 26 |
+| Vitals hàng 2, giáp | `icon_armor.png` (40) | `icon_armor@2x.png` (80) | breastplate (Lorc) | sắt cũ `C3CBCC` / `8E999C` | 26 x 26 |
+| Vitals hàng 2, mũ | `icon_helmet.png` (40) | `icon_helmet@2x.png` (80) | barbute (Lorc) | đồng thau `EFC463` / `D3A04A` | 26 x 26 |
+| Vitals hàng 3, Adrenaline | `icon_adrenaline.png` (36) | `icon_adrenaline@2x.png` (72) | lightning-helix (Lorc) | vàng sáng `FFE08A` / `E8B945` | 24 x 24 |
+| Match status, còn sống | `icon_alive.png` (36) | `icon_alive@2x.png` (72) | person (Delapouite) | bạc kem `F2ECD8` / `C9C2AA` | 24 x 24 |
+| Match status, bo | `icon_zone-timer.png` (36) | `icon_zone-timer@2x.png` (72) | hourglass (Lorc) | Purple (bạc tím `D8CBF8` / `B6A5E3` tạm, giữ Purple tới khi Huy chốt) | 24 x 24 |
+| Dự phòng (killfeed, kết quả) | `icon_kill.png` (32) | `icon_kill@2x.png` (64) | skull-crossed-bones (Lorc) | bạc kem `F2ECD8` / `C9C2AA` | chưa dùng |
+| Phương án mũ 2 | `icon_helmet-alt.png` (40) | `icon_helmet-alt@2x.png` (80) | crested-helmet (Lorc) | đồng thau `EFC463` / `D3A04A` | chưa dùng |
 
 - Import đề xuất: Sprite 2D/UI, Single, FilterMode Bilinear (nét vector, không pixel-art), tắt mipmap, không nén; dùng @2x làm nguồn, hiển thị ở size u ở trên. Quyết định import cuối của unity.
 - Giấy phép CC BY 3.0: ghi công ở `ux/credits.md`.

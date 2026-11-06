@@ -67,3 +67,9 @@ Khoảng trống chặn QA-01 theo PIC người (MAP-02, Game-10, DRG-01, ZON-01
 - **Người quyết:** Huy ("Duyệt, đổi icon", 06/11)
 - **Lý do:** Lượt 2 đạt chất đá; icon là chỗ lệch concept còn lại rõ nhất.
 - **Hệ quả:** art-ux đổi icon trong T-015 rồi qa chấm chéo; T-016 bắt đầu sau khi qa ĐẠT.
+
+## 2026-11-06 - Icon HP tim biểu tượng, đồng hồ bo màu kem
+- **Quyết định:** (1) Icon HP đổi từ tim giải phẫu (`heart-organ`) sang tim biểu tượng hai thùy như concept A, vẫn tông kim loại ấm có viền tối. (2) Đồng hồ bo (icon cát và số) bỏ token Purple, dùng kem như concept A.
+- **Người quyết:** Huy ("Đổi cả hai", 06/11), theo lỗi Nhẹ N-ICON-1, N-ICON-2 của qa T-015
+- **Lý do:** Tim giải phẫu ở cỡ thật đọc giống bàn tay; tím lệch concept và lệch vòng bo đỏ/vàng trên world.
+- **Hệ quả:** art-ux thay `icon_hp*`, `icon_zone-timer*`, sửa `hud-B-spec.md` mục 7-8 và credits; unity gắn vào T-016.
