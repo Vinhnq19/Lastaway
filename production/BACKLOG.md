@@ -4,7 +4,7 @@ Nguồn sự thật duy nhất về việc cần làm. CPO sở hữu cấu trú
 
 Trạng thái: `todo` · `doing` · `review` · `done` · `blocked` (thêm `loại`, `gộp vào T-###`). Ước lượng: S (một lượt ngắn) · M (một lượt đầy) · L (phải chia nhỏ).
 
-Mã task lớn nhất đã cấp: **T-014**. Task mới lấy số tiếp theo.
+Mã task lớn nhất đã cấp: **T-016**. Task mới lấy số tiếp theo.
 
 Kiểm cấu trúc sau mỗi lần sửa: `node scripts/backlog-check.mjs`.
 
@@ -24,8 +24,10 @@ Kiểm cấu trúc sau mỗi lần sửa: `node scripts/backlog-check.mjs`.
 | T-010 | lastaway: chụp màn gameplay hiện tại 1920x1080 làm đầu vào cho GPT | unity | - | S | done | >= 4 ảnh trong `projects/lastaway/art/brief/gameplay-hien-tai/` (spawn, giao tranh, loot/túi đồ, bo thu hẹp), camera Follow Player, có `index.md` ghi commit và cách chụp. Nghiệm thu 06/11: 5 ảnh; thiếu cảnh có địch vì offline không có bot, CPO chấp nhận |
 | T-011 | lastaway: GPT sáng tạo nhiều bản màn gameplay từ ảnh T-010, dựng trang so sánh để Huy chọn | art-ux | T-010 | M | done | >= 4 hướng, mỗi hướng HUD + world cùng khung; trang so sánh cạnh ảnh gốc; ảnh ở `art/inbox/`; Huy chọn một bản. 06/11 Huy không follow hướng world nào, giữ style gameplay; chuyển sang T-014 |
 | T-012 | lastaway: spec dựng HUD bản B cho unity (rect, neo, cỡ chữ số, icon PNG xuất từ SVG game-icons.net) và mục Credits ghi công CC BY | art-ux | T-009 | S | done | `projects/lastaway/ux/hud-B-spec.md` đủ số cho từng khối; icon PNG trong `projects/lastaway/art/inbox/hud-icons/png/`; Quick bar không thừa khoảng trống dưới. Huy duyệt 2 ngoại lệ 06/11 |
-| T-013 | lastaway: dựng HUD bản B trong prefab HUD theo spec T-012 | unity | T-012, T-010 | M | doing | Game view 1920x1080 khớp mock B (ảnh so sánh); EditMode xanh phần HUD; camera Follow Player; qa ĐẠT |
-| T-014 | lastaway: GPT gen skin UI (HUD B, menu) hợp màu và style gameplay hiện tại, world giữ nguyên | art-ux | T-012 | M | review | >= 4 bản skin UI vẽ lên ảnh gameplay T-010 (world không đổi), đúng bố cục HUD B; trang so sánh; Huy chọn một bản |
+| T-013 | lastaway: dựng HUD bản B trong prefab HUD theo spec T-012 | unity | T-012, T-010 | M | review | Game view 1920x1080 khớp mock B (ảnh so sánh); EditMode xanh phần HUD; camera Follow Player; qa ĐẠT |
+| T-014 | lastaway: GPT gen skin UI (HUD B, menu) hợp màu và style gameplay hiện tại, world giữ nguyên | art-ux | T-012 | M | done | >= 4 bản skin UI vẽ lên ảnh gameplay T-010 (world không đổi), đúng bố cục HUD B; trang so sánh; Huy chọn một bản. Huy chọn A đá khắc 06/11 |
+| T-015 | lastaway: tách skin A đá khắc thành asset UI dùng được (khung 9-slice, ô quick bar trống/chọn, nền thanh, khung minimap, Match status, killfeed) và asset list | art-ux | T-014 | M | todo | Sprite PNG nền trong suốt, đúng cỡ spec HUD B ở 1080p, có border 9-slice ghi trong asset list; ảnh dựng thử HUD B bằng asset khớp concept A; qa chấm chéo |
+| T-016 | lastaway: gắn skin A vào Hud.prefab (HUD B) | unity | T-013, T-015 | M | todo | Game view 1920x1080 khớp concept A; rect HUD B không đổi; test HUD xanh; qa ĐẠT |
 
 ## Icebox
 

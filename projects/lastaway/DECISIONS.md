@@ -43,3 +43,15 @@ Khoảng trống chặn QA-01 theo PIC người (MAP-02, Game-10, DRG-01, ZON-01
 - **Người quyết:** Huy (06/11, nguyên văn: "Giữ nguyên Màu style Gameplay thứ cần sửa là UI nên cần Gen ảnh UI sao cho hợp Gameplay ý")
 - **Lý do:** World đã ổn; feedback Vũ #4 ("như html chưa có css") nhắm vào UI.
 - **Hệ quả:** T-011 đóng (concept world lưu tham khảo). T-014: GPT gen skin UI trên ảnh gameplay thật, giữ bố cục HUD B.
+
+## 2026-11-06 - Chấp nhận 5 lệch spec HUD B của Dev; kênh Editor cho qa
+- **Quyết định:** Chấp nhận 5 lệch T-013: đồng hồ bo dời trái 10 u (chống cắt chữ); icon trong ô 22 u; vòng bo trên minimap đỏ/vàng giống world thay Purple; icon import Bilinear; chữ ngoài 2 ngoại lệ giữ 13 u. qa không lái Editor: unity chạy test và chụp bằng chứng theo danh sách của qa, qa đọc rồi kết luận.
+- **Người quyết:** CPO (qa đánh giá chấp nhận được)
+- **Lý do:** Lệch nhỏ, có lý do kỹ thuật; giữ luật chỉ unity chạy Unity.
+- **Hệ quả:** `hud-B-spec.md` coi các điểm này là đúng. Huy muốn khác thì sửa ở đây.
+
+## 2026-11-06 - Chọn skin UI A đá khắc
+- **Quyết định:** Skin UI theo bản A đá khắc của T-014 (`projects/lastaway/art/inbox/T-014/01-da-khac/`): khung đá xám khắc góc hoa văn, viền rêu, hợp world đá rêu olive. World giữ nguyên.
+- **Người quyết:** Huy ("A đá khắc", 06/11)
+- **Lý do:** Hợp world nhất.
+- **Hệ quả:** T-015 (art-ux: asset list, sprite 9-slice), T-016 (unity: gắn skin lên HUD B).
