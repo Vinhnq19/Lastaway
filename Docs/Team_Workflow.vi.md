@@ -39,7 +39,7 @@ python -I Tools/read_gdd.py Weapons                           # bảng số li�
 ### 2.1. Hai cách chạy đội
 
 - **Subagent** (mặc định, hợp khi làm một mình): phiên chạy `/cpo` gọi từng vai trò như subagent. Agent con xong việc là kết thúc, không giữ ngữ cảnh giữa các ticket.
-- **Phiên thường trực** (trên app Claude desktop): mỗi vai trò là một phiên riêng trong sidebar, tên `Game Designer`, `Tech Lead`, `Unity Dev`, `Backend Dev`, `Code Reviewer`, `QA Tester`, và phiên điều phối tên `CPO`. Mỗi phiên đọc file vai trò trong `.claude/agents/` khi khởi động rồi chờ việc. CPO giao việc bằng tin nhắn giữa các phiên. Báo cáo cuối lượt của mỗi phiên tự chuyển về CPO. Bạn cũng có thể mở thẳng một phiên vai trò để hỏi hoặc giao việc. Các phiên dùng chung một thư mục, nên CPO chỉ giao song song khi các phiên không sửa chung file.
+- **Phiên thường trực** (trên app Claude desktop): từ 06/11/2026 đội gọn còn 4 phiên: `Lastaway · CPO` (điều phối), `Lastaway · Thiết kế & Kế hoạch` (game-designer + tech-lead), `Lastaway · Unity Dev` (unity-dev), `Lastaway · Review & QA` (code-reviewer + qa-tester, độc lập với dev). Không có phiên backend vì `Backend/` thuộc Vinh; khi Vinh đồng ý giao việc backend thì CPO gọi subagent `backend-dev`. Mỗi phiên đọc file vai trò trong `.claude/agents/` khi khởi động rồi chờ việc. CPO giao việc bằng tin nhắn giữa các phiên. Báo cáo cuối lượt của mỗi phiên tự chuyển về CPO. Bạn cũng có thể mở thẳng một phiên vai trò để hỏi hoặc giao việc. Các phiên dùng chung một thư mục, nên CPO chỉ giao song song khi các phiên không sửa chung file.
 
 Ánh xạ module trong GDD sang agent thực hiện:
 

@@ -63,7 +63,7 @@ Tự kiểm báo cáo của agent trước khi tin: mở file chúng nói đã s
 
 ## Giao việc cho phiên thường trực
 
-Nếu đang chạy trên app desktop và đã có các phiên vai trò (`Game Designer`, `Tech Lead`, `Unity Dev`, `Backend Dev`, `Code Reviewer`, `QA Tester`; tìm bằng danh sách phiên liên kết), giao việc bằng tin nhắn tới phiên đó thay vì gọi subagent. Tin nhắn có dòng đầu nêu rõ ID ticket và bước, kèm brief như ở các mục trên. Mỗi phiên chỉ nhận một việc một lúc. Báo cáo cuối lượt của phiên tự quay về đây; kiểm file ticket trước khi chuyển bước. Không có phiên vai trò thì dùng subagent cùng tên.
+Nếu đang chạy trên app desktop và đã có các phiên vai trò (`Lastaway · Thiết kế & Kế hoạch` cho spec và plan, `Lastaway · Unity Dev` cho build, `Lastaway · Review & QA` cho review rồi QA; tìm bằng danh sách phiên liên kết; backend dùng subagent `backend-dev`), giao việc bằng tin nhắn tới phiên đó thay vì gọi subagent. Tin nhắn có dòng đầu nêu rõ ID ticket và bước, kèm brief như ở các mục trên. Mỗi phiên chỉ nhận một việc một lúc. Báo cáo cuối lượt của phiên tự quay về đây; kiểm file ticket trước khi chuyển bước. Không có phiên vai trò thì dùng subagent cùng tên.
 
 ## Nguyên tắc của CPO
 
