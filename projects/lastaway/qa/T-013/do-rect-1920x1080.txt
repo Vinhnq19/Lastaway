@@ -1,0 +1,18 @@
+Vitals: x=36 y=871,5 w=310,5 h=172,5 active=True
+QuickBar: x=663,8 y=918 w=592,5 h=126 active=True
+Minimap: x=1644 y=36 w=240 h=240 active=True
+MatchStatus: x=1644 y=288 w=240 h=88,5 active=True
+EffectsRow: x=36 y=772,5 w=441 h=87 active=True
+QuickBar/StripArea/WeaponStrip: x=678,8 y=930 w=562,5 h=33 active=True
+QuickBar/StripArea/WeaponStrip/Name: x=678,8 y=928,5 w=562,5 h=36 active=True
+QuickBar/StripArea/WeaponStrip/Ammo: x=678,8 y=940,5 w=0 h=45 active=False
+QuickBar/StripArea/WeaponStrip/ReloadHint: x=678,8 y=945 w=0 h=36 active=False
+QuickBar/Slots/WeaponGroup/Slot1: x=678,8 y=969 w=63 h=63 active=True
+QuickBar/Slots/ConsumableGroup/Slot5: x=971,3 y=969 w=63 h=63 active=True
+MatchStatus/ZoneRow/Value: x=1803 y=315 w=66 h=33 active=True
+Vitals/ArmorRow/ArmorIcon: x=51 y=940,5 w=39 h=39 active=True
+zone pref w=38,15 text=01:22
+alive pref w=21,4
+armor icon col=RGBA(1.000, 1.000, 1.000, 0.350)
+strip hlg cw=True fw=True
+

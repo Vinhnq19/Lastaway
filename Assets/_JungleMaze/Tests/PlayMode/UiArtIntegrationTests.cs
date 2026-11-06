@@ -93,7 +93,7 @@ namespace JungleMaze.Tests.PlayMode
             {
                 var slot = quickbar.GetSlotView(i); var item = _inventory.GetSlot(i);
                 Assert.AreEqual(expectedNames[i], slot.NameLabel.text, "slot " + i);
-                Assert.AreEqual(new Vector2(28, 28), ((RectTransform)slot.Icon.transform).sizeDelta, "slot " + i);
+                Assert.AreEqual(new Vector2(22, 22), ((RectTransform)slot.Icon.transform).sizeDelta, "slot " + i); // B slot 42
                 if (item.IsEmpty)
                 {
                     Assert.AreEqual(SlotVisual.Empty, slot.Visual);

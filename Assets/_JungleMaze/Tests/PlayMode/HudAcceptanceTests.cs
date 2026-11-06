@@ -64,14 +64,14 @@ namespace JungleMaze.Tests.PlayMode
         // ---------- Layout (AC1, AC2, AC3, AC20, AC22, AC13) ----------
 
         [UnityTest]
-        public IEnumerator Layout_FourBlocksMatchFigmaV2_At1280x720()
+        public IEnumerator Layout_FourBlocksMatchLayoutB_At1280x720()
         {
             yield return SpawnHud();
             var canvas = MeasureAt(1280f, 720f);
-            AssertRect(HudFigmaV2.Vitals, Measure(canvas, _root.Vitals.transform), "Vitals");
-            AssertRect(HudFigmaV2.QuickBar, Measure(canvas, _root.Quickbar.transform), "QuickBar");
-            AssertRect(HudFigmaV2.Minimap, Measure(canvas, _root.Minimap.transform), "Minimap");
-            AssertRect(HudFigmaV2.MatchStatus, Measure(canvas, _root.MatchStatus.transform), "MatchStatus");
+            AssertRect(HudLayoutB.Vitals, Measure(canvas, _root.Vitals.transform), "Vitals");
+            AssertRect(HudLayoutB.QuickBar, Measure(canvas, _root.Quickbar.transform), "QuickBar");
+            AssertRect(HudLayoutB.Minimap, Measure(canvas, _root.Minimap.transform), "Minimap");
+            AssertRect(HudLayoutB.MatchStatus, Measure(canvas, _root.MatchStatus.transform), "MatchStatus");
             var quickbar = Measure(canvas, _root.Quickbar.transform);
             Assert.That(quickbar.center.x, Is.EqualTo(640f).Within(HudFigmaV2.Tolerance));
             Assert.That(1280f - Measure(canvas, _root.Minimap.transform).xMax, Is.EqualTo(24f).Within(HudFigmaV2.Tolerance));
@@ -121,35 +121,37 @@ namespace JungleMaze.Tests.PlayMode
         }
 
         [UnityTest]
-        public IEnumerator Layout_ChildElementsMatchFigmaV2()
+        public IEnumerator Layout_ChildElementsMatchLayoutB()
         {
             yield return SpawnHud();
             var canvas = MeasureAt(1280f, 720f);
             var vitals = Measure(canvas, _root.Vitals.transform);
-            AssertRect(Offset(HudFigmaV2.HpBar, vitals), Measure(canvas, _root.Vitals.HpBar.transform), "HpBar");
+            AssertRect(Offset(HudLayoutB.HpBar, vitals), Measure(canvas, _root.Vitals.HpBar.transform), "HpBar");
+            AssertRect(Offset(HudLayoutB.HpIcon, vitals), Measure(canvas, _root.Vitals.transform.Find("HpIcon")), "HpIcon");
             var rows = new[] { _root.Vitals.ArmorRow, _root.Vitals.HelmetRow, _root.Vitals.AdrenalineRow };
             var names = new[] { "ArmorRow", "HelmetRow", "AdrenalineRow" };
+            var icons = new[] { HudLayoutB.ArmorIcon, HudLayoutB.HelmetIcon, HudLayoutB.AdrenalineIcon };
             for (var i = 0; i < 3; i++)
             {
                 Assert.AreEqual(names[i], rows[i].name, "row order Giáp → Mũ → Adrenaline");
-                var row = Measure(canvas, rows[i].transform);
-                Assert.That(row.y - vitals.y, Is.EqualTo(HudFigmaV2.RowY[i]).Within(HudFigmaV2.Tolerance), names[i]);
-                AssertRect(Offset(HudFigmaV2.RowBar, row), Measure(canvas, rows[i].Bar.transform), names[i] + " bar");
+                Assert.IsNotNull(rows[i].Icon, names[i] + " icon");
+                AssertRect(Offset(icons[i], vitals), Measure(canvas, rows[i].Icon.transform), names[i] + " icon");
+                Assert.IsFalse(rows[i].Label.gameObject.activeSelf, names[i] + " label hidden (B: icon + number)");
             }
+            Assert.IsFalse(_root.Vitals.ArmorRow.Bar.gameObject.activeSelf, "armor durability bar removed in B");
+            Assert.IsFalse(_root.Vitals.HelmetRow.Bar.gameObject.activeSelf, "helmet durability bar removed in B");
+            AssertRect(Offset(HudLayoutB.AdrenalineBar, vitals), Measure(canvas, _root.Vitals.AdrenalineRow.Bar.transform), "AdrenalineRow bar");
             var quickbar = Measure(canvas, _root.Quickbar.transform);
-            var strip = Measure(canvas, _root.Quickbar.WeaponStrip);
-            Assert.That(strip.height, Is.EqualTo(HudFigmaV2.WeaponStripHeight).Within(HudFigmaV2.Tolerance));
-            Assert.That(strip.y - quickbar.y, Is.EqualTo(0f).Within(HudFigmaV2.Tolerance));
-            Assert.That(strip.center.x, Is.EqualTo(640f).Within(HudFigmaV2.Tolerance));
+            AssertRect(Offset(HudLayoutB.WeaponStrip, quickbar), Measure(canvas, _root.Quickbar.WeaponStrip), "WeaponStrip");
             for (var i = 0; i < 8; i++)
             {
                 var slot = Measure(canvas, _root.Quickbar.GetSlotView(i).transform);
                 var group = i / 4;
-                var expectedX = (group == 0 ? 0f : HudFigmaV2.ConsumableGroupX) + (i % 4) * HudFigmaV2.SlotStep;
-                Assert.That(slot.width, Is.EqualTo(HudFigmaV2.SlotSize).Within(HudFigmaV2.Tolerance), $"slot {i + 1} w");
-                Assert.That(slot.height, Is.EqualTo(HudFigmaV2.SlotSize).Within(HudFigmaV2.Tolerance), $"slot {i + 1} h");
+                var expectedX = HudLayoutB.SlotRowX + (group == 0 ? 0f : HudLayoutB.ConsumableGroupX) + (i % 4) * HudLayoutB.SlotStep;
+                Assert.That(slot.width, Is.EqualTo(HudLayoutB.SlotSize).Within(HudFigmaV2.Tolerance), $"slot {i + 1} w");
+                Assert.That(slot.height, Is.EqualTo(HudLayoutB.SlotSize).Within(HudFigmaV2.Tolerance), $"slot {i + 1} h");
                 Assert.That(slot.x - quickbar.x, Is.EqualTo(expectedX).Within(HudFigmaV2.Tolerance), $"slot {i + 1} x");
-                Assert.That(slot.y - quickbar.y, Is.EqualTo(HudFigmaV2.SlotRowY).Within(HudFigmaV2.Tolerance), $"slot {i + 1} y");
+                Assert.That(slot.y - quickbar.y, Is.EqualTo(HudLayoutB.SlotRowY).Within(HudFigmaV2.Tolerance), $"slot {i + 1} y");
             }
         }
 
@@ -174,7 +176,7 @@ namespace JungleMaze.Tests.PlayMode
         }
 
         [UnityTest]
-        public IEnumerator WeaponStrip_StaysCentered_WithAndWithoutAmmo()
+        public IEnumerator WeaponStrip_StaysCentered_WithAndWithoutAmmo() // B: fixed 375 u strip, same box both ways
         {
             yield return SpawnHud();
             _hud.SetHeldWeapon("CROSSBOW");
@@ -190,7 +192,8 @@ namespace JungleMaze.Tests.PlayMode
             canvas = MeasureAt(1280f, 720f);
             var bare = Measure(canvas, _root.Quickbar.WeaponStrip);
             Assert.That(bare.center.x, Is.EqualTo(640f).Within(HudFigmaV2.Tolerance), "Bare Hands");
-            Assert.That(bare.width, Is.LessThan(withAmmo.width));
+            Assert.That(bare.width, Is.EqualTo(withAmmo.width).Within(HudFigmaV2.Tolerance));
+            Assert.That(bare.width, Is.EqualTo(HudLayoutB.WeaponStrip.width).Within(HudFigmaV2.Tolerance));
         }
 
         // ---------- Behaviour (AC10, AC11, AC14, AC15, AC17, AC18) ----------
@@ -201,7 +204,7 @@ namespace JungleMaze.Tests.PlayMode
             yield return SpawnHud();
             var vitals = _root.Vitals;
             Assert.AreEqual("100", Parsed(vitals.HpNumber));
-            Assert.AreEqual("/100", Parsed(vitals.HpMax));
+            Assert.IsFalse(vitals.HpMax.gameObject.activeInHierarchy, "B hides the /max text (icon + number)");
             Assert.AreEqual(1f, vitals.HpBar.FillValue);
             var palette = _root.Palette;
             foreach (var row in new[] { vitals.ArmorRow, vitals.HelmetRow, vitals.AdrenalineRow })
@@ -313,12 +316,45 @@ namespace JungleMaze.Tests.PlayMode
             var canvas = MeasureAt(1280f, 720f);
             var fill = Measure(canvas, _root.Vitals.HpBar.FillImage.transform);
             var trail = Measure(canvas, _root.Vitals.HpBar.TrailImage.transform);
-            Assert.That(trail.width - fill.width, Is.EqualTo(21f).Within(1f));
+            Assert.That(trail.width - fill.width, Is.EqualTo(0.08f * HudLayoutB.HpBar.width).Within(1f)); // 8 of 100 HP
             _root.Presenter.Tick(0.4f);
             canvas = MeasureAt(1280f, 720f);
             fill = Measure(canvas, _root.Vitals.HpBar.FillImage.transform);
             trail = Measure(canvas, _root.Vitals.HpBar.TrailImage.transform);
             Assert.That(trail.width - fill.width, Is.EqualTo(0f).Within(0.5f), "trail retracted");
+        }
+
+        [UnityTest]
+        public IEnumerator LayoutB_VitalsIcons_DimUntilTheRowHasANumber()
+        {
+            yield return SpawnHud();
+            var helmet = _root.Vitals.HelmetRow;
+            Assert.That(helmet.Icon.color.a, Is.EqualTo(0.35f).Within(0.01f), "nothing worn: dim icon, no number");
+            Assert.IsFalse(helmet.Value.enabled);
+            _hud.SetHelmet("WOODEN_HELMET", 30f);
+            _root.Presenter.Tick(0.1f);
+            Assert.AreEqual(Color.white, helmet.Icon.color, "worn: full icon, colour stays baked (white tint)");
+            Assert.IsTrue(helmet.Value.enabled);
+        }
+
+        [UnityTest]
+        public IEnumerator LayoutB_Minimap_DrawsTheMapWithoutPlayers()
+        {
+            var grid = Track(new GameObject("Map grid")).AddComponent<JungleMaze.Presentation.World.MapGridView>();
+            grid.Build(50, 8);
+            var hero = Track(Object.Instantiate(AssetDatabase.LoadAssetAtPath<GameObject>(HeroPrefabPath)));
+            hero.GetComponent<HeroController>().enabled = false;
+            yield return SpawnHud();
+            var capture = _root.Minimap.GetComponent<MinimapMapCapture>();
+            Assert.IsNotNull(capture, "Hud.prefab minimap carries the map capture");
+            Assert.AreEqual(0, capture.MapImage.transform.GetSiblingIndex(), "map under grid and marker");
+            yield return null;
+            yield return null;
+            Assert.IsTrue(capture.MapImage.enabled, "map shown once the grid exists");
+            Assert.IsNotNull(capture.Texture);
+            Assert.AreSame(capture.Texture, capture.MapImage.texture);
+            foreach (var r in hero.GetComponentsInChildren<Renderer>())
+                Assert.IsFalse(r.forceRenderingOff, r.name + " is visible again after the capture");
         }
 
         [UnityTest]
@@ -334,7 +370,7 @@ namespace JungleMaze.Tests.PlayMode
             var body = hero.GetComponent<Rigidbody2D>();
             var cases = new[]
             {
-                (cell: 0, expected: 0f, rotation: 0f), (cell: 25, expected: 100f, rotation: 90f), (cell: 49, expected: 200f, rotation: 225f)
+                (cell: 0, expected: 0f, rotation: 0f), (cell: 25, expected: 80f, rotation: 90f), (cell: 49, expected: 160f, rotation: 225f)
             };
             foreach (var c in cases)
             {
@@ -425,8 +461,9 @@ namespace JungleMaze.Tests.PlayMode
             Assert.That(all.Count, Is.GreaterThan(30));
             foreach (var text in all)
             {
-                Assert.That(text.fontSize, Is.GreaterThanOrEqualTo(13f), text.name);
-                if (text.enableAutoSizing) Assert.That(text.fontSizeMin, Is.GreaterThanOrEqualTo(13f), text.name);
+                var min = HudLayoutB.MinFontSize(text);
+                Assert.That(text.fontSize, Is.GreaterThanOrEqualTo(min), text.name);
+                if (text.enableAutoSizing) Assert.That(text.fontSizeMin, Is.GreaterThanOrEqualTo(min), text.name);
                 Assert.IsNotNull(text.font, text.name);
                 foreach (var s in required)
                     Assert.IsTrue(text.font.HasCharacters(s, out uint[] missing, true), $"{text.name} ({text.font.name}) misses '{s}': {Codepoints(missing)}");

@@ -61,7 +61,7 @@ namespace JungleMaze.Tests.PlayMode
         [UnityTest] public IEnumerator FeedbackLayout_BlocksMatchFigma_At1280x720()
         {
             yield return Spawn();RectIs(HudFigmaV2Feedback.Effects,Measure(_feedback.EffectRow.transform),"effects");RectIs(HudFigmaV2Feedback.Pickup,Measure(_feedback.PickupFeed.transform),"pickup");RectIs(HudFigmaV2Feedback.Banner,Measure(_feedback.DangerBanner.transform),"banner");RectIs(HudFigmaV2Feedback.Use,Measure(_feedback.UseAction.transform),"use");
-            for(var i=0;i<6;i++)RectIs(new Rect(24+i*50,466,44,58),Measure(_feedback.EffectRow.Chips[i].transform),"chip"+i);
+            for(var i=0;i<6;i++)RectIs(new Rect(24+i*50,HudFigmaV2Feedback.Effects.y,44,58),Measure(_feedback.EffectRow.Chips[i].transform),"chip"+i);
             _hud.NotifyPickup("GOD_LEAF",1);_hud.NotifyPickup("SPIRIT_TEAR",1);_hud.NotifyPickup("MERMAID_TAIL",1);_hud.NotifyPickup("UNICORN_BLOOD",1);_hud.NotifyPickup("ADRENALINE",1);Tick(0);
             for(var i=0;i<3;i++)RectIs(new Rect(1115,591+i*37,141,31),Measure(_feedback.PickupFeed.Rows[i].transform),"toast"+i);
             RectIs(new Rect(1164,564,92,21),Measure(_feedback.PickupFeed.OverflowGroup.transform),"overflow");
@@ -73,8 +73,8 @@ namespace JungleMaze.Tests.PlayMode
         }
         [UnityTest] public IEnumerator FeedbackLayout_NoOverlapWithCoreAndCenter()
         {
-            yield return Spawn();var fixedRects=FeedbackRects();var core=new[]{Measure(_core.Vitals.transform),new Rect(358,612,564,84),Measure(_core.Minimap.transform),Measure(_core.MatchStatus.transform),new Rect(24,24,171,90),HudFigmaV2Feedback.Center};
-            foreach(var a in fixedRects)foreach(var b in core)Assert.AreEqual(0,Overlap(a,b),a+" versus "+b);Assert.LessOrEqual(Measure(_feedback.UseAction.transform).yMax,604);
+            yield return Spawn();var fixedRects=FeedbackRects();var core=new[]{Measure(_core.Vitals.transform),HudLayoutB.SlotRow,Measure(_core.Minimap.transform),Measure(_core.MatchStatus.transform),new Rect(24,24,171,90),HudFigmaV2Feedback.Center};
+            foreach(var a in fixedRects)foreach(var b in core)Assert.AreEqual(0,Overlap(a,b),a+" versus "+b);Assert.LessOrEqual(Measure(_feedback.UseAction.transform).yMax,HudLayoutB.SlotRow.y);
         }
         [UnityTest] public IEnumerator Use_GodLeafJsonProgress_HintAndSlotFrame_SelectedKept()
         {
@@ -150,7 +150,7 @@ namespace JungleMaze.Tests.PlayMode
         [UnityTest] public IEnumerator FeedbackText_MinSize13_VietnameseGlyphsAndFontRoles()
         {
             yield return Spawn();var phrases="Đang dùng Đã hủy Di chuyển để hủy hướng Tây Nam món khác Có bẫy Độc Chậm Ẩn Ngất Trói Đảo Miễn";
-            foreach(var text in _feedback.GetComponentsInChildren<TMP_Text>(true)){Assert.GreaterOrEqual(text.fontSize,13,text.name);Assert.False(text.enableAutoSizing,text.name);Assert.NotNull(text.font,text.name);Assert.True(text.font.faceInfo.familyName.Contains("Be Vietnam Pro")||text.font.faceInfo.familyName.Contains("Pixelify Sans"));}
+            foreach(var text in _feedback.GetComponentsInChildren<TMP_Text>(true)){Assert.GreaterOrEqual(text.fontSize,HudLayoutB.MinFontSize(text),text.name);Assert.False(text.enableAutoSizing,text.name);Assert.NotNull(text.font,text.name);Assert.True(text.font.faceInfo.familyName.Contains("Be Vietnam Pro")||text.font.faceInfo.familyName.Contains("Pixelify Sans"));}
             foreach(var chip in _feedback.EffectRow.Chips){Assert.True(chip.Label.font.HasCharacters(phrases,out uint[] missing,false,false),missing==null?"":string.Join(",",missing));Assert.AreEqual(TextOverflowModes.Ellipsis,chip.Label.overflowMode);Assert.True(chip.Seconds.font.faceInfo.familyName.Contains("Pixelify"));}
             Assert.True(_feedback.UseAction.Seconds.font.faceInfo.familyName.Contains("Pixelify"));Assert.True(_feedback.UseAction.Label.font.faceInfo.familyName.Contains("Be Vietnam"));foreach(var e in _feedback.Catalog.Entries)if(e.Kind!=EffectKind.Adrenaline)Assert.LessOrEqual(e.Label.Length,4);
         }
