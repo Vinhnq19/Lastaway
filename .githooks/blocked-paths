@@ -1,0 +1,13 @@
+# Đường dẫn không bao giờ được commit. Mỗi dòng một regex (grep -E), so với đường dẫn tính từ gốc repo,
+# không phân biệt hoa thường. Bỏ dấu # ở dòng cần dùng hoặc thêm dòng mới. Hook: .githooks/pre-commit.
+#
+# Tài sản tham chiếu của bên thứ ba (ảnh, âm thanh, file gốc của game tham chiếu): chỉ làm mẫu, để ngoài repo.
+# ^reference/
+# ref-original
+#
+# Ảnh thô của xưởng art ngoài (chưa duyệt):
+# ^art-src/raw/
+#
+# Bí mật:
+(^|/)\.env(\.local)?$
+\.(pem|key)$
