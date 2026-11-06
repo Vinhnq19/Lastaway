@@ -79,3 +79,9 @@ Khoảng trống chặn QA-01 theo PIC người (MAP-02, Game-10, DRG-01, ZON-01
 - **Người quyết:** Huy (07/11, dòng ticket "Giai đoạn 3 | 7/11/2026 | UI | Minimap")
 - **Lý do:** Không ghi.
 - **Hệ quả:** T-017 (designer: spec + dòng ticket), T-018 (unity: dựng, sau T-016). Phụ thuộc FOW-01 (Quang Huy, Not Yet) cho "vùng Hero thấy". GDD hiện là đấu đơn 10 người, chưa có đồng đội: mục này chờ Huy làm rõ.
+
+## 2026-11-07 - Hoãn minimap; skin A lượt 3: bớt chi tiết, viền nhẹ, tách UI khỏi gameplay
+- **Quyết định:** (1) Minimap Giai đoạn 3 chưa làm (T-017, T-018 hoãn). (2) Huy thích skin A hiện tại nhưng UI hơi chi tiết và viền đậm: giảm mức chi tiết (hoa văn, rêu, vân, shading icon), làm viền nhẹ hơn. (3) UI cần thêm yếu tố tách bạch với gameplay; art-ux đưa vài cách trên ảnh gameplay thật để Huy chọn.
+- **Người quyết:** Huy (07/11, nguyên văn: "chưa làm vội. UI Oke và tôi thích rồi nhưng chúng hơi chi tiết, và viền khá đậm hãy giảm mức độ chi tiết đi và xử lý để viền nó ko bị đậm quá. Ngoài ra UI cần thêm gì đó để tách bạch với phần Gameplay")
+- **Lý do:** UI chi tiết và cùng chất đá rêu với world nên dễ lẫn vào gameplay.
+- **Hệ quả:** T-015 mở lại lượt 3. T-016 dựng tiếp cấu trúc với sprite hiện tại, sprite sẽ thay khi lượt 3 được duyệt. Giả định: "chưa làm vội" là trả lời câu hỏi minimap, áp cho cả T-017 và T-018.
