@@ -37,9 +37,9 @@
   }
  },
  "A": {
-  "area_px": 292283,
-  "pct_screen": 14.1,
-  "pct_bottom_left_quadrant": 18.12,
+  "area_px": 286064,
+  "pct_screen": 13.8,
+  "pct_bottom_left_quadrant": 17.52,
   "rects": {
    "vitals": [
     36,
@@ -49,9 +49,9 @@
    ],
    "quick": [
     664,
-    908,
+    918,
     592,
-    136
+    126
    ],
    "minimap": [
     1584,
@@ -74,9 +74,9 @@
   }
  },
  "B": {
-  "area_px": 247895,
-  "pct_screen": 11.95,
-  "pct_bottom_left_quadrant": 18.12,
+  "area_px": 241676,
+  "pct_screen": 11.65,
+  "pct_bottom_left_quadrant": 17.52,
   "rects": {
    "vitals": [
     36,
@@ -86,9 +86,9 @@
    ],
    "quick": [
     664,
-    908,
+    918,
     592,
-    136
+    126
    ],
    "minimap": [
     1644,
