@@ -72,12 +72,10 @@ namespace JungleMaze.Tests.PlayMode
             AssertRect(HudLayoutB.QuickBar, Measure(canvas, _root.Quickbar.transform), "QuickBar");
             AssertRect(HudLayoutB.Minimap, Measure(canvas, _root.Minimap.transform), "Minimap");
             AssertRect(HudLayoutB.MatchStatus, Measure(canvas, _root.MatchStatus.transform), "MatchStatus");
+            // r11: margins are the concept's (Vitals 30/17 px, quick bar 18 px from the bottom and 4.5 px right of centre,
+            // minimap and match 25 px from the right); the rects above carry them.
             var quickbar = Measure(canvas, _root.Quickbar.transform);
-            Assert.That(quickbar.center.x, Is.EqualTo(640f).Within(HudFigmaV2.Tolerance));
-            Assert.That(1280f - Measure(canvas, _root.Minimap.transform).xMax, Is.EqualTo(24f).Within(HudFigmaV2.Tolerance));
-            Assert.That(1280f - Measure(canvas, _root.MatchStatus.transform).xMax, Is.EqualTo(24f).Within(HudFigmaV2.Tolerance));
-            Assert.That(720f - Measure(canvas, _root.Vitals.transform).yMax, Is.EqualTo(24f).Within(HudFigmaV2.Tolerance));
-            Assert.That(720f - quickbar.yMax, Is.EqualTo(24f).Within(HudFigmaV2.Tolerance));
+            Assert.That(quickbar.center.x, Is.EqualTo(640f + 4.5f / 1.5f).Within(HudFigmaV2.Tolerance));
         }
 
         [UnityTest]
@@ -98,10 +96,10 @@ namespace JungleMaze.Tests.PlayMode
             for (var i = 0; i < blocks.Length; i++)
             {
                 var r = blocks[i];
-                Assert.That(r.xMin, Is.GreaterThanOrEqualTo(24f - HudFigmaV2.Tolerance), $"block {i} left");
-                Assert.That(r.yMin, Is.GreaterThanOrEqualTo(24f - HudFigmaV2.Tolerance), $"block {i} top");
-                Assert.That(1280f - r.xMax, Is.GreaterThanOrEqualTo(24f - HudFigmaV2.Tolerance), $"block {i} right");
-                Assert.That(720f - r.yMax, Is.GreaterThanOrEqualTo(24f - HudFigmaV2.Tolerance), $"block {i} bottom");
+                Assert.That(r.xMin, Is.GreaterThanOrEqualTo(HudLayoutB.MinMargin - HudFigmaV2.Tolerance), $"block {i} left");
+                Assert.That(r.yMin, Is.GreaterThanOrEqualTo(HudLayoutB.MinMargin - HudFigmaV2.Tolerance), $"block {i} top");
+                Assert.That(1280f - r.xMax, Is.GreaterThanOrEqualTo(HudLayoutB.MinMargin - HudFigmaV2.Tolerance), $"block {i} right");
+                Assert.That(720f - r.yMax, Is.GreaterThanOrEqualTo(HudLayoutB.MinMargin - HudFigmaV2.Tolerance), $"block {i} bottom");
                 for (var j = i + 1; j < blocks.Length; j++) Assert.AreEqual(0f, OverlapArea(r, blocks[j]), $"blocks {i}/{j} overlap");
             }
             var minimap = Measure(canvas, _root.Minimap.transform);
@@ -142,7 +140,10 @@ namespace JungleMaze.Tests.PlayMode
             Assert.IsFalse(_root.Vitals.HelmetRow.Bar.gameObject.activeSelf, "helmet durability bar removed in B");
             AssertRect(Offset(HudLayoutB.AdrenalineBar, vitals), Measure(canvas, _root.Vitals.AdrenalineRow.Bar.transform), "AdrenalineRow bar");
             var quickbar = Measure(canvas, _root.Quickbar.transform);
-            AssertRect(Offset(HudLayoutB.WeaponStrip, quickbar), Measure(canvas, _root.Quickbar.WeaponStrip), "WeaponStrip");
+            Assert.IsFalse(_root.Quickbar.WeaponStrip.gameObject.activeInHierarchy, "r11: no weapon/ammo tab (Huy 07/11)");
+            var minimap = Measure(canvas, _root.Minimap.transform);
+            AssertRect(Offset(HudLayoutB.MapHole, minimap), Measure(canvas, _root.Minimap.transform.Find("MapArea")), "minimap map area = frame hole");
+            Assert.That(_root.Minimap.SizePixels, Is.EqualTo(HudLayoutB.MapHole.width).Within(0.01f), "marker projection spans the hole");
             for (var i = 0; i < 8; i++)
             {
                 var slot = Measure(canvas, _root.Quickbar.GetSlotView(i).transform);
@@ -176,24 +177,21 @@ namespace JungleMaze.Tests.PlayMode
         }
 
         [UnityTest]
-        public IEnumerator WeaponStrip_StaysCentered_WithAndWithoutAmmo() // B: fixed 375 u strip, same box both ways
+        public IEnumerator WeaponStrip_HiddenInR11_AmmoCodeStillRuns() // Huy 07/11: no weapon/ammo tab; code kept
         {
             yield return SpawnHud();
             _hud.SetHeldWeapon("CROSSBOW");
             _hud.SetAmmo(4, 30);
             Assert.IsTrue(_root.Quickbar.Ammo.activeSelf);
             Assert.IsTrue(_root.Quickbar.ReloadHint.activeSelf);
-            var canvas = MeasureAt(1280f, 720f);
-            var withAmmo = Measure(canvas, _root.Quickbar.WeaponStrip);
-            Assert.That(withAmmo.center.x, Is.EqualTo(640f).Within(HudFigmaV2.Tolerance), "Crossbow 4/30 + R Nạp");
+            Assert.IsFalse(_root.Quickbar.WeaponStrip.gameObject.activeInHierarchy, "tab not drawn");
+            var area = _root.Quickbar.WeaponStrip.parent.gameObject; // TMP only parses active text: peek, then hide again
+            area.SetActive(true);
+            Assert.AreEqual("4", Parsed(_root.Quickbar.WeaponStrip.Find("Ammo/Magazine").GetComponent<TMP_Text>()));
+            area.SetActive(false);
             _hud.SetHeldWeapon("HAND");
             Assert.IsFalse(_root.Quickbar.Ammo.activeSelf);
             Assert.IsFalse(_root.Quickbar.ReloadHint.activeSelf);
-            canvas = MeasureAt(1280f, 720f);
-            var bare = Measure(canvas, _root.Quickbar.WeaponStrip);
-            Assert.That(bare.center.x, Is.EqualTo(640f).Within(HudFigmaV2.Tolerance), "Bare Hands");
-            Assert.That(bare.width, Is.EqualTo(withAmmo.width).Within(HudFigmaV2.Tolerance));
-            Assert.That(bare.width, Is.EqualTo(HudLayoutB.WeaponStrip.width).Within(HudFigmaV2.Tolerance));
         }
 
         // ---------- Behaviour (AC10, AC11, AC14, AC15, AC17, AC18) ----------
@@ -358,6 +356,78 @@ namespace JungleMaze.Tests.PlayMode
         }
 
         [UnityTest]
+        public IEnumerator SkinA_StoneFrames_MinimapOverlayUnderRings_FrameOnTop()
+        {
+            var grid = Track(new GameObject("Map grid")).AddComponent<JungleMaze.Presentation.World.MapGridView>();
+            grid.Build(50, 8);
+            var ring = Track(new GameObject("Zone ring")).AddComponent<LineRenderer>();
+            ring.positionCount = 2;
+            ring.SetPositions(new[] { new Vector3(10, 25, 0), new Vector3(40, 25, 0) });
+            ring.startColor = ring.endColor = Color.red;
+            ring.material = new Material(Shader.Find("Sprites/Default"));
+            var ringLayer = ring.gameObject.layer;
+            yield return SpawnHud();
+
+            // Stone panels replace the old background and the direction-A edge/bevel overlays.
+            foreach (var block in new[] { "Vitals", "QuickBar", "MatchStatus" })
+            {
+                var t = _root.transform.Find(block);
+                Assert.IsFalse(t.GetComponent<Image>().enabled, block + " old background off");
+                Assert.IsFalse(t.Find("ArtEdge").gameObject.activeSelf, block + " ArtEdge off");
+                Assert.IsFalse(t.Find("ArtBevel").gameObject.activeSelf, block + " ArtBevel off");
+                var skin = t.Find("Skin").GetComponent<Image>();
+                Assert.AreEqual(0, skin.transform.GetSiblingIndex(), block + " stone drawn first");
+                StringAssert.StartsWith("hud_panel_", skin.sprite.name, block);
+                Assert.AreEqual(Image.Type.Simple, skin.type, block + " drawn Simple at its own size (r11)");
+                Assert.AreEqual(Color.white, skin.color, block + " stone untinted");
+                Assert.AreEqual(300f, skin.sprite.pixelsPerUnit, block + " @2x sprite at 300 PPU");
+            }
+            Assert.AreEqual("hud_slot_empty", _root.Quickbar.GetSlotView(7).Border.sprite.name, "empty slot is the stone slot");
+            Assert.AreEqual(0f, _root.Quickbar.GetSlotView(7).Icon.color.a, "empty stone slot shows no placeholder square");
+
+            // Minimap: map → overlay → rings (own texture, 1 px dark outline) → frame last.
+            var minimap = _root.Minimap.transform;
+            var area = minimap.Find("MapArea");
+            var capture = minimap.GetComponent<MinimapMapCapture>();
+            Assert.AreEqual(0, area.Find("Map").GetSiblingIndex(), "terrain first");
+            Assert.AreEqual(1, area.Find("Overlay").GetSiblingIndex(), "overlay over terrain");
+            Assert.AreEqual(2, capture.RingImage.transform.GetSiblingIndex(), "rings over the overlay");
+            Assert.AreSame(area, capture.RingImage.transform.parent);
+            // The capture camera may be parented after it at runtime; it draws nothing in the canvas.
+            for (var i = minimap.Find("Frame").GetSiblingIndex() + 1; i < minimap.childCount; i++)
+                Assert.IsNull(minimap.GetChild(i).GetComponentInChildren<Graphic>(true), "stone frame on top of every minimap graphic");
+            Assert.Greater(minimap.Find("Frame").GetSiblingIndex(), area.GetSiblingIndex(), "frame over the map area");
+            var outline = capture.RingImage.GetComponent<Outline>();
+            Assert.IsNotNull(outline, "ring outline");
+            Assert.Less(outline.effectColor.r + outline.effectColor.g + outline.effectColor.b, 0.3f, "outline is dark");
+            yield return null;
+            yield return null;
+            Assert.IsTrue(capture.RingImage.enabled);
+            Assert.AreSame(capture.RingTexture, capture.RingImage.texture);
+            Assert.AreEqual(ringLayer, ring.gameObject.layer, "ring layer restored after the capture");
+            Assert.IsFalse(ring.forceRenderingOff, "ring visible again after the capture");
+            var pixels = ReadTexture(capture.RingTexture);
+            var size = capture.RingTexture.width;
+            Assert.AreEqual(0, pixels[size * 2 + size / 2].a, "ring texture is clear away from the ring (terrain not in it)");
+            var onRing = pixels[(size / 2) * size + size / 2];
+            Assert.Greater(onRing.a, 0, "ring drawn into its own texture");
+            Assert.Greater(onRing.r, onRing.g, "ring keeps its colour");
+        }
+
+        private static Color32[] ReadTexture(RenderTexture rt)
+        {
+            var previous = RenderTexture.active;
+            RenderTexture.active = rt;
+            var tex = new Texture2D(rt.width, rt.height, TextureFormat.RGBA32, false);
+            tex.ReadPixels(new UnityEngine.Rect(0, 0, rt.width, rt.height), 0, 0);
+            tex.Apply();
+            RenderTexture.active = previous;
+            var pixels = tex.GetPixels32();
+            Object.Destroy(tex);
+            return pixels;
+        }
+
+        [UnityTest]
         public IEnumerator Minimap_FollowsHeroPose()
         {
             Physics2D.simulationMode = SimulationMode2D.Script;
@@ -370,7 +440,9 @@ namespace JungleMaze.Tests.PlayMode
             var body = hero.GetComponent<Rigidbody2D>();
             var cases = new[]
             {
-                (cell: 0, expected: 0f, rotation: 0f), (cell: 25, expected: 80f, rotation: 90f), (cell: 49, expected: 160f, rotation: 225f)
+                // Fractions of the map area (r11: the frame hole, 269 px = 179.3 u).
+                (cell: 0, expected: 0f, rotation: 0f), (cell: 25, expected: 0.5f * _root.Minimap.SizePixels, rotation: 90f),
+                (cell: 49, expected: _root.Minimap.SizePixels, rotation: 225f)
             };
             foreach (var c in cases)
             {
@@ -434,18 +506,24 @@ namespace JungleMaze.Tests.PlayMode
             var required = new List<string> { "VŨ KHÍ", "DƯỢC PHẨM", "Bo thu sau", "Còn sống", "Nạp", "Tay không", "Giáp", "Mũ", "Adrenaline", "…" };
             foreach (var weapon in _balance.Weapons) required.Add(weapon.DisplayName);
             foreach (var equipment in _balance.Equipments) required.Add(equipment.DisplayName);
+            // Pixel numbers stay on the feedback layer and the hidden ammo tab. The skin A blocks (vitals, match, slot
+            // keys and counts) use Be Vietnam Pro Bold like the approved mock (T-015 r11 asset-list section 3).
             var numberTexts = new HashSet<TMP_Text>
             {
-                _root.Vitals.HpNumber, _root.Vitals.ArmorRow.Value, _root.Vitals.HelmetRow.Value, _root.Vitals.AdrenalineRow.Value,
-                _root.MatchStatus.ZoneValue, _root.MatchStatus.AliveValue,
                 _root.Quickbar.WeaponStrip.Find("Ammo/Magazine").GetComponent<TMP_Text>(),
                 _root.Quickbar.ReloadHint.transform.Find("KeyCap/Label").GetComponent<TMP_Text>()
             };
+            var boldNumbers = new HashSet<TMP_Text>
+            {
+                _root.Vitals.HpNumber, _root.Vitals.ArmorRow.Value, _root.Vitals.HelmetRow.Value, _root.Vitals.AdrenalineRow.Value,
+                _root.MatchStatus.ZoneValue, _root.MatchStatus.AliveValue
+            };
             for (var i = 0; i < 8; i++)
             {
-                numberTexts.Add(_root.Quickbar.GetSlotView(i).KeyLabel);
-                numberTexts.Add(_root.Quickbar.GetSlotView(i).CountLabel);
+                boldNumbers.Add(_root.Quickbar.GetSlotView(i).KeyLabel);
+                boldNumbers.Add(_root.Quickbar.GetSlotView(i).CountLabel);
             }
+            foreach (var text in boldNumbers) Assert.AreEqual("HudTextBold SDF", text.font.name, text.name + " bold numbers");
             var feedback = _root.GetComponent<HudFeedbackRoot>();
             if (feedback != null)
             {
@@ -481,14 +559,20 @@ namespace JungleMaze.Tests.PlayMode
             yield return SpawnHud();
             _effects.Apply(EffectKind.Adrenaline, 8f, 8f);
             _inventory.SetActiveSlot(1);
-            AssertColor(Hex(0xE5, 0x48, 0x4D), _root.Vitals.HpBar.FillImage.color, "HP fill");
+            AssertColor(Hex(0xC8, 0x3A, 0x41), _root.Vitals.HpBar.FillImage.color, "HP fill (r11 asset-list section 1)");
             AssertColor(Hex(0x5B, 0xB8, 0xE8), _root.Vitals.ArmorRow.Bar.FillImage.color, "armor fill");
             AssertColor(Hex(0x5B, 0xB8, 0xE8), _root.Vitals.HelmetRow.Bar.FillImage.color, "helmet fill");
             AssertColor(Hex(0xF5, 0xC5, 0x42), _root.Vitals.AdrenalineRow.Bar.FillImage.color, "adrenaline fill");
             AssertColor(Hex(0xF5, 0xC5, 0x42), _root.Vitals.AdrenalineRow.Label.color, "adrenaline label");
             AssertColor(Hex(0xF5, 0xC5, 0x42), _root.Vitals.AdrenalineRow.Value.color, "adrenaline number");
-            AssertColor(Hex(0xC6, 0xAE, 0x78), _root.Quickbar.GetSlotView(1).Border.color, "selected slot border (direction A gold)");
-            AssertColor(Hex(0xA2, 0x74, 0xFF), _root.MatchStatus.ZoneValue.color, "zone clock");
+            // Skin A (T-016): the selected slot is its own gold stone sprite, drawn untinted.
+            AssertColor(Color.white, _root.Quickbar.GetSlotView(1).Border.color, "selected slot border (skin A sprite, untinted)");
+            Assert.AreEqual("hud_slot_selected", _root.Quickbar.GetSlotView(1).Border.sprite.name, "selected slot sprite");
+            AssertColor(Hex(0xF1, 0xE7, 0xC8), _root.MatchStatus.ZoneValue.color, "zone clock (Cream, Huy 06/11)");
+            AssertColor(Hex(0xFF, 0xDC, 0x6E), _root.Quickbar.GetSlotView(0).KeyLabel.color, "slot key (Gold, r11)");
+            var keyMaterial = _root.Quickbar.GetSlotView(0).KeyLabel.fontSharedMaterial;
+            Assert.Greater(keyMaterial.GetFloat("_OutlineWidth"), 0f, "slot key has a dark outline");
+            Assert.Less(keyMaterial.GetColor("_OutlineColor").grayscale, 0.15f, "slot key outline is dark");
             var surface = Hex(0x20, 0x2A, 0x2D); // direction A surface (ADHOC-UI-ASSETS-A)
             surface.a = 0.92f;
             foreach (var block in new Component[] { _root.Vitals, _root.Minimap, _root.MatchStatus })

@@ -12,19 +12,27 @@ namespace JungleMaze.EditorTools
     /// T-013: applies HUD layout B (projects/lastaway/ux/hud-B-spec.md, chosen by Huy 06/11/2026) to Hud.prefab.
     /// Units are reference units of the 1280×720 canvas. Children are placed by their top-left corner inside the block,
     /// y downwards, as in the spec tables. Idempotent: running it again gives the same prefab.
-    /// Skin art (ArtEdge/ArtBevel, fonts) is kept; only rects, font sizes, visibility and the new icons change.
+    /// T-016 r11 (Huy 07/11): block rects and content follow art/inbox/T-015/asset-list.md section 3, measured on the
+    /// 1920×1080 concept (1080p px; Px() divides by 1.5), replacing the HUD B numbers; no weapon/ammo tab.
+    /// <see cref="HudSkinABuild"/> then puts the carved-stone sprites on.
     /// </summary>
     public static class HudLayoutBBuild
     {
         private const string PrefabPath = "Assets/_JungleMaze/Prefabs/UI/Hud.prefab";
         public const string IconFolder = "Assets/_JungleMaze/Art/Hud/StatusIcons";
-        private const string IconSource = "projects/lastaway/art/inbox/hud-icons/png";
+        /// <summary>
+        /// Where art is read from. Default is the repo inbox; point it at a git-extracted copy (git archive of a commit)
+        /// to import the exact art version qa passed while art-ux keeps editing the inbox.
+        /// </summary>
+        public static string ArtInbox = "projects/lastaway/art/inbox";
+        private static string IconSource => ArtInbox + "/hud-icons/png";
         private static readonly string[] IconNames = { "hp", "armor", "helmet", "adrenaline", "alive", "zone-timer", "kill", "helmet-alt" };
 
-        [MenuItem("Jungle Maze/HUD/Apply layout B (T-013)")]
+        [MenuItem("Jungle Maze/HUD/Apply layout B + skin A (T-013, T-016)")]
         public static void Apply()
         {
             ImportIcons();
+            HudSkinABuild.ImportSprites();
             var root = PrefabUtility.LoadPrefabContents(PrefabPath);
             try
             {
@@ -32,14 +40,15 @@ namespace JungleMaze.EditorTools
                 QuickBar(root.transform.Find("QuickBar"));
                 Minimap(root.transform.Find("Minimap"));
                 MatchStatus(root.transform.Find("MatchStatus"));
-                Rect(root.transform.Find("EffectsRow"), new Vector2(24, 147));
+                Rect(root.transform.Find("EffectsRow"), new Vector2(24, 157)); // 8 u above the r11 Vitals (top 148.7 u)
+                HudSkinABuild.Apply(root.transform);
                 PrefabUtility.SaveAsPrefabAsset(root, PrefabPath);
             }
             finally
             {
                 PrefabUtility.UnloadPrefabContents(root);
             }
-            Debug.Log("[HUD B] Hud.prefab updated (T-013).");
+            Debug.Log("[HUD B] Hud.prefab updated (T-013 layout, T-016 skin A).");
         }
 
         /// <summary>Copies the @2x PNGs (baked colours) into the project; Bilinear because the art is vector, not pixel.</summary>
@@ -68,29 +77,34 @@ namespace JungleMaze.EditorTools
             AssetDatabase.LoadAssetAtPath<Sprite>(IconFolder + "/icon_" + name + ".png") is Sprite s && s != null
                 ? s : throw new InvalidOperationException("Icon not imported: " + name);
 
-        // ---- Vitals 207×115, padding 10 ----
+        // ---- Vitals 422×206 px at (30, 857) of 1920×1080 (T-015 r11 asset-list section 3) ----
         private static void Vitals(Transform vitals)
         {
-            Rect(vitals, new Vector2(24, 24), new Vector2(207, 115));
+            Rect(vitals, new Vector2(Px(30), Px(1080 - 857 - 206)), new Vector2(Px(422), Px(206)));
             var view = vitals.GetComponent<VitalsView>();
-            AddIcon(vitals, "HpIcon", "hp", 10, 10, 26);
-            Place(vitals.Find("HpBar"), 42, 16, 109, 14);
+            AddIconAt(vitals, "HpIcon", "hp", 64, 42);
+            // Bar rect = fill area, 6 px inside the 224×32 px stone track at (91, 26) that HudSkinABuild draws.
+            Place(vitals.Find("HpBar"), Px(97), Px(32), Px(212), Px(20));
             var hpValue = vitals.Find("HpValue");
-            Place(hpValue, 157, 8, 40, 30);
+            Place(hpValue, Px(290), Px(41 - 22.5f), Px(90), Px(45)); // right edge x 380, centre y 41
             var layout = hpValue.GetComponent<HorizontalLayoutGroup>();
             layout.childAlignment = TextAnchor.MiddleRight;
-            Text(view.HpNumber, 16, TextAlignmentOptions.MidlineRight);
+            Text(view.HpNumber, Px(30), TextAlignmentOptions.MidlineRight, true);
             view.HpMax.gameObject.SetActive(false);
 
-            Row(vitals, view.ArmorRow, "ArmorIcon", "armor", 10, 46, 26, 40, 50, TextAlignmentOptions.MidlineLeft, 13, false);
-            Row(vitals, view.HelmetRow, "HelmetIcon", "helmet", 104, 46, 26, 134, 50, TextAlignmentOptions.MidlineLeft, 13, false);
-            Row(vitals, view.AdrenalineRow, "AdrenalineIcon", "adrenaline", 12, 80, 24, 157, 83, TextAlignmentOptions.MidlineRight, 12, true);
-            Place(view.AdrenalineRow.Bar.transform, 42, 88, 109, 8);
+            Row(vitals, view.ArmorRow, "ArmorIcon", "armor", 65, 100, 103, 101, 70, TextAlignmentOptions.MidlineLeft, false);
+            Row(vitals, view.HelmetRow, "HelmetIcon", "helmet", 245, 100, 280, 101, 70, TextAlignmentOptions.MidlineLeft, false);
+            Row(vitals, view.AdrenalineRow, "AdrenalineIcon", "adrenaline", 65, 158, 336, 158, 60, TextAlignmentOptions.Midline, true);
+            // Thin track 242×24 px at (95, 146); fill area 5 px inside.
+            Place(view.AdrenalineRow.Bar.transform, Px(100), Px(151), Px(232), Px(14));
         }
 
-        /// <summary>The row becomes a transparent container over the whole block so children use block coordinates.</summary>
-        private static void Row(Transform block, HudGaugeRowView row, string iconName, string sprite, float ix, float iy, float isize,
-            float vx, float vy, TextAlignmentOptions align, float fontSize, bool keepBar)
+        /// <summary>
+        /// The row becomes a transparent container over the whole block so children use block coordinates. Icon centre
+        /// (icx, icy) and number box (left vx, centre y vcy, width vw) in 1080p px; numbers are 28 px bold.
+        /// </summary>
+        private static void Row(Transform block, HudGaugeRowView row, string iconName, string sprite, float icx, float icy,
+            float vx, float vcy, float vw, TextAlignmentOptions align, bool keepBar)
         {
             var rt = (RectTransform)row.transform;
             rt.anchorMin = rt.anchorMax = new Vector2(0, 1);
@@ -99,18 +113,18 @@ namespace JungleMaze.EditorTools
             rt.sizeDelta = ((RectTransform)block).sizeDelta;
             row.Label.gameObject.SetActive(false);
             row.Bar.gameObject.SetActive(keepBar);
-            var icon = AddIcon(row.transform, iconName, sprite, ix, iy, isize);
-            Place(row.Value.transform, vx, vy, 40, 18);
-            Text(row.Value, fontSize, align);
+            var icon = AddIconAt(row.transform, iconName, sprite, icx, icy);
+            Place(row.Value.transform, Px(vx), Px(vcy - 18), Px(vw), Px(36));
+            Text(row.Value, Px(28), align, true);
             var so = new SerializedObject(row);
             so.FindProperty("icon").objectReferenceValue = icon;
             so.ApplyModifiedPropertiesWithoutUndo();
         }
 
-        // ---- Quick bar 395×84 ----
+        // ---- Quick bar 593×112 px at (668, 950) of 1920×1080, no weapon/ammo tab (Huy 07/11) ----
         private static void QuickBar(Transform bar)
         {
-            Rect(bar, new Vector2(0, 24), new Vector2(395, 84));
+            Rect(bar, new Vector2(Px(668 + 593 / 2f - 960), Px(1080 - 950 - 112)), new Vector2(Px(593), Px(112)));
             var view = bar.GetComponent<QuickbarView>();
             var strip = bar.Find("WeaponStrip") ?? bar.Find("StripArea/WeaponStrip");
 
@@ -156,7 +170,7 @@ namespace JungleMaze.EditorTools
                 area.SetSiblingIndex(strip.GetSiblingIndex());
                 strip.SetParent(area, false);
             }
-            Place(area, 10, 8, 375, 22);
+            Place(area, Px(40), Px(18), Px(512), Px(22));
             var stripRt = (RectTransform)strip;
             stripRt.anchorMin = Vector2.zero;
             stripRt.anchorMax = Vector2.one;
@@ -175,60 +189,79 @@ namespace JungleMaze.EditorTools
             reload.GetComponent<HorizontalLayoutGroup>().childAlignment = TextAnchor.MiddleRight;
             var keyCap = reload.Find("KeyCap");
             var keyLayout = keyCap.GetComponent<LayoutElement>();
-            keyLayout.preferredWidth = keyLayout.preferredHeight = 18;
+            keyLayout.preferredWidth = keyLayout.preferredHeight = Px(22); // fits the 22 px strip
             Text(keyCap.Find("Label").GetComponent<TMP_Text>(), 13, null);
             Text(reload.Find("Label").GetComponent<TMP_Text>(), 13, null);
+            // r11 (Huy 07/11): no weapon name / ammo tab. QuickbarView still writes to it, so it stays in the prefab, hidden.
+            area.gameObject.SetActive(false);
 
-            // Slots: two groups of 4 × 42 with step 46, groups 15 apart, no group headings.
-            Place(bar.Find("Slots"), 10, 34, 375, 42);
+            // Slots: two groups of 4 × 54 px, step 60, groups at x 50 and 310, row centred at y 29.
+            Place(bar.Find("Slots"), Px(50), Px(29), Px(494), Px(54));
             Group(bar.Find("Slots/WeaponGroup"), 0);
-            Group(bar.Find("Slots/ConsumableGroup"), 195);
+            Group(bar.Find("Slots/ConsumableGroup"), Px(260));
 
-            // Use-item strip takes the weapon strip's place.
+            // Use-item strip: the panel has no room for it any more, so it shows just above the bar while an item is used.
             var use = bar.Find("UseActionStrip");
-            Place(use, 10, 8, 375, 22);
-            // "Di chuyển để hủy" needs ~108 u at 13 u and must not be ellipsized (UI-01 part 2).
-            PlaceText(use.Find("Label"), 6, 2, 140, 18, 13);
-            Place(use.Find("Track"), 150, 9, 64, 4);
-            PlaceText(use.Find("Seconds"), 220, 2, 30, 18, 13);
-            PlaceText(use.Find("Hint"), 254, 2, 117, 18, 13);
+            var stripH = Px(22);
+            Place(use, Px(40), -Px(28), Px(512), stripH);
+            // "Di chuyển để hủy" needs ~108 u at 13 u and must not be ellipsized (UI-01 part 2). Texts are 18 u boxes
+            // centred on the 14.7 u strip height.
+            var ty = (stripH - 18) / 2;
+            // Label must hold "Đang dùng God Leaf" (UI-01 test), hint "Di chuyển để hủy".
+            PlaceText(use.Find("Label"), 2, ty, 136, 18, 13);
+            Place(use.Find("Track"), 140, stripH / 2 - 2, 44, 4);
+            PlaceText(use.Find("Seconds"), 188, ty, 30, 18, 13);
+            PlaceText(use.Find("Hint"), 220, ty, 119, 18, 13);
         }
 
         private static void Group(Transform group, float x)
         {
-            Place(group, x, 0, 180, 42);
+            Place(group, x, 0, Px(234), Px(54));
             group.Find("Label").gameObject.SetActive(false);
-            for (var i = 0; i < 4; i++) Slot(group.GetChild(i + 1), i * 46f);
+            for (var i = 0; i < 4; i++) Slot(group.GetChild(i + 1), Px(i * 60f));
         }
 
         /// <summary>
-        /// Slot 64 → 42: key 10 u top-left (approved exception), count 13 u top-right, icon 22 below both so the three
-        /// never overlap (ART-04 sweep), name hidden (mock B).
+        /// Slot 54 px: item icon up to 40 px centred, key number 16 px bold anchored bottom-right at (50, 50) (Huy 07/11),
+        /// count top-right, name hidden.
         /// </summary>
         private static void Slot(Transform slot, float x)
         {
-            Place(slot, x, 0, 42, 42);
-            Place(slot.Find("Icon"), 10, 16, 22, 22);
-            PlaceText(slot.Find("Key"), 3, 1, 12, 12, 10);
-            PlaceText(slot.Find("Count"), 17, 0, 23, 16, 13);
+            var size = Px(54);
+            Place(slot, x, 0, size, size);
+            Place(slot.Find("Icon"), Px(7), Px(7), Px(40), Px(40));
+            PlaceText(slot.Find("Key"), Px(20), Px(28), Px(30), Px(22), Px(16));
+            var key = slot.Find("Key").GetComponent<TMP_Text>();
+            key.alignment = TextAlignmentOptions.BottomRight;
+            Bold(key);
+            // 13 u text needs a box taller than its ~17 u line, or TMP's ellipsis mode drops the whole line.
+            PlaceText(slot.Find("Count"), Px(12), 0, Px(40), Px(28), 13);
+            var count = slot.Find("Count").GetComponent<TMP_Text>();
+            count.alignment = TextAlignmentOptions.TopRight;
+            Bold(count);
             slot.Find("Name").gameObject.SetActive(false);
             var inUse = (RectTransform)slot.Find("InUseFrame");
-            inUse.sizeDelta = new Vector2(42, 42);
+            inUse.sizeDelta = new Vector2(size, size);
         }
 
-        // ---- Minimap 160×160 ----
+        // ---- Minimap 318×316 px at (1577, 30); the map fills the frame's hole exactly ----
         private static void Minimap(Transform minimap)
         {
-            Rect(minimap, new Vector2(-24, -24), new Vector2(160, 160));
+            Rect(minimap, new Vector2(-Px(1920 - 1577 - 318), -Px(30)), new Vector2(Px(318), Px(316)));
+            var hole = HudSkinABuild.MinimapHole(); // px inside the frame sprite, y down
             var view = minimap.GetComponent<MinimapView>();
             var so = new SerializedObject(view);
-            so.FindProperty("sizePixels").floatValue = 160f;
+            so.FindProperty("sizePixels").floatValue = Px(hole.width);
             so.ApplyModifiedPropertiesWithoutUndo();
-            var area = minimap.Find("MapArea");
+            var area = (RectTransform)minimap.Find("MapArea");
+            area.anchorMin = Vector2.zero;
+            area.anchorMax = Vector2.one;
+            area.offsetMin = new Vector2(Px(hole.x), Px(316 - hole.yMax));
+            area.offsetMax = new Vector2(-Px(318 - hole.xMax), -Px(hole.y));
             for (var i = 1; i <= 4; i++)
             {
-                ((RectTransform)area.Find("Grid/V" + i)).anchoredPosition = new Vector2(32 * i, 0);
-                ((RectTransform)area.Find("Grid/H" + i)).anchoredPosition = new Vector2(0, 32 * i);
+                ((RectTransform)area.Find("Grid/V" + i)).anchoredPosition = new Vector2(Px(hole.width) / 5 * i, 0);
+                ((RectTransform)area.Find("Grid/H" + i)).anchoredPosition = new Vector2(0, Px(hole.height) / 5 * i);
             }
             var marker = (RectTransform)area.Find("Marker");
             marker.sizeDelta = new Vector2(14, 14);
@@ -261,28 +294,70 @@ namespace JungleMaze.EditorTools
             captureSo.ApplyModifiedPropertiesWithoutUndo();
         }
 
-        // ---- Match status 160×59, one row: alive left, zone timer right ----
+        // ---- Match status 318×90 px at (1577, 350): alive left, divider at x 155, zone timer right ----
         private static void MatchStatus(Transform status)
         {
-            Rect(status, new Vector2(-24, -192), new Vector2(160, 59));
+            Rect(status, new Vector2(-Px(1920 - 1577 - 318), -Px(350)), new Vector2(Px(318), Px(90)));
             foreach (var rowName in new[] { "AliveRow", "ZoneRow" })
             {
                 var row = (RectTransform)status.Find(rowName);
                 row.anchorMin = row.anchorMax = row.pivot = new Vector2(0, 1);
                 row.anchoredPosition = Vector2.zero;
-                row.sizeDelta = new Vector2(160, 59);
+                row.sizeDelta = new Vector2(Px(318), Px(90));
                 row.Find("Label").gameObject.SetActive(false);
             }
-            // Spec put the timer at x 116 w 44, which ends on the frame (160) and clips "01:22": keep 10 u padding.
-            AddIcon(status.Find("AliveRow"), "AliveIcon", "alive", 10, 17, 24);
-            Place(status.Find("AliveRow/Value"), 38, 18, 38, 22);
-            Text(status.Find("AliveRow/Value").GetComponent<TMP_Text>(), 16, TextAlignmentOptions.MidlineLeft);
-            AddIcon(status.Find("ZoneRow"), "ZoneIcon", "zone-timer", 80, 17, 24);
-            Place(status.Find("ZoneRow/Value"), 106, 18, 44, 22);
-            Text(status.Find("ZoneRow/Value").GetComponent<TMP_Text>(), 16, TextAlignmentOptions.MidlineRight);
+            AddIconAt(status.Find("AliveRow"), "AliveIcon", "alive", 71, 45);
+            Place(status.Find("AliveRow/Value"), Px(97), Px(45 - 16), Px(56), Px(32));
+            var alive = status.Find("AliveRow/Value").GetComponent<TMP_Text>();
+            // Asset-list says 22 px, but a 10-player "10/10" is 62 px there and would cross the divider at x 155. 20 px
+            // fits it in the 56 px box; no auto-size (HUD rule, FeedbackText_MinSize13_VietnameseGlyphsAndFontRoles).
+            Text(alive, Px(20), TextAlignmentOptions.MidlineLeft, true);
+            // The divider is not in the panel sprite; colour sampled from the approved mock dung-thu-hud-A.png.
+            var divider = status.Find("Divider");
+            if (divider == null)
+            {
+                divider = new GameObject("Divider", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image)).transform;
+                divider.SetParent(status, false);
+            }
+            Place(divider, Px(155), Px(28), Px(2), Px(34));
+            var line = divider.GetComponent<Image>();
+            line.color = new Color32(0xBE, 0xB4, 0x96, 0xFF);
+            line.raycastTarget = false;
+            AddIconAt(status.Find("ZoneRow"), "ZoneIcon", "zone-timer", 185, 45);
+            // Left x 211; "00:48" at 22 px is 69 px wide, ends ~280 px, still 12 px clear of the corner block (x 292).
+            Place(status.Find("ZoneRow/Value"), Px(211), Px(45 - 16), Px(74), Px(32));
+            Text(status.Find("ZoneRow/Value").GetComponent<TMP_Text>(), Px(22), TextAlignmentOptions.MidlineLeft, true);
         }
 
         // ---- helpers ----
+        /// <summary>1080p pixels (skin A asset-list) to reference units of the 1280×720 canvas.</summary>
+        private static float Px(float px) => px / 1.5f;
+
+        private const string BoldFontPath = "Assets/_JungleMaze/Art/Fonts/TMP/HudTextBold SDF.asset";
+
+        /// <summary>Asset-list r11: HUD numbers in Be Vietnam Pro Bold, as in the approved mock.</summary>
+        private static void Bold(TMP_Text text)
+        {
+            var font = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(BoldFontPath);
+            if (font == null) throw new InvalidOperationException("Font missing: " + BoldFontPath);
+            text.font = font;
+            text.fontSharedMaterial = font.material;
+            text.fontStyle = FontStyles.Normal; // the face is already bold
+        }
+
+        private static void Text(TMP_Text text, float size, TextAlignmentOptions? align, bool bold)
+        {
+            Text(text, size, align);
+            if (bold) Bold(text);
+        }
+
+        /// <summary>Icon centred at (cx, cy) 1080p px; the box is the icon's own canvas (@2x / 2), so art keeps its size.</summary>
+        private static Image AddIconAt(Transform parent, string name, string sprite, float cx, float cy)
+        {
+            var canvas = Icon(sprite).rect.width / 2f;
+            return AddIcon(parent, name, sprite, Px(cx - canvas / 2f), Px(cy - canvas / 2f), Px(canvas));
+        }
+
         private static void Rect(Transform t, Vector2 position, Vector2? size = null)
         {
             var rt = (RectTransform)t;

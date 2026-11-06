@@ -43,6 +43,12 @@ namespace JungleMaze.Presentation.UI.Hud
         public Color Scrim;
         /// <summary>Dark outer edge of direction A frames (overlay tint, ADHOC-UI-ASSETS-A).</summary>
         public Color Edge;
+        /// <summary>Skin A cream (hud-B-spec, Huy 06/11/2026): zone clock number; replaced Purple there.</summary>
+        public Color Cream;
+        /// <summary>Skin A r11 gold (T-015 asset-list, Huy 07/11/2026): slot key numbers in the slot's bottom-right corner.</summary>
+        public Color Gold;
+        /// <summary>Skin A r11 HP bar fill (T-015 asset-list section 1); the low-HP number keeps <see cref="Red"/>.</summary>
+        public Color HpFill;
 
         /// <summary>
         /// Direction A (charcoal / jade / soft gold, Figma 51:32) on top of the UI-01 semantic colors: HP red,
@@ -71,7 +77,10 @@ namespace JungleMaze.Presentation.UI.Hud
             DangerFill = Hex(0xE5, 0x48, 0x4D, 0.15f),
             RedText = Hex(0xF0, 0x6A, 0x6E),
             Scrim = Hex(0x0B, 0x11, 0x14, 0.72f),
-            Edge = Hex(0x0C, 0x14, 0x17)
+            Edge = Hex(0x0C, 0x14, 0x17),
+            Cream = Hex(0xF1, 0xE7, 0xC8),
+            Gold = Hex(0xFF, 0xDC, 0x6E),
+            HpFill = Hex(0xC8, 0x3A, 0x41)
         };
 
         private static Color Hex(byte r, byte g, byte b, float alpha = 1f) => new Color(r / 255f, g / 255f, b / 255f, alpha);

@@ -31,7 +31,7 @@ namespace JungleMaze.Presentation.UI.Hud
             if (background != null) background.color = palette.Surface;
             if (hpMax != null) hpMax.color = palette.Muted;
             if (hpNumber != null) hpNumber.color = palette.Text;
-            if (hpBar != null) hpBar.SetColors(palette.Red, palette.Track, palette.Trail);
+            if (hpBar != null) hpBar.SetColors(palette.HpFill.a > 0f ? palette.HpFill : palette.Red, palette.Track, palette.Trail);
             if (armorRow != null) armorRow.SetBarColors(palette.Blue, palette.Track, palette.Trail);
             if (helmetRow != null) helmetRow.SetBarColors(palette.Blue, palette.Track, palette.Trail);
             if (adrenalineRow != null) adrenalineRow.SetBarColors(palette.Yellow, palette.Track, palette.Trail);
