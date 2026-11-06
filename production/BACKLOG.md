@@ -4,7 +4,7 @@ Nguồn sự thật duy nhất về việc cần làm. CPO sở hữu cấu trú
 
 Trạng thái: `todo` · `doing` · `review` · `done` · `blocked` (thêm `loại`, `gộp vào T-###`). Ước lượng: S (một lượt ngắn) · M (một lượt đầy) · L (phải chia nhỏ).
 
-Mã task lớn nhất đã cấp: **T-008**. Task mới lấy số tiếp theo.
+Mã task lớn nhất đã cấp: **T-011**. Task mới lấy số tiếp theo.
 
 Kiểm cấu trúc sau mỗi lần sửa: `node scripts/backlog-check.mjs`.
 
@@ -20,6 +20,9 @@ Kiểm cấu trúc sau mỗi lần sửa: `node scripts/backlog-check.mjs`.
 | T-006 | lastaway: soạn gọn 26 câu luật lõi GDD v0.3 chờ Huy (`game-designer-team/projects/lastaway/gdd/v0.3-nhap/cho-lead-quyet.md`) | designer | - | M | todo | Một trang câu hỏi kèm phương án nghiêng về; câu Huy chốt vào `so-hien-hanh.md` |
 | T-007 | lastaway: nhận bàn giao Figma `oeZgisxdiR80hRqbikUwPb` page `116:3` làm nguồn UX/UI, lập bản đồ frame sang màn hình và ticket | art-ux | - | M | done | `projects/lastaway/ux/figma-ban-do.md` liệt kê đủ frame của page `116:3` (node id, tên, màn hình, ticket, trạng thái so với build); ghi chỗ lệch với `Docs/UI_Wireframes.vi.md`. Nghiệm thu 06/11: 36/36 frame; thêm `figma-feedback.md` 5 comment (Vũ) |
 | T-008 | lastaway: nối Unity MCP vào Editor của `D:\Lastaway`, sửa hết lỗi đỏ trong Console | unity | - | M | done | Console 0 lỗi đỏ sau compile và sau một lần vào Play; EditMode xanh; ghi danh sách lỗi, nguyên nhân, cách sửa trong báo cáo. Nghiệm thu 06/11: Console 0 đỏ; EditMode 953/959, 6 đỏ do map_demo.json mới (Vũ, b153b6ed) ngoài vùng V.Huy, chuyển PIC Vũ/Vinh; FPT.prefab thiếu nested prefab chuyển Hào |
+| T-009 | lastaway: đề xuất HUD tối giản theo quyết định 06/11 (Vitals, Quick bar -30%; icon + số; minimap bản đồ thật), benchmark nhiều game cùng thể loại, chọn bộ icon thư viện | art-ux | - | M | todo | `projects/lastaway/de-xuat/hud-toi-gian.md` có bảng benchmark >= 4 game, bộ icon kèm nguồn và giấy phép, mock HUD 1920x1080 đo vùng che; Huy duyệt |
+| T-010 | lastaway: chụp màn gameplay hiện tại 1920x1080 làm đầu vào cho GPT | unity | - | S | todo | >= 4 ảnh trong `projects/lastaway/art/brief/gameplay-hien-tai/` (spawn, giao tranh, loot/túi đồ, bo thu hẹp), camera Follow Player, có `index.md` ghi commit và cách chụp |
+| T-011 | lastaway: GPT sáng tạo nhiều bản màn gameplay từ ảnh T-010, dựng trang so sánh để Huy chọn | art-ux | T-010 | M | todo | >= 4 hướng, mỗi hướng HUD + world cùng khung; trang so sánh cạnh ảnh gốc; ảnh ở `art/inbox/`; Huy chọn một bản |
 
 ## Icebox
 

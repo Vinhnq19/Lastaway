@@ -19,3 +19,9 @@ Quyết định trước 06/11/2026 nằm ở `Docs/CPO_Runbook.vi.md` mục 4 v
 | 05/11 | Account bắt buộc; Guest cũ chỉ giữ lịch sử; mất API thì không join mới, Local luyện tập vẫn chạy | `Docs/Network_Architecture.vi.md` mục 4 |
 
 Khoảng trống chặn QA-01 theo PIC người (MAP-02, Game-10, DRG-01, ZON-01, ART-02, WPN-03): `production/reports/2026-11-06-ban-giao-cpo-cu.md` mục 5.
+
+## 2026-11-06 - Hướng sửa HUD và art theo comment Figma của Vũ
+- **Quyết định:** (1) Thu nhỏ Vitals và Quick bar 30%. (2) Tham khảo nhiều game cùng thể loại top-down battle royale, không chỉ một game. (3) Minimap hiện bản đồ thật, chưa thêm chức năng. (4) Icon kèm số nhỏ, bỏ nhãn chữ; icon lấy từ thư viện icon có giấy phép rõ. (5) Art: chụp màn hình gameplay hiện tại, gửi GPT tự sáng tạo nhiều bản màn gameplay để Huy chọn bản follow.
+- **Người quyết:** Huy (bằng lời, 06/11)
+- **Lý do:** Feedback 5 comment trên Figma (`projects/lastaway/ux/figma-feedback.md`).
+- **Hệ quả:** Đổi bố cục HUD v2 đã duyệt 24/10 (UI-01). T-009 (đề xuất HUD tối giản), T-010 (chụp gameplay), T-011 (GPT sáng tạo màn gameplay). Chưa lan sang ticket, prefab cho tới khi Huy chọn bản.

@@ -4,3 +4,6 @@ Số liệu cân bằng gốc nằm trong GDD (`Docs/[GDD] - Lastaway.xlsx`, cá
 
 | Tham số | Giá trị | Ngày | Nguồn |
 |---|---|---|---|
+| Kích thước Vitals và Quick bar | Giảm 30% so với HUD v2 (24/10) | 2026-11-06 | Huy, chat |
+| Minimap | Hiện bản đồ thật, chưa thêm chức năng | 2026-11-06 | Huy, chat |
+| Chỉ số HUD | Icon kèm số nhỏ, bỏ nhãn chữ | 2026-11-06 | Huy, chat |
