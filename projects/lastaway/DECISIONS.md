@@ -85,3 +85,9 @@ Khoảng trống chặn QA-01 theo PIC người (MAP-02, Game-10, DRG-01, ZON-01
 - **Người quyết:** Huy (07/11, nguyên văn: "chưa làm vội. UI Oke và tôi thích rồi nhưng chúng hơi chi tiết, và viền khá đậm hãy giảm mức độ chi tiết đi và xử lý để viền nó ko bị đậm quá. Ngoài ra UI cần thêm gì đó để tách bạch với phần Gameplay")
 - **Lý do:** UI chi tiết và cùng chất đá rêu với world nên dễ lẫn vào gameplay.
 - **Hệ quả:** T-015 mở lại lượt 3. T-016 dựng tiếp cấu trúc với sprite hiện tại, sprite sẽ thay khi lượt 3 được duyệt. Giả định: "chưa làm vội" là trả lời câu hỏi minimap, áp cho cả T-017 và T-018.
+
+## 2026-11-07 - Mục tiêu lượt 3: giống ảnh concept Huy gửi
+- **Quyết định:** Lượt 3 bám sát ảnh `projects/lastaway/art/brief/T-015/muc-tieu-huy-07-11.png` (cắt từ concept A T-014): khung đá mảnh, lòng đá xám nâu sáng hơn, vạch khắc chia hàng trong Vitals, icon pixel đơn giản (tim đỏ, áo giáp, mũ, tia sét), quick bar có thanh đạn dạng tab phía trên và số phím kem nằm dưới ô.
+- **Người quyết:** Huy (07/11, "tôi muốn nó giống được với Conpect này")
+- **Lý do:** Không ghi.
+- **Hệ quả:** Thay mục tiêu "2-3 cách tách UI" bằng một bản bám ảnh này. Icon HP heart-beats và icon kim loại ấm không còn là đích; theo icon trong ảnh. Vị trí số phím (dưới ô) và tab đạn lệch spec HUD B: art-ux ghi lệch, unity sửa ở T-016.
