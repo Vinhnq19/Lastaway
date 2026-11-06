@@ -817,7 +817,7 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
 
         // Initialize zone
         var seed = MatchId.GetHashCode();
-        _zone = new ZoneSimulation(_zoneSchedule, seed, 2.0f, _map);
+        _zone = new ZoneSimulation(_zoneSchedule, seed, 2.0f, _map, SelectedMap?.ReachableCells);
 
         // Spawn players at pair-distance >= 6 safe points
         var spawnList = _map.SpawnPoints;

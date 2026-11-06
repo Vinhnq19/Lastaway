@@ -165,7 +165,8 @@ try
     Join(room, "p3", "third");
     Check(room.Match.Phase == JungleBackend.Protocol.Gameplay.MatchPhase.Waiting, "joining during countdown cancels it");
     room.Match.ProcessLeave("p3", room.Match.MatchId); rooms.Tick(1d/30);
-    var secondMap = store.Current.Find("bai-da")!;
+    var firstMap = store.Current.Find(store.Current.DefaultMapId)!;
+    var secondMap = store.Current.Maps.Values.First(map => map.Entry.Id != firstMap.Entry.Id);
     var boundaryProfile = new MatchProfile { Version = profile.Version, MinPlayers = 2, LobbyDurationSeconds = 1d / 30 };
     var boundaryMap = store.Current.Find(store.Current.DefaultMapId)!;
     var boundaryZone = ZoneSchedule.Load(GameDataLoader.ReadGameDataFile("zone_schedule.json"));
@@ -202,7 +203,6 @@ try
     Check(rooms.GetMapState(room).ReadyCount == 0, "changing map resets all readiness");
     Check(rooms.StartMatch(room, "p1", start) == JungleBackend.Protocol.Gameplay.RoomMapError.SelectionChanged, "stale start packet rejected");
     // Select the first map for the running match; publish will later remove it.
-    var firstMap = store.Current.Find("di-tich-co")!;
     choice.SelectionRevision = rooms.GetMapState(room).SelectionRevision; choice.MapId = firstMap.Entry.Id; choice.MapHash = firstMap.Entry.MapHash;
     rooms.SelectMap(room, "p1", choice); Ready(room, "p1"); Ready(room, "p2");
     start.SelectionRevision = rooms.GetMapState(room).SelectionRevision; rooms.StartMatch(room, "p1", start);
@@ -210,6 +210,7 @@ try
     room.Match.SetPlayerLoaded("p1", room.Match.MatchId); room.Match.SetPlayerLoaded("p2", room.Match.MatchId); rooms.Tick(1d/30);
     Check(room.Match.Phase == JungleBackend.Protocol.Gameplay.MatchPhase.InGame && room.Match.World?.Layout.Hash == firstMap.Layout.Hash,
         "selected authored map supplies actual world, collision and spawns");
+    Check(room.Match.Zone?.CurrentRadius == firstMap.Layout.Size / 2f, "online map starts with a safe zone sized to its bounds");
     Check(rooms.SelectMap(room, "p1", choice) == JungleBackend.Protocol.Gameplay.RoomMapError.MatchLocked, "in-game map changes rejected");
     var createdResult = rooms.Create(new JungleBackend.Rooms.CreateRoomCommand { OwnerId = "creator", Name = "Other room", MaxPlayers = 10 });
     var createdId = ((JungleBackend.Rooms.RoomView)createdResult.Body!).Id;
@@ -238,19 +239,19 @@ try
     var waitingResult=rooms.Create(new JungleBackend.Rooms.CreateRoomCommand{OwnerId="waiting-owner",Name="Waiting map fallback",MaxPlayers=10});
     var waitingRoom=rooms.AllRooms.Single(r=>r.Id==((JungleBackend.Rooms.RoomView)waitingResult.Body!).Id);
     var published = JsonSerializer.Deserialize<MapCatalogManifest>(File.ReadAllText(Path.Combine(live, "catalog.json")), new JsonSerializerOptions { PropertyNameCaseInsensitive = true })!;
-    published.Generation++; published.DefaultMapId = "bai-da"; published.Maps = published.Maps.Where(m => m.Id == "bai-da").ToArray();
+    published.Generation++; published.DefaultMapId = secondMap.Entry.Id; published.Maps = published.Maps.Where(m => m.Id == secondMap.Entry.Id).ToArray();
     WriteCatalog(live, published);
     var commands = new GameServer.Rooms.RoomCommands();
     var reload = store.Reload(commands, CancellationToken.None);
     while (!reload.IsCompleted) { commands.Drain(rooms); Thread.Sleep(1); }
     Check(reload.GetAwaiter().GetResult().Status == 200, "new valid catalog activates without restart");
-    Check(room.Match.SelectedMap == firstMap && otherRoom.Match.SelectedMap?.Entry.Id == "bai-da"&&waitingRoom.Match.SelectedMap?.Entry.Id=="bai-da", "running matches frozen, waiting room switches to published default");
-    Check(store.FindVersion("di-tich-co", firstMap.Entry.MapHash) is not null, "removed map version remains available to pinned matches");
+    Check(room.Match.SelectedMap == firstMap && otherRoom.Match.SelectedMap?.Entry.Id == secondMap.Entry.Id&&waitingRoom.Match.SelectedMap?.Entry.Id==secondMap.Entry.Id, "running matches frozen, waiting room switches to published default");
+    Check(store.FindVersion(firstMap.Entry.Id, firstMap.Entry.MapHash) is not null, "removed map version remains available to pinned matches");
     var roundIdentities = new List<(string Player, byte Id, Guid Proof)>();
     room.Match.ResumeTokenRotated += (player,id,proof) => roundIdentities.Add((player,id,proof));
     foreach (var e in room.Match.Entities.All) room.Match.Health.ApplyDamage(e.NetId, 255, 255);
     for (var i=0;i<25;i++) rooms.Tick(1d/30);
-    Check(room.Match.Phase == JungleBackend.Protocol.Gameplay.MatchPhase.Waiting && room.Match.SelectedMap?.Entry.Id == "bai-da",
+    Check(room.Match.Phase == JungleBackend.Protocol.Gameplay.MatchPhase.Waiting && room.Match.SelectedMap?.Entry.Id == secondMap.Entry.Id,
         "after results the room returns to waiting on latest map without auto-start");
     Check(roundIdentities.Count==2&&roundIdentities.All(p=>p.Proof!=Guid.Empty),"new waiting round publishes identity/proof so host can start again before InGame");
 

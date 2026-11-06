@@ -12,4 +12,9 @@
       <LinkBase>GameData</LinkBase>
     </Content>
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="../Fixtures/LegacyMaps/catalog.json" Link="FixtureMaps/catalog.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="../../Shared/GameData/Maps/di-tich-co/**/*.*" Link="FixtureMaps/di-tich-co/%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 </Project>

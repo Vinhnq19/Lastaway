@@ -13,7 +13,7 @@ namespace JungleMaze.Infrastructure.Config
     /// <summary>Pure validation/preparation of one selected map; built only after every check passes.</summary>
     public sealed class SelectedMapData
     {
-        const int MaxBytes = 2 * 1024 * 1024, RequiredSpawns = 10, RequiredSize = 50;
+        const int MaxBytes = 2 * 1024 * 1024, RequiredSpawns = 10;
         static readonly string[] RuleFiles = { "match_settings.json", "zone_schedule.json", "world_settings.json", "items_catalog.json", "weapons.json" };
 
         public MapLayout Layout { get; }
@@ -77,15 +77,16 @@ namespace JungleMaze.Infrastructure.Config
             catch (JsonException e) { throw new InvalidDataException("Map JSON is invalid.", e); }
             if (document == null || document.MapBounds == null || document.SpawnPoints == null || document.Obstacles == null)
                 throw new InvalidDataException("Map data requires bounds, spawnPoints and obstacles.");
-            if (document.SpawnPoints.Length != RequiredSpawns || document.MapBounds.MaxX - document.MapBounds.MinX != RequiredSize ||
-                document.MapBounds.MaxY - document.MapBounds.MinY != RequiredSize)
-                throw new InvalidDataException($"Map requires a size of {RequiredSize} and {RequiredSpawns} spawn points.");
+            var size = document.MapBounds.MaxX - document.MapBounds.MinX;
+            if (document.SpawnPoints.Length != RequiredSpawns || !(size >= 30 && size <= 256) || size != Math.Floor(size) ||
+                document.MapBounds.MaxY - document.MapBounds.MinY != size)
+                throw new InvalidDataException($"Map requires a square size 30..256 and {RequiredSpawns} spawn points.");
 
             MapLayout layout;
             try { layout = document.Build(worldVersion); }
             catch (ArgumentException e) { throw new InvalidDataException("Map layout is invalid: " + e.Message, e); }
-            if (layout == null || layout.Size != RequiredSize || layout.Spawns.Count != RequiredSpawns)
-                throw new InvalidDataException($"Built map must be {RequiredSize} x {RequiredSize} with {RequiredSpawns} spawns.");
+            if (layout == null || layout.Size != size || layout.Spawns.Count != RequiredSpawns)
+                throw new InvalidDataException($"Built map must match its bounds with {RequiredSpawns} spawns.");
 
             var covers = new List<RuntimeCover>(document.Obstacles.Length);
             foreach (var cover in document.Obstacles)
