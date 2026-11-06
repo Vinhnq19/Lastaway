@@ -5,10 +5,10 @@
    64
   ],
   "border_LRTB": [
-   18,
-   18,
-   18,
-   18
+   22,
+   22,
+   28,
+   28
   ],
   "slice": true
  },
@@ -18,10 +18,10 @@
    64
   ],
   "border_LRTB": [
-   18,
-   18,
-   18,
-   18
+   22,
+   22,
+   28,
+   28
   ],
   "slice": true
  },
@@ -31,10 +31,10 @@
    64
   ],
   "border_LRTB": [
-   18,
-   18,
-   18,
-   18
+   22,
+   22,
+   28,
+   28
   ],
   "slice": true
  },
@@ -44,10 +44,10 @@
    64
   ],
   "border_LRTB": [
-   18,
-   18,
-   18,
-   18
+   22,
+   22,
+   28,
+   28
   ],
   "slice": true
  },
@@ -57,10 +57,10 @@
    64
   ],
   "border_LRTB": [
-   18,
-   18,
-   18,
-   18
+   22,
+   22,
+   28,
+   28
   ],
   "slice": true
  },
@@ -70,10 +70,10 @@
    64
   ],
   "border_LRTB": [
-   18,
-   18,
-   18,
-   18
+   22,
+   22,
+   28,
+   28
   ],
   "slice": true
  },
@@ -83,10 +83,10 @@
    64
   ],
   "border_LRTB": [
-   18,
-   18,
-   18,
-   18
+   22,
+   22,
+   28,
+   28
   ],
   "slice": true
  },
@@ -96,10 +96,10 @@
    64
   ],
   "border_LRTB": [
-   18,
-   18,
-   18,
-   18
+   22,
+   22,
+   28,
+   28
   ],
   "slice": true
  },
@@ -109,10 +109,10 @@
    64
   ],
   "border_LRTB": [
-   18,
-   18,
-   18,
-   18
+   22,
+   22,
+   28,
+   28
   ],
   "slice": true
  },
@@ -122,10 +122,10 @@
    64
   ],
   "border_LRTB": [
-   18,
-   18,
-   18,
-   18
+   22,
+   22,
+   28,
+   28
   ],
   "slice": true
  },
@@ -135,10 +135,10 @@
    64
   ],
   "border_LRTB": [
-   18,
-   18,
-   18,
-   18
+   22,
+   22,
+   28,
+   28
   ],
   "slice": true
  },
@@ -148,16 +148,16 @@
    64
   ],
   "border_LRTB": [
-   18,
-   18,
-   18,
-   18
+   22,
+   22,
+   28,
+   28
   ],
   "slice": true
  },
  "kit_iconbtn_round_normal": {
   "size": [
-   63,
+   64,
    64
   ],
   "border_LRTB": null,
@@ -165,7 +165,7 @@
  },
  "kit_iconbtn_round_hover": {
   "size": [
-   63,
+   64,
    64
   ],
   "border_LRTB": null,
@@ -173,7 +173,7 @@
  },
  "kit_iconbtn_round_pressed": {
   "size": [
-   63,
+   64,
    64
   ],
   "border_LRTB": null,
@@ -189,7 +189,7 @@
  },
  "kit_iconbtn_square_normal": {
   "size": [
-   63,
+   64,
    64
   ],
   "border_LRTB": null,
@@ -197,7 +197,7 @@
  },
  "kit_iconbtn_square_hover": {
   "size": [
-   63,
+   64,
    64
   ],
   "border_LRTB": null,
@@ -205,7 +205,7 @@
  },
  "kit_iconbtn_square_pressed": {
   "size": [
-   63,
+   64,
    64
   ],
   "border_LRTB": null,
@@ -213,7 +213,7 @@
  },
  "kit_iconbtn_square_disabled": {
   "size": [
-   63,
+   64,
    64
   ],
   "border_LRTB": null,
@@ -396,12 +396,12 @@
  "kit_tab_off": {
   "size": [
    160,
-   56
+   64
   ],
   "border_LRTB": [
-   13,
-   13,
-   13,
+   19,
+   19,
+   19,
    1
   ],
   "slice": true
@@ -409,12 +409,12 @@
  "kit_tab_on": {
   "size": [
    160,
-   56
+   64
   ],
   "border_LRTB": [
-   13,
-   13,
-   13,
+   19,
+   19,
+   19,
    1
   ],
   "slice": true
@@ -573,12 +573,12 @@
  "kit_tab_hover": {
   "size": [
    160,
-   56
+   64
   ],
   "border_LRTB": [
-   13,
-   13,
-   13,
+   19,
+   19,
+   19,
    1
   ],
   "slice": true
@@ -634,6 +634,453 @@
   "slice": false
  },
  "kit_icon_dot": {
+  "size": [
+   32,
+   32
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_close_normal": {
+  "size": [
+   52,
+   52
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_close_hover": {
+  "size": [
+   52,
+   52
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_close_pressed": {
+  "size": [
+   52,
+   52
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_close_disabled": {
+  "size": [
+   52,
+   52
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_icon_cross_dark": {
+  "size": [
+   32,
+   32
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_icon_cross_ink": {
+  "size": [
+   32,
+   32
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_gear": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_map": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_bag": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_copy": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_refresh": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_person": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_clock": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_wifi": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_sound": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_music": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_vibrate": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_eye": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_skull": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_arrow_left": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_arrow_right": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_trophy": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_screen_header": {
+  "size": [
+   1210,
+   104
+  ],
+  "border_LRTB": [
+   36,
+   36,
+   12,
+   12
+  ],
+  "slice": true
+ },
+ "kit_dialog_footer": {
+  "size": [
+   1041,
+   96
+  ],
+  "border_LRTB": [
+   8,
+   8,
+   8,
+   8
+  ],
+  "slice": true
+ },
+ "kit_codebox_empty": {
+  "size": [
+   70,
+   78
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_codebox_active": {
+  "size": [
+   69,
+   78
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_codebox_filled": {
+  "size": [
+   69,
+   78
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_codebox_error": {
+  "size": [
+   69,
+   78
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_keycap_normal": {
+  "size": [
+   50,
+   52
+  ],
+  "border_LRTB": [
+   14,
+   14,
+   14,
+   14
+  ],
+  "slice": true
+ },
+ "kit_keycap_active": {
+  "size": [
+   50,
+   52
+  ],
+  "border_LRTB": [
+   14,
+   14,
+   14,
+   14
+  ],
+  "slice": true
+ },
+ "kit_keycap_disabled": {
+  "size": [
+   50,
+   52
+  ],
+  "border_LRTB": [
+   14,
+   14,
+   14,
+   14
+  ],
+  "slice": true
+ },
+ "kit_card_room_normal": {
+  "size": [
+   619,
+   120
+  ],
+  "border_LRTB": [
+   24,
+   24,
+   24,
+   24
+  ],
+  "slice": true
+ },
+ "kit_card_room_selected": {
+  "size": [
+   615,
+   120
+  ],
+  "border_LRTB": [
+   24,
+   24,
+   24,
+   24
+  ],
+  "slice": true
+ },
+ "kit_card_room_full": {
+  "size": [
+   615,
+   120
+  ],
+  "border_LRTB": [
+   24,
+   24,
+   24,
+   24
+  ],
+  "slice": true
+ },
+ "kit_slot_player_empty": {
+  "size": [
+   368,
+   96
+  ],
+  "border_LRTB": [
+   100,
+   40,
+   24,
+   24
+  ],
+  "slice": true
+ },
+ "kit_slot_player_notready": {
+  "size": [
+   371,
+   96
+  ],
+  "border_LRTB": [
+   100,
+   40,
+   24,
+   24
+  ],
+  "slice": true
+ },
+ "kit_slot_player_ready": {
+  "size": [
+   371,
+   96
+  ],
+  "border_LRTB": [
+   100,
+   40,
+   24,
+   24
+  ],
+  "slice": true
+ },
+ "kit_ico_play": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_plus": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_logout": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_door": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_trash": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_check": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_key": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_home": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_server": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_list": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_people": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_icon_cross_red": {
   "size": [
    32,
    32

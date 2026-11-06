@@ -1,0 +1,17 @@
+Use your image generation tool to create ONE image as described below, and copy the generated file AS-IS (no cropping, no resizing, no padding) to:
+D:\Lastaway\projects\lastaway\art\inbox\T-026\src\gen2\nut-v2c.png
+Do not write any other files and do not post-process the image. Use only the built-in image tool, never the OpenAI API, curl or python.
+
+Image 1 is the full-screen concept of the game: pixel-art top-down ruins, warm grey stone brick walls with a lighter top surface and a darker front face, reddish-brown mortar lines, small cracks and chips, olive moss only in tiny patches, wooden crates (#7B5C3B), grey stone blocks, glowing cyan rune glyphs (#4FD8E8), dark pixel outlines. Image 2 shows close crops of the wall bricks, a stone block, a rune pillar, a crate and two HUD panels from that same concept at 3x: copy THIS pixel density, this stone vocabulary and this dark pixel outline (#1A1510), 2 to 3 px thick details, hard-edged shading in 3 tone steps, speckle and chips instead of smooth gradients.
+
+Draw ONE sprite sheet on a flat solid magenta background (#FF00FF, no gradient, never used inside a piece), at least 60 px of pure magenta between pieces and around the border. No text, no letters, no icons.
+
+The sheet is a grid of 3 rows x 4 columns of wide BUTTONS, about 4:1 aspect (about 300 x 90 px including base), all the same size and silhouette, with chamfered pixel corners, empty. Every button is a raised chunky block that can be pressed DOWN, built like the stone brick wall of the concept: a FACE (top surface), a lighter top edge line, and a BASE (the darker front face of the block) visible below, the base about 19 percent of the total button height. NO full olive-and-moss ornate frame, NO corner ornaments, NO vines: at most one or two tiny olive moss pixel clusters (#787320) near the left or right end of the base, never along the whole edge. Stone faces must have the brick-like grain, chips and thin reddish-brown crack lines of the concept, NOT smooth plastic.
+
+Columns left to right: 1 NORMAL, 2 HOVER (face about 15 percent lighter, same base), 3 PRESSED (face pushed DOWN by almost the full base thickness: base only about 1/4 as thick, face slightly darker, no top edge highlight, silhouette clearly shorter), 4 DISABLED (flat desaturated grey #6b6a63 stone, base a 2 px line, no color, no glow).
+
+Rows top to bottom:
+ROW 1 PRIMARY: wooden crate plank block like the crates of the concept (wood face #7B5C3B with plank grain lines and nail dots, base darker wood #4A331E), with gold-brass corner brackets (#D9A83A, highlight #F2C14E) on the left and right ends and a thin brass strip along the top edge.
+ROW 2 SECONDARY: carved warm grey stone block (face #8A8070 / #6B625C, base #4A4238) with brick grain and a thin crack.
+ROW 3 DESTRUCTIVE: dark stone block (face #6B3A34, base #3A1A16) with a rusty red iron band (#A83228, rivets) across the face.
+Keep every piece clean, symmetric, no glow except where said, no sparkles.

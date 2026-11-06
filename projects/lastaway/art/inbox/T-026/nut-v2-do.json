@@ -1,0 +1,74 @@
+{
+ "Rõ hiện tại (v1)": {
+  "de_px_o_cao_64": 12.2,
+  "lun_px": 11.6,
+  "chu": {
+   "primary_normal": "toi 5.93",
+   "primary_hover": "toi 7.30",
+   "primary_pressed": "toi 4.85",
+   "primary_disabled": "trang 4.11",
+   "secondary_normal": "trang 7.48",
+   "secondary_hover": "trang 6.02",
+   "secondary_pressed": "trang 7.19",
+   "secondary_disabled": "trang 4.20",
+   "danger_normal": "trang 6.02",
+   "danger_hover": "trang 4.90",
+   "danger_pressed": "trang 6.45",
+   "danger_disabled": "trang 4.06"
+  }
+ },
+ "(a) Đá khắc, chính ốp vàng": {
+  "de_px_o_cao_64": 11.5,
+  "lun_px": 17.9,
+  "chu": {
+   "primary_normal": "toi 7.07",
+   "primary_hover": "toi 8.75",
+   "primary_pressed": "toi 6.86",
+   "primary_disabled": "trang 3.80",
+   "secondary_normal": "trang 5.59",
+   "secondary_hover": "trang 4.70",
+   "secondary_pressed": "trang 5.93",
+   "secondary_disabled": "trang 3.79",
+   "danger_normal": "trang 5.71",
+   "danger_hover": "trang 4.86",
+   "danger_pressed": "trang 5.93",
+   "danger_disabled": "trang 3.79"
+  }
+ },
+ "(b) Đá + rune phát sáng": {
+  "de_px_o_cao_64": 11.5,
+  "lun_px": 12.9,
+  "chu": {
+   "primary_normal": "trang 4.85",
+   "primary_hover": "trang 3.90",
+   "primary_pressed": "trang 5.32",
+   "primary_disabled": "trang 4.22",
+   "secondary_normal": "trang 4.87",
+   "secondary_hover": "trang 3.72",
+   "secondary_pressed": "trang 6.30",
+   "secondary_disabled": "trang 4.27",
+   "danger_normal": "trang 5.90",
+   "danger_hover": "trang 5.42",
+   "danger_pressed": "trang 6.86",
+   "danger_disabled": "trang 4.08"
+  }
+ },
+ "(c) Gỗ thùng + đồng, phụ đá": {
+  "de_px_o_cao_64": 11.5,
+  "lun_px": 7.9,
+  "chu": {
+   "primary_normal": "trang 6.53",
+   "primary_hover": "trang 5.60",
+   "primary_pressed": "trang 8.06",
+   "primary_disabled": "trang 3.30",
+   "secondary_normal": "trang 5.89",
+   "secondary_hover": "trang 4.91",
+   "secondary_pressed": "trang 7.01",
+   "secondary_disabled": "trang 3.45",
+   "danger_normal": "trang 6.61",
+   "danger_hover": "trang 5.61",
+   "danger_pressed": "trang 7.02",
+   "danger_disabled": "trang 2.93"
+  }
+ }
+}

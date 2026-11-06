@@ -1,0 +1,65 @@
+{
+ "P2 xin 8 (v3, ngà)": {
+  "de_px_o_cao_64": 7.2,
+  "lun_px": 7.2,
+  "mat": "mặt: chính #DEB561 · phụ #E4D2AA · đỏ #D68477",
+  "chu_do_dam_tren_phu": {
+   "normal": 6.19,
+   "hover": 6.56,
+   "pressed": 5.8
+  },
+  "chu": {
+   "pri_nor": "toi 7.97",
+   "pri_hov": "toi 9.22",
+   "pri_pre": "toi 7.41",
+   "sec_nor": "toi 10.22",
+   "sec_hov": "toi 10.84",
+   "sec_pre": "toi 9.58",
+   "dan_nor": "toi 5.12",
+   "dan_hov": "toi 5.56",
+   "dan_pre": "toi 4.54"
+  }
+ },
+ "K2 phụ kaki": {
+  "de_px_o_cao_64": 7.1,
+  "lun_px": 7.8,
+  "mat": "mặt: chính #DDAF5D · phụ #BFA26C · đỏ #D5786E",
+  "chu_do_dam_tren_phu": {
+   "normal": 5.27,
+   "hover": 5.72,
+   "pressed": 5.25
+  },
+  "chu": {
+   "pri_nor": "toi 7.82",
+   "pri_hov": "toi 9.34",
+   "pri_pre": "toi 7.89",
+   "sec_nor": "toi 6.48",
+   "sec_hov": "toi 7.04",
+   "sec_pre": "toi 6.46",
+   "dan_nor": "toi 4.77",
+   "dan_hov": "toi 5.17",
+   "dan_pre": "toi 4.55"
+  }
+ },
+ "K1 cả ba kaki": {
+  "de_px_o_cao_64": 7.3,
+  "lun_px": 7.3,
+  "mat": "mặt: chính #B2915D · phụ #B5915F · đỏ #B39161",
+  "chu_do_dam_tren_phu": {
+   "normal": 4.87,
+   "hover": 6.08,
+   "pressed": 4.61
+  },
+  "chu": {
+   "pri_nor": "toi 5.02",
+   "pri_hov": "toi 6.19",
+   "pri_pre": "toi 4.79",
+   "sec_nor": "toi 5.08",
+   "sec_hov": "toi 6.35",
+   "sec_pre": "toi 4.81",
+   "dan_nor": "toi 5.82",
+   "dan_hov": "toi 6.92",
+   "dan_pre": "toi 4.69"
+  }
+ }
+}

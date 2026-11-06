@@ -1,0 +1,12 @@
+Use your image generation tool to create ONE image as described below, and copy the generated file AS-IS (no cropping, no resizing, no padding) to:
+D:\Lastaway\projects\lastaway\art\inbox\T-026\src\gen4\nut-k1.png
+Do not write any other files and do not post-process the image. Use only the built-in image tool, never the OpenAI API, curl or python.
+
+Image 1 is the approved button sheet (P2): smooth, clean, chunky buttons with a FACE, a thin lighter top edge line, and a thin darker BASE below (base about 9 percent of the button height, about 7 px at 64 px button height), 3 rows x 4 columns, 4 states per row. Keep EVERYTHING the same: layout, silhouettes, sizes, the thin base, smooth clean pixel style with a 1 px dark outline, chamfered corners, state logic (NORMAL, HOVER 6 percent lighter, PRESSED face sunk with base almost gone and silhouette slightly shorter, DISABLED flat desaturated grey #8A877D with a 1 px base line) and the magenta background rules. Image 2 is a 16x enlarged crop of the game's real UI frame rim: warm khaki-yellow stone (face #AA9360 to #B09A66, light edge #CEB681, shadow #94835A, dark outline #1C1810). The new button colors must match THAT khaki stone, calm and not harsh. No text, no icons, no letters. Flat solid magenta (#FF00FF) background, at least 60 px between pieces.
+
+Change ONLY the colors, as follows:
+ALL THREE ROWS have the same khaki stone face as image 2: upper face #B09A66, lower face #A38C5C, top edge line #CEB681, base #94835A.
+ROW 1 PRIMARY: add a bold 4 px inner border line in soft gold (#E0B84E) following the face outline, plus two small gold studs (#E0B84E with #8A6A28 shadow) near the left and right ends. Face stays khaki.
+ROW 2 SECONDARY: plain khaki, no accent.
+ROW 3 DESTRUCTIVE: add a bold 4 px inner border line in muted red (#B5564A) following the face outline, plus two small muted-red studs near the ends. Face stays khaki.
+In HOVER the accent lines are slightly brighter; in PRESSED slightly darker; in DISABLED the accents disappear (flat grey).

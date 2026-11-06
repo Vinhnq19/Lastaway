@@ -1,0 +1,97 @@
+{
+ "v1 Rõ hiện tại": {
+  "de_px_o_cao_64": 12.2,
+  "lun_px": 11.6,
+  "mat": "",
+  "chu": {
+   "pri_nor": "toi 5.93",
+   "pri_hov": "toi 7.30",
+   "pri_pre": "toi 4.85",
+   "pri_dis": "trang 4.11",
+   "sec_nor": "trang 7.48",
+   "sec_hov": "trang 6.02",
+   "sec_pre": "trang 7.19",
+   "sec_dis": "trang 4.20",
+   "dan_nor": "trang 6.02",
+   "dan_hov": "trang 4.90",
+   "dan_pre": "trang 6.45",
+   "dan_dis": "trang 4.06"
+  }
+ },
+ "P1 đá ngà + nhấn (xin đế 6)": {
+  "de_px_o_cao_64": 8.7,
+  "lun_px": 8.7,
+  "mat": "mặt: chính #DCCEAC · phụ #DDCFAE · đỏ #DDCFAE",
+  "chu": {
+   "pri_nor": "toi 11.01",
+   "pri_hov": "toi 12.26",
+   "pri_pre": "toi 9.45",
+   "pri_dis": "trang 2.94",
+   "sec_nor": "toi 11.10",
+   "sec_hov": "toi 12.26",
+   "sec_pre": "toi 9.37",
+   "sec_dis": "trang 2.94",
+   "dan_nor": "toi 11.10",
+   "dan_hov": "toi 12.40",
+   "dan_pre": "toi 9.44",
+   "dan_dis": "trang 2.94"
+  }
+ },
+ "P1 đá ngà + nhấn (xin đế 8)": {
+  "de_px_o_cao_64": 5.3,
+  "lun_px": 12.4,
+  "mat": "mặt: chính #E0D0A7 · phụ #E0D1A8 · đỏ #E0CFA5",
+  "chu": {
+   "pri_nor": "toi 11.22",
+   "pri_hov": "toi 12.47",
+   "pri_pre": "toi 9.74",
+   "pri_dis": "trang 3.04",
+   "sec_nor": "toi 11.25",
+   "sec_hov": "toi 12.38",
+   "sec_pre": "toi 9.67",
+   "sec_dis": "trang 3.03",
+   "dan_nor": "toi 11.22",
+   "dan_hov": "toi 12.37",
+   "dan_pre": "toi 9.76",
+   "dan_dis": "trang 3.03"
+  }
+ },
+ "P2 vàng/đỏ dịu (xin đế 6)": {
+  "de_px_o_cao_64": 5.4,
+  "lun_px": 8.8,
+  "mat": "mặt: chính #DFB559 · phụ #DFCF9F · đỏ #D37E70",
+  "chu": {
+   "pri_nor": "toi 8.88",
+   "pri_hov": "toi 10.79",
+   "pri_pre": "toi 6.99",
+   "pri_dis": "trang 2.96",
+   "sec_nor": "toi 10.87",
+   "sec_hov": "toi 12.01",
+   "sec_pre": "toi 8.22",
+   "sec_dis": "trang 2.92",
+   "dan_nor": "toi 5.72",
+   "dan_hov": "toi 6.76",
+   "dan_pre": "toi 4.04",
+   "dan_dis": "trang 2.98"
+  }
+ },
+ "P2 vàng/đỏ dịu (xin đế 8)": {
+  "de_px_o_cao_64": 7.2,
+  "lun_px": 7.2,
+  "mat": "mặt: chính #DEB561 · phụ #E4D2AA · đỏ #D68477",
+  "chu": {
+   "pri_nor": "toi 7.97",
+   "pri_hov": "toi 9.22",
+   "pri_pre": "toi 7.41",
+   "pri_dis": "trang 2.99",
+   "sec_nor": "toi 10.22",
+   "sec_hov": "toi 10.84",
+   "sec_pre": "toi 9.58",
+   "sec_dis": "trang 3.00",
+   "dan_nor": "toi 5.12",
+   "dan_hov": "toi 5.56",
+   "dan_pre": "toi 4.54",
+   "dan_dis": "trang 3.03"
+  }
+ }
+}

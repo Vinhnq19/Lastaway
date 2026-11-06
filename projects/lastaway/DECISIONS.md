@@ -151,3 +151,33 @@ Khoảng trống chặn QA-01 theo PIC người (MAP-02, Game-10, DRG-01, ZON-01
 ## 2026-11-07 - Duyệt UI kit T-020 (kèm quy tắc màu ngữ nghĩa bản sửa)
 - **Quyết định:** UI kit skin A trong `art/inbox/T-020/` được duyệt, gồm quy tắc màu ngữ nghĩa bản sửa ở `de-xuat/mau-ngu-nghia.md` (nút chính vàng kim; đỏ đầy nút chỉ ở hộp xác nhận phá hủy; xanh lá chỉ ở icon nhỏ, viền mảnh; toast, tag nền trung tính; luôn kèm icon hoặc chữ). Quy tắc này nay là luật cho mọi màn T-021 tới T-025.
 - **Người quyết:** Huy (07/11, "Duyệt").
+
+## 2026-11-07 - Bỏ chế độ Khách: bắt đăng nhập rồi mới vào phòng
+- **Quyết định:** Không có đường Khách. Khởi động vào Đăng nhập (JWT còn hạn thì vào thẳng Sảnh); chưa đăng nhập thì không vào và không tạo phòng được. Khớp UI-02 vòng 2 (31/10) nên không đổi logic của Vinh.
+- **Người quyết:** Huy (07/11, "Bắt đăng nhập, rồi mới vào dc phòng").
+- **Hệ quả:** T-021 bỏ mock `a2-sanh-chinh-khach`, luồng A1 -> Đăng nhập -> Sảnh; đợt A coi như được duyệt với sửa này.
+
+## 2026-11-07 - UI kit thiếu thành phần: nghiên cứu lại trước khi làm tiếp mock
+- **Quyết định:** UI kit T-020 mới có khung và vài loại nút, thiếu thẻ và phân loại nút theo ngữ cảnh (nút trong hộp thoại, nút ngoài màn...). Art-ux nghiên cứu thành phần UI game từ nguồn trên mạng, đối chiếu với kit, đề xuất bổ sung ở `de-xuat/ui-kit-thanh-phan.md` (T-026). Huy duyệt danh sách rồi mới gen.
+- **Người quyết:** Huy (07/11, "UI/UX cần có các thẻ, các button chứ sao mà làm mỗi cái khung thôi vậy?").
+- **CPO:** hoãn đợt B của T-021 tới khi T-026 xong, để mock không phải vẽ lại; đợt A chỉ sửa luồng bỏ Khách, chưa vẽ lại.
+
+## 2026-11-07 - Nút bấm phải nổi khối, không giống viền hộp thoại
+- **Quyết định:** Nút bấm cần cảm giác nhô lên để bấm xuống (khối có độ dày, sáng mép trên, tối mép dưới; khi nhấn thì lún xuống), không được trông như một cái viền. Viền olive và rêu là đặc trưng của khung hộp thoại; nút không mượn viền đó.
+- **Người quyết:** Huy (07/11, "các nút bấm cần cho cảm giác nhô lên để bấm xuống chứ ko phải như viền").
+- **Hệ quả:** Trước khi Huy duyệt danh sách T-026, art-ux gen lại kiểu nút (chính, phụ, phá hủy, icon) bằng GPT và làm trang so sánh để Huy chọn. Gen P0 dùng kiểu nút đã chọn.
+- **Cập nhật 07/11:** Huy xem 3 mức nổi (Vừa, Rõ, Rất rõ) và chưa chọn: "muốn nó phù hợp và đồng bộ với game hơn". CPO đọc là nét vẽ lệch game (nút mịn kiểu casual, game là pixel art đá rêu); giữ nổi khối, làm lại chất liệu và nét pixel theo vật thể trong game.
+- **Cập nhật 07/11 (2):** Huy bỏ cả 3 phương án chất liệu v2 (đá khắc, rune, gỗ thùng). Giữ kiểu nút v1 hiện tại (mặt mịn) nhưng: màu dịu, không gắt; nổi nhẹ, thấp hơn mức Rõ 12 px; màu nút có thể lấy màu trắng ngà của viền đá khung UI. CPO hiểu "hiện tại" là v1 mức Rõ (bản T-020 đã bị chê giống viền).
+- **Cập nhật 07/11 (3):** Huy gửi crop viền khung (`art/inbox/T-026/ref-mau-vien-huy.png`): màu nút là màu đá vàng-kaki của viền này, không phải trắng ngà của bản v3. Mẫu CPO đo trên crop: mặt #AA9360 đến #B09A66, mép sáng #CEB681, bóng #94835A, viền tối #1C1810.
+- **Chốt 07/11:** Huy duyệt K2 (`art/inbox/T-026/nut-v4/k2/`, trang `so-sanh-nut-v4.png`): nút phụ mặt kaki #BFA26C, nút chính vàng dịu #DDAF5D, nút đỏ dịu #D5786E, chữ tối; đế khoảng 7 px; chữ "Thoát trận" và icon X đỏ đậm #55140F. Thay bộ nút T-020 cho mọi màn.
+- **CPO 07/11:** nút đóng dùng X mực tối #1F1A10 (luật màu: nút đóng không đỏ); X đỏ đậm #55140F chỉ cho Thoát trận/Rời phòng. Tab chọn cao và sáng hơn hẳn tab tắt/hover, liền với panel.
+
+## 2026-11-07 - Duyệt danh sách thành phần T-026 và cỡ nút
+- **Quyết định:** Duyệt `de-xuat/ui-kit-thanh-phan.md`: 22 thành phần thiếu chia P0 8, P1 10, P2 4; thứ bậc nút 8 cấp; cỡ nút S 48, M 64, L 80 (1080p). Kèm mặc định: hộp thoại một nút căn giữa rộng 320; thẻ vật phẩm chỉ phân loại Weapon/Armor/Consumable, không độ hiếm; gen xong P0 thì dựng lại mock đợt A trên kit mới.
+- **Người quyết:** Huy (07/11, "Duyệt, gen P0").
+
+## 2026-11-07 - Luật nút: đồng bộ icon + chữ, căn giữa thị giác, X đỏ
+- **Quyết định (Huy):** (1) Nút không được lẫn lộn cái có icon + chữ, cái chỉ có chữ; phải đồng bộ. (2) Icon và chữ trên nút đang lệch lên trên về thị giác: phải căn giữa mặt nút. (3) X trên nút nên màu đỏ (thay quyết định X mực tối của CPO). (4) Nút icon + chữ thì icon to hơn. (5) Tham khảo icon trên mạng (Unity Asset Store...).
+- **Người quyết:** Huy (07/11, "sao lại cái thì icon + text cái thì chỉ có Text... màu nút X nên là màu đỏ... icon nên to hơn chút").
+- **CPO áp dụng:** mọi nút có chữ đều kèm icon bên trái, trừ tab, keycap và nút chỉ chữ; X dùng đỏ #94281F (đỏ sáng nhất đạt 3:1 trên kaki) cho nút đóng, Thoát trận, Rời phòng; Thoát trận chọn R2 (chữ tối, X đỏ), vì Huy chưa chọn R2/R3 bằng lời và R2 khớp luật "màu ở icon", Huy đổi được. Căn giữa thành cổng máy (script đo lệch tâm mực chữ/icon so với mặt nút, không tính đế, ngưỡng 1 px) vì đây là lần thứ hai lỗi chữ lệch. Icon trên mạng chỉ làm tham chiếu phong cách kèm URL; không tải, không mua; asset vẫn gen bằng GPT.
+- **Duyệt 07/11:** Huy duyệt UI kit T-026 (họ nút K2 icon + chữ, X đỏ, P0) và mock đợt A dựng lại; T-026 đóng, T-021 làm lại đợt B trên kit mới ("Duyệt, làm đợt B"). Thoát trận theo R2 coi như được duyệt cùng bộ.

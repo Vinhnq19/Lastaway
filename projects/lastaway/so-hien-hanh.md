@@ -11,3 +11,4 @@ Số liệu cân bằng gốc nằm trong GDD (`Docs/[GDD] - Lastaway.xlsx`, cá
 | Quick bar | Số phím ở góc dưới phải trong ô; hàng ô căn giữa dọc; không có tab đạn | 2026-11-07 | Huy, chat |
 | Viền panel HUD | 24 px (1080p) mọi panel, cùng cỡ hoa văn góc | 2026-11-07 | Huy, chat |
 | HUD bố cục | Theo ảnh ref `concept-toan-man-huy-07-11.png`, cỡ và vị trí panel đo ra 1920x1080 (art-ux ghi trong `T-015/asset-list.md`); thay bản B (Vitals 311x172, Quick bar 592x136) | 2026-11-07 | Huy, chat |
+| Cỡ nút UI | S cao 48, M cao 64, L cao 80 (1080p); nút K2 đế khoảng 7 px; hộp thoại một nút căn giữa rộng 320 | 2026-11-07 | Huy, chat |
