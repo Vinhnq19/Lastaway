@@ -1,0 +1,20 @@
+Create one 16:9 landscape game screenshot concept (target 1920x1080) of a top-down 2D pixel-art battle royale for PC, 10 players, a jungle-island ruins setting. The attached image is the CURRENT in-engine screenshot of our game. It looks flat and unfinished ("HTML without CSS"). Reimagine the whole screen with a strong, finished art direction.
+
+KEEP from the attached screenshot (do not change):
+- Camera: straight top-down, same zoom level; the hero stays at the screen center.
+- Character scale: the hero is about 5% of the screen height; same for crates and pillars.
+- The scene content of the attached image: same kind of props (loot crates, barrels, stone pillars, ruined walls, trees, clay pots), same rough layout of the ground.
+- HUD layout (version B), all HUD parts are small and compact so the center of the screen stays clear:
+  * top-left: a killfeed of 3 short lines, older lines faded;
+  * top-right: a square minimap (about 12% of screen width) that shows an actual map (terrain, walls, a circular safe-zone ring, a dot for the player), and directly below it a small panel with a person icon + "7/10" and an hourglass icon + "1:24";
+  * bottom-left: a compact vitals panel (about 16% of screen width): heart icon + red bar + number, armor icon + number, helmet icon + number, lightning icon + thin yellow bar + number. Icons and numbers only, NO text labels;
+  * bottom-center: a weapon bar (about 31% of screen width): a thin ammo strip on top and 8 square item slots below in two groups of 4 with a small gap, tiny number keys 1 to 8 on the slots, slot 1 highlighted.
+- Aspect ratio 16:9.
+
+FREE for you to invent (be bold, make it clearly its own look): color palette, lighting and time of day, materials and textures, the visual style of the HUD frames and icons, the look of the ground, props and the hero.
+Do NOT imitate any existing real game or brand. No logos, no watermarks, no extra UI that is not listed above. Any text must be only digits like 7/10 and 1:24.
+
+ART DIRECTION: 'Neon Dusk'. Dark twilight island, deep indigo and teal ground, glowing cyan and magenta light from lanterns and crystals, strong rim light and soft bloom. HUD is sleek dark glass panels with thin glowing outlines; icons are luminous line glyphs.
+SCENE: the safe zone is shrinking. A red damage-zone boundary wall and a smaller yellow next-zone ring cut across the ruined houses in the main view; the area outside the ring has a red tint. The hero is near the ring, health is lower (about 60%), two items already in quick-bar slots. Minimap shows the shrinking ring.
+
+Reference image role: the attached screenshot is the layout and scale reference for the scene content and camera only. Do not copy its flat look.

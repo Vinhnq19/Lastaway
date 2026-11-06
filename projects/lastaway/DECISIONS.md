@@ -37,3 +37,9 @@ Khoảng trống chặn QA-01 theo PIC người (MAP-02, Game-10, DRG-01, ZON-01
 - **Người quyết:** Huy ("Duyệt cả hai", 06/11)
 - **Lý do:** Giảm 30% không giữ được 13 u; tối giản theo feedback Vũ.
 - **Hệ quả:** `projects/lastaway/ux/hud-B-spec.md` là spec chốt cho T-013.
+
+## 2026-11-06 - Giữ màu và style gameplay, chỉ làm lại UI
+- **Quyết định:** Không đổi art world: giữ nguyên màu và style gameplay hiện tại (ảnh T-010). Chỉ sửa UI: GPT gen các bản UI hợp với gameplay hiện có để Huy chọn. 4 hướng world của T-011 không follow.
+- **Người quyết:** Huy (06/11, nguyên văn: "Giữ nguyên Màu style Gameplay thứ cần sửa là UI nên cần Gen ảnh UI sao cho hợp Gameplay ý")
+- **Lý do:** World đã ổn; feedback Vũ #4 ("như html chưa có css") nhắm vào UI.
+- **Hệ quả:** T-011 đóng (concept world lưu tham khảo). T-014: GPT gen skin UI trên ảnh gameplay thật, giữ bố cục HUD B.
