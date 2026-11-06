@@ -1,0 +1,224 @@
+{
+ "hud_panel_vitals": {
+  "size": [
+   311,
+   173
+  ],
+  "border_LRTB": [
+   32,
+   32,
+   32,
+   32
+  ],
+  "note": "PANEL-LARGE",
+  "border_LRTB_2x": [
+   65,
+   65,
+   65,
+   65
+  ]
+ },
+ "hud_panel_quickbar": {
+  "size": [
+   592,
+   126
+  ],
+  "border_LRTB": [
+   25,
+   25,
+   23,
+   23
+  ],
+  "note": "PANEL-WIDE",
+  "border_LRTB_2x": [
+   50,
+   50,
+   47,
+   47
+  ]
+ },
+ "hud_panel_match": {
+  "size": [
+   240,
+   89
+  ],
+  "border_LRTB": [
+   27,
+   27,
+   27,
+   27
+  ],
+  "note": "PANEL-SMALL",
+  "border_LRTB_2x": [
+   54,
+   54,
+   54,
+   54
+  ]
+ },
+ "hud_minimap_frame": {
+  "size": [
+   240,
+   240
+  ],
+  "border_LRTB": [
+   32,
+   32,
+   32,
+   32
+  ],
+  "note": "MINIMAP-FRAME (hole transparent)",
+  "border_LRTB_2x": [
+   65,
+   65,
+   65,
+   65
+  ]
+ },
+ "hud_killfeed_plate": {
+  "size": [
+   256,
+   135
+  ],
+  "border_LRTB": [
+   38,
+   38,
+   38,
+   38
+  ],
+  "note": "KILLFEED-PLATE",
+  "border_LRTB_2x": [
+   76,
+   76,
+   76,
+   76
+  ]
+ },
+ "hud_slot_empty": {
+  "size": [
+   63,
+   63
+  ],
+  "border_LRTB": [
+   18,
+   18,
+   18,
+   18
+  ],
+  "note": "SLOT procedural (Pillow, mau lay tu concept A), khong gach dut",
+  "border_LRTB_2x": [
+   37,
+   37,
+   37,
+   37
+  ]
+ },
+ "hud_slot_selected": {
+  "size": [
+   63,
+   63
+  ],
+  "border_LRTB": [
+   18,
+   18,
+   18,
+   18
+  ],
+  "note": "SLOT-SELECTED procedural, vien vang + glow",
+  "border_LRTB_2x": [
+   37,
+   37,
+   37,
+   37
+  ]
+ },
+ "hud_bar_track_hp": {
+  "size": [
+   164,
+   21
+  ],
+  "border_LRTB": [
+   21,
+   21,
+   8,
+   8
+  ],
+  "note": "BAR-TRACK",
+  "border_LRTB_2x": [
+   42,
+   42,
+   15,
+   15
+  ]
+ },
+ "hud_bar_track_thin": {
+  "size": [
+   164,
+   12
+  ],
+  "border_LRTB": [
+   12,
+   12,
+   4,
+   4
+  ],
+  "note": "BAR-TRACK thin",
+  "border_LRTB_2x": [
+   24,
+   24,
+   9,
+   9
+  ]
+ },
+ "hud_bar_fill_white": {
+  "size": [
+   64,
+   16
+  ],
+  "border_LRTB": [
+   6,
+   6,
+   5,
+   5
+  ],
+  "note": "BAR-FILL-WHITE (tint red/yellow)",
+  "border_LRTB_2x": [
+   13,
+   13,
+   11,
+   11
+  ]
+ },
+ "hud_ammo_plate": {
+  "size": [
+   220,
+   36
+  ],
+  "border_LRTB": [
+   31,
+   31,
+   11,
+   11
+  ],
+  "note": "AMMO-PLATE",
+  "border_LRTB_2x": [
+   62,
+   62,
+   22,
+   22
+  ]
+ },
+ "hud_minimap_overlay": {
+  "size": [
+   240,
+   240
+  ],
+  "border_LRTB": [
+   0,
+   0,
+   0,
+   0
+  ],
+  "note": "N3 overlay"
+ }
+}

@@ -55,3 +55,9 @@ Khoảng trống chặn QA-01 theo PIC người (MAP-02, Game-10, DRG-01, ZON-01
 - **Người quyết:** Huy ("A đá khắc", 06/11)
 - **Lý do:** Hợp world nhất.
 - **Hệ quả:** T-015 (art-ux: asset list, sprite 9-slice), T-016 (unity: gắn skin lên HUD B).
+
+## 2026-11-06 - Làm lại asset skin A theo chất đá concept
+- **Quyết định:** Bản T-015 lượt 1 (khung mảnh 8 px, lòng panel xanh đen) không đạt chất đá. Làm lại: lòng panel vân đá xám như concept A, khung dày hơn (khoảng 12-14 px ở 1080p), nội dung lùi vào trong; rect ngoài HUD B (T-013) giữ nguyên. Giữ phần đạt: ô quick bar phẳng, khung minimap + overlay, số phím kem viền đen.
+- **Người quyết:** Huy ("Làm lại", 06/11), theo đề xuất CPO
+- **Lý do:** Huy chọn A vì chất đá khắc; bản tách mất chất đó.
+- **Hệ quả:** T-015 làm lại lượt 2; T-016 chờ.
