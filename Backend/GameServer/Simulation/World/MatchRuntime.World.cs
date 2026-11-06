@@ -1,6 +1,7 @@
 using JungleBackend.Protocol.Gameplay;
 using JungleMaze.World;
 using JungleMaze.World.Inventory;
+using JungleMaze.World.Throwables;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 namespace GameServer.Simulation;
@@ -50,6 +51,8 @@ public sealed partial class MatchRuntime
     {
         if (_worldSettings == null || _worldCatalog == null) return;
         World=new MatchWorldRuntime(MatchId,_worldSettings,this,_health,_worldCatalog,_worldLootProfile);
+        World.ThrowableDamage=(attacker,target,amount)=>{World.SetCombatTick(CurrentTick);return _combat.ApplyExternalDamage(attacker,target,amount,CurrentTick)?.Damage??0;};
+        World.ThrowableRaised+=BroadcastThrowable;
         _worldMap=new MapData{Version=_map.Version,MinX=0,MinY=0,MaxX=World.Layout.Size,MaxY=World.Layout.Size};
         _worldPhysics=new PhysicsSimulation(_worldMap,_profile.PlayerRadius,_profile.PlayerSpeed);
         var i=0;foreach(var entity in _entities.Values){var spawn=World.Layout.Spawns[i++%World.Layout.Spawns.Count];entity.X=spawn.X;entity.Y=spawn.Y;}
@@ -67,7 +70,24 @@ public sealed partial class MatchRuntime
     {
         if(World==null)return;
         World.Tick(CurrentTick,_matchElapsedSeconds);
+        World.TickThrowables();
         RefreshWorldGeometry();
+    }
+    /// <summary>
+    /// WPN-03: uses the held thrown or special weapon. The request names the weapon kind so a swap in flight cannot
+    /// throw the wrong item; actor identity comes from the session, never from the packet.
+    /// </summary>
+    public ThrowableResult ProcessThrowable(string sessionId,in ThrowableRequestPacket request)
+    {
+        if(request.MatchId!=MatchId||Phase!=MatchPhase.InGame||World==null||!_bySession.TryGetValue(sessionId,out var actor)||actor.IsDisconnected)return ThrowableResult.Invalid;
+        var degrees=request.Aim*(360f/65536f);
+        return World.UseThrowable(actor.NetId,request.RequestId,(ThrowableKind)request.Kind,degrees,request.Distance);
+    }
+    private void BroadcastThrowable(ThrowableEvent e)
+    {
+        var packet=new ThrowableEventPacket{MatchId=MatchId,Tick=CurrentTick,Event=(byte)e.Kind,Item=(byte)e.Item,Actor=e.Actor,Target=e.Target,Id=e.Id,
+            FromX=e.FromX,FromY=e.FromY,ToX=e.ToX,ToY=e.ToY,Seconds=e.Seconds,Size=e.Size,Amount=e.Amount,Flags=e.Flags};
+        BroadcastCombatResult(ref packet);
     }
     private void RefreshWorldGeometry()
     {

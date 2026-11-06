@@ -60,7 +60,7 @@ public sealed partial class MatchWorldRuntime : ITransactionalDestructibleLootSi
     {
         var value=1f;
         // Overlapping swamp sources do not multiply the same Slow effect; leaving one keeps the other.
-        var slow=1f;foreach(var e in _effects)if(e.Key.Actor==actor&&e.Value.End>_now){if(e.Key.Effect=="Slow")slow=Math.Min(slow,e.Value.Magnitude);else if(e.Key.Effect=="Speed")value*=e.Value.Magnitude;else if(e.Key.Effect=="Stun")return 0;}
+        var slow=1f;foreach(var e in _effects)if(e.Key.Actor==actor&&e.Value.End>_now){if(e.Key.Effect=="Slow")slow=Math.Min(slow,e.Value.Magnitude);else if(e.Key.Effect=="Speed")value*=e.Value.Magnitude;else if(e.Key.Effect=="Stun"||e.Key.Effect=="Root")return 0;}
         return value*slow;
     }
     internal bool InvisibleToBots(byte actor) => _effects.Any(e => e.Key.Actor == actor && e.Key.Effect == "Invisible" && e.Value.End > _now);

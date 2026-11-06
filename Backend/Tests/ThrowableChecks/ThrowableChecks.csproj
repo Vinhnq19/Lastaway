@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net8.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>disable</Nullable><EnableDefaultCompileItems>true</EnableDefaultCompileItems></PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../../Shared/World/**/*.cs" LinkBase="World" />
+    <Content Include="../../Shared/GameData/weapons.json" Link="GameData/weapons.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

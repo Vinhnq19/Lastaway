@@ -9,13 +9,16 @@ namespace JungleMaze.EditorTools
     /// <summary>
     /// Builds <see cref="HeroVisualSet"/> from the JSurviv hero clips (sprite keyframes only) and puts a
     /// <see cref="HeroSpriteAnimator"/> on the Body of the local Hero and the remote PlayerView prefabs. Also builds
-    /// <see cref="HeldWeaponCatalog"/> and adds a <see cref="HeldWeaponView"/> hand to both prefabs.
+    /// <see cref="HeldWeaponCatalog"/> and adds a <see cref="HeldWeaponView"/> with both hands to both prefabs.
     /// </summary>
     public static class HeroVisualBuild
     {
-        public const string SetPath = "Assets/_JungleMaze/Art/Characters/HeroVisualSet.asset";
+        public const string SetPath = "Assets/_JungleMaze/Art/Characters/Resources/HeroVisualSet.asset";
         private const string Clips = "Assets/_JungleMaze/Art/JSurviv/Characters/Heroes/Animations/hvu_Player/";
-        /// <summary>Hero_14 first (local default). Hero_1 is left out: it is a League of Legends character.</summary>
+        /// <summary>
+        /// Hero_14 first (local default). Hero_1 is left out: it is a League of Legends character. The position is the
+        /// skin index players save on Home (and the server will relay), so append new heroes instead of reordering.
+        /// </summary>
         private static readonly int[] Order = { 14, 10, 11, 2, 4, 5, 6, 7, 8 };
 
         [MenuItem("Jungle Maze/Art/Build Hero Visuals")]
@@ -44,6 +47,7 @@ namespace JungleMaze.EditorTools
                     AttackBack = WorldDemoBuild.ExtractFrames(Clip("attack", "back"), false),
                     AttackSide = WorldDemoBuild.ExtractFrames(Clip("attack", "side"), false),
                     AttackFront = WorldDemoBuild.ExtractFrames(Clip("attack", "front"), false),
+                    Hand = LoadHand(n),
                 };
                 if (hero.IdleFront == null || hero.IdleSide == null || hero.MoveSide == null)
                 {
@@ -63,32 +67,45 @@ namespace JungleMaze.EditorTools
             Debug.Log($"[HeroVisualBuild] {heroes.Count} heroes, {weapons.Entries.Length} held weapons; Hero and PlayerView wired.");
         }
 
+        private const string HeroSprites = "Assets/_JungleMaze/Art/JSurviv/Characters/Heroes/Sprites/";
+
+        /// <summary>The hero's fist from its JSurviv hand sheet (16 px, same PPU as the body frames).</summary>
+        private static Sprite LoadHand(int n)
+        {
+            foreach (var asset in AssetDatabase.LoadAllAssetsAtPath($"{HeroSprites}Hero_{n}/Sheet/{n}_Hero_Hand.png"))
+                if (asset is Sprite sprite) return sprite;
+            Debug.LogWarning("[HeroVisualBuild] Hero_" + n + " has no hand sprite.");
+            return null;
+        }
+
         public const string WeaponsPath = "Assets/_JungleMaze/Art/Characters/HeldWeaponCatalog.asset";
         private const string Inventory = "Docs/Tickets/ART-04_icon_inventory.csv";
 
         /// <summary>
         /// Per weapon: degrees that turn the drawn handle→tip axis onto +X, held point (0..1 from the sprite's
-        /// bottom-left) and world length of the longest side. Tuned by eye against each JSurviv sprite.
+        /// bottom-left), world length of the longest side, and where the off hand holds two-handed weapons (fraction of
+        /// the length past the grip, 0 = one-handed). Tuned by eye against each JSurviv sprite; guns are drawn larger
+        /// than melee weapons so they read at gameplay zoom.
         /// </summary>
-        private static readonly Dictionary<string, (float angle, Vector2 grip, float length)> Tuning = new Dictionary<string, (float, Vector2, float)>
+        private static readonly Dictionary<string, (float angle, Vector2 grip, float length, float support)> Tuning = new Dictionary<string, (float, Vector2, float, float)>
         {
-            { "TREE_BRANCH", (-50f, new Vector2(.10f, .05f), .70f) },
-            { "KNIFE", (0f, new Vector2(.12f, .50f), .60f) },
-            { "BONE", (-45f, new Vector2(.12f, .12f), .60f) },
-            { "AXE", (-135f, new Vector2(.92f, .08f), .65f) },
-            { "MACE", (-135f, new Vector2(.90f, .08f), .65f) },
-            { "RUBBER_GUN", (-90f, new Vector2(.50f, .08f), .60f) },
-            { "SCEPTER", (-90f, new Vector2(.50f, .05f), .65f) },
-            { "CROSSBOW", (0f, new Vector2(.35f, .50f), .60f) },
-            { "SHOTGUN", (0f, new Vector2(.25f, .45f), .70f) },
-            { "BANANA", (0f, new Vector2(.50f, .50f), .40f) },
-            { "SMOKE", (0f, new Vector2(.50f, .50f), .35f) },
-            { "METEORITE_FRAGMENT", (0f, new Vector2(.50f, .50f), .35f) },
-            { "CRYSTAL", (0f, new Vector2(.50f, .50f), .40f) },
-            { "SEED", (0f, new Vector2(.50f, .50f), .25f) },
-            { "ROPE", (0f, new Vector2(.10f, .50f), .60f) },
-            { "BELL", (0f, new Vector2(.50f, .50f), .40f) },
-            { "SAHUR_BAT", (-55f, new Vector2(.12f, .08f), .72f) },
+            { "TREE_BRANCH", (-50f, new Vector2(.10f, .05f), .70f, 0f) },
+            { "KNIFE", (0f, new Vector2(.12f, .50f), .60f, 0f) },
+            { "BONE", (-45f, new Vector2(.12f, .12f), .60f, 0f) },
+            { "AXE", (-135f, new Vector2(.92f, .08f), .65f, 0f) },
+            { "MACE", (-135f, new Vector2(.90f, .08f), .65f, 0f) },
+            { "RUBBER_GUN", (-90f, new Vector2(.50f, .08f), .80f, 0f) },
+            { "SCEPTER", (-90f, new Vector2(.50f, .05f), .85f, 0f) },
+            { "CROSSBOW", (0f, new Vector2(.35f, .50f), .85f, .45f) },
+            { "SHOTGUN", (0f, new Vector2(.25f, .45f), 1.00f, .45f) },
+            { "BANANA", (0f, new Vector2(.50f, .50f), .40f, 0f) },
+            { "SMOKE", (0f, new Vector2(.50f, .50f), .35f, 0f) },
+            { "METEORITE_FRAGMENT", (0f, new Vector2(.50f, .50f), .35f, 0f) },
+            { "CRYSTAL", (0f, new Vector2(.50f, .50f), .40f, 0f) },
+            { "SEED", (0f, new Vector2(.50f, .50f), .25f, 0f) },
+            { "ROPE", (0f, new Vector2(.10f, .50f), .60f, 0f) },
+            { "BELL", (0f, new Vector2(.50f, .50f), .40f, 0f) },
+            { "SAHUR_BAT", (-55f, new Vector2(.12f, .08f), .72f, 0f) },
         };
 
         /// <summary>Reads each weapon's source sprite and slice from the ART-04 inventory and applies <see cref="Tuning"/>.</summary>
@@ -127,7 +144,7 @@ namespace JungleMaze.EditorTools
                 foreach (var v in sprite.vertices) { min = Vector2.Min(min, v); max = Vector2.Max(max, v); }
                 entries.Add(new HeldWeaponCatalog.Entry
                 {
-                    ItemId = cells[2], Sprite = sprite, AngleOffset = tune.angle, Grip = tune.grip, Length = tune.length,
+                    ItemId = cells[2], Sprite = sprite, AngleOffset = tune.angle, Grip = tune.grip, Length = tune.length, Support = tune.support,
                     ContentMin = min, ContentSize = max - min,
                 });
             }
@@ -170,11 +187,26 @@ namespace JungleMaze.EditorTools
                 heldSo.FindProperty("weaponRenderer").objectReferenceValue = weaponRenderer;
                 heldSo.FindProperty("body").objectReferenceValue = renderer;
                 heldSo.FindProperty("bodyAnimator").objectReferenceValue = animator;
+                heldSo.FindProperty("mainHand").objectReferenceValue = Hand(hand, "MainHand", renderer);
+                heldSo.FindProperty("offHand").objectReferenceValue = Hand(hand, "OffHand", renderer);
                 heldSo.FindProperty("followLocalHud").boolValue = local;
                 heldSo.ApplyModifiedPropertiesWithoutUndo();
                 PrefabUtility.SaveAsPrefabAsset(root, prefabPath);
             }
             finally { PrefabUtility.UnloadPrefabContents(root); }
+        }
+
+        /// <summary>Hand renderer under the Weapon object; <see cref="HeldWeaponView"/> places it and picks the skin's sprite.</summary>
+        private static SpriteRenderer Hand(Transform weapon, string name, SpriteRenderer body)
+        {
+            var hand = weapon.Find(name);
+            if (hand == null) { hand = new GameObject(name).transform; hand.SetParent(weapon, false); }
+            if (!hand.TryGetComponent<SpriteRenderer>(out var renderer)) renderer = hand.gameObject.AddComponent<SpriteRenderer>();
+            renderer.sharedMaterial = body.sharedMaterial;
+            renderer.sortingLayerID = body.sortingLayerID;
+            renderer.sortingOrder = body.sortingOrder + 2;
+            renderer.enabled = false;
+            return renderer;
         }
     }
 }

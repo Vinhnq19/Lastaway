@@ -8,6 +8,14 @@ public sealed partial class SessionHub
     private void SetupWorldSubscriptions()
     {
         _frameValidator.Subscribe<WorldActionRequestPacket>(_=>{});
+        _frameValidator.Subscribe<ThrowableRequestPacket>(_=>{});
+        // WPN-03: thrown and special weapons. Duplicates are rejected by request id inside ThrowableService.
+        _gameplayRegistry.Subscribe<ThrowableRequestPacket,Session>((request,session)=>
+        {
+            if(session.PlayerId==null||!session.WorldEnabled||request.MatchId!=session.Room.Match.MatchId)return;
+            if(session.Room.Match.ProcessThrowable(session.PlayerId,request)==JungleMaze.World.Throwables.ThrowableResult.Ok)
+                SendWorldState(session,false);
+        });
         _gameplayRegistry.Subscribe<WorldActionRequestPacket,Session>((request,session)=>
         {
             if(session.PlayerId==null||request.MatchId!=session.Room.Match.MatchId)return;

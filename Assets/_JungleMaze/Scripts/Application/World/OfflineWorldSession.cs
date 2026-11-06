@@ -18,7 +18,7 @@ namespace JungleMaze.App.World
     /// Runs authored map placements, destructible one-time loot drops, floor items, inventory,
     /// hazards, armor absorption, and inventory-backed combat locally without network or WorldDemoController.
     /// </summary>
-    public sealed class OfflineWorldSession : ITickable, IDisposable,
+    public sealed partial class OfflineWorldSession : ITickable, IDisposable,
         ITransactionalDestructibleLootSink, IEnvironmentDamageSink, IEnvironmentEffectSink, IEnvironmentMovementSink, IItemGameplayPort
     {
         private readonly OfflineMatchSession _match;
@@ -132,6 +132,7 @@ namespace JungleMaze.App.World
             _boostUntil = 0;
             _slow.Clear();
             _pendingPortalDestination = null;
+            ResetThrowables();
 
             if (_map != null)
             {
@@ -219,6 +220,8 @@ namespace JungleMaze.App.World
                 _actors.Add(new WorldActor(0, _playerPose.X, _playerPose.Y, isAlive));
                 _hazards.Tick(_tick, _actors);
             }
+
+            TickThrowables();
 
             if (_poisonUntil > _now && _poisonDue <= _now)
             {

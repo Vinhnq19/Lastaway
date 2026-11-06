@@ -245,6 +245,35 @@ namespace JungleMaze.World.Inventory
             stack.Magazine = magazine; stack.MagazineKnown = true; stack.Ammo = reserve;
             a.Weapons[index] = stack; Mark(a, actor); return true;
         }
+        /// <summary>
+        /// Spends one use of the held thrown or special weapon (WPN-03). Thrown stacks lose one item. Special weapons
+        /// keep their remaining <paramref name="charges"/> in Magazine (unknown means full) and vanish at zero. An
+        /// emptied slot drops to bare hands like a drop does.
+        /// </summary>
+        public bool TryConsumeHeldUse(byte actor, string itemId, int charges)
+        {
+            if (!_actors.TryGetValue(actor, out var a) || !a.Alive) return false;
+            var index = a.ActiveWeapon;
+            if (index < 0 || index >= a.Weapons.Length || a.Weapons[index].IsEmpty || a.Weapons[index].ItemId != itemId) return false;
+            var stack = a.Weapons[index];
+            if (charges > 0)
+            {
+                var left = (stack.MagazineKnown ? stack.Magazine : charges) - 1;
+                if (left < 0) return false;
+                if (left == 0) stack = default(ItemStack);
+                else { stack.Magazine = left; stack.MagazineKnown = true; }
+            }
+            else
+            {
+                stack.Count--;
+                if (stack.Count <= 0) stack = default(ItemStack);
+            }
+            Cancel(a, actor);
+            a.Weapons[index] = stack;
+            if (stack.IsEmpty) { a.ActiveWeapon = -1; a.EquipmentGeneration++; }
+            Mark(a, actor);
+            return true;
+        }
         /// <summary>Only confirmed weapon damage enters armor; environmental damage bypasses this method.</summary>
         public int AbsorbWeaponDamage(byte actor, int rawDamage, float reductionCap = .7f)
         {

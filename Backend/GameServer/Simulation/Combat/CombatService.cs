@@ -303,7 +303,22 @@ public sealed class CombatService
             _breakables.ApplyDamage(nearestObstacle.Value, rule.Damage, attacker.NetId);
     }
 
-    private void ApplyHit(byte attackerNetId, IEntity target, int damage, WeaponRule rule, uint tick, List<CombatHit> hits)
+    /// <summary>
+    /// Damage confirmed by another authoritative rule (WPN-03 throwables). Goes through the same armor, invulnerability,
+    /// life-save and death path as weapon hits, so WPN-02 stays the only owner of HP.
+    /// </summary>
+    public CombatHit? ApplyExternalDamage(byte attackerNetId, byte targetNetId, int damage, uint tick)
+    {
+        if (!_registry.TryGet(targetNetId, out var target) || target == null) return null;
+        var hits = new List<CombatHit>(1);
+        ApplyHit(attackerNetId, target, damage, 0.0, tick, hits);
+        return hits.Count > 0 ? hits[0] : null;
+    }
+
+    private void ApplyHit(byte attackerNetId, IEntity target, int damage, WeaponRule rule, uint tick, List<CombatHit> hits) =>
+        ApplyHit(attackerNetId, target, damage, rule.StunSeconds, tick, hits);
+
+    private void ApplyHit(byte attackerNetId, IEntity target, int damage, double stunSeconds, uint tick, List<CombatHit> hits)
     {
         if (damage <= 0 || !target.IsAlive) return;
         if (_effects.IsInvulnerable(target.NetId, tick)) return;
@@ -326,8 +341,8 @@ public sealed class CombatService
             hits.Add(new CombatHit(target.NetId, clamped, !target.IsAlive));
         }
 
-        if (rule.StunSeconds > 0.0 && target.IsAlive)
-            _effects.ApplyStun(target.NetId, tick, rule.StunSeconds);
+        if (stunSeconds > 0.0 && target.IsAlive)
+            _effects.ApplyStun(target.NetId, tick, stunSeconds);
     }
 
     private bool IsBlocked(Vector2 from, Vector2 to, AABB? exclude)
