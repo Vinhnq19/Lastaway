@@ -25,7 +25,7 @@ Kiểm cấu trúc sau mỗi lần sửa: `node scripts/backlog-check.mjs`.
 | T-011 | lastaway: GPT sáng tạo nhiều bản màn gameplay từ ảnh T-010, dựng trang so sánh để Huy chọn | art-ux | T-010 | M | done | >= 4 hướng, mỗi hướng HUD + world cùng khung; trang so sánh cạnh ảnh gốc; ảnh ở `art/inbox/`; Huy chọn một bản. 06/11 Huy không follow hướng world nào, giữ style gameplay; chuyển sang T-014 |
 | T-012 | lastaway: spec dựng HUD bản B cho unity (rect, neo, cỡ chữ số, icon PNG xuất từ SVG game-icons.net) và mục Credits ghi công CC BY | art-ux | T-009 | S | done | `projects/lastaway/ux/hud-B-spec.md` đủ số cho từng khối; icon PNG trong `projects/lastaway/art/inbox/hud-icons/png/`; Quick bar không thừa khoảng trống dưới. Huy duyệt 2 ngoại lệ 06/11 |
 | T-013 | lastaway: dựng HUD bản B trong prefab HUD theo spec T-012 | unity | T-012, T-010 | M | doing | Game view 1920x1080 khớp mock B (ảnh so sánh); EditMode xanh phần HUD; camera Follow Player; qa ĐẠT |
-| T-014 | lastaway: GPT gen skin UI (HUD B, menu) hợp màu và style gameplay hiện tại, world giữ nguyên | art-ux | T-012 | M | todo | >= 4 bản skin UI vẽ lên ảnh gameplay T-010 (world không đổi), đúng bố cục HUD B; trang so sánh; Huy chọn một bản |
+| T-014 | lastaway: GPT gen skin UI (HUD B, menu) hợp màu và style gameplay hiện tại, world giữ nguyên | art-ux | T-012 | M | review | >= 4 bản skin UI vẽ lên ảnh gameplay T-010 (world không đổi), đúng bố cục HUD B; trang so sánh; Huy chọn một bản |
 
 ## Icebox
 

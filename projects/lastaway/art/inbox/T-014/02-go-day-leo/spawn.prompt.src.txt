@@ -1,0 +1,18 @@
+You are given a screenshot of our top-down 2D pixel-art battle royale (1920x1080). TASK: EDIT this screenshot. Keep the ENTIRE game world exactly as it is, pixel for pixel: the ground, walls, crates, barrels, pots, trees, the hero character and its position, the safe-zone rings and the red out-of-zone tint. Do not repaint, recolor, move, add or remove anything in the world. Keep the camera and the 16:9 frame.
+
+ONLY redraw the HUD layer on top, as a new finished pixel-art UI skin. Today's HUD looks flat and unstyled; the new one must look like a crafted part of the same game, using the same palette and materials as the world (mossy stone, weathered wood, earth, olive grass), same pixel-art crispness and a dark outer edge with a small highlight bevel. The HUD stays compact so the center of the screen is clear.
+
+HUD LAYOUT (fixed, do not change positions or invent extra elements):
+1. Bottom-left, about 16% of screen width x 16% of screen height: a vitals panel with exactly 3 rows. Row 1: heart icon + ONE red bar + number. Row 2: a chest-armor icon + number, and next to it a helmet icon + number (icons and numbers only, NO bar, NO item names). Row 3: a lightning-bolt icon + ONE thin yellow bar + number. No text labels anywhere in this panel.
+2. Bottom-center, about 31% of screen width and 11% of height, tight to its content with no empty space: a thin ammo strip on top (small bullet icon and numbers) and below it a row of 8 square item slots in two groups of 4 with a small gap between the groups, a tiny key number 1 to 8 on each slot, slot 1 highlighted.
+3. Top-right: a square minimap about 12% of screen width that shows a real top-down map (terrain, walls, trees, the circular zone lines, a dot for the player). Directly below it a small one-row panel: person icon + a number, hourglass icon + a time.
+4. Top-left: a killfeed of 3 short plain text lines, no icons, older lines fainter.
+Numbers and text must be sharp and legible pixel text. No logos, no watermark, no other UI.
+
+SKIN MATERIAL (be creative inside this): Wood and vines. Panels are weathered wooden planks held with rope lashings and iron nails, thin vines and small leaves curling over the corners; icons are burned or carved into the wood; bars sit in bamboo-like channels.
+
+CONTENT FOR THIS SCENE (start of the match): vitals all full: heart bar full red with number 100, armor 0, helmet 0 (shown dim), yellow bar empty with 0. Quick bar: all 8 slots empty, slot 1 highlighted, ammo strip empty. Minimap shows the whole island with one big circular zone line. Match panel: 1/1 and 1:21. Killfeed lines: "Hao ha Linh", "Vinh ha Mai", "Vu ha Son".
+
+The attached screenshot is both the base to edit and the layout reference. Output the full edited screenshot.
+
+OUTPUT FORMAT: the edited screenshot must keep EXACTLY the same 16:9 proportions as the attached screenshot (same width to height ratio, no extra width, no cropping, no stretching).
