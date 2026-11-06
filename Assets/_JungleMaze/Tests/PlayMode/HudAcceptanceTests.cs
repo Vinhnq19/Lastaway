@@ -208,7 +208,9 @@ namespace JungleMaze.Tests.PlayMode
             foreach (var row in new[] { vitals.ArmorRow, vitals.HelmetRow, vitals.AdrenalineRow })
             {
                 AssertColor(palette.Faint, row.Label.color, row.name + " label faint");
-                Assert.IsFalse(row.Value.enabled, row.name + " number hidden");
+                Assert.AreEqual("0", Parsed(row.Value), row.name + " empty reads 0 (T-019, Huy 07/11)");
+                AssertColor(palette.Text, row.Value.color, row.name + " 0 in the normal number colour");
+                AssertColor(Color.white, row.Icon.color, row.name + " icon at full brightness");
                 Assert.AreEqual(0f, row.Bar.FillValue, row.name + " empty");
             }
             Assert.AreEqual("Giáp", vitals.ArmorRow.Label.text);
@@ -268,7 +270,7 @@ namespace JungleMaze.Tests.PlayMode
             Assert.AreEqual(alive, Parsed(_root.MatchStatus.AliveValue));
             for (var i = 0; i < 8; i++) Assert.AreEqual(visuals[i], _root.Quickbar.GetSlotView(i).Visual);
             Assert.That(_root.Vitals.AdrenalineRow.Bar.FillValue, Is.EqualTo(0f).Within(FillTolerance), "adrenaline still counts down (AC12)");
-            Assert.IsFalse(_root.Vitals.AdrenalineRow.Value.enabled);
+            Assert.AreEqual("0", Parsed(_root.Vitals.AdrenalineRow.Value), "expired adrenaline reads 0 (T-019)");
         }
 
         [UnityTest]
@@ -323,16 +325,19 @@ namespace JungleMaze.Tests.PlayMode
         }
 
         [UnityTest]
-        public IEnumerator LayoutB_VitalsIcons_DimUntilTheRowHasANumber()
+        public IEnumerator Vitals_EmptyRowsReadZeroWithFullIcon_ThenTheValue() // T-019 (Huy 07/11 "Theo ref")
         {
             yield return SpawnHud();
             var helmet = _root.Vitals.HelmetRow;
-            Assert.That(helmet.Icon.color.a, Is.EqualTo(0.35f).Within(0.01f), "nothing worn: dim icon, no number");
-            Assert.IsFalse(helmet.Value.enabled);
+            Assert.AreEqual(Color.white, helmet.Icon.color, "nothing worn: icon not dimmed");
+            Assert.AreEqual("0", Parsed(helmet.Value), "nothing worn: 0");
             _hud.SetHelmet("WOODEN_HELMET", 30f);
             _root.Presenter.Tick(0.1f);
             Assert.AreEqual(Color.white, helmet.Icon.color, "worn: full icon, colour stays baked (white tint)");
-            Assert.IsTrue(helmet.Value.enabled);
+            Assert.AreEqual("30", Parsed(helmet.Value));
+            _hud.SetHelmet(null, 0f);
+            _root.Presenter.Tick(0.1f);
+            Assert.AreEqual("0", Parsed(helmet.Value), "taken off: back to 0");
         }
 
         [UnityTest]

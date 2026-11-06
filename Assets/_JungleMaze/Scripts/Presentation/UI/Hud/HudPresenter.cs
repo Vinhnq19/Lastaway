@@ -185,7 +185,8 @@ namespace JungleMaze.Presentation.UI.Hud
             {
                 fill = 0f;
                 _vitals.SetRowLabel(row, emptyLabel, TextTone.Faint);
-                _vitals.SetRowValue(row, _rowText, 0, TextTone.Faint);
+                // T-019 (Huy 07/11 "Theo ref"): nothing worn reads "0" like a normal number.
+                _vitals.SetRowValue(row, _rowText, HudFormat.Integer(_rowText, 0), TextTone.Normal);
             }
             if (_snap) bar.Snap(fill);
             else bar.SetTarget(fill);
@@ -214,9 +215,10 @@ namespace JungleMaze.Presentation.UI.Hud
                     _adrenalineShownSeconds = seconds;
                 }
             }
-            else if (force || _adrenalineShownTimed)
+            else if (force || _adrenalineShownTimed || active != _adrenalineShownActive)
             {
-                _vitals.SetRowValue(VitalsRow.Adrenaline, _rowText, 0, TextTone.Faint);
+                // T-019: no adrenaline reads "0" (approved mock); an untimed effect keeps its full bar and no number.
+                _vitals.SetRowValue(VitalsRow.Adrenaline, _rowText, active ? 0 : HudFormat.Integer(_rowText, 0), TextTone.Normal);
                 _adrenalineShownSeconds = -1;
             }
             _adrenalineShownActive = active;

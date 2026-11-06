@@ -131,3 +131,13 @@ Khoảng trống chặn QA-01 theo PIC người (MAP-02, Game-10, DRG-01, ZON-01
 ## 2026-11-07 - Duyệt T-015 bản r11
 - **Quyết định:** Bộ asset HUD skin A bản r11 (GPT, theo concept toàn màn) được duyệt; T-015 đóng. qa chấm asset trong Unity ở T-016 thay vì chấm file riêng (CPO, để khỏi chấm hai lần).
 - **Người quyết:** Huy (07/11, "Duyệt"); cách chấm: CPO.
+
+## 2026-11-07 - Icon giáp, mũ, Adrenaline khi trống theo ref
+- **Quyết định:** Khi giáp, mũ, Adrenaline bằng 0, icon vẫn sáng như khi có và hiện số "0" (theo ảnh ref), bỏ hành vi làm mờ từ T-013.
+- **Người quyết:** Huy (07/11, "Theo ref"), theo lỗi N-DIM của qa T-016.
+
+## 2026-11-07 - Đợt UI toàn game: phương án L
+- **Quyết định:** Sản xuất toàn bộ UI/UX theo skin A, phương án L trong `de-xuat/ui-toan-game.md`: UI kit, mock mọi màn, làn V.Huy trong Unity (phản hồi HUD, balo, bản đồ lớn, ESC, spectator), đổi skin menu/lobby/kết quả và màn còn thiếu của UI-02. Đi theo chặng, Huy duyệt từng chặng.
+- **Người quyết:** Huy (07/11, "L toàn game").
+- **Ràng buộc:** UI-02 PIC là Vinh. T-024, T-025 (sửa LobbyUi, MatchOverlay, màn UI-02) chỉ bắt đầu khi Huy xác nhận Vinh đồng ý. Màn bị hạ gục, máy bay nhảy dù ngoài phạm vi (không có trong GDD).
+- **Cập nhật 07/11:** Vinh đồng ý cho đội AI sửa LobbyUi, MatchOverlay và màn UI-02 (Huy báo, "Vinh đồng ý rồi"). T-024, T-025 bỏ chặn; vẫn chỉ đổi hình và thêm màn, không đổi logic mạng/phòng của Vinh.

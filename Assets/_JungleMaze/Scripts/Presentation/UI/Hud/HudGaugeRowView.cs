@@ -6,12 +6,11 @@ namespace JungleMaze.Presentation.UI.Hud
 {
     /// <summary>
     /// One Vitals row (armor, helmet or adrenaline): label, bar and a number. HUD B (T-013) hides the label and the
-    /// armor/helmet bars and shows a baked-colour icon instead, dimmed while the row has no number.
+    /// armor/helmet bars and shows a baked-colour icon instead. T-019 (Huy 07/11 "Theo ref"): the icon keeps full
+    /// brightness and an empty row reads "0", as in the approved mock.
     /// </summary>
     public sealed class HudGaugeRowView : MonoBehaviour
     {
-        private const float DimIconAlpha = 0.35f;
-
         [SerializeField] private TMP_Text label;
         [SerializeField] private HudBarView bar;
         [SerializeField] private TMP_Text value;
@@ -34,7 +33,6 @@ namespace JungleMaze.Presentation.UI.Hud
         {
             if (value == null) return;
             var visible = length > 0;
-            if (icon != null) icon.color = new Color(1f, 1f, 1f, visible ? 1f : DimIconAlpha);
             if (value.enabled != visible) value.enabled = visible;
             if (!visible) return;
             value.SetCharArray(text, 0, length);

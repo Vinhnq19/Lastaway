@@ -73,7 +73,8 @@ namespace JungleMaze.Tests.Hud
             foreach (VitalsRow row in Enum.GetValues(typeof(VitalsRow)))
             {
                 Assert.AreEqual(TextTone.Faint, _vitals.LabelTones[Row(row)], row.ToString());
-                Assert.IsNull(_vitals.Values[Row(row)], row.ToString());
+                Assert.AreEqual("0", _vitals.Values[Row(row)], row + " empty reads 0 (T-019)");
+                Assert.AreEqual(TextTone.Normal, _vitals.ValueTones[Row(row)], row + " 0 in the normal tone");
                 Assert.AreEqual(0f, _vitals.Fills[Row(row)], row.ToString());
             }
             Assert.AreEqual("Giáp", _vitals.Labels[Row(VitalsRow.Armor)]);
@@ -190,7 +191,7 @@ namespace JungleMaze.Tests.Hud
             Run(0.3f);
             Assert.AreEqual("Giáp", _vitals.Labels[Row(VitalsRow.Armor)]);
             Assert.AreEqual(TextTone.Faint, _vitals.LabelTones[Row(VitalsRow.Armor)]);
-            Assert.IsNull(_vitals.Values[Row(VitalsRow.Armor)]);
+            Assert.AreEqual("0", _vitals.Values[Row(VitalsRow.Armor)], "taken off: 0 (T-019)");
             Assert.AreEqual(0f, _vitals.Fills[Row(VitalsRow.Armor)]);
         }
 
@@ -296,7 +297,7 @@ namespace JungleMaze.Tests.Hud
             Assert.AreEqual(1f, _vitals.Fills[Row(VitalsRow.Adrenaline)]);
             var elapsed = 0f;
             var previousFill = 1f;
-            while (_vitals.Values[Row(VitalsRow.Adrenaline)] != null && elapsed < 20f)
+            while (_vitals.Values[Row(VitalsRow.Adrenaline)] != "0" && elapsed < 20f)
             {
                 Frame();
                 elapsed += Dt;
@@ -460,7 +461,7 @@ namespace JungleMaze.Tests.Hud
             _effects.Apply(EffectKind.Adrenaline, 8f, 0.00005f);
             Assert.AreEqual("1s", _vitals.Values[Row(VitalsRow.Adrenaline)], "G-13: 0 only when the effect is over");
             Frame();
-            Assert.IsNull(_vitals.Values[Row(VitalsRow.Adrenaline)], "expired: number hidden");
+            Assert.AreEqual("0", _vitals.Values[Row(VitalsRow.Adrenaline)], "expired: 0 (T-019)");
         }
 
         [Test]
