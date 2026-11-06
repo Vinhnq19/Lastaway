@@ -229,6 +229,22 @@ Scene NewScene() => new Scene(rules);
     Check(s.Use(0, 4, ThrowableKind.Banana, float.NaN, 3, 0) == ThrowableResult.Invalid, "NaN aim rejected");
 }
 
+foreach (var (kind, amount) in new[]
+{
+    (ThrowableKind.Banana, 30), (ThrowableKind.Meteorite, 35), (ThrowableKind.Crystal, 45),
+    (ThrowableKind.Seed, 20), (ThrowableKind.Smoke, 0), (ThrowableKind.Bell, 0)
+})
+{
+    var scene = new Scene(rules);
+    scene.Give(0, ThrowableRules.IdOf(kind), 1);
+    Check(scene.Use(0, 1, kind, 0, 3, 0) == ThrowableResult.Ok, kind + " can be used");
+    scene.Use(0, 1, kind, 0, 3, 0);
+    scene.Tick(2);
+    scene.Tick(3);
+    Check(scene.ContainerHits.SequenceEqual(amount == 0 ? Array.Empty<int>() : new[] { amount }),
+        kind + " applies the expected container damage once");
+}
+
 Console.WriteLine($"ThrowableChecks: {passed} passed");
 return 0;
 
@@ -241,6 +257,7 @@ sealed class Scene : IThrowableWorld, IItemGameplayPort
     public readonly List<(byte Attacker, byte Target, int Amount)> Hits = new();
     public readonly List<(byte Target, ThrowableEffect Effect, double Seconds)> Effects = new();
     public readonly List<ThrowableEvent> Events = new();
+    public readonly List<int> ContainerHits = new();
     public readonly InventoryService Inventory;
     public readonly ThrowableService Service;
     private readonly Guid _match = Guid.NewGuid();
@@ -296,6 +313,7 @@ sealed class Scene : IThrowableWorld, IItemGameplayPort
 
     public bool IsWalkable(float x, float y, float radius) => !Walls.Any(w => w.IntersectsCircle(new WorldPoint(x, y), radius));
     public int Damage(byte attacker, byte target, int amount) { Hits.Add((attacker, target, amount)); return amount; }
+    public void DamageContainers(byte attacker, WorldBounds blast, int amount) => ContainerHits.Add(amount);
     public void ApplyEffect(byte target, ThrowableEffect effect, double seconds) => Effects.Add((target, effect, seconds));
     public void Move(byte actor, float x, float y) { var a = Actors[actor]; a.X = x; a.Y = y; Actors[actor] = a; }
 

@@ -258,6 +258,24 @@ namespace JungleMaze.Tests.World
         }
 
         [Test]
+        public void BananaBlast_BreaksChestAndSpawnsLootAfterFuse()
+        {
+            using var rig = new TestRig();
+            var session = rig.Session;
+            session.SetPlayerPose(22f, 25f);
+            Assert.IsTrue(session.Floor.TrySpawn(new ItemStack("BANANA"), 22f, 25f, out var bananaId));
+            Assert.IsTrue(session.Pickup(bananaId));
+            Assert.IsTrue(session.SelectWeapon(0));
+            Assert.IsTrue(session.TryUseThrowable(0, 2));
+            Assert.IsFalse(session.Destructibles.IsBroken(101));
+
+            for (var i = 0; i < 60; i++) session.Tick(1f / 30f);
+
+            Assert.IsTrue(session.Destructibles.IsBroken(101));
+            Assert.That(session.Floor.Items.Count, Is.InRange(3, 4));
+        }
+
+        [Test]
         public void Inventory_PickupSelectUseDrop_WorksCorrectly()
         {
             using var rig = new TestRig();

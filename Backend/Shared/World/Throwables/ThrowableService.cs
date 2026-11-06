@@ -83,6 +83,7 @@ namespace JungleMaze.World.Throwables
         bool IsWalkable(float x, float y, float radius);
         /// <summary>Requests damage; returns the HP actually removed (after armor, immunity or a life-save).</summary>
         int Damage(byte attacker, byte target, int amount);
+        void DamageContainers(byte attacker, WorldBounds blast, int amount);
         void ApplyEffect(byte target, ThrowableEffect effect, double seconds);
         void Move(byte actor, float x, float y);
     }
@@ -249,6 +250,9 @@ namespace JungleMaze.World.Throwables
                 if (rule.RootSeconds > 0) _world.ApplyEffect(target.Id, ThrowableEffect.Root, rule.RootSeconds);
                 Raise(new ThrowableEvent { Kind = ThrowableEventKind.Hit, Item = rule.Kind, Actor = blast.Actor, Target = target.Id, Id = blast.Id, FromX = blast.X, FromY = blast.Y, ToX = target.X, ToY = target.Y, Amount = (short)dealt, Seconds = (float)rule.RootSeconds });
             }
+            if (rule.Damage > 0)
+                _world.DamageContainers(blast.Actor, new WorldBounds(blast.X, blast.Y, rule.AreaWidth, rule.AreaHeight), rule.Damage);
+
             if (rule.Kind == ThrowableKind.Banana && rule.TrapSeconds > 0)
             {
                 _traps.Add(new Trap { Id = blast.Id, Rule = rule, Actor = blast.Actor, X = blast.X, Y = blast.Y, ArmedAt = now + TrapArmSeconds, Until = now + rule.TrapSeconds });

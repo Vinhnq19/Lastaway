@@ -143,19 +143,25 @@ try
     Pump(WitnessSeesBanana);
     Check(WitnessSeesBanana(), "other clients learn the held throwable: snapshot says other item, held-items list says BANANA");
 
-    // WPN-03 over the real network: the owner throws the held banana at the witness three cells east.
+    // Throw three cells east, just short of a pot, with a witness inside the blast.
     var witnessActor = serverMatch.Entities.All.First(a => a.NetId == witness.OwnNetId);
     var throwWorld = (JungleMaze.World.Throwables.IThrowableWorld)world;
-    WorldPoint? lane = null;
-    for (var y = 3f; y < world.Layout.Size - 3 && lane == null; y += 1f)
-    for (var x = 3f; x < world.Layout.Size - 6 && lane == null; x += 1f)
-        if (world.Layout.IsWalkable(new WorldPoint(x, y), .45f, world.Destructibles.IsBroken, world.Hazards.IsDoorClosed) &&
-            world.Layout.IsWalkable(new WorldPoint(x + 3, y), .45f, world.Destructibles.IsBroken, world.Hazards.IsDoorClosed) &&
-            throwWorld.CoverFraction(x, y, x + 3, y) >= 1f && throwWorld.CoverFraction(x - 1, y - 1.5f, x + 4.5f, y + 1.5f) >= 1f)
-            lane = new WorldPoint(x, y);
-    Check(lane.HasValue, "fixture finds an open lane for the throw");
-    ownerActor.X = lane!.Value.X; ownerActor.Y = lane.Value.Y; witnessActor.X = lane.Value.X + 3; witnessActor.Y = lane.Value.Y;
+    bool CanThrowToPot(WorldObjectDefinition pot)
+    {
+        var y = pot.Bounds.Center.Y;
+        var landingX = pot.Bounds.MinX - .55f;
+        var startX = landingX - 3f;
+        return world.Layout.IsWalkable(new WorldPoint(startX, y), .45f, world.Destructibles.IsBroken, world.Hazards.IsDoorClosed) &&
+            world.Layout.IsWalkable(new WorldPoint(landingX, y), .45f, world.Destructibles.IsBroken, world.Hazards.IsDoorClosed) &&
+            throwWorld.CoverFraction(startX, y, pot.Bounds.MinX - .01f, y) >= 1f;
+    }
+    var targetPot = world.Layout.Objects.First(pot => pot.Kind == WorldObjectKind.Pot && CanThrowToPot(pot));
+    witnessActor.X = targetPot.Bounds.MinX - .55f;
+    witnessActor.Y = targetPot.Bounds.Center.Y;
+    ownerActor.X = witnessActor.X - 3f;
+    ownerActor.Y = witnessActor.Y;
     world.SyncActors(); WaitTicks(2);
+    var floorBeforeBlast = world.Floor.Items.Select(item => item.Id).ToHashSet();
     var throwDamage = 0;
     serverMatch.Health.EntityDamaged += (target, amount, source) => { if (target == witness.OwnNetId && source == owner.OwnNetId) throwDamage += amount; };
     var bananaThrow = new ThrowableRequestPacket { MatchId = owner.MatchId, RequestId = 1, Kind = 1, Aim = 0, Distance = 3 };
@@ -169,6 +175,14 @@ try
     var blastHit = witness.ThrowableEvents.First(e => e.Event == 14 && e.Target == witness.OwnNetId);
     Check(blastHit.Amount > 0 && blastHit.Amount <= 30 && throwDamage == blastHit.Amount, "banana blast removes HP through the combat service (30 before armor)");
     Check(owner.ThrowableEvents.Any(e => e.Event == 14 && e.Target == witness.OwnNetId && e.Amount == blastHit.Amount), "both clients see the same hit on the witness");
+    var potDrops = world.Floor.Items.Where(item => !floorBeforeBlast.Contains(item.Id) &&
+        Math.Abs(item.X - targetPot.Bounds.Center.X) <= .25f && Math.Abs(item.Y - targetPot.Bounds.Center.Y) <= .25f)
+        .Select(item => item.Id).ToArray();
+    Check(world.Destructibles.IsBroken(targetPot.Id) && potDrops.Length > 0, "the network throw breaks the pot and spawns loot");
+    Pump(() => clients.Take(2).All(client => client.WorldObjects.Any(o => o.Id == targetPot.Id && (o.Flags & 1) != 0) &&
+        potDrops.All(id => client.WorldObjects.Any(o => o.Id == id && o.Kind == 100))));
+    Check(world.Destructibles.TryGet(targetPot.Id, out var potState) && potState.Revision == 1,
+        "both clients see the pot break and its loot from one detonation despite the duplicate request");
     Check(clients.Take(2).All(c => c.ThrowableEvents.Any(e => e.Event == 3)), "both clients see the banana trap armed");
     Pump(() => clients.Take(2).All(c => c.ThrowableEvents.Any(e => e.Event == 4)));
     Check(clients.Take(2).All(c => c.ThrowableEvents.Count(e => e.Event == 4 && e.Target == witness.OwnNetId) == 1), "witness slips on the trap once, seen by both clients");
