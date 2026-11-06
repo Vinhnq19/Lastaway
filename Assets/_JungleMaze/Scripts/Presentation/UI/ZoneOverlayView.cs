@@ -14,9 +14,8 @@ namespace JungleMaze.Presentation.UI
         private Mesh _mesh;
         private MeshRenderer _renderer;
         private RawImage _map;
-        private TMPro.TextMeshProUGUI _status;
 
-        public void Show(ZoneStatePacket state, uint tick, RuntimeMapBounds bounds, Vector2 player)
+        public void Show(ZoneStatePacket state, uint tick, RuntimeMapBounds bounds)
         {
             if (_worldMaterial == null) CreateWorld();
             if (_worldMaterial == null) return;
@@ -29,14 +28,6 @@ namespace JungleMaze.Presentation.UI
             {
                 Apply(_mapMaterial, state, bounds, preview);
                 _map.enabled = true;
-                bool outside = state.CurrentRadius <= .0001f || Vector2.Distance(player,
-                    new Vector2(state.CurrentCenterX, state.CurrentCenterY)) > state.CurrentRadius;
-                bool shrinking = unchecked((int)(tick - state.ShrinkStartTick)) >= 0 &&
-                    unchecked((int)(state.ShrinkEndTick - tick)) > 0;
-                float seconds = Mathf.Max(0, unchecked((int)((shrinking ? state.ShrinkEndTick : state.ShrinkStartTick) - tick)) / 30f);
-                _status.enabled = outside || shrinking || state.InWarning;
-                _status.SetText(outside ? "NGOÀI BO\n{0:0}s" : shrinking ? "BO ĐANG CO\n{0:0}s" : "BO CO SAU\n{0:0}s", Mathf.Ceil(seconds));
-                _status.color = outside ? new Color(1, .65f, .9f) : Color.white;
             }
         }
 
@@ -47,7 +38,7 @@ namespace JungleMaze.Presentation.UI
             _worldMaterial = new Material(shader);
             _mapMaterial = new Material(shader);
             _mapMaterial.SetFloat("_Minimap", 1);
-            _mapMaterial.SetFloat("_FillAlpha", .55f);
+            _mapMaterial.SetFloat("_FillAlpha", .62f);
             var surface = new GameObject("Zone danger overlay", typeof(MeshFilter), typeof(MeshRenderer));
             surface.transform.SetParent(transform, false);
             _mesh = new Mesh { name = "Zone overlay viewport" };
@@ -76,16 +67,6 @@ namespace JungleMaze.Presentation.UI
             rect.anchoredPosition = Vector2.zero;
             rect.sizeDelta = Vector2.one * minimap.SizePixels;
             layer.transform.SetSiblingIndex(minimap.Marker.GetSiblingIndex());
-            var label = new GameObject("Zone status", typeof(RectTransform), typeof(CanvasRenderer), typeof(TMPro.TextMeshProUGUI));
-            label.transform.SetParent(minimap.GetComponentInParent<Canvas>().rootCanvas.transform, false);
-            _status = label.GetComponent<TMPro.TextMeshProUGUI>();
-            _status.raycastTarget = false;
-            _status.fontSize = 16;
-            _status.alignment = TMPro.TextAlignmentOptions.Center;
-            _status.rectTransform.anchorMin = _status.rectTransform.anchorMax = new Vector2(.5f, 1);
-            _status.rectTransform.pivot = new Vector2(.5f, 1);
-            _status.rectTransform.anchoredPosition = new Vector2(0, -24);
-            _status.rectTransform.sizeDelta = new Vector2(260, 48);
         }
 
         private static void Apply(Material material, ZoneStatePacket state, RuntimeMapBounds bounds, bool preview)
@@ -99,13 +80,11 @@ namespace JungleMaze.Presentation.UI
         {
             if (_renderer != null) _renderer.enabled = false;
             if (_map != null) _map.enabled = false;
-            if (_status != null) _status.enabled = false;
         }
 
         private void OnDestroy()
         {
             if (_map != null) Destroy(_map.gameObject);
-            if (_status != null) Destroy(_status.gameObject);
             if (_worldMaterial != null) Destroy(_worldMaterial);
             if (_mapMaterial != null) Destroy(_mapMaterial);
             if (_mesh != null) Destroy(_mesh);

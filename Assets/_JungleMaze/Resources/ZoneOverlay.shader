@@ -3,7 +3,7 @@ Shader "JungleMaze/ZoneOverlay"
     Properties
     {
         _MainTex ("UI texture", 2D) = "white" {}
-        _FillAlpha ("Danger opacity", Range(0,1)) = 0.4
+        _FillAlpha ("Danger opacity", Range(0,1)) = 0.62
         _Minimap ("Minimap coordinates", Float) = 0
     }
     SubShader
@@ -35,14 +35,16 @@ Shader "JungleMaze/ZoneOverlay"
                 float distanceNow = length(i.world - _Current.xy) - _Current.z;
                 float pixel = max(length(fwidth(i.world)), .001);
                 float danger = _Current.z <= .0001 ? 1 : smoothstep(-pixel, pixel, distanceNow);
-                float edge = (1 - smoothstep(pixel, 2.5 * pixel, abs(distanceNow))) * step(.0001, _Current.z);
-                fixed4 color = fixed4(.23,.05,.32, danger * _FillAlpha);
-                color = lerp(color, fixed4(.86,.37,1,1), edge);
+                fixed3 dangerColor = lerp(fixed3(.85, .025, .035), fixed3(.02, .025, .035), _Minimap);
+                fixed4 color = fixed4(dangerColor, danger * _FillAlpha);
                 float2 delta = i.world - _Next.xy;
-                float nextEdge = 1 - smoothstep(pixel, 2 * pixel, abs(length(delta) - _Next.z));
+                float nextDistance = abs(length(delta) - _Next.z);
+                float worldLine = 1 - smoothstep(.35 * pixel, pixel, nextDistance);
+                float mapLine = 1 - smoothstep(pixel, 2 * pixel, nextDistance);
                 float angle = atan2(delta.y, delta.x) + UNITY_PI;
                 float dashed = step(.4, frac(angle / (2 * UNITY_PI) * 64));
-                return lerp(color, fixed4(1,1,1,1), nextEdge * dashed * _Next.w);
+                float preview = lerp(worldLine, mapLine * dashed, _Minimap) * _Next.w;
+                return lerp(color, fixed4(1, 1, 1, 1), preview);
             }
             ENDCG
         }

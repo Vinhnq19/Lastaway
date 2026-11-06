@@ -232,7 +232,7 @@ namespace JungleMaze.Presentation.UI
         private void ShowZone(ZoneStatePacket state, uint tick)
         {
             if (_zoneOverlay == null) _zoneOverlay = gameObject.AddComponent<ZoneOverlayView>();
-            _zoneOverlay.Show(state, tick, _data.Bounds, _hero != null ? (Vector2)_hero.transform.position : Vector2.zero);
+            _zoneOverlay.Show(state, tick, _data.Bounds);
         }
         /// <summary>Home's skin choice for the offline hero (default hero when none). Optional: views built in tests skip it.</summary>
         [Inject] public void BindSkins(IHeroSkinPreference skins) => _skins = skins;
