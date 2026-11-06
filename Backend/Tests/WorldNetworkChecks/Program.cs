@@ -132,6 +132,39 @@ try
         Enumerable.Range(0, witness.Snapshot.PlayerCount).Select(witness.Snapshot.GetPlayer).Any(s => s.NetId == owner.OwnNetId && s.HeldCode == PlayerStatePacket.HeldOther);
     Pump(WitnessSeesBanana);
     Check(WitnessSeesBanana(), "other clients learn the held throwable: snapshot says other item, held-items list says BANANA");
+
+    // WPN-03 over the real network: the owner throws the held banana at the witness three cells east.
+    var witnessActor = serverMatch.Entities.All.First(a => a.NetId == witness.OwnNetId);
+    var throwWorld = (JungleMaze.World.Throwables.IThrowableWorld)world;
+    WorldPoint? lane = null;
+    for (var y = 3f; y < world.Layout.Size - 3 && lane == null; y += 1f)
+    for (var x = 3f; x < world.Layout.Size - 6 && lane == null; x += 1f)
+        if (world.Layout.IsWalkable(new WorldPoint(x, y), .45f, world.Destructibles.IsBroken, world.Hazards.IsDoorClosed) &&
+            world.Layout.IsWalkable(new WorldPoint(x + 3, y), .45f, world.Destructibles.IsBroken, world.Hazards.IsDoorClosed) &&
+            throwWorld.CoverFraction(x, y, x + 3, y) >= 1f && throwWorld.CoverFraction(x - 1, y - 1.5f, x + 4.5f, y + 1.5f) >= 1f)
+            lane = new WorldPoint(x, y);
+    Check(lane.HasValue, "fixture finds an open lane for the throw");
+    ownerActor.X = lane!.Value.X; ownerActor.Y = lane.Value.Y; witnessActor.X = lane.Value.X + 3; witnessActor.Y = lane.Value.Y;
+    world.SyncActors(); WaitTicks(2);
+    var throwDamage = 0;
+    serverMatch.Health.EntityDamaged += (target, amount, source) => { if (target == witness.OwnNetId && source == owner.OwnNetId) throwDamage += amount; };
+    var bananaThrow = new ThrowableRequestPacket { MatchId = owner.MatchId, RequestId = 1, Kind = 1, Aim = 0, Distance = 3 };
+    owner.Send(ref bananaThrow, true);
+    Pump(() => clients.Take(2).All(c => c.ThrowableEvents.Any(e => e.Event == 1)));
+    var thrownEvent = witness.ThrowableEvents.First(e => e.Event == 1);
+    Check(thrownEvent.Actor == owner.OwnNetId && thrownEvent.Item == 1 && Math.Abs(thrownEvent.ToX - witnessActor.X) < .05f, "both clients see the banana thrown toward the witness");
+    owner.Send(ref bananaThrow, true);
+    Pump(() => clients.Take(2).All(c => c.ThrowableEvents.Any(e => e.Event == 2)));
+    Check(clients.Take(2).All(c => c.ThrowableEvents.Count(e => e.Event == 1) == 1), "duplicate throw request is not thrown twice");
+    var blastHit = witness.ThrowableEvents.First(e => e.Event == 14 && e.Target == witness.OwnNetId);
+    Check(blastHit.Amount > 0 && blastHit.Amount <= 30 && throwDamage == blastHit.Amount, "banana blast removes HP through the combat service (30 before armor)");
+    Check(owner.ThrowableEvents.Any(e => e.Event == 14 && e.Target == witness.OwnNetId && e.Amount == blastHit.Amount), "both clients see the same hit on the witness");
+    Check(clients.Take(2).All(c => c.ThrowableEvents.Any(e => e.Event == 3)), "both clients see the banana trap armed");
+    Pump(() => clients.Take(2).All(c => c.ThrowableEvents.Any(e => e.Event == 4)));
+    Check(clients.Take(2).All(c => c.ThrowableEvents.Count(e => e.Event == 4 && e.Target == witness.OwnNetId) == 1), "witness slips on the trap once, seen by both clients");
+    Pump(() => owner.Inventory!.Value.Slots.Take(4).All(s => s.ItemId != "BANANA"));
+    Check(owner.Inventory!.Value.ActiveWeapon == 255, "the only banana was spent once and the hand is empty");
+    Check(isolated.ThrowableEvents.Count == 0, "throwable events never reach another room");
     Check(clients.All(c => c.InvalidFrames == 0), "all real packet frames deserialize without protocol errors");
     var oldMatch = serverMatch.MatchId;
     var victim = clients.Take(2).First(c => c != owner);

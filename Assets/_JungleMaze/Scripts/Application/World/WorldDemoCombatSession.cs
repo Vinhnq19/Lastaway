@@ -17,12 +17,13 @@ namespace JungleMaze.App.World
         private uint _revision=uint.MaxValue, _equipment=uint.MaxValue;
         private float _fraction, _aim;
         private bool _supported;
+        private readonly IHudStateWriter _hud;
         public WeaponController Controller { get; }
         public event Action<CombatWeaponId,float> Confirmed;
 
         public WorldDemoCombatSession(IBalanceConfigProvider balance, IHudStateWriter hud, InventoryService items)
         {
-            _items=items;_backend=new FakeCombatBackend(balance);_peer=_backend.AddPeer(0);
+            _items=items;_hud=hud;_backend=new FakeCombatBackend(balance);_peer=_backend.AddPeer(0);
             Controller=new WeaponController(balance,_peer,hud,0);
             _peer.AttackResult+=AttackResult;_peer.ReloadResult+=Controller.OnReloadResult;
             Synchronize();
@@ -36,6 +37,8 @@ namespace JungleMaze.App.World
             if(!_supported)weapon=CombatWeaponId.Hand;
             _peer.SynchronizeEquipment(weapon,held.Magazine,held.Ammo,generation!=_equipment);
             Controller.ApplyEquipment(id,held.Magazine,held.Ammo,generation!=_equipment);
+            // Thrown and special weapons (WPN-03) are not combat weapons: show them in hand like the online session does.
+            if(!_supported){_hud?.SetHeldWeapon(id);_hud?.SetAmmo(0,held.Ammo);}
             _revision=state.Revision;_equipment=generation;
         }
         public bool TryAttack(float aim)

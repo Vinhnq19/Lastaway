@@ -10,6 +10,8 @@ namespace JungleMaze.Presentation.Player
     /// </summary>
     [DisallowMultipleComponent]
     [RequireComponent(typeof(SpriteRenderer))]
+    // Reads the root's movement and aim after the player view applied them this frame.
+    [DefaultExecutionOrder(400)]
     public sealed class HeroSpriteAnimator : MonoBehaviour
     {
         [SerializeField] private HeroVisualSet visuals;
@@ -27,6 +29,8 @@ namespace JungleMaze.Presentation.Player
         private bool _hasLast;
 
         public bool HasVisuals => _hero != null;
+        /// <summary>Hand sprite of the current hero (skin); null when the set has none.</summary>
+        public Sprite Hand => _hero != null ? _hero.Hand : null;
         public HeroFacing Facing { get; private set; } = HeroFacing.Front;
         public bool Moving { get; private set; }
 

@@ -96,7 +96,13 @@ Nguồn nằm trong `WorldDemoBuild` (`JungleArt`, `StoneDoorFrames`); dựng l�
   - `HeldWeaponCatalog.asset` gồm 17 vũ khí. Sprite lấy theo CSV ART-04. Góc xoay, điểm cầm và độ dài nằm trong `HeroVisualBuild.Tuning`. Kích thước tính theo vùng có nội dung thật của sprite, không theo canvas.
   - `HeldWeaponView` (child `Weapon` của Hero/PlayerView) đặt vũ khí ở tay theo hướng ngắm, lật khi ngắm sang trái, nằm sau body khi quay lưng, ẩn khi tay không hoặc khi chết.
   - Hero local theo `IHudState.HeldWeapon`. Người chơi khác hiện vũ khí của đòn đánh gần nhất, vì snapshot không có vũ khí đang cầm.
-- **Khi đánh:** đòn cận chiến ẩn vũ khí cầm tay, vì `MeleeSwingVisual` vẽ vũ khí quét theo cung, giờ cũng dùng sprite đã chuẩn hóa. Đòn bắn hoặc ném làm vũ khí giật lùi 0.12 giây.
+- **Khi đánh (cập nhật 05/11/2026, theo `PlayerAnimation.PlayAttackAnim` của JSurviv):** tay vung chính vũ khí đang cầm theo cung `arcDegrees` trong config: giơ lên sau đầu (30% thời gian), chém xuống tới −cung/2 (25%), giữ (20%), rồi về hướng ngắm. Khi ngắm sang trái thì lật chiều, nên lúc nào cũng giơ lên trước. Vũ khí chĩa lên trên màn hình (sin góc > 0.65) thì vẽ sau thân. Tay không thì đấm thẳng theo hướng ngắm, ra 0.3 ô rồi thu về. `MeleeSwingVisual` chỉ còn dùng khi người đánh không có `HeldWeaponView`. Đòn bắn hoặc ném làm vũ khí giật lùi 0.12 giây. Khi nạp đạn, tay hạ xuống 0.15 ô rồi nâng lên lại trong suốt thời gian nạp.
+- **Tay (05/11/2026):**
+  - `HeroVisualSet.Hero.Hand` lấy nắm tay 4 px trong `Hero_N/Sheet/N_Hero_Hand.png`. Mỗi skin có tay riêng, vẽ cùng tỉ lệ pixel với thân.
+  - `HeldWeaponView` có thêm `MainHand` và `OffHand`. Tay chính cầm cán vũ khí, chạy trên hình elip quanh vai: ngang 0.38, dọc 0.22, thấp hơn tâm 0.18.
+  - Tay phụ để ở cạnh thân, phía ngược hướng ngắm, tại (0.42, −0.26). Với vũ khí hai tay (`Support` > 0: SHOTGUN, CROSSBOW = 0.45) thì tay phụ đỡ thân súng.
+  - Lửa nòng đặt ở đầu nòng thật (`MuzzlePosition`).
+- **Súng to hơn (05/11/2026):** RUBBER_GUN 0.60 → 0.80, SCEPTER 0.65 → 0.85, CROSSBOW 0.60 → 0.85, SHOTGUN 0.70 → 1.00. Dựng lại bằng **Jungle Maze → Art → Build Hero Visuals**.
 - **Kiểm chứng:**
   - EditMode 929 test: 928 pass, `RoomMapTests` fail sẵn.
   - PlayMode 133 test: 132 pass. `MenuOpen_DoesNotPause` fail do thời gian khi editor không được focus, chạy lại thì pass.
