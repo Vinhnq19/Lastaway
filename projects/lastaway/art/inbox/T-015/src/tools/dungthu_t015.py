@@ -47,7 +47,7 @@ for i, x in enumerate(xs):
     text((x + 6, QB[1] + 46), str(i + 1), 15, (241, 231, 200), "la", stroke=2)
 # --- Match status: lề L/R 32 ---
 im.alpha_composite(ico("alive", 24), (MS[0] + 32, MS[1] + 32)); text((MS[0] + 62, MS[1] + 44), "1/1", 22, anchor="lm")
-im.alpha_composite(ico("zone-timer", 24), (MS[0] + 118, MS[1] + 32)); text((MS[0] + 148, MS[1] + 44), "1:22", 22, (162, 116, 255), "lm")
+im.alpha_composite(ico("zone-timer", 24), (MS[0] + 118, MS[1] + 32)); text((MS[0] + 148, MS[1] + 44), "1:22", 22, (241, 231, 200), "lm")
 # --- Killfeed: lề L 16, T 14 ---
 for i, t in enumerate(["Hao ha Linh", "Vinh ha Mai", "Vu ha Son"]):
     text((KF[0] + 16, KF[1] + 24 + i * 32), t, 17, (237, 242, 238) if i == 0 else (214, 218, 214))

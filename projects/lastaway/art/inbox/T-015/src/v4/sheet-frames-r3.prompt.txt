@@ -1,0 +1,16 @@
+Use your image generation tool to create ONE image as described below, and copy the generated file AS-IS (no cropping, no resizing, no padding) to:
+D:\Lastaway\projects\lastaway\art\inbox\T-015\src\v4\sheet-frames-r3.png
+Do not write any other files and do not post-process the image. Use only the built-in image tool, never the OpenAI API, curl or python.
+
+Image 1 is our current sprite sheet of empty carved-stone HUD frames on flat magenta. Image 2 is the TARGET look: zoomed crops (left to right) of the concept's bottom-left vitals panel, bottom-center item bar with ammo tab, and top-right minimap frame with the small match panel under it. Image 3 is the full-screen concept.
+
+Redraw the sheet so that every frame matches image 2 as exactly as possible, same pixel-art style and pixel scale. Keep: flat solid magenta #FF00FF background with at least 80 px between pieces, NO text, NO numbers, NO icons, NO bars, NO slots inside the frames, interiors stay DARK warm brown-grey (#2b2821 to #38342b, almost flat, very faint grain), the minimap hole stays flat magenta and fully enclosed.
+
+Frame look to copy from image 2: the rim is a MEDIUM-THICK olive-grey carved stone border (olive-tinted stone, about #7d7a62 to #a39e80, NOT bright beige), made of two parallel stone courses with thin dark joint lines (a brick-like double line along the top and bottom edges), dark outline outside, chamfered (diagonal) corners, a thin dark inner groove. Each of the four corners has a larger carved square Greek-key spiral ornament block, and THICK green moss and vines hang over all four corners (clearly visible, like the concept), plus a few moss touches along the rim.
+
+PIECES (left to right, top to bottom), exact aspect ratios width : height:
+1. VITALS-FRAME: 2.05 : 1. Inside the rim, the interior is divided into THREE rows. Each row is a slightly darker inset rounded-rectangle panel with a thin lighter border line, separated from the next by a thin carved line, like the concept (top row tall, middle row, bottom row). Corner spirals at four corners, thick moss at four corners.
+2. QUICKBAR-FRAME: 3.73 : 1 overall. A wide main body with a SHORT raised ammo tab centered on top: the tab is about 63 percent of the total width and only about 13 percent of the total height, with slanted ends, sitting directly on top of the body, tab interior the same dark slab, moss at both tab ends. Corner spiral ornaments at the four corners of the body, thick moss at the body corners.
+3. MATCH-FRAME: 4.6 : 1. A small wide panel, same olive rim, small corner spirals, moss on all four corners, plain dark interior. There is no divider drawn.
+4. MINIMAP-FRAME: 1.0 : 1 square. A THIN olive stone rim (about 6 percent of the width) with NO repeating pattern along the straight sides; ornament ONLY at the four corners: a square carved Greek-key spiral block at each corner, with moss on the corners. The interior is a flat solid magenta hole fully enclosed by the rim.
+5. KILLFEED-PLATE: 2.0 : 1. A plain flat dark rectangle (#1f1d18), straight edges, no rim, no moss, no ornament.

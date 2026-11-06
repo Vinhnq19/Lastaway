@@ -14,10 +14,12 @@ METAL = {
     "adrenaline": ("#FFE08A", "#E8B945", "vang sang"),
     "alive":      ("#F2ECD8", "#C9C2AA", "bac kem"),
     "kill":       ("#F2ECD8", "#C9C2AA", "bac kem"),
-    "zone-timer": ("#D8CBF8", "#B6A5E3", "bac tim"),
+    "zone-timer": ("#F4EAC9", "#D2C7A4", "bac kem am"),
 }
 hexc = lambda h: tuple(int(h[i:i + 2], 16) for i in (1, 3, 5))
 OUTLINE = (20, 16, 14)
+OUT_A = 150     # vien nhe: alpha 150/255 (truoc 255)
+FLAT = 0.5      # 0 = gradient day du (luot 2), 1 = mot mau; luot 3 = 0.5
 
 def metal(src, hi, lo, px):
     im = src.convert("RGBA"); w, h = im.size
@@ -26,16 +28,15 @@ def metal(src, hi, lo, px):
     grad = Image.new("RGB", (w, h)); g = grad.load()
     for y in range(h):
         t = y / max(1, h - 1)
-        c = tuple(int(hi[i] * (1 - t) + lo[i] * t) for i in range(3))
+        c = tuple(int(hi[i] * (1 - t) + lo[i] * t) for i in range(3)); mid = tuple((hi[i] + lo[i]) // 2 for i in range(3)); c = tuple(int(c[i] * (1 - FLAT) + mid[i] * FLAT) for i in range(3))
         for x in range(w): g[x, y] = c
     # vien sang gan canh tren-trai (cat canh): lech anh mask 1 px
     sh = ImageChops.offset(a_bin, px, px)
     edge = ImageChops.subtract(a_bin, sh)          # phan nhin thay o canh tren-trai
-    grad = Image.composite(Image.new("RGB", (w, h), (255, 246, 214)), grad, edge.point(lambda v: 90 if v > 0 else 0))
     fill = grad.convert("RGBA"); fill.putalpha(a)
     # vien toi 'px' pixel quanh icon
     ring = a_bin.filter(ImageFilter.MaxFilter(2 * px + 1))
-    out = Image.new("RGBA", (w, h), OUTLINE + (0,)); out.putalpha(ring)
+    out = Image.new("RGBA", (w, h), OUTLINE + (0,)); out.putalpha(ring.point(lambda v: OUT_A if v else 0))
     out.alpha_composite(fill)
     return out
 

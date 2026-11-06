@@ -21,6 +21,7 @@ Game Unity multiplayer battle royale top-down 10 người (client Unity + GameSe
 - Không push, không deploy, không dùng AWS.
 - Unity Editor: một bên dùng mỗi lúc. Kết thúc task phải trả camera Follow Player (luật trong `AGENTS.md`).
 - Commit kèm đường dẫn, tiếng Anh, không ghi AI (quy ước repo).
+- Mọi asset UI gen bằng GPT qua art-bridge, không dựng tay bằng script hay vector; script chỉ tách nền, cắt 9-slice, đổi cỡ, đo (Huy, 07/11).
 
 ## Ánh xạ vai cũ sang vai studio
 

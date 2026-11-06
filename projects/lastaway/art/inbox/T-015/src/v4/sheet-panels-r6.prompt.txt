@@ -1,0 +1,14 @@
+Use your image generation tool to create ONE image as described below, and copy the generated file AS-IS (no cropping, no resizing, no padding) to:
+D:\Lastaway\projects\lastaway\art\inbox\T-015\src\v4\sheet-panels-r6.png
+Do not write any other files and do not post-process the image. Use only the built-in image tool, never the OpenAI API, curl or python.
+
+Image 1 is the approved MINIMAP FRAME (thin olive carved-stone rim, small square Greek-key spiral ornament blocks at the corners, small moss tufts on the corners). It is the master for rim thickness and corner ornament size. Image 2 is an older sprite sheet with the frames to be redrawn (vitals frame with 3 inset rows, quick bar, match panel).
+
+Draw ONE new sprite sheet on a flat solid magenta background (#FF00FF, no gradient, at least 80 px of magenta between pieces and around the border) with THREE pieces, each isolated, drawn large and sharp, not cropped, left to right then top to bottom:
+1. VITALS-FRAME, aspect ratio 2.05 : 1. Inside the rim, the interior has THREE rows, each a slightly darker inset rounded rectangle with a thin lighter border line, separated by thin carved lines (same as the vitals frame in image 2).
+2. QUICKBAR-FRAME, aspect ratio 5.3 : 1, a plain wide panel with a perfectly straight flat top edge (no tab, no bump), empty dark interior.
+3. MATCH-FRAME, aspect ratio 3.5 : 1, a plain wide panel, empty dark interior.
+
+For ALL three pieces the frame must look exactly like the minimap frame of image 1, drawn at the SAME pixel scale as image 1: the same thin rim thickness (the rim is the same number of pixels thick as in image 1, identical on all four sides, do not make it thicker on bigger pieces), the same olive-grey stone texture with thin dark joint lines and dark outline, the same chamfered corners, the same SMALL corner ornament blocks (same size as in image 1, equal at the four corners), and the same small moss tufts at the four corners, mirror-symmetric left and right. The interior is a flat DARK warm brown-grey (#2b2821 to #38342b, almost no variation, very faint grain), with a thin dark inner groove right inside the rim.
+
+NO text, NO numbers, NO icons, NO slots, NO bars inside the frames. Empty frames only.

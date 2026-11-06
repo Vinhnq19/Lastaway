@@ -1,22 +1,29 @@
-Bang do tuong phan (nen = diem sang p95 va p99 cua mat da trong long panel, xau nhat)
-| Khoi | Nen: median / p95 / p99 (do sang) | Mau chu hoac icon | cr o p95 | cr o p99 | Nguong | Dat |
-|---|---|---|---:|---:|---:|---|
-| Vitals | 0.025 / 0.030 / 0.040 | so HP 24px trang EDF2EE | 11.64 | 10.28 | 3.0 | Dat |
-| Vitals | 0.025 / 0.030 / 0.040 | so giap/mu, nhan 'muted' A6BBB7 | 6.54 | 5.77 | 4.5 | Dat |
-| Quick bar | 0.025 / 0.029 / 0.040 | ten vu khi EDF2EE | 11.68 | 10.31 | 4.5 | Dat |
-| Quick bar | 0.025 / 0.029 / 0.040 | so phim kem F1E7C8 (co vien den) | 10.72 | 9.46 | 4.5 | Dat |
-| Match status | 0.025 / 0.028 / 0.036 | so 1/7 va 1:22 EDF2EE | 11.85 | 10.75 | 4.5 | Dat |
-| Match status | 0.025 / 0.028 / 0.036 | dong ho bo A274FF (22px) | 4.14 | 3.76 | 3.0 | Dat |
-| Killfeed | 0.055 / 0.064 / 0.077 | dong 1 EDF2EE | 8.11 | 7.30 | 4.5 | Dat |
-| Killfeed | 0.055 / 0.064 / 0.077 | dong 2-3 D6DAD6 | 6.50 | 5.85 | 4.5 | Dat |
+# Tương phản T-015 lượt 5 (sprite GPT, cỡ và vị trí đo từ concept, Huy 07/11)
 
-### Icon kim loai (do tren pixel that @2x, nen = p95 / p99 long da)
+Nền = điểm sáng p95 và p99 của mặt đá trong lòng panel (vùng không có vạch chia hay ô khắc góc). Lòng đá là bản GPT vẽ, không làm tối thêm. Ngưỡng: chữ thường và icon 4,5:1; số lớn và số đồng hồ bo 3:1.
 
-| Icon | Khoi | L trung binh | L p5 (toi nhat) | cr TB o p99 | cr p5 o p99 | cr p5 o p95 | Nguong | Dat |
-|---|---|---:|---:|---:|---:|---:|---:|---|
-| icon_hp | Vitals | 0.447 | 0.401 | 5.51 | 5.01 | 5.67 | 4.5 | Dat |
-| icon_armor | Vitals | 0.459 | 0.392 | 5.64 | 4.90 | 5.55 | 4.5 | Dat |
-| icon_helmet | Vitals | 0.495 | 0.419 | 6.04 | 5.20 | 5.89 | 4.5 | Dat |
-| icon_adrenaline | Vitals | 0.678 | 0.590 | 8.07 | 7.10 | 8.05 | 4.5 | Dat |
-| icon_alive | Match | 0.673 | 0.571 | 8.39 | 7.20 | 7.94 | 4.5 | Dat |
-| icon_zone-timer | Match | 0.531 | 0.434 | 6.74 | 5.62 | 6.19 | 4.5 | Dat |
+| Khối | Nền median / p95 / p99 | Mục | Màu | cr ở p99 | Ngưỡng | Kết quả |
+|---|---|---|---|---:|---:|---|
+| Vitals dải trên (HP) | 0.023 / 0.024 / 0.024 | số HP | `EDF2EE` | 12.54 | 4.5 | Đạt |
+| Vitals dải giữa (giáp, mũ) | 0.052 / 0.053 / 0.053 | số giáp, mũ | `EDF2EE` | 8.96 | 4.5 | Đạt |
+| Vitals dải dưới (Adrenaline) | 0.023 / 0.024 / 0.024 | số Adrenaline | `EDF2EE` | 12.49 | 4.5 | Đạt |
+| Quick bar (khoảng giữa hai nhóm ô) | 0.029 / 0.029 / 0.030 | nền thân thanh | `FFDC6E` | 9.79 | 4.5 | Đạt |
+| Ô trống | 0.041 / 0.042 / 0.043 | số phím trong góc ô (vàng, thêm viền tối 3 px) | `FFDC6E` | 8.48 | 4.5 | Đạt |
+| Ô chọn | 0.041 / 0.042 / 0.043 | số phím ô chọn | `FFDC6E` | 8.48 | 4.5 | Đạt |
+| Match status | 0.029 / 0.029 / 0.031 | số 1/7 | `EDF2EE` | 11.51 | 4.5 | Đạt |
+| Match status | 0.029 / 0.029 / 0.031 | số đồng hồ bo kem | `F1E7C8` | 10.56 | 3.0 | Đạt |
+| Vitals dải trên (HP) | 0.023 / 0.024 / 0.024 | icon hp, màu chiếm 21% | `E74845` | 3.66 | 4,5 | KHÔNG ĐẠT |
+| Vitals dải trên (HP) | 0.023 / 0.024 / 0.024 | icon hp, màu chiếm 21% | `CB3031` | 2.71 | 4,5 | KHÔNG ĐẠT |
+| Vitals dải trên (HP) | 0.023 / 0.024 / 0.024 | icon hp, màu chiếm 11% | `FAD053` | 9.61 | 4,5 | Đạt |
+| Vitals dải giữa (giáp, mũ) | 0.052 / 0.053 / 0.053 | icon armor, màu chiếm 39% | `AB936F` | 3.45 | 4,5 | KHÔNG ĐẠT |
+| Vitals dải giữa (giáp, mũ) | 0.052 / 0.053 / 0.053 | icon armor, màu chiếm 12% | `CAB28B` | 4.96 | 4,5 | Đạt |
+| Vitals dải giữa (giáp, mũ) | 0.052 / 0.053 / 0.053 | icon helmet, màu chiếm 27% | `AB9573` | 3.52 | 4,5 | KHÔNG ĐẠT |
+| Vitals dải giữa (giáp, mũ) | 0.052 / 0.053 / 0.053 | icon helmet, màu chiếm 12% | `998465` | 2.82 | 4,5 | KHÔNG ĐẠT |
+| Vitals dải dưới (Adrenaline) | 0.023 / 0.024 / 0.024 | icon adrenaline, màu chiếm 19% | `E9AA39` | 6.92 | 4,5 | Đạt |
+| Vitals dải dưới (Adrenaline) | 0.023 / 0.024 / 0.024 | icon adrenaline, màu chiếm 16% | `F8C650` | 8.89 | 4,5 | Đạt |
+| Vitals dải dưới (Adrenaline) | 0.023 / 0.024 / 0.024 | icon adrenaline, màu chiếm 13% | `EEB745` | 7.75 | 4,5 | Đạt |
+| Vitals dải dưới (Adrenaline) | 0.023 / 0.024 / 0.024 | icon adrenaline, màu chiếm 12% | `F8D673` | 10.01 | 4,5 | Đạt |
+| Match status | 0.029 / 0.029 / 0.031 | icon alive, màu chiếm 73% | `C3B7A3` | 6.60 | 4,5 | Đạt |
+| Match status | 0.029 / 0.029 / 0.031 | icon zone-timer, màu chiếm 19% | `EAD8AD` | 9.27 | 4,5 | Đạt |
+| Match status | 0.029 / 0.029 / 0.031 | icon zone-timer, màu chiếm 14% | `FDF5CC` | 11.86 | 4,5 | Đạt |
+| Match status | 0.029 / 0.029 / 0.031 | icon zone-timer, màu chiếm 14% | `CEB68C` | 6.64 | 4,5 | Đạt |

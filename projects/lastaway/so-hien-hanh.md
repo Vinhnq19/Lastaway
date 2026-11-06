@@ -8,4 +8,6 @@ Số liệu cân bằng gốc nằm trong GDD (`Docs/[GDD] - Lastaway.xlsx`, cá
 | Minimap | Hiện bản đồ thật, chưa thêm chức năng (thay bằng dòng 07/11) | 2026-11-06 | Huy, chat |
 | Minimap chức năng (Giai đoạn 3) | Hiện địch khi vào vùng Hero thấy; hiện vùng địa hình; hiện bo; hiện đồng đội; phóng to thu nhỏ. Số cụ thể chờ spec T-017 | 2026-11-07 | Huy, chat |
 | Chỉ số HUD | Icon kèm số nhỏ, bỏ nhãn chữ | 2026-11-06 | Huy, chat |
-| HUD bố cục | Bản B: Vitals 311x172, Quick bar 592x136, minimap và Match status -20% (canvas 1920x1080) | 2026-11-06 | Huy, chat |
+| Quick bar | Số phím ở góc dưới phải trong ô; hàng ô căn giữa dọc; không có tab đạn | 2026-11-07 | Huy, chat |
+| Viền panel HUD | 24 px (1080p) mọi panel, cùng cỡ hoa văn góc | 2026-11-07 | Huy, chat |
+| HUD bố cục | Theo ảnh ref `concept-toan-man-huy-07-11.png`, cỡ và vị trí panel đo ra 1920x1080 (art-ux ghi trong `T-015/asset-list.md`); thay bản B (Vitals 311x172, Quick bar 592x136) | 2026-11-07 | Huy, chat |

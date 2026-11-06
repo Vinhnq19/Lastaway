@@ -23,7 +23,7 @@ kf = dt.crop((250, 50, 284, 160)).getdata(); kv = sorted(L(p) for p in kf); s_k 
 items = [
  ("Vitals", s_v, [("so HP 24px trang EDF2EE", "#EDF2EE", 3.0), ("so giap/mu, nhan 'muted' A6BBB7", "#A6BBB7", 4.5)]),
  ("Quick bar", s_q, [("ten vu khi EDF2EE", "#EDF2EE", 4.5), ("so phim kem F1E7C8 (co vien den)", "#F1E7C8", 4.5)]),
- ("Match status", s_m, [("so 1/7 va 1:22 EDF2EE", "#EDF2EE", 4.5), ("dong ho bo A274FF (22px)", "#A274FF", 3.0)]),
+ ("Match status", s_m, [("so 1/7 va 1:22 EDF2EE", "#EDF2EE", 4.5), ("so dong ho bo kem F1E7C8 (22px)", "#F1E7C8", 3.0)]),
  ("Killfeed", s_k, [("dong 1 EDF2EE", "#EDF2EE", 4.5), ("dong 2-3 D6DAD6", "#D6DAD6", 4.5)]),
 ]
 print("| Khoi | Nen: median / p95 / p99 (do sang) | Mau chu hoac icon | cr o p95 | cr o p99 | Nguong | Dat |\n|---|---|---|---:|---:|---:|---|")

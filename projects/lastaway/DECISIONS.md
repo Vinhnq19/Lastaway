@@ -90,4 +90,44 @@ Khoảng trống chặn QA-01 theo PIC người (MAP-02, Game-10, DRG-01, ZON-01
 - **Quyết định:** Lượt 3 bám sát ảnh `projects/lastaway/art/brief/T-015/muc-tieu-huy-07-11.png` (cắt từ concept A T-014): khung đá mảnh, lòng đá xám nâu sáng hơn, vạch khắc chia hàng trong Vitals, icon pixel đơn giản (tim đỏ, áo giáp, mũ, tia sét), quick bar có thanh đạn dạng tab phía trên và số phím kem nằm dưới ô.
 - **Người quyết:** Huy (07/11, "tôi muốn nó giống được với Conpect này")
 - **Lý do:** Không ghi.
-- **Hệ quả:** Thay mục tiêu "2-3 cách tách UI" bằng một bản bám ảnh này. Icon HP heart-beats và icon kim loại ấm không còn là đích; theo icon trong ảnh. Vị trí số phím (dưới ô) và tab đạn lệch spec HUD B: art-ux ghi lệch, unity sửa ở T-016.
+- **Cập nhật 07/11:** Huy gửi concept toàn màn `projects/lastaway/art/brief/T-015/concept-toan-man-huy-07-11.png` (1672x941), nói "Gen ảnh lại theo concept này": asset UI gen lại bằng GPT từ concept này (Vitals, Quick bar, minimap, Match status, killfeed, icon), không dựng tay bằng script nữa; script chỉ dùng tách nền, cắt 9-slice, đo.
+- **Hệ quả:** Thay mục tiêu "2-3 cách tách UI" bằng một bản bám ảnh này.
+
+## 2026-11-07 - Mọi asset UI phải gen bằng AI ngoài
+- **Quyết định:** Mọi asset UI của Lastaway (khung, panel, ô, nút, thanh, icon, nền, menu) gen bằng GPT qua art-bridge. Không dựng tay bằng script hay vector. Script chỉ để tách nền, cắt 9-slice, đổi cỡ, đo.
+- **Người quyết:** Huy (07/11, "Mọi Asset UI cần phải Gen ảnh")
+- **Hệ quả:** Áp cho T-015 và mọi task UI sau. Icon game-icons.net (T-012) thay dần bằng icon gen khi làm lại. `projects/lastaway/CLAUDE.md` ghi luật này. Icon HP heart-beats và icon kim loại ấm không còn là đích; theo icon trong ảnh. Vị trí số phím (dưới ô) và tab đạn lệch spec HUD B: art-ux ghi lệch, unity sửa ở T-016.
+
+## 2026-11-07 - T-015 lượt 4: trả một vòng
+- **Quyết định:** Lượt 4 (sprite GPT) gần concept nhưng lòng panel be sáng, kém tách khỏi sàn; icon trung tính 1,31-4,23:1. Gen lại lòng panel tối như concept, killfeed bỏ khung đá (chỉ nền tối mờ), khung minimap dày và đậm hơn như concept.
+- **Người quyết:** Huy (07/11, "Trả một vòng"), theo đề xuất CPO.
+- **Hệ quả:** Art-ux sửa bằng GPT, giữ tên file và rect HUD B. Icon đạt >= 3:1 trên lòng mới là đủ (viền đen giữ); số vẫn >= 4,5:1.
+
+## 2026-11-07 - T-015: làm giống hệt ảnh ref
+- **Quyết định:** Bộ HUD skin A phải giống ảnh `art/brief/T-015/concept-toan-man-huy-07-11.png` ở mọi điểm còn lệch: rim olive và rêu dày 4 góc, khung minimap chỉ hoa văn góc, cỡ số (HP, giáp, phím, bo), tỉ lệ thanh HP và Adrenaline, tab đạn. Cỡ và vị trí panel lấy theo concept (đo ra 1920x1080), thay cỡ bản B nếu khác.
+- **Người quyết:** Huy (07/11, "Tôi chỉ cần làm giống ảnh Ref").
+- **Giả định CPO:** "giống ảnh Ref" gồm cả cỡ panel, nên dòng "HUD bố cục" trong so-hien-hanh đổi theo số art-ux đo từ concept. Huy muốn giữ cỡ bản B thì nói lại.
+
+## 2026-11-07 - Quick bar: số phím trong góc ô, ô giữa thanh, bỏ tab đạn
+- **Quyết định:** Số phím đặt ở góc dưới bên phải trong mỗi ô (không còn nằm dưới ô). Hàng ô căn giữa theo chiều dọc của thanh. Bỏ tab đạn (thanh nhỏ phía trên Quick bar).
+- **Người quyết:** Huy (07/11, "Đặt số vào góc dưới bên phải của ô... Các ô đưa xuống giữa. bỏ thanh nhỏ bên trên thanh to này đi").
+- **Hệ quả:** Khung Quick bar gen lại bằng GPT không có tab; rect cao giảm theo. Chỗ hiện đạn hiện chưa có (giả định CPO: đạn chưa cần trên HUD lúc này; Huy muốn đặt đạn ở đâu thì nói). Unity ở T-016 bỏ phần tab đạn.
+
+## 2026-11-07 - Viền minimap mỏng lại
+- **Quyết định:** Khung minimap giảm độ dày viền từ 40 px xuống khoảng 24 px (1080p), giữ rect ngoài 318x316, lòng bản đồ to ra. Hoa văn góc nhỏ theo, rêu cân hai bên.
+- **Người quyết:** Huy (07/11, "viền của minimap đang khá là dày"). Số 24 px là CPO chọn; Huy muốn mỏng hơn hoặc dày hơn thì nói.
+- **Ghi chú:** Đo bản r3: lỗ khung lệch 1 px ngang, 3 px dọc; vòng bo và lâu đài lệch tâm <= 2 px. Cảm giác lệch trái do ảnh đảo trong mock (dải nước bên phải rộng hơn) và rêu, hoa văn góc không đối xứng. Bản đồ thật trong Unity là RenderTexture căn theo tâm.
+
+## 2026-11-07 - Đồng bộ viền mọi panel HUD: 24 px
+- **Quyết định:** Mọi panel HUD (Vitals, Quick bar, minimap, Match status) dùng chung một độ dày viền 24 px (1080p) và một cỡ hoa văn góc, như khung minimap đã duyệt. Match status cao lên khoảng 90 px để đủ chỗ chữ.
+- **Người quyết:** Huy (07/11, "tôi cần mọi phần hộp thoại sẽ đồng bộ được viền với nhau"; chọn phương án 24 px CPO đưa).
+- **Đo trước khi sửa (1080p):** Vitals 28, minimap 24, Quick bar 15, Match 10. Áp cho mọi hộp thoại UI sau này của Lastaway.
+
+## 2026-11-07 - Vitals: bỏ khung trong từng hàng, tách bằng đậm nhạt
+- **Quyết định:** Bỏ đường viền khung bao quanh từng hàng (thẻ) trong Vitals. Ba hàng tách nhau bằng độ đậm nhạt của nền thẻ (lòng thẻ tối/sáng khác nhau), không vẽ đường kẻ.
+- **Người quyết:** Huy (07/11, "Bỏ cái đường khung bên trong đi thay bằng đậm nhạt của các thẻ là được rồi mà").
+- **Hệ quả:** Khung Vitals gen lại bằng GPT; rim ngoài 24 px và hoa văn góc giữ nguyên. Áp cùng cách cho mọi panel có nhiều hàng sau này.
+
+## 2026-11-07 - Duyệt T-015 bản r11
+- **Quyết định:** Bộ asset HUD skin A bản r11 (GPT, theo concept toàn màn) được duyệt; T-015 đóng. qa chấm asset trong Unity ở T-016 thay vì chấm file riêng (CPO, để khỏi chấm hai lần).
+- **Người quyết:** Huy (07/11, "Duyệt"); cách chấm: CPO.

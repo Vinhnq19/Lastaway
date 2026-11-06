@@ -1,0 +1,7 @@
+EDIT image 1 (a sprite sheet of three empty carved-stone HUD frames on flat magenta). Keep EVERYTHING in image 1 exactly the same: all three pieces, their positions, sizes and aspect ratios, the magenta background, the olive stone rims, the dark outlines, the chamfered corners, the SMALL square corner blocks and the small moss tufts, and keep the middle piece (wide quick bar) and the bottom piece (match panel) completely unchanged.
+
+Change ONLY the interior of the TOP piece (the vitals frame): REMOVE all the inset rounded-rectangle row borders, all thin carved separator lines and all raised ledges inside it. In their place the interior is a flat smooth slab split into THREE horizontal bands that differ ONLY by shade, with hard straight edges between bands and no line, no groove, no highlight, no shadow at the band edges:
+- top band (about 30 percent of the interior height): DARK warm brown-grey, #2a2720
+- middle band (about 37 percent of the interior height): clearly LIGHTER warm brown-grey, #4b4639
+- bottom band (about 33 percent of the interior height): DARK warm brown-grey, #2a2720
+The bands run edge to edge across the full inner width, right up to the thin dark groove inside the rim. Almost no grain inside the bands, no cracks. Do not change the rim, corner blocks or moss of that piece at all. No text, no numbers, no icons.

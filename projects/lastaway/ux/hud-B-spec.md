@@ -83,34 +83,33 @@ Một hàng ngang, padding 10 u, căn giữa dọc. Bỏ nhãn chữ "Bo thu sau
 | Icon còn sống | (mới) `AliveIcon` | 10 | 17 | 24 x 24 | `icon_alive.png` |
 | Số còn sống | `AliveRow/Value` | 38 | 18 | 42 x 22 | "7/10", **16 u** |
 | Icon đồng hồ bo | (mới) `ZoneIcon` | 88 | 17 | 24 x 24 | `icon_zone-timer.png` |
-| Đồng hồ bo | `ZoneRow/Value` | 116 | 18 | 44 x 22, căn phải | "1:24", **16 u**, màu `Purple` |
+| Đồng hồ bo | `ZoneRow/Value` | 116 | 18 | 44 x 22, căn phải | "1:24", **16 u**, màu `Cream` `F1E7C8` (đổi từ Purple, 06/11/2026) |
 
 `AliveRow` và `ZoneRow` chuyển từ xếp dọc (v2) sang xếp ngang; đổi `anchoredPosition` hai object.
 
 ## 7. Màu và cỡ chữ
 
-- Màu **chỉ dùng token trong `HudPalette.Default`**, không thêm màu mới: Red `E5484D` (máu), Blue `5BB8E8` (giáp, mũ), Yellow `F5C542` (Adrenaline), Purple `A274FF` (bo), Amber `C6AE78` (ô chọn), Text `EDF2EE`, Muted `A6BBB7`, Surface `202A2D` @92%, Track `0C1417` @80%.
+- Màu **chỉ dùng token trong `HudPalette.Default`**, không thêm màu mới: Red `E5484D` (máu), Blue `5BB8E8` (giáp, mũ), Yellow `F5C542` (Adrenaline), Cream `F1E7C8` (số đồng hồ bo, số phím; thay Purple `A274FF` từ 06/11/2026), Amber `C6AE78` (ô chọn), Text `EDF2EE`, Muted `A6BBB7`, Surface `202A2D` @92%, Track `0C1417` @80%.
 - Font **giữ nguyên** theo từng Text hiện có trong prefab; chỉ đổi cỡ.
 - Cỡ chữ số (u): HP 16, giáp/mũ 13, Adrenaline 12, đạn 16 + dự trữ 12, Match status 16, tên vũ khí 12, nhãn phím 10.
 - **Lệch so với UI-01:** UI-01 ghi chữ HUD tối thiểu 13 u. B có 12 u (Adrenaline, dự trữ, tên vũ khí) và 10 u (nhãn phím): Huy chốt giảm 30% nên không giữ nổi 13 u cho mọi chữ. 12 u = 18 px ở 1080p. Cần Huy hoặc CPO duyệt ngoại lệ (xem mục 10).
 
 ## 8. Icon (PNG)
 
-Thư mục: `projects/lastaway/art/inbox/hud-icons/png/` (inbox, chưa qua cổng duyệt; unity chưa nhập cho tới khi art-ux chuyển `art/final/`). PNG RGBA, nền trong suốt, **màu kim loại ấm đã nướng** (cập nhật T-015, 06/11/2026; chi tiết `art/inbox/hud-icons/metal.json`, bản vector cũ ở `png-vector-goc/`); `Image.color` phải để **trắng** (không tint lại). Xuất từ SVG bằng Microsoft Edge headless, tô kim loại và viền tối 1 px (@1x) bằng `T-015/src/tools/recolor_icons_t015.py`.
+Cập nhật T-015 lượt 4, 07/11/2026: icon do **GPT vẽ** theo concept toàn màn của Huy (luật: asset UI gen bằng GPT), thay bộ game-icons.net. Thư mục: `projects/lastaway/art/inbox/hud-icons/png/` (inbox, chưa qua cổng duyệt). PNG RGBA nền trong suốt, màu nướng sẵn, `Image.color` trắng. Nguồn và prompt: `art/inbox/T-015/asset-list.md` mục 0 và 3; bản cũ ở `png-metal-lop2/`.
 
-| Dùng ở | File @1x (px) | File @2x (px) | Nguồn SVG (tác giả) | Màu nướng (sáng / tối) | Size hiển thị (u) |
-|---|---|---|---|---|---|
-| Vitals hàng 1, HP | `icon_hp.png` (40) | `icon_hp@2x.png` (80) | heart-organ (Lorc) | đồng đỏ `FFAA84` / `EE8F68` | 26 x 26 |
-| Vitals hàng 2, giáp | `icon_armor.png` (40) | `icon_armor@2x.png` (80) | breastplate (Lorc) | sắt cũ `C3CBCC` / `8E999C` | 26 x 26 |
-| Vitals hàng 2, mũ | `icon_helmet.png` (40) | `icon_helmet@2x.png` (80) | barbute (Lorc) | đồng thau `EFC463` / `D3A04A` | 26 x 26 |
-| Vitals hàng 3, Adrenaline | `icon_adrenaline.png` (36) | `icon_adrenaline@2x.png` (72) | lightning-helix (Lorc) | vàng sáng `FFE08A` / `E8B945` | 24 x 24 |
-| Match status, còn sống | `icon_alive.png` (36) | `icon_alive@2x.png` (72) | person (Delapouite) | bạc kem `F2ECD8` / `C9C2AA` | 24 x 24 |
-| Match status, bo | `icon_zone-timer.png` (36) | `icon_zone-timer@2x.png` (72) | hourglass (Lorc) | Purple (bạc tím `D8CBF8` / `B6A5E3` tạm, giữ Purple tới khi Huy chốt) | 24 x 24 |
-| Dự phòng (killfeed, kết quả) | `icon_kill.png` (32) | `icon_kill@2x.png` (64) | skull-crossed-bones (Lorc) | bạc kem `F2ECD8` / `C9C2AA` | chưa dùng |
-| Phương án mũ 2 | `icon_helmet-alt.png` (40) | `icon_helmet-alt@2x.png` (80) | crested-helmet (Lorc) | đồng thau `EFC463` / `D3A04A` | chưa dùng |
+| Dùng ở | File @1x (px) | @2x (px) | Hình | Size hiển thị (u) |
+|---|---|---|---|---|
+| Vitals hàng 1, HP | `icon_hp.png` (40) | `icon_hp@2x.png` (80) | tim đỏ viền vàng | 26 x 26 |
+| Vitals hàng 2, giáp | `icon_armor.png` (40) | `icon_armor@2x.png` (80) | áo giáp be | 26 x 26 |
+| Vitals hàng 2, mũ | `icon_helmet.png` (40) | `icon_helmet@2x.png` (80) | mũ hiệp sĩ sọc vàng | 26 x 26 |
+| Vitals hàng 3, Adrenaline | `icon_adrenaline.png` (36) | `icon_adrenaline@2x.png` (72) | tia sét vàng | 24 x 24 |
+| Quick bar, tab đạn (mới) | `icon_ammo.png` (16) | `icon_ammo@2x.png` (32) | viên đạn vàng | 11 x 11 |
+| Match status, còn sống | `icon_alive.png` (36) | `icon_alive@2x.png` (72) | người | 24 x 24 |
+| Match status, bo | `icon_zone-timer.png` (36) | `icon_zone-timer@2x.png` (72) | đồng hồ cát | 24 x 24 |
+| Dự phòng | `icon_kill.png` (32), `icon_helmet-alt.png` (40) | `@2x` | sọ, mũ | chưa dùng |
 
-- Import đề xuất: Sprite 2D/UI, Single, FilterMode Bilinear (nét vector, không pixel-art), tắt mipmap, không nén; dùng @2x làm nguồn, hiển thị ở size u ở trên. Quyết định import cuối của unity.
-- Giấy phép CC BY 3.0: ghi công ở `ux/credits.md`.
+- Vị trí và bảng lệch spec: `art/inbox/T-015/asset-list.md` mục 4 và 5. Không còn icon CC BY 3.0 trong HUD (`ux/credits.md`).
 
 ## 9. Đo lại và tiêu chí
 

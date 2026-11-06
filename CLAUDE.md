@@ -93,7 +93,7 @@ Báo theo mốc, không báo từng sự kiện. Tiếng Việt có dấu, khôn
 
 ### Git và an toàn
 
-- CPO commit theo mốc khi đã kiểm, đứng tên Huy, không thêm Co-Authored-By. Không push khi Huy chưa bảo. Không `--no-verify`. Phiên vai không commit.
+- CPO chỉ commit khi một task đóng (qa ĐẠT hoặc Huy duyệt), gộp mọi file của task vào một commit (Huy, 07/11), đứng tên Huy, không thêm Co-Authored-By. Không push khi Huy chưa bảo. Không `--no-verify`. Phiên vai không commit.
 - Hook `.githooks/pre-commit` chạy `node scripts/backlog-check.mjs` và chặn đường dẫn trong `.githooks/blocked-paths`.
 - Dev server cổng riêng (tránh cổng đang bận ghi ở `production/STUDIO_CONFIG.md`); dừng theo PID, kiểm cổng trống.
 - Xóa, ghi đè: backup có timestamp; thư mục chưa git thì xác nhận phạm vi với Huy trước.

@@ -23,3 +23,9 @@ Khuôn một mục:
 - **Người quyết:** Huy
 - **Lý do:** Trả lời câu hỏi khi chạy `/istudio`.
 - **Hệ quả:** `Docs/Team_Workflow.vi.md`, `Docs/CPO_Runbook.vi.md`, `.claude/skills/cpo/SKILL.md` trỏ sang `CLAUDE.md`; T-001, T-002 trong BACKLOG. Bốn phiên cũ chờ Huy lưu trữ.
+
+## 2026-11-07 - Commit ít
+- **Quyết định:** CPO chỉ commit khi một task đóng (qa ĐẠT hoặc Huy duyệt), gộp mọi thay đổi DECISIONS, BACKLOG, so-hien-hanh, brief và asset của task đó vào một commit. Không commit riêng cho ghi quyết định, đổi trạng thái hay lượt làm lại chưa duyệt.
+- **Người quyết:** Huy (07/11, "tôi muốn commit ít thôi")
+- **Lý do:** 06-07/11 có khoảng 20 commit nhỏ, khó đọc lịch sử.
+- **Hệ quả:** Thay dòng "CPO commit theo mốc khi đã kiểm" trong `CLAUDE.md` theo nghĩa này.

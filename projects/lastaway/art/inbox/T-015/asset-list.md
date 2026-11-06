@@ -1,129 +1,139 @@
-# Asset list - skin A đá khắc (T-015, lượt 2)
+# Asset list - skin A đá khắc (T-015, lượt 5: sprite GPT, cỡ và vị trí đo từ concept của Huy, 07/11/2026)
 
-Skin: đá khắc (Huy chọn 06/11), thẩm mỹ gốc `art/inbox/T-014/01-da-khac/`. Lượt 2 làm lại theo yêu cầu CPO: khung đá dày, góc khắc hoa văn có rêu, lòng panel là mặt đá có vân (không phẳng). Sprite PNG RGBA nền trong suốt, **vẽ ở cỡ 1080p thật**, khớp rect đo ở `qa/T-013/do-rect-1920x1080.txt`; bản `@2x` gấp đôi. **Rect ngoài HUD B không đổi.** Chưa qua qa, chưa vào `Assets/`, chưa gắn prefab.
+Huy chốt "làm giống hệt ảnh ref": bảng mục 4 là **spec mới cho unity**, thay rect HUD B. Concept: `projects/lastaway/art/brief/T-015/concept-toan-man-huy-07-11.png` (1672x941, quy 1920x1080 nhân 1,1483). Ảnh phóng Quick bar 2x có 1 ô chứa icon: `quickbar-2x.png`. Ảnh soi lệch: `so-sanh-concept.png` (concept trên, dựng thử dưới), `chong-concept-50.png` (chồng 50%). Dựng thử: `dung-thu-hud-A.png` (mock trên ảnh QA T-013, chưa xem trong Unity). Bản cũ: `lop2/`, `lan3/` (loại), `src/tools/build_t015_v4.py` (loại, vẽ bằng code).
 
-## 1. Quy tắc import (unity, T-016)
+## 0. Nguồn và quy trình (luật 07/11: asset UI do GPT vẽ)
 
-- Canvas HUD reference 1280x720 nên 1080p = 1,5 lần. Sprite `@1x` vẽ theo pixel 1080p: **dùng `@1x` với Pixels Per Unit 150, hoặc `@2x` với PPU 300**. Khi đó 60 px = 40 u (ô quick bar) và border 42 px = 28 u, đúng thiết kế. PPU 100 làm mọi thứ phình 1,5 lần.
-- Image Type **Sliced** cho khung và thanh; Slot Simple hoặc Sliced đều được. Fill Center bật.
-- Filter **Bilinear**, không mipmap, nén None.
-- Border Unity theo thứ tự **Left, Bottom, Right, Top**; bảng ghi **L, R, T, B**. Giá trị tính theo px của file đó; cột "@2x" là border của file `@2x`.
-- `Image.color` để **trắng** với mọi sprite, riêng `hud_bar_fill_white` tint đỏ `HudPalette.Red` hoặc vàng `HudPalette.Yellow`.
-- Tắt `ArtEdge` và `ArtBevel` cũ của `Vitals`, `QuickBar`, `Minimap`, `MatchStatus` (khung mới thay thế).
+GPT qua Codex CLI (`codex-img.sh -e medium`), nền magenta `#FF00FF`.
 
-## 2. Danh sách sprite
-
-| File | Dùng ở (`Hud.prefab`) | Cỡ @1x (px) | Border L,R,T,B | Border @2x | Ghi chú |
-|---|---|---|---|---|---|
-| `hud_panel_vitals.png` | `Vitals` (nền) | 311 x 173 | 42,42,42,42 | 85,85,85,85 | Khung đá khối xếp, viền trong mảnh, góc chamfer + hoa văn khắc + rêu; lòng đá xám có vân nứt |
-| `hud_panel_quickbar.png` | `QuickBar` (nền) | 592 x 126 | 44,44,42,42 | 88,88,84,84 | Như trên, dạng dài |
-| `hud_panel_match.png` | `MatchStatus` (nền) | 240 x 89 | 31,31,30,30 | 63,63,59,59 | Như trên, dạng nhỏ |
-| `hud_minimap_frame.png` | `Minimap`, **trên** `MapArea` và **trên** `hud_minimap_overlay` | 240 x 240 | 45,45,45,45 | 90,90,90,90 | Giữa trong suốt (lỗ). Khung dày che khoảng 18 px mép bản đồ |
-| `hud_minimap_overlay.png` | `Minimap`, **giữa terrain và vòng bo** | 240 x 240 | 0,0,0,0 | - | N3: tối `#0C1417`, giữa 50% viền 70%. Nằm dưới vòng bo; đặt trên vòng thì làm tối cả vòng |
-| `hud_killfeed_plate.png` | Killfeed (chưa có object; 24,24; 171 x 90 u) | 256 x 135 | 21,21,21,21 | 42,42,42,42 | Tấm đá viền mảnh, 72% đục để world hơi lộ; bỏ được nếu chữ đủ đọc |
-| `hud_slot_empty.png` | `QuickBar/Slots/WeaponGroup/Slot1..4`, `ConsumableGroup/Slot5..8` | **60 x 60** | 18,18,18,18 | 36,36,36,36 | Viền đá liền, lòng đá vân tối, không nét đứt (N1). **Nhỏ hơn T-013 (63 px): xem mục 4** |
-| `hud_slot_selected.png` | cùng Slot, trạng thái chọn | 60 x 60 | 18,18,18,18 | 36,36,36,36 | Viền vàng, glow vàng nhẹ trong lòng |
-| `hud_bar_track_hp.png` | `Vitals/HpBar/Track` | 164 x 21 | 21,21,8,8 | 42,42,15,15 | Rãnh thanh máu; fill lùi 3 px |
-| `hud_bar_track_thin.png` | `Vitals/AdrenalineRow/Bar` (Track) | 164 x 12 | 12,12,4,4 | 24,24,9,9 | Rãnh Adrenaline; fill lùi 2 px |
-| `hud_bar_fill_white.png` | `HpBar/Fill`, `AdrenalineRow/Bar` Fill | 64 x 16 | 6,6,5,5 | 13,13,11,11 | Trắng, tint đỏ hoặc vàng; `Trail` đỏ 35% như cũ |
-| `hud_ammo_plate.png` | `QuickBar/StripArea` (tùy chọn) | 220 x 36 | 31,31,11,11 | 62,62,22,22 | T-013 không dùng thanh đạn riêng nên có thể bỏ |
-
-Khung đá: vòng đá ngoài khoảng 13 đến 14 px, cộng viền trong và đường viền tối nên cả viền chiếm khoảng 16 đến 19 px ở 1080p (Vitals 18, Quick bar 19, Match 15, Minimap 19). Hoa văn góc rộng khoảng 40 px (Vitals, Quick bar, Minimap) và 32 px (Match).
-
-## 3. Lề nội dung mới (padding, không đổi rect ngoài)
-
-Để không đè lên hoa văn góc. Giá trị là px ở 1080p tính từ mép ngoài sprite; đổi sang u chia 1,5.
-
-| Khối | Lề trái và phải | Lề trên và dưới | Bố trí đề nghị (px, gốc là góc trái trên khối) |
+| Sheet | Ảnh GPT | Prompt | Vòng |
 |---|---|---|---|
-| Vitals (311 x 173) | **40** | **20** | Hàng 1: icon 36 tại x 40, y 20; thanh máu x 84, rộng 104, cao 24; số HP căn phải tới x 271. Hàng 2 (y 64): icon giáp x 40, số x 84; icon mũ x 150, số x 194. Hàng 3 (y 108): icon 32 tại x 42; thanh Adrenaline x 84, rộng 104, cao 14; số căn phải tới x 271. Nội dung từ y 20 đến 140 trong 173 |
-| Quick bar (592 x 126) | **40** | **18** trên, 20 dưới | Dải tên vũ khí y 18 đến 40, bắt đầu x 40. Hàng ô **60 px** tại y 45; ô 1 tại x 41; khe 3 px; hai nhóm cách 12 px (nhóm 2 bắt đầu x 302); tổng 510 px trong vùng 512. Số phím tại x +6, y +1 mỗi ô, 15 px |
-| Match status (240 x 89) | **32** | căn giữa dọc | Icon 24 tại x 32 và x 118; số x 62 và x 148 |
-| Minimap (240 x 240) | 0 (MapArea giữ nguyên rect) | 0 | Khung phủ lên map; phần map nhìn thấy còn khoảng 204 x 204 |
-| Killfeed (256 x 135) | 16 | 14 | Ba dòng chữ 17 px, cách nhau 32 px, bắt đầu y 24; dòng 2 và 3 mờ |
+| Khung **(đang dùng, trừ Quick bar và Minimap)** | `src/v4/sheet-frames-r3.png` | `src/v4/sheet-frames-r3.prompt.src.txt` (sửa từ r2, ref: `ref-r3.png` crop concept + concept toàn màn) | r1 (`sheet-frames.png`), r2 (lòng tối, `-r2`), r3 (cỡ + rim olive + rêu 4 góc, `-r3`): 3 vòng, r3 dùng luôn |
+| Vitals 3 dải đậm nhạt | `src/v4/sheet-vit-r11.png` (sửa từ `-r9` = sửa sheet r7) | `src/v4/sheet-vit-r9.prompt.src.txt` (bỏ khung hàng, 3 dải) và `sheet-vit-r11.prompt.src.txt` (dải giữa tối hơn, hex rõ) | 4 vòng: r8 bỏ (GPT vẽ lại cả khung, góc to), r9 dải quá sáng, r10 không đổi, r11 dùng; dựng bằng `src/tools/build_vit.py` (k = 0,653 như r7) |
+| Minimap viền mỏng | `src/v4/sheet-mm-r5.png` | `src/v4/sheet-mm-r5.prompt.src.txt` | 1 vòng; dựng bằng `src/tools/build_mm.py` (đo border 4 cạnh) |
+| Quick bar không tab | `src/v4/sheet-qb-r4.png` | `src/v4/sheet-qb-r4.prompt.src.txt` | 1 vòng; dựng bằng `src/tools/build_qb.py` |
+| Ô và thanh | `src/v4/sheet-slots.png` | `src/v4/sheet-slots.prompt.src.txt` | 1 vòng (giữ từ lượt 4) |
+| Icon | `src/v4/sheet-icons.png` | `src/v4/sheet-icons.prompt.src.txt` | 1 vòng (giữ từ lượt 4) |
 
-## 4. Thay đổi so với T-013 unity cần biết (nội dung trong khối, không đổi rect ngoài)
+Script chỉ tách nền, cắt, 9-slice, đổi cỡ, đo: `src/tools/build_v6.py` (khung, ô, thanh), `build_icons_v5.py` (icon, canvas mới), `contrast_v6.py`, `dungthu_v6.py` (dựng thử, so sánh, chồng). Ngoại lệ không phải GPT: `hud_bar_fill_white`, `hud_minimap_overlay` (mặt nạ phẳng, giữ từ lượt trước).
 
-| Thay đổi | Từ (T-013) | Sang | Lý do |
+## 1. Import (unity)
+
+- Canvas reference 1280x720, 1080p = 1,5 lần: **`@1x` PPU 150 hoặc `@2x` PPU 300**. Border Unity theo thứ tự Left, Bottom, Right, Top. Filter Bilinear, không mipmap, nén None.
+- Image Type: **Simple cho mọi khung** (Vitals có hàng ô lõm; các khung khác đúng cỡ concept). Sliced chỉ khi đổi cỡ, border trong `meta.json`.
+- `Image.color` trắng; `hud_bar_fill_white` tint `C83A41` (HP) hoặc `F5C542` (Adrenaline).
+
+## 2. Sprite (tên file giữ nguyên; cỡ px @1080p, @2x gấp đôi)
+
+| File | Cỡ | Ghi chú |
+|---|---|---|
+| `hud_panel_vitals` | 422x206 | **không còn khung từng hàng, không đường kẻ**; lòng phẳng 3 dải đậm nhạt (Huy 07/11): dải trên y 24 đến 72 tối, dải giữa y 72 đến 132 sáng hơn một bậc, dải dưới y 132 đến 182 tối. Rim 24, góc như r7, border meta 33 |
+| `hud_panel_quickbar` | 593x112 | không tab đạn, **rim 24 px**, border meta 30 (Simple) |
+| `hud_panel_match` | 318x90 | **rim 24 px**, cao 90 (Huy 07/11), border meta 31 |
+| `hud_minimap_frame` | 318x316 | **viền mỏng**: border đo L 24, R 25, T 24, B 24 (@1080p; @2x gấp đôi); lỗ trong suốt 269x268 tại x 24 đến 292, y 24 đến 291, tâm lỗ (158; 157,5), lệch tâm khung <= 1 px; hoa văn góc nhỏ, rêu đều 4 góc. Simple |
+| `hud_killfeed_plate` | 270x130 | chỉ nền tối phẳng, alpha 60%, không khung |
+| `hud_slot_empty`, `hud_slot_selected` | 54x54 | |
+| `hud_bar_track_hp` | 236x32 | |
+| `hud_bar_track_thin` | 242x24 | viền vàng (Adrenaline) |
+| `hud_ammo_plate` | 276x19 | **đã bỏ** (không còn thanh đạn, unity không dùng) |
+| `hud_bar_fill_white` | 64x16 | tint trong code |
+| `hud_minimap_overlay` | 240x240 | giữ từ lượt 2, co theo lỗ 269x268 (khi unity gắn) |
+
+Icon (`hud-icons/png/`, canvas và hình lớn nhất @1x): hp 44 (38), armor 50 (46), helmet và helmet-alt 46 (43), adrenaline 44 (39), alive 40 (37), zone-timer 40 (37), kill 32 (28).
+
+## 3. Spec vị trí đo từ concept (px 1920x1080; gốc = góc trên trái sprite tương ứng)
+
+Rect đặt trên màn:
+
+| Khối | x | y | w | h |
+|---|---:|---:|---:|---:|
+| Vitals | 30 | 857 | 422 | 206 |
+| Quick bar | 668 | 950 | 593 | 112 |
+| Minimap | 1577 | 30 | 318 | 316 |
+| Match status | 1577 | 350 | 318 | **90** (đáy y 440) |
+| Killfeed (nền) | 16 | 44 | 270 | 130 |
+
+Nội dung (tâm hoặc góc trái như ghi):
+
+| Khối | Phần tử | Vị trí | Cỡ |
 |---|---|---|---|
-| Ô quick bar | 63 px, khe 6, nhóm cách 22 | **60 px**, khe 3, nhóm cách 12 | Lề trái 40 px để Slot1 không đè hoa văn góc; tổng 510 trong 512 |
-| Dải tên vũ khí | y 12 đến 45 | y 18 đến 40, x từ 40 | Chừa viền trên 18 px |
-| Vitals | lề 15 | 40 ngang, 20 dọc; thanh rộng 104 | Chừa hoa văn góc |
-| Match status | icon x 15 | x 32 | Chừa hoa văn góc |
-| Minimap | khung phẳng | khung đá dày 18 px | Phần nhìn thấy bản đồ nhỏ hơn 18 px mỗi cạnh |
+| Vitals | icon tim | tâm (64,42) | 38x33 |
+| | thanh HP (rãnh) | x 91, y 26 | **224x32**; số "100" căn phải x 380, tâm y 41; font 30 |
+| | icon giáp / số | tâm (65,100) / trái x 103, tâm y 101 | 46x37; font 28 |
+| | icon mũ / số | tâm (245,100) / trái x 280, tâm y 101 | 36x43; font 28 |
+| | icon sét | tâm (65,158) | 29x39 |
+| | thanh Adrenaline | x 95, y 146 | 242x24; số "0" tâm x 366, y 158, font 28 |
+| Quick bar | ô 1 đến 4 | x = 50 + 60 i, **y 29** (căn giữa dọc thân 112: lề trên 29, dưới 29) | 54x54 |
+| | ô 5 đến 8 | x = 310 + 60 (i-4), y 29 | 54x54 |
+| | số phím | **trong ô, góc dưới phải**: neo phải-dưới tại (x ô + 50, y ô + 50) | font 16 bold, vàng `FFDC6E`, viền tối 3 px |
+| | icon vật phẩm trong ô | tâm ô (27,27) | tối đa 40x40 |
+| | icon đạn, thanh đạn, tab | **đã bỏ** (`icon_ammo` và thanh đạn không còn dùng) | |
+| Match | icon người | tâm (71,45) | 30x37 |
+| | "1/1" | trái x 97, tâm y 45 | font 22 |
+| | vạch chia | x 155, y 28 đến 62 | rộng 2 |
+| | icon đồng hồ cát | tâm (185,45) | 29x37 |
+| | "1:21" | trái x 211, tâm y 45 | font 22, kem `F1E7C8`; nội dung gói trong x 56 đến 262, tránh khối hoa văn góc (rộng khoảng 40 px mỗi bên) |
+| Minimap | hộp bản đồ (lỗ khung) | trong sprite x 24, y 24 | 269x268; ảnh đảo căn theo tâm lỗ, nước hai bên đều; tâm vòng bo (157,8; 157,6) lệch tâm lỗ <= 0,3 px (`minimap-2x-tam.png`: kẻ tâm khung tím, tâm lỗ xanh, tâm vòng bo đỏ) |
+| Killfeed | 3 dòng | trái x 37, tâm y 53, 88, 123 (cách 35) | font 19, dòng 1 trắng, hai dòng sau xám nhạt |
 
-Rect ngoài giữ y nguyên: Vitals 311 x 173, Quick bar 592 x 126, Match 240 x 89, Minimap 240 x 240.
+Font: Be Vietnam Pro Bold (như dựng thử); concept gần font bold không chân, cỡ đo theo chiều cao chữ số.
 
-## 4b. Icon trạng thái kim loại ấm (T-015 bổ sung, 06/11/2026, thay icon vector xanh/đỏ)
+## 4. Bảng lệch so với `ux/hud-B-spec.md` (unity sửa ở T-016)
 
-Hình game-icons.net giữ nguyên, chỉ đổi chất: gradient kim loại sáng trên tối dưới, vạch sáng 1 px cạnh trên-trái, viền tối `141010` (1 px ở @1x, 2 px ở @2x). Kích thước file, pivot và vị trí trong lề mục 3 không đổi. Icon Adrenaline, icon Match status dùng chung bộ này.
+Mọi rect, vị trí, cỡ chữ ở mục 3 thay spec HUD B. Thêm: số phím trong góc dưới phải ô; **không có tab đạn, không có `icon_ammo`/thanh đạn** (Huy 07/11); bỏ tên vũ khí; số đồng hồ bo kem; Image Type Simple.
 
-**File thay đổi (cùng tên, ghi đè), thư mục `projects/lastaway/art/inbox/hud-icons/png/`:** `icon_hp`, `icon_armor`, `icon_helmet`, `icon_helmet-alt`, `icon_adrenaline`, `icon_alive`, `icon_kill`, `icon_zone-timer`, mỗi cái có `.png` và `@2x.png`. Bản vector gốc giữ ở `hud-icons/png-vector-goc/`. Màu sáng/tối từng icon ở `hud-icons/metal.json`. Script: `src/tools/recolor_icons_t015.py` (chạy lại luôn từ bản gốc).
+## 5. Tương phản (`contrast.md`, đo p99 mặt đá lòng panel)
 
-| Icon | Chất | Màu sáng trên / tối dưới | Phân biệt |
-|---|---|---|---|
-| hp | đồng đỏ | `FFAA84` / `EE8F68` | cam hồng ấm, hình tim |
-| armor | sắt cũ | `C3CBCC` / `8E999C` | xám gần như không bão hòa, hình giáp ngực |
-| helmet, helmet-alt | đồng thau | `EFC463` / `D3A04A` | vàng, hình mũ |
-| adrenaline | vàng sáng | `FFE08A` / `E8B945` | vàng sáng nhất, hình tia chớp |
-| alive, kill | bạc kem | `F2ECD8` / `C9C2AA` | gần trắng |
-| zone-timer | bạc tím | `D8CBF8` / `B6A5E3` | tím nhạt, khớp số `A274FF` |
+Chữ: HP, giáp, mũ 11,15:1; số 1/1 11,52:1; số bo kem 10,57:1; số phím vàng trong góc ô 8,48:1 trên ô trống và ô chọn (có viền tối 3 px nên đọc được cả trên ô có icon). Icon (ngưỡng 3:1 kèm viền đen): mảng chính tim đỏ 3,25, giáp 4,29 (be sáng 6,17), mũ 4,38 (mảng phụ 3,51), sét 6,18 đến 8,93, người 6,60, đồng hồ cát 6,64 đến 11,87. Mảng bóng sẫm của tim đỏ 2,41 dưới 3:1, nằm trong viền đen, không gen lại.
 
-Tương phản đo trên pixel lõi icon (bỏ viền tối), nền là điểm sáng p99 của mặt đá, ngưỡng 4,5:1 cho cả điểm tối nhất (p5):
+## 6. Còn lệch concept (điểm đã biết)
 
-| Icon | L trung bình | L p5 | cr trung bình ở p99 | cr p5 ở p99 | cr p5 ở p95 | Kết quả |
-|---|---:|---:|---:|---:|---:|---|
-| hp | 0,447 | 0,401 | 5,51 | 5,01 | 5,67 | Đạt |
-| armor | 0,459 | 0,392 | 5,64 | 4,90 | 5,55 | Đạt |
-| helmet | 0,495 | 0,419 | 6,04 | 5,20 | 5,89 | Đạt |
-| adrenaline | 0,678 | 0,590 | 8,07 | 7,10 | 8,05 | Đạt |
-| alive | 0,673 | 0,571 | 8,39 | 7,20 | 7,94 | Đạt |
-| zone-timer | 0,531 | 0,434 | 6,74 | 5,62 | 6,19 | Đạt |
-
-HP / giáp / mũ đọc trong 1 giây nhờ khác tông và khác độ bão hòa: HP cam hồng (L 0,45), giáp xám trung tính (L 0,46), mũ vàng (L 0,50); độ sáng gần nhau nên khác biệt chính là tông màu cộng hình khối, không phải độ sáng. Đã xem trên `dung-thu-hud-A.png`. Lưu ý: icon vốn chạm mép canvas (adrenaline, kill, zone-timer, helmet-alt), nên viền tối bị cắt đúng ở mép đó; không đổi kích thước canvas để unity khỏi chỉnh rect. Thanh máu vẫn đỏ bão hòa `E5484D` (tint trong code), chưa đụng.
-
-## 5. Bảng đo tương phản (script `src/tools/contrast_t015.py`, output đầy đủ ở `contrast.md`, 06/11/2026)
-
-Nền lấy từ chính sprite (điểm sáng p95 và p99 của mặt đá trong lòng, trường hợp xấu nhất); màu chữ và icon theo `HudPalette`. Ngưỡng: chữ thường 4,5:1; số lớn và icon 3:1. Lòng đá được hạ độ sáng (hệ số 0,70 trên RGB) so với concept để đạt ngưỡng, nên tối hơn concept một chút.
-
-| Khối | Nền: median / p95 / p99 (độ sáng) | Màu chữ hoặc icon | cr ở p95 | cr ở p99 | Ngưỡng | Kết quả |
-|---|---|---|---:|---:|---:|---|
-| Vitals | 0,025 / 0,030 / 0,040 | số HP 24 px trắng `EDF2EE` | 11,64 | 10,28 | 3,0 | Đạt |
-| Vitals | cùng | số giáp/mũ, chữ phụ `A6BBB7` | 6,54 | 5,77 | 4,5 | Đạt |
-| Vitals | cùng | icon máu, giáp, mũ, Adrenaline | xem mục 4b | xem mục 4b | 4,5 | Đã thay bằng icon kim loại ấm (06/11/2026), đo trên pixel thật |
-| Quick bar | 0,025 / 0,029 / 0,040 | tên vũ khí `EDF2EE` | 11,68 | 10,31 | 4,5 | Đạt |
-| Quick bar | cùng | số phím kem `F1E7C8` (viền đen 2 px) | 10,72 | 9,46 | 4,5 | Đạt |
-| Match status | 0,025 / 0,028 / 0,036 | số `EDF2EE` và icon người | 11,85 | 10,75 | 4,5 | Đạt |
-| Match status | cùng | số đồng hồ bo `A274FF` (chữ) | 4,14 | 3,76 | 3,0 | Đạt. Icon đồng hồ cát và icon người: mục 4b |
-| Killfeed (72% trên world) | 0,055 / 0,064 / 0,077 | dòng 1 `EDF2EE` | 8,11 | 7,30 | 4,5 | Đạt |
-| Killfeed | cùng | dòng 2-3 `D6DAD6` | 6,50 | 5,85 | 4,5 | Đạt |
-
-## 6. Nguồn từng sprite
-
-| Sprite | Cách làm |
+| Điểm | Lệch |
 |---|---|
-| 5 khung (vitals, quickbar, match, minimap, killfeed) | GPT (Codex) vẽ tấm `src/v2/sheet-panels2a.png` trên nền magenta phẳng, tham chiếu `T-014/01-da-khac/spawn.png` (hai lần chạy, chọn bản a vì viền dày hơn; bản b ở `src/v2/sheet-panels2b.png`). Script Pillow tách nền (chroma key, khử viền hồng), dựng 9-slice về đúng cỡ 1080p, hạ sáng lòng đá, làm nét nhẹ |
-| 2 ô quick bar | Script Pillow: viền đá, lòng lấy vân từ lòng panel hạ sáng; viền vàng cho trạng thái chọn |
-| Thanh (track hp, thin, fill) và ammo plate | GPT vẽ `src/sheet-slots.png` (lượt 1), tách và dựng 9-slice |
-| Overlay minimap | Script Pillow (vignette) |
-| Prompt | `src/v2/sheet-panels2.prompt.src.txt` và `*.prompt.txt` (đầy đủ), `src/sheet-slots.prompt.txt` |
-| Script | `src/tools/`: `build_t015_v2.py` (sprite), `dungthu_t015.py` (ghép thử), `contrast_t015.py` (đo), `compare_t015.py` (so concept). Chạy bằng `python` thường (Pillow ở user site, không dùng `-I`) |
+| Rim đá | GPT vẽ rim sáng và rêu rậm hơn concept ở vài góc; vân gạch rim đều hơn |
+| Quick bar | theo quyết định Huy 07/11: không tab, số phím trong góc ô, ô căn giữa (khác concept ảnh) |
+| Hàng ô lõm Vitals | viền hàng mảnh hơn concept |
+| Minimap | viền mỏng theo Huy 07/11 (24 px), hoa văn góc nhỏ, đơn giản hơn concept |
+| Mock | còn vệt nền cũ của ảnh QA (đường dọc nhỏ cạnh Quick bar); nội dung bản đồ minimap lấy từ concept |
+| Chưa kiểm | chưa xem trong Unity, chưa qua qa |
 
-## 7. Lỗi Nhẹ của qa T-013
+## 7. Bảng rim, cỡ khối góc, khoảng hở (đo bằng script trên sprite @1x, px 1080p)
 
-| Lỗi | Xử lý |
-|---|---|
-| N1 ô trống rối | Ô phẳng viền liền, lòng đá vân tối, không nét đứt, không ô xám |
-| N2 số phím 10 u | Giữ cỡ; chữ kem `#F1E7C8` + viền đen 2 px; cr 10,72:1 (mục 5). Dùng `TMP_Text` outline 0,2 |
-| N3 minimap tương phản thấp | Khung đá dày + `hud_minimap_overlay` dưới vòng bo. Đo ở lượt 1 (ảnh `qa/T-013/01-dau-tran-1920x1080.png`, vùng 200 x 200 px trong minimap): vòng vàng/nền map 3,36:1 lên 6,87:1; vòng đỏ 1,21:1 lên 2,48:1. Vòng đỏ vẫn dưới 3:1: đề xuất viền đen 1 px quanh vòng đỏ (unity). Nếu vòng bo cùng RenderTexture với terrain thì nhân màu terrain khoảng 0,5 thay vì dùng overlay |
+Nguồn: lượt này GPT gen lại sheet 3 khung với yêu cầu khối góc nhỏ (`src/v4/sheet-panels-r7.png`, prompt `sheet-panels-r7.prompt.src.txt`, ref `ref-corner-mm.png`; tổng 2 vòng cho 3 khung này, r6 bị trả vì góc to). Script dựng: `src/tools/build_panels.py` (hệ số co theo rim đo trong ảnh nguồn). Đo: `rim_measure.py` (rim2) và `corner_measure.py`.
 
-## 8. Dựng thử và so concept
+**Rim** (rim2 + 3,5 px rãnh tối trong cùng, hiệu chuẩn trên minimap: rim2 20,5 ứng với border 24):
 
-- `dung-thu-hud-A.png`: ghép sprite lên `qa/T-013/01-dau-tran-1920x1080.png` theo đúng rect HUD B, nội dung theo lề mục 3, icon PNG T-012, font Be Vietnam Pro Bold. Panel cũ che bằng mảng world lân cận (chỉ để dựng thử). Là mock, không phải ảnh chụp Unity.
-- `so-sanh-concept.png`: concept A (T-014, thu về 1920x1080) bên trái, bản dựng thử bên phải, cùng tỉ lệ: toàn màn, Vitals, Quick bar, Minimap + Match.
+| Panel | Cỡ | Trái | Phải | Trên | Dưới | Trung bình |
+|---|---|---:|---:|---:|---:|---:|
+| Minimap | 318x316 | 24 | 25 | 24 | 24 | 24,3 |
+| Quick bar | 593x112 | 23,5 | 22,5 | 26,5 | 26,5 | 24,8 |
+| Match | 318x90 | 24,5 | 24,5 | 25,5 | 24,5 | 24,8 |
+| Vitals | 422x206 | 28,5 | 27,5 | 24,5 | 26,5 | 26,8 |
 
-## 9. Khác concept và chưa kiểm
+Lệch trung bình giữa các panel tối đa 2,5 px (Vitals, đã cố ý nới 13% để khối góc đủ lớn); Vitals trái/phải đo cao vì đường viền hàng ô lõm (x 22 đến 23) nằm sát rim và được tính vào.
 
-- Khác concept A: lòng đá tối hơn (để đạt tương phản) và không có đường chia hàng khắc giữa các hàng của Vitals (concept có). Vòng đá ngoài 13 đến 14 px như yêu cầu, cả viền 16 đến 19 px nếu tính viền trong.
-- Chưa qua qa chấm chéo, chưa xem trong Unity: NOT VERIFIED. Chưa có cảnh bo thu, máu thấp, nhặt đồ với skin A.
-- `src/v2` và thư mục `debug/` chứa ảnh phụ, xóa được.
+**Khối góc** (đo theo đường chéo từ góc ngoài tới lòng tối: minimap 35 đến 37; cỡ khối = chéo chia căn 2):
+
+| Panel | Chéo TL / TR / BL / BR | Cỡ khối (px) |
+|---|---|---:|
+| Minimap | 35 / 35 / 37 / 37 | 25,5 |
+| Quick bar | 35 / 35 / 36 / 36 | 25,1 |
+| Match | 33 / 33 / 33 / 33 | 23,3 |
+| Vitals | 33 / 33 / 35 / 35 | 24,0 |
+
+Lệch lớn nhất 2,2 px (Match so với minimap). Vitals và Match nhỏ hơn một chút vì tỉ lệ khối/rim của GPT khác nhau theo từng khung; chưa ép bằng tay.
+
+**Khoảng hở nội dung tới khối góc** (tính từ toạ độ bố cục, khối góc 26 px, chưa đo bằng pixel; hở = khoảng cách ngang hoặc dọc nhỏ hơn):
+
+| Panel | Cặp gần nhất | Hở (px) |
+|---|---|---:|
+| Quick bar | ô 1 (trái x 50) - góc trái (x tới 26) | 24 |
+| Quick bar | ô 8 (phải x 544) - góc phải (từ x 567) | 23 |
+| Match | icon người (trái x 56) - góc trái | 30 |
+| Match | "1:21" (phải x khoảng 261) - góc phải (từ x 292) | 31 |
+| Vitals | "100" (phải x 380) - góc phải (từ x 396) | 16 |
+| Vitals | icon tim (trái x 45) - góc trái | 19 |
+
+Tất cả >= 16 px, đạt yêu cầu >= 6 px. Match: hai góc trên (y tới 26) và dưới (từ y 64) tách nhau 38 px; nội dung nằm giữa, tâm y 45. Vòng này không còn khối góc đè ô hay số.
+
+**Dải đậm nhạt Vitals** (L = độ sáng tương đối, đo cột giữa): dải trên 0,023, dải giữa 0,052, dải dưới 0,023. Chênh giữa hai dải kề 0,029 (mục tiêu gợi ý >= 0,03; hơi dưới, nhìn thấy rõ ở `vitals-2x.png`). Tâm dải: 48, 102, 157; vị trí nội dung giữ như r7 (tâm 42, 100, 158). Chữ trên dải sáng nhất: 8,96:1 (số giáp, mũ). Icon trên dải sáng: giáp 3,45 (mảng chính), mũ 3,52, mảng giáp phụ 4,96; mảng nâu sẫm của mũ 2,82 và đỏ sẫm của tim 2,71 dưới 3:1 (bóng trong viền đen). Ảnh phóng 2x: `vitals-2x.png`. Ảnh so viền: `4-panel-vien-2x.png`.
