@@ -4,7 +4,7 @@ Nguồn sự thật duy nhất về việc cần làm. CPO sở hữu cấu trú
 
 Trạng thái: `todo` · `doing` · `review` · `done` · `blocked` (thêm `loại`, `gộp vào T-###`). Ước lượng: S (một lượt ngắn) · M (một lượt đầy) · L (phải chia nhỏ).
 
-Mã task lớn nhất đã cấp: **T-016**. Task mới lấy số tiếp theo.
+Mã task lớn nhất đã cấp: **T-018**. Task mới lấy số tiếp theo.
 
 Kiểm cấu trúc sau mỗi lần sửa: `node scripts/backlog-check.mjs`.
 
@@ -28,6 +28,8 @@ Kiểm cấu trúc sau mỗi lần sửa: `node scripts/backlog-check.mjs`.
 | T-014 | lastaway: GPT gen skin UI (HUD B, menu) hợp màu và style gameplay hiện tại, world giữ nguyên | art-ux | T-012 | M | done | >= 4 bản skin UI vẽ lên ảnh gameplay T-010 (world không đổi), đúng bố cục HUD B; trang so sánh; Huy chọn một bản. Huy chọn A đá khắc 06/11 |
 | T-015 | lastaway: tách skin A đá khắc thành asset UI dùng được (khung 9-slice, ô quick bar trống/chọn, nền thanh, khung minimap, Match status, killfeed) và asset list | art-ux | T-014 | M | done | Sprite PNG nền trong suốt, đúng cỡ spec HUD B ở 1080p, có border 9-slice ghi trong asset list; ảnh dựng thử HUD B bằng asset khớp concept A; qa chấm chéo. Huy duyệt lượt 2 ngày 06/11, icon kim loại ấm; qa ĐẠT 06/11 (0 Nặng, 6 Nhẹ, chưa xem trong Unity) |
 | T-016 | lastaway: gắn skin A vào Hud.prefab (HUD B) | unity | T-013, T-015 | M | doing | Game view 1920x1080 khớp concept A; rect HUD B không đổi; test HUD xanh; qa ĐẠT; ảnh chứng minh số giáp hiện khi có giáp |
+| T-017 | lastaway: spec minimap Giai đoạn 3 (địch trong vùng nhìn, vùng địa hình, bo, đồng đội, phóng to thu nhỏ) và dòng ticket PROJECT TRACKING | designer | - | S | doing | `projects/lastaway/de-xuat/minimap-chuc-nang.md` có luật bằng ví dụ số cho từng lớp, nguồn dữ liệu, phụ thuộc FOW-01, phím zoom PC, câu hỏi cho Huy; Huy chốt |
+| T-018 | lastaway: dựng minimap Giai đoạn 3 theo spec T-017 | unity | T-016, T-017 | M | todo | Game view 1920x1080 đủ các lớp đã chốt; test xanh; qa ĐẠT |
 
 ## Icebox
 

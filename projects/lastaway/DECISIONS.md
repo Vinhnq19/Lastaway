@@ -73,3 +73,9 @@ Khoảng trống chặn QA-01 theo PIC người (MAP-02, Game-10, DRG-01, ZON-01
 - **Người quyết:** Huy ("Đổi cả hai", 06/11), theo lỗi Nhẹ N-ICON-1, N-ICON-2 của qa T-015
 - **Lý do:** Tim giải phẫu ở cỡ thật đọc giống bàn tay; tím lệch concept và lệch vòng bo đỏ/vàng trên world.
 - **Hệ quả:** art-ux thay `icon_hp*`, `icon_zone-timer*`, sửa `hud-B-spec.md` mục 7-8 và credits; unity gắn vào T-016.
+
+## 2026-11-07 - Minimap có chức năng (Giai đoạn 3)
+- **Quyết định:** Thay quyết định 06/11 "minimap chưa thêm chức năng". Minimap Giai đoạn 3: hiện địch khi vào vùng Hero thấy, hiện vùng địa hình, hiện bo, hiện đồng đội, phóng to thu nhỏ.
+- **Người quyết:** Huy (07/11, dòng ticket "Giai đoạn 3 | 7/11/2026 | UI | Minimap")
+- **Lý do:** Không ghi.
+- **Hệ quả:** T-017 (designer: spec + dòng ticket), T-018 (unity: dựng, sau T-016). Phụ thuộc FOW-01 (Quang Huy, Not Yet) cho "vùng Hero thấy". GDD hiện là đấu đơn 10 người, chưa có đồng đội: mục này chờ Huy làm rõ.
