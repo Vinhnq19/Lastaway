@@ -1,0 +1,10 @@
+Use your image generation tool to create ONE image as described below, and copy the generated file AS-IS (no cropping, no resizing, no padding) to:
+D:\Lastaway\projects\lastaway\art\inbox\T-020\src\sheet-sem2.png
+Do not write any other files and do not post-process the image. Use only the built-in image tool, never the OpenAI API, curl or python.
+
+Image 1 is the approved pixel-art HUD style (carved olive-grey stone, dark outline, dark warm brown-grey interior, gold accents). Image 2 is our small-controls sheet (round and square icon buttons, toggle, checkbox, a red round badge, a knob, a gold arrow).
+
+Draw ONE new sprite sheet in exactly the same style and pixel scale on a flat solid magenta background (#FF00FF, no gradient, never inside a piece), at least 50 px of pure magenta between pieces and around the border. NO text. Every piece sharp, not cropped, rows top to bottom:
+ROW 1: STATUS TAGS (small pill plaques, empty, aspect 3.3 : 1, thin olive-tan stone rim, dark outline): SUCCESS (green interior #3f6b2f), ERROR (red interior #7a2a26), WARNING (amber interior #9a6a1a), NEUTRAL (dark grey-brown interior #3a352b).
+ROW 2: FOUR GLYPH ICONS, pixel-art, each about 32 px, flat, with a 1 px dark outline, no frame, transparent surroundings (magenta): a bold CHECK MARK in bright green #6fcf5a; a bold X in bright red #ff5a4a; an EXCLAMATION MARK inside a rounded triangle in amber #ffb53a; a plain round DOT in light grey #c8c8bc.
+ROW 3: FOUR ROUND STATUS BADGES, each about 48 px, round stone-rimmed badges like the red badge in image 2, colored interior with a white glyph: SUCCESS (green interior with a white check mark), ERROR (red interior with a white X), WARNING (amber interior with a dark exclamation mark), NEUTRAL (grey-brown interior with a white dot).

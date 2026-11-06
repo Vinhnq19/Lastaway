@@ -1,0 +1,644 @@
+{
+ "kit_btn_primary_normal": {
+  "size": [
+   240,
+   64
+  ],
+  "border_LRTB": [
+   18,
+   18,
+   18,
+   18
+  ],
+  "slice": true
+ },
+ "kit_btn_secondary_normal": {
+  "size": [
+   240,
+   64
+  ],
+  "border_LRTB": [
+   18,
+   18,
+   18,
+   18
+  ],
+  "slice": true
+ },
+ "kit_btn_danger_normal": {
+  "size": [
+   240,
+   64
+  ],
+  "border_LRTB": [
+   18,
+   18,
+   18,
+   18
+  ],
+  "slice": true
+ },
+ "kit_btn_primary_hover": {
+  "size": [
+   240,
+   64
+  ],
+  "border_LRTB": [
+   18,
+   18,
+   18,
+   18
+  ],
+  "slice": true
+ },
+ "kit_btn_secondary_hover": {
+  "size": [
+   240,
+   64
+  ],
+  "border_LRTB": [
+   18,
+   18,
+   18,
+   18
+  ],
+  "slice": true
+ },
+ "kit_btn_danger_hover": {
+  "size": [
+   240,
+   64
+  ],
+  "border_LRTB": [
+   18,
+   18,
+   18,
+   18
+  ],
+  "slice": true
+ },
+ "kit_btn_primary_pressed": {
+  "size": [
+   240,
+   64
+  ],
+  "border_LRTB": [
+   18,
+   18,
+   18,
+   18
+  ],
+  "slice": true
+ },
+ "kit_btn_secondary_pressed": {
+  "size": [
+   240,
+   64
+  ],
+  "border_LRTB": [
+   18,
+   18,
+   18,
+   18
+  ],
+  "slice": true
+ },
+ "kit_btn_danger_pressed": {
+  "size": [
+   240,
+   64
+  ],
+  "border_LRTB": [
+   18,
+   18,
+   18,
+   18
+  ],
+  "slice": true
+ },
+ "kit_btn_primary_disabled": {
+  "size": [
+   240,
+   64
+  ],
+  "border_LRTB": [
+   18,
+   18,
+   18,
+   18
+  ],
+  "slice": true
+ },
+ "kit_btn_secondary_disabled": {
+  "size": [
+   240,
+   64
+  ],
+  "border_LRTB": [
+   18,
+   18,
+   18,
+   18
+  ],
+  "slice": true
+ },
+ "kit_btn_danger_disabled": {
+  "size": [
+   240,
+   64
+  ],
+  "border_LRTB": [
+   18,
+   18,
+   18,
+   18
+  ],
+  "slice": true
+ },
+ "kit_iconbtn_round_normal": {
+  "size": [
+   63,
+   64
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_iconbtn_round_hover": {
+  "size": [
+   63,
+   64
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_iconbtn_round_pressed": {
+  "size": [
+   63,
+   64
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_iconbtn_round_disabled": {
+  "size": [
+   64,
+   64
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_iconbtn_square_normal": {
+  "size": [
+   63,
+   64
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_iconbtn_square_hover": {
+  "size": [
+   63,
+   64
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_iconbtn_square_pressed": {
+  "size": [
+   63,
+   64
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_iconbtn_square_disabled": {
+  "size": [
+   63,
+   64
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_toggle_off": {
+  "size": [
+   114,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_toggle_on": {
+  "size": [
+   114,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_checkbox_off": {
+  "size": [
+   39,
+   40
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_checkbox_on": {
+  "size": [
+   39,
+   40
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_badge": {
+  "size": [
+   24,
+   24
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_knob": {
+  "size": [
+   31,
+   32
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_arrow_down": {
+  "size": [
+   16,
+   10
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_panel_s": {
+  "size": [
+   360,
+   240
+  ],
+  "border_LRTB": [
+   47,
+   47,
+   47,
+   47
+  ],
+  "slice": true
+ },
+ "kit_panel_m": {
+  "size": [
+   640,
+   400
+  ],
+  "border_LRTB": [
+   47,
+   47,
+   47,
+   47
+  ],
+  "slice": true
+ },
+ "kit_panel_l": {
+  "size": [
+   1000,
+   640
+  ],
+  "border_LRTB": [
+   47,
+   47,
+   47,
+   47
+  ],
+  "slice": true
+ },
+ "kit_panel_popup": {
+  "size": [
+   720,
+   480
+  ],
+  "border_LRTB": [
+   47,
+   47,
+   88,
+   47
+  ],
+  "slice": true,
+  "title_bar_px": 62
+ },
+ "kit_input_normal": {
+  "size": [
+   360,
+   56
+  ],
+  "border_LRTB": [
+   19,
+   19,
+   19,
+   19
+  ],
+  "slice": true
+ },
+ "kit_input_focus": {
+  "size": [
+   360,
+   56
+  ],
+  "border_LRTB": [
+   19,
+   19,
+   19,
+   19
+  ],
+  "slice": true
+ },
+ "kit_input_error": {
+  "size": [
+   360,
+   56
+  ],
+  "border_LRTB": [
+   19,
+   19,
+   19,
+   19
+  ],
+  "slice": true
+ },
+ "kit_dropdown_closed": {
+  "size": [
+   360,
+   56
+  ],
+  "border_LRTB": [
+   19,
+   19,
+   68,
+   19
+  ],
+  "slice": true
+ },
+ "kit_dropdown_open": {
+  "size": [
+   360,
+   56
+  ],
+  "border_LRTB": [
+   19,
+   19,
+   67,
+   19
+  ],
+  "slice": true
+ },
+ "kit_tab_off": {
+  "size": [
+   160,
+   56
+  ],
+  "border_LRTB": [
+   13,
+   13,
+   13,
+   1
+  ],
+  "slice": true
+ },
+ "kit_tab_on": {
+  "size": [
+   160,
+   56
+  ],
+  "border_LRTB": [
+   13,
+   13,
+   13,
+   1
+  ],
+  "slice": true
+ },
+ "kit_row_normal": {
+  "size": [
+   600,
+   48
+  ],
+  "border_LRTB": [
+   12,
+   2,
+   2,
+   2
+  ],
+  "slice": true
+ },
+ "kit_row_alt": {
+  "size": [
+   600,
+   48
+  ],
+  "border_LRTB": [
+   12,
+   2,
+   2,
+   2
+  ],
+  "slice": true
+ },
+ "kit_row_selected": {
+  "size": [
+   600,
+   48
+  ],
+  "border_LRTB": [
+   12,
+   2,
+   2,
+   2
+  ],
+  "slice": true
+ },
+ "kit_toast": {
+  "size": [
+   360,
+   64
+  ],
+  "border_LRTB": [
+   22,
+   22,
+   22,
+   22
+  ],
+  "slice": true
+ },
+ "kit_tooltip": {
+  "size": [
+   240,
+   80
+  ],
+  "border_LRTB": [
+   22,
+   22,
+   22,
+   35
+  ],
+  "slice": true
+ },
+ "kit_progress_track": {
+  "size": [
+   480,
+   28
+  ],
+  "border_LRTB": [
+   12,
+   5,
+   12,
+   5
+  ],
+  "slice": true
+ },
+ "kit_progress_fill": {
+  "size": [
+   470,
+   16
+  ],
+  "border_LRTB": [
+   3,
+   2,
+   3,
+   2
+  ],
+  "slice": true
+ },
+ "kit_slider_track": {
+  "size": [
+   320,
+   16
+  ],
+  "border_LRTB": [
+   7,
+   3,
+   7,
+   3
+  ],
+  "slice": true
+ },
+ "kit_slider_fill": {
+  "size": [
+   320,
+   10
+  ],
+  "border_LRTB": [
+   2,
+   1,
+   2,
+   1
+  ],
+  "slice": true
+ },
+ "kit_scroll_track": {
+  "size": [
+   14,
+   320
+  ],
+  "border_LRTB": [
+   4,
+   5,
+   4,
+   5
+  ],
+  "slice": true
+ },
+ "kit_scroll_thumb": {
+  "size": [
+   14,
+   96
+  ],
+  "border_LRTB": [
+   4,
+   4,
+   4,
+   4
+  ],
+  "slice": true
+ },
+ "kit_dim": {
+  "size": [
+   64,
+   64
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_tab_hover": {
+  "size": [
+   160,
+   56
+  ],
+  "border_LRTB": [
+   13,
+   13,
+   13,
+   1
+  ],
+  "slice": true
+ },
+ "kit_input_success": {
+  "size": [
+   360,
+   56
+  ],
+  "border_LRTB": [
+   13,
+   13,
+   13,
+   13
+  ],
+  "slice": true
+ },
+ "kit_tag_neutral": {
+  "size": [
+   110,
+   36
+  ],
+  "border_LRTB": [
+   8,
+   6,
+   8,
+   6
+  ],
+  "slice": true
+ },
+ "kit_icon_check": {
+  "size": [
+   40,
+   32
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_icon_cross": {
+  "size": [
+   32,
+   32
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_icon_warn": {
+  "size": [
+   36,
+   32
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_icon_dot": {
+  "size": [
+   32,
+   32
+  ],
+  "border_LRTB": null,
+  "slice": false
+ }
+}

@@ -1,0 +1,7 @@
+Use your image generation tool to create ONE image as described below, and copy the generated file AS-IS (no cropping, no resizing, no padding) to:
+D:\Lastaway\projects\lastaway\art\inbox\T-020\src\sheet-popup.png
+Do not write any other files and do not post-process the image. Use only the built-in image tool, never the OpenAI API, curl or python.
+
+Image 1 is the approved pixel-art HUD style. Image 2 is a sprite sheet whose bottom-right piece is the POPUP frame (olive stone rim, small corner blocks, moss tufts, dark warm brown-grey interior, with a title bar band at the top of the interior).
+
+EDIT image 2 minimal: keep EVERYTHING exactly the same (all four pieces, positions, sizes, rims, corner blocks, moss, magenta background) and change ONLY the bottom-right POPUP piece: make its TITLE BAR band TALLER, about 22 percent of the piece height (it is about 13 percent now), still a flat slightly lighter warm brown-grey (#4a4538) band across the full inner width, separated from the dark body only by the shade difference, no line, no groove, no ledge, empty (no text, no button). Nothing else changes.

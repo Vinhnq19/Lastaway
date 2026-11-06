@@ -141,3 +141,13 @@ Khoảng trống chặn QA-01 theo PIC người (MAP-02, Game-10, DRG-01, ZON-01
 - **Người quyết:** Huy (07/11, "L toàn game").
 - **Ràng buộc:** UI-02 PIC là Vinh. T-024, T-025 (sửa LobbyUi, MatchOverlay, màn UI-02) chỉ bắt đầu khi Huy xác nhận Vinh đồng ý. Màn bị hạ gục, máy bay nhảy dù ngoài phạm vi (không có trong GDD).
 - **Cập nhật 07/11:** Vinh đồng ý cho đội AI sửa LobbyUi, MatchOverlay và màn UI-02 (Huy báo, "Vinh đồng ý rồi"). T-024, T-025 bỏ chặn; vẫn chỉ đổi hình và thêm màn, không đổi logic mạng/phòng của Vinh.
+
+## 2026-11-07 - UI kit thêm màu ngữ nghĩa (đỏ, xanh lá)
+- **Quyết định:** UI kit thêm hệ màu ngữ nghĩa theo nghiên cứu UX: xanh lá cho tích cực/xác nhận/thành công, đỏ cho nguy hiểm/hủy/lỗi (và vàng cảnh báo nếu cần). Cách gán màu cho từng thành phần và mã màu là đề xuất của art-ux ở `de-xuat/mau-ngu-nghia.md`, chờ Huy duyệt trang so sánh.
+- **Người quyết:** Huy (07/11, "nên đưa các màu sắc vào dựa trên nghiên cứu về UX như đỏ và xanh lá").
+- **Ràng buộc CPO thêm:** không dùng màu một mình để truyền nghĩa (khoảng 8% nam mù màu đỏ-lục): luôn kèm icon, chữ hoặc hình. T-020 chưa đóng tới khi Huy duyệt bản có màu ngữ nghĩa.
+- **Cập nhật 07/11:** Huy thấy bản màu ngữ nghĩa lạm dụng đỏ và xanh lá ("lạm dụng màu đỏ và xanh lá quá rồi hãy nghiên cứu thêm rồi sửa"). Art-ux nghiên cứu lại có nguồn mở được, giảm diện tích và số chỗ dùng màu ngữ nghĩa, rồi đề xuất lại trong `de-xuat/mau-ngu-nghia.md`.
+
+## 2026-11-07 - Duyệt UI kit T-020 (kèm quy tắc màu ngữ nghĩa bản sửa)
+- **Quyết định:** UI kit skin A trong `art/inbox/T-020/` được duyệt, gồm quy tắc màu ngữ nghĩa bản sửa ở `de-xuat/mau-ngu-nghia.md` (nút chính vàng kim; đỏ đầy nút chỉ ở hộp xác nhận phá hủy; xanh lá chỉ ở icon nhỏ, viền mảnh; toast, tag nền trung tính; luôn kèm icon hoặc chữ). Quy tắc này nay là luật cho mọi màn T-021 tới T-025.
+- **Người quyết:** Huy (07/11, "Duyệt").
