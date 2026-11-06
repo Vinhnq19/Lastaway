@@ -25,3 +25,9 @@ Khoảng trống chặn QA-01 theo PIC người (MAP-02, Game-10, DRG-01, ZON-01
 - **Người quyết:** Huy (bằng lời, 06/11)
 - **Lý do:** Feedback 5 comment trên Figma (`projects/lastaway/ux/figma-feedback.md`).
 - **Hệ quả:** Đổi bố cục HUD v2 đã duyệt 24/10 (UI-01). T-009 (đề xuất HUD tối giản), T-010 (chụp gameplay), T-011 (GPT sáng tạo màn gameplay). Chưa lan sang ticket, prefab cho tới khi Huy chọn bản.
+
+## 2026-11-06 - Chọn HUD tối giản bản B
+- **Quyết định:** HUD theo bản B trong `projects/lastaway/de-xuat/hud-toi-gian.md`: Vitals 311x172, Quick bar 592x136 (giảm 30% mỗi chiều), minimap và khối Match status giảm thêm 20%, icon kèm số thay chữ (cả Match status). Che 11,95% màn (v2: 20,84%).
+- **Người quyết:** Huy (gõ "B", 06/11)
+- **Lý do:** Che ít nhất; minimap v2 to hơn game cùng thể loại.
+- **Hệ quả:** Giả định "30% mỗi chiều" và "Match status dùng icon" coi là chốt theo mock B; Huy đổi thì sửa ở đây. T-012 (art-ux: spec + icon PNG), T-013 (unity: dựng HUD B). Skin art chờ T-011.
