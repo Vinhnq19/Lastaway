@@ -31,3 +31,9 @@ Khoảng trống chặn QA-01 theo PIC người (MAP-02, Game-10, DRG-01, ZON-01
 - **Người quyết:** Huy (gõ "B", 06/11)
 - **Lý do:** Che ít nhất; minimap v2 to hơn game cùng thể loại.
 - **Hệ quả:** Giả định "30% mỗi chiều" và "Match status dùng icon" coi là chốt theo mock B; Huy đổi thì sửa ở đây. T-012 (art-ux: spec + icon PNG), T-013 (unity: dựng HUD B). Skin art chờ T-011.
+
+## 2026-11-06 - Duyệt 2 ngoại lệ HUD B
+- **Quyết định:** (1) Cỡ chữ HUD B dưới ngưỡng 13 u của UI-01: 12 u (Adrenaline, đạn dự trữ, tên vũ khí), 10 u (nhãn phím). (2) Bỏ tên món giáp/mũ và hai thanh độ bền, chỉ còn icon + số. Kèm giả định theo mock B: ẩn "/100", Match status dùng icon.
+- **Người quyết:** Huy ("Duyệt cả hai", 06/11)
+- **Lý do:** Giảm 30% không giữ được 13 u; tối giản theo feedback Vũ.
+- **Hệ quả:** `projects/lastaway/ux/hud-B-spec.md` là spec chốt cho T-013.

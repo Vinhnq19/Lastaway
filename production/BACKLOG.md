@@ -23,8 +23,8 @@ Kiểm cấu trúc sau mỗi lần sửa: `node scripts/backlog-check.mjs`.
 | T-009 | lastaway: đề xuất HUD tối giản theo quyết định 06/11 (Vitals, Quick bar -30%; icon + số; minimap bản đồ thật), benchmark nhiều game cùng thể loại, chọn bộ icon thư viện | art-ux | - | M | done | `projects/lastaway/de-xuat/hud-toi-gian.md` có bảng benchmark >= 4 game, bộ icon kèm nguồn và giấy phép, mock HUD 1920x1080 đo vùng che; Huy duyệt. Huy chọn B 06/11 |
 | T-010 | lastaway: chụp màn gameplay hiện tại 1920x1080 làm đầu vào cho GPT | unity | - | S | done | >= 4 ảnh trong `projects/lastaway/art/brief/gameplay-hien-tai/` (spawn, giao tranh, loot/túi đồ, bo thu hẹp), camera Follow Player, có `index.md` ghi commit và cách chụp. Nghiệm thu 06/11: 5 ảnh; thiếu cảnh có địch vì offline không có bot, CPO chấp nhận |
 | T-011 | lastaway: GPT sáng tạo nhiều bản màn gameplay từ ảnh T-010, dựng trang so sánh để Huy chọn | art-ux | T-010 | M | todo | >= 4 hướng, mỗi hướng HUD + world cùng khung; trang so sánh cạnh ảnh gốc; ảnh ở `art/inbox/`; Huy chọn một bản |
-| T-012 | lastaway: spec dựng HUD bản B cho unity (rect, neo, cỡ chữ số, icon PNG xuất từ SVG game-icons.net) và mục Credits ghi công CC BY | art-ux | T-009 | S | review | `projects/lastaway/ux/hud-B-spec.md` đủ số cho từng khối; icon PNG trong `projects/lastaway/art/inbox/hud-icons/png/`; Quick bar không thừa khoảng trống dưới |
-| T-013 | lastaway: dựng HUD bản B trong prefab HUD theo spec T-012 | unity | T-012, T-010 | M | todo | Game view 1920x1080 khớp mock B (ảnh so sánh); EditMode xanh phần HUD; camera Follow Player; qa ĐẠT |
+| T-012 | lastaway: spec dựng HUD bản B cho unity (rect, neo, cỡ chữ số, icon PNG xuất từ SVG game-icons.net) và mục Credits ghi công CC BY | art-ux | T-009 | S | done | `projects/lastaway/ux/hud-B-spec.md` đủ số cho từng khối; icon PNG trong `projects/lastaway/art/inbox/hud-icons/png/`; Quick bar không thừa khoảng trống dưới. Huy duyệt 2 ngoại lệ 06/11 |
+| T-013 | lastaway: dựng HUD bản B trong prefab HUD theo spec T-012 | unity | T-012, T-010 | M | doing | Game view 1920x1080 khớp mock B (ảnh so sánh); EditMode xanh phần HUD; camera Follow Player; qa ĐẠT |
 
 ## Icebox
 
