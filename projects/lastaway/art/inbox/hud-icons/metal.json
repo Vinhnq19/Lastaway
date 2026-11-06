@@ -1,0 +1,42 @@
+{
+ "hp": {
+  "sang": "#FFAA84",
+  "toi": "#EE8F68",
+  "chat": "dong do"
+ },
+ "armor": {
+  "sang": "#C3CBCC",
+  "toi": "#8E999C",
+  "chat": "sat cu xam"
+ },
+ "helmet": {
+  "sang": "#EFC463",
+  "toi": "#D3A04A",
+  "chat": "dong thau"
+ },
+ "helmet-alt": {
+  "sang": "#EFC463",
+  "toi": "#D3A04A",
+  "chat": "dong thau"
+ },
+ "adrenaline": {
+  "sang": "#FFE08A",
+  "toi": "#E8B945",
+  "chat": "vang sang"
+ },
+ "alive": {
+  "sang": "#F2ECD8",
+  "toi": "#C9C2AA",
+  "chat": "bac kem"
+ },
+ "kill": {
+  "sang": "#F2ECD8",
+  "toi": "#C9C2AA",
+  "chat": "bac kem"
+ },
+ "zone-timer": {
+  "sang": "#D8CBF8",
+  "toi": "#B6A5E3",
+  "chat": "bac tim"
+ }
+}

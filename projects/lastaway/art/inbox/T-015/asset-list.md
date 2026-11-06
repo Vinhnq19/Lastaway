@@ -54,6 +54,34 @@ Khung đá: vòng đá ngoài khoảng 13 đến 14 px, cộng viền trong và 
 
 Rect ngoài giữ y nguyên: Vitals 311 x 173, Quick bar 592 x 126, Match 240 x 89, Minimap 240 x 240.
 
+## 4b. Icon trạng thái kim loại ấm (T-015 bổ sung, 06/11/2026, thay icon vector xanh/đỏ)
+
+Hình game-icons.net giữ nguyên, chỉ đổi chất: gradient kim loại sáng trên tối dưới, vạch sáng 1 px cạnh trên-trái, viền tối `141010` (1 px ở @1x, 2 px ở @2x). Kích thước file, pivot và vị trí trong lề mục 3 không đổi. Icon Adrenaline, icon Match status dùng chung bộ này.
+
+**File thay đổi (cùng tên, ghi đè), thư mục `projects/lastaway/art/inbox/hud-icons/png/`:** `icon_hp`, `icon_armor`, `icon_helmet`, `icon_helmet-alt`, `icon_adrenaline`, `icon_alive`, `icon_kill`, `icon_zone-timer`, mỗi cái có `.png` và `@2x.png`. Bản vector gốc giữ ở `hud-icons/png-vector-goc/`. Màu sáng/tối từng icon ở `hud-icons/metal.json`. Script: `src/tools/recolor_icons_t015.py` (chạy lại luôn từ bản gốc).
+
+| Icon | Chất | Màu sáng trên / tối dưới | Phân biệt |
+|---|---|---|---|
+| hp | đồng đỏ | `FFAA84` / `EE8F68` | cam hồng ấm, hình tim |
+| armor | sắt cũ | `C3CBCC` / `8E999C` | xám gần như không bão hòa, hình giáp ngực |
+| helmet, helmet-alt | đồng thau | `EFC463` / `D3A04A` | vàng, hình mũ |
+| adrenaline | vàng sáng | `FFE08A` / `E8B945` | vàng sáng nhất, hình tia chớp |
+| alive, kill | bạc kem | `F2ECD8` / `C9C2AA` | gần trắng |
+| zone-timer | bạc tím | `D8CBF8` / `B6A5E3` | tím nhạt, khớp số `A274FF` |
+
+Tương phản đo trên pixel lõi icon (bỏ viền tối), nền là điểm sáng p99 của mặt đá, ngưỡng 4,5:1 cho cả điểm tối nhất (p5):
+
+| Icon | L trung bình | L p5 | cr trung bình ở p99 | cr p5 ở p99 | cr p5 ở p95 | Kết quả |
+|---|---:|---:|---:|---:|---:|---|
+| hp | 0,447 | 0,401 | 5,51 | 5,01 | 5,67 | Đạt |
+| armor | 0,459 | 0,392 | 5,64 | 4,90 | 5,55 | Đạt |
+| helmet | 0,495 | 0,419 | 6,04 | 5,20 | 5,89 | Đạt |
+| adrenaline | 0,678 | 0,590 | 8,07 | 7,10 | 8,05 | Đạt |
+| alive | 0,673 | 0,571 | 8,39 | 7,20 | 7,94 | Đạt |
+| zone-timer | 0,531 | 0,434 | 6,74 | 5,62 | 6,19 | Đạt |
+
+HP / giáp / mũ đọc trong 1 giây nhờ khác tông và khác độ bão hòa: HP cam hồng (L 0,45), giáp xám trung tính (L 0,46), mũ vàng (L 0,50); độ sáng gần nhau nên khác biệt chính là tông màu cộng hình khối, không phải độ sáng. Đã xem trên `dung-thu-hud-A.png`. Lưu ý: icon vốn chạm mép canvas (adrenaline, kill, zone-timer, helmet-alt), nên viền tối bị cắt đúng ở mép đó; không đổi kích thước canvas để unity khỏi chỉnh rect. Thanh máu vẫn đỏ bão hòa `E5484D` (tint trong code), chưa đụng.
+
 ## 5. Bảng đo tương phản (script `src/tools/contrast_t015.py`, output đầy đủ ở `contrast.md`, 06/11/2026)
 
 Nền lấy từ chính sprite (điểm sáng p95 và p99 của mặt đá trong lòng, trường hợp xấu nhất); màu chữ và icon theo `HudPalette`. Ngưỡng: chữ thường 4,5:1; số lớn và icon 3:1. Lòng đá được hạ độ sáng (hệ số 0,70 trên RGB) so với concept để đạt ngưỡng, nên tối hơn concept một chút.
@@ -62,13 +90,11 @@ Nền lấy từ chính sprite (điểm sáng p95 và p99 của mặt đá trong
 |---|---|---|---:|---:|---:|---|
 | Vitals | 0,025 / 0,030 / 0,040 | số HP 24 px trắng `EDF2EE` | 11,64 | 10,28 | 3,0 | Đạt |
 | Vitals | cùng | số giáp/mũ, chữ phụ `A6BBB7` | 6,54 | 5,77 | 4,5 | Đạt |
-| Vitals | cùng | icon máu đỏ `E5484D` | 3,37 | 2,98 | 3,0 | Đạt ở p95; p99 thiếu 0,02. Đề nghị viền tối 1 px quanh icon máu |
-| Vitals | cùng | icon giáp/mũ `5BB8E8` | 5,95 | 5,25 | 3,0 | Đạt |
-| Vitals | cùng | icon Adrenaline `F5C542` | 8,13 | 7,18 | 3,0 | Đạt |
+| Vitals | cùng | icon máu, giáp, mũ, Adrenaline | xem mục 4b | xem mục 4b | 4,5 | Đã thay bằng icon kim loại ấm (06/11/2026), đo trên pixel thật |
 | Quick bar | 0,025 / 0,029 / 0,040 | tên vũ khí `EDF2EE` | 11,68 | 10,31 | 4,5 | Đạt |
 | Quick bar | cùng | số phím kem `F1E7C8` (viền đen 2 px) | 10,72 | 9,46 | 4,5 | Đạt |
 | Match status | 0,025 / 0,028 / 0,036 | số `EDF2EE` và icon người | 11,85 | 10,75 | 4,5 | Đạt |
-| Match status | cùng | đồng hồ bo và icon đồng hồ `A274FF` | 4,14 | 3,76 | 3,0 | Đạt |
+| Match status | cùng | số đồng hồ bo `A274FF` (chữ) | 4,14 | 3,76 | 3,0 | Đạt. Icon đồng hồ cát và icon người: mục 4b |
 | Killfeed (72% trên world) | 0,055 / 0,064 / 0,077 | dòng 1 `EDF2EE` | 8,11 | 7,30 | 4,5 | Đạt |
 | Killfeed | cùng | dòng 2-3 `D6DAD6` | 6,50 | 5,85 | 4,5 | Đạt |
 
