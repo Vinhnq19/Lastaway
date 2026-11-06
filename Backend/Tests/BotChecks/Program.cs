@@ -18,7 +18,7 @@ void Check(bool ok, string message) { if (!ok) throw new Exception("FAIL: " + me
 Environment.SetEnvironmentVariable("WORLD_ENABLED", "1");
 var settings = BotSettings.Load(GameDataLoader.ReadGameDataFile("bot_settings.json"));
 Check(settings.ThinkHz == 5 && settings.ReactionSeconds >= .35, "versioned fair bot settings");
-var maps = new MapCatalogStore(Path.Combine(AppContext.BaseDirectory,"GameData","Maps"),"world-prototype-1");
+var maps = new MapCatalogStore(Path.Combine(AppContext.BaseDirectory,"FixtureMaps"),"world-prototype-1");
 RoomManager Manager(MatchProfile? profile = null, int total = 50) => new(new ServerOptions(IPAddress.Loopback,7777,10,30,5,"RoomCode","BotsTest",Rooms:new RoomOptions(MaxTotalPlayers:total)),profile:profile ?? MatchProfile.CreateTestProfile(),catalog:maps);
 uint sequence = 0;
 void Human(RoomManager manager,RoomManager.Room room,string id,int peer)

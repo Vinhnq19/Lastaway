@@ -2,9 +2,9 @@
 
 ## Map phát hành cho phòng mạng
 
-Hai map đầu tiên: **Di tích cổ** (`di-tich-co`, mặc định) và **Bãi đá** (`bai-da`). Map online lấy từ catalog server; Local offline dùng map mặc định đóng gói sẵn và không cần API.
+Catalog Local và tự host gồm **Tháp cổ** (`thap-co`, mặc định) và **Thị trấn** (`thi-tran`), đều 150×150. Luyện tập offline mặc định dùng Tháp cổ. Cập nhật cả GameServer và client để dùng map mạng 150×150.
 
-1. **Tạo/sửa:** mở Level Editor, Play, mở JSON map và chỉnh bố cục. Map phát hành hiện phải 50×50, đúng 10 spawn an toàn cách nhau tối thiểu 6 cell, portal đủ cặp, không chồng vật cản. Bấm **Kiểm tra**. Lưu bản nguồn bằng **Lưu thành…**; không sửa file theo hash đang phát hành.
+1. **Tạo/sửa:** mở Level Editor, Play, mở JSON map và chỉnh bố cục. Map phát hành phải vuông, cạnh 30–256 ô và đúng 10 spawn an toàn cách nhau tối thiểu 6 cell, portal đủ cặp, không chồng vật cản. Bấm **Kiểm tra**. Lưu bản nguồn bằng **Lưu thành…**; không sửa file theo hash đang phát hành.
 2. **Xuất:** menu **Jungle Maze → Level Editor → Export Published Map**. Nhập ID ổn định, tên, mô tả, version mới; chọn mặc định nếu cần. Khi Level Editor đang Play, công cụ dùng bản đồ đang mở; ngoài Play, chọn JSON. Bấm **Kiểm tra và xuất map + preview vào catalog**. Preview là ảnh sơ đồ sinh từ đúng geometry/placements/spawn. Scene và catalog asset của Level Editor được giữ nguyên.
 3. **Danh sách map:** nguồn ở `Backend/Shared/GameData/Maps/catalog.json`. Chỉ các mục trong `maps` được thấy trong phòng. Bỏ một mục để ẩn map; giữ ít nhất một mục, `defaultMapId` phải trỏ mục còn lại. Không cần xóa dữ liệu phiên bản cũ. Đổi JSON thì phải xuất lại để cập nhật hash; không sửa hash bằng tay.
 4. **Validate/publish Local:** mở terminal tại `Backend`, chạy:
@@ -93,7 +93,7 @@ Mọi vật **đặt theo ô**: không có vị trí lẻ, không phóng to/thu 
 - **Phá được** (cột phải, mục ĐANG CHỌN của một vật che chắn): bật để vật đó trong game có **HP** riêng, **nháy sáng** khi trúng đòn (shader `JungleMaze/Sprite Hit Flash`) và **rơi loot** khi vỡ theo bảng **Loot** chọn (Bình / Rương / Tiếp tế). Vật phá được không còn là hard cover: ghi vào `worldObjects` với `kind` = bảng loot, `hp`, `art` = tên vật, bounds = cả footprint (dễ đánh trúng). Rương/bình/thùng tiếp tế cũng chỉnh được HP. HP 0 = HP mặc định của loại (`world_settings.json`). Trên map, vật phá được có nhãn "Vỡ <hp>"; Ctrl+D nhân bản giữ nguyên thiết lập. Hash map chỉ đổi khi có `hp` khác 0, nên map cũ giữ nguyên hash.
 - **Tường gạch** tự nối theo ô kề. Tường ngang (có tường trái/phải) vẽ mặt gạch + gờ. Tường **dọc** (chỉ nối trên/dưới, cạnh bên của phòng) vẽ bằng **dải đá mảnh** như viền map: sát mép trái (ô `2,1` của `TX Tileset Wall`) nếu đoạn dọc nối vào tường ngang chạy sang phải, sát mép phải (ô `2,3`) nếu nối sang trái, giữa ô nếu là vách chữ T. Collider của tường dọc trong JSON game chỉ là dải đó (rộng 0.31/0.25 ô), không phải cả ô, để không có tường vô hình. Lát sàn nhà tới sát ô tường dọc để không lộ cỏ.
 
-> **Trong trận** `LevelArtView` (Game scene, `Scripts/Presentation/World/LevelArtView.cs`) đọc khối `editor` của `map_demo.json` và vẽ giống Level Editor: ground cỏ theo seed, đường đá, viền/tường mép, cỏ rải, hình Cainos của cover/decor (Y-sort theo chân, material Unlit như editor). Nó hiện khi chơi offline, hoặc khi phòng mạng chọn đúng map có cùng hash với `map_demo.json`; map khác giữ cách vẽ cũ. Vật thể game (rương, bình, bụi, portal, cửa, hazard) vẫn dùng art game theo trạng thái. Đổi `map_demo.json` thì phải dựng lại collider `Obstacles` trong `Game.unity` cho khớp từng collider chân (tên = type), nếu không màn Game báo lệch vật cản.
+> **Trong trận** `LevelArtView` dùng khối `editor` của map đã xác minh trong phòng mạng hoặc map offline đóng gói. Art được dựng lại khi đổi map. Geometry và trạng thái vật thể vẫn đến từ dữ liệu gameplay tương ứng. Map thiếu khối `editor` dùng cách vẽ mặc định.
 
 ## 5. File JSON
 
@@ -104,7 +104,7 @@ Mọi vật **đặt theo ô**: không có vị trí lẻ, không phóng to/thu 
 - **Kiểm tra**: chạy đúng đường game đọc map (`AuthoredMapDocument.Build`). Bắt buộc map **vuông**, gốc (0,0), **đúng 10 spawn** cách nhau ≥ 6, nằm trong bo đầu, không bị chặn, đi tới được nhau. Không vật thể nào đè nhau, portal đủ cặp. Hợp lệ thì hiện hash của map.
 - Lưu không bắt buộc hợp lệ (cho phép lưu bản dở). Thanh trạng thái báo map đã dùng được cho game hay chưa.
 
-**Đưa map vào phòng mạng:** dùng quy trình **Export Published Map → validate → publish → reload** ở đầu tài liệu; không ghi đè `map_demo.json`, không cần build lại server/client khi chỉ thay dữ liệu được hỗ trợ. **Đổi map mặc định offline đóng gói:** lưu vào `Backend/Shared/GameData/map_demo.json`, chạy **Jungle Maze → Phase 2 → Sync Runtime Data**, rồi build lại client. Thao tác offline này không thay lựa chọn map của phòng mạng.
+**Đưa map vào phòng mạng:** dùng quy trình **Export Published Map → validate → publish → reload** ở đầu tài liệu; không ghi đè `map_demo.json`, không cần build lại server/client khi chỉ thay dữ liệu được hỗ trợ. **Đổi map mặc định offline đóng gói:** chọn file JSON trong `Assets/_JungleMaze/Levels`, dùng **Jungle Maze → Level Editor → Use Selected Level As Offline Map**, rồi build lại client. Thao tác offline này không thay lựa chọn map của phòng mạng.
 
 ## 6. Mã nguồn
 
@@ -126,7 +126,7 @@ Assembly `JungleMaze.LevelEditor` chỉ phụ thuộc `JungleMaze.World` và New
 
 ## 7. Map sinh tồn 150×150 "Rừng Sinh Tồn" (Luyện tập offline)
 
-`Levels/map3_rung_sinh_ton.json` là map Luyện tập offline (`Levels/offline_map.txt` = `map3_rung_sinh_ton`, chép vào `StreamingAssets/JungleMaze/runtime/offline_map.json` bằng **Sync Runtime Data**). Hero bắt đầu ở spawn đầu tiên (S1, tây nam), không phải tâm map.
+`Levels/map3_rung_sinh_ton.json` là map luyện tập có thể chọn lại bằng **Use Selected Level As Offline Map**. Hero bắt đầu ở spawn đầu tiên (S1, tây nam), không phải tâm map.
 
 Bản nháp sinh bằng `Tools/Level/survival_map_150.py` (tất định theo seed 5150), rồi Level Editor dựng JSON game (`LevelDocument.FromJson` → `Validate` → `ToJson`, giống bấm Lưu). Mở file trong Level Editor để sửa tay tiếp; chạy lại script sẽ ghi đè bản sửa tay.
 

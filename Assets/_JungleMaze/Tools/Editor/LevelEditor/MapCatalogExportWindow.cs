@@ -54,7 +54,8 @@ namespace JungleMaze.EditorTools
             if (!Regex.IsMatch(id ?? "", @"^[a-z0-9][a-z0-9-]{0,31}\z")) throw new ArgumentException("Map ID chỉ gồm chữ thường, số, dấu -, tối đa 32 ký tự.");
             if (string.IsNullOrWhiteSpace(name) || name.Length > 64 || (description ?? "").Length > 256 ||
                 string.IsNullOrWhiteSpace(document.Version) || document.Version.Length > 32) throw new ArgumentException("Tên/mô tả/phiên bản không hợp lệ.");
-            if (document.Width != 50 || document.Height != 50) throw new ArgumentException("Map phát hành hiện phải là 50×50.");
+            if (document.Width != document.Height || document.Width < 30 || document.Width > 256)
+                throw new ArgumentException("Map phát hành phải vuông, cạnh từ 30 đến 256.");
             var error = document.Validate(out _); if (error != null) throw new ArgumentException(error);
             var json = document.ToJson().Replace("\r\n", "\n");
             var authored = JsonConvert.DeserializeObject<AuthoredMapDocument>(json);

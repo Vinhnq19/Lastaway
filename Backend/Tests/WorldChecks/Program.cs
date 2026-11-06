@@ -87,7 +87,7 @@ try
     Environment.SetEnvironmentVariable("WORLD_ENABLED","1");
     Environment.SetEnvironmentVariable("WORLD_LAYOUT_MODE","Prototype");
     // This golden vector describes the shipped ruins map, independently of the developer-selected default.
-    var definition=new MapCatalogStore(Path.Combine(AppContext.BaseDirectory,"GameData","Maps"),"world-prototype-1").Current.Find("di-tich-co")!;
+    var definition=new MapCatalogStore(Path.Combine(AppContext.BaseDirectory,"FixtureMaps"),"world-prototype-1").Current.Find("di-tich-co")!;
     var canonical=definition.Data;
     var schedule=ZoneSchedule.Load(GameDataLoader.ReadGameDataFile("zone_schedule.json"));
     var profile=new MatchProfile{Version=canonical.Version,MinPlayers=2,LobbyDurationSeconds=.01,LoadingTimeoutSeconds=1,ZoneTimeScale=1000,TargetMatchDurationSeconds=10000};

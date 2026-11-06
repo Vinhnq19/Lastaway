@@ -46,6 +46,7 @@ namespace JungleMaze.App.Match
         public bool HasState { get; private set; }
         public bool Busy { get; private set; }
         public bool Verified { get; private set; }
+        public string VerifiedMapJson { get; private set; }
         public string Error { get; private set; }
         public string Notice { get; private set; }
         public bool IsHost => HasState && _match.OwnNetId != 255 && _match.OwnNetId == State.HostNetId;
@@ -68,7 +69,7 @@ namespace JungleMaze.App.Match
         {
             _generation++; _download?.Cancel(); _download?.Dispose(); _download = null;
             BotCommandPending = false;
-            HasState = Busy = Verified = false; Catalog = null; Error = Notice = null; _files.Clear(); Changed?.Invoke();
+            HasState = Busy = Verified = false; VerifiedMapJson = null; Catalog = null; Error = Notice = null; _files.Clear(); Changed?.Invoke();
         }
         private void OnState(RoomMapStatePacket packet)
         {
@@ -119,7 +120,7 @@ namespace JungleMaze.App.Match
         {
             _download?.Cancel(); _download?.Dispose(); _download = new CancellationTokenSource();
             var token = _download.Token; var generation = ++_generation; var selected = State;
-            Busy = true; Error = null; if (resetReadiness) Verified = false;
+            Busy = true; Error = null; if (resetReadiness) { Verified = false; VerifiedMapJson = null; }
             try
             {
                 var catalog = await _files.Catalog(token);
@@ -132,6 +133,7 @@ namespace JungleMaze.App.Match
                     if (generation != _generation || token.IsCancellationRequested) return;
                     var error = _files.Activate(json, selected.MapHash, selected.RulesHash);
                     if (error != null) throw new InvalidOperationException(error);
+                    VerifiedMapJson = json;
                     Verified = true;
                     var ready = new RoomMapReadyPacket { RoomId = selected.RoomId, SelectionRevision = selected.SelectionRevision, MapHash = selected.MapHash, RulesHash = selected.RulesHash };
                     if (!_sender.Send(ref ready, PacketDelivery.ReliableOrdered)) throw new InvalidOperationException("Không gửi được xác nhận map; thử lại.");
@@ -139,7 +141,7 @@ namespace JungleMaze.App.Match
             }
             catch (OperationCanceledException) { }
             catch (Exception e) when (!(e is OutOfMemoryException))
-            { if (generation == _generation) { Verified = false; Error = e is InvalidOperationException ? e.Message : "Không tải được map; kiểm tra kết nối rồi thử lại."; } }
+            { if (generation == _generation) { Verified = false; VerifiedMapJson = null; Error = e is InvalidOperationException ? e.Message : "Không tải được map; kiểm tra kết nối rồi thử lại."; } }
             finally { if (generation == _generation) { Busy = false; Changed?.Invoke(); } }
         }
     }
