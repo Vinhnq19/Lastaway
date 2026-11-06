@@ -35,11 +35,14 @@ Shader "JungleMaze/ZoneOverlay"
                 float distanceNow = length(i.world - _Current.xy) - _Current.z;
                 float pixel = max(length(fwidth(i.world)), .001);
                 float danger = _Current.z <= .0001 ? 1 : smoothstep(-pixel, pixel, distanceNow);
-                fixed3 dangerColor = lerp(fixed3(.85, .025, .035), fixed3(.02, .025, .035), _Minimap);
-                fixed4 color = fixed4(dangerColor, danger * _FillAlpha);
+                float rim = (1 - smoothstep(pixel, 3.5 * pixel, distanceNow)) *
+                    step(0, distanceNow) * step(.0001, _Current.z) * (1 - _Minimap);
+                fixed3 worldDanger = lerp(fixed3(.85, .025, .035), fixed3(.54, .012, .025), rim);
+                fixed3 dangerColor = lerp(worldDanger, fixed3(.48, .035, .12), _Minimap);
+                fixed4 color = fixed4(dangerColor, danger * lerp(_FillAlpha, .88, rim));
                 float2 delta = i.world - _Next.xy;
                 float nextDistance = abs(length(delta) - _Next.z);
-                float worldLine = 1 - smoothstep(.35 * pixel, pixel, nextDistance);
+                float worldLine = 1 - smoothstep(.7 * pixel, 1.6 * pixel, nextDistance);
                 float mapLine = 1 - smoothstep(pixel, 2 * pixel, nextDistance);
                 float angle = atan2(delta.y, delta.x) + UNITY_PI;
                 float dashed = step(.4, frac(angle / (2 * UNITY_PI) * 64));

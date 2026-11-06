@@ -9,6 +9,7 @@ namespace JungleMaze.Presentation.UI
     /// <summary>Draws the same authoritative circles in the world and on the HUD minimap.</summary>
     public sealed class ZoneOverlayView : MonoBehaviour
     {
+        private const float MinimapFrameInset = 3f;
         private Material _worldMaterial;
         private Material _mapMaterial;
         private Mesh _mesh;
@@ -64,8 +65,13 @@ namespace JungleMaze.Presentation.UI
             var rect = _map.rectTransform;
             rect.anchorMin = rect.anchorMax = Vector2.zero;
             rect.pivot = Vector2.zero;
-            rect.anchoredPosition = Vector2.zero;
-            rect.sizeDelta = Vector2.one * minimap.SizePixels;
+            float mapSize = minimap.SizePixels;
+            float inset = Mathf.Min(MinimapFrameInset, mapSize * .25f);
+            rect.anchoredPosition = Vector2.one * inset;
+            rect.sizeDelta = Vector2.one * (mapSize - 2 * inset);
+            // Crop the overlay rather than rescaling its map coordinates relative to the player marker.
+            float uvInset = inset / mapSize;
+            _map.uvRect = new Rect(uvInset, uvInset, 1 - 2 * uvInset, 1 - 2 * uvInset);
             layer.transform.SetSiblingIndex(minimap.Marker.GetSiblingIndex());
         }
 
