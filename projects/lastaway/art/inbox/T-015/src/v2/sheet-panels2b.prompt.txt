@@ -1,0 +1,16 @@
+Use your image generation tool to create ONE image as described below, and copy the generated file AS-IS (no cropping, no resizing, no padding) to:
+D:\Lastaway\projects\lastaway\art\inbox\T-015\src\v2\sheet-panels2b.png
+Do not write any other files and do not post-process the image. Use only the built-in image tool, never the OpenAI API, curl or python.
+
+The attached image is a concept screenshot of our pixel-art battle royale HUD in the 'Carved Stone' skin. Look closely at the HUD panels (bottom-left vitals panel, bottom-center item bar, top-right minimap and the small panel under it): thick carved stone frames made of an outer stone rim built from rectangular stone blocks with visible joints, plus a thin inner rim line, chamfered (diagonally cut) outer corners, small square carved glyph ornaments at the inner corners, green moss creeping over the corners, a dark outline, and a DARK GREY CARVED STONE SLAB as the panel interior with subtle cracks, veins and grain (a textured stone surface, not a flat color).
+
+TASK: draw a clean UI-kit sprite sheet of EMPTY panel frames in exactly that look, each isolated on a perfectly flat solid magenta background (#FF00FF, no gradient, no noise, no shadow, magenta must not appear inside any piece). At least 80 px of pure magenta between pieces and around the sheet border. No text, no numbers, no icons, no characters, no row dividers, no bars, no slots: just empty frames.
+
+Proportions are important. Each frame must have a THICK stone rim: the rim (outer block ring plus thin inner line) is about 7 to 8 percent of the frame's shorter side, and the corner ornaments with moss are small, about 14 percent of the shorter side. The interior stone slab is a mid-dark grey (about #3a3c3b with darker cracks to #2a2c2c and slightly lighter grain to #4a4c4a), textured like the concept, never flat and never bluish. Draw every piece large and sharp. Do not crop any piece.
+
+PIECES (left to right, top to bottom), exact aspect ratios (width : height):
+1. PANEL-LARGE: 1.80 : 1.
+2. PANEL-WIDE: 4.70 : 1 (very wide, short).
+3. PANEL-SMALL: 2.70 : 1.
+4. MINIMAP-FRAME: 1 : 1 square, same thick rim and corners, and the interior is a flat solid magenta hole (#FF00FF) fully enclosed by the rim, so a map can show through.
+5. KILLFEED-PLATE: 1.90 : 1, same stone slab look but with a thinner rim (about 3 percent of the shorter side), no corner ornaments, no moss.

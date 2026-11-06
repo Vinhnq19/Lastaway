@@ -61,3 +61,9 @@ Khoảng trống chặn QA-01 theo PIC người (MAP-02, Game-10, DRG-01, ZON-01
 - **Người quyết:** Huy ("Làm lại", 06/11), theo đề xuất CPO
 - **Lý do:** Huy chọn A vì chất đá khắc; bản tách mất chất đó.
 - **Hệ quả:** T-015 làm lại lượt 2; T-016 chờ.
+
+## 2026-11-06 - Duyệt T-015 lượt 2, đổi icon sang kim loại ấm
+- **Quyết định:** Duyệt bộ asset lượt 2 (khung đá dày 13-14 px, góc khắc rêu, lòng vân đá; ô quick bar 60 px, gap 3, nhóm 12; lề nội dung Vitals 40/20, Quick bar 40/18, Match 32). Icon trạng thái đổi từ xanh/đỏ vector sang tông kim loại ấm như concept A; icon tim thêm viền tối (tương phản hiện 2,98:1).
+- **Người quyết:** Huy ("Duyệt, đổi icon", 06/11)
+- **Lý do:** Lượt 2 đạt chất đá; icon là chỗ lệch concept còn lại rõ nhất.
+- **Hệ quả:** art-ux đổi icon trong T-015 rồi qa chấm chéo; T-016 bắt đầu sau khi qa ĐẠT.
