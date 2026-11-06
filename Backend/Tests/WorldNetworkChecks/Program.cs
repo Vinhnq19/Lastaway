@@ -59,6 +59,16 @@ try
     }
     Pump(() => clients.All(c => c.Phase == MatchPhase.InGame && c.SnapshotCount > 2));
     var serverMatch = host.Hub.Rooms.Find("WORLD_TEST")!.Match;
+    Pump(() => clients.All(c => c.Zone.MatchId == serverMatch.MatchId) && clients[0].Zone.Tick == clients[1].Zone.Tick);
+    var firstZone = clients[0].Zone;
+    var secondZone = clients[1].Zone;
+    Check(firstZone.CurrentRadius > 0 && firstZone.TargetRadius >= 0, "network zone supplies current and target radii");
+    Check(firstZone.CurrentCenterX == secondZone.CurrentCenterX && firstZone.CurrentCenterY == secondZone.CurrentCenterY &&
+          firstZone.CurrentRadius == secondZone.CurrentRadius && firstZone.TargetCenterX == secondZone.TargetCenterX &&
+          firstZone.TargetCenterY == secondZone.TargetCenterY && firstZone.TargetRadius == secondZone.TargetRadius,
+          "both transports receive identical zone geometry at the same tick");
+    Check(firstZone.InWarning == secondZone.InWarning && firstZone.ShrinkStartTick == secondZone.ShrinkStartTick &&
+          firstZone.ShrinkEndTick == secondZone.ShrinkEndTick, "both transports agree on zone warning and shrink timing");
     Check(serverMatch.World != null, "configured world created at match start without client mutation");
     var world = serverMatch.World!;
     foreach (var c in clients) Send(c, 1, WorldActionKind.Resync);
