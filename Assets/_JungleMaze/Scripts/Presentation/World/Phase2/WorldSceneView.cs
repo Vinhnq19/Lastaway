@@ -22,6 +22,8 @@ namespace JungleMaze.Presentation.World.Phase2
         private IMatchMenuState _menu;
         private ItemCatalog _catalog;
         private float _autoPickupAt;
+        private WorldObjectWire? _interactionTarget;
+        private GUIStyle _interactionStyle;
 
         private OfflineWorldSession _offlineWorld;
         private OfflineMatchSession _offlineMatch;
@@ -122,6 +124,7 @@ namespace JungleMaze.Presentation.World.Phase2
 
         private void Update()
         {
+            _interactionTarget = null;
             if (_flow != null && _flow.IsOffline && _offlineWorld != null)
             {
                 UpdateOffline();
@@ -135,15 +138,8 @@ namespace JungleMaze.Presentation.World.Phase2
                 foreach (var o in _world.Objects) if (o.Kind == 100 && Vector2.Distance(new Vector2(_match.Prediction.PredictedX, _match.Prediction.PredictedY), new Vector2(o.X, o.Y)) <= .6f && _catalog.TryGet(o.ItemId, out var item) &&
                     (item.Kind == ItemKind.Ammo || item.Kind == ItemKind.Helmet || item.Kind == ItemKind.Armor)) _world.Send(WorldActionKind.Pickup, o.Id);
             }
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                var camera = Camera.main; if (camera == null) return; var cursor = camera.ScreenToWorldPoint(Input.mousePosition); ushort target = 0; var best = float.MaxValue;
-                var own = new Vector2(_match.Prediction.PredictedX, _match.Prediction.PredictedY);
-                foreach (var o in _world.Objects) if (o.Kind == 100 && Vector2.Distance(own, new Vector2(o.X, o.Y)) <= 1.2f)
-                { var d = ((Vector2)cursor - new Vector2(o.X, o.Y)).sqrMagnitude; if (d < best) { best = d; target = o.Id; } }
-                if (target != 0) _world.Send(WorldActionKind.Pickup, target);
-                else { var door = NearestDoor(_world.Objects, own); if (door != 0) _world.Send(WorldActionKind.Interact, door); }
-            }
+            HandleInteraction(_world.Objects,
+                new Vector2(_match.Prediction.PredictedX, _match.Prediction.PredictedY), false);
             for (var i = 0; i < 4; i++)
             {
                 if (Input.GetKeyDown((KeyCode)((int)KeyCode.Alpha1 + i))) _world.Send(WorldActionKind.Select, 0, (byte)(_world.Inventory != null && _world.Inventory.ActiveWeapon == i ? 255 : i));
@@ -198,31 +194,8 @@ namespace JungleMaze.Presentation.World.Phase2
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.F) && _hero != null)
-            {
-                var camera = Camera.main;
-                if (camera != null)
-                {
-                    var cursor = camera.ScreenToWorldPoint(Input.mousePosition);
-                    ushort target = 0;
-                    var best = float.MaxValue;
-                    var own = new Vector2(_hero.position.x, _hero.position.y);
-                    foreach (var o in _offlineWorld.Objects)
-                    {
-                        if (o.Kind == 100 && Vector2.Distance(own, new Vector2(o.X, o.Y)) <= 1.2f)
-                        {
-                            var d = ((Vector2)cursor - new Vector2(o.X, o.Y)).sqrMagnitude;
-                            if (d < best) { best = d; target = o.Id; }
-                        }
-                    }
-                    if (target != 0) _offlineWorld.Pickup(target);
-                    else
-                    {
-                        var door = NearestDoor(_offlineWorld.Objects, own);
-                        if (door != 0) _offlineWorld.ToggleDoor(door);
-                    }
-                }
-            }
+            if (_hero != null)
+                HandleInteraction(_offlineWorld.Objects, _hero.position, true);
 
             for (var i = 0; i < 4; i++)
             {
@@ -250,6 +223,58 @@ namespace JungleMaze.Presentation.World.Phase2
                 if (inv != null && inv.IsUsing)
                     _offlineWorld.CancelUse();
             }
+        }
+
+        // The prompt and the F action must always refer to the same object.
+        public static WorldObjectWire? InteractionTarget(WorldObjectWire[] states, Vector2 own, Vector2 cursor)
+        {
+            WorldObjectWire? target = null;
+            var best = float.MaxValue;
+            foreach (var state in states)
+            {
+                if (state.Kind != 100 || Vector2.Distance(own, new Vector2(state.X, state.Y)) > 1.2f) continue;
+                var distance = (cursor - new Vector2(state.X, state.Y)).sqrMagnitude;
+                if (distance < best) { best = distance; target = state; }
+            }
+            if (target.HasValue) return target;
+            var door = NearestDoor(states, own);
+            if (door != 0)
+                foreach (var state in states)
+                    if (state.Id == door) return state;
+            return null;
+        }
+
+        private void HandleInteraction(WorldObjectWire[] states, Vector2 own, bool offline)
+        {
+            var camera = Camera.main;
+            if (camera == null) return;
+            _interactionTarget = InteractionTarget(states, own, camera.ScreenToWorldPoint(Input.mousePosition));
+            if (!_interactionTarget.HasValue || !Input.GetKeyDown(KeyCode.F)) return;
+            var target = _interactionTarget.Value;
+            if (offline)
+            {
+                if (target.Kind == 100) _offlineWorld.Pickup(target.Id);
+                else _offlineWorld.ToggleDoor(target.Id);
+            }
+            else _world.Send(target.Kind == 100 ? WorldActionKind.Pickup : WorldActionKind.Interact, target.Id);
+        }
+
+        private void OnGUI()
+        {
+            if (!_interactionTarget.HasValue || (_menu?.BlocksGameplayInput ?? false) ||
+                SceneManager.GetActiveScene().name != "Game") return;
+            var camera = Camera.main;
+            if (camera == null) return;
+            var target = _interactionTarget.Value;
+            var screen = camera.WorldToScreenPoint(new Vector3(target.X, target.Y + target.Height / 2f, 0));
+            if (screen.z <= 0 || screen.x < 0 || screen.x > Screen.width || screen.y < 0 || screen.y > Screen.height) return;
+            if (_interactionStyle == null)
+                _interactionStyle = new GUIStyle(GUI.skin.box)
+                {
+                    alignment = TextAnchor.MiddleCenter, fontSize = 16, fontStyle = FontStyle.Bold,
+                    normal = { textColor = Color.white }
+                };
+            GUI.Box(new Rect(screen.x - 22, Screen.height - screen.y - 34, 44, 28), "[F]", _interactionStyle);
         }
 
         private void Refresh()

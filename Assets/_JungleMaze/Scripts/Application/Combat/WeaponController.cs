@@ -19,7 +19,9 @@ namespace JungleMaze.App.Combat
         /// <summary>Another player's accepted attack, from the room-wide result broadcast.</summary>
         RemoteAttackConfirmed = 7,
         /// <summary>Another player's accepted reload, from the room-wide result broadcast.</summary>
-        RemoteReloadStarted = 8
+        RemoteReloadStarted = 8,
+        EmptyFire = 9,
+        MeleeImpact = 10
     }
 
     public readonly struct CombatEvent
@@ -136,7 +138,12 @@ namespace JungleMaze.App.Combat
         {
             var slot = SelectedSlot;
             if (!slot.Available || _reloading || _reloadRequested || slot.CooldownRemaining > 0f) return false;
-            if (slot.IsRanged && slot.Magazine <= 0) return false;
+            if (slot.IsRanged && slot.Magazine <= 0)
+            {
+                slot.CooldownRemaining = Math.Max(.2f, slot.CadenceSeconds);
+                Raise(CombatEventKind.EmptyFire, _selected, _ownNetId, NextSeq(), aimDegrees, CombatOutcome.NoAmmo);
+                return false;
+            }
             if (_pendingCount >= MaxPending) return false;
 
             var seq = NextSeq();

@@ -8,6 +8,7 @@ namespace GameServer.Simulation;
 public sealed partial class MatchWorldRuntime : IEffectService, GameServer.Simulation.Combat.IItemPassive, IBreakableObstacles, ICombatLoadout
 {
     private uint _confirmedWorldAction;
+    public uint ConfirmedObstacleHits { get; private set; }
     private uint _combatTick;
     public static string WeaponItemId(CombatWeaponId weapon) => weapon switch
     {
@@ -54,7 +55,8 @@ public sealed partial class MatchWorldRuntime : IEffectService, GameServer.Simul
     public void ApplyDamage(AABB obstacle, int damage, byte attackerNetId)
     {
         if (!TryFindDestructible(obstacle, out var id)) return;
-        Destructibles.DamageConfirmed(id, damage, attackerNetId, NextConfirmedWorldAction());
+        if (Destructibles.DamageConfirmed(id, damage, attackerNetId, NextConfirmedWorldAction()))
+            ConfirmedObstacleHits++;
     }
 
     private uint NextConfirmedWorldAction()

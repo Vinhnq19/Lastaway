@@ -339,3 +339,15 @@ MonoBehaviour:
     cooldownSeconds: 5
     repeatCount: 1
     repeatIntervalSeconds: 0
+  - id: 27
+    clips:
+    - {fileID: 8300000, guid: 80101c397bf34acb9a38b7538d4b924a, type: 3}
+    volume: 1
+    pitchJitter: 0
+    priority: 3
+    bus: 1
+    rangeCells: 0
+    maxInstances: 1
+    cooldownSeconds: 5
+    repeatCount: 1
+    repeatIntervalSeconds: 0

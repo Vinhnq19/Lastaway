@@ -73,6 +73,7 @@ namespace JungleMaze.Presentation.Combat
         private GameFlow _flow;
         private OnlineThrowableSession _throwables;
         private ThrowableView _throwView;
+        private ReloadProgressView _reloadProgress;
 
         [Inject]
         public void Construct(IBalanceConfigProvider balance, IPoolService pool, IHudStateWriter hud,
@@ -211,6 +212,31 @@ namespace JungleMaze.Presentation.Combat
             if (online) _throwables?.TryUse(kind, aim, distance);
             else _offlineWorld?.TryUseThrowable(aim, distance);
             return true;
+        }
+
+        private void LateUpdate()
+        {
+            WeaponController controller = null;
+            if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Game" &&
+                !(_menu?.BlocksGameplayInput ?? false))
+            {
+                if (_match?.Connected == true && _online?.CanAct == true)
+                    controller = _online.Controller;
+                else if (_flow?.IsOffline == true && _offlineWorld?.IsReady == true &&
+                         _offlineMatch?.IsDead != true)
+                    controller = _offlineWorld.Combat?.Controller;
+            }
+            if (hero == null || controller == null || !controller.IsReloading)
+            {
+                if (_reloadProgress != null) _reloadProgress.Hide();
+                return;
+            }
+            if (_reloadProgress == null) _reloadProgress = gameObject.AddComponent<ReloadProgressView>();
+            var duration = Mathf.Max(.001f, controller.SelectedSlot.ReloadSeconds);
+            var progress = Mathf.Clamp01(1f - controller.ReloadRemainingSeconds / duration);
+            // A delayed confirmation must never look like a completed reload.
+            if (!controller.IsReloadConfirmed) progress = Mathf.Min(progress, .95f);
+            _reloadProgress.Show(LocalVisual(out _, out _), progress);
         }
 
         private void OnDestroy()

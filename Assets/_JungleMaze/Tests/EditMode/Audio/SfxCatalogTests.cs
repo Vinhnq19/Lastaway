@@ -22,7 +22,7 @@ namespace JungleMaze.Tests.Audio
         }
 
         [Test]
-        public void Has26Ids_EachHasClipAndRuleFromTable()
+        public void Has27Ids_EachHasClipAndRuleFromTable()
         {
             var missing = new List<SfxId>();
             var table = _catalog.BuildRules();
@@ -46,7 +46,7 @@ namespace JungleMaze.Tests.Audio
         [Test]
         public void DistinguishableIdsUseDistinctClips()
         {
-            var ids = new[] { SfxId.HitMarker, SfxId.HurtLocal, SfxId.ZoneBell3, SfxId.DragonRoar, SfxId.MatchEnd, SfxId.Explosion };
+            var ids = new[] { SfxId.HitMarker, SfxId.HurtLocal, SfxId.ZoneBell3, SfxId.DragonRoar, SfxId.MatchEnd, SfxId.Victory, SfxId.Explosion };
             var clips = new HashSet<AudioClip>();
             foreach (var id in ids) Assert.IsTrue(clips.Add(_catalog.GetClip(id, 0)), $"{id} shares a clip");
         }

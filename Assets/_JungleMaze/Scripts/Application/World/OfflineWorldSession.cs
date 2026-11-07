@@ -381,6 +381,7 @@ namespace JungleMaze.App.World
                 return;
             }
 
+            var meleeHit = false;
             foreach (var target in _map.Objects)
             {
                 if (!target.IsBreakable || _destructibles.IsBroken(target.Id)) continue;
@@ -396,10 +397,14 @@ namespace JungleMaze.App.World
                 var damage = stats.Damage * (weapon == CombatWeaponId.Axe ? 1.5f : 1f);
                 if (_destructibles.DamageConfirmed(target.Id, (int)Math.Round(damage), 0, ++_hitSequence))
                 {
+                    meleeHit = true;
                     RebuildWireObjects();
                     Changed?.Invoke();
                 }
             }
+            if (meleeHit)
+                CombatChanged?.Invoke(new CombatEvent(CombatEventKind.MeleeImpact, weapon, 0,
+                    (ushort)_hitSequence, aimDegrees, CombatOutcome.Accepted));
         }
 
         private WorldObjectDefinition NearestHit(WorldPoint origin, WorldPoint direction, float range, out float distance)
