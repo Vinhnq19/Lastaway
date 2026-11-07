@@ -152,7 +152,7 @@ namespace JungleMaze.App.Audio
             var reload = value.Kind == CombatEventKind.ReloadStarted && own ||
                          value.Kind == CombatEventKind.RemoteReloadStarted && !own;
             if (value.Outcome != CombatOutcome.Accepted || (!shot && !reload) ||
-                (byte)value.Weapon > (byte)CombatWeaponId.Shotgun) return;
+                (byte)value.Weapon >= CombatWeaponIds.Count) return;
             var id = reload ? SfxId.Reload : value.Weapon == CombatWeaponId.Crossbow ? SfxId.ShootCrossbow :
                      (byte)value.Weapon >= (byte)CombatWeaponId.RubberGun ? SfxId.ShootRanged : SfxId.MeleeSwing;
             var key = SfxDeduper.Key(reload ? (byte)4 : (byte)3, value.NetId, value.RequestSeq, (uint)value.Weapon);

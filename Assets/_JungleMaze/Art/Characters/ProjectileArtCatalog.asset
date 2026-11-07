@@ -45,6 +45,12 @@ MonoBehaviour:
       Loop: 0
     MuzzleLength: 0
     MuzzleContent: 0
+    Casing:
+      Sprites: []
+      Times: []
+      Duration: 0
+      Loop: 0
+    CasingScale: 0
   - ItemId: SCEPTER
     Flight:
       Sprites:
@@ -65,6 +71,12 @@ MonoBehaviour:
       Loop: 0
     MuzzleLength: 0
     MuzzleContent: 0
+    Casing:
+      Sprites: []
+      Times: []
+      Duration: 0
+      Loop: 0
+    CasingScale: 0
   - ItemId: CROSSBOW
     Flight:
       Sprites:
@@ -85,6 +97,12 @@ MonoBehaviour:
       Loop: 0
     MuzzleLength: 0
     MuzzleContent: 0
+    Casing:
+      Sprites: []
+      Times: []
+      Duration: 0
+      Loop: 0
+    CasingScale: 0
   - ItemId: SHOTGUN
     Flight:
       Sprites: []
@@ -115,3 +133,93 @@ MonoBehaviour:
       Loop: 0
     MuzzleLength: 1.4
     MuzzleContent: 1.5625
+    Casing:
+      Sprites: []
+      Times: []
+      Duration: 0
+      Loop: 0
+    CasingScale: 0
+  - ItemId: PISTOL
+    Flight:
+      Sprites:
+      - {fileID: 21300000, guid: da018b9b36f153c4e8d919a1424605cf, type: 3}
+      Times:
+      - 0
+      Duration: 0.1
+      Loop: 1
+    AngleOffset: 0
+    Length: 0.18
+    Spin: 0
+    FlightContent: 0.09375
+    TracerColor: {r: 1, g: 1, b: 1, a: 1}
+    Muzzle:
+      Sprites: []
+      Times: []
+      Duration: 0
+      Loop: 0
+    MuzzleLength: 0
+    MuzzleContent: 0
+    Casing:
+      Sprites:
+      - {fileID: 21300000, guid: 8f31c7e75f132b446899c3f9d49f4c07, type: 3}
+      Times:
+      - 0
+      Duration: 0.32
+      Loop: 0
+    CasingScale: 0.8533333
+  - ItemId: ASSAULT_RIFLE
+    Flight:
+      Sprites:
+      - {fileID: 21300000, guid: da018b9b36f153c4e8d919a1424605cf, type: 3}
+      Times:
+      - 0
+      Duration: 0.1
+      Loop: 1
+    AngleOffset: 0
+    Length: 0.22
+    Spin: 0
+    FlightContent: 0.09375
+    TracerColor: {r: 1, g: 1, b: 1, a: 1}
+    Muzzle:
+      Sprites: []
+      Times: []
+      Duration: 0
+      Loop: 0
+    MuzzleLength: 0
+    MuzzleContent: 0
+    Casing:
+      Sprites:
+      - {fileID: 21300000, guid: 8f31c7e75f132b446899c3f9d49f4c07, type: 3}
+      Times:
+      - 0
+      Duration: 0.32
+      Loop: 0
+    CasingScale: 0.8533333
+  - ItemId: SNIPER_RIFLE
+    Flight:
+      Sprites:
+      - {fileID: 21300000, guid: da018b9b36f153c4e8d919a1424605cf, type: 3}
+      Times:
+      - 0
+      Duration: 0.1
+      Loop: 1
+    AngleOffset: 0
+    Length: 0.34
+    Spin: 0
+    FlightContent: 0.09375
+    TracerColor: {r: 1, g: 1, b: 1, a: 1}
+    Muzzle:
+      Sprites: []
+      Times: []
+      Duration: 0
+      Loop: 0
+    MuzzleLength: 0
+    MuzzleContent: 0
+    Casing:
+      Sprites:
+      - {fileID: 21300000, guid: 8f31c7e75f132b446899c3f9d49f4c07, type: 3}
+      Times:
+      - 0
+      Duration: 0.32
+      Loop: 0
+    CasingScale: 0.8533333

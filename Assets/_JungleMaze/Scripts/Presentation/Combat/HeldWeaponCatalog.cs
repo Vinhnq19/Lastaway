@@ -16,6 +16,12 @@ namespace JungleMaze.Presentation.Combat
         {
             public string ItemId;
             public Sprite Sprite;
+            /// <summary>Optional firing pose on the same canvas and pivot as Sprite.</summary>
+            public Sprite FireSprite;
+            public float FireSeconds;
+            public float RecoilDistance, RecoilSeconds;
+            /// <summary>Barrel tip in the content box (0..1); zero retains the legacy tip calculation.</summary>
+            public Vector2 Muzzle;
             /// <summary>Degrees added to the aim so the drawn weapon points along it.</summary>
             public float AngleOffset;
             /// <summary>Held point in the drawn content box, 0..1 from its bottom-left corner.</summary>
@@ -57,6 +63,8 @@ namespace JungleMaze.Presentation.Combat
                     return content.min + Vector2.Scale(Grip, content.size);
                 }
             }
+
+            public Vector2 MuzzleLocal => Content.min + Vector2.Scale(Muzzle, Content.size);
         }
 
         public Entry[] Entries = Array.Empty<Entry>();

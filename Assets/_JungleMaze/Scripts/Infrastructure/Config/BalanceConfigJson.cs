@@ -28,7 +28,7 @@ namespace JungleMaze.Infrastructure.Config
         {
             "id", "displayName", "category", "damage", "cooldownSeconds", "range", "arcDegrees", "stunSeconds",
             "fireRatePerSecond", "projectileSpeed", "pellets", "magazineSize", "reserveAmmo", "fuseSeconds",
-            "areaWidth", "areaHeight", "carry", "charges", "reloadSeconds", "spreadDegrees"
+            "areaWidth", "areaHeight", "carry", "charges", "reloadSeconds", "spreadDegrees", "semiAutomatic"
         };
 
         private static readonly HashSet<string> EquipmentKeys = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
@@ -132,6 +132,8 @@ namespace JungleMaze.Infrastructure.Config
                 }
                 if (!RequireFloat(values, "damage", source, id, out var damage, out error)) return false;
                 if (!RequireFloat(values, "range", source, id, out var range, out error)) return false;
+                if (values.TryGetValue("semiAutomatic", out var fireMode) && fireMode.Type != JTokenType.Boolean)
+                { error = $"{source}: {id} semiAutomatic must be a boolean."; return false; }
 
                 var stats = new WeaponStats
                 {
@@ -151,7 +153,8 @@ namespace JungleMaze.Infrastructure.Config
                     Carry = OptionalInt(values, "carry"),
                     Charges = OptionalInt(values, "charges"),
                     ReloadSeconds = OptionalFloat(values, "reloadSeconds"),
-                    SpreadDegrees = OptionalFloat(values, "spreadDegrees")
+                    SpreadDegrees = OptionalFloat(values, "spreadDegrees"),
+                    SemiAutomatic = values.TryGetValue("semiAutomatic", out var semiAutomatic) && semiAutomatic.Value<bool>()
                 };
                 // WPN-01 defaults (reload 1.2-2.8 s band, midpoint 2.0; shotgun cone 25 degrees). Override in JSON.
                 if (stats.ReloadSeconds == null && category == WeaponCategory.Ranged && stats.MagazineSize.HasValue)

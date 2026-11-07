@@ -22,14 +22,14 @@ var catalog = document.Build();
 var table = new LootTable(catalog, document.Loot);
 var floor = table.Floor;
 const float hero = .4f;
-var rangedIds = new[] { "RUBBER_GUN", "SCEPTER", "CROSSBOW", "SHOTGUN" };
+var rangedIds = new[] { "RUBBER_GUN", "SCEPTER", "CROSSBOW", "SHOTGUN", "PISTOL", "ASSAULT_RIFLE", "SNIPER_RIFLE" };
 var floorWeaponsSeen = new HashSet<string>();
-Check(rangedIds.All(id => catalog.Get(id).Enabled), "all four ranged weapons enabled in the shipped catalog");
+Check(rangedIds.All(id => catalog.Get(id).Enabled), "all seven ranged weapons enabled in the shipped catalog");
 var chestWeaponsSeen = new HashSet<string>();
 for (uint seed = 1; seed <= 2000; seed++)
     foreach (var item in table.Roll(LootSource.Chest, seed))
         chestWeaponsSeen.Add(item.ItemId);
-Check(rangedIds.All(chestWeaponsSeen.Contains), "all four ranged weapons can drop from chests");
+Check(rangedIds.All(chestWeaponsSeen.Contains), "all seven ranged weapons can drop from chests");
 
 // ---- Catalog: rarity and the Floor block ----
 var baseline = ItemCatalog.CreateBaseline();

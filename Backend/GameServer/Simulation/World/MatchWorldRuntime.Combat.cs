@@ -15,13 +15,15 @@ public sealed partial class MatchWorldRuntime : IEffectService, GameServer.Simul
         CombatWeaponId.Hand => "HAND", CombatWeaponId.TreeBranch => "TREE_BRANCH", CombatWeaponId.Knife => "KNIFE",
         CombatWeaponId.Bone => "BONE", CombatWeaponId.Axe => "AXE", CombatWeaponId.Mace => "MACE",
         CombatWeaponId.RubberGun => "RUBBER_GUN", CombatWeaponId.Scepter => "SCEPTER",
-        CombatWeaponId.Crossbow => "CROSSBOW", CombatWeaponId.Shotgun => "SHOTGUN", _ => ""
+        CombatWeaponId.Crossbow => "CROSSBOW", CombatWeaponId.Shotgun => "SHOTGUN",
+        CombatWeaponId.Pistol => "PISTOL", CombatWeaponId.AssaultRifle => "ASSAULT_RIFLE",
+        CombatWeaponId.SniperRifle => "SNIPER_RIFLE", _ => ""
     };
     public bool TryGetHeld(byte actor, out CombatWeaponId weapon)
     {
         var held = Inventory.HeldWeapon(actor);
         if (held.IsEmpty) { weapon = CombatWeaponId.Hand; return true; }
-        for (var i = 1; i <= (int)CombatWeaponId.Shotgun; i++)
+        for (var i = 1; i <= (int)CombatWeaponId.SniperRifle; i++)
             if (held.ItemId == WeaponItemId((CombatWeaponId)i)) { weapon = (CombatWeaponId)i; return true; }
         weapon = CombatWeaponId.Hand; return false;
     }

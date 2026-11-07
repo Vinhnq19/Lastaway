@@ -21,6 +21,10 @@
   { "id": "SHOTGUN", "displayName": "Shotgun", "category": "Ranged",
     "damage": 9, "pellets": 5, "range": 4, "fireRatePerSecond": 0.8, "projectileSpeed": 24, "magazineSize": 4, "reserveAmmo": 20, "reloadSeconds": 2.8 },
 
+  {"id": "PISTOL", "displayName": "Pistol", "category": "Ranged", "damage": 22, "range": 8, "fireRatePerSecond": 2.5, "projectileSpeed": 32, "magazineSize": 12, "reserveAmmo": 60, "reloadSeconds": 1.6, "semiAutomatic": true},
+  {"id": "ASSAULT_RIFLE", "displayName": "Assault Rifle", "category": "Ranged", "damage": 11, "range": 10, "fireRatePerSecond": 6, "projectileSpeed": 36, "magazineSize": 24, "reserveAmmo": 96, "reloadSeconds": 2.4},
+  {"id": "SNIPER_RIFLE", "displayName": "Sniper Rifle", "category": "Ranged", "damage": 65, "range": 16, "fireRatePerSecond": 0.625, "projectileSpeed": 48, "magazineSize": 5, "reserveAmmo": 20, "reloadSeconds": 3, "semiAutomatic": true},
+
   { "id": "BANANA", "displayName": "Banana", "category": "Thrown",
     "damage": 30, "cooldownSeconds": 1, "range": 8, "fuseSeconds": 1.5, "areaWidth": 3, "areaHeight": 3, "carry": 3, "stunSeconds": 1.0 },
   { "id": "SMOKE", "displayName": "Smoke Bomb", "category": "Thrown",

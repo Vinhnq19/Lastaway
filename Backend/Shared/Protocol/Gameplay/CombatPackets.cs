@@ -2,7 +2,7 @@ using LiteNetLib.Utils;
 
 namespace JungleBackend.Protocol.Gameplay
 {
-    /// <summary>The ten GDD weapons (six melee including bare hands, four ranged). Order matches balance/weapons.json; append new ids only.</summary>
+    /// <summary>Append-only combat weapon identities, shared by server, client and held-weapon snapshots.</summary>
     public enum CombatWeaponId : byte
     {
         Hand = 0,
@@ -14,7 +14,10 @@ namespace JungleBackend.Protocol.Gameplay
         RubberGun = 6,
         Scepter = 7,
         Crossbow = 8,
-        Shotgun = 9
+        Shotgun = 9,
+        Pistol = 10,
+        AssaultRifle = 11,
+        SniperRifle = 12
     }
 
     /// <summary>Outcome of one attack or reload request. Only <see cref="Accepted"/> takes effect on the server.</summary>

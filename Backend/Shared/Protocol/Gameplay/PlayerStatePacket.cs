@@ -108,7 +108,7 @@ namespace JungleBackend.Protocol.Gameplay
         /// <summary>
         /// Held weapon lives in the free high nibble of <see cref="Flags"/> (bits 4-7), so the packet size and the
         /// gameplay version stay the same and older peers ignore it. 0 = unknown (server without this field),
-        /// 1..10 = <see cref="CombatWeaponId"/> + 1, 15 = holding an item that has no combat id (e.g. a throwable).
+        /// 1..13 = <see cref="CombatWeaponId"/> + 1, 15 = holding an item that has no combat id (e.g. a throwable).
         /// </summary>
         public const byte HeldUnknown = 0, HeldOther = 15;
         private const int HeldShift = 4;
@@ -126,11 +126,11 @@ namespace JungleBackend.Protocol.Gameplay
         /// <summary>The combat weapon held, when the server sent one.</summary>
         public bool TryGetHeldWeapon(out CombatWeaponId weapon) => TryDecodeHeld(HeldCode, out weapon);
 
-        /// <summary>Decodes a held code: true only for 1..10 (a <see cref="CombatWeaponId"/>).</summary>
+        /// <summary>Decodes a held code: true only for 1..13 (a <see cref="CombatWeaponId"/>).</summary>
         public static bool TryDecodeHeld(byte code, out CombatWeaponId weapon)
         {
             weapon = CombatWeaponId.Hand;
-            if (code < 1 || code > (byte)CombatWeaponId.Shotgun + 1) return false;
+            if (code < 1 || code > (byte)CombatWeaponId.SniperRifle + 1) return false;
             weapon = (CombatWeaponId)(code - 1);
             return true;
         }
