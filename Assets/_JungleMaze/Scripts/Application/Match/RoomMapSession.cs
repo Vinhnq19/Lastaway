@@ -37,11 +37,16 @@ namespace JungleMaze.App.Match
         private CancellationTokenSource _download;
         private int _generation;
         private bool _wasConnected;
+        private uint _botRequest;
+        private float _botWait;
+        public bool BotCommandPending { get; private set; }
+        public bool CanManageBots => HasState && IsHost && _match.Phase == MatchPhase.Waiting && !BotCommandPending;
         public RoomMapStatePacket State { get; private set; }
         public PublishedMaps Catalog { get; private set; }
         public bool HasState { get; private set; }
         public bool Busy { get; private set; }
         public bool Verified { get; private set; }
+        public string VerifiedMapJson { get; private set; }
         public string Error { get; private set; }
         public string Notice { get; private set; }
         public bool IsHost => HasState && _match.OwnNetId != 255 && _match.OwnNetId == State.HostNetId;
@@ -51,18 +56,20 @@ namespace JungleMaze.App.Match
         public RoomMapSession(MatchSession match, IPacketSender sender, IPacketReceiver receiver, IRoomMapFiles files)
         { _match = match; _sender = sender; _receiver = receiver; _files = files; }
         public void Initialize()
-        { _receiver.Subscribe<RoomMapStatePacket>(OnState); _receiver.Subscribe<RoomMapCommandResultPacket>(OnResult); }
+        { _receiver.Subscribe<RoomBotCommandResultPacket>(OnBotResult); _receiver.Subscribe<RoomMapStatePacket>(OnState); _receiver.Subscribe<RoomMapCommandResultPacket>(OnResult); }
         public void Dispose()
-        { _receiver.Unsubscribe<RoomMapStatePacket>(OnState); _receiver.Unsubscribe<RoomMapCommandResultPacket>(OnResult); Reset(); }
+        { _receiver.Unsubscribe<RoomBotCommandResultPacket>(OnBotResult); _receiver.Unsubscribe<RoomMapStatePacket>(OnState); _receiver.Unsubscribe<RoomMapCommandResultPacket>(OnResult); Reset(); }
         public void Tick(float dt)
         {
+            if (BotCommandPending && (_botWait -= dt) <= 0) { BotCommandPending = false; Notice = "Chưa nhận phản hồi bot; kiểm tra phòng rồi thử lại."; Changed?.Invoke(); }
             if (_wasConnected && !_match.Connected) Reset();
             _wasConnected = _match.Connected;
         }
         private void Reset()
         {
             _generation++; _download?.Cancel(); _download?.Dispose(); _download = null;
-            HasState = Busy = Verified = false; Catalog = null; Error = Notice = null; _files.Clear(); Changed?.Invoke();
+            BotCommandPending = false;
+            HasState = Busy = Verified = false; VerifiedMapJson = null; Catalog = null; Error = Notice = null; _files.Clear(); Changed?.Invoke();
         }
         private void OnState(RoomMapStatePacket packet)
         {
@@ -78,6 +85,21 @@ namespace JungleMaze.App.Match
         {
             if (!HasState || packet.RoomId != State.RoomId) return;
             Notice = packet.Error == RoomMapError.None ? null : "Lệnh phòng bị từ chối: " + packet.Error;
+            Changed?.Invoke();
+        }
+        public void ManageBots(RoomBotAction action, uint botId = 0)
+        {
+            if (!CanManageBots) return;
+            var packet = new RoomBotCommandPacket { RoomId = State.RoomId, Revision = State.LobbyRevision, RequestId = ++_botRequest, Action = action, BotId = botId };
+            if (_sender.Send(ref packet, PacketDelivery.ReliableOrdered)) { BotCommandPending = true; _botWait = 5; }
+            else Notice = "Không gửi được lệnh bot.";
+            Changed?.Invoke();
+        }
+        private void OnBotResult(RoomBotCommandResultPacket packet)
+        {
+            if (!HasState || packet.RoomId != State.RoomId || packet.RequestId != _botRequest) return;
+            BotCommandPending = false;
+            Notice = packet.Error == RoomBotError.None ? null : "Không thể sửa bot: " + packet.Error;
             Changed?.Invoke();
         }
         public void Select(PublishedMap map)
@@ -98,7 +120,7 @@ namespace JungleMaze.App.Match
         {
             _download?.Cancel(); _download?.Dispose(); _download = new CancellationTokenSource();
             var token = _download.Token; var generation = ++_generation; var selected = State;
-            Busy = true; Error = null; if (resetReadiness) Verified = false;
+            Busy = true; Error = null; if (resetReadiness) { Verified = false; VerifiedMapJson = null; }
             try
             {
                 var catalog = await _files.Catalog(token);
@@ -111,6 +133,7 @@ namespace JungleMaze.App.Match
                     if (generation != _generation || token.IsCancellationRequested) return;
                     var error = _files.Activate(json, selected.MapHash, selected.RulesHash);
                     if (error != null) throw new InvalidOperationException(error);
+                    VerifiedMapJson = json;
                     Verified = true;
                     var ready = new RoomMapReadyPacket { RoomId = selected.RoomId, SelectionRevision = selected.SelectionRevision, MapHash = selected.MapHash, RulesHash = selected.RulesHash };
                     if (!_sender.Send(ref ready, PacketDelivery.ReliableOrdered)) throw new InvalidOperationException("Không gửi được xác nhận map; thử lại.");
@@ -118,7 +141,7 @@ namespace JungleMaze.App.Match
             }
             catch (OperationCanceledException) { }
             catch (Exception e) when (!(e is OutOfMemoryException))
-            { if (generation == _generation) { Verified = false; Error = e is InvalidOperationException ? e.Message : "Không tải được map; kiểm tra kết nối rồi thử lại."; } }
+            { if (generation == _generation) { Verified = false; VerifiedMapJson = null; Error = e is InvalidOperationException ? e.Message : "Không tải được map; kiểm tra kết nối rồi thử lại."; } }
             finally { if (generation == _generation) { Busy = false; Changed?.Invoke(); } }
         }
     }

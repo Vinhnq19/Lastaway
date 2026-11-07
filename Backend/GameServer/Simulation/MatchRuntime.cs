@@ -1,3 +1,4 @@
+using GameServer.Diagnostics;
 using GameServer.Simulation.Combat;
 using JungleBackend.Protocol.Gameplay;
 using LiteNetLib.Utils;
@@ -7,8 +8,11 @@ namespace GameServer.Simulation;
 
 public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityRegistry
 {
+    internal ServerMetrics? PerformanceMetrics { get; set; }
     private sealed class Entity : IEntity
     {
+        public uint BotId;
+        public bool IsBot => BotId != 0;
         public byte NetId { get; init; }
         public string PlayerSessionId { get; set; } = "";
         public string DisplayName { get; init; } = "";
@@ -30,6 +34,7 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
         public Guid ResumeToken { get; set; }
         public sbyte MoveX { get; set; }
         public sbyte MoveY { get; set; }
+        public ushort Kills;
         public int Rank { get; set; }
         public double SurvivalSeconds { get; set; }
         public bool Loaded { get; set; }
@@ -141,7 +146,10 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
     public int Count => _entities.Count;
     public int AliveCount => _entities.Values.Count(e => e.IsAlive);
 
-    public bool TryRegisterPlayer(string sessionId, string displayName, out string reason)
+    public bool TryRegisterPlayer(string sessionId, string displayName, out string reason) =>
+        RegisterParticipant(sessionId, displayName, 0, out reason);
+
+    private bool RegisterParticipant(string sessionId, string displayName, uint botId, out string reason)
     {
         reason = "";
         if (_bySession.ContainsKey(sessionId))
@@ -180,12 +188,12 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
         var netId = unusedNetId.Value;
         var entity = new Entity
         {
-            NetId = netId,
+            NetId = netId, BotId = botId,
             PlayerSessionId = sessionId,
             DisplayName = displayName,
             Radius = _profile.PlayerRadius,
             Hp = _profile.PlayerHp,
-            ResumeToken = Guid.NewGuid()
+            ResumeToken = botId == 0 ? Guid.NewGuid() : Guid.Empty
         };
 
         _entities[netId] = entity;
@@ -374,7 +382,7 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
 
         foreach (var e in _entities.Values)
         {
-            if (e.IsDisconnected && e.IsAlive && e.ResumeToken == resumeToken)
+            if (!e.IsBot && e.IsDisconnected && e.IsAlive && e.ResumeToken == resumeToken)
             {
                 if (_matchElapsedSeconds - (e.DisconnectedAtSecond ?? 0.0) < _profile.DisconnectGraceSeconds)
                 {
@@ -428,6 +436,7 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
 
     public void Tick(double deltaTime)
     {
+        using var lifecycle = new ServerMetrics.StageTiming(Phase == MatchPhase.InGame ? null : PerformanceMetrics, TickWorkStage.Lifecycle);
         DeltaTime = deltaTime;
         CurrentTick++;
         _combat.Tick(CurrentTick);
@@ -483,11 +492,11 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
     {
         _phaseTimer -= dt;
 
-        var allLoaded = _entities.Values.All(e => e.Loaded);
+        var allLoaded = _entities.Values.All(e => e.IsBot || e.Loaded);
         if (allLoaded || _phaseTimer <= 0.0)
         {
             // Drop missing players who failed to load
-            var missing = _entities.Values.Where(e => !e.Loaded).ToArray();
+            var missing = _entities.Values.Where(e => !e.IsBot && !e.Loaded).ToArray();
             foreach (var m in missing)
             {
                 _entities.Remove(m.NetId);
@@ -501,7 +510,7 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
                 BroadcastRoster();
             }
 
-            if (_entities.Count < _profile.MinPlayers)
+            if (_entities.Count < _profile.MinPlayers || !_entities.Values.Any(e => !e.IsBot && !e.IsDisconnected))
             {
                 TransitionTo(MatchPhase.Waiting);
             }
@@ -515,6 +524,8 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
     private void TickInGame(double dt)
     {
         _matchElapsedSeconds += dt;
+        using (new ServerMetrics.StageTiming(PerformanceMetrics, TickWorkStage.Bots)) TickBots();
+        if (Phase != MatchPhase.InGame) return;
 
         // 1. Process disconnect grace timeout
         foreach (var entity in _entities.Values.Where(e => e.IsAlive && e.IsDisconnected))
@@ -528,11 +539,14 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
 
         // 2. Process physics & movement (input stale >= 8 ticks stops)
         var staleTicks = (uint)Math.Ceiling(_profile.InputStaleMs * 30.0 / 1000.0); // 250ms at 30Hz ~ 7.5 ticks -> stale if >= 8 ticks
+        using (new ServerMetrics.StageTiming(PerformanceMetrics, TickWorkStage.Movement))
         foreach (var entity in _entities.Values.Where(e => e.IsAlive))
         {
             var isStale = (CurrentTick - entity.LastInputTick >= staleTicks) || entity.IsDisconnected;
             var mx = isStale ? 0f : (entity.MoveX / 127f);
             var my = isStale ? 0f : (entity.MoveY / 127f);
+            // WPN-03 bell: reversed controls invert the movement input (clients mirror it in prediction).
+            if (World?.IsReversed(entity.NetId) == true) { mx = -mx; my = -my; }
 
             if (World != null && (mx != 0 || my != 0)) World.Inventory.CancelForAction(entity.NetId, JungleMaze.World.Inventory.ItemCancelAction.Move);
             var speed = World?.SpeedMultiplier(entity.NetId) ?? 1f;
@@ -542,70 +556,84 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
             entity.Y = newY;
         }
 
-        TickWorld();
+        using (new ServerMetrics.StageTiming(PerformanceMetrics, TickWorkStage.World)) TickWorld();
 
-        // 3. Zone simulation & zone damage
-        if (_zone != null)
+        using (new ServerMetrics.StageTiming(PerformanceMetrics, TickWorkStage.Resolution))
         {
-            _zone.Update(_matchElapsedSeconds / _profile.ZoneTimeScale, CurrentTick);
-
-            // Whole-tick damage: applied once each second (every 30 ticks)
-            if (unchecked(CurrentTick - _inGameStartTick) % 30 == 0)
+            // 3. Zone simulation & zone damage
+            if (_zone != null)
             {
-                foreach (var entity in _entities.Values.Where(e => e.IsAlive))
+                _zone.Update(_matchElapsedSeconds / _profile.ZoneTimeScale, CurrentTick);
+
+                // Whole-tick damage: applied once each second (every 30 ticks)
+                if (unchecked(CurrentTick - _inGameStartTick) % 30 == 0)
                 {
-                    if (_zone.IsOutside(entity.X, entity.Y))
+                    foreach (var entity in _entities.Values.Where(e => e.IsAlive))
                     {
-                        _health.ApplyZoneDamage(entity.NetId, CurrentTick, (byte)_zone.Schedule.DamagePerSecond);
+                        if (_zone.IsOutside(entity.X, entity.Y))
+                        {
+                            _health.ApplyZoneDamage(entity.NetId, CurrentTick, (byte)_zone.Schedule.DamagePerSecond);
+                        }
                     }
                 }
             }
+
+            // 4. Whole-tick elimination processing & winner check
+            var aliveBeforeTick = _entities.Values.Count(e => e.IsAlive);
+            var newlyDied = _entities.Values.Where(e => !e.IsAlive && e.Rank == 0).ToArray();
+
+            if (newlyDied.Length > 0)
+            {
+                EnsureReplayFrameRecorded();
+                var sharedRank = aliveBeforeTick + 1; // Same-tick elimination shares rank
+                foreach (var dead in newlyDied)
+                {
+                    dead.Rank = sharedRank;
+                    dead.SurvivalSeconds = _matchElapsedSeconds;
+                    if (dead.EliminationTick == 0) dead.EliminationTick = CurrentTick;
+
+                    CaptureReplayForVictim(dead);
+                    BroadcastElimination(dead);
+                    BroadcastEntityEvent(dead.NetId, MatchEntityEvent.Eliminated);
+                    BroadcastPlayerDiedEvent(dead);
+                }
+                BroadcastRoster();
+            }
+
+            // No human audience is left (disconnected grace expired or humans lost this tick):
+            // bots must not be awarded a win nobody can observe.
+            if (_bots.Count > 0 && !HasHumanAudience())
+            {
+                EndMatch(MatchEndReason.NoHumans, 255);
+                return;
+            }
+
+            var aliveNow = _entities.Values.Count(e => e.IsAlive);
+            if (aliveNow <= 1 && _entities.Count > 1)
+            {
+                if (aliveNow == 1)
+                {
+                    var winner = _entities.Values.First(e => e.IsAlive);
+                    winner.Rank = 1;
+                    winner.SurvivalSeconds = _matchElapsedSeconds;
+                    EndMatch(MatchEndReason.LastAlive, winner.NetId);
+                }
+                else // aliveNow == 0: tie
+                {
+                    EndMatch(MatchEndReason.Tie, 255);
+                }
+            }
+
         }
-
-        // 4. Whole-tick elimination processing & winner check
-        var aliveBeforeTick = _entities.Values.Count(e => e.IsAlive);
-        var newlyDied = _entities.Values.Where(e => !e.IsAlive && e.Rank == 0).ToArray();
-
-        if (newlyDied.Length > 0)
+        using (new ServerMetrics.StageTiming(PerformanceMetrics, TickWorkStage.Snapshot))
         {
+            // 5. Store frame in private Replay Ring Buffer
             EnsureReplayFrameRecorded();
-            var sharedRank = aliveBeforeTick + 1; // Same-tick elimination shares rank
-            foreach (var dead in newlyDied)
-            {
-                dead.Rank = sharedRank;
-                dead.SurvivalSeconds = _matchElapsedSeconds;
-                if (dead.EliminationTick == 0) dead.EliminationTick = CurrentTick;
 
-                CaptureReplayForVictim(dead);
-                BroadcastElimination(dead);
-                BroadcastEntityEvent(dead.NetId, MatchEntityEvent.Eliminated);
-                BroadcastPlayerDiedEvent(dead);
-            }
-            BroadcastRoster();
+            // 6. Broadcast 30Hz snapshot (using SetPlayer to avoid heap allocation)
+            BroadcastSnapshot();
+            BroadcastHeldItems();
         }
-
-        var aliveNow = _entities.Values.Count(e => e.IsAlive);
-        if (aliveNow <= 1 && _entities.Count > 1)
-        {
-            if (aliveNow == 1)
-            {
-                var winner = _entities.Values.First(e => e.IsAlive);
-                winner.Rank = 1;
-                winner.SurvivalSeconds = _matchElapsedSeconds;
-                EndMatch(MatchEndReason.LastAlive, winner.NetId);
-            }
-            else // aliveNow == 0: tie
-            {
-                EndMatch(MatchEndReason.Tie, 255);
-            }
-        }
-
-        // 5. Store frame in private Replay Ring Buffer
-        EnsureReplayFrameRecorded();
-
-        // 6. Broadcast 30Hz snapshot (using SetPlayer to avoid heap allocation)
-        BroadcastSnapshot();
-        BroadcastHeldItems();
     }
 
     /// <summary>Resend period for <see cref="HeldItemsPacket"/> so late joiners and resumed peers catch up (2 s at 30 Hz).</summary>
@@ -651,7 +679,7 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
     private void TickEnding(double dt)
     {
         _phaseTimer -= dt;
-        var allReplayed = _entities.Values.All(e => e.ReplayAcked || e.IsDisconnected);
+        var allReplayed = _entities.Values.All(e => e.IsBot || e.ReplayAcked || e.IsDisconnected);
 
         if (_phaseTimer <= 0.0 || allReplayed)
         {
@@ -680,7 +708,7 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
         {
             entity.Hp = _profile.PlayerHp;
             entity.Flags = PlayerStateFlags.None;
-            entity.Rank = 0;
+            entity.Rank = 0; entity.Kills = 0;
             entity.SurvivalSeconds = 0;
             entity.LastProcessedInputSeq = 0;
             entity.HasInput = false;
@@ -691,7 +719,7 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
             entity.Ready = true; // Hello is capability negotiation, not a per-round Ready button.
             entity.Loaded = false;
             entity.ReplayAcked = false;
-            entity.ResumeToken = Guid.NewGuid();
+            entity.ResumeToken = entity.IsBot ? Guid.Empty : Guid.NewGuid();
             // Preserve verified identity across rounds on the same connection.
         }
 
@@ -726,7 +754,7 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
         TransitionTo(MatchPhase.Waiting);
         BroadcastRoster();
         // Manual rooms need the new round's identity before the host can press Start again.
-        foreach (var entity in _entities.Values)
+        foreach (var entity in _entities.Values.Where(e => !e.IsBot))
             ResumeTokenRotated?.Invoke(entity.PlayerSessionId, entity.NetId, entity.ResumeToken);
     }
 
@@ -791,7 +819,7 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
 
         // Initialize zone
         var seed = MatchId.GetHashCode();
-        _zone = new ZoneSimulation(_zoneSchedule, seed, 2.0f, _map);
+        _zone = new ZoneSimulation(_zoneSchedule, seed, 2.0f, _map, SelectedMap?.ReachableCells);
 
         // Spawn players at pair-distance >= 6 safe points
         var spawnList = _map.SpawnPoints;
@@ -807,17 +835,18 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
             entity.LastProcessedInputSeq = 0;
             entity.HasInput = false;
             entity.InputBudget = 0;
-            entity.Rank = 0;
+            entity.Rank = 0; entity.Kills = 0;
 
             // Rotate resume token on game start and notify session hub
-            entity.ResumeToken = Guid.NewGuid();
-            ResumeTokenRotated?.Invoke(entity.PlayerSessionId, entity.NetId, entity.ResumeToken);
+            entity.ResumeToken = entity.IsBot ? Guid.Empty : Guid.NewGuid();
+            if (!entity.IsBot) ResumeTokenRotated?.Invoke(entity.PlayerSessionId, entity.NetId, entity.ResumeToken);
 
             BroadcastEntityEvent(entity.NetId, MatchEntityEvent.Spawn);
             netIdCounter++;
         }
 
         StartWorld();
+        ResetBotBrains();
         BroadcastRoster();
     }
 
@@ -827,9 +856,9 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
             e.PlayerSessionId,
             e.DisplayName,
             e.Rank == 0 ? (reason == MatchEndReason.LastAlive && e.NetId == winnerNetId ? 1 : 2) : e.Rank,
-            0, // Kills = 0 without combat
+            e.Kills,
             e.SurvivalSeconds,
-            e.ProfileKey
+            e.ProfileKey, e.IsBot
         )).ToList().AsReadOnly();
 
         // RoomId not secret RoomCode in persisted result
@@ -841,7 +870,7 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
             DateTimeOffset.UtcNow,
             reason.ToString(),
             participants,
-            SelectedMap?.Entry.Id ?? "", SelectedMap?.Entry.Version ?? "", SelectedMap?.Entry.MapHash ?? "", RulesHash
+            SelectedMap?.Entry.Id ?? "", SelectedMap?.Entry.Version ?? "", SelectedMap?.Entry.MapHash ?? "", RulesHash, _bots.Count > 0 ? "WithBots" : "HumanOnly"
         );
 
         // Fire outside tick sink for persistence
@@ -851,10 +880,11 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
         var participantStates = _entities.Values.Select(e => new MatchParticipantState
         {
             NetId = e.NetId,
+            IsBot = e.IsBot, BotId = e.BotId,
             PlayerSessionId = e.PlayerSessionId,
             DisplayName = e.DisplayName,
             Rank = (byte)(e.Rank == 0 ? (reason == MatchEndReason.LastAlive && e.NetId == winnerNetId ? 1 : 2) : e.Rank),
-            Kills = 0,
+            Kills = e.Kills,
             SurvivalTicks = (uint)(e.SurvivalSeconds * 30)
         }).ToArray();
 
@@ -973,10 +1003,11 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
         Players = _entities.Values.Select(e => new MatchParticipantState
         {
             NetId = e.NetId,
+            IsBot = e.IsBot, BotId = e.BotId,
             PlayerSessionId = e.PlayerSessionId,
             DisplayName = e.DisplayName,
             Rank = (byte)e.Rank,
-            Kills = 0,
+            Kills = e.Kills,
             SurvivalTicks = (uint)(e.SurvivalSeconds * 30)
         }).ToArray()
     };
@@ -1005,6 +1036,7 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
     }
     private void OnEntityDied(byte victimNetId, byte killerNetId)
     {
+        if (killerNetId != victimNetId && World?.EnvironmentDamageInProgress != true && _entities.TryGetValue(killerNetId, out var killer)) killer.Kills++;
         if (World != null)
         {
             World.SyncActors();

@@ -22,6 +22,8 @@ namespace JungleMaze.Presentation.Combat
             public Vector2 Grip;
             /// <summary>World length of the content's longest side.</summary>
             public float Length;
+            /// <summary>Where the off hand holds a two-handed weapon, as a fraction of <see cref="Length"/> past the grip; 0 = one-handed.</summary>
+            public float Support;
             /// <summary>Opaque content box in sprite units (relative to the pivot); empty means the whole rect.</summary>
             public Vector2 ContentMin, ContentSize;
 

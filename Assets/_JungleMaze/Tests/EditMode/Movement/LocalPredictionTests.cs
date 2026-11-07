@@ -39,6 +39,20 @@ namespace JungleMaze.Tests.Movement
         }
 
         [Test]
+        public void Reversed_InvertsPredictedMovement_LikeTheServerBell()
+        {
+            var prediction = Create();
+            prediction.Reversed = true;
+            prediction.RecordInput(MovementTestMap.Input(1, 1, 0));
+            Assert.AreEqual(10f - Step, prediction.PredictedX, 1e-4f, "pressing right moves left while reversed");
+            prediction.Reversed = false;
+            prediction.RecordInput(MovementTestMap.Input(2, 1, 0));
+            Assert.AreEqual(10f, prediction.PredictedX, 1e-4f, "normal again once the reversal ends");
+            prediction.Reconcile(Server(2, 10f, 10f, 0));
+            Assert.AreEqual(10f, prediction.PredictedX, 1e-4f, "replay keeps each input's own direction");
+        }
+
+        [Test]
         public void Input_MovesHeroImmediately_BeforeServerAck()
         {
             var prediction = Create();

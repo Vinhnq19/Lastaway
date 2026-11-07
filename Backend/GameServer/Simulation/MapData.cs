@@ -39,6 +39,15 @@ public sealed class MapData
             MinX >= MaxX || MinY >= MaxY)
             throw new ArgumentException("Map bounds must be finite and min < max.");
 
+        var width = MaxX - MinX;
+        var height = MaxY - MinY;
+        if (MathF.Abs(width - height) > 1e-3f)
+            throw new ArgumentException("Map bounds must form a square supported by zone scaling.");
+
+        var initialCenterX = (MinX + MaxX) * 0.5f;
+        var initialCenterY = (MinY + MaxY) * 0.5f;
+        var initialRadius = width * 0.5f;
+
         foreach (var obs in Obstacles)
         {
             if (!float.IsFinite(obs.MinX) || !float.IsFinite(obs.MaxX) || !float.IsFinite(obs.MinY) || !float.IsFinite(obs.MaxY) || obs.MinX < MinX || obs.MaxX > MaxX || obs.MinY < MinY || obs.MaxY > MaxY ||
@@ -56,8 +65,8 @@ public sealed class MapData
                 throw new ArgumentException($"Spawn point {i} ({p1.X}, {p1.Y}) is outside map bounds.");
 
             // Distance from initial center (25, 25) must be <= 25.0
-            var distCenter = MathF.Sqrt(MathF.Pow(p1.X - 25f, 2) + MathF.Pow(p1.Y - 25f, 2));
-            if (distCenter > 25.0f)
+            var distCenter = MathF.Sqrt(MathF.Pow(p1.X - initialCenterX, 2) + MathF.Pow(p1.Y - initialCenterY, 2));
+            if (distCenter > initialRadius + 1e-3f)
                 throw new ArgumentException($"Spawn point {i} is outside initial zone circle.");
 
             // Must not overlap any obstacle with clearance 0.4

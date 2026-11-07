@@ -22,6 +22,7 @@ using JungleMaze.Infrastructure.Logging;
 using JungleMaze.Infrastructure.Network;
 using JungleMaze.Infrastructure.Pooling;
 using JungleMaze.Infrastructure.Scenes;
+using JungleMaze.Infrastructure.Settings;
 using JungleMaze.Infrastructure.Ticking;
 using JungleMaze.Presentation.Rendering;
 using JungleMaze.Presentation.UI;
@@ -88,6 +89,7 @@ namespace JungleMaze.Composition
             var balance = new BalanceConfigProvider(Application.streamingAssetsPath, _log);
             _registry.Register<IConfigProvider>(config);
             _registry.Register<IBalanceConfigProvider>(balance);
+            _registry.Register<IHeroSkinPreference>(new PlayerPrefsHeroSkinPreference());
             _registry.Register(packets);
             _registry.Register(network);
             _registry.Register<INetworkClient>(network);

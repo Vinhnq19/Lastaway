@@ -47,14 +47,18 @@ public sealed class MapDefinition
     public string Json { get; }
     public MapData Data { get; }
     public MapLayout Layout { get; }
+    internal IReadOnlySet<(int X, int Y)> ReachableCells { get; }
+    public GameServer.Simulation.Bots.BotNavigationGrid Navigation { get; }
     public byte[] Preview { get; }
 
-    internal MapDefinition(MapCatalogEntry entry, string json, MapData data, MapLayout layout, byte[] preview)
+    internal MapDefinition(MapCatalogEntry entry, string json, MapData data, MapLayout layout, byte[] preview, IReadOnlySet<(int X, int Y)> reachableCells)
     {
         _entry = entry.Copy();
         Json = json;
         Data = data;
         Layout = layout;
+        ReachableCells = reachableCells;
+        Navigation = new GameServer.Simulation.Bots.BotNavigationGrid(layout);
         Preview = preview;
     }
 }
@@ -161,12 +165,12 @@ public sealed class MapCatalogSnapshot
             throw new ArgumentException(
                 $"Map '{entry.Id}' preview hash {actualPreviewHash} does not match manifest hash {entry.PreviewHash}.");
 
-        var (data, layout) = BuildAuthoritative(entry.Id, json, worldVersion);
-        return new MapDefinition(entry, json, data, layout, preview);
+        var (data, layout, reachableCells) = BuildAuthoritative(entry.Id, json, worldVersion);
+        return new MapDefinition(entry, json, data, layout, preview, reachableCells);
     }
 
     /// <summary>Runs the existing authored/layout validators; no new domain fields are invented.</summary>
-    private static (MapData Data, MapLayout Layout) BuildAuthoritative(string id, string json, string worldVersion)
+    private static (MapData Data, MapLayout Layout, IReadOnlySet<(int X, int Y)> ReachableCells) BuildAuthoritative(string id, string json, string worldVersion)
     {
         try
         {
@@ -175,11 +179,12 @@ public sealed class MapCatalogSnapshot
             // Existing authored builder validates geometry, counts, hazards and connectivity.
             var layout = document.Build(worldVersion);
             var data = MapData.Load(json);
-            if (data.ReachableCells().Count == 0)
+            var reachableCells = data.ReachableCells();
+            if (reachableCells.Count == 0)
                 throw new ArgumentException("Authored map has no reachable cells.");
             if (data.SpawnPoints.Count != 10 || layout.Spawns.Count != 10)
                 throw new ArgumentException("Authored map requires exactly 10 spawn points.");
-            return (data, layout);
+            return (data, layout, reachableCells);
         }
         catch (ArgumentException e)
         {

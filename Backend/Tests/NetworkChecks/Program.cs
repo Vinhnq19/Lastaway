@@ -48,6 +48,7 @@ try
     using var host = new NetworkHost(new ServerOptions(IPAddress.Loopback, port, 10, 30, 1, "RoomCode", TestRoom), metrics);
     var hosts = new List<NetworkHost> { host };
     host.Start();
+    Check(host.Hub.GetDeploymentStatus().SafeToDeploy, "Empty server deployment snapshot is safe");
 
     var wrongKey = AddProbe("wrong-key");
     PumpUntil(() => wrongKey.DisconnectReason is not null);
@@ -83,6 +84,8 @@ try
     // Tạo 11 request cùng lượt: kiểm tra race giữa Accept và callback Connected.
     var batch = Enumerable.Range(0, 11).Select(_ => AddProbe()).ToArray();
     PumpUntil(() => batch.All(peer => peer.Joined || peer.DisconnectReason is not null));
+    var deployment = host.Hub.GetDeploymentStatus();
+    Check(!deployment.SafeToDeploy && deployment.HumanActive > 0, "Deployment refuses occupied server");
     Check(batch.Count(peer => peer.Joined) == 10 && host.ReservedPeers == 10, "11 request đồng thời chỉ nhận 10");
     Check(batch.Single(peer => !peer.Joined).DisconnectReason == "RoomFull", "Peer thứ 11 nhận RoomFull");
     Check(batch.Where(peer => peer.Joined).Select(peer => peer.PlayerId).Distinct().Count() == 10, "RoomCode: server cấp 10 PlayerId khác nhau");
@@ -259,6 +262,9 @@ try
     Check(loopMaxMatch.Success && double.Parse(loopMaxMatch.Groups[1].Value, System.Globalization.CultureInfo.InvariantCulture) >= 250 &&
         gapMaxMatch.Success && double.Parse(gapMaxMatch.Groups[1].Value, System.Globalization.CultureInfo.InvariantCulture) >= 250,
         "Stall diagnostics preserve max work/loop spacing even when p99 hides a rare pause");
+    var pollMax = Regex.Match(output.ToString(), @"pollMaxMs=([0-9.]+)");
+    Check(pollMax.Success && double.Parse(pollMax.Groups[1].Value, System.Globalization.CultureInfo.InvariantCulture) >= 250,
+        "Stage timing identifies the deliberately stalled network poll");
     Check(Regex.IsMatch(output.ToString(), @"gcPauseMs=[0-9.]+ previousReportMs=[0-9.]+"),
         "Window reports distinguish GC pause and previous metric-output time without dropping counters");
 
@@ -508,17 +514,22 @@ try
     {
         tcp.Start(); var controlPort = ((IPEndPoint)tcp.LocalEndpoint).Port; tcp.Stop();
         var secret = Convert.ToHexString(RandomNumberGenerator.GetBytes(32));
-        var control = RoomControlHost.Start(new RoomOptions(ControlToken: secret, ControlPort: controlPort), multi.Commands)!;
+        var control = RoomControlHost.Start(new RoomOptions(ControlToken: secret, ControlPort: controlPort), multi.Commands, multi.Hub)!;
         try
         {
             using var http = new HttpClient { BaseAddress = new Uri($"http://127.0.0.1:{controlPort}") };
             Check((int)http.GetAsync("/internal/rooms?ownerId=owner").GetAwaiter().GetResult().StatusCode == 401, "Private control requires its own secret");
+            Check((int)http.GetAsync("/internal/deployment-status").GetAwaiter().GetResult().StatusCode == 401, "Deployment status is never public without control secret");
             http.DefaultRequestHeaders.Add("X-Room-Control-Key", "wrong");
             Check((int)http.GetAsync("/internal/rooms?ownerId=owner").GetAwaiter().GetResult().StatusCode == 401, "Wrong private secret rejected");
             http.DefaultRequestHeaders.Remove("X-Room-Control-Key"); http.DefaultRequestHeaders.Add("X-Room-Control-Key", secret);
             var task = http.GetAsync("/internal/rooms?ownerId=owner");
             PumpUntil(() => task.IsCompleted);
             Check(task.GetAwaiter().GetResult().IsSuccessStatusCode, "Authorized HTTP control completes through UDP command queue");
+            var statusTask = http.GetAsync("/internal/deployment-status"); PumpUntil(() => statusTask.IsCompleted);
+            var response = statusTask.GetAwaiter().GetResult();
+            var body = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            Check(response.IsSuccessStatusCode && body.Contains("safeToDeploy") && !body.Contains("roomCode", StringComparison.OrdinalIgnoreCase) && !body.Contains(secret), "Deployment snapshot is queued, read-only and omits join codes/secrets");
         }
         finally { control.StopAsync().GetAwaiter().GetResult(); control.DisposeAsync().AsTask().GetAwaiter().GetResult(); }
     }

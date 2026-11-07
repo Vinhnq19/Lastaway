@@ -1,0 +1,281 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8213526459e48349bf7370f5b7b5b0a, type: 3}
+  m_Name: ThrowableArtCatalog
+  m_EditorClassIdentifier: JungleMaze.Presentation::JungleMaze.Presentation.Combat.ThrowableArtCatalog
+  Entries:
+  - ItemId: BANANA
+    Flight:
+      Frames:
+        Sprites:
+        - {fileID: 7381965769198725172, guid: a195559f4d686164da25ac986b0d24d1, type: 3}
+        Times:
+        - 0
+        Duration: 1
+        Loop: 1
+      Content: 0.734375
+    FlightSize: 0.45
+    Blast:
+      Frames:
+        Sprites:
+        - {fileID: -7765348523709983726, guid: d45e55d02700b3d4e9ac80be074eca05, type: 3}
+        - {fileID: 5134369151546457678, guid: d45e55d02700b3d4e9ac80be074eca05, type: 3}
+        - {fileID: -5595241261264972132, guid: d45e55d02700b3d4e9ac80be074eca05, type: 3}
+        - {fileID: 8795527550542511667, guid: d45e55d02700b3d4e9ac80be074eca05, type: 3}
+        - {fileID: 1060515499735505365, guid: d45e55d02700b3d4e9ac80be074eca05, type: 3}
+        - {fileID: 5476081280218353406, guid: d45e55d02700b3d4e9ac80be074eca05, type: 3}
+        - {fileID: -5657998387741406618, guid: d45e55d02700b3d4e9ac80be074eca05, type: 3}
+        - {fileID: 8989753510154877403, guid: d45e55d02700b3d4e9ac80be074eca05, type: 3}
+        Times:
+        - 0
+        - 0.06875
+        - 0.1375
+        - 0.20625001
+        - 0.275
+        - 0.34375
+        - 0.41250002
+        - 0.48125002
+        Duration: 0.55
+        Loop: 0
+      Content: 1
+    Linger:
+      Frames:
+        Sprites:
+        - {fileID: 531190487959408822, guid: 9f7501dbbd0edd84cb2af505c5eafb87, type: 3}
+        Times:
+        - 0
+        Duration: 1
+        Loop: 0
+      Content: 0.484375
+    LingerSize: 0.7
+  - ItemId: SMOKE
+    Flight:
+      Frames:
+        Sprites:
+        - {fileID: -6990950841956652341, guid: 7d123b4e7ffe9ff41b1f4d2edf6aebf6, type: 3}
+        Times:
+        - 0
+        Duration: 1
+        Loop: 1
+      Content: 0.921875
+    FlightSize: 0.45
+    Blast:
+      Frames:
+        Sprites: []
+        Times: []
+        Duration: 0
+        Loop: 0
+      Content: 0
+    Linger:
+      Frames:
+        Sprites:
+        - {fileID: -6263406393262513435, guid: 6a35cc2c8485e8a45bcd9c930e39ffa5, type: 3}
+        - {fileID: -7998501789705523354, guid: 6a35cc2c8485e8a45bcd9c930e39ffa5, type: 3}
+        - {fileID: 2871649648816872375, guid: 6a35cc2c8485e8a45bcd9c930e39ffa5, type: 3}
+        - {fileID: 3706316279051819933, guid: 6a35cc2c8485e8a45bcd9c930e39ffa5, type: 3}
+        Times:
+        - 0
+        - 0.15
+        - 0.3
+        - 0.45000002
+        Duration: 0.6
+        Loop: 1
+      Content: 2.4375
+    LingerSize: 7
+  - ItemId: METEORITE_FRAGMENT
+    Flight:
+      Frames:
+        Sprites:
+        - {fileID: 5945060823959902216, guid: 42ede309ed26acb4c985c02cf3bb749e, type: 3}
+        Times:
+        - 0
+        Duration: 1
+        Loop: 1
+      Content: 0.96875
+    FlightSize: 0.5
+    Blast:
+      Frames:
+        Sprites:
+        - {fileID: 3545876214214813119, guid: b0d56e62778adfc45b7cf82285fbf705, type: 3}
+        - {fileID: -2070575307042353341, guid: b0d56e62778adfc45b7cf82285fbf705, type: 3}
+        - {fileID: -2253405924584457747, guid: b0d56e62778adfc45b7cf82285fbf705, type: 3}
+        - {fileID: -8256353062020681893, guid: b0d56e62778adfc45b7cf82285fbf705, type: 3}
+        - {fileID: 3386425880436102058, guid: b0d56e62778adfc45b7cf82285fbf705, type: 3}
+        - {fileID: 1780289766892833003, guid: b0d56e62778adfc45b7cf82285fbf705, type: 3}
+        - {fileID: -6052583399655497356, guid: b0d56e62778adfc45b7cf82285fbf705, type: 3}
+        Times:
+        - 0
+        - 0.071428575
+        - 0.14285715
+        - 0.21428572
+        - 0.2857143
+        - 0.35714287
+        - 0.42857143
+        Duration: 0.5
+        Loop: 0
+      Content: 2.5625
+    Linger:
+      Frames:
+        Sprites: []
+        Times: []
+        Duration: 0
+        Loop: 0
+      Content: 0
+    LingerSize: 0
+  - ItemId: CRYSTAL
+    Flight:
+      Frames:
+        Sprites:
+        - {fileID: 7479642271789056252, guid: cee34d0b6e37e18449287f98e952a154, type: 3}
+        Times:
+        - 0
+        Duration: 1
+        Loop: 1
+      Content: 1.0703125
+    FlightSize: 0.45
+    Blast:
+      Frames:
+        Sprites:
+        - {fileID: 3545876214214813119, guid: b0d56e62778adfc45b7cf82285fbf705, type: 3}
+        - {fileID: -2070575307042353341, guid: b0d56e62778adfc45b7cf82285fbf705, type: 3}
+        - {fileID: -2253405924584457747, guid: b0d56e62778adfc45b7cf82285fbf705, type: 3}
+        - {fileID: -8256353062020681893, guid: b0d56e62778adfc45b7cf82285fbf705, type: 3}
+        - {fileID: 3386425880436102058, guid: b0d56e62778adfc45b7cf82285fbf705, type: 3}
+        - {fileID: 1780289766892833003, guid: b0d56e62778adfc45b7cf82285fbf705, type: 3}
+        - {fileID: -6052583399655497356, guid: b0d56e62778adfc45b7cf82285fbf705, type: 3}
+        Times:
+        - 0
+        - 0.071428575
+        - 0.14285715
+        - 0.21428572
+        - 0.2857143
+        - 0.35714287
+        - 0.42857143
+        Duration: 0.5
+        Loop: 0
+      Content: 2.5625
+    Linger:
+      Frames:
+        Sprites: []
+        Times: []
+        Duration: 0
+        Loop: 0
+      Content: 0
+    LingerSize: 0
+  - ItemId: SEED
+    Flight:
+      Frames:
+        Sprites:
+        - {fileID: 3124949146848436715, guid: 80bfde283bb7f284faa974c5f1a6fe86, type: 3}
+        Times:
+        - 0
+        Duration: 1
+        Loop: 1
+      Content: 0.9375
+    FlightSize: 0.35
+    Blast:
+      Frames:
+        Sprites:
+        - {fileID: 7557587670062055109, guid: 4e5a9f46c00c35d41bc23742876265ca, type: 3}
+        Times:
+        - 0
+        Duration: 0.5
+        Loop: 0
+      Content: 3.125
+    Linger:
+      Frames:
+        Sprites:
+        - {fileID: 7557587670062055109, guid: 4e5a9f46c00c35d41bc23742876265ca, type: 3}
+        Times:
+        - 0
+        Duration: 1
+        Loop: 0
+      Content: 3.125
+    LingerSize: 0.9
+  - ItemId: ROPE
+    Flight:
+      Frames:
+        Sprites:
+        - {fileID: -8344690870260263076, guid: e278c2614ee2a1c4b9c2a4f9e258154b, type: 3}
+        Times:
+        - 0
+        Duration: 1
+        Loop: 1
+      Content: 5
+    FlightSize: 0.6
+    Blast:
+      Frames:
+        Sprites: []
+        Times: []
+        Duration: 0
+        Loop: 0
+      Content: 0
+    Linger:
+      Frames:
+        Sprites: []
+        Times: []
+        Duration: 0
+        Loop: 0
+      Content: 0
+    LingerSize: 0
+  - ItemId: BELL
+    Flight:
+      Frames:
+        Sprites:
+        - {fileID: 3616512531535755360, guid: 4ac131267c9fbfd4e881250419bf7693, type: 3}
+        Times:
+        - 0
+        Duration: 1
+        Loop: 1
+      Content: 0.63720703
+    FlightSize: 0.55
+    Blast:
+      Frames:
+        Sprites: []
+        Times: []
+        Duration: 0
+        Loop: 0
+      Content: 0
+    Linger:
+      Frames:
+        Sprites: []
+        Times: []
+        Duration: 0
+        Loop: 0
+      Content: 0
+    LingerSize: 0
+  - ItemId: SAHUR_BAT
+    Flight:
+      Frames:
+        Sprites:
+        - {fileID: -2414027456312203395, guid: f2f6ead158665ad45afd5c30860dc8a1, type: 3}
+        Times:
+        - 0
+        Duration: 1
+        Loop: 1
+      Content: 1.03125
+    FlightSize: 0.7
+    Blast:
+      Frames:
+        Sprites: []
+        Times: []
+        Duration: 0
+        Loop: 0
+      Content: 0
+    Linger:
+      Frames:
+        Sprites: []
+        Times: []
+        Duration: 0
+        Loop: 0
+      Content: 0
+    LingerSize: 0

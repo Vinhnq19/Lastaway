@@ -28,9 +28,17 @@ public sealed partial class RoomManager
         internal byte HostNetId = 255;
         internal bool HostAssigned;
         internal uint SelectionRevision = 1;
+        internal uint LobbyRevision = 1, NextBotId;
+        internal Dictionary<string, (uint RequestId, RoomBotError Error)> BotRequests { get; } = new();
         public override string ToString() => $"Room(id={Id}, peers={Peers.Count})";
     }
+    private readonly GameServer.Simulation.Bots.BotNavigationBudget _botNavigationBudget = new() { Shared = true };
+    private readonly GameServer.Simulation.Bots.BotSettings _botWorkSettings = GameServer.Simulation.Bots.BotSettings.Load(GameDataLoader.ReadGameDataFile("bot_settings.json"));
     private readonly RoomOptions _options;
+    private int _roomCursor;
+    public int BotCount => _byCode.Values.Sum(r => r.Match.BotCount);
+    public int BotPathNodes => _botNavigationBudget.Used;
+    public int PendingBotPaths => _byCode.Values.Sum(r => r.Match.PendingBotPaths);
     private readonly TimeProvider _time;
     private readonly Dictionary<string, Room> _byCode = new(StringComparer.Ordinal);
     private readonly MapData _map;
@@ -60,13 +68,13 @@ public sealed partial class RoomManager
     }
 
     public int Count => _byCode.Count;
-    public int ReservedPeers => _byCode.Values.Sum(room => room.Peers.Count);
+    public int ReservedPeers => _byCode.Values.Sum(room => room.Peers.Count + room.Match.BotCount);
     public int ActivePeers => _byCode.Values.Sum(room => room.Peers.Values.Count(active => active));
     public Room? Find(string code) => _byCode.GetValueOrDefault(code);
     public IEnumerable<Room> AllRooms => _byCode.Values;
 
     public string? CapacityError(Room room) =>
-        room.Peers.Count >= room.MaxPlayers ? "RoomFull"
+        room.Peers.Count + room.Match.BotCount >= room.MaxPlayers ? "RoomFull"
         : ReservedPeers >= _options.MaxTotalPlayers ? "ServerFull" : null;
 
     public void Reserve(Room room, int peerId, bool active) => room.Peers.Add(peerId, active);
@@ -96,15 +104,21 @@ public sealed partial class RoomManager
 
     public void Tick(double dt)
     {
-        foreach (var room in _byCode.Values)
+        _botNavigationBudget.Reset(_botWorkSettings.GlobalPathNodesPerTick, _botWorkSettings.GlobalPathMillisecondsPerTick);
+        // Rotate the first room so a busy room cannot monopolise the shared A* budget.
+        var rooms = _byCode.Values.ToArray();
+        for (var index = 0; index < rooms.Length; index++)
         {
+            var room = rooms[(index + _roomCursor) % rooms.Length];
             var phase = room.Match.Phase;
             var matchId = room.Match.MatchId;
             room.Match.Tick(dt);
             RefreshMembers(room);
+            ClearOrphanBots(room);
             if (room.Match.Phase == MatchPhase.Waiting && Catalog is not null) ReconcileMap(room, Catalog.Current);
             if (phase != room.Match.Phase || matchId != room.Match.MatchId) MapStateChanged?.Invoke(room);
         }
+        _roomCursor = (_roomCursor + 1) % rooms.Length;
     }
 
     public RoomResult Create(CreateRoomCommand command)
@@ -165,6 +179,7 @@ public sealed partial class RoomManager
     {
         Id = room.Id, Name = room.Name, IsDefault = room.IsDefault, MaxPlayers = room.MaxPlayers,
         ActivePlayers = room.Peers.Values.Count(active => active), PendingPlayers = room.Peers.Values.Count(active => !active),
+        BotCount = room.Match.BotCount, TotalPlayers = room.Peers.Count + room.Match.BotCount,
         RoomCode = !room.IsDefault && room.Owner == owner ? room.Code : null,
         MapId = room.Match.SelectedMap?.Entry.Id ?? "",
         MapName = room.Match.SelectedMap?.Entry.Name ?? "",
@@ -172,5 +187,5 @@ public sealed partial class RoomManager
         MapHash = room.Match.SelectedMap?.Entry.MapHash ?? ""
     };
 
-    public string Occupancy() => string.Join(',', _byCode.Values.Select(r => $"{r.Id}:{r.Peers.Count}/{r.MaxPlayers}"));
+    public string Occupancy() => string.Join(',', _byCode.Values.Select(r => $"{r.Id}:{r.Peers.Count + r.Match.BotCount}/{r.MaxPlayers}"));
 }

@@ -99,8 +99,8 @@ docker compose logs --tail 40 game-server api
 1. Mở project Unity **6000.3.15f1**, đợi hết compile. Trong menu **Jungle Maze → Phase 2 → Sync Runtime Data** đồng bộ map/luật/bo từ `Backend/Shared/GameData`. Dùng Verify Runtime Data để kiểm; không sửa bản sao StreamingAssets thay nguồn chuẩn.
 2. Trong Nâng cao của menu kết nối scene Boot, chọn profile **phase2-local**, đặt host/port theo compose và nhập `ROOM_CODE` trong `.env`. Protocol v4 bắt buộc account. Đăng ký/đăng nhập trên menu trước khi vào phòng; `apiBaseUrl` trỏ API loopback đang chạy. API từ xa phải HTTPS. Vé30s được cấp trước socket, không nhập JWT vào RoomCode.
 3. Build hai scene `Boot` và `Game` thành Windows player. Chạy một player + Unity Editor, hoặc hai player. Dùng hai tên dễ phân biệt. Cả hai dùng chung endpoint và mã phòng.
-4. Với `MATCH_PROFILE=test`, hai người đủ điều kiện; trưởng phòng vẫn phải bấm Bắt đầu; lobby 0,5s, loading tối đa 1s, disconnect grace 1s, kết quả 0,5s và lịch bo chạy ở 4% thời gian gốc. Với `main`, cần ít nhất 6 người, lobby 15s, loading tối đa 30s, grace 15s, kết quả 10s và bo đúng lịch GDD. **Không dùng test profile để đo thời lượng GDD hoặc đưa public.**
-5. Quan sát roster/countdown/loading, hai nhân vật có nhãn tên/HP, bo đỏ hiện tại và bo vàng kế tiếp. WASD gửi input thật; server tính va chạm/speed/HP. Góc nhìn toàn map dành cho demo. Local HeroController bị tắt khi chơi mạng, tránh hai mô phỏng ghi vị trí.
+4. Với `MATCH_PROFILE=test`, hai người đủ điều kiện; trưởng phòng vẫn phải bấm Bắt đầu; lobby 0,5s, loading tối đa 1s, disconnect grace 1s, kết quả 0,5s và lịch bo chạy ở 4% thời gian gốc. Với `main`, cần ít nhất 6 người, lobby 5s, loading tối đa 30s, grace 15s, kết quả 10s và bo đúng lịch GDD. **Không dùng test profile để đo thời lượng GDD hoặc đưa public.**
+5. Quan sát roster/countdown/loading, hai nhân vật có nhãn tên/HP, bo đỏ hiện tại và bo vàng kế tiếp. WASD gửi input thật; server tính va chạm/speed/HP. Camera đi theo nhân vật của mình; spectator dùng camera theo mục tiêu đang xem. Local HeroController bị tắt khi chơi mạng, tránh hai mô phỏng ghi vị trí.
 6. Ra ngoài bo để thấy HP giảm5/s; đợi thắng/hòa, xem hạng và nhấn chơi lại để trở về phòng; trưởng phòng chọn map và Bắt đầu lượt mới. Cùng tick bị loại đồng hạng. Bo về0 vẫn gây damage toàn map;420s không phải timeout cưỡng bức.
 7. Rời phòng bằng nút để loại ngay. Mất mạng đột ngột: nhân vật đứng yên và còn nhận damage; nút khôi phục chỉ thành công khi còn sống và trong grace từ lúc server phát hiện mất kết nối: 15s với `main`, 1s với `test`. Resume giữ PlayerId/slot và đổi proof; không tạo nhân vật thứ hai.
 8. Nút lịch sử gọi API cho hồ sơ đã xác minh. Không tạo Guest mới trong flow chơi. JWT chỉ giữ RAM; mở lại client cần đăng nhập. Guest cũ không bị xóa/gộp. API mất kết nối vẫn xem kết quả trực tiếp; lịch sử báo không khả dụng. Không tự gộp tài khoản theo tên.
@@ -281,3 +281,23 @@ Không truyền `-offlineTest` khi chơi bình thường. Chạy lại sau khi s
 Giữ Unity **6000.3.15f1** theo quyết định01/11. Windows player có thể hoàn tất scenario nhưng crash trong cleanup Accessibility lúc thoát; báo cáo JSON `passed=true` hoặc `status=PASS` chưa đủ nếu process exit khác0. Launcher phải giữ FAIL/BLOCKED và không mở cổng deploy AWS. Stack native và Event1000 được lưu cùng bằng chứng. Unity công bố bản sửa UUM-146676 tại [6000.3.21f1](https://unity.com/releases/editor/whats-new/6000.3.21f1); chưa được phép đổi Editor. Không tắt hỗ trợ accessibility hoặc bỏ kiểm exit code để đổi kết quả thành PASS.
 
 Lượt sáu client01/11 sau sửa ACK quan sát đủ flow qua2 trận, nhưng vẫn có8 dropped tick và crash native khi thoát; chưa đạt cổng Local/AWS. Lỗi Mono startup ở một lượt khác được ghi riêng, chưa xác định nguyên nhân. Xem báo cáo hiện hành, không suy ra mọi lỗi native đều là Accessibility.
+
+
+## Chơi với bot trong phòng mạng
+
+Bản bot hiện hành AWS là **bots-20261105-r2**, Windows build **6000.3.15f1** tại `Builds/Windows-Bots-6000.3.15f1/Lastaway.exe`. Xem [báo cáo hiện hành](Reports/Server_Bots/report.vi.md) để biết build/release đã kiểm. Local luyện tập offline không có bot trong đợt này.
+
+1. Bật stack backend Local hoặc chọn backend LAN/AWS đã có bản bot, đăng nhập bằng tài khoản của chính backend đó.
+2. Tạo/vào phòng, chọn map. Chỉ trưởng phòng được dùng **+ Bot**, **Xóa** trên hàng bot, hoặc **Điền đủ 6** khi Waiting. Profile test riêng hiển thị đúng số tối thiểu của profile.
+3. Một người +5 bot đáp ứng cấu hình chính min6; phòng tối đa10 participant. Người thật tải/xác minh map xong thì trưởng phòng bấm **Bắt đầu**. Bot dùng map server nên không phải tải HTTP.
+4. Bot FFA đánh cả người thật và bot khác, loot/phá vật/dùng vũ khí/thuốc theo luật chung. Kết quả có nhãn **CÓ BOT**, lịch sử ghi **WithBots**; bot có thể thắng. Trận này không tính như thành tích PvP thuần người.
+5. Chơi lại giữ số bot, reset AI/HP/đồ; về phòng chờ rồi bấm Start cho lượt mới. Muốn đón người mới khi phòng đầy bot phải xóa bot trước. Không thể sửa bot trong countdown/loading/trận.
+6. Người cuối rời phòng chờ thì bot bị dọn. Khi tất cả người thật rời trong trận, server giữ grace reconnect rồi kết thúc NoHumans nếu không ai trở lại; không trao win. Restart xóa toàn bộ session/bot và phòng bổ sung trong RAM, giữ tài khoản/kết quả Mongo.
+
+### Test nhanh bản bot
+
+- **Local:** mở Docker Desktop; tại `Backend` chạy `docker compose --profile account up -d --build`. Mở `Builds/Windows-Bots-6000.3.15f1/Lastaway.exe` (hoặc scene Boot trong Editor), chọn Local, đăng ký/đăng nhập tài khoản Local, tạo phòng và chọn map. Bấm **Điền đủ 6** để có 1 người +5 bot, đợi tải map xong rồi **Bắt đầu**. Muốn 1+9 thì bấm thêm bot tới tổng10. Không chọn Luyện tập offline để test bot.
+- **Hai người:** chạy hai player/two PC, cùng backend và mã phòng; trưởng phòng thêm4 bot để đủ6. Hai PC cần tài khoản riêng, endpoint LAN/VPN/AWS phù hợp và cùng bản client gameplay v3. So sánh di chuyển/loot/HP/bo/kết quả và chơi lại theo checklist hai PC; nhiều cửa sổ trên một PC chỉ kiểm flow đồng bộ.
+- **AWS:** dùng profile Online với HTTPS/WSS hợp lệ và tài khoản AWS backend. Xem release hiện hành trong báo cáo bot trước khi dùng client mới; client gameplay v2 cũ bị từ chối rõ ràng. Không gửi mật khẩu/JWT trong mã phòng hoặc commandline. EC2 được giữ Running trong đợt này; admin tự Stop khi hết buổi để tiết kiệm credits.
+
+Dev smoke có thể đặt NET_SMOKE_BOTS=5 với NetSmokeClient --gameplay để chủ phòng yêu cầu thêm bot; đây là smoke backend, không tạo AI bên client. Unity acceptance runner nhận NET_TEST_BOT_COUNT=5 và NET_TEST_MAP_ID theo catalog. Luôn xem exitcode và report thực, không chỉ dòng PASS trong log player. Không dùng UI Automation lúc nghiệm thu thoát player15f1 vì lỗi engine đã ghi ở báo cáo cũ; không tắt accessibility để đổi kết quả thành PASS.

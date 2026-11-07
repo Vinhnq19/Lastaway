@@ -1,3 +1,4 @@
+using GameServer.Maps;
 using JungleMaze.World;
 using JungleBackend.Protocol.Gameplay;
 using GameServer.Simulation;
@@ -32,6 +33,35 @@ Check(!destructibles.DamageConfirmed(chest.Id,20,0,1),"duplicate damage ignored"
 Check(destructibles.DamageConfirmed(chest.Id,20,1,1),"second attacker breaks chest");
 Check(loot.LootCount==1&&destructibles.IsBroken(chest.Id),"single loot batch and broken state");
 Check(!destructibles.DamageConfirmed(chest.Id,100,1,2)&&loot.LootCount==1,"broken cannot respawn loot");
+
+var blastMap = new MapLayout { Size = 50 };
+blastMap.Objects.AddRange(new[]
+{
+    new WorldObjectDefinition { Id = 1, Kind = WorldObjectKind.Chest, Bounds = new WorldBounds(11.6f, 10, 1, 1) },
+    new WorldObjectDefinition { Id = 2, Kind = WorldObjectKind.Pot, Bounds = new WorldBounds(9, 10, 1, 1) },
+    new WorldObjectDefinition { Id = 3, Kind = WorldObjectKind.Pot, Bounds = new WorldBounds(10, 11.3f, 1, 1) },
+    new WorldObjectDefinition { Id = 4, Kind = WorldObjectKind.Wall, Bounds = new WorldBounds(10, 10.5f, 1, .2f) },
+    new WorldObjectDefinition { Id = 5, Kind = WorldObjectKind.Chest, Bounds = new WorldBounds(10, 8.7f, 1, 1) },
+    new WorldObjectDefinition { Id = 6, Kind = WorldObjectKind.Door, Bounds = new WorldBounds(10, 9.5f, 1, .2f) },
+    new WorldObjectDefinition { Id = 7, Kind = WorldObjectKind.Supply, Bounds = new WorldBounds(11.3f, 11.3f, .5f, .5f) },
+    new WorldObjectDefinition { Id = 8, Kind = WorldObjectKind.Pot, Bounds = new WorldBounds(12.1f, 10, 1, 1) }
+});
+var blastLoot = new FakePorts();
+var blastObjects = new DestructibleService(blastMap, new DestructibleConfig(), blastLoot);
+var blastArea = new WorldBounds(10, 10, 3, 3);
+blastObjects.DamageContainersInBlast(blastArea, 20, 0, 1, _ => true);
+blastObjects.DamageContainersInBlast(blastArea, 20, 0, 1, _ => true);
+Check(blastObjects.TryGet(1, out var exposedChest) && exposedChest.Hp == 10 && exposedChest.Revision == 1,
+    "blast hits the exposed part of a chest once, even when its center is outside");
+Check(blastObjects.IsBroken(2) && blastLoot.LootCount == 1, "20 blast damage breaks the exposed pot and drops one loot batch");
+Check(blastObjects.TryGet(3, out var shelteredPot) && shelteredPot.Hp == 20 &&
+    blastObjects.TryGet(5, out var shelteredChest) && shelteredChest.Hp == 30, "hard cover and a closed door protect containers");
+Check(blastObjects.TryGet(7, out var supply) && supply.Hp == 150 &&
+    blastObjects.TryGet(8, out var outsidePot) && outsidePot.Hp == 20, "supply and containers outside the blast are unaffected");
+blastObjects.DamageContainersInBlast(blastArea, 30, 0, 2, _ => false);
+Check(blastObjects.IsBroken(1) && blastObjects.IsBroken(5) && !blastObjects.IsBroken(3) && blastLoot.LootCount == 3,
+    "a second blast reaches an open doorway and cannot drop loot from a previously broken pot");
+
 var hazardMap=new MapLayout{Version="test",Size=50};
 hazardMap.Objects.Add(new WorldObjectDefinition{Id=1,Kind=WorldObjectKind.Lava,Bounds=new WorldBounds(5,5,3,3)});
 hazardMap.Objects.Add(new WorldObjectDefinition{Id=2,Kind=WorldObjectKind.Swamp,Bounds=new WorldBounds(10,10,4,4)});
@@ -85,14 +115,17 @@ try
 {
     Environment.SetEnvironmentVariable("WORLD_ENABLED","1");
     Environment.SetEnvironmentVariable("WORLD_LAYOUT_MODE","Prototype");
-    var canonical=MapData.Load(GameDataLoader.ReadGameDataFile("map_demo.json"));
+    // This golden vector describes the shipped ruins map, independently of the developer-selected default.
+    var definition=new MapCatalogStore(Path.Combine(AppContext.BaseDirectory,"FixtureMaps"),"world-prototype-1").Current.Find("di-tich-co")!;
+    var canonical=definition.Data;
     var schedule=ZoneSchedule.Load(GameDataLoader.ReadGameDataFile("zone_schedule.json"));
     var profile=new MatchProfile{Version=canonical.Version,MinPlayers=2,LobbyDurationSeconds=.01,LoadingTimeoutSeconds=1,ZoneTimeScale=1000,TargetMatchDurationSeconds=10000};
     MatchRuntime Start(string room,byte hp=100)
     {
         var p=hp==100?profile:new MatchProfile{Version=canonical.Version,MinPlayers=2,LobbyDurationSeconds=.01,LoadingTimeoutSeconds=1,PlayerHp=hp,ZoneTimeScale=1000,TargetMatchDurationSeconds=10000};
-        var m=new MatchRuntime(room,canonical,schedule,p);
+        var m=new MatchRuntime(room,canonical,schedule,p,selectedMap:definition);
         m.TryRegisterPlayer("p0","Hero0",out _);m.TryRegisterPlayer("p1","Hero1",out _);m.SetPlayerReady("p0");m.SetPlayerReady("p1");
+        m.StartFromRoom();
         for(var i=0;i<4;i++)m.Tick(1.0/30);
         m.SetPlayerLoaded("p0",m.MatchId);m.SetPlayerLoaded("p1",m.MatchId);m.Tick(1.0/30);
         return m;

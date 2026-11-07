@@ -52,7 +52,7 @@ public sealed record MatchParticipantSubmission(
     int Rank,
     int Kills,
     double SurvivalSeconds,
-    string? ProfileKey = null
+    string? ProfileKey = null, bool IsBot = false
 );
 
 /// <summary>
@@ -66,7 +66,7 @@ public sealed record MatchResultSubmission(
     DateTimeOffset EndUtc,
     string Reason,
     IReadOnlyList<MatchParticipantSubmission> Participants,
-    string MapId = "", string MapVersion = "", string MapHash = "", string RulesHash = ""
+    string MapId = "", string MapVersion = "", string MapHash = "", string RulesHash = "", string MatchKind = "HumanOnly"
 );
 
 /// <summary>
@@ -77,7 +77,7 @@ public sealed record SanitizedMatchParticipant(
     string DisplayName,
     int Rank,
     int Kills,
-    double SurvivalSeconds
+    double SurvivalSeconds, bool IsBot = false
 );
 
 /// <summary>
@@ -91,7 +91,7 @@ public sealed record MatchLeaderboardResponse(
     DateTimeOffset EndUtc,
     string Reason,
     IReadOnlyList<SanitizedMatchParticipant> Players,
-    string MapId = "", string MapVersion = "", string MapHash = "", string RulesHash = ""
+    string MapId = "", string MapVersion = "", string MapHash = "", string RulesHash = "", string MatchKind = "HumanOnly"
 );
 
 /// <summary>
@@ -105,7 +105,7 @@ public sealed record MyMatchHistoryItem(
     double SurvivalSeconds,
     DateTimeOffset EndedAt,
     string Reason,
-    string MapId = "", string MapVersion = "", string MapHash = "", string RulesHash = ""
+    string MapId = "", string MapVersion = "", string MapHash = "", string RulesHash = "", string MatchKind = "HumanOnly"
 );
 
 /// <summary>
@@ -132,7 +132,7 @@ public static class MatchCanonicalHasher
             submission.StartUtc,
             submission.EndUtc,
             submission.Reason,
-            submission.Participants, submission.MapId, submission.MapVersion, submission.MapHash, submission.RulesHash);
+            submission.Participants, submission.MapId, submission.MapVersion, submission.MapHash, submission.RulesHash, submission.MatchKind);
 
     public static string ComputeCanonicalHash(
         Guid matchId,
@@ -142,7 +142,7 @@ public static class MatchCanonicalHasher
         DateTimeOffset endUtc,
         string reason,
         IEnumerable<MatchParticipantSubmission> participants,
-        string mapId = "", string mapVersion = "", string mapHash = "", string rulesHash = "")
+        string mapId = "", string mapVersion = "", string mapHash = "", string rulesHash = "", string matchKind = "HumanOnly")
     {
         // Length-prefixed binary canonical form: names may contain pipes/newlines without hash ambiguity.
         // Preserve full time/double precision so a subtly changed payload is still a conflict.
@@ -162,6 +162,8 @@ public static class MatchCanonicalHasher
             // Old outbox records retain their canonical hash; selected-map results bind all independent versions.
             if (!string.IsNullOrEmpty(mapId) || !string.IsNullOrEmpty(mapHash) || !string.IsNullOrEmpty(rulesHash) || !string.IsNullOrEmpty(mapVersion))
             { writer.Write(mapId ?? ""); writer.Write(mapVersion ?? ""); writer.Write(mapHash ?? ""); writer.Write(rulesHash ?? ""); }
+            if (matchKind != "HumanOnly" || ordered.Any(p => p.IsBot))
+            { writer.Write("bot-metadata-v1"); writer.Write(matchKind); foreach (var p in ordered) writer.Write(p.IsBot); }
         }
         return Convert.ToHexString(SHA256.HashData(stream.ToArray())).ToLowerInvariant();
     }

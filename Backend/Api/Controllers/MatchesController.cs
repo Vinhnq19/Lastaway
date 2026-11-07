@@ -71,7 +71,7 @@ public sealed class MatchesController(
                     Kills: participant.Kills,
                     SurvivalSeconds: participant.SurvivalSeconds,
                     EndedAt: new DateTimeOffset(match.EndUtc, TimeSpan.Zero),
-                    Reason: match.Reason, MapId: match.MapId, MapVersion: match.MapVersion, MapHash: match.MapHash, RulesHash: match.RulesHash
+                    Reason: match.Reason, MapId: match.MapId, MapVersion: match.MapVersion, MapHash: match.MapHash, RulesHash: match.RulesHash, MatchKind: match.MatchKind
                 ));
             }
         }
@@ -107,7 +107,7 @@ public sealed class MatchesController(
                     DisplayName: p.DisplayName,
                     Rank: p.Rank,
                     Kills: p.Kills,
-                    SurvivalSeconds: p.SurvivalSeconds
+                    SurvivalSeconds: p.SurvivalSeconds, IsBot: p.IsBot
                 ))
                 .ToList();
 
@@ -118,7 +118,7 @@ public sealed class MatchesController(
                 StartUtc: new DateTimeOffset(match.StartUtc, TimeSpan.Zero),
                 EndUtc: new DateTimeOffset(match.EndUtc, TimeSpan.Zero),
                 Reason: match.Reason,
-                Players: players, MapId: match.MapId, MapVersion: match.MapVersion, MapHash: match.MapHash, RulesHash: match.RulesHash
+                Players: players, MapId: match.MapId, MapVersion: match.MapVersion, MapHash: match.MapHash, RulesHash: match.RulesHash, MatchKind: match.MatchKind
             );
 
             return Ok(response);
@@ -166,7 +166,7 @@ public sealed class MatchesController(
         }
 
         // 2. Validate server-issued submission bounds
-        if (!Guid.TryParse(submission.RoomId, out _) || string.IsNullOrEmpty(submission.ConfigVersion) || submission.ConfigVersion.Length > 32 || submission.Reason is not ("LastAlive" or "Tie" or "Timeout" or "Cancelled"))
+        if (!Guid.TryParse(submission.RoomId, out _) || string.IsNullOrEmpty(submission.ConfigVersion) || submission.ConfigVersion.Length > 32 || submission.Reason is not ("LastAlive" or "Tie" or "Timeout" or "Cancelled" or "NoHumans"))
             return BadRequest(new { error = "InvalidMatchMetadata" });
         if (submission.MatchId == Guid.Empty)
             return BadRequest(new { error = "InvalidMatchId" });
@@ -189,6 +189,9 @@ public sealed class MatchesController(
                 return BadRequest(new { error = "InvalidSurvivalSeconds" });
         }
 
+        if (submission.MatchKind is not ("HumanOnly" or "WithBots") || (submission.MatchKind == "WithBots") != submission.Participants.Any(p => p.IsBot) || submission.Participants.Any(p => p.IsBot && p.ProfileKey != null))
+            return BadRequest(new { error = "InvalidBotMetadata" });
+
         // 3. Normalized canonical representation & canonical hash computation
         var canonicalHash = MatchCanonicalHasher.ComputeCanonicalHash(submission);
 
@@ -202,7 +205,7 @@ public sealed class MatchesController(
             MapId = submission.MapId, MapVersion = submission.MapVersion, MapHash = submission.MapHash, RulesHash = submission.RulesHash,
             StartUtc = submission.StartUtc.UtcDateTime,
             EndUtc = submission.EndUtc.UtcDateTime,
-            Reason = submission.Reason ?? "",
+            Reason = submission.Reason ?? "", MatchKind = submission.MatchKind,
             Participants = submission.Participants.Select(p => new MatchParticipantRecord
             {
                 PlayerSessionId = p.PlayerSessionId,
@@ -210,7 +213,7 @@ public sealed class MatchesController(
                 Rank = p.Rank,
                 Kills = p.Kills,
                 SurvivalSeconds = p.SurvivalSeconds,
-                ProfileKey = p.ProfileKey
+                ProfileKey = p.ProfileKey, IsBot = p.IsBot
             }).ToList()
         };
 

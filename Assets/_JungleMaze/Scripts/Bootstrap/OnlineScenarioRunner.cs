@@ -25,14 +25,14 @@ namespace JungleMaze.Composition
         [Serializable] public sealed class Metrics
         {
             public float elapsedSeconds, connectedSeconds;
-            public int snapshots, inputs, ignoredPackets, catchupDrops, maxPlayers, completedMatches;
+            public int snapshots, inputs, ignoredPackets, catchupDrops, maxPlayers, maxRosterPlayers, maxOnScreenPlayers, completedMatches;
             public double inputHz, activeInputSeconds, snapshotHz, snapshotSeconds, rttP50Ms, rttP95Ms, rttP99Ms;
             public int pings, pongs, pongTimeouts;
         }
         [Serializable] public sealed class Evidence
         {
             public int schemaVersion = 1, physicalDeviceCount = 1;
-            public string scenarioId, status, reason, selectedTransport, fallbackReason, endpoint, matchId;
+            public string scenarioId, status, reason, selectedTransport, fallbackReason, endpoint, matchId, disconnectCallSite;
             public Metrics metrics = new Metrics();
             public Assertion[] assertions;
         }
@@ -64,6 +64,7 @@ namespace JungleMaze.Composition
         private RoomMapSession _roomMaps;
         private bool _startRequested;
         private string _testMapId;
+        private int _testBotCount;
         private uint _testMapRevision;
         private bool _capturedLobby;
         [Inject] public void BindRoomMaps(RoomMapSession maps) => _roomMaps = maps;
@@ -81,15 +82,18 @@ namespace JungleMaze.Composition
 
         private void NetworkChanged(NetworkStateChanged change)
         {
-            if (_finished || !_wasJoined || _failureStats.HasValue || change.Current != NetworkState.Failed) return;
+            if (_finished || !_wasJoined || _failureStats.HasValue || (change.Current != NetworkState.Failed && change.Current != NetworkState.Disconnected)) return;
             // Reconnect can reset LastReason/stats in the same frame; retain the original transport failure.
             _failureStats = _network.Stats; _failureEndpoint = _network.Endpoint; _failureReason = change.Reason.ToString();
+            _evidence.disconnectCallSite = Environment.StackTrace; // Only this opt-in test component records caller frames, never auth payloads.
         }
 
         private IEnumerator Start()
         {
             _started = Time.realtimeSinceStartup;
             _testMapId = Environment.GetEnvironmentVariable("NET_TEST_MAP_ID");
+            var bots = Environment.GetEnvironmentVariable("NET_TEST_BOT_COUNT");
+            if (!string.IsNullOrEmpty(bots) && (!int.TryParse(bots, out _testBotCount) || _testBotCount < 0 || _testBotCount > 9)) throw new ArgumentException("NET_TEST_BOT_COUNT must be 0..9.");
             var args = Environment.GetCommandLineArgs(); string scenarioPath = null;
             for (var i = 0; i + 1 < args.Length; i++)
             { if (args[i] == "-onlineTest") scenarioPath = args[++i]; else if (args[i] == "-onlineEvidence") _output = args[++i]; }
@@ -144,13 +148,18 @@ namespace JungleMaze.Composition
             var context = new OnlineTestContext(_match, _network, _history, _sender, elapsed);
             if (_roomMaps != null && _roomMaps.HasState)
             {
-                if (_roomMaps.Verified && !_capturedLobby)
+                if (_roomMaps.Verified && _roomMaps.State.BotCount >= _testBotCount && (string.IsNullOrEmpty(_testMapId) || _roomMaps.State.MapId == _testMapId) && !_capturedLobby)
                 { ScreenCapture.CaptureScreenshot(_output + ".lobby.png"); _capturedLobby = true; }
                 if (_roomMaps.IsHost && _match.Phase == MatchPhase.Waiting && !string.IsNullOrEmpty(_testMapId) && _roomMaps.State.MapId != _testMapId)
                 {
                     var target = Array.Find(_roomMaps.Catalog?.Maps ?? Array.Empty<PublishedMap>(), map => map.Id == _testMapId);
                     if (target != null && _testMapRevision != _roomMaps.State.SelectionRevision)
                     { _testMapRevision = _roomMaps.State.SelectionRevision; _roomMaps.Select(target); }
+                    return;
+                }
+                if (_roomMaps.IsHost && _match.Phase == MatchPhase.Waiting && _roomMaps.State.BotCount < _testBotCount)
+                {
+                    if (_roomMaps.CanManageBots) _roomMaps.ManageBots(RoomBotAction.Add);
                     return;
                 }
                 if (!_roomMaps.CanStart || _match.Phase != MatchPhase.Waiting) _startRequested = false;
@@ -199,15 +208,20 @@ namespace JungleMaze.Composition
                     if (Vector2.Distance(position, _firstPosition.Value) > .5f) Mark("movement");
                     if (own.Current.Hp < 100) Mark("hpDamage");
                 }
-                var visible = 0; var spawner = FindAnyObjectByType<RemotePlayerSpawner>();
-                if (spawner != null && Camera.main != null) foreach (var id in _match.Players.ActiveIds)
+                var spawned = 0; var visible = 0; var spawner = FindAnyObjectByType<RemotePlayerSpawner>();
+                if (spawner != null) foreach (var id in _match.Players.ActiveIds)
                 {
-                    var view = spawner.GetView(id); if (view == null) continue;
-                    var p = Camera.main.WorldToViewportPoint(view.transform.position);
-                    if (p.z > 0 && p.x >= 0 && p.x <= 1 && p.y >= 0 && p.y <= 1) visible++;
+                    var view = spawner.GetView(id); if (view == null || !view.transform.gameObject.activeInHierarchy) continue;
+                    spawned++;
+                    if (Camera.main == null) continue;
+                    var point = Camera.main.WorldToViewportPoint(view.transform.position);
+                    if (point.z > 0 && point.x >= 0 && point.x <= 1 && point.y >= 0 && point.y <= 1) visible++;
                 }
-                _evidence.metrics.maxPlayers = Math.Max(_evidence.metrics.maxPlayers, visible);
-                if (visible >= _scenario.expectedPlayers) Mark("playersVisible");
+                _evidence.metrics.maxPlayers = Math.Max(_evidence.metrics.maxPlayers, spawned);
+                _evidence.metrics.maxRosterPlayers = Math.Max(_evidence.metrics.maxRosterPlayers, _match.Roster.Length);
+                _evidence.metrics.maxOnScreenPlayers = Math.Max(_evidence.metrics.maxOnScreenPlayers, visible);
+                // Follow Player intentionally cannot show a whole FFA map at once; require the roster and every network view instead.
+                if (spawned >= _scenario.expectedPlayers && _match.Roster.Length >= _scenario.expectedPlayers) Mark("playersVisible");
                 if (!_capturedView && Seen("playersVisible") && Seen("movement"))
                 { ScreenCapture.CaptureScreenshot(_output + ".png"); _capturedView = true; }
                 if (_match.HasZone) Mark("zone");
@@ -287,7 +301,7 @@ namespace JungleMaze.Composition
             }
             var assertions = new List<Assertion>();
             foreach (var id in new[] { "joined", "playersVisible", "movement", "zone", "hpDamage", "result", "replay", "history" })
-                assertions.Add(new Assertion { id = id, status = Seen(id) ? "PASS" : "NOT_OBSERVED", detail = "Observed during this run" });
+                assertions.Add(new Assertion { id = id, status = Seen(id) ? "PASS" : "NOT_OBSERVED", detail = id == "playersVisible" ? "Roster and network views confirmed; Follow Player viewport count is separate" : "Observed during this run" });
             foreach (var pair in _checkResults) assertions.Add(new Assertion { id = pair.Key, status = pair.Value.Status, detail = pair.Value.Detail });
             _evidence.assertions = assertions.ToArray();
             try

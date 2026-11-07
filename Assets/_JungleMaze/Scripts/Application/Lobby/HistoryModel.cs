@@ -86,7 +86,7 @@ namespace JungleMaze.App.Lobby
 
         /// <summary>Local time, rank, survival, reason.</summary>
         public static string Line(PlayerMatchHistory row) =>
-            row.EndedAt.ToLocalTime().ToString("dd/MM HH:mm") + " · Hạng #" + row.Rank + " · Sống sót "
+            (row.MatchKind == "WithBots" ? "[Có bot] " : "") + row.EndedAt.ToLocalTime().ToString("dd/MM HH:mm") + " · Hạng #" + row.Rank + " · Sống sót "
             + Domain.Lobby.ResultRow.Clock((float)row.SurvivalSeconds) + " · " + (row.Reason ?? "");
 
         private void Set(ListState state, string message)
