@@ -38,6 +38,7 @@ namespace JungleMaze.Presentation.World.Loot
 
         private GroundLootArt _art;
         private GroundLootTuning.RarityStyle _style;
+        private GroundLootArrival _arrival;
         private Vector2 _ground;
         private double _shownAt;
         private int _sparkleCount;
@@ -47,6 +48,7 @@ namespace JungleMaze.Presentation.World.Loot
         public ushort WorldId { get; private set; }
         public string ItemId { get; private set; }
         public GroundLootArt Art => _art;
+        public GroundLootEntry Entry => _arrival.Entry;
         /// <summary>Visible (non-zero alpha) light column, for tests.</summary>
         public bool HasBeam => _beam != null && _beam.enabled;
         public int SparkleCount => _sparkleCount;
@@ -88,10 +90,10 @@ namespace JungleMaze.Presentation.World.Loot
             return r;
         }
 
-        /// <summary>Starts presenting one item: short fade-in, then hover.</summary>
-        public void Show(ushort id, string itemId, float x, float y, GroundLootArt art, double now)
+        /// <summary>Starts presenting one item: entry animation from <paramref name="arrival"/>, then hover.</summary>
+        public void Show(ushort id, string itemId, float x, float y, GroundLootArt art, GroundLootArrival arrival, double now)
         {
-            WorldId = id; ItemId = itemId; _art = art; _shownAt = now;
+            WorldId = id; ItemId = itemId; _art = art; _arrival = arrival; _shownAt = now;
             _ground = new Vector2(x, y);
             _lit = GroundLootLook.HasRarityLight(art.Shape);
             _style = _tuning.StyleOf(art.Rarity);
@@ -122,21 +124,43 @@ namespace JungleMaze.Presentation.World.Loot
         {
             if (_tuning == null) return;
             var t = (float)(now - _shownAt);
-            var point = _ground;
-            var appear = Fade(t, _tuning.FadeSeconds);
-            var light = appear;
+            Vector2 point = _ground; float lift = 0f, appear = 1f, light, settle, spin = 0f;
+            if (_arrival.Entry == GroundLootEntry.Launch)
+            {
+                var flight = t - _arrival.Delay;
+                if (flight < 0f)
+                {
+                    // Waiting for its turn inside the container: hidden at the launch origin.
+                    transform.position = new Vector3(_arrival.FromX, _arrival.FromY, 0f);
+                    SetAlpha(0f, 0f, 0f);
+                    return;
+                }
+                var pose = GroundLootMotion.Flight(flight, _arrival.FromX, _arrival.FromY, _ground.x, _ground.y,
+                    _tuning.LaunchHeight, _tuning.LaunchSeconds, _tuning.BounceHeight, _tuning.BounceShare);
+                point = new Vector2(pose.X, pose.Y); lift = pose.Lift;
+                var since = flight - _tuning.LaunchSeconds;
+                settle = pose.Landed ? Fade(since, _tuning.LightFadeSeconds) : 0f;
+                light = settle;
+                if (!pose.Landed) spin = _tuning.LaunchSpinDegrees * (1f - Mathf.Clamp01(flight / Mathf.Max(.01f, _tuning.LaunchSeconds)));
+            }
+            else
+            {
+                appear = Fade(t, _tuning.FadeSeconds);
+                light = appear; settle = 1f;
+            }
 
             transform.position = new Vector3(point.x, point.y, 0f);
             _body.sortingOrder = DepthSortingSystem.ComputeOrder(point.y, DepthSortingSystem.DefaultPrecision);
 
-            var bob = GroundLootMotion.Bob(now, WorldId, _tuning.BobAmplitude, _tuning.BobPeriod);
-            var height = _tuning.FloatHeight + bob;
-            var rotation = Quaternion.Euler(0f, 0f, _art.Angle);
+            var bob = GroundLootMotion.Bob(now, WorldId, _tuning.BobAmplitude, _tuning.BobPeriod) * settle;
+            var height = _tuning.FloatHeight + bob + lift;
+            var rotation = Quaternion.Euler(0f, 0f, _art.Angle + spin);
             var center = rotation * (Vector3)(_art.Center * _art.Scale);
             _itemTransform.localRotation = rotation;
             _itemTransform.localPosition = new Vector3(-center.x, height - center.y, 0f);
 
-            _shadow.transform.localScale = new Vector3(_tuning.ShadowSize.x, _tuning.ShadowSize.y, 1f);
+            var shadow = Mathf.Lerp(1f, _tuning.ShadowMinScale, Mathf.Clamp01((height - _tuning.FloatHeight) / Mathf.Max(.01f, _tuning.LaunchHeight)));
+            _shadow.transform.localScale = new Vector3(_tuning.ShadowSize.x * shadow, _tuning.ShadowSize.y * shadow, 1f);
 
             var pulse = 1f - _tuning.BeamPulse * .5f * (1f + Mathf.Sin((float)(now / Mathf.Max(.1f, _tuning.BeamPulsePeriod)) * Mathf.PI * 2f + GroundLootMotion.Phase(WorldId) * 6.283f));
             SetAlpha(appear, light, pulse);

@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace JungleMaze.Tests.World
 {
-    /// <summary>Ground loot look: shape and size per item, rarity light, hover curve and pooled views.</summary>
+    /// <summary>Ground loot look: shape and size per item, rarity light, hover/launch curves and pooled views.</summary>
     public sealed class GroundLootViewTests
     {
         private static ItemDefinition Def(ItemKind kind, ItemRarity rarity = ItemRarity.Common) => new ItemDefinition { Id = "X", Kind = kind, Rarity = rarity };
@@ -37,6 +37,23 @@ namespace JungleMaze.Tests.World
                 Assert.LessOrEqual(Mathf.Abs(GroundLootMotion.Bob(t, 7, .08f, 1.6f)), .08f + 1e-6f);
             Assert.AreEqual(GroundLootMotion.Bob(.3, 7, .08f, 1.6f), GroundLootMotion.Bob(1.9, 7, .08f, 1.6f), 1e-5f, "1.6 s period");
             Assert.AreNotEqual(GroundLootMotion.Phase(7), GroundLootMotion.Phase(8));
+        }
+
+        [Test]
+        public void FlightArcs_EasesOut_AndLandsOnTheItem()
+        {
+            const float h = .8f, d = .45f, bounce = .1f, share = .22f;
+            var start = GroundLootMotion.Flight(0, 10, 10, 11, 10, h, d, bounce, share);
+            Assert.AreEqual(10f, start.X, 1e-5f); Assert.AreEqual(0f, start.Lift, 1e-5f);
+            var main = d * (1 - share);
+            var half = GroundLootMotion.Flight(main * .5f, 10, 10, 11, 10, h, d, bounce, share);
+            Assert.Greater(half.X, 10.5f, "ease-out: more than half way at half time");
+            var peak = Enumerable.Range(0, 100).Max(i => GroundLootMotion.Flight(main * i / 100f, 10, 10, 11, 10, h, d, bounce, share).Lift);
+            Assert.AreEqual(h, peak, .01f, "arc about 0.8 cells high");
+            var hop = GroundLootMotion.Flight(main + (d - main) * .5f, 10, 10, 11, 10, h, d, bounce, share);
+            Assert.AreEqual(11f, hop.X, 1e-5f); Assert.AreEqual(bounce, hop.Lift, 1e-4f, "small bounce on landing");
+            var end = GroundLootMotion.Flight(d, 10, 10, 11, 10, h, d, bounce, share);
+            Assert.IsTrue(end.Landed); Assert.AreEqual(0f, end.Lift);
         }
 
         [Test]
@@ -72,7 +89,7 @@ namespace JungleMaze.Tests.World
             new WorldObjectWire { Id = id, Kind = 100, X = x, Y = y, Width = .35f, Height = .35f, ItemId = item, Count = 1 };
 
         [Test]
-        public void Layer_SizesByArt_FadesIn_AndPoolsViews()
+        public void Layer_SizesByArt_PoolsViews_AndLaunchesFromABrokenChest()
         {
             var tuning = Resources.Load<GroundLootTuning>(GroundLootTuning.ResourceName);
             Assert.IsNotNull(tuning);
@@ -107,6 +124,7 @@ namespace JungleMaze.Tests.World
                 layer.Apply(new[] { chest, Item(10, "SHOTGUN", 20, 20), Item(11, "AMMO", 21, 20) }, 0);
                 Assert.AreEqual(2, layer.ActiveCount);
                 Assert.IsTrue(layer.TryGetView(10, out var view10));
+                Assert.AreEqual(GroundLootEntry.Appear, view10.Entry, "items present at match start fade in");
                 Assert.IsTrue(view10.HasBeam, "Epic shotgun has a column");
                 Assert.AreEqual(tuning.StyleOf(ItemRarity.Epic).Sparkles, view10.SparkleCount);
                 Assert.IsTrue(layer.TryGetView(11, out var view11));
@@ -132,13 +150,20 @@ namespace JungleMaze.Tests.World
                 Assert.AreEqual(1, layer.ActiveCount); Assert.AreEqual(1, layer.PooledCount);
                 Assert.IsTrue(view10 != null && !view10.gameObject.activeSelf);
 
-                // Two new items: the pooled view is reused, one more is created.
+                // The chest breaks and two items appear next to it: the pooled view is reused for a launch.
+                chest.Flags = 1;
                 layer.Apply(new[] { chest, Item(11, "AMMO", 21, 20), Item(12, "KNIFE", 11, 10), Item(13, "GOD_LEAF", 10, 11.2f) }, 2);
                 Assert.AreEqual(created + 1, layer.Created, "one new view, one reused");
                 Assert.IsTrue(layer.TryGetView(12, out var knife));
-                knife.Render(2 + tuning.FadeSeconds + .01f);
-                Assert.AreEqual(11f, knife.transform.position.x, 1e-4f, "on its authoritative position");
-                Assert.Greater(knife.HaloRenderer.color.a, 0f, "rarity glow");
+                Assert.IsTrue(layer.TryGetView(13, out var leaf));
+                Assert.AreEqual(GroundLootEntry.Launch, knife.Entry); Assert.AreEqual(GroundLootEntry.Launch, leaf.Entry);
+                knife.Render(2);
+                Assert.AreEqual(10f, knife.transform.position.x, 1e-4f, "starts at the chest center");
+                knife.Render(2 + tuning.LaunchSeconds * .3f);
+                Assert.Greater(knife.ItemRenderer.transform.localPosition.y, tuning.FloatHeight + .3f, "in the air");
+                knife.Render(2 + tuning.LaunchSeconds + tuning.LightFadeSeconds + .01f);
+                Assert.AreEqual(11f, knife.transform.position.x, 1e-4f, "landed on its authoritative position");
+                Assert.Greater(knife.HaloRenderer.color.a, 0f, "glow after landing");
 
                 layer.Clear();
                 Assert.AreEqual(0, layer.ActiveCount);

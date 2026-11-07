@@ -11,18 +11,22 @@ namespace JungleMaze.Presentation.World.Loot
 {
     /// <summary>
     /// Draws every ground item (WorldObjectWire kind 100) of a world snapshot with a pooled <see cref="GroundLootView"/>,
-    /// online and offline alike. A new item fades in; views are reused, never destroyed per snapshot.
+    /// online and offline alike. <see cref="GroundLootArrivals"/> decides from the snapshots alone whether a new item fades in
+    /// or bursts out of a container that just broke. Views are reused, never destroyed per snapshot.
     /// </summary>
     public sealed class GroundLootLayer
     {
-        public const byte GroundItemKind = 100;
+        public const byte GroundItemKind = GroundLootArrivals.GroundItemKind;
         private readonly Transform _root;
         private readonly GroundLootTuning _tuning;
         private readonly IItemIconProvider _icons;
         private readonly ItemCatalog _catalog;
         private readonly Sprite _fallback;
+        private readonly GroundLootArrivals _arrivals;
         private readonly ObjectPool<GroundLootView> _pool;
         private readonly Dictionary<ushort, GroundLootView> _views = new Dictionary<ushort, GroundLootView>();
+        private readonly Dictionary<ushort, GroundLootArrival> _new = new Dictionary<ushort, GroundLootArrival>();
+        private readonly List<GroundLootArrival> _arrivalBuffer = new List<GroundLootArrival>();
         private readonly HashSet<ushort> _seen = new HashSet<ushort>();
         private readonly List<ushort> _gone = new List<ushort>();
 
@@ -30,10 +34,12 @@ namespace JungleMaze.Presentation.World.Loot
         public int Created { get; private set; }
         public int ActiveCount => _views.Count;
         public int PooledCount => _pool.CountInactive;
+        public GroundLootArrivals Arrivals => _arrivals;
 
         public GroundLootLayer(Transform root, GroundLootTuning tuning, IItemIconProvider icons, ItemCatalog catalog, Sprite fallback)
         {
             _root = root; _tuning = tuning; _icons = icons; _catalog = catalog; _fallback = fallback;
+            _arrivals = new GroundLootArrivals(tuning.LaunchWindow, tuning.LaunchRadius, tuning.LaunchStagger, tuning.LaunchCompanionRadius);
             _pool = new ObjectPool<GroundLootView>(Create, v => v.gameObject.SetActive(true), v => v.gameObject.SetActive(false), 0, 4096);
         }
 
@@ -49,21 +55,23 @@ namespace JungleMaze.Presentation.World.Loot
 
         public bool TryGetView(ushort id, out GroundLootView view) => _views.TryGetValue(id, out view);
 
-        /// <summary>Shows the ground items (kind 100) of <paramref name="states"/>; other kinds are ignored.</summary>
+        /// <summary>Shows the ground items of <paramref name="states"/> (other kinds are only read for container breaks).</summary>
         public void Apply(IReadOnlyList<WorldObjectWire> states, double now)
         {
-            _seen.Clear();
+            _arrivalBuffer.Clear(); _new.Clear(); _seen.Clear();
+            _arrivals.Observe(states, now, _arrivalBuffer);
+            foreach (var a in _arrivalBuffer) _new[a.Id] = a;
             for (var i = 0; i < states.Count; i++)
             {
                 var s = states[i];
                 if (s.Kind != GroundItemKind) continue;
                 _seen.Add(s.Id);
                 var known = _views.TryGetValue(s.Id, out var view);
-                // Ids are reused after a practice reset: a different item under a known id is shown afresh.
-                if (!known || view.ItemId != s.ItemId)
+                if (_new.TryGetValue(s.Id, out var arrival) || !known)
                 {
                     if (!known) { view = _pool.Get(); _views.Add(s.Id, view); }
-                    view.Show(s.Id, s.ItemId, s.X, s.Y, ResolveArt(s.ItemId), now);
+                    if (!_new.ContainsKey(s.Id)) arrival = new GroundLootArrival { Id = s.Id, FromX = s.X, FromY = s.Y };
+                    view.Show(s.Id, s.ItemId, s.X, s.Y, ResolveArt(s.ItemId), arrival, now);
                 }
                 else view.Move(s.X, s.Y);
             }
@@ -72,11 +80,12 @@ namespace JungleMaze.Presentation.World.Loot
             foreach (var id in _gone) { _pool.Release(_views[id]); _views.Remove(id); }
         }
 
-        /// <summary>Hides every item (world hidden, new match).</summary>
+        /// <summary>Hides every item and forgets the snapshot history (world hidden, new match).</summary>
         public void Clear()
         {
             foreach (var view in _views.Values) _pool.Release(view);
             _views.Clear();
+            _arrivals.Reset();
         }
 
         /// <summary>Picks the floor art: throwable flight art, in-hand weapon art or the HUD icon, sized by the tuning.</summary>
