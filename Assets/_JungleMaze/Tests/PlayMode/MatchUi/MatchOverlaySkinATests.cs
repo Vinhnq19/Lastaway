@@ -39,7 +39,7 @@ namespace JungleMaze.Tests.PlayMode.MatchUi
             var menu = _root.Menu;
             Assert.NotNull(menu.Close);
             Assert.AreEqual("kit_close_normal", SpriteOf(menu.Close));
-            Assert.AreEqual("kit_icon_cross_red", menu.Close.transform.Find("Icon").GetComponent<Image>().sprite.name);
+            Assert.AreEqual("kit_icon_cross_red", menu.Close.transform.Find("Face/Icon").GetComponent<Image>().sprite.name /* UiKit.FaceAll wraps the X in Face (pressed sink) */);
             var resumed = 0;
             menu.Resume.onClick.AddListener(() => resumed++);
             menu.Close.onClick.Invoke();

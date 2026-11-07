@@ -73,6 +73,7 @@ namespace JungleMaze.EditorTools
                 Set(root, "serverSettings", BuildServerSettings(rt)); // modals last: drawn over Home and Login
                 Set(root, "logoutConfirm", BuildLogoutConfirm(rt));
 
+                UiKit.FaceAll(go); // pressed K2, close and icon buttons sink their content with the face (Integrator, KitButtonFace)
                 var prefab = PrefabUtility.SaveAsPrefabAsset(go, PrefabPath);
                 var set = AssetDatabase.LoadAssetAtPath<LobbyUiSet>(SetPath);
                 if (set == null)
@@ -166,26 +167,43 @@ namespace JungleMaze.EditorTools
             return v;
         }
 
-        /// <summary>Server settings modal (no mock; built like A5): popup 820×860, endpoint fields, audio, Đóng.</summary>
+        /// <summary>
+        /// Server settings modal (no mock; kit rules, ui-kit.md mục 2, 4): popup 820×720 sized to its content, inner margin
+        /// 60 (rim 24 + 36), form rows of label 20 + field 56 on a 100 px pitch, host and port side by side, Lưu / Âm thanh
+        /// (M) in one row 24 apart, then the footer with Đóng.
+        /// </summary>
         private static ServerSettingsView BuildServerSettings(RectTransform rt)
         {
+            const float w = 820, h = 720;
             var v = Screen<ServerSettingsView>(rt, "ServerSettings");
             var r = Rt(v);
             UiKit.Dim(r);
-            var p = Popup(r, 820, 860, "Cài đặt máy chủ");
-            Para(p, "Advanced", Tier.C, "Nâng cao: chỉ đổi khi chơi LAN/VPN hoặc được hướng dẫn.", C.Muted, 60, 120, 700, 56);
-            Set(v, "profile", Drop(p, "Profile", 60, 196, 700));
-            Set(v, "host", Input(p, "Host", "Host", 60, 266, 700));
-            Set(v, "port", Input(p, "Port", "Port", 60, 336, 240));
-            Set(v, "api", Input(p, "Api", "API (https://…)", 60, 406, 700));
-            Set(v, "save", Btn(p, "Save", Kind.Secondary, Size.M, 60, 480, 700, "kit_ico_save", "Lưu endpoint"));
-            Set(v, "status", Txt(p, "Status", Tier.C, "", C.Muted, 60, 568, 700));
-            Set(v, "audioSettings", Btn(p, "Audio", Kind.Secondary, Size.M, 60, 600, 700, "kit_ico_sound", "Âm thanh & điều khiển"));
-            var close = Btn(p, "Close", Kind.Secondary, Size.M, 260, Footer(p, 820, 860), 300, "kit_icon_cross_ink", "Đóng");
+            var p = Popup(r, w, h, "Cài đặt máy chủ");
+            Txt(p, "Advanced", Tier.C, "Nâng cao: chỉ đổi khi chơi LAN/VPN hoặc được hướng dẫn.", C.Muted, 60, 124, 700);
+            var profile = Drop(p, "Profile", 60, 182, 700);
+            FieldLabel((RectTransform)profile.transform, "Kết nối");
+            Set(v, "profile", profile);
+            var host = Input(p, "Host", "Host", 60, 282, 456);
+            FieldLabel((RectTransform)host.transform, "Máy chủ");
+            Set(v, "host", host);
+            var port = Input(p, "Port", "Port", 540, 282, 220);
+            FieldLabel((RectTransform)port.transform, "Cổng");
+            Set(v, "port", port);
+            var api = Input(p, "Api", "https://…", 60, 382, 700);
+            FieldLabel((RectTransform)api.transform, "URL API");
+            Set(v, "api", api);
+            Set(v, "status", Txt(p, "Status", Tier.C, "", C.Muted, 60, 466, 700));
+            Set(v, "save", Btn(p, "Save", Kind.Secondary, Size.M, 60, 496, 260, "kit_ico_save", "Lưu endpoint"));
+            Set(v, "audioSettings", Btn(p, "Audio", Kind.Secondary, Size.M, 344, 496, 416, "kit_ico_sound", "Âm thanh & điều khiển"));
+            var close = Btn(p, "Close", Kind.Secondary, Size.M, 260, Footer(p, w, h), 300, "kit_icon_cross_ink", "Đóng");
             Set(v, "close", close);
-            Close(p, 820, close);
+            Close(p, w, close);
             return v;
         }
+
+        /// <summary>Caption 20 above a form field, as a child so it hides with the field (the presenter hides Profile without a menu).</summary>
+        private static void FieldLabel(RectTransform field, string label) =>
+            Txt(field, "FieldLabel", Tier.C, label, C.Muted, 0, -16, field.sizeDelta.x * UiKit.Scale);
 
         /// <summary>A3 Vào phòng: popup 800×620 over Home behind the dim (the account chip stays under it).</summary>
         private static JoinFormView BuildJoin(RectTransform rt)
@@ -830,25 +848,70 @@ namespace JungleMaze.EditorTools
             t.verticalAlignment = VerticalAlignmentOptions.Middle; // UX review: text and hint centred
         }
 
+        /// <summary>
+        /// Kit dropdown (ui-kit.md mục 2): kit_dropdown_closed 56 tall (border L19 R68 T19 B19, the right 68 px hold the
+        /// arrow box), kit_arrow_down 16×10 centred in that box, the value in the left part; while the list is open the
+        /// header swaps to kit_dropdown_open (selected state). The list is kit rows 48 px: kit_row_alt behind, kit_row_normal
+        /// per item, kit_row_selected for the current one, kit_scroll_track/thumb. Component, options and listeners stay TMP's.
+        /// </summary>
         private static TMP_Dropdown Drop(RectTransform parent, string name, float x, float y, float w)
         {
+            const float arrowBox = 68f, row = 48f, rows = 5f;
             var go = TMP_DefaultControls.CreateDropdown(new TMP_DefaultControls.Resources());
             go.name = name;
             var r = (RectTransform)go.transform;
             r.SetParent(parent, false);
             UiKit.Place(r, x, y, w, InputHeight);
-            UiKit.Image(r, "kit_dropdown_closed").raycastTarget = true; // the arrow is part of the sprite
+            UiKit.Image(r, "kit_dropdown_closed").raycastTarget = true;
+            var drop = go.GetComponent<TMP_Dropdown>();
+            drop.transition = Selectable.Transition.SpriteSwap;
+            drop.spriteState = new SpriteState
+            {
+                highlightedSprite = UiKit.Sprite("kit_dropdown_closed"),
+                pressedSprite = UiKit.Sprite("kit_dropdown_open"),
+                selectedSprite = UiKit.Sprite("kit_dropdown_open"),
+            };
             foreach (var t in go.GetComponentsInChildren<TMP_Text>(true))
             {
                 UiKit.ApplyTier(t, Tier.B2);
-                t.color = t.transform.parent == r ? C.Text : C.Ink; // list items sit on the template's light background
+                t.color = C.Text; // header and list rows are both dark stone
+                t.verticalAlignment = VerticalAlignmentOptions.Middle;
             }
-            var label = r.Find("Label") as RectTransform;
-            if (label != null) { label.offsetMin = new Vector2(UiKit.Px(20), label.offsetMin.y); label.offsetMax = new Vector2(-UiKit.Px(68), label.offsetMax.y); }
-            var arrow = r.Find("Arrow");
-            if (arrow != null) arrow.gameObject.SetActive(false); // QA m-a: TMP default arrow has no sprite (white box)
-            go.GetComponent<TMP_Dropdown>().ClearOptions();
-            return go.GetComponent<TMP_Dropdown>();
+            var label = (RectTransform)r.Find("Label");
+            label.offsetMin = new Vector2(UiKit.Px(20), 0f);
+            label.offsetMax = new Vector2(-UiKit.Px(arrowBox + 8), 0f);
+            var arrow = (RectTransform)r.Find("Arrow");
+            arrow.anchorMin = arrow.anchorMax = arrow.pivot = new Vector2(1f, 0.5f);
+            arrow.anchoredPosition = new Vector2(-UiKit.Px(arrowBox / 2f - 8f), 0f); // centre of the 68 px box from the right edge
+            arrow.sizeDelta = new Vector2(UiKit.Px(16), UiKit.Px(10));
+            UiKit.Image(arrow, "kit_arrow_down");
+
+            var template = (RectTransform)r.Find("Template");
+            template.sizeDelta = new Vector2(template.sizeDelta.x, UiKit.Px(rows * row));
+            UiKit.Image(template, "kit_row_alt");
+            var viewport = (RectTransform)template.Find("Viewport");
+            viewport.offsetMax = new Vector2(-UiKit.Px(14), 0f); // room for the 14 px scrollbar
+            var item = (RectTransform)viewport.Find("Content/Item");
+            item.sizeDelta = new Vector2(item.sizeDelta.x, UiKit.Px(row));
+            var content = (RectTransform)viewport.Find("Content");
+            content.sizeDelta = new Vector2(content.sizeDelta.x, UiKit.Px(row));
+            var itemBack = UiKit.Image((RectTransform)item.Find("Item Background"), "kit_row_normal");
+            itemBack.raycastTarget = true;
+            var check = UiKit.Stretch((RectTransform)item.Find("Item Checkmark"));
+            UiKit.Image(check, "kit_row_selected"); // the toggle graphic: the chosen row gets the gold-edged row
+            var itemLabel = (RectTransform)item.Find("Item Label");
+            itemLabel.offsetMin = new Vector2(UiKit.Px(20), 0f);
+            itemLabel.offsetMax = new Vector2(-UiKit.Px(8), 0f);
+            var bar = (RectTransform)template.Find("Scrollbar");
+            bar.sizeDelta = new Vector2(UiKit.Px(14), bar.sizeDelta.y);
+            UiKit.Image(bar, "kit_scroll_track").raycastTarget = true;
+            var area = (RectTransform)bar.Find("Sliding Area");
+            area.offsetMin = area.offsetMax = Vector2.zero;
+            var handle = (RectTransform)area.Find("Handle");
+            handle.offsetMin = handle.offsetMax = Vector2.zero;
+            UiKit.Image(handle, "kit_scroll_thumb").raycastTarget = true;
+            drop.ClearOptions();
+            return drop;
         }
 
         // ---------- serialized refs ----------

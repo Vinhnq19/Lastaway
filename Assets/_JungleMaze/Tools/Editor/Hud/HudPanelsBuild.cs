@@ -24,6 +24,13 @@ namespace JungleMaze.EditorTools
         private const string ZoneIcon = "Assets/_JungleMaze/Art/Hud/StatusIcons/icon_zone-timer.png";
         /// <summary>Zone ring stroke on the big map, 1080p px (mock b5: orange and white rings both 4 px).</summary>
         public const float BigMapRingPx = 4f;
+        public const float BigMapMargin = 60f; // map square inset in the 1000 px big-map panel, same on all four sides
+
+        /// <summary>
+        /// Outside-the-zone fill of the main ZoneOverlay on the minimap, read from Resources/ZoneOverlay.shader (map team,
+        /// read only): rgb (0.48, 0.035, 0.12) at _FillAlpha 0.62.
+        /// </summary>
+        public static readonly Color OutsideZoneColor = new Color(0.48f, 0.035f, 0.12f, 0.62f);
         private const string MouseIcon = "Assets/_JungleMaze/Art/UI/MatchOverlay/IconMouse.png";
         public const string InventoryName = "HudInventory";
         public const string BigMapName = "HudBigMap";
@@ -46,7 +53,9 @@ namespace JungleMaze.EditorTools
                 }
                 var map = root.Find(BigMapName).GetComponent<HudBigMapView>();
                 Set(map, "capture", hud.GetComponent<HudRoot>().Minimap.GetComponent<MinimapMapCapture>());
+                Set(map.ZoneOverlay, "minimap", hud.GetComponent<HudRoot>().Minimap); // crop ratio of the main minimap layer
                 foreach (var graphic in hud.GetComponentsInChildren<Graphic>(true)) graphic.raycastTarget = false; // HUD never catches clicks
+                UiKit.FaceAll(hud); // pressed K2 face sinks icon + label (Huy 07/11)
                 PrefabUtility.SaveAsPrefabAsset(hud, HudPath);
             }
             finally
@@ -176,16 +185,18 @@ namespace JungleMaze.EditorTools
             {
                 var view = root.gameObject.AddComponent<HudBigMapView>();
                 var content = Content(root, 215f / 255f);
-                var panel = UiKit.PlaceCentred(UiKit.Node(content, "Panel"), 50, 40, 1090, 1000);
+                var panel = UiKit.PlaceCentred(UiKit.Node(content, "Panel"), 50, 40, 1000, 1000); // square, the map fills it (CPO 07/11 "BIGMAP FIT")
                 UiKit.Panel(panel, UiKit.PanelKind.L);
 
                 // Map 840 px square at (110, 100) (T-028 round 2): kit_map_bg frame, the minimap's map texture inside its
                 // 5 px margin, map_grid (840, 10x10 tiled with the same margin) over it, then the zone rings (RingGraphic
                 // from map_ring_zone orange / map_ring_safe white, 4 px stroke at any radius, mock b5) and the hero pin.
-                var area = UiKit.Place(UiKit.Node(panel, "MapArea"), 60, 60, 840, 840);
+                var area = UiKit.Place(UiKit.Node(panel, "MapArea"), BigMapMargin, BigMapMargin, 1000 - 2 * BigMapMargin, 1000 - 2 * BigMapMargin); // 880 square, centred
                 UiKit.Image(area, "kit_map_bg");
                 var inner = UiKit.Stretch(UiKit.Node(area, "Inner"), 5);
                 var map = Raw(inner, "Map");
+                // Main-style zone layer (ZoneOverlay shader, minimap mode) over the map, under grid and pin (CPO 07/11).
+                var overlay = Raw(inner, "ZoneOverlay").gameObject.AddComponent<HudZoneOverlay>();
                 var grid = UiKit.Image(UiKit.Stretch(UiKit.Node(area, "Grid")), "map_grid");
                 grid.preserveAspect = false;
                 var marks = UiKit.Stretch(UiKit.Node(area, "Marks"), 5); // projection space = the map texture's rect
@@ -205,13 +216,21 @@ namespace JungleMaze.EditorTools
                 var distance = UiKit.Text(header, "DistanceValue", Tier.H2, "420", UiKit.Colors.Text);
                 UiKit.Place(distance.rectTransform, 1645 - 1170, 45, 100, 60);
 
-                // Legend: icons only, the same shapes as on the map (mock y 275, x 1235 + 140 i).
+                // Legend: icons only, the same shapes as on the map (mock y 275). Zone in the main style (Huy 07/11): a flat
+                // "outside the zone" swatch in the ZoneOverlay minimap colour and the white dashed next ring, so 6 slots on a
+                // 114 px step instead of the mock's 5 on 140.
                 var legend = SubPanel(panel, "Legend", 1170, 210, 700, 130);
                 Centred(legend, "Danger", "kit_icon_warn", 65, 65, 45, 40);
-                Centred(legend, "Zone", "map_ring_safe", 65 + 140, 65, 32, 32); // same sprite as the safe ring (T-028)
-                Centred(legend, "Drop", "fx_map_drop", 65 + 280, 65, 41, 52);
-                Centred(legend, "Mark", "fx_map_mark", 65 + 420, 65, 35, 52);
-                Centred(legend, "Player", "fx_map_player", 65 + 560, 65, 38, 52);
+                // White base sprite so the tint shows the shader colour (kit_dim is dark and multiplied it to near black).
+                var outside = UiKit.Place(UiKit.Node(legend, "OutsideZone"), 65 + 114 - 16, 65 - 16, 32, 32).gameObject.AddComponent<Image>();
+                outside.sprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/_JungleMaze/Art/Hud/SkinA/hud_bar_fill_white.png");
+                outside.type = Image.Type.Simple;
+                outside.color = new Color32(167, 55, 80, 255); // the outside-zone pink as it shows on the minimap (ZoneOverlay fill over terrain, measured 07/11)
+                outside.raycastTarget = false;
+                Centred(legend, "NextZone", "legend_ring_next_dashed", 65 + 228, 65, 32, 32); // T-028 dashed next ring
+                Centred(legend, "Drop", "fx_map_drop", 65 + 342, 65, 41, 52);
+                Centred(legend, "Mark", "fx_map_mark", 65 + 456, 65, 35, 52);
+                Centred(legend, "Player", "fx_map_player", 65 + 570, 65, 38, 52);
 
                 // Controls, 4 rows as the mock: mouse → mark, mouse → zoom, mouse → pan, M → close. Only M works today
                 // (mark, zoom, pan not built yet: noted in qa/T-022/index.md).
@@ -237,6 +256,7 @@ namespace JungleMaze.EditorTools
                 Set(view, "content", content.gameObject);
                 Set(view, "mapArea", marks);
                 Set(view, "zoneRings", zoneRings);
+                Set(view, "zoneOverlay", overlay);
                 Set(view, "phaseValue", phase);
                 Set(view, "distanceValue", distance);
                 Set(view, "map", map);
@@ -334,7 +354,7 @@ namespace JungleMaze.EditorTools
             return raw;
         }
 
-        private static void Save(RectTransform root, string name) => PrefabUtility.SaveAsPrefabAsset(root.gameObject, Ui + name + ".prefab");
+        private static void Save(RectTransform root, string name) { UiKit.FaceAll(root.gameObject); PrefabUtility.SaveAsPrefabAsset(root.gameObject, Ui + name + ".prefab"); }
 
         private static T Load<T>(string path) where T : Object
         {

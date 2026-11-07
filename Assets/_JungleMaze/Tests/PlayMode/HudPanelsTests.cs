@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using JungleMaze.App.Hud.State;
+using JungleMaze.App.Ports;
 using JungleMaze.Core.Events;
 using JungleMaze.Domain.Hud;
 using JungleMaze.Infrastructure.Config;
@@ -291,32 +292,56 @@ namespace JungleMaze.Tests.PlayMode
         }
 
         [UnityTest]
-        public IEnumerator BigMap_ZoneRings_SizedFromRadius_CapturedLinesOff()
+        public IEnumerator ZoneRings_MainStyle_SpriteRingsHidden_DataKept()
         {
+            // Huy 07/11 "kiểu main": the maps show the map team's ZoneOverlay; the T-022 sprite rings are built (switch
+            // back with HudSkinABuild.RingStyle) but never drawn, while HudZoneRings still knows phase, centre and radius.
             yield return Spawn();
             _map.Open();
-            Assert.False(_map.ZoneRing.gameObject.activeSelf, "no zone yet");
             var cells = _hud.MapSizeCells;
-            _map.SetZone(cells / 2f, cells / 2f, cells / 4f, cells / 2f, cells / 2f, 0f);
+            _map.ZoneRings.SetZone(3, cells / 2f, cells / 2f, cells / 4f, cells / 2f, cells / 2f, cells / 8f);
             _map.Refresh();
-            var area = (RectTransform)_map.ZoneRing.parent;
-            Assert.True(_map.ZoneRing.gameObject.activeSelf);
-            Assert.That(_map.ZoneRing.sizeDelta.x, Is.EqualTo(area.rect.width / 2f).Within(0.01f), "diameter = 2 r on the map scale");
-            Assert.That(Vector2.Distance(_map.ZoneRing.anchoredPosition, area.rect.size / 2f), Is.LessThan(0.01f));
-            Assert.False(_map.SafeRing.gameObject.activeSelf, "radius 0 hides the next ring");
-            var zoneArt = _map.ZoneRing.GetComponent<RingGraphic>();
-            Assert.AreEqual("map_ring_zone", zoneArt.Sprite.name);
-            Assert.AreEqual("map_ring_safe", _map.SafeRing.GetComponent<RingGraphic>().Sprite.name);
-            Assert.That(zoneArt.Thickness, Is.EqualTo(4 / Px).Within(0.01f), "4 px stroke (mock b5) whatever the radius");
-            _map.SetZone(cells / 2f, cells / 2f, cells / 8f, cells / 2f, cells / 2f, cells / 16f);
-            _map.Refresh();
-            Assert.That(zoneArt.Thickness, Is.EqualTo(4 / Px).Within(0.01f), "stroke unchanged at a smaller radius");
-            Assert.True(_map.SafeRing.gameObject.activeSelf);
-            var mini = _core.Minimap.transform.Find("MapArea/ZoneRing").GetComponent<RingGraphic>();
-            Assert.AreEqual("map_ring_zone", mini.Sprite.name, "minimap uses the same ring art");
-            Assert.That(mini.Thickness, Is.EqualTo(2 / Px).Within(0.01f), "minimap stroke at its scale");
+            Assert.False(_map.ZoneRings.Draw);
+            Assert.False(_map.ZoneRing.gameObject.activeSelf, "big map: no sprite ring");
+            Assert.False(_map.SafeRing.gameObject.activeSelf);
+            Assert.True(_map.ZoneRings.HasZone);
+            Assert.AreEqual(3, _map.ZoneRings.Phase);
+            Assert.That(_map.ZoneRings.SafeRadius, Is.EqualTo(cells / 8f).Within(0.001f));
+            Assert.AreEqual("3", Parsed(_map.PhaseValue), "header still reads the zone data");
+            Assert.AreEqual("map_ring_zone", _map.ZoneRing.GetComponent<RingGraphic>().Sprite.name, "art kept for the Sprite style");
+
+            var mini = _core.Minimap.transform.Find("MapArea").GetComponent<HudZoneRings>();
+            Assert.NotNull(mini, "minimap keeps the zone data component");
+            Assert.False(mini.Draw);
+            mini.SetZone(1, cells / 2f, cells / 2f, cells / 4f, cells / 2f, cells / 2f, cells / 8f);
+            mini.Apply(cells);
+            Assert.False(mini.ZoneRing.gameObject.activeSelf, "minimap: no sprite ring");
+            Assert.False(mini.SafeRing.gameObject.activeSelf);
+            Assert.True(mini.HasZone);
+
             SpriteIs(_map.transform.Find("Content/Panel/MapArea").GetComponent<Image>(), "kit_map_bg");
+            { // BIGMAP FIT (CPO 07/11): square map centred in a square panel, equal margins, overlay and marks on the same rect
+                var panelRect = ((RectTransform)_map.transform.Find("Content/Panel")).rect;
+                var areaT = (RectTransform)_map.transform.Find("Content/Panel/MapArea");
+                Assert.That(areaT.rect.width, Is.EqualTo(areaT.rect.height).Within(0.01f), "map is square");
+                Assert.That(panelRect.width, Is.EqualTo(panelRect.height).Within(0.01f), "panel is square");
+                var left = areaT.anchoredPosition.x; var top = -areaT.anchoredPosition.y;
+                Assert.That(panelRect.width - left - areaT.rect.width, Is.EqualTo(left).Within(0.01f), "right margin = left");
+                Assert.That(panelRect.height - top - areaT.rect.height, Is.EqualTo(top).Within(0.01f), "bottom margin = top");
+            }
             SpriteIs(_map.transform.Find("Content/Panel/MapArea/Grid").GetComponent<Image>(), "map_grid");
+        }
+
+        [UnityTest]
+        public IEnumerator BigMap_Legend_OutsideZoneSwatch_AndNextRing()
+        {
+            yield return Spawn();
+            var legend = _map.transform.Find("Content/Panel/Legend");
+            var outside = legend.Find("OutsideZone").GetComponent<Image>();
+            SpriteIs(outside, "hud_bar_fill_white"); // white base so the tint is the shader colour (kit_dim darkened it to black)
+            Assert.That(Vector4.Distance(outside.color, (Color)new Color32(167, 55, 80, 255)), Is.LessThan(0.001f), "outside-zone pink as displayed on the minimap");
+            SpriteIs(legend.Find("NextZone").GetComponent<Image>(), "legend_ring_next_dashed");
+            Assert.IsNull(legend.Find("Zone"), "old single ring symbol gone");
         }
 
         [UnityTest]
@@ -359,6 +384,99 @@ namespace JungleMaze.Tests.PlayMode
             foreach (var t in new[] { _map.PhaseValue, _map.ZoneValue, _map.DistanceValue }) TierIs(t, 40, "Chakra Petch");
             for (var i = 1; i <= 4; i++)
                 Assert.True(_map.transform.Find("Content/Panel/Controls/Row" + i).gameObject.activeSelf, "all 4 control rows shown as the mock");
+        }
+
+        // ---------- Main-style zone layer on the big map (CPO 07/11) ----------
+
+        private static readonly RuntimeMapBounds TestBounds = new RuntimeMapBounds { MinX = 0, MinY = 0, MaxX = 50, MaxY = 50 };
+
+        [UnityTest]
+        public IEnumerator BigMap_ZoneOverlay_UsesMainShaderInMinimapMode()
+        {
+            yield return Spawn();
+            var overlay = _map.ZoneOverlay;
+            Assert.NotNull(overlay, "big map has the ZoneOverlay layer");
+            Assert.AreEqual("Inner", overlay.transform.parent.name, "over the map texture, under grid and pin");
+            Assert.Greater(overlay.transform.GetSiblingIndex(), overlay.transform.parent.Find("Map").GetSiblingIndex());
+            _map.Open();
+            Assert.False(overlay.Image.enabled, "no zone yet: layer off");
+            _map.ZoneRings.SetBounds(TestBounds);
+            _map.ZoneRings.SetZone(1, 25, 25, 20, 30, 28, 8);
+            _map.Refresh();
+            Assert.True(overlay.Image.enabled);
+            var m = overlay.Material;
+            Assert.NotNull(m);
+            Assert.AreEqual(ZoneOverlayParams.ShaderName, m.shader.name);
+            Assert.AreEqual(1f, m.GetFloat("_Minimap"));
+            Assert.AreEqual(ZoneOverlayParams.FillAlpha, m.GetFloat("_FillAlpha"), 1e-6f);
+            Assert.AreEqual(new Vector4(25, 25, 20, 0), m.GetVector("_Current"));
+            Assert.AreEqual(new Vector4(30, 28, 8, 1), m.GetVector("_Next"), "next ring previewed whenever it exists (minimap rule)");
+            Assert.AreEqual(new Vector4(0, 0, 50, 50), m.GetVector("_MapBounds"));
+            Assert.False(overlay.Image.raycastTarget);
+        }
+
+        [UnityTest]
+        public IEnumerator BigMap_ZoneOverlay_MatchesMainMinimapLayer_SameData()
+        {
+            yield return Spawn();
+            // The main layer (ZoneOverlayView, map team) is driven through its public Show; its packet type lives in the
+            // protocol assembly this test does not reference, so it is built by reflection.
+            var main = Track(new GameObject("Main zone overlay")).AddComponent<JungleMaze.Presentation.UI.ZoneOverlayView>();
+            var show = typeof(JungleMaze.Presentation.UI.ZoneOverlayView).GetMethod("Show");
+            var packetType = show.GetParameters()[0].ParameterType;
+            var packet = System.Activator.CreateInstance(packetType);
+            foreach (var (field, value) in new[] { ("CurrentCenterX", 25f), ("CurrentCenterY", 25f), ("CurrentRadius", 20f), ("TargetCenterX", 30f), ("TargetCenterY", 28f), ("TargetRadius", 8f) })
+                packetType.GetField(field).SetValue(packet, value);
+            show.Invoke(main, new object[] { packet, 0u, TestBounds });
+            var layer = _core.Minimap.Marker.parent.Find("Zone circles");
+            Assert.NotNull(layer, "main minimap layer created");
+            var mini = layer.GetComponent<RawImage>().material;
+
+            _map.Open();
+            _map.ZoneRings.SetBounds(TestBounds);
+            _map.ZoneRings.SetZone(1, 25, 25, 20, 30, 28, 8);
+            _map.Refresh();
+            var big = _map.ZoneOverlay.Material;
+            Assert.AreEqual(mini.shader, big.shader, "same shader");
+            foreach (var f in new[] { "_Minimap", "_FillAlpha" }) Assert.AreEqual(mini.GetFloat(f), big.GetFloat(f), 1e-6f, f);
+            foreach (var v in new[] { "_Current", "_Next", "_MapBounds" }) Assert.AreEqual(mini.GetVector(v), big.GetVector(v), v);
+            var a = layer.GetComponent<RawImage>().uvRect; var b = _map.ZoneOverlay.Image.uvRect;
+            Assert.That(Vector4.Distance(new Vector4(a.x, a.y, a.width, a.height), new Vector4(b.x, b.y, b.width, b.height)), Is.LessThan(1e-4f), "same crop ratio");
+        }
+
+        [UnityTest]
+        public IEnumerator MinimapCapture_LeavesOutWorldZoneLayer_AndRestoresIt()
+        {
+            var grid = Track(new GameObject("Map grid")).AddComponent<JungleMaze.Presentation.World.MapGridView>();
+            grid.Build(50, 8);
+            var zone = Track(GameObject.CreatePrimitive(PrimitiveType.Quad));
+            zone.name = MinimapMapCapture.WorldZoneOverlayName;
+            zone.transform.position = new Vector3(25, 25, 0);
+            zone.transform.localScale = new Vector3(80, 80, 1);
+            var material = Track(new Material(Shader.Find("Sprites/Default")) { color = Color.magenta });
+            var renderer = zone.GetComponent<Renderer>();
+            renderer.sharedMaterial = material;
+            yield return Spawn();
+            yield return null;
+            yield return null;
+            var capture = _core.Minimap.GetComponent<MinimapMapCapture>();
+            Assert.NotNull(capture.Texture, "map captured");
+            var centre = Pixel(capture.Texture, 0.5f, 0.5f);
+            Assert.False(centre.r > 200 && centre.g < 60 && centre.b > 200, "world zone fill is not in the terrain image: " + centre);
+            Assert.False(renderer.forceRenderingOff, "world zone fill visible again after the capture");
+        }
+
+        private static Color32 Pixel(RenderTexture rt, float u, float v)
+        {
+            var previous = RenderTexture.active;
+            RenderTexture.active = rt;
+            var tex = new Texture2D(rt.width, rt.height, TextureFormat.RGBA32, false);
+            tex.ReadPixels(new Rect(0, 0, rt.width, rt.height), 0, 0);
+            tex.Apply();
+            RenderTexture.active = previous;
+            var c = tex.GetPixel((int)(u * (rt.width - 1)), (int)(v * (rt.height - 1)));
+            Object.Destroy(tex);
+            return c;
         }
 
         private sealed class FakeIcons : IItemIconProvider

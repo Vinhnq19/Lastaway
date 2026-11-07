@@ -10,7 +10,7 @@
 | khung/thành phần kit | `files/new/map_grid.png` | 840x840 | không (không cắt) | có / có | 1 | lưới 10x10 phủ lên bản đồ, nền trong suốt (giữ chỗ trong mock) |
 | khung/thành phần kit | `files/new/map_ring_zone.png` | 680x680 | không (không cắt) | có / có | 1 | vòng bo hiện tại, tâm (530,530) |
 | khung/thành phần kit | `files/new/map_ring_safe.png` | 180x180 | không (không cắt) | có / có | 1 | vòng bo tiếp theo (an toàn), tâm (570,480) |
-| khung/thành phần kit | `files/new/map_ring_safe.png` | 32x32 | không (không cắt) | có / có | 1 | vòng trắng chú giải (cùng sprite, cỡ nhỏ) |
+| khung/thành phần kit | `files/new/legend_ring_next_dashed.png` | 32x32 | không (không cắt) | có / có | 1 | chú giải vòng bo kế tiếp: vòng trắng nét đứt (Huy chốt 07/11, theo kiểu main) |
 | khung/thành phần kit | `files/new/kit_killfeed_panel.png` | 270x154 | [16, 16, 16, 16] | có / có | 1 | panel kill feed, rộng thêm theo chữ (tên + icon vũ khí 32 + tên, 24 px, dòng cách 44), alpha ~0,98 |
 | khung/thành phần kit | `files/new/kit_badge_key.png` | 30x30 | [14, 14, 14, 14] | có / có | 8 | nhãn số phím quick bar (1), số 20 px vàng #FFDC6E đè lên |
 | nền HUD | `HUD trong trận (Hud.prefab T-016)` | 1920x1080 | không (không cắt) | - | 1 | nền HUD đã có trong Unity (T-016); mock chỉ dựng lại để thấy lớp phủ |

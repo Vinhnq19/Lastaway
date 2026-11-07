@@ -55,7 +55,7 @@ def overlay(im, a): rec(kind="sprite", file="kit_dim", size=[1920, 1080], border
 def dim(im, a): rec(kind="sprite", file="kit_dim", size=[1920, 1080], border=None, xy=[0, 0], note=f"lớp phủ tối toàn màn: kéo giãn full màn, tint alpha {a}/255 (màu gốc #0A0A08)"); o_dim(im, a)
 def bigmap(state="main"):
     newspr("kit_map_bg", [840, 840], "nền khung bản đồ lớn (bản đồ thật vẽ lúc chạy trên nền này)"); newspr("map_grid", [840, 840], "lưới 10x10 phủ lên bản đồ, nền trong suốt (giữ chỗ trong mock)")
-    newspr("map_ring_zone", [680, 680], "vòng bo hiện tại, tâm (530,530)"); newspr("map_ring_safe", [180, 180], "vòng bo tiếp theo (an toàn), tâm (570,480)"); newspr("map_ring_safe", [32, 32], "vòng trắng chú giải (cùng sprite, cỡ nhỏ)")
+    newspr("map_ring_zone", [680, 680], "vòng bo hiện tại, tâm (530,530)"); newspr("map_ring_safe", [180, 180], "vòng bo tiếp theo (an toàn), tâm (570,480)"); newspr("legend_ring_next_dashed", [32, 32], "chú giải vòng bo kế tiếp: vòng trắng nét đứt (Huy chốt 07/11, theo kiểu main)")
     return o_bigmap(state)
 def hudbg(a=0): newspr("kit_killfeed_panel", [270, 154], "panel kill feed, rộng thêm theo chữ (tên + icon vũ khí 32 + tên, 24 px, dòng cách 44), alpha ~0,98"); [newspr("kit_badge_key", [30, 30], f"nhãn số phím quick bar ({i + 1}), số 20 px vàng #FFDC6E đè lên") for i in range(8)]; rec(kind="hudbg", file="HUD trong trận (Hud.prefab T-016)", size=[1920, 1080], border=None, xy=[0, 0], note="nền HUD đã có trong Unity (T-016); mock chỉ dựng lại để thấy lớp phủ" + (f"; phủ tối alpha {a}" if a else "")); return screens_b._hudbg(a)
 o_header, o_button = mock.header, mock.button

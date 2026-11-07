@@ -31,6 +31,8 @@ namespace JungleMaze.Presentation.UI.Hud
         private int _worldMask;
         // shortcut: borrows unnamed layer 31 for the ring render only; give it a name if the project ever uses 31.
         private const int RingLayer = 31;
+        /// <summary>World danger fill made by ZoneOverlayView.CreateWorld (map team); kept out of the terrain capture.</summary>
+        public const string WorldZoneOverlayName = "Zone danger overlay";
         private float _nextAt;
 
         public RawImage MapImage => mapImage;
@@ -83,6 +85,11 @@ namespace JungleMaze.Presentation.UI.Hud
             // shortcut: scans the scene each refresh (about once a second); cache by event if the HUD ever shows lag.
             HidePlayers<HeroController>();
             HidePlayers<PlayerView>();
+            // T-022 (CPO 07/11): the map image is terrain only; the zone shows through the main ZoneOverlay map layer.
+            var zone = GameObject.Find(WorldZoneOverlayName);
+            if (zone != null)
+                foreach (var r in zone.GetComponentsInChildren<Renderer>())
+                    if (!r.forceRenderingOff) { r.forceRenderingOff = true; _hidden.Add(r); }
             foreach (var canvas in FindObjectsByType<Canvas>(FindObjectsSortMode.None))
                 if (canvas.renderMode == RenderMode.WorldSpace && canvas.enabled) { canvas.enabled = false; _hiddenCanvases.Add(canvas); }
             var lines = FindObjectsByType<LineRenderer>(FindObjectsSortMode.None);
@@ -98,7 +105,7 @@ namespace JungleMaze.Presentation.UI.Hud
             var split = _ringTexture != null;
             try
             {
-                if (split) foreach (var line in lines) line.forceRenderingOff = true;
+                foreach (var line in lines) line.forceRenderingOff = true; // world zone lines never go into the terrain
                 _camera.targetTexture = _texture;
                 _camera.cullingMask = _worldMask;
                 _camera.backgroundColor = emptyColor;

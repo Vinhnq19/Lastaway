@@ -84,6 +84,7 @@ namespace JungleMaze.EditorTools
                 Set(overlay, "canvas", canvas);
                 Set(overlay, "eventSystem", events);
 
+                UiKit.FaceAll(root); // pressed K2 face sinks icon + label (Huy 07/11)
                 var prefab = PrefabUtility.SaveAsPrefabAsset(root, PrefabPath);
                 var set = AssetDatabase.LoadAssetAtPath<MatchOverlaySet>(SetPath);
                 if (set == null)

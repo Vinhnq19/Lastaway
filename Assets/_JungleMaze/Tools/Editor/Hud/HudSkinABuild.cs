@@ -304,6 +304,13 @@ namespace JungleMaze.EditorTools
             Simple(frame, "hud_minimap_frame");
         }
 
+        /// <summary>How the zone shows on the minimap and big map. Main (Huy 07/11, replaces orange + white): only the
+        /// ZoneOverlay layer of the map team (pink outside the zone, white dashed next ring); the sprite rings are built
+        /// but not drawn, <see cref="HudZoneRings"/> still computes phase, centre and radius. Sprite = the T-022 R3 rings.</summary>
+        public enum ZoneRingStyle { Main, Sprite }
+
+        public static ZoneRingStyle RingStyle = ZoneRingStyle.Main;
+
         /// <summary>Zone ring stroke on the minimap, 1080p px (measured on T-015/dung-thu-hud-A.png: about 2 px).</summary>
         public const float MinimapRingPx = 2f;
 
@@ -323,6 +330,7 @@ namespace JungleMaze.EditorTools
             if (rings == null) rings = area.gameObject.AddComponent<HudZoneRings>();
             var so = new SerializedObject(rings);
             so.FindProperty("area").objectReferenceValue = area;
+            so.FindProperty("draw").boolValue = RingStyle == ZoneRingStyle.Sprite;
             so.FindProperty("zoneRing").objectReferenceValue = Ring(area, "ZoneRing", "map_ring_zone", ZoneBand, strokePx);
             so.FindProperty("safeRing").objectReferenceValue = Ring(area, "SafeRing", "map_ring_safe", SafeBand, strokePx);
             so.ApplyModifiedPropertiesWithoutUndo();

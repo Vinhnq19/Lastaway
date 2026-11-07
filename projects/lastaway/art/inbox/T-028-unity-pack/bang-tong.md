@@ -73,21 +73,21 @@ Toạ độ và cỡ trong các bảng màn là **1080p (1920x1080)**. Unity (Ca
 | `kit_panel_m.png` | 640x400 | [47, 47, 47, 47] | có | a3b-dang-nhap, a3b-dang-nhap-loi, a6-phong-cho-cho-du-nguoi, a6-phong-cho-dem-nguoc, b2-bi-loai, b2-bi-loai-bo ... |
 | `kit_panel_popup.png` | 720x480 | [47, 47, 88, 47] | có | a3-vao-phong, a3-vao-phong-dang-ket-noi, a3-vao-phong-loi, a4-xoa-phong, a5-tao-phong, a5-tao-phong-loi ... |
 | `kit_panel_s.png` | 360x240 | [47, 47, 47, 47] | có | a7-dang-tai, a7-dang-tai-loi, b4-tui-do, b4-tui-do-tooltip, b4-tui-do-trong, b5-ban-do-lon |
-| `kit_progress_fill.png` | 470x16 | [3, 2, 3, 2] | có | a1-khoi-dong, a3-vao-phong-dang-ket-noi, a7-dang-tai, b3-spectator, b3-spectator-chuyen, b3-spectator-het ... |
-| `kit_progress_track.png` | 480x28 | [12, 5, 12, 5] | có | a1-khoi-dong, a3-vao-phong-dang-ket-noi, a7-dang-tai, b3-spectator, b3-spectator-chuyen, b3-spectator-het ... |
+| `kit_progress_fill.png` | 470x16 | [3, 3, 2, 2] | có | a1-khoi-dong, a3-vao-phong-dang-ket-noi, a7-dang-tai, b3-spectator, b3-spectator-chuyen, b3-spectator-het ... |
+| `kit_progress_track.png` | 480x28 | [12, 12, 5, 5] | có | a1-khoi-dong, a3-vao-phong-dang-ket-noi, a7-dang-tai, b3-spectator, b3-spectator-chuyen, b3-spectator-het ... |
 | `kit_row_alt.png` | 600x48 | [12, 2, 2, 2] | có | b3-spectator, b3-spectator-chuyen, b6-thang, b7-thua, b9-phan-hoi-hud, b9-phan-hoi-mau-thap |
 | `kit_row_normal.png` | 600x48 | [12, 2, 2, 2] | có | b3-spectator, b3-spectator-chuyen, b4-tui-do, b4-tui-do-tooltip, b4-tui-do-trong, b6-thang ... |
 | `kit_row_selected.png` | 600x48 | [12, 2, 2, 2] | có | b3-spectator, b3-spectator-chuyen, b3-spectator-het, b4-tui-do, b4-tui-do-tooltip, b6-thang ... |
 | `kit_screen_header.png` | 1210x104 | [36, 36, 12, 12] | có | a4-phong-cua-toi, a4-phong-cua-toi-loi, a4-phong-cua-toi-trong, a4-xoa-phong, a6-phong-cho-cho-du-nguoi, a6-phong-cho-dem-nguoc |
-| `kit_slider_fill.png` | 320x10 | [2, 1, 2, 1] | có | a5-tao-phong, a5-tao-phong-loi, b1-esc-cai-dat, b1-esc-xac-nhan-thoat |
-| `kit_slider_track.png` | 320x16 | [7, 3, 7, 3] | có | a5-tao-phong, a5-tao-phong-loi, b1-esc-cai-dat, b1-esc-xac-nhan-thoat |
+| `kit_slider_fill.png` | 320x10 | [2, 2, 1, 1] | có | a5-tao-phong, a5-tao-phong-loi, b1-esc-cai-dat, b1-esc-xac-nhan-thoat |
+| `kit_slider_track.png` | 320x16 | [7, 7, 3, 3] | có | a5-tao-phong, a5-tao-phong-loi, b1-esc-cai-dat, b1-esc-xac-nhan-thoat |
 | `kit_slot_item_empty.png` | 139x140 | không | có | b4-tui-do, b4-tui-do-tooltip, b4-tui-do-trong |
 | `kit_slot_item_normal.png` | 139x140 | không | có | b4-tui-do, b4-tui-do-tooltip, b4-tui-do-trong |
 | `kit_slot_item_selected.png` | 139x140 | không | có | b4-tui-do, b4-tui-do-tooltip, b4-tui-do-trong |
 | `kit_slot_player_notready.png` | 371x96 | [100, 40, 24, 24] | có | a6-phong-cho-cho-du-nguoi, a6-phong-cho-dem-nguoc |
 | `kit_tab_off.png` | 160x64 | [19, 19, 19, 1] | có | a3b-dang-nhap, a3b-dang-nhap-loi |
 | `kit_tab_on.png` | 160x64 | [19, 19, 19, 1] | có | a3b-dang-nhap, a3b-dang-nhap-loi |
-| `kit_tag_neutral.png` | 110x36 | [8, 6, 8, 6] | có | a4-phong-cua-toi, a4-phong-cua-toi-trong, a4-xoa-phong, b9-phan-hoi-hud, b9-phan-hoi-mau-thap |
+| `kit_tag_neutral.png` | 110x36 | [8, 8, 6, 6] | có | a4-phong-cua-toi, a4-phong-cua-toi-trong, a4-xoa-phong, b9-phan-hoi-hud, b9-phan-hoi-mau-thap |
 | `kit_tip_item.png` | 387x230 | [30, 30, 30, 30] | có | b4-tui-do-tooltip |
 | `kit_toast.png` | 360x64 | [22, 22, 22, 22] | có | a2-sanh-chinh, a3-vao-phong, a3-vao-phong-dang-ket-noi, a3-vao-phong-loi, a4-phong-cua-toi-loi, a5-tao-phong ... |
 | `kit_toggle_off.png` | 114x48 | không | có | b1-esc-cai-dat, b1-esc-xac-nhan-thoat |
@@ -147,9 +147,10 @@ Toạ độ và cỡ trong các bảng màn là **1080p (1920x1080)**. Unity (Ca
 | `kit_map_bg.png` | 256x256 | [24, 24, 24, 24] | có | gen GPT qua codex-img.sh, prompt `src/gen/mapbg.prompt.src.txt`; nền khung bản đồ lớn |
 | `map_grid.png` | 840x840 | không | có | gen GPT 1 ô lưới (prompt `src/gen/gridtile.prompt.src.txt`: chỉ hai nét mảnh trên và trái, độ tương phản thấp), script lát 10x10 ô 83 px vào vùng trong của `kit_map_bg` (lề 5 px mỗi cạnh, mép phải và dưới do khung đóng); lưới 840x840, nền trong suốt |
 | `map_ring_zone.png` | 512x512 | không | có | gen GPT qua codex-img.sh, prompt `src/gen/ringzone.prompt.src.txt`; vòng bo hiện tại (nét vàng cam), vẽ 680x680 |
-| `map_ring_safe.png` | 256x256 | không | có | gen GPT qua codex-img.sh, prompt `src/gen/ringsafe.prompt.src.txt`; vòng bo tiếp theo, vùng an toàn (nét trắng), vẽ 180x180; cỡ 32x32 làm chú giải |
+| `map_ring_safe.png` | 256x256 | không | có | gen GPT qua codex-img.sh, prompt `src/gen/ringsafe.prompt.src.txt`; vòng bo tiếp theo, vùng an toàn (nét trắng), vẽ 180x180; chú giải dùng `legend_ring_next_dashed` |
 | `kit_ico_practice.png` | 48x48 | không | có | gen GPT qua codex-img.sh, prompt `src/gen/practice.prompt.src.txt`; icon mục tối cho nút Luyện tập offline (bia tập bắn có mũi tên) |
 | `kit_ico_save.png` | 48x48 | không | có | gen GPT qua codex-img.sh, prompt `src/gen/save.prompt.src.txt`; icon mục tối cho nút Lưu endpoint (đĩa mềm) |
 | `kit_ico_globe.png` | 48x48 | không | có | gen GPT qua codex-img.sh, prompt `src/gen/globe.prompt.src.txt`; icon mục tối cho nút Xem online (quả địa cầu) |
 | `kit_ico_fill.png` | 48x48 | không | có | gen GPT qua codex-img.sh, prompt `src/gen/fill.prompt.src.txt`; icon mục tối cho nút Điền đủ (nhóm 3 người và dấu cộng) |
 | `icon_zone_cause.png` | 64x64 | không | có | gen GPT qua codex-img.sh, prompt `src/gen/zonecause.prompt.src.txt`; icon màu nguyên nhân chết Bo thu v2 (khói bo đỏ lấn vào nền đá, nhân vật nhỏ ở ngoài vòng; lấp khoảng 90% ô) |
+| `legend_ring_next_dashed.png` | 32x32 | không | có | gen GPT qua codex-img.sh, prompt `src/gen/legend-ring.prompt.src.txt`; chú giải vòng bo kế tiếp: vòng trắng nét đứt 12 đoạn |

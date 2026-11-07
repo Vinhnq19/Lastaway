@@ -69,3 +69,24 @@ Bậc: **VERIFIED trong Editor**. Ảnh so mock `r3/so-sanh-r3.png` (B9 toast nh
 | T22-4 toast | khung `kit_toast`, "Giáp gỗ ×1", "Mũ gỗ ×1"; thanh "Đang dùng" cũng tên Việt |
 
 Integrator sửa thêm khi gộp: (1) `PickupToastView.cs` (file một dòng) có comment `//` nuốt mất lệnh ghi số lượng nên toast luôn hiện "×2" của prefab; đổi sang `/* */`, thêm assertion "×1"/"×2" vào `HudFeedbackAcceptanceTests.Pickup_NewestAtBottom_MergesAndDoesNotWriteInventory`. (2) Ô nhãn "Đang dùng" 280 -> 340 px, thanh tiến độ 180 -> 120 px (test `Use_GodLeaf...` đỏ vì "Lá thần m…").
+
+## Vòng bo theo kiểu main (Huy 07/11, thay cam + trắng; làn B WRITTEN)
+- Minimap và bản đồ lớn không vẽ vòng sprite T-022 nữa (`HudSkinABuild.RingStyle = Main`; đổi `Sprite` rồi chạy lại builder để quay lại). `HudZoneRings` vẫn tính pha, tâm, bán kính cho thẻ trên bản đồ lớn.
+- Minimap: lớp "Zone circles" của main (tô hồng ngoài bo, vòng trắng nét đứt) hiện như ảnh `merge/02-bo-dang-thu.png`.
+- Bản đồ lớn: chỉ có lớp tô vùng ngoài bo của world đi vào ảnh qua `MinimapMapCapture` (màu tô world, đỏ hơn minimap). **Không có vòng trắng nét đứt** vì "Zone circles" của main chỉ gắn vào minimap; làn B không vẽ thay.
+- Chú giải: thêm ô "vùng ngoài bo" (`kit_dim` tô màu tô minimap của `ZoneOverlay.shader`: (0,48; 0,035; 0,12) alpha 0,62) và ký hiệu "vòng an toàn kế tiếp" tạm bằng `map_ring_safe` (vòng liền, chưa có sprite nét đứt).
+
+### Integrator gộp (07/11)
+Ảnh `zone-main/so-sanh-zone-main.png` (minimap đầu trận, bản đồ lớn đầu trận, minimap khi bo thu, bản đồ lớn khi bo thu). Ô chú giải vùng ngoài bo đổi từ `kit_dim` (sprite tối nhân màu ra gần đen) sang `hud_bar_fill_white` tô màu hồng đo trên minimap (167, 55, 80). EditMode 990/1002, PlayMode 176/177 (đỏ có sẵn).
+
+## Bản đồ lớn dùng lớp vòng bo của main (CPO 07/11, làn B WRITTEN)
+- Bản đồ lớn có lớp `ZoneOverlay` riêng (shader `JungleMaze/ZoneOverlay`, `_Minimap` 1, `_FillAlpha` 0,62, cắt lề cùng tỉ lệ với lớp minimap của main), nằm trên ảnh bản đồ, dưới lưới và pin: cùng tô hồng ngoài bo và vòng trắng nét đứt như minimap. Hằng số nằm ở `ZoneOverlayParams` (trỏ về `ZoneOverlayView.CreateWorld/CreateMinimap/Apply/Show`).
+- Vòng nét đứt hiện khi có bán kính kế tiếp (luật lớp minimap của main: `TargetRadius > 0`), không theo luật cảnh báo/đang thu của lớp world, để hai bản đồ giống nhau.
+- Ảnh bản đồ (`MinimapMapCapture`) giờ chỉ còn địa hình: lớp tô world "Zone danger overlay" và mọi đường bo world tắt trong lúc chụp, bật lại sau.
+- Chú giải: ô "vòng an toàn kế tiếp" dùng `legend_ring_next_dashed` (T-028).
+
+### Zone R2 gộp (unity, 07/11)
+Ảnh `zone-main-r2/so-sanh-zone-main-r2.png`: minimap và bản đồ lớn cùng lớp shader `ZoneOverlay` (hồng ngoài bo, vòng trắng nét đứt, nét mảnh), đầu trận và khi bo thu. Màu ngoài bo đo được: minimap (155, 67, 79), bản đồ lớn (157, 68, 79). Ảnh chụp bản đồ không còn lớp tô world. Chú giải dùng `legend_ring_next_dashed`. EditMode 990/1002, PlayMode 179/180 (đỏ có sẵn).
+
+### BIGMAP FIT (unity, 07/11)
+Panel bản đồ lớn 1090x1000 -> 1000x1000, ô bản đồ 840 ở góc trên trái -> 880 vuông căn giữa (`HudPanelsBuild.BigMapMargin` = 60 bốn phía); lớp ZoneOverlay, lưới, marker cùng rect. Test thêm trong `HudPanelsTests` (ô vuông, panel vuông, lề phải = trái, dưới = trên). Ảnh `bigmap-fit/so-sanh-mock-b5.png`.

@@ -2,6 +2,7 @@ using JungleBackend.Protocol.Gameplay;
 using JungleMaze.App.Hud;
 using JungleMaze.App.Hud.State;
 using JungleMaze.App.Match;
+using JungleMaze.App.Ports;
 using JungleMaze.Core.DI;
 using UnityEngine;
 
@@ -17,6 +18,8 @@ namespace JungleMaze.Presentation.UI.Hud
     {
         [SerializeField] private RectTransform area;
         [SerializeField] private RingGraphic zoneRing, safeRing;
+        [Tooltip("Draw the sprite rings. Off = main style (Huy 07/11): the map shows Quang Huy's ZoneOverlay layer; data still computed.")]
+        [SerializeField] private bool draw = true;
 
         private IHudState _hud;
         private MatchSession _online;
@@ -30,6 +33,10 @@ namespace JungleMaze.Presentation.UI.Hud
         public float SafeRadius { get; private set; }
         public RingGraphic ZoneRing => zoneRing;
         public RingGraphic SafeRing => safeRing;
+        public bool Draw => draw;
+        /// <summary>Map rect in world cells (runtime map data), for the big map's ZoneOverlay layer (_MapBounds).</summary>
+        public bool HasBounds { get; private set; }
+        public RuntimeMapBounds Bounds { get; private set; }
 
         [Inject]
         public void Construct(IHudState hud, MatchSession online, OfflineMatchSession offline)
@@ -37,6 +44,19 @@ namespace JungleMaze.Presentation.UI.Hud
             _hud = hud;
             _online = online;
             _offline = offline;
+        }
+
+        /// <summary>Same source as the main ZoneOverlay (<c>MatchDemoView</c> passes <c>IClientRuntimeData.Bounds</c>).</summary>
+        [Inject]
+        public void BindMapData(IClientRuntimeData data)
+        {
+            if (data != null) SetBounds(data.Bounds);
+        }
+
+        public void SetBounds(RuntimeMapBounds bounds)
+        {
+            Bounds = bounds;
+            HasBounds = bounds.MaxX > bounds.MinX && bounds.MaxY > bounds.MinY;
         }
 
         /// <summary>World cells (same space as the hero pose). Radius 0 hides that ring.</summary>
@@ -82,7 +102,7 @@ namespace JungleMaze.Presentation.UI.Hud
         private void Place(RingGraphic ring, MinimapProjection projection, Vector2 centre, float radius)
         {
             if (ring == null) return;
-            var visible = HasZone && radius > 0f;
+            var visible = draw && HasZone && radius > 0f;
             if (ring.gameObject.activeSelf != visible) ring.gameObject.SetActive(visible);
             if (!visible) return;
             projection.Project(centre.x, centre.y, out var px, out var py);

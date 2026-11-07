@@ -309,6 +309,36 @@ namespace JungleMaze.EditorTools
             return t;
         }
 
+        /// <summary>
+        /// Gives every kit button under <paramref name="root"/> (target sprite kit_btn_*, kit_close_*, kit_iconbtn_*) the
+        /// pressed-face behaviour of <see cref="KitButtonFace"/>: its children are moved into a stretched "Face" node that
+        /// sinks by the base while pressed. Buttons from <see cref="Button"/> already have one. Builders call this last,
+        /// before saving the prefab. Icon-only buttons keep their hand-placed rest position (no extra padding).
+        /// </summary>
+        public static int FaceAll(GameObject root)
+        {
+            var added = 0;
+            foreach (var b in root.GetComponentsInChildren<UnityEngine.UI.Button>(true))
+            {
+                if (b.GetComponent<KitButtonFace>() != null) continue;
+                var img = b.targetGraphic as UnityEngine.UI.Image;
+                var sprite = img != null && img.sprite != null ? img.sprite.name : "";
+                if (!(sprite.StartsWith("kit_btn_") || sprite.StartsWith("kit_close_") || sprite.StartsWith("kit_iconbtn_"))) continue;
+                var t = (RectTransform)b.transform;
+                var face = Stretch(Node(t, "Face"));
+                for (var i = t.childCount - 1; i >= 0; i--)
+                {
+                    var child = t.GetChild(i);
+                    if (child == face) continue;
+                    child.SetParent(face, false); // Face has the button's rect, so local layout is unchanged
+                    child.SetSiblingIndex(0);
+                }
+                b.gameObject.AddComponent<KitButtonFace>().Bind(b, face, centreOnFace: false);
+                added++;
+            }
+            return added;
+        }
+
         // ---------- K2 buttons (T-026; ui-kit.md mục 9, 11) ----------
         public enum ButtonKind { Primary, Secondary, Danger, Exit }
         public enum ButtonSize { S = 48, M = 64, L = 80 }
