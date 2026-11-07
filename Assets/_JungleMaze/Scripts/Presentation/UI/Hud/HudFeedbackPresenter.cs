@@ -16,28 +16,33 @@ namespace JungleMaze.Presentation.UI.Hud
         private readonly EffectChipOutput[] _lastChips=new EffectChipOutput[6];private readonly PickupOutput[] _lastPickups=new PickupOutput[3];private readonly DamageArcOutput[] _lastArcs=new DamageArcOutput[4];private readonly DangerArrowOutput[] _lastArrows=new DangerArrowOutput[3];
         private readonly bool[] _chipVisible=new bool[6],_pickupVisible=new bool[3],_arcVisible=new bool[4],_arrowVisible=new bool[3];
         private bool _first=true,_disposed,_lastUseVisible;private int _lastSlot=-1,_lastOverflow;private float _lastOverflowAlpha,_lastHitAlpha,_lastAimX,_lastAimY,_lastUseFill;private int _lastTenths;private ItemUseStatus _lastUse;private DangerBannerOutput _lastBanner;
+        private readonly IReloadProgressSource _reload;private readonly IReloadRingView _ringView;private readonly Action<bool> _onReloadEnded;
+        private bool _lastBarReload,_lastRingVisible;private ItemUsePhase _lastReloadPhase;private float _lastRingFill,_lastRingX,_lastRingY;
         public UseActionFeedback Use {get;}public EffectChipFeedback Effects {get;}public PickupFeed Pickups {get;}public HitMarkerFeedback Hit {get;}public DamageArcFeedback Arcs {get;}public DangerFeedback Dangers {get;}
-        public HudFeedbackPresenter(IHudState hud,IInventoryState inventory,IEffectState effects,HudFeedbackTuning tuning,IWorldViewport viewport,IQuickbarFeedbackHooks quickbar,IUseActionView use,IEffectRowView effectRow,IPickupFeedView pickup,IHitMarkerView hit,IDamageArcView arcs,IDangerBannerView banner,IDangerArrowView arrows)
+        /// <summary>Local reload display; idle when no <see cref="IReloadProgressSource"/> was given.</summary>
+        public ReloadProgressFeedback Reload {get;}
+        public HudFeedbackPresenter(IHudState hud,IInventoryState inventory,IEffectState effects,HudFeedbackTuning tuning,IWorldViewport viewport,IQuickbarFeedbackHooks quickbar,IUseActionView use,IEffectRowView effectRow,IPickupFeedView pickup,IHitMarkerView hit,IDamageArcView arcs,IDangerBannerView banner,IDangerArrowView arrows,IReloadProgressSource reload=null,IReloadRingView reloadRing=null)
         {
             _hud=hud??throw new ArgumentNullException(nameof(hud));_inventory=inventory??throw new ArgumentNullException(nameof(inventory));_effects=effects??throw new ArgumentNullException(nameof(effects));_viewport=viewport;
-            _quickbar=quickbar;_useView=use;_effectsView=effectRow;_pickupView=pickup;_hitView=hit;_arcView=arcs;_bannerView=banner;_arrowView=arrows;
-            Use=new UseActionFeedback(tuning);Effects=new EffectChipFeedback(tuning);Pickups=new PickupFeed(tuning);Hit=new HitMarkerFeedback(tuning);Arcs=new DamageArcFeedback(tuning);Dangers=new DangerFeedback(tuning);
-            _onPickup=OnPickup;_onHit=OnHit;_onDamage=OnDamage;_onDanger=OnDanger;_onUse=OnUse;
-            hud.ItemPicked+=_onPickup;hud.HitDealt+=_onHit;hud.DamageTaken+=_onDamage;hud.DangerChanged+=_onDanger;inventory.UseChanged+=_onUse;
+            _quickbar=quickbar;_useView=use;_effectsView=effectRow;_pickupView=pickup;_hitView=hit;_arcView=arcs;_bannerView=banner;_arrowView=arrows;_reload=reload;_ringView=reloadRing;
+            Use=new UseActionFeedback(tuning);Effects=new EffectChipFeedback(tuning);Pickups=new PickupFeed(tuning);Hit=new HitMarkerFeedback(tuning);Arcs=new DamageArcFeedback(tuning);Dangers=new DangerFeedback(tuning);Reload=new ReloadProgressFeedback(tuning);
+            _onPickup=OnPickup;_onHit=OnHit;_onDamage=OnDamage;_onDanger=OnDanger;_onUse=OnUse;_onReloadEnded=OnReloadEnded;
+            hud.ItemPicked+=_onPickup;hud.HitDealt+=_onHit;hud.DamageTaken+=_onDamage;hud.DangerChanged+=_onDanger;inventory.UseChanged+=_onUse;if(_reload!=null)_reload.Ended+=_onReloadEnded;
             Use.Accept(inventory.Use);for(var i=0;i<hud.DangerCount;i++)Dangers.Upsert(hud.GetDangerAt(i));
         }
         public void Tick(float dt,float aimX,float aimY)
         {
             if(_disposed)return;
-            Use.Tick(dt,_inventory.Use);Effects.BeginSync();for(var i=0;i<_effects.Count;i++)Effects.Sync(_effects.GetAt(i));Effects.Tick(dt);Pickups.Tick(dt);Hit.Tick(dt);Arcs.Tick(dt);
+            Use.Tick(dt,_inventory.Use);if(_reload!=null)Reload.Tick(dt,_reload.Current);Effects.BeginSync();for(var i=0;i<_effects.Count;i++)Effects.Sync(_effects.GetAt(i));Effects.Tick(dt);Pickups.Tick(dt);Hit.Tick(dt);Arcs.Tick(dt);
             for(var i=0;i<_hud.DangerCount;i++)Dangers.SyncSnapshot(_hud.GetDangerAt(i));Dangers.Tick(dt,_hud.HasPose,_hud.Pose,_viewport);
-            RenderUse();RenderEffects();RenderPickups();RenderArcs();RenderDanger();
+            RenderUse();RenderReloadRing();RenderEffects();RenderPickups();RenderArcs();RenderDanger();
             var alpha=Hit.Alpha;if(_first||alpha!=_lastHitAlpha||(alpha>0&&(aimX!=_lastAimX||aimY!=_lastAimY))){_hitView?.Show(alpha,aimX,aimY);_lastHitAlpha=alpha;_lastAimX=aimX;_lastAimY=aimY;}
             _first=false;
         }
         public void Dispose()
         {
-            if(_disposed)return;_disposed=true;_hud.ItemPicked-=_onPickup;_hud.HitDealt-=_onHit;_hud.DamageTaken-=_onDamage;_hud.DangerChanged-=_onDanger;_inventory.UseChanged-=_onUse;
+            if(_disposed)return;_disposed=true;_hud.ItemPicked-=_onPickup;_hud.HitDealt-=_onHit;_hud.DamageTaken-=_onDamage;_hud.DangerChanged-=_onDanger;_inventory.UseChanged-=_onUse;if(_reload!=null)_reload.Ended-=_onReloadEnded;
+            if(_lastRingVisible)_ringView?.Show(false,0,0,0);
             if(_lastSlot>=0)_quickbar?.SetSlotInUse(_lastSlot,false);_quickbar?.SetWeaponStripVisible(true);
         }
         private void OnPickup(ItemPickup item)=>Pickups.Add(item);
@@ -49,15 +54,30 @@ namespace JungleMaze.Presentation.UI.Hud
             if(change.Type==DangerChangeType.Removed||change.Type==DangerChangeType.Expired){Dangers.Remove(change.Id,change.Type==DangerChangeType.Expired);return;}
             for(var i=0;i<_hud.DangerCount;i++){var w=_hud.GetDangerAt(i);if(w.Id==change.Id){Dangers.Upsert(w);return;}}
         }
+        private void OnReloadEnded(bool completed)=>Reload.Finish(completed);
+        /// <summary>The action bar shows item use, or the local reload when no use is shown; the weapon strip (with "R Nạp") hides under either.</summary>
         private void RenderUse()
         {
-            var s=Use.Status;var tenths=(int)Math.Ceiling(Math.Max(0,s.RemainingSeconds)*10-.00001f);
-            if(_first||Use.Visible!=_lastUseVisible||Use.Fill!=_lastUseFill||s.Phase!=_lastUse.Phase||s.DisplayName!=_lastUse.DisplayName||s.Cancellable!=_lastUse.Cancellable||tenths!=_lastTenths){
-                _useView?.Show(Use.Visible,_text,HudFeedbackFormat.UseLabel(_text,s),_seconds,HudFeedbackFormat.Tenths(_seconds,s.RemainingSeconds),Use.Fill,Use.Hint,s.Phase==ItemUsePhase.Cancelled);
-                if(_first||Use.Visible!=_lastUseVisible)_quickbar?.SetWeaponStripVisible(!Use.Visible);
-                _lastUse=s;_lastUseVisible=Use.Visible;_lastUseFill=Use.Fill;_lastTenths=tenths;
+            var s=Use.Status;var reload=_reload!=null&&Reload.ShowsOnBar(Use.Visible);
+            var visible=Use.Visible||reload;var remaining=reload?Reload.RemainingSeconds:s.RemainingSeconds;var fill=reload?Reload.Fill:Use.Fill;
+            var tenths=(int)Math.Ceiling(Math.Max(0,remaining)*10-.00001f);
+            var changed=reload?Reload.Phase!=_lastReloadPhase:s.Phase!=_lastUse.Phase||s.DisplayName!=_lastUse.DisplayName||s.Cancellable!=_lastUse.Cancellable;
+            if(_first||visible!=_lastUseVisible||fill!=_lastUseFill||reload!=_lastBarReload||changed||tenths!=_lastTenths){
+                if(reload)_useView?.Show(true,_text,HudFeedbackFormat.ReloadLabel(_text,Reload.Phase),_seconds,HudFeedbackFormat.Tenths(_seconds,remaining),fill,false,Reload.Phase==ItemUsePhase.Cancelled);
+                else _useView?.Show(Use.Visible,_text,HudFeedbackFormat.UseLabel(_text,s),_seconds,HudFeedbackFormat.Tenths(_seconds,s.RemainingSeconds),Use.Fill,Use.Hint,s.Phase==ItemUsePhase.Cancelled);
+                if(_first||visible!=_lastUseVisible)_quickbar?.SetWeaponStripVisible(!visible);
+                _lastUse=s;_lastUseVisible=visible;_lastUseFill=fill;_lastTenths=tenths;_lastBarReload=reload;_lastReloadPhase=reload?Reload.Phase:ItemUsePhase.Idle;
             }
             var slot=Use.SlotInUse;if(_first||slot!=_lastSlot){if(_lastSlot>=0)_quickbar?.SetSlotInUse(_lastSlot,false);if(slot>=0)_quickbar?.SetSlotInUse(slot,true);_lastSlot=slot;}
+        }
+        /// <summary>The ring needs the own pose to sit above the hero; it is written only when visibility, fill or pose change.</summary>
+        private void RenderReloadRing()
+        {
+            if(_ringView==null)return;
+            var visible=Reload.RingVisible&&_hud.HasPose;
+            if(visible){var p=_hud.Pose;if(_first||!_lastRingVisible||Reload.Fill!=_lastRingFill||p.X!=_lastRingX||p.Y!=_lastRingY){_ringView.Show(true,Reload.Fill,p.X,p.Y);_lastRingFill=Reload.Fill;_lastRingX=p.X;_lastRingY=p.Y;}}
+            else if(_first||_lastRingVisible)_ringView.Show(false,0,0,0);
+            _lastRingVisible=visible;
         }
         private void RenderEffects()
         {

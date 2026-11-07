@@ -103,6 +103,8 @@ namespace JungleMaze.App.Combat
         /// <summary>True once the server accepted the reload and its ReloadEndTick is known.</summary>
         public bool IsReloadConfirmed => _reloadConfirmed;
         public float ReloadRemainingSeconds => _reloadRemaining;
+        /// <summary>The weapon the current reload belongs to; only meaningful while <see cref="IsReloading"/>.</summary>
+        public CombatWeaponId ReloadWeapon => _reloadWeapon;
         public int PendingCount => _pendingCount;
         public CombatWeaponSlot Slot(CombatWeaponId weapon) => _slots[(int)weapon];
         public CombatWeaponSlot SelectedSlot => _slots[(int)_selected];
