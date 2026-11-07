@@ -17,7 +17,7 @@ namespace JungleMaze.Presentation.UI.Hud
         private readonly bool[] _chipVisible=new bool[6],_pickupVisible=new bool[3],_arcVisible=new bool[4],_arrowVisible=new bool[3];
         private bool _first=true,_disposed,_lastUseVisible;private int _lastSlot=-1,_lastOverflow;private float _lastOverflowAlpha,_lastHitAlpha,_lastAimX,_lastAimY,_lastUseFill;private int _lastTenths;private ItemUseStatus _lastUse;private DangerBannerOutput _lastBanner;
         private readonly IReloadProgressSource _reload;private readonly IReloadRingView _ringView;private readonly Action<bool> _onReloadEnded;
-        private bool _lastBarReload,_lastRingVisible;private ItemUsePhase _lastReloadPhase;private float _lastRingFill,_lastRingX,_lastRingY;
+        private bool _lastBarReload,_lastRingVisible;private string _lastIconItem;private ItemUsePhase _lastReloadPhase;private float _lastRingFill,_lastRingX,_lastRingY;
         public UseActionFeedback Use {get;}public EffectChipFeedback Effects {get;}public PickupFeed Pickups {get;}public HitMarkerFeedback Hit {get;}public DamageArcFeedback Arcs {get;}public DangerFeedback Dangers {get;}
         /// <summary>Local reload display; idle when no <see cref="IReloadProgressSource"/> was given.</summary>
         public ReloadProgressFeedback Reload {get;}
@@ -64,8 +64,14 @@ namespace JungleMaze.Presentation.UI.Hud
             var changed=reload?Reload.Phase!=_lastReloadPhase:s.Phase!=_lastUse.Phase||s.DisplayName!=_lastUse.DisplayName||s.Cancellable!=_lastUse.Cancellable;
             if(_first||visible!=_lastUseVisible||fill!=_lastUseFill||reload!=_lastBarReload||changed||tenths!=_lastTenths){
                 if(reload)_useView?.Show(true,_text,HudFeedbackFormat.ReloadLabel(_text,Reload.Phase),_seconds,HudFeedbackFormat.Tenths(_seconds,remaining),fill,false,Reload.Phase==ItemUsePhase.Cancelled);
-                else _useView?.Show(Use.Visible,_text,HudFeedbackFormat.UseLabel(_text,s),_seconds,HudFeedbackFormat.Tenths(_seconds,s.RemainingSeconds),Use.Fill,Use.Hint,s.Phase==ItemUsePhase.Cancelled);
+                else
+                {
+                    var named=new ItemUseStatus(s.Phase,s.ItemId,HudItemNames.Get(s.ItemId,s.DisplayName),s.SlotIndex,s.TotalSeconds,s.RemainingSeconds,s.Cancellable); // T-022 R3: Vietnamese item name (GDD ITEM LIST), format untouched
+                    _useView?.Show(Use.Visible,_text,HudFeedbackFormat.UseLabel(_text,named),_seconds,HudFeedbackFormat.Tenths(_seconds,s.RemainingSeconds),Use.Fill,Use.Hint,s.Phase==ItemUsePhase.Cancelled);
+                }
                 if(_first||visible!=_lastUseVisible)_quickbar?.SetWeaponStripVisible(!visible);
+                // T-022: image assignment only; the reload bar clears the item icon, the next use sets it again.
+                var iconItem=reload?"":s.ItemId;if(_useView is IUseActionIconView icon&&(_first||iconItem!=_lastIconItem)){icon.SetItem(iconItem);_lastIconItem=iconItem;}
                 _lastUse=s;_lastUseVisible=visible;_lastUseFill=fill;_lastTenths=tenths;_lastBarReload=reload;_lastReloadPhase=reload?Reload.Phase:ItemUsePhase.Idle;
             }
             var slot=Use.SlotInUse;if(_first||slot!=_lastSlot){if(_lastSlot>=0)_quickbar?.SetSlotInUse(_lastSlot,false);if(slot>=0)_quickbar?.SetSlotInUse(slot,true);_lastSlot=slot;}

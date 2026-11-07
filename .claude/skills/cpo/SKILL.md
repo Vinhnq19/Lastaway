@@ -12,9 +12,10 @@ Quy trình đầy đủ: `Docs/Team_Workflow.vi.md` — đọc nó trước khi 
 
 ## 0. Phân loại yêu cầu
 
+- **Việc nhỏ (đi tắt, xét trước mọi mục khác):** sửa lỗi hoặc thêm nhỏ, tối đa khoảng 3 file code, không đổi protocol, schema data hay contract, không đụng vùng người khác, không đổi luật game. Làm thẳng trong phiên này: đọc code liên quan, sửa, kiểm compile sạch, báo 2-3 dòng (sửa gì, file nào). Không viết spec, không lập kế hoạch, không viết test mới, không gọi review hay QA, không chia nhiều dev, không tạo ticket file. Không chắc là việc nhỏ hay không thì hỏi người một câu. Commit theo luật commit của người dùng.
 - **ID ticket** (dạng `ABC-01`, `Game-10`): chạy quy trình ở mục 1–7.
 - **"backlog"/"giai đoạn N"/câu hỏi tiến độ:** đọc `python -I Tools/read_gdd.py "PROJECT TRACKING"`, đối chiếu `Docs/Tickets/` và `.claude/memory/`, trả về bảng: ticket, ưu tiên, PIC, trạng thái, phụ thuộc còn thiếu, ticket nào Ready. Đề xuất thứ tự làm (P0 trước, mở khoá nhiều ticket khác trước). Dừng ở đó.
-- **Yêu cầu tự do** (không có ID): tìm ticket GDD gần nhất bằng `--grep`. Có thì hỏi người xác nhận dùng ticket đó; không có thì tạo ID tạm `ADHOC-<slug>` và vẫn đi đủ quy trình.
+- **Yêu cầu tự do** (không có ID, không phải việc nhỏ): tìm ticket GDD gần nhất bằng `--grep`. Có thì hỏi người xác nhận dùng ticket đó; không có thì tạo ID tạm `ADHOC-<slug>` và đi đủ quy trình.
 
 Lập task list theo các bước dưới đây để người theo dõi.
 
@@ -63,7 +64,7 @@ Tự kiểm báo cáo của agent trước khi tin: mở file chúng nói đã s
 
 ## Giao việc cho phiên thường trực
 
-Nếu đang chạy trên app desktop và đã có các phiên vai trò (`Game Designer`, `Tech Lead`, `Unity Dev`, `Backend Dev`, `Code Reviewer`, `QA Tester`; tìm bằng danh sách phiên liên kết), giao việc bằng tin nhắn tới phiên đó thay vì gọi subagent. Tin nhắn có dòng đầu nêu rõ ID ticket và bước, kèm brief như ở các mục trên. Mỗi phiên chỉ nhận một việc một lúc. Báo cáo cuối lượt của phiên tự quay về đây; kiểm file ticket trước khi chuyển bước. Không có phiên vai trò thì dùng subagent cùng tên.
+Từ 06/11/2026 luồng chính là bộ máy studio trong `CLAUDE.md` (phiên `CPO`, 5 phiên vai, `production/BACKLOG.md`). Skill này chỉ còn dùng khi Huy gọi `/cpo <ticket>` để chạy theo quy trình cổng G1/G3 cũ; khi đó giao việc cho phiên vai studio theo ánh xạ ở `projects/lastaway/CLAUDE.md` thay vì các phiên `Lastaway · ...` cũ.
 
 ## Nguyên tắc của CPO
 

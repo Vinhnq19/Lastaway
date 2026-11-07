@@ -1,0 +1,138 @@
+{
+ "hud_panel_vitals": {
+  "size": [
+   422,
+   206
+  ],
+  "border_LRTB": [
+   33,
+   33,
+   33,
+   33
+  ],
+  "slice": false
+ },
+ "hud_panel_match": {
+  "size": [
+   318,
+   90
+  ],
+  "border_LRTB": [
+   31,
+   31,
+   31,
+   31
+  ],
+  "slice": false
+ },
+ "hud_minimap_frame": {
+  "size": [
+   318,
+   316
+  ],
+  "border_LRTB": [
+   24,
+   25,
+   24,
+   24
+  ],
+  "hole": [
+   24,
+   24,
+   292,
+   291
+  ],
+  "slice": false
+ },
+ "hud_killfeed_plate": {
+  "size": [
+   270,
+   130
+  ],
+  "border_LRTB": [
+   14,
+   14,
+   14,
+   14
+  ],
+  "border_LRTB_2x": [
+   28,
+   28,
+   28,
+   28
+  ]
+ },
+ "hud_panel_quickbar": {
+  "size": [
+   593,
+   112
+  ],
+  "border_LRTB": [
+   30,
+   30,
+   30,
+   30
+  ],
+  "slice": false
+ },
+ "hud_slot_empty": {
+  "size": [
+   54,
+   54
+  ],
+  "border_LRTB": [
+   16,
+   16,
+   16,
+   16
+  ]
+ },
+ "hud_slot_selected": {
+  "size": [
+   54,
+   54
+  ],
+  "border_LRTB": [
+   16,
+   16,
+   16,
+   16
+  ]
+ },
+ "hud_bar_track_hp": {
+  "size": [
+   236,
+   32
+  ],
+  "border_LRTB": [
+   15,
+   12,
+   15,
+   12
+  ]
+ },
+ "hud_bar_track_thin": {
+  "size": [
+   242,
+   24
+  ],
+  "border_LRTB": [
+   10,
+   7,
+   10,
+   7
+  ]
+ },
+ "hud_ammo_plate": {
+  "size": [
+   276,
+   19
+  ],
+  "border_LRTB": [
+   9,
+   7,
+   9,
+   7
+  ]
+ }
+}

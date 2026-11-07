@@ -1,0 +1,202 @@
+{
+ "hud_panel_vitals": {
+  "size": [
+   311,
+   173
+  ],
+  "border_LRTB": [
+   16,
+   16,
+   16,
+   16
+  ],
+  "border_LRTB_2x": [
+   32,
+   32,
+   32,
+   32
+  ]
+ },
+ "hud_panel_quickbar": {
+  "size": [
+   592,
+   126
+  ],
+  "border_LRTB": [
+   16,
+   16,
+   16,
+   16
+  ],
+  "border_LRTB_2x": [
+   32,
+   32,
+   32,
+   32
+  ]
+ },
+ "hud_panel_match": {
+  "size": [
+   240,
+   89
+  ],
+  "border_LRTB": [
+   16,
+   16,
+   16,
+   16
+  ],
+  "border_LRTB_2x": [
+   32,
+   32,
+   32,
+   32
+  ]
+ },
+ "hud_minimap_frame": {
+  "size": [
+   240,
+   240
+  ],
+  "border_LRTB": [
+   16,
+   16,
+   16,
+   16
+  ],
+  "border_LRTB_2x": [
+   32,
+   32,
+   32,
+   32
+  ]
+ },
+ "hud_killfeed_plate": {
+  "size": [
+   256,
+   135
+  ],
+  "border_LRTB": [
+   12,
+   12,
+   12,
+   12
+  ],
+  "border_LRTB_2x": [
+   24,
+   24,
+   24,
+   24
+  ],
+  "note": "alpha 78%"
+ },
+ "hud_slot_empty": {
+  "size": [
+   60,
+   60
+  ],
+  "border_LRTB": [
+   18,
+   18,
+   18,
+   18
+  ],
+  "border_LRTB_2x": [
+   36,
+   36,
+   36,
+   36
+  ]
+ },
+ "hud_slot_selected": {
+  "size": [
+   60,
+   60
+  ],
+  "border_LRTB": [
+   18,
+   18,
+   18,
+   18
+  ],
+  "border_LRTB_2x": [
+   36,
+   36,
+   36,
+   36
+  ]
+ },
+ "hud_bar_track_hp": {
+  "size": [
+   164,
+   21
+  ],
+  "border_LRTB": [
+   21,
+   21,
+   8,
+   8
+  ],
+  "border_LRTB_2x": [
+   42,
+   42,
+   16,
+   16
+  ]
+ },
+ "hud_bar_track_thin": {
+  "size": [
+   164,
+   12
+  ],
+  "border_LRTB": [
+   12,
+   12,
+   4,
+   4
+  ],
+  "border_LRTB_2x": [
+   24,
+   24,
+   8,
+   8
+  ]
+ },
+ "hud_ammo_plate": {
+  "size": [
+   220,
+   36
+  ],
+  "border_LRTB": [
+   31,
+   31,
+   11,
+   11
+  ],
+  "border_LRTB_2x": [
+   62,
+   62,
+   22,
+   22
+  ]
+ },
+ "hud_panel_shadow": {
+  "size": [
+   64,
+   64
+  ],
+  "border_LRTB": [
+   32,
+   32,
+   32,
+   32
+  ],
+  "border_LRTB_2x": [
+   64,
+   64,
+   64,
+   64
+  ],
+  "note": "chi A1 va A2; Image Sliced, dat duoi panel, to hon panel moi canh 24 px (1080p), lech xuong 4 px; Image.color trang"
+ }
+}

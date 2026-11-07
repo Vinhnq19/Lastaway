@@ -1,0 +1,17 @@
+Use your image generation tool to create ONE image as described below, and copy the generated file AS-IS (no cropping, no resizing, no padding) to:
+D:\Lastaway\projects\lastaway\art\inbox\T-015\src\v4\sheet-icons.png
+Do not write any other files and do not post-process the image. Use only the built-in image tool, never the OpenAI API, curl or python.
+
+Image 1 is a full-screen concept of our pixel-art battle royale game with its HUD. Image 2 is zoomed crops of the HUD icons from that concept (red heart with gold outline, beige tunic armor, silver knight helmet with a gold center stripe and T-shaped eye slit, gold lightning bolt, grey person bust, cream hourglass, small gold bullet). Copy EXACTLY the style of these pixel-art icons: chunky visible pixels, a dark outline around every icon, a simple 2 to 3 tone shading, the same colors and proportions as the concept.
+
+TASK: draw a clean icon sprite sheet, each icon isolated on a perfectly flat solid magenta background (#FF00FF, no gradient, no noise, no shadow; magenta must not appear inside any icon). At least 100 px of pure magenta between icons and around the border. NO text, NO numbers, NO frames, NO panel behind the icons. Draw each icon large (about 300 px) and sharp with crisp pixel edges; do not crop any icon.
+
+ICONS in a 4 by 2 grid (left to right, top to bottom), all roughly square:
+1. HEART: red two-lobe pixel heart with a golden-yellow outline and a dark outer outline (like the concept).
+2. ARMOR: beige tunic / chest armor with short shoulder plates and a center seam (like the concept), dark outline.
+3. HELMET: silver-grey knight helmet (Corinthian style), a vertical gold stripe on top center, a dark T-shaped eye opening, cheek guards, dark outline (like the concept).
+4. LIGHTNING: golden-yellow lightning bolt with dark outline.
+5. PERSON: neutral light-grey person bust silhouette (head and shoulders) with a dark outline.
+6. HOURGLASS: cream-white hourglass with a thin frame, a little sand, dark outline.
+7. BULLET: small golden bullet / cartridge seen from the side, dark outline (small and simple like the concept).
+8. SKULL: small cream skull with dark outline, same pixel style.

@@ -1,0 +1,6 @@
+Use your image generation tool to create ONE image as described below, and copy the generated file AS-IS (no cropping, no resizing, no padding) to:
+D:\Lastaway\projects\lastaway\art\inbox\T-028-unity-pack\src\gen\ringsafe.png
+Do not write any other files and do not post-process the image. Use only the built-in image tool, never the OpenAI API, curl or python.
+
+Draw ONE big perfect circle OUTLINE (ring only) used as the next safe-zone boundary on a map in a pixel-art survival game: a white-ivory line (#EDF2EE) with a thin dark-brown edge (#2B2A24) on both sides, line thickness about 2 percent of the diameter, chunky pixel-art style, crisp stepped pixel edges (no soft gradients). The inside of the circle and the outside must both be flat solid magenta #FF00FF (only the ring itself is drawn). No text, no icons, no glow.
+Draw it large and centered, filling about 94 percent of the square canvas.

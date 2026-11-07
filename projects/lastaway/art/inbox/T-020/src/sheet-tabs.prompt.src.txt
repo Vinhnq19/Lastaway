@@ -1,0 +1,6 @@
+Image 1 is the approved pixel-art HUD style. Image 2 is a sprite sheet whose third row has two TAB pieces: TAB-UNSELECTED (dark stone, thin olive rim on top and sides, flat open bottom edge) and TAB-SELECTED (lighter warm brown-grey #4a4538, bright gold #FFDC6E rim on top and sides, raised, flat open bottom edge).
+
+Draw ONE sprite sheet on a flat solid magenta background (#FF00FF, no gradient, never inside a piece), at least 60 px of pure magenta between pieces and around the border, with THREE tabs in one row, all the same size and shape as the tabs in image 2 (aspect 3 : 1, flat open bottom edge, chamfered top corners), empty, no text:
+1. TAB-UNSELECTED exactly as in image 2.
+2. TAB-HOVER: same as unselected but with the fill about 25 percent lighter (#3a352b) and a thin bright gold #FFDC6E line just INSIDE the rim at the top only; the rim itself stays olive-tan.
+3. TAB-SELECTED exactly as in image 2.

@@ -1,0 +1,896 @@
+{
+ "kit_btn_danger_disabled": {
+  "size": [
+   240,
+   64
+  ],
+  "border_LRTB": [
+   22,
+   22,
+   28,
+   28
+  ],
+  "slice": true
+ },
+ "kit_btn_danger_hover": {
+  "size": [
+   240,
+   64
+  ],
+  "border_LRTB": [
+   22,
+   22,
+   28,
+   28
+  ],
+  "slice": true
+ },
+ "kit_btn_danger_normal": {
+  "size": [
+   240,
+   64
+  ],
+  "border_LRTB": [
+   22,
+   22,
+   28,
+   28
+  ],
+  "slice": true
+ },
+ "kit_btn_danger_pressed": {
+  "size": [
+   240,
+   64
+  ],
+  "border_LRTB": [
+   22,
+   22,
+   28,
+   28
+  ],
+  "slice": true
+ },
+ "kit_btn_primary_disabled": {
+  "size": [
+   240,
+   64
+  ],
+  "border_LRTB": [
+   22,
+   22,
+   28,
+   28
+  ],
+  "slice": true
+ },
+ "kit_btn_primary_hover": {
+  "size": [
+   240,
+   64
+  ],
+  "border_LRTB": [
+   22,
+   22,
+   28,
+   28
+  ],
+  "slice": true
+ },
+ "kit_btn_primary_normal": {
+  "size": [
+   240,
+   64
+  ],
+  "border_LRTB": [
+   22,
+   22,
+   28,
+   28
+  ],
+  "slice": true
+ },
+ "kit_btn_primary_pressed": {
+  "size": [
+   240,
+   64
+  ],
+  "border_LRTB": [
+   22,
+   22,
+   28,
+   28
+  ],
+  "slice": true
+ },
+ "kit_btn_secondary_disabled": {
+  "size": [
+   240,
+   64
+  ],
+  "border_LRTB": [
+   22,
+   22,
+   28,
+   28
+  ],
+  "slice": true
+ },
+ "kit_btn_secondary_hover": {
+  "size": [
+   240,
+   64
+  ],
+  "border_LRTB": [
+   22,
+   22,
+   28,
+   28
+  ],
+  "slice": true
+ },
+ "kit_btn_secondary_normal": {
+  "size": [
+   240,
+   64
+  ],
+  "border_LRTB": [
+   22,
+   22,
+   28,
+   28
+  ],
+  "slice": true
+ },
+ "kit_btn_secondary_pressed": {
+  "size": [
+   240,
+   64
+  ],
+  "border_LRTB": [
+   22,
+   22,
+   28,
+   28
+  ],
+  "slice": true
+ },
+ "kit_card_cause": {
+  "size": [
+   768,
+   150
+  ],
+  "border_LRTB": [
+   110,
+   28,
+   28,
+   28
+  ],
+  "slice": true
+ },
+ "kit_card_room_full": {
+  "size": [
+   615,
+   120
+  ],
+  "border_LRTB": [
+   24,
+   24,
+   24,
+   24
+  ],
+  "slice": true
+ },
+ "kit_card_room_normal": {
+  "size": [
+   619,
+   120
+  ],
+  "border_LRTB": [
+   24,
+   24,
+   24,
+   24
+  ],
+  "slice": true
+ },
+ "kit_card_room_selected": {
+  "size": [
+   615,
+   120
+  ],
+  "border_LRTB": [
+   24,
+   24,
+   24,
+   24
+  ],
+  "slice": true
+ },
+ "kit_card_stat": {
+  "size": [
+   278,
+   130
+  ],
+  "border_LRTB": [
+   28,
+   28,
+   28,
+   28
+  ],
+  "slice": true
+ },
+ "kit_close_normal": {
+  "size": [
+   52,
+   52
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_codebox_active": {
+  "size": [
+   69,
+   78
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_codebox_error": {
+  "size": [
+   69,
+   78
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_codebox_filled": {
+  "size": [
+   69,
+   78
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_dialog_footer": {
+  "size": [
+   1041,
+   96
+  ],
+  "border_LRTB": [
+   8,
+   8,
+   8,
+   8
+  ],
+  "slice": true
+ },
+ "kit_dim": {
+  "size": [
+   64,
+   64
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_divider": {
+  "size": [
+   1069,
+   14
+  ],
+  "border_LRTB": [
+   10,
+   10,
+   2,
+   2
+  ],
+  "slice": true
+ },
+ "kit_ico_arrow_left": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_arrow_right": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_bag": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_check": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_clock": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_copy": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_door": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_eye": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_gear": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_home": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_key": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_list": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_logout": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_music": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_people": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_person": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_play": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_plus": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_refresh": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_server": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_skull": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_sound": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_trash": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_trophy": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_vibrate": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_ico_wifi": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_icon_check": {
+  "size": [
+   40,
+   32
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_icon_cross": {
+  "size": [
+   32,
+   32
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_icon_cross_ink": {
+  "size": [
+   32,
+   32
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_icon_cross_red": {
+  "size": [
+   32,
+   32
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_icon_dot": {
+  "size": [
+   32,
+   32
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_icon_warn": {
+  "size": [
+   36,
+   32
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_iconbtn_round_normal": {
+  "size": [
+   64,
+   64
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_iconbtn_square_normal": {
+  "size": [
+   64,
+   64
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_input_error": {
+  "size": [
+   360,
+   56
+  ],
+  "border_LRTB": [
+   19,
+   19,
+   19,
+   19
+  ],
+  "slice": true
+ },
+ "kit_input_normal": {
+  "size": [
+   360,
+   56
+  ],
+  "border_LRTB": [
+   19,
+   19,
+   19,
+   19
+  ],
+  "slice": true
+ },
+ "kit_keycap_active": {
+  "size": [
+   50,
+   52
+  ],
+  "border_LRTB": [
+   14,
+   14,
+   14,
+   14
+  ],
+  "slice": true
+ },
+ "kit_keycap_normal": {
+  "size": [
+   50,
+   52
+  ],
+  "border_LRTB": [
+   14,
+   14,
+   14,
+   14
+  ],
+  "slice": true
+ },
+ "kit_knob": {
+  "size": [
+   31,
+   32
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_panel_l": {
+  "size": [
+   1000,
+   640
+  ],
+  "border_LRTB": [
+   47,
+   47,
+   47,
+   47
+  ],
+  "slice": true
+ },
+ "kit_panel_m": {
+  "size": [
+   640,
+   400
+  ],
+  "border_LRTB": [
+   47,
+   47,
+   47,
+   47
+  ],
+  "slice": true
+ },
+ "kit_panel_popup": {
+  "size": [
+   720,
+   480
+  ],
+  "border_LRTB": [
+   47,
+   47,
+   88,
+   47
+  ],
+  "slice": true,
+  "title_bar_px": 62
+ },
+ "kit_panel_s": {
+  "size": [
+   360,
+   240
+  ],
+  "border_LRTB": [
+   47,
+   47,
+   47,
+   47
+  ],
+  "slice": true
+ },
+ "kit_progress_fill": {
+  "size": [
+   470,
+   16
+  ],
+  "border_LRTB": [
+   3,
+   2,
+   3,
+   2
+  ],
+  "slice": true
+ },
+ "kit_progress_track": {
+  "size": [
+   480,
+   28
+  ],
+  "border_LRTB": [
+   12,
+   5,
+   12,
+   5
+  ],
+  "slice": true
+ },
+ "kit_row_alt": {
+  "size": [
+   600,
+   48
+  ],
+  "border_LRTB": [
+   12,
+   2,
+   2,
+   2
+  ],
+  "slice": true
+ },
+ "kit_row_normal": {
+  "size": [
+   600,
+   48
+  ],
+  "border_LRTB": [
+   12,
+   2,
+   2,
+   2
+  ],
+  "slice": true
+ },
+ "kit_row_selected": {
+  "size": [
+   600,
+   48
+  ],
+  "border_LRTB": [
+   12,
+   2,
+   2,
+   2
+  ],
+  "slice": true
+ },
+ "kit_screen_header": {
+  "size": [
+   1210,
+   104
+  ],
+  "border_LRTB": [
+   36,
+   36,
+   12,
+   12
+  ],
+  "slice": true
+ },
+ "kit_slider_fill": {
+  "size": [
+   320,
+   10
+  ],
+  "border_LRTB": [
+   2,
+   1,
+   2,
+   1
+  ],
+  "slice": true
+ },
+ "kit_slider_track": {
+  "size": [
+   320,
+   16
+  ],
+  "border_LRTB": [
+   7,
+   3,
+   7,
+   3
+  ],
+  "slice": true
+ },
+ "kit_slot_item_empty": {
+  "size": [
+   139,
+   140
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_slot_item_normal": {
+  "size": [
+   139,
+   140
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_slot_item_selected": {
+  "size": [
+   139,
+   140
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_slot_player_notready": {
+  "size": [
+   371,
+   96
+  ],
+  "border_LRTB": [
+   100,
+   40,
+   24,
+   24
+  ],
+  "slice": true
+ },
+ "kit_tab_off": {
+  "size": [
+   160,
+   64
+  ],
+  "border_LRTB": [
+   19,
+   19,
+   19,
+   1
+  ],
+  "slice": true
+ },
+ "kit_tab_on": {
+  "size": [
+   160,
+   64
+  ],
+  "border_LRTB": [
+   19,
+   19,
+   19,
+   1
+  ],
+  "slice": true
+ },
+ "kit_tag_neutral": {
+  "size": [
+   110,
+   36
+  ],
+  "border_LRTB": [
+   8,
+   6,
+   8,
+   6
+  ],
+  "slice": true
+ },
+ "kit_tip_item": {
+  "size": [
+   387,
+   230
+  ],
+  "border_LRTB": [
+   30,
+   30,
+   30,
+   30
+  ],
+  "slice": true
+ },
+ "kit_toast": {
+  "size": [
+   360,
+   64
+  ],
+  "border_LRTB": [
+   22,
+   22,
+   22,
+   22
+  ],
+  "slice": true
+ },
+ "kit_toggle_off": {
+  "size": [
+   114,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_toggle_on": {
+  "size": [
+   114,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false
+ }
+}

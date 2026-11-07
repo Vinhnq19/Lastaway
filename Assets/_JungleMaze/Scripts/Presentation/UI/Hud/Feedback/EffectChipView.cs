@@ -9,7 +9,7 @@ namespace JungleMaze.Presentation.UI.Hud.Feedback
     /// <summary>One prebuilt effect chip with configurable label and icon.</summary>
     public sealed class EffectChipView:MonoBehaviour
     {
-        [SerializeField] private CanvasGroup group;[SerializeField] private Image border,icon;[SerializeField] private TMP_Text label,seconds;[SerializeField] private RectTransform fill;[SerializeField] private Image background;
+        [SerializeField] private CanvasGroup group;[SerializeField] private Image border,icon;[SerializeField] private TMP_Text label,seconds;[SerializeField] private RectTransform fill;[SerializeField] private Image background;[SerializeField] private Image secondsPlate;
         private readonly char[] _buffer=new char[24];private HudPalette _palette;private HudEffectCatalog _catalog;
         public CanvasGroup Group=>group;public TMP_Text Label=>label;public TMP_Text Seconds=>seconds;public RectTransform Fill=>fill;public Image Border=>border;public Image Icon=>icon;
         public void Configure(HudPalette palette,HudEffectCatalog catalog){_palette=palette;_catalog=catalog;if(background!=null)background.color=palette.Surface;}
@@ -21,7 +21,7 @@ namespace JungleMaze.Presentation.UI.Hud.Feedback
             // metadata); overflow "+n" or a kind without art shows only the label.
             if(overflow>0){label.SetCharArray(_buffer,0,HudFeedbackFormat.Overflow(_buffer,overflow,false));icon.enabled=false;label.enabled=true;}
             else {var title=_catalog!=null?_catalog.Label(kind):"?";if(label.text!=title)label.text=title;var sprite=_catalog!=null?_catalog.Icon(kind):null;if(icon.sprite!=sprite)icon.sprite=sprite;icon.color=Color.white;icon.enabled=sprite!=null;label.enabled=sprite==null;}
-            seconds.enabled=timed&&overflow==0;fill.gameObject.SetActive(timed&&overflow==0);if(seconds.enabled)seconds.SetCharArray(_buffer,0,HudFeedbackFormat.Seconds(_buffer,left));fill.anchorMax=new Vector2(ratio,1);seconds.color=_palette.Text;
+            seconds.enabled=timed&&overflow==0;fill.gameObject.SetActive(timed&&overflow==0);if(secondsPlate!=null)secondsPlate.enabled=seconds.enabled;if(seconds.enabled)seconds.SetCharArray(_buffer,0,HudFeedbackFormat.Seconds(_buffer,left));fill.anchorMax=new Vector2(ratio,1);seconds.color=_palette.Text;
         }
     }
 }

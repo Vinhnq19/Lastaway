@@ -7,7 +7,7 @@
 | Ưu tiên | P2 |
 | PIC | V.Huy |
 | Phụ thuộc | Chính thức: None. Thực tế dùng `SfxCatalog.asset`, `AudioRuntimeSet.asset`, mixer và panel F6 của **AUD-01** (Done, G3 27/10/2026), nên không chặn. Nguồn thật của sự kiện (WPN-01, WPN-02, ITM-01, DRG-01, ZON-01) chưa có: kiểm bằng panel F6 và nguồn giả của AUD-01, như dòng ticket ghi ("phát từng clip bằng bảng event giả rồi thay vào event thật") |
-| Trạng thái | Spec (chờ G1) |
+| Trạng thái | G3 có điều kiện 27/10/2026 (`dfb3a914`). F1 đóng (`157101eb`); F4 dọn Placeholder còn mở (T-002) |
 | Sheet GDD tham chiếu | Dòng ART-05 trong PROJECT TRACKING. Ref ghi "Assets!11–16" là **số dòng trong sheet** (lệch +2 so với cột STT, như AUD-01 đã xác nhận): **Assets STT 9–14** (9 Bước chân/Tương tác môi trường · 10 Dùng vũ khí/Bom/Bẫy · 11 Gây/Nhận sát thương/Bị loại · 12 Nhặt/Đổi/Dùng đồ · 13 Cảnh báo/Kết quả/Kết nối · 14 Nhạc nền). Cột "Link / License" của sheet Assets **để trống ở cả 6 dòng này**. Số liệu thêm: Equipments STT 7–14, 16 (thời gian dùng đồ), Weapons STT 11–15 (ngòi bom), MATCH DESIGN DATA (`zoneWarningTime`, `dragonFlyDuration`, `matchDuration`, `visionRadius`), WIREFRAME STT 11–13. Đầu vào: `Docs/Tickets/AUD-01.md` (mục 2.1, 5, 7, 8), `Docs/JSurviv_Integration.vi.md`, `Docs/JSurviv_Verification.vi.md` |
 | Figma node | Không có (âm thanh không có Figma) |
 

@@ -1,0 +1,7 @@
+Use your image generation tool to create ONE image as described below, and copy the generated file AS-IS (no cropping, no resizing, no padding) to:
+D:\Lastaway\projects\lastaway\art\inbox\T-015\src\v4\sheet-vit-r11.png
+Do not write any other files and do not post-process the image. Use only the built-in image tool, never the OpenAI API, curl or python.
+
+EDIT image 1 (sprite sheet of three empty carved-stone HUD frames on flat magenta). Keep EVERYTHING exactly the same: all three pieces, positions, sizes, rims, corner blocks, moss, the magenta background, the interiors of the middle and bottom pieces, and the dark top and bottom bands of the TOP piece (vitals frame).
+
+Change ONLY the middle band of the TOP piece: repaint it as a flat solid shade of exactly #413c30 (a dark warm brown-grey, noticeably darker than it is now; it must look only a little lighter than the dark bands, which are #2a2720). Same position and height, hard straight edges, no lines, no highlight, no shadow, no gradient, no texture. Nothing else changes.

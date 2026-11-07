@@ -1,0 +1,77 @@
+{
+"rows": [
+{
+"px": 19.5,
+"cap_px": 14.4,
+"so_lan": 4,
+"A": 0,
+"B": 0,
+"Unity": 4,
+"so_man": 2,
+"dung_o": "Unity:HudSlot, Unity:HudKeyCap",
+"mau": "R | (chu dong) | 1",
+"thuoc_thang": false
+},
+{
+"px": 20.0,
+"cap_px": 14.8,
+"so_lan": 255,
+"A": 81,
+"B": 112,
+"Unity": 62,
+"so_man": 32,
+"dung_o": "Unity:LobbyUi, Unity:HudInventory, Unity:MatchOverlay",
+"mau": "Kiểm tra phiên đăng nh | Kết nối máy chủ | Máy chủ: Local 127.0.0",
+"thuoc_thang": true
+},
+{
+"px": 24.0,
+"cap_px": 17.8,
+"so_lan": 677,
+"A": 113,
+"B": 321,
+"Unity": 243,
+"so_man": 45,
+"dung_o": "Unity:LobbyUi, B:b7-thua, B:b6-thang",
+"mau": "Đang kết nối máy chủ.. | Đăng xuất | Huy",
+"thuoc_thang": true
+},
+{
+"px": 30.0,
+"cap_px": 22.2,
+"so_lan": 202,
+"A": 41,
+"B": 107,
+"Unity": 54,
+"so_man": 39,
+"dung_o": "Unity:LobbyUi, Unity:MatchOverlay, B:b1-esc-xac-nhan-thoat",
+"mau": "huycv | Hủy | Vào phòng",
+"thuoc_thang": true
+},
+{
+"px": 40.0,
+"cap_px": 29.6,
+"so_lan": 112,
+"A": 66,
+"B": 22,
+"Unity": 24,
+"so_man": 28,
+"dung_o": "Unity:LobbyUi, A:a3-vao-phong-loi, A:a3-vao-phong-dang-ket-noi",
+"mau": "Vào phòng | Tạo phòng | Lịch sử",
+"thuoc_thang": true
+},
+{
+"px": 96.0,
+"cap_px": 71.0,
+"so_lan": 9,
+"A": 2,
+"B": 5,
+"Unity": 2,
+"so_man": 9,
+"dung_o": "A:a6-phong-cho-cho-du-nguoi, A:a6-phong-cho-dem-nguoc, B:b2-bi-loai",
+"mau": "Chờ | 12 | #4",
+"thuoc_thang": true
+}
+],
+"cap_ratio": 0.74
+}

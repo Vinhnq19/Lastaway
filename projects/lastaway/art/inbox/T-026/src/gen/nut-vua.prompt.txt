@@ -1,0 +1,21 @@
+Use your image generation tool to create ONE image as described below, and copy the generated file AS-IS (no cropping, no resizing, no padding) to:
+D:\Lastaway\projects\lastaway\art\inbox\T-026\src\gen\nut-vua.png
+Do not write any other files and do not post-process the image. Use only the built-in image tool, never the OpenAI API, curl or python.
+
+Image 1 is only a style reference for the pixel-art grain and palette of the game (dark carved stone, olive, warm gold). Do NOT copy its ornate frames: the buttons you draw must NOT have olive rims, moss, vines, corner ornaments or any frame-like border.
+
+Draw ONE sprite sheet on a flat solid magenta background (#FF00FF, no gradient, never used inside a piece), at least 60 px of pure magenta between pieces and around the border. No text, no letters, no icons on the buttons. Hard pixel edges, same pixel grain as image 1.
+
+The sheet is a grid of 3 rows x 4 columns of wide rounded-rectangle BUTTONS, each about 4:1 aspect (about 300 x 90 px including its base), all identical in size and silhouette, empty (no text). A button must look like a physical, raised, chunky key that can be pressed DOWN: it is made of a FACE (the top surface, slightly lighter in the upper half), a thin bright highlight line along the top edge of the face, and a thick darker BASE (ledge, the side of the button) visible below the face. The base thickness is about 6 percent of the button height (a subtle low ledge, about 4 px when the button is 64 px tall). There is no outline frame around the whole button other than a 1 px dark pixel edge.
+
+Columns, left to right, are the four states:
+1. NORMAL: face raised, full base visible.
+2. HOVER: same shape, face about 15 percent lighter, same base.
+3. PRESSED: the face is pushed DOWN by almost the full base thickness so the base is only about 1/4 as thick as in normal, the face is slightly darker, the top highlight line is gone, and the whole silhouette is shorter; clearly sunk.
+4. DISABLED: completely flat, desaturated grey (#6b6a63 face, #4a4944 base), base reduced to a thin 2 px line, no highlight.
+
+Rows, top to bottom, are the three materials:
+ROW 1 PRIMARY: face of polished gold metal (#E0A92E, highlight #FFDC6E), base darker bronze (#8A5A14).
+ROW 2 SECONDARY: face of carved dark stone slab (#4a4538, subtle stone speckle, highlight #6b6452), base very dark brown stone (#26231c).
+ROW 3 DESTRUCTIVE: face of deep red lacquered metal (#B0302A, highlight #E0594A), base dark maroon (#5A1612).
+Keep every piece clean and symmetric, flat color with 2 to 3 tone shading only, no glow, no sparkles.

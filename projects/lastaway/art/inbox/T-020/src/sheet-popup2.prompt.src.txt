@@ -1,0 +1,3 @@
+Image 1 is a single empty pixel-art panel frame on flat magenta (olive stone rim, small corner blocks, small moss tufts, flat dark warm brown-grey interior).
+
+EDIT image 1 with the smallest possible change: keep the frame EXACTLY the same (size, position, rim, corner blocks, moss, magenta background, dark interior) and add ONLY a TITLE BAR band at the top of the interior: a flat slightly lighter warm brown-grey (#4a4538) band across the full inner width, from just under the top rim down to about 16 percent of the piece height, separated from the dark body only by the shade difference (no line, no groove, no ledge, no shadow). The band is empty (no text, no button). Change nothing else.

@@ -10,6 +10,8 @@ namespace JungleMaze.Presentation.UI.Lobby
         [SerializeField] private Image background;
         [SerializeField] private TMP_Text playerName;
         [SerializeField] private TMP_Text badge;
+        [Tooltip("Small trash button for bots, used by RoomMapPanel when set (hidden until a bot sits here).")]
+        [SerializeField] private Button removeBot;
         [Tooltip("Placeholder tints (AC50: changed on the prefab only).")]
         [SerializeField] private Color selfColor = new Color(0.20f, 0.42f, 0.33f);
         [SerializeField] private Color filledColor = new Color(0.12f, 0.17f, 0.16f);
@@ -19,6 +21,7 @@ namespace JungleMaze.Presentation.UI.Lobby
         public Image Background => background;
         public TMP_Text PlayerName => playerName;
         public TMP_Text Badge => badge;
+        public Button RemoveBot => removeBot;
 
         public void Tint(bool filled, bool self) => background.color = self ? selfColor : filled ? filledColor : emptyColor;
     }

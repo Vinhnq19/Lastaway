@@ -1,0 +1,2 @@
+Draw ONE square map-grid overlay: exactly 10 by 10 equal cells formed by thin warm grey-brown lines (#3C392E, 1 to 2 pixels thick at 1000 px wide, pixel-art crisp), including the outer border lines. Nothing inside the cells. The cells themselves must be flat solid magenta #FF00FF (so only the lines remain after removing the background). No text, no numbers, no letters, no coordinates, no decorations.
+Fill about 92 percent of the square canvas, centered.

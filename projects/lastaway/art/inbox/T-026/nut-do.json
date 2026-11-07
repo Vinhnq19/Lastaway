@@ -1,0 +1,143 @@
+{
+ "vua": {
+  "de_px_o_cao_64": 7.5,
+  "lun_px": 15.0,
+  "hn_native": 128,
+  "base_native": {
+   "primary_normal": 15,
+   "primary_hover": 15,
+   "primary_pressed": 6,
+   "primary_disabled": 5,
+   "secondary_normal": 14,
+   "secondary_hover": 14,
+   "secondary_pressed": 7,
+   "secondary_disabled": 6,
+   "danger_normal": 14,
+   "danger_hover": 14,
+   "danger_pressed": 7,
+   "danger_disabled": 6
+  },
+  "face": {
+   "primary_normal": "#DEA42E",
+   "primary_hover": "#EEBB43",
+   "primary_pressed": "#C58A1A",
+   "primary_disabled": "#6D6A63",
+   "secondary_normal": "#5F5342",
+   "secondary_hover": "#726653",
+   "secondary_pressed": "#544839",
+   "secondary_disabled": "#6D6A62",
+   "danger_normal": "#B4342A",
+   "danger_hover": "#C5463A",
+   "danger_pressed": "#A62D25",
+   "danger_disabled": "#6D6B62"
+  },
+  "chu": {
+   "primary_normal": "toi 7.79",
+   "primary_hover": "toi 9.74",
+   "primary_pressed": "toi 5.79",
+   "primary_disabled": "trang 4.51",
+   "secondary_normal": "trang 7.49",
+   "secondary_hover": "trang 5.61",
+   "secondary_pressed": "trang 8.89",
+   "secondary_disabled": "trang 4.52",
+   "danger_normal": "trang 6.06",
+   "danger_hover": "trang 4.87",
+   "danger_pressed": "trang 6.95",
+   "danger_disabled": "trang 4.47"
+  }
+ },
+ "ro": {
+  "de_px_o_cao_64": 12.2,
+  "lun_px": 11.6,
+  "hn_native": 110,
+  "base_native": {
+   "primary_normal": 21,
+   "primary_hover": 20,
+   "primary_pressed": 10,
+   "primary_disabled": 7,
+   "secondary_normal": 21,
+   "secondary_hover": 21,
+   "secondary_pressed": 9,
+   "secondary_disabled": 7,
+   "danger_normal": 22,
+   "danger_hover": 21,
+   "danger_pressed": 9,
+   "danger_disabled": 7
+  },
+  "face": {
+   "primary_normal": "#DC9D27",
+   "primary_hover": "#EBB02F",
+   "primary_pressed": "#D79926",
+   "primary_disabled": "#746F64",
+   "secondary_normal": "#5E523E",
+   "secondary_hover": "#6D5F4A",
+   "secondary_pressed": "#615440",
+   "secondary_disabled": "#736E63",
+   "danger_normal": "#B0382C",
+   "danger_hover": "#C44436",
+   "danger_pressed": "#A9332A",
+   "danger_disabled": "#757065"
+  },
+  "chu": {
+   "primary_normal": "toi 7.33",
+   "primary_hover": "toi 8.89",
+   "primary_pressed": "toi 6.98",
+   "primary_disabled": "trang 4.18",
+   "secondary_normal": "trang 7.63",
+   "secondary_hover": "trang 6.20",
+   "secondary_pressed": "trang 7.37",
+   "secondary_disabled": "trang 4.24",
+   "danger_normal": "trang 6.09",
+   "danger_hover": "trang 4.97",
+   "danger_pressed": "trang 6.57",
+   "danger_disabled": "trang 4.12"
+  }
+ },
+ "rat-ro": {
+  "de_px_o_cao_64": 13.6,
+  "lun_px": 16.8,
+  "hn_native": 122,
+  "base_native": {
+   "primary_normal": 26,
+   "primary_hover": 26,
+   "primary_pressed": 16,
+   "primary_disabled": 10,
+   "secondary_normal": 26,
+   "secondary_hover": 26,
+   "secondary_pressed": 16,
+   "secondary_disabled": 8,
+   "danger_normal": 26,
+   "danger_hover": 26,
+   "danger_pressed": 16,
+   "danger_disabled": 5
+  },
+  "face": {
+   "primary_normal": "#E0A429",
+   "primary_hover": "#EDB837",
+   "primary_pressed": "#B87D1D",
+   "primary_disabled": "#6E6960",
+   "secondary_normal": "#5D513D",
+   "secondary_hover": "#675943",
+   "secondary_pressed": "#564936",
+   "secondary_disabled": "#6D6860",
+   "danger_normal": "#B63528",
+   "danger_hover": "#CB4433",
+   "danger_pressed": "#9B291F",
+   "danger_disabled": "#6D6960"
+  },
+  "chu": {
+   "primary_normal": "toi 7.84",
+   "primary_hover": "toi 9.49",
+   "primary_pressed": "toi 4.94",
+   "primary_disabled": "trang 4.56",
+   "secondary_normal": "trang 7.75",
+   "secondary_hover": "trang 6.80",
+   "secondary_pressed": "trang 8.74",
+   "secondary_disabled": "trang 4.62",
+   "danger_normal": "trang 5.95",
+   "danger_hover": "trang 4.76",
+   "danger_pressed": "trang 7.69",
+   "danger_disabled": "trang 4.57"
+  }
+ }
+}

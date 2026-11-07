@@ -1,0 +1,38 @@
+{
+ "5": {
+  "cong": {
+   "man": 36,
+   "dong_chu": 590,
+   "duoi_4.5": 0,
+   "xau_nhat": [],
+   "nut_ca": 40,
+   "nut_FAIL": 0,
+   "nut_lech_max": 0.5,
+   "nut_sai_bac": 0
+  },
+  "so_co_truoc": 28,
+  "so_co_sau": 5,
+  "dong_tong": 943,
+  "dong_truoc_duoi_20": 119,
+  "dong_truoc_duoi_24": 412,
+  "dong_sau_duoi_24": 101
+ },
+ "7": {
+  "cong": {
+   "man": 36,
+   "dong_chu": 590,
+   "duoi_4.5": 0,
+   "xau_nhat": [],
+   "nut_ca": 40,
+   "nut_FAIL": 0,
+   "nut_lech_max": 0.5,
+   "nut_sai_bac": 0
+  },
+  "so_co_truoc": 28,
+  "so_co_sau": 7,
+  "dong_tong": 943,
+  "dong_truoc_duoi_20": 119,
+  "dong_truoc_duoi_24": 412,
+  "dong_sau_duoi_24": 101
+ }
+}

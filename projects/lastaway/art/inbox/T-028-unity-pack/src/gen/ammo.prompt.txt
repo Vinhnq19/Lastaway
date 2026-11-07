@@ -1,0 +1,7 @@
+Use your image generation tool to create ONE image as described below, and copy the generated file AS-IS (no cropping, no resizing, no padding) to:
+D:\Lastaway\projects\lastaway\art\inbox\T-028-unity-pack\src\gen\ammo.png
+Do not write any other files and do not post-process the image. Use only the built-in image tool, never the OpenAI API, curl or python.
+
+Draw ONE small game inventory icon meaning generic "ammo" shared by all weapons: a small brown leather pouch (drawstring bag tied at the top with a thin cord) with a few round grey metal pellets / bullets spilling out of its open top and two pellets lying in front. No weapon, no arrow, no crossbow, no gun, no cartridge case shape tied to a specific weapon: only round pellets and the pouch.
+Style: exactly the same pixel-art look as the attached reference icons (ref-crossbow.png, ref-leaf.png, ref-shotgun.png): chunky pixel art on a 64x64 grid, dark brown outline, flat shading with a small number of colours, warm earthy palette, no anti-aliased soft gradients. Draw it large and centered, filling about 80 percent of the canvas.
+Background: perfectly flat solid magenta #FF00FF, nothing else (no shadow, no ground, no text, no letters, no frame).

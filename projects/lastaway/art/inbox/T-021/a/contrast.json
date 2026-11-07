@@ -1,0 +1,4850 @@
+[
+{
+"mock": "a1-khoi-dong",
+"text": "Đang kết nối máy chủ...",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+817,
+607,
+1103,
+634
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 8.47
+},
+{
+"mock": "a1-khoi-dong",
+"text": "Kiểm tra phiên đăng nhập",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+812,
+667,
+1070,
+692
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 8.46
+},
+{
+"mock": "a1-khoi-dong",
+"text": "Kết nối máy chủ",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+812,
+710,
+973,
+733
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 8.46
+},
+{
+"mock": "a1-khoi-dong",
+"text": "Máy chủ: Local 127.0.0.1:7777",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+60,
+1020,
+367,
+1041
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 6.9
+},
+{
+"mock": "a1-khoi-dong",
+"text": "v0.2",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1814,
+1022,
+1860,
+1037
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 7.15
+},
+{
+"mock": "a2-sanh-chinh",
+"text": "Đã đăng nhập",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1544,
+54,
+1685,
+74
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 9.49
+},
+{
+"mock": "a2-sanh-chinh",
+"text": "huycv",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1544,
+88,
+1635,
+117
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 9.9
+},
+{
+"mock": "a2-sanh-chinh",
+"text": "Đăng xuất",
+"size": 24,
+"font": "BVP",
+"btn": true,
+"bbox": [
+1732,
+68,
+1859,
+95
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.39
+},
+{
+"mock": "a2-sanh-chinh",
+"text": "Vào phòng",
+"size": 40,
+"font": "BVP",
+"btn": true,
+"bbox": [
+873,
+358,
+1092,
+398
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 7.74
+},
+{
+"mock": "a2-sanh-chinh",
+"text": "Tạo phòng",
+"size": 40,
+"font": "BVP",
+"btn": true,
+"bbox": [
+877,
+458,
+1093,
+499
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.35
+},
+{
+"mock": "a2-sanh-chinh",
+"text": "Lịch sử",
+"size": 40,
+"font": "BVP",
+"btn": true,
+"bbox": [
+914,
+556,
+1058,
+600
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.35
+},
+{
+"mock": "a2-sanh-chinh",
+"text": "Bảng xếp hạng",
+"size": 40,
+"font": "BVP",
+"btn": true,
+"bbox": [
+836,
+653,
+1136,
+699
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.39
+},
+{
+"mock": "a2-sanh-chinh",
+"text": "Cài đặt",
+"size": 40,
+"font": "BVP",
+"btn": true,
+"bbox": [
+910,
+758,
+1061,
+799
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.35
+},
+{
+"mock": "a2-sanh-chinh",
+"text": "Thoát",
+"size": 40,
+"font": "BVP",
+"btn": true,
+"bbox": [
+919,
+858,
+1041,
+890
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.46
+},
+{
+"mock": "a2-sanh-chinh",
+"text": "API sẵn sàng",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+912,
+946,
+1042,
+969
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 8.46
+},
+{
+"mock": "a2-sanh-chinh",
+"text": "v0.2",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1814,
+1022,
+1860,
+1037
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 7.15
+},
+{
+"mock": "a3-vao-phong",
+"text": "Đã đăng nhập",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1544,
+54,
+1685,
+74
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 9.49
+},
+{
+"mock": "a3-vao-phong",
+"text": "huycv",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1544,
+88,
+1635,
+117
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 9.9
+},
+{
+"mock": "a3-vao-phong",
+"text": "Đăng xuất",
+"size": 24,
+"font": "BVP",
+"btn": true,
+"bbox": [
+1732,
+68,
+1859,
+95
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.39
+},
+{
+"mock": "a3-vao-phong",
+"text": "Vào phòng",
+"size": 40,
+"font": "BVP",
+"btn": true,
+"bbox": [
+873,
+358,
+1092,
+398
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 7.74
+},
+{
+"mock": "a3-vao-phong",
+"text": "Tạo phòng",
+"size": 40,
+"font": "BVP",
+"btn": true,
+"bbox": [
+877,
+458,
+1093,
+499
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.35
+},
+{
+"mock": "a3-vao-phong",
+"text": "Lịch sử",
+"size": 40,
+"font": "BVP",
+"btn": true,
+"bbox": [
+914,
+556,
+1058,
+600
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.35
+},
+{
+"mock": "a3-vao-phong",
+"text": "Bảng xếp hạng",
+"size": 40,
+"font": "BVP",
+"btn": true,
+"bbox": [
+836,
+653,
+1136,
+699
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.39
+},
+{
+"mock": "a3-vao-phong",
+"text": "Cài đặt",
+"size": 40,
+"font": "BVP",
+"btn": true,
+"bbox": [
+910,
+758,
+1061,
+799
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.35
+},
+{
+"mock": "a3-vao-phong",
+"text": "Thoát",
+"size": 40,
+"font": "BVP",
+"btn": true,
+"bbox": [
+919,
+858,
+1041,
+890
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.46
+},
+{
+"mock": "a3-vao-phong",
+"text": "API sẵn sàng",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+912,
+946,
+1042,
+969
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 8.46
+},
+{
+"mock": "a3-vao-phong",
+"text": "v0.2",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1814,
+1022,
+1860,
+1037
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 7.15
+},
+{
+"mock": "a3-vao-phong",
+"text": "Vào phòng",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+859,
+270,
+1061,
+308
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 6.65
+},
+{
+"mock": "a3-vao-phong",
+"text": "Tên hiển thị",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+620,
+367,
+737,
+392
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.4
+},
+{
+"mock": "a3-vao-phong",
+"text": "Huy",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+640,
+419,
+686,
+442
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 11.83
+},
+{
+"mock": "a3-vao-phong",
+"text": "Mã phòng (6 ký tự)",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+620,
+480,
+811,
+502
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.4
+},
+{
+"mock": "a3-vao-phong",
+"text": "4",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+753,
+544,
+777,
+572
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 8.96
+},
+{
+"mock": "a3-vao-phong",
+"text": "X",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+828,
+544,
+854,
+572
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 8.96
+},
+{
+"mock": "a3-vao-phong",
+"text": "7",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+906,
+544,
+927,
+572
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 8.96
+},
+{
+"mock": "a3-vao-phong",
+"text": "K",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+980,
+544,
+1007,
+572
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 8.96
+},
+{
+"mock": "a3-vao-phong",
+"text": "2",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+1057,
+544,
+1080,
+572
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 8.96
+},
+{
+"mock": "a3-vao-phong",
+"text": "Nhập mã do chủ phòng gửi. Không phân biệt chữ hoa.",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+732,
+610,
+1266,
+632
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.3
+},
+{
+"mock": "a3-vao-phong",
+"text": "Vào bằng tài khoản huycv",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+620,
+653,
+883,
+677
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.37
+},
+{
+"mock": "a3-vao-phong",
+"text": "Hủy",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+756,
+737,
+814,
+768
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.41
+},
+{
+"mock": "a3-vao-phong",
+"text": "Vào phòng",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+1090,
+739,
+1255,
+768
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 7.74
+},
+{
+"mock": "a3-vao-phong-loi",
+"text": "Đã đăng nhập",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1544,
+54,
+1685,
+74
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 9.49
+},
+{
+"mock": "a3-vao-phong-loi",
+"text": "huycv",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1544,
+88,
+1635,
+117
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 9.9
+},
+{
+"mock": "a3-vao-phong-loi",
+"text": "Đăng xuất",
+"size": 24,
+"font": "BVP",
+"btn": true,
+"bbox": [
+1732,
+68,
+1859,
+95
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.39
+},
+{
+"mock": "a3-vao-phong-loi",
+"text": "Vào phòng",
+"size": 40,
+"font": "BVP",
+"btn": true,
+"bbox": [
+873,
+358,
+1092,
+398
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 7.74
+},
+{
+"mock": "a3-vao-phong-loi",
+"text": "Tạo phòng",
+"size": 40,
+"font": "BVP",
+"btn": true,
+"bbox": [
+877,
+458,
+1093,
+499
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.35
+},
+{
+"mock": "a3-vao-phong-loi",
+"text": "Lịch sử",
+"size": 40,
+"font": "BVP",
+"btn": true,
+"bbox": [
+914,
+556,
+1058,
+600
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.35
+},
+{
+"mock": "a3-vao-phong-loi",
+"text": "Bảng xếp hạng",
+"size": 40,
+"font": "BVP",
+"btn": true,
+"bbox": [
+836,
+653,
+1136,
+699
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.39
+},
+{
+"mock": "a3-vao-phong-loi",
+"text": "Cài đặt",
+"size": 40,
+"font": "BVP",
+"btn": true,
+"bbox": [
+910,
+758,
+1061,
+799
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.35
+},
+{
+"mock": "a3-vao-phong-loi",
+"text": "Thoát",
+"size": 40,
+"font": "BVP",
+"btn": true,
+"bbox": [
+919,
+858,
+1041,
+890
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.46
+},
+{
+"mock": "a3-vao-phong-loi",
+"text": "API sẵn sàng",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+912,
+946,
+1042,
+969
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 8.46
+},
+{
+"mock": "a3-vao-phong-loi",
+"text": "v0.2",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1814,
+1022,
+1860,
+1037
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 7.15
+},
+{
+"mock": "a3-vao-phong-loi",
+"text": "Vào phòng",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+859,
+270,
+1061,
+308
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 6.65
+},
+{
+"mock": "a3-vao-phong-loi",
+"text": "Tên hiển thị",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+620,
+367,
+737,
+392
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.4
+},
+{
+"mock": "a3-vao-phong-loi",
+"text": "Huy",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+640,
+419,
+686,
+442
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 11.83
+},
+{
+"mock": "a3-vao-phong-loi",
+"text": "Mã phòng (6 ký tự)",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+620,
+480,
+811,
+502
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.4
+},
+{
+"mock": "a3-vao-phong-loi",
+"text": "4",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+753,
+544,
+777,
+572
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.0
+},
+{
+"mock": "a3-vao-phong-loi",
+"text": "X",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+828,
+544,
+854,
+572
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.0
+},
+{
+"mock": "a3-vao-phong-loi",
+"text": "7",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+906,
+544,
+927,
+572
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.0
+},
+{
+"mock": "a3-vao-phong-loi",
+"text": "K",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+980,
+544,
+1007,
+572
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.0
+},
+{
+"mock": "a3-vao-phong-loi",
+"text": "2",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+1057,
+544,
+1080,
+572
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.0
+},
+{
+"mock": "a3-vao-phong-loi",
+"text": "P",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+1132,
+544,
+1158,
+572
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.0
+},
+{
+"mock": "a3-vao-phong-loi",
+"text": "Phòng đã đầy (10/10). Thử mã khác.",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+764,
+608,
+1132,
+632
+],
+"game": false,
+"fill": "#FF8A78",
+"ratio": 6.33
+},
+{
+"mock": "a3-vao-phong-loi",
+"text": "Vào bằng tài khoản huycv",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+620,
+653,
+883,
+677
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.37
+},
+{
+"mock": "a3-vao-phong-loi",
+"text": "Hủy",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+756,
+737,
+814,
+768
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.41
+},
+{
+"mock": "a3-vao-phong-loi",
+"text": "Vào phòng",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+1090,
+739,
+1255,
+768
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 7.74
+},
+{
+"mock": "a3-vao-phong-dang-ket-noi",
+"text": "Đã đăng nhập",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1544,
+54,
+1685,
+74
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 9.49
+},
+{
+"mock": "a3-vao-phong-dang-ket-noi",
+"text": "huycv",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1544,
+88,
+1635,
+117
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 9.9
+},
+{
+"mock": "a3-vao-phong-dang-ket-noi",
+"text": "Đăng xuất",
+"size": 24,
+"font": "BVP",
+"btn": true,
+"bbox": [
+1732,
+68,
+1859,
+95
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.39
+},
+{
+"mock": "a3-vao-phong-dang-ket-noi",
+"text": "Vào phòng",
+"size": 40,
+"font": "BVP",
+"btn": true,
+"bbox": [
+873,
+358,
+1092,
+398
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 7.74
+},
+{
+"mock": "a3-vao-phong-dang-ket-noi",
+"text": "Tạo phòng",
+"size": 40,
+"font": "BVP",
+"btn": true,
+"bbox": [
+877,
+458,
+1093,
+499
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.35
+},
+{
+"mock": "a3-vao-phong-dang-ket-noi",
+"text": "Lịch sử",
+"size": 40,
+"font": "BVP",
+"btn": true,
+"bbox": [
+914,
+556,
+1058,
+600
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.35
+},
+{
+"mock": "a3-vao-phong-dang-ket-noi",
+"text": "Bảng xếp hạng",
+"size": 40,
+"font": "BVP",
+"btn": true,
+"bbox": [
+836,
+653,
+1136,
+699
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.39
+},
+{
+"mock": "a3-vao-phong-dang-ket-noi",
+"text": "Cài đặt",
+"size": 40,
+"font": "BVP",
+"btn": true,
+"bbox": [
+910,
+758,
+1061,
+799
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.35
+},
+{
+"mock": "a3-vao-phong-dang-ket-noi",
+"text": "Thoát",
+"size": 40,
+"font": "BVP",
+"btn": true,
+"bbox": [
+919,
+858,
+1041,
+890
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.46
+},
+{
+"mock": "a3-vao-phong-dang-ket-noi",
+"text": "API sẵn sàng",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+912,
+946,
+1042,
+969
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 8.46
+},
+{
+"mock": "a3-vao-phong-dang-ket-noi",
+"text": "v0.2",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1814,
+1022,
+1860,
+1037
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 7.15
+},
+{
+"mock": "a3-vao-phong-dang-ket-noi",
+"text": "Vào phòng",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+859,
+270,
+1061,
+308
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 6.65
+},
+{
+"mock": "a3-vao-phong-dang-ket-noi",
+"text": "Tên hiển thị",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+620,
+367,
+737,
+392
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.4
+},
+{
+"mock": "a3-vao-phong-dang-ket-noi",
+"text": "Huy",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+640,
+419,
+686,
+442
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 11.83
+},
+{
+"mock": "a3-vao-phong-dang-ket-noi",
+"text": "Mã phòng (6 ký tự)",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+620,
+480,
+811,
+502
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.4
+},
+{
+"mock": "a3-vao-phong-dang-ket-noi",
+"text": "4",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+753,
+544,
+777,
+572
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 8.96
+},
+{
+"mock": "a3-vao-phong-dang-ket-noi",
+"text": "X",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+828,
+544,
+854,
+572
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 8.96
+},
+{
+"mock": "a3-vao-phong-dang-ket-noi",
+"text": "7",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+906,
+544,
+927,
+572
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 8.96
+},
+{
+"mock": "a3-vao-phong-dang-ket-noi",
+"text": "K",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+980,
+544,
+1007,
+572
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 8.96
+},
+{
+"mock": "a3-vao-phong-dang-ket-noi",
+"text": "2",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+1057,
+544,
+1080,
+572
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 8.96
+},
+{
+"mock": "a3-vao-phong-dang-ket-noi",
+"text": "P",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+1132,
+544,
+1158,
+572
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 8.96
+},
+{
+"mock": "a3-vao-phong-dang-ket-noi",
+"text": "Đang kết nối tới phòng 4X7K2P...",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+732,
+608,
+1069,
+631
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.27
+},
+{
+"mock": "a3-vao-phong-dang-ket-noi",
+"text": "Vào bằng tài khoản huycv",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+620,
+679,
+883,
+703
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.39
+},
+{
+"mock": "a3-vao-phong-dang-ket-noi",
+"text": "Hủy",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+756,
+737,
+814,
+768
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.41
+},
+{
+"mock": "a3-vao-phong-dang-ket-noi",
+"text": "Vào phòng",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+1090,
+744,
+1255,
+773
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 5.21
+},
+{
+"mock": "a3b-dang-nhap",
+"text": "Đăng nhập",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+670,
+279,
+874,
+317
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 11.0
+},
+{
+"mock": "a3b-dang-nhap",
+"text": "Đăng nhập",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+744,
+351,
+876,
+375
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 8.45
+},
+{
+"mock": "a3b-dang-nhap",
+"text": "Đăng ký",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1060,
+361,
+1159,
+384
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 5.27
+},
+{
+"mock": "a3b-dang-nhap",
+"text": "Tên đăng nhập",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+670,
+427,
+820,
+447
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.4
+},
+{
+"mock": "a3b-dang-nhap",
+"text": "huycv",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+690,
+476,
+762,
+499
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 11.83
+},
+{
+"mock": "a3b-dang-nhap",
+"text": "Mật khẩu",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+670,
+528,
+764,
+553
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.37
+},
+{
+"mock": "a3b-dang-nhap",
+"text": "Mật khẩu",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+690,
+577,
+803,
+606
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 9.49
+},
+{
+"mock": "a3b-dang-nhap",
+"text": "Đăng nhập",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+910,
+706,
+1075,
+736
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 7.72
+},
+{
+"mock": "a3b-dang-nhap",
+"text": "Máy chủ (nâng cao)",
+"size": 24,
+"font": "BVP",
+"btn": true,
+"bbox": [
+858,
+783,
+1100,
+809
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.37
+},
+{
+"mock": "a3b-dang-nhap-loi",
+"text": "Đăng nhập",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+670,
+279,
+874,
+317
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 11.0
+},
+{
+"mock": "a3b-dang-nhap-loi",
+"text": "Đăng nhập",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+744,
+351,
+876,
+375
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 8.45
+},
+{
+"mock": "a3b-dang-nhap-loi",
+"text": "Đăng ký",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1060,
+361,
+1159,
+384
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 5.27
+},
+{
+"mock": "a3b-dang-nhap-loi",
+"text": "Tên đăng nhập",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+670,
+427,
+820,
+447
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.4
+},
+{
+"mock": "a3b-dang-nhap-loi",
+"text": "huycv",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+690,
+476,
+762,
+499
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.0
+},
+{
+"mock": "a3b-dang-nhap-loi",
+"text": "Mật khẩu",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+670,
+528,
+764,
+553
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.37
+},
+{
+"mock": "a3b-dang-nhap-loi",
+"text": "••••••••",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+690,
+587,
+802,
+600
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.0
+},
+{
+"mock": "a3b-dang-nhap-loi",
+"text": "Sai tên đăng nhập hoặc mật khẩu.",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+702,
+636,
+1046,
+661
+],
+"game": false,
+"fill": "#FF8A78",
+"ratio": 6.33
+},
+{
+"mock": "a3b-dang-nhap-loi",
+"text": "Đăng nhập",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+910,
+706,
+1075,
+736
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 7.72
+},
+{
+"mock": "a3b-dang-nhap-loi",
+"text": "Máy chủ (nâng cao)",
+"size": 24,
+"font": "BVP",
+"btn": true,
+"bbox": [
+858,
+783,
+1100,
+809
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.37
+},
+{
+"mock": "a4-phong-cua-toi",
+"text": "Phòng của tôi",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+829,
+66,
+1090,
+107
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 10.45
+},
+{
+"mock": "a4-phong-cua-toi",
+"text": "2 phòng bổ sung tối đa",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1542,
+70,
+1820,
+98
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 9.89
+},
+{
+"mock": "a4-phong-cua-toi",
+"text": "Phòng mặc định",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+170,
+238,
+412,
+268
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.08
+},
+{
+"mock": "a4-phong-cua-toi",
+"text": "Mặc định",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+583,
+242,
+676,
+262
+],
+"game": false,
+"fill": "#FFFFFF",
+"ratio": 10.77
+},
+{
+"mock": "a4-phong-cua-toi",
+"text": "6/10",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+760,
+239,
+817,
+264
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.03
+},
+{
+"mock": "a4-phong-cua-toi",
+"text": "mã do chủ phòng gửi",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+960,
+240,
+1168,
+261
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 9.77
+},
+{
+"mock": "a4-phong-cua-toi",
+"text": "Vào",
+"size": 24,
+"font": "BVP",
+"btn": true,
+"bbox": [
+1385,
+233,
+1435,
+252
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 7.8
+},
+{
+"mock": "a4-phong-cua-toi",
+"text": "Leo rank tối nay",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+170,
+374,
+416,
+407
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 11.6
+},
+{
+"mock": "a4-phong-cua-toi",
+"text": "Của bạn",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+588,
+380,
+672,
+402
+],
+"game": false,
+"fill": "#FFFFFF",
+"ratio": 10.78
+},
+{
+"mock": "a4-phong-cua-toi",
+"text": "3/10",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+760,
+379,
+816,
+404
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 11.56
+},
+{
+"mock": "a4-phong-cua-toi",
+"text": "4X7K2P",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+960,
+381,
+1058,
+399
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 9.84
+},
+{
+"mock": "a4-phong-cua-toi",
+"text": "Sao chép",
+"size": 24,
+"font": "BVP",
+"btn": true,
+"bbox": [
+1185,
+373,
+1300,
+397
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.35
+},
+{
+"mock": "a4-phong-cua-toi",
+"text": "Vào",
+"size": 24,
+"font": "BVP",
+"btn": true,
+"bbox": [
+1385,
+373,
+1435,
+392
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 7.8
+},
+{
+"mock": "a4-phong-cua-toi",
+"text": "Xóa",
+"size": 24,
+"font": "BVP",
+"btn": true,
+"bbox": [
+1516,
+373,
+1566,
+392
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.51
+},
+{
+"mock": "a4-phong-cua-toi",
+"text": "Luyện tập",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+170,
+518,
+322,
+548
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.03
+},
+{
+"mock": "a4-phong-cua-toi",
+"text": "Của bạn",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+588,
+520,
+672,
+542
+],
+"game": false,
+"fill": "#FFFFFF",
+"ratio": 10.78
+},
+{
+"mock": "a4-phong-cua-toi",
+"text": "10/10 đầy",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+760,
+517,
+879,
+544
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.03
+},
+{
+"mock": "a4-phong-cua-toi",
+"text": "9HM3TQ",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+960,
+521,
+1068,
+539
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 10.2
+},
+{
+"mock": "a4-phong-cua-toi",
+"text": "Sao chép",
+"size": 24,
+"font": "BVP",
+"btn": true,
+"bbox": [
+1185,
+513,
+1300,
+537
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.35
+},
+{
+"mock": "a4-phong-cua-toi",
+"text": "Vào",
+"size": 24,
+"font": "BVP",
+"btn": true,
+"bbox": [
+1385,
+516,
+1435,
+535
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 5.21
+},
+{
+"mock": "a4-phong-cua-toi",
+"text": "Xóa",
+"size": 24,
+"font": "BVP",
+"btn": true,
+"bbox": [
+1516,
+513,
+1566,
+532
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.51
+},
+{
+"mock": "a4-phong-cua-toi",
+"text": "Tạo phòng",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+1598,
+960,
+1762,
+990
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 7.74
+},
+{
+"mock": "a4-phong-cua-toi-trong",
+"text": "Phòng của tôi",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+829,
+66,
+1090,
+107
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 10.45
+},
+{
+"mock": "a4-phong-cua-toi-trong",
+"text": "2 phòng bổ sung tối đa",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1542,
+70,
+1820,
+98
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 9.89
+},
+{
+"mock": "a4-phong-cua-toi-trong",
+"text": "Phòng mặc định",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+170,
+238,
+412,
+268
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.08
+},
+{
+"mock": "a4-phong-cua-toi-trong",
+"text": "Mặc định",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+583,
+242,
+676,
+262
+],
+"game": false,
+"fill": "#FFFFFF",
+"ratio": 10.77
+},
+{
+"mock": "a4-phong-cua-toi-trong",
+"text": "6/10",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+760,
+239,
+817,
+264
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.03
+},
+{
+"mock": "a4-phong-cua-toi-trong",
+"text": "mã do chủ phòng gửi",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+960,
+240,
+1168,
+261
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 9.77
+},
+{
+"mock": "a4-phong-cua-toi-trong",
+"text": "Vào",
+"size": 24,
+"font": "BVP",
+"btn": true,
+"bbox": [
+1385,
+233,
+1435,
+252
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 7.8
+},
+{
+"mock": "a4-phong-cua-toi-trong",
+"text": "Bạn chưa có phòng bổ sung.",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+747,
+502,
+1173,
+538
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 9.63
+},
+{
+"mock": "a4-phong-cua-toi-trong",
+"text": "Bấm Tạo phòng để tạo phòng riêng và gửi mã cho bạn bè.",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+609,
+552,
+1310,
+581
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 7.69
+},
+{
+"mock": "a4-phong-cua-toi-trong",
+"text": "Tạo phòng",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+1598,
+960,
+1762,
+990
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 7.74
+},
+{
+"mock": "a4-phong-cua-toi-loi",
+"text": "Phòng của tôi",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+829,
+66,
+1090,
+107
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 10.45
+},
+{
+"mock": "a4-phong-cua-toi-loi",
+"text": "2 phòng bổ sung tối đa",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1542,
+70,
+1820,
+98
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 9.89
+},
+{
+"mock": "a4-phong-cua-toi-loi",
+"text": "Không tải được danh sách phòng. Kiểm tra máy chủ rồi thử lại.",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+210,
+222,
+965,
+251
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 11.72
+},
+{
+"mock": "a4-phong-cua-toi-loi",
+"text": "Thử lại",
+"size": 24,
+"font": "BVP",
+"btn": true,
+"bbox": [
+1646,
+222,
+1727,
+248
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.34
+},
+{
+"mock": "a4-phong-cua-toi-loi",
+"text": "Tạo phòng",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+1598,
+960,
+1762,
+990
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 7.74
+},
+{
+"mock": "a4-xoa-phong",
+"text": "Phòng của tôi",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+829,
+66,
+1090,
+107
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 10.45
+},
+{
+"mock": "a4-xoa-phong",
+"text": "2 phòng bổ sung tối đa",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1542,
+70,
+1820,
+98
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 9.89
+},
+{
+"mock": "a4-xoa-phong",
+"text": "Phòng mặc định",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+170,
+238,
+412,
+268
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.08
+},
+{
+"mock": "a4-xoa-phong",
+"text": "Mặc định",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+583,
+242,
+676,
+262
+],
+"game": false,
+"fill": "#FFFFFF",
+"ratio": 10.77
+},
+{
+"mock": "a4-xoa-phong",
+"text": "6/10",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+760,
+239,
+817,
+264
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.03
+},
+{
+"mock": "a4-xoa-phong",
+"text": "mã do chủ phòng gửi",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+960,
+240,
+1168,
+261
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 9.77
+},
+{
+"mock": "a4-xoa-phong",
+"text": "Vào",
+"size": 24,
+"font": "BVP",
+"btn": true,
+"bbox": [
+1385,
+233,
+1435,
+252
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 7.8
+},
+{
+"mock": "a4-xoa-phong",
+"text": "Leo rank tối nay",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+170,
+374,
+416,
+407
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 11.6
+},
+{
+"mock": "a4-xoa-phong",
+"text": "Của bạn",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+588,
+380,
+672,
+402
+],
+"game": false,
+"fill": "#FFFFFF",
+"ratio": 10.78
+},
+{
+"mock": "a4-xoa-phong",
+"text": "3/10",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+760,
+379,
+816,
+404
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 11.56
+},
+{
+"mock": "a4-xoa-phong",
+"text": "4X7K2P",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+960,
+381,
+1058,
+399
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 9.84
+},
+{
+"mock": "a4-xoa-phong",
+"text": "Sao chép",
+"size": 24,
+"font": "BVP",
+"btn": true,
+"bbox": [
+1185,
+373,
+1300,
+397
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.35
+},
+{
+"mock": "a4-xoa-phong",
+"text": "Vào",
+"size": 24,
+"font": "BVP",
+"btn": true,
+"bbox": [
+1385,
+373,
+1435,
+392
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 7.8
+},
+{
+"mock": "a4-xoa-phong",
+"text": "Xóa",
+"size": 24,
+"font": "BVP",
+"btn": true,
+"bbox": [
+1516,
+373,
+1566,
+392
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.51
+},
+{
+"mock": "a4-xoa-phong",
+"text": "Luyện tập",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+170,
+518,
+322,
+548
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.03
+},
+{
+"mock": "a4-xoa-phong",
+"text": "Của bạn",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+588,
+520,
+672,
+542
+],
+"game": false,
+"fill": "#FFFFFF",
+"ratio": 10.78
+},
+{
+"mock": "a4-xoa-phong",
+"text": "10/10 đầy",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+760,
+517,
+879,
+544
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.03
+},
+{
+"mock": "a4-xoa-phong",
+"text": "9HM3TQ",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+960,
+521,
+1068,
+539
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 10.2
+},
+{
+"mock": "a4-xoa-phong",
+"text": "Sao chép",
+"size": 24,
+"font": "BVP",
+"btn": true,
+"bbox": [
+1185,
+513,
+1300,
+537
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.35
+},
+{
+"mock": "a4-xoa-phong",
+"text": "Vào",
+"size": 24,
+"font": "BVP",
+"btn": true,
+"bbox": [
+1385,
+516,
+1435,
+535
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 5.21
+},
+{
+"mock": "a4-xoa-phong",
+"text": "Xóa",
+"size": 24,
+"font": "BVP",
+"btn": true,
+"bbox": [
+1516,
+513,
+1566,
+532
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.51
+},
+{
+"mock": "a4-xoa-phong",
+"text": "Tạo phòng",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+1598,
+960,
+1762,
+990
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 7.74
+},
+{
+"mock": "a4-xoa-phong",
+"text": "Xóa phòng?",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+867,
+383,
+1052,
+412
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 6.67
+},
+{
+"mock": "a4-xoa-phong",
+"text": "Xóa phòng Luyện tập (9HM3TQ)? Không hoàn tác.",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+651,
+471,
+1269,
+497
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.92
+},
+{
+"mock": "a4-xoa-phong",
+"text": "Chỉ xóa được phòng đang trống.",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+796,
+508,
+1123,
+532
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.36
+},
+{
+"mock": "a4-xoa-phong",
+"text": "Hủy",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+781,
+627,
+839,
+658
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.39
+},
+{
+"mock": "a4-xoa-phong",
+"text": "Xóa phòng",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+1065,
+629,
+1231,
+658
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 4.69
+},
+{
+"mock": "a5-tao-phong",
+"text": "Đã đăng nhập",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1544,
+54,
+1685,
+74
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 9.49
+},
+{
+"mock": "a5-tao-phong",
+"text": "huycv",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1544,
+88,
+1635,
+117
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 9.9
+},
+{
+"mock": "a5-tao-phong",
+"text": "Đăng xuất",
+"size": 24,
+"font": "BVP",
+"btn": true,
+"bbox": [
+1732,
+68,
+1859,
+95
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.39
+},
+{
+"mock": "a5-tao-phong",
+"text": "Vào phòng",
+"size": 40,
+"font": "BVP",
+"btn": true,
+"bbox": [
+873,
+358,
+1092,
+398
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 7.74
+},
+{
+"mock": "a5-tao-phong",
+"text": "Tạo phòng",
+"size": 40,
+"font": "BVP",
+"btn": true,
+"bbox": [
+877,
+458,
+1093,
+499
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.35
+},
+{
+"mock": "a5-tao-phong",
+"text": "Lịch sử",
+"size": 40,
+"font": "BVP",
+"btn": true,
+"bbox": [
+914,
+556,
+1058,
+600
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.35
+},
+{
+"mock": "a5-tao-phong",
+"text": "Bảng xếp hạng",
+"size": 40,
+"font": "BVP",
+"btn": true,
+"bbox": [
+836,
+653,
+1136,
+699
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.39
+},
+{
+"mock": "a5-tao-phong",
+"text": "Cài đặt",
+"size": 40,
+"font": "BVP",
+"btn": true,
+"bbox": [
+910,
+758,
+1061,
+799
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.35
+},
+{
+"mock": "a5-tao-phong",
+"text": "Thoát",
+"size": 40,
+"font": "BVP",
+"btn": true,
+"bbox": [
+919,
+858,
+1041,
+890
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.46
+},
+{
+"mock": "a5-tao-phong",
+"text": "API sẵn sàng",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+912,
+946,
+1042,
+969
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 8.46
+},
+{
+"mock": "a5-tao-phong",
+"text": "v0.2",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1814,
+1022,
+1860,
+1037
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 7.15
+},
+{
+"mock": "a5-tao-phong",
+"text": "Tạo phòng",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+860,
+250,
+1060,
+288
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 6.65
+},
+{
+"mock": "a5-tao-phong",
+"text": "Tên phòng (1 đến 48 ký tự)",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+610,
+348,
+878,
+372
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.4
+},
+{
+"mock": "a5-tao-phong",
+"text": "Leo rank tối nay",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+630,
+397,
+826,
+424
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 11.84
+},
+{
+"mock": "a5-tao-phong",
+"text": "Sức chứa",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+610,
+466,
+703,
+481
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.4
+},
+{
+"mock": "a5-tao-phong",
+"text": "10 người",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1210,
+464,
+1310,
+488
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 10.97
+},
+{
+"mock": "a5-tao-phong",
+"text": "1",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+610,
+544,
+619,
+559
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.44
+},
+{
+"mock": "a5-tao-phong",
+"text": "5",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+950,
+544,
+964,
+559
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.36
+},
+{
+"mock": "a5-tao-phong",
+"text": "10",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1290,
+544,
+1313,
+559
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.27
+},
+{
+"mock": "a5-tao-phong",
+"text": "Cần tối thiểu 6 người để bắt đầu trận.",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+610,
+589,
+990,
+614
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.36
+},
+{
+"mock": "a5-tao-phong",
+"text": "Còn 1/2 phòng bổ sung. Phòng trống sau 10 phút sẽ bị thu hồi.",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+610,
+621,
+1231,
+646
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.3
+},
+{
+"mock": "a5-tao-phong",
+"text": "Hủy",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+746,
+757,
+804,
+788
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.41
+},
+{
+"mock": "a5-tao-phong",
+"text": "Tạo phòng",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+1103,
+759,
+1267,
+789
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 7.73
+},
+{
+"mock": "a5-tao-phong-loi",
+"text": "Đã đăng nhập",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1544,
+54,
+1685,
+74
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 9.49
+},
+{
+"mock": "a5-tao-phong-loi",
+"text": "huycv",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1544,
+88,
+1635,
+117
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 9.9
+},
+{
+"mock": "a5-tao-phong-loi",
+"text": "Đăng xuất",
+"size": 24,
+"font": "BVP",
+"btn": true,
+"bbox": [
+1732,
+68,
+1859,
+95
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.39
+},
+{
+"mock": "a5-tao-phong-loi",
+"text": "Vào phòng",
+"size": 40,
+"font": "BVP",
+"btn": true,
+"bbox": [
+873,
+358,
+1092,
+398
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 7.74
+},
+{
+"mock": "a5-tao-phong-loi",
+"text": "Tạo phòng",
+"size": 40,
+"font": "BVP",
+"btn": true,
+"bbox": [
+877,
+458,
+1093,
+499
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.35
+},
+{
+"mock": "a5-tao-phong-loi",
+"text": "Lịch sử",
+"size": 40,
+"font": "BVP",
+"btn": true,
+"bbox": [
+914,
+556,
+1058,
+600
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.35
+},
+{
+"mock": "a5-tao-phong-loi",
+"text": "Bảng xếp hạng",
+"size": 40,
+"font": "BVP",
+"btn": true,
+"bbox": [
+836,
+653,
+1136,
+699
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.39
+},
+{
+"mock": "a5-tao-phong-loi",
+"text": "Cài đặt",
+"size": 40,
+"font": "BVP",
+"btn": true,
+"bbox": [
+910,
+758,
+1061,
+799
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.35
+},
+{
+"mock": "a5-tao-phong-loi",
+"text": "Thoát",
+"size": 40,
+"font": "BVP",
+"btn": true,
+"bbox": [
+919,
+858,
+1041,
+890
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.46
+},
+{
+"mock": "a5-tao-phong-loi",
+"text": "API sẵn sàng",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+912,
+946,
+1042,
+969
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 8.46
+},
+{
+"mock": "a5-tao-phong-loi",
+"text": "v0.2",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1814,
+1022,
+1860,
+1037
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 7.15
+},
+{
+"mock": "a5-tao-phong-loi",
+"text": "Tạo phòng",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+860,
+250,
+1060,
+288
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 6.65
+},
+{
+"mock": "a5-tao-phong-loi",
+"text": "Tên phòng (1 đến 48 ký tự)",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+610,
+348,
+878,
+372
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.4
+},
+{
+"mock": "a5-tao-phong-loi",
+"text": "Leo rank tối nay",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+630,
+397,
+826,
+424
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 11.84
+},
+{
+"mock": "a5-tao-phong-loi",
+"text": "Sức chứa",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+610,
+466,
+703,
+481
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.4
+},
+{
+"mock": "a5-tao-phong-loi",
+"text": "10 người",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1210,
+464,
+1310,
+488
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 10.97
+},
+{
+"mock": "a5-tao-phong-loi",
+"text": "1",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+610,
+544,
+619,
+559
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.44
+},
+{
+"mock": "a5-tao-phong-loi",
+"text": "5",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+950,
+544,
+964,
+559
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.36
+},
+{
+"mock": "a5-tao-phong-loi",
+"text": "10",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1290,
+544,
+1313,
+559
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.27
+},
+{
+"mock": "a5-tao-phong-loi",
+"text": "Cần tối thiểu 6 người để bắt đầu trận.",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+610,
+589,
+990,
+614
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.36
+},
+{
+"mock": "a5-tao-phong-loi",
+"text": "Còn 1/2 phòng bổ sung. Phòng trống sau 10 phút sẽ bị thu hồi.",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+610,
+621,
+1231,
+646
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.3
+},
+{
+"mock": "a5-tao-phong-loi",
+"text": "Đã đủ 2 phòng bổ sung. Xóa một phòng rồi thử lại.",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+642,
+661,
+1146,
+686
+],
+"game": false,
+"fill": "#FF8A78",
+"ratio": 6.39
+},
+{
+"mock": "a5-tao-phong-loi",
+"text": "Hủy",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+746,
+757,
+804,
+788
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.41
+},
+{
+"mock": "a5-tao-phong-loi",
+"text": "Tạo phòng",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+1103,
+764,
+1267,
+794
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 5.21
+},
+{
+"mock": "a6-phong-cho-cho-du-nguoi",
+"text": "Phòng chờ",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+859,
+69,
+1063,
+107
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 10.45
+},
+{
+"mock": "a6-phong-cho-cho-du-nguoi",
+"text": "Mã phòng 4X7K2P",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1476,
+74,
+1700,
+98
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.34
+},
+{
+"mock": "a6-phong-cho-cho-du-nguoi",
+"text": "Chép",
+"size": 24,
+"font": "BVP",
+"btn": true,
+"bbox": [
+1765,
+70,
+1830,
+94
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.41
+},
+{
+"mock": "a6-phong-cho-cho-du-nguoi",
+"text": "Huy (chủ phòng)",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+172,
+207,
+373,
+233
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.03
+},
+{
+"mock": "a6-phong-cho-cho-du-nguoi",
+"text": "V.Huy",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+172,
+321,
+244,
+344
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.03
+},
+{
+"mock": "a6-phong-cho-cho-du-nguoi",
+"text": "Hào",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+172,
+432,
+222,
+451
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.04
+},
+{
+"mock": "a6-phong-cho-cho-du-nguoi",
+"text": "Vinh",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+172,
+545,
+226,
+563
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.04
+},
+{
+"mock": "a6-phong-cho-cho-du-nguoi",
+"text": "Chỗ trống",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+100,
+652,
+223,
+680
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 9.65
+},
+{
+"mock": "a6-phong-cho-cho-du-nguoi",
+"text": "Chỗ trống",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+570,
+204,
+693,
+232
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 9.65
+},
+{
+"mock": "a6-phong-cho-cho-du-nguoi",
+"text": "Chỗ trống",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+570,
+316,
+693,
+344
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 9.65
+},
+{
+"mock": "a6-phong-cho-cho-du-nguoi",
+"text": "Chỗ trống",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+570,
+428,
+693,
+456
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 9.65
+},
+{
+"mock": "a6-phong-cho-cho-du-nguoi",
+"text": "Chỗ trống",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+570,
+540,
+693,
+568
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 9.65
+},
+{
+"mock": "a6-phong-cho-cho-du-nguoi",
+"text": "Chỗ trống",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+570,
+652,
+693,
+680
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 9.65
+},
+{
+"mock": "a6-phong-cho-cho-du-nguoi",
+"text": "Bắt đầu sau",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1090,
+236,
+1235,
+259
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.98
+},
+{
+"mock": "a6-phong-cho-cho-du-nguoi",
+"text": "Chờ",
+"size": 96,
+"font": "Main",
+"btn": false,
+"bbox": [
+1090,
+314,
+1279,
+383
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.98
+},
+{
+"mock": "a6-phong-cho-cho-du-nguoi",
+"text": "Chưa đủ người, chưa đếm ngược",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1090,
+417,
+1477,
+445
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.36
+},
+{
+"mock": "a6-phong-cho-cho-du-nguoi",
+"text": "4/10 người trong phòng",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1148,
+469,
+1434,
+494
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.92
+},
+{
+"mock": "a6-phong-cho-cho-du-nguoi",
+"text": "Tối thiểu 6 người để bắt đầu",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1090,
+526,
+1431,
+554
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.37
+},
+{
+"mock": "a6-phong-cho-cho-du-nguoi",
+"text": "Bản đồ: Đảo rừng 50x50 ô",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1090,
+567,
+1409,
+594
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.4
+},
+{
+"mock": "a6-phong-cho-cho-du-nguoi",
+"text": "Trận tự bắt đầu sau 15 giây khi đủ 6 người. Thiếu người thì hủy đếm ngược.",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+60,
+746,
+952,
+775
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 7.69
+},
+{
+"mock": "a6-phong-cho-cho-du-nguoi",
+"text": "Rời phòng",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+163,
+920,
+316,
+949
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.35
+},
+{
+"mock": "a6-phong-cho-cho-du-nguoi",
+"text": "Sẵn sàng (tùy chọn)",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+1520,
+914,
+1825,
+950
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.39
+},
+{
+"mock": "a6-phong-cho-dem-nguoc",
+"text": "Phòng chờ",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+859,
+69,
+1063,
+107
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 10.45
+},
+{
+"mock": "a6-phong-cho-dem-nguoc",
+"text": "Mã phòng 4X7K2P",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1476,
+74,
+1700,
+98
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.34
+},
+{
+"mock": "a6-phong-cho-dem-nguoc",
+"text": "Chép",
+"size": 24,
+"font": "BVP",
+"btn": true,
+"bbox": [
+1765,
+70,
+1830,
+94
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.41
+},
+{
+"mock": "a6-phong-cho-dem-nguoc",
+"text": "Huy (chủ phòng)",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+172,
+207,
+373,
+233
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.03
+},
+{
+"mock": "a6-phong-cho-dem-nguoc",
+"text": "V.Huy",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+172,
+321,
+244,
+344
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.03
+},
+{
+"mock": "a6-phong-cho-dem-nguoc",
+"text": "Hào",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+172,
+432,
+222,
+451
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.04
+},
+{
+"mock": "a6-phong-cho-dem-nguoc",
+"text": "Vinh",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+172,
+545,
+226,
+563
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.04
+},
+{
+"mock": "a6-phong-cho-dem-nguoc",
+"text": "Vũ",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+172,
+657,
+204,
+675
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.04
+},
+{
+"mock": "a6-phong-cho-dem-nguoc",
+"text": "Quang Huy",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+642,
+209,
+774,
+232
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.03
+},
+{
+"mock": "a6-phong-cho-dem-nguoc",
+"text": "Khoa",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+642,
+321,
+706,
+339
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.04
+},
+{
+"mock": "a6-phong-cho-dem-nguoc",
+"text": "Chỗ trống",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+570,
+428,
+693,
+456
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 9.65
+},
+{
+"mock": "a6-phong-cho-dem-nguoc",
+"text": "Chỗ trống",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+570,
+540,
+693,
+568
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 9.65
+},
+{
+"mock": "a6-phong-cho-dem-nguoc",
+"text": "Chỗ trống",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+570,
+652,
+693,
+680
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 9.65
+},
+{
+"mock": "a6-phong-cho-dem-nguoc",
+"text": "Bắt đầu sau",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1090,
+236,
+1235,
+259
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.98
+},
+{
+"mock": "a6-phong-cho-dem-nguoc",
+"text": "12",
+"size": 96,
+"font": "Main",
+"btn": false,
+"bbox": [
+1090,
+316,
+1181,
+383
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 11.0
+},
+{
+"mock": "a6-phong-cho-dem-nguoc",
+"text": "giây",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1197,
+366,
+1264,
+395
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.92
+},
+{
+"mock": "a6-phong-cho-dem-nguoc",
+"text": "7/10 người trong phòng",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1148,
+469,
+1431,
+494
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.92
+},
+{
+"mock": "a6-phong-cho-dem-nguoc",
+"text": "Tối thiểu 6 người để bắt đầu",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1090,
+526,
+1431,
+554
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.37
+},
+{
+"mock": "a6-phong-cho-dem-nguoc",
+"text": "Bản đồ: Đảo rừng 50x50 ô",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1090,
+567,
+1409,
+594
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.4
+},
+{
+"mock": "a6-phong-cho-dem-nguoc",
+"text": "Trận tự bắt đầu sau 15 giây khi đủ 6 người. Thiếu người thì hủy đếm ngược.",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+60,
+746,
+952,
+775
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 7.69
+},
+{
+"mock": "a6-phong-cho-dem-nguoc",
+"text": "Rời phòng",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+163,
+920,
+316,
+949
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.35
+},
+{
+"mock": "a6-phong-cho-dem-nguoc",
+"text": "Sẵn sàng (tùy chọn)",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+1520,
+914,
+1825,
+950
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.39
+},
+{
+"mock": "a7-dang-tai",
+"text": "Đảo rừng · 50x50 ô · 10 người",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+740,
+266,
+1179,
+297
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 9.64
+},
+{
+"mock": "a7-dang-tai",
+"text": "Đang tải bản đồ...",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+680,
+372,
+899,
+399
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 7.69
+},
+{
+"mock": "a7-dang-tai",
+"text": "68%",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1186,
+376,
+1240,
+394
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 9.59
+},
+{
+"mock": "a7-dang-tai",
+"text": "Kết nối máy chủ",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+730,
+427,
+924,
+454
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 9.63
+},
+{
+"mock": "a7-dang-tai",
+"text": "Nạp cấu hình cân bằng",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+730,
+466,
+1007,
+495
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 9.59
+},
+{
+"mock": "a7-dang-tai",
+"text": "Tải bản đồ và vật cản",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+730,
+507,
+993,
+535
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 9.59
+},
+{
+"mock": "a7-dang-tai",
+"text": "Chờ người chơi khác",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+730,
+550,
+978,
+574
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 7.72
+},
+{
+"mock": "a7-dang-tai",
+"text": "Còn tối đa 30 giây. Người chưa tải xong sẽ bị loại khỏi trận.",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+680,
+598,
+1280,
+622
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 7.69
+},
+{
+"mock": "a7-dang-tai",
+"text": "Điều khiển",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+530,
+699,
+635,
+719
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 11.0
+},
+{
+"mock": "a7-dang-tai",
+"text": "WASD",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+531,
+749,
+608,
+767
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.07
+},
+{
+"mock": "a7-dang-tai",
+"text": "Di chuyển",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+520,
+799,
+619,
+823
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.41
+},
+{
+"mock": "a7-dang-tai",
+"text": "Chuột",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+702,
+749,
+777,
+773
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.07
+},
+{
+"mock": "a7-dang-tai",
+"text": "Ngắm, bắn",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+685,
+799,
+794,
+823
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.4
+},
+{
+"mock": "a7-dang-tai",
+"text": "F",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+902,
+749,
+917,
+767
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.07
+},
+{
+"mock": "a7-dang-tai",
+"text": "Nhặt",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+885,
+804,
+934,
+824
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.44
+},
+{
+"mock": "a7-dang-tai",
+"text": "M",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1069,
+749,
+1090,
+767
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.07
+},
+{
+"mock": "a7-dang-tai",
+"text": "Bản đồ",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1044,
+800,
+1115,
+819
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.4
+},
+{
+"mock": "a7-dang-tai",
+"text": "ESC",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1225,
+749,
+1275,
+767
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.07
+},
+{
+"mock": "a7-dang-tai",
+"text": "Cài đặt",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1212,
+804,
+1288,
+824
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.44
+},
+{
+"mock": "a7-dang-tai",
+"text": "MẸO",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+490,
+924,
+538,
+944
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 9.9
+},
+{
+"mock": "a7-dang-tai",
+"text": "Bụi rậm che bạn khỏi tầm nhìn, nhưng bắn sẽ lộ vị trí ngay lập tức.",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+560,
+918,
+1352,
+947
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 11.72
+},
+{
+"mock": "a7-dang-tai-loi",
+"text": "Đảo rừng · 50x50 ô · 10 người",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+740,
+266,
+1179,
+297
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 9.64
+},
+{
+"mock": "a7-dang-tai-loi",
+"text": "Không vào được trận",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+780,
+380,
+1098,
+410
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.98
+},
+{
+"mock": "a7-dang-tai-loi",
+"text": "Dữ liệu bản đồ không khớp với máy chủ.",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+730,
+437,
+1208,
+465
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.92
+},
+{
+"mock": "a7-dang-tai-loi",
+"text": "Lý do: phiên bản dữ liệu khác nhau (ví dụ).",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+730,
+475,
+1154,
+497
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.3
+},
+{
+"mock": "a7-dang-tai-loi",
+"text": "Về trang chủ",
+"size": 24,
+"font": "BVP",
+"btn": true,
+"bbox": [
+900,
+531,
+1056,
+558
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 7.74
+},
+{
+"mock": "a7-dang-tai-loi",
+"text": "Điều khiển",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+530,
+699,
+635,
+719
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 11.0
+},
+{
+"mock": "a7-dang-tai-loi",
+"text": "WASD",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+531,
+749,
+608,
+767
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.07
+},
+{
+"mock": "a7-dang-tai-loi",
+"text": "Di chuyển",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+520,
+799,
+619,
+823
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.41
+},
+{
+"mock": "a7-dang-tai-loi",
+"text": "Chuột",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+702,
+749,
+777,
+773
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.07
+},
+{
+"mock": "a7-dang-tai-loi",
+"text": "Ngắm, bắn",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+685,
+799,
+794,
+823
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.4
+},
+{
+"mock": "a7-dang-tai-loi",
+"text": "F",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+902,
+749,
+917,
+767
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.07
+},
+{
+"mock": "a7-dang-tai-loi",
+"text": "Nhặt",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+885,
+804,
+934,
+824
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.44
+},
+{
+"mock": "a7-dang-tai-loi",
+"text": "M",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1069,
+749,
+1090,
+767
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.07
+},
+{
+"mock": "a7-dang-tai-loi",
+"text": "Bản đồ",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1044,
+800,
+1115,
+819
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.4
+},
+{
+"mock": "a7-dang-tai-loi",
+"text": "ESC",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1225,
+749,
+1275,
+767
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.07
+},
+{
+"mock": "a7-dang-tai-loi",
+"text": "Cài đặt",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1212,
+804,
+1288,
+824
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.44
+},
+{
+"mock": "a7-dang-tai-loi",
+"text": "MẸO",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+490,
+924,
+538,
+944
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 9.9
+},
+{
+"mock": "a7-dang-tai-loi",
+"text": "Bụi rậm che bạn khỏi tầm nhìn, nhưng bắn sẽ lộ vị trí ngay lập tức.",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+560,
+918,
+1352,
+947
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 11.72
+}
+]

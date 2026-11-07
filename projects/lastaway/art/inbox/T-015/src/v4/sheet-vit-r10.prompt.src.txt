@@ -1,0 +1,3 @@
+EDIT image 1 (sprite sheet of three empty carved-stone HUD frames on flat magenta). Keep EVERYTHING exactly the same: all three pieces, positions, sizes, rims, corner blocks, moss, the magenta background, the interiors of the middle and bottom pieces, and the dark top and bottom bands of the TOP piece (vitals frame).
+
+Change ONLY the middle band of the TOP piece: make it about 15 percent DARKER than it is now (a slightly less bright warm brown-grey), still clearly lighter than the two dark bands, still a flat smooth shade with hard straight edges, no lines, no highlight, no shadow, same position and height. Nothing else changes.

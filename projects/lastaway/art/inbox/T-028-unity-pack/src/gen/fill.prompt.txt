@@ -1,0 +1,7 @@
+Use your image generation tool to create ONE image as described below, and copy the generated file AS-IS (no cropping, no resizing, no padding) to:
+D:\Lastaway\projects\lastaway\art\inbox\T-028-unity-pack\src\gen\fill.png
+Do not write any other files and do not post-process the image. Use only the built-in image tool, never the OpenAI API, curl or python.
+
+Draw ONE small UI icon for a button, flat dark-ink style: a group of three person silhouettes side by side (one in the middle slightly larger, two behind) with a small plus sign at the top-right corner, meaning add players to fill the room.
+Style: exactly the same as the attached reference icons (ref-ico-gear.png, ref-ico-people.png, ref-ico-key.png): a solid very dark brown-black ink silhouette (#241A0E) with at most one slightly lighter inner detail tone (#4A3A22), chunky pixel art on a 24 by 24 pixel grid scaled up, crisp stepped pixel edges, NO colours, NO outline of another colour, NO gradients, NO text or letters. The icon fills about 85 percent of a square canvas and is centered.
+Background: perfectly flat solid magenta #FF00FF, nothing else (no shadow, no frame, no plate).

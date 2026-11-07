@@ -16,6 +16,8 @@ namespace JungleMaze.Presentation.UI.Hud
         [SerializeField] private RectTransform weaponStrip;
         [SerializeField] private CanvasGroup weaponStripGroup;
         [SerializeField] private Graphic weaponStripBackground;
+        /// <summary>HUD B (T-013): one Surface panel behind the whole quick bar; the strip's own background is off.</summary>
+        [SerializeField] private Graphic panelBackground;
         [SerializeField] private TMP_Text weaponName;
         [SerializeField] private GameObject ammo;
         [SerializeField] private TMP_Text magazine;
@@ -50,6 +52,7 @@ namespace JungleMaze.Presentation.UI.Hud
         public void ApplyPalette(HudPalette palette)
         {
             if (weaponStripBackground != null) weaponStripBackground.color = palette.Surface;
+            if (panelBackground != null) panelBackground.color = palette.Surface;
             if (weaponName != null) weaponName.color = palette.Text;
             if (magazine != null) magazine.color = palette.Text;
             if (reserve != null) reserve.color = palette.Muted;

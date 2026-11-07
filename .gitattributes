@@ -1,0 +1,14 @@
+# Ép LF cho mọi file văn bản để formatter (endOfLine lf) không báo lỗi sau checkout trên Windows
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ogg binary
+*.mp3 binary
+*.wav binary
+*.woff2 binary
+*.woff binary
+*.ttf binary
+*.zip binary

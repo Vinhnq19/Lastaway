@@ -1,0 +1,10 @@
+Use your image generation tool to create ONE image as described below, and copy the generated file AS-IS (no cropping, no resizing, no padding) to:
+D:\Lastaway\projects\lastaway\art\inbox\T-020\src\sheet-sem1.png
+Do not write any other files and do not post-process the image. Use only the built-in image tool, never the OpenAI API, curl or python.
+
+Image 1 is the approved pixel-art HUD style (carved olive-grey stone, dark outline, small moss tufts, dark warm brown-grey interior, gold #FFDC6E accents). Image 2 is our button sheet (3 columns: primary gold, secondary dark, danger red; 4 states per column). Image 3 is our form sheet (text input in normal, focus gold, error red; dropdown; tabs; list rows; toast; tooltip).
+
+Draw ONE new sprite sheet in exactly the same style, pixel scale, rim thickness, outline and corner nubs as those sheets, on a flat solid magenta background (#FF00FF, no gradient, never inside a piece), at least 50 px of pure magenta between pieces and around the border. NO text, NO numbers, NO icons inside any piece. Every piece sharp, not cropped, rows top to bottom, all EMPTY:
+ROW 1: SUCCESS BUTTON, 4 states left to right, aspect 3.75 : 1, same shape and rim as the buttons in image 2, interior GREEN stone (#3f6b2f to #4f8a3c, a natural moss green, not neon): NORMAL; HOVER (about 20 percent lighter with a thin bright gold #FFDC6E line just inside the rim); PRESSED (about 20 percent darker, bevel inverted); DISABLED (fully desaturated grey-brown like the disabled buttons in image 2).
+ROW 2: INPUT-SUCCESS, aspect 6 : 1, same as the text input in image 3 but with a thin green #4caf50 line just inside the rim.
+ROW 3: three TOASTS side by side, each aspect 5.6 : 1, same dark stone plaque shape and rim as the toast in image 3, each with a small empty square recessed socket at the LEFT end (for an icon, about the height of the plaque minus the rim) and a flat colored tint on the rest of the interior: SUCCESS (dark green #1f3a1c), ERROR (dark red #4a1a18), WARNING (dark amber #4a3510). The rim stays olive-tan on all three.

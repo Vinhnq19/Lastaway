@@ -15,6 +15,9 @@ namespace JungleMaze.Presentation.UI.Lobby
         [SerializeField] private TMP_InputField password;
         [SerializeField] private Button loginTab;
         [SerializeField] private Button registerTab;
+        [Tooltip("Skin A: raised 'on' tab drawn over the 'off' face; null keeps the alpha-only look.")]
+        [SerializeField] private GameObject loginTabOn;
+        [SerializeField] private GameObject registerTabOn;
         [SerializeField] private Button submit;
         [SerializeField] private Button advanced;
         [SerializeField] private TMP_Text message;
@@ -44,12 +47,13 @@ namespace JungleMaze.Presentation.UI.Lobby
 
         public void SetTab(bool register)
         {
-            Tab(loginTab, !register);
-            Tab(registerTab, register);
+            Tab(loginTab, loginTabOn, !register);
+            Tab(registerTab, registerTabOn, register);
         }
 
-        private void Tab(Button tab, bool active)
+        private void Tab(Button tab, GameObject on, bool active)
         {
+            if (on != null) on.SetActive(active);
             var c = tab.image.color;
             c.a = active ? 1f : idleTabAlpha;
             tab.image.color = c;
