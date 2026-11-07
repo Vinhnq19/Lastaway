@@ -83,6 +83,16 @@ namespace JungleMaze.Presentation.UI.Hud
             // shortcut: scans the scene each refresh (about once a second); cache by event if the HUD ever shows lag.
             HidePlayers<HeroController>();
             HidePlayers<PlayerView>();
+            // Both HUD maps draw their own authoritative zone. Never bake the world tint into terrain.
+            foreach (var overlay in FindObjectsByType<ZoneOverlayView>(FindObjectsSortMode.None))
+            {
+                var renderer = overlay.WorldRenderer;
+                if (renderer != null && !renderer.forceRenderingOff)
+                {
+                    renderer.forceRenderingOff = true;
+                    _hidden.Add(renderer);
+                }
+            }
             foreach (var canvas in FindObjectsByType<Canvas>(FindObjectsSortMode.None))
                 if (canvas.renderMode == RenderMode.WorldSpace && canvas.enabled) { canvas.enabled = false; _hiddenCanvases.Add(canvas); }
             var lines = FindObjectsByType<LineRenderer>(FindObjectsSortMode.None);

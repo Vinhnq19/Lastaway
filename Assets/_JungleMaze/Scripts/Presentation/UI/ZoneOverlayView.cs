@@ -16,6 +16,8 @@ namespace JungleMaze.Presentation.UI
         private MeshRenderer _renderer;
         private RawImage _map;
 
+        public Renderer WorldRenderer => _renderer;
+
         public void Show(ZoneStatePacket state, uint tick, RuntimeMapBounds bounds)
         {
             if (_worldMaterial == null) CreateWorld();
@@ -59,6 +61,8 @@ namespace JungleMaze.Presentation.UI
         {
             var minimap = FindFirstObjectByType<MinimapView>();
             if (minimap == null || minimap.Marker == null) return;
+            // The composed HUD owns both map overlays; keep this fallback for the older demo HUD.
+            if (minimap.GetComponentInChildren<HudZoneRings>(true) != null) return;
             var layer = new GameObject("Zone circles", typeof(RectTransform), typeof(CanvasRenderer), typeof(RawImage));
             layer.transform.SetParent(minimap.Marker.parent, false);
             _map = layer.GetComponent<RawImage>();

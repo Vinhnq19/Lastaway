@@ -21,6 +21,8 @@ namespace JungleMaze.Presentation.UI.Hud
         private IHudState _hud;
         private MatchSession _online;
         private OfflineMatchSession _offline;
+        private UnityEngine.UI.RawImage _danger;
+        private Material _dangerMaterial;
 
         public bool HasZone { get; private set; }
         public int Phase { get; private set; }
@@ -60,8 +62,50 @@ namespace JungleMaze.Presentation.UI.Hud
         {
             Read();
             var projection = new MinimapProjection(mapSizeCells, area != null ? area.rect.width : 0f);
-            Place(zoneRing, projection, ZoneCentre, ZoneRadius);
+            ApplyDanger(mapSizeCells);
+            Place(zoneRing, projection, ZoneCentre, Phase > 0 ? ZoneRadius : 0f);
             Place(safeRing, projection, SafeCentre, SafeRadius);
+        }
+
+        private void ApplyDanger(int mapSizeCells)
+        {
+            var visible = HasZone && Phase > 0 && mapSizeCells > 0;
+            if (visible && _danger == null && area != null)
+            {
+                var shader = Resources.Load<Shader>("ZoneOverlay");
+                if (shader == null) return;
+                _dangerMaterial = new Material(shader);
+                _dangerMaterial.SetFloat("_Minimap", 1f);
+                _dangerMaterial.SetFloat("_FillAlpha", .62f);
+                var layer = new GameObject("Map danger fill", typeof(RectTransform), typeof(CanvasRenderer), typeof(UnityEngine.UI.RawImage));
+                layer.transform.SetParent(area, false);
+                _danger = layer.GetComponent<UnityEngine.UI.RawImage>();
+                _danger.raycastTarget = false;
+                _danger.material = _dangerMaterial;
+                if (zoneRing != null) layer.transform.SetSiblingIndex(zoneRing.transform.GetSiblingIndex());
+                else if (safeRing != null) layer.transform.SetSiblingIndex(safeRing.transform.GetSiblingIndex());
+            }
+            if (_danger == null) return;
+            _danger.enabled = visible;
+            if (!visible) return;
+            // Crop the fill inside the frame without shifting its world-to-map coordinates.
+            var size = area.rect.size;
+            float inset = Mathf.Min(3f, Mathf.Min(size.x, size.y) * .25f);
+            var rect = _danger.rectTransform;
+            rect.anchorMin = Vector2.zero;
+            rect.anchorMax = Vector2.one;
+            rect.offsetMin = Vector2.one * inset;
+            rect.offsetMax = -Vector2.one * inset;
+            _danger.uvRect = new Rect(inset / Mathf.Max(size.x, 1f), inset / Mathf.Max(size.y, 1f),
+                1f - 2f * inset / Mathf.Max(size.x, 1f), 1f - 2f * inset / Mathf.Max(size.y, 1f));
+            _dangerMaterial.SetVector("_Current", new Vector4(ZoneCentre.x, ZoneCentre.y, ZoneRadius, 0f));
+            _dangerMaterial.SetVector("_MapBounds", new Vector4(0f, 0f, mapSizeCells, mapSizeCells));
+        }
+
+        private void OnDestroy()
+        {
+            if (_danger != null) Destroy(_danger.gameObject);
+            if (_dangerMaterial != null) Destroy(_dangerMaterial);
         }
 
         private void Read()
