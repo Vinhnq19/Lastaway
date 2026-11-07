@@ -175,5 +175,47 @@ namespace JungleMaze.Tests.World
                 Object.DestroyImmediate(texture);
             }
         }
+
+        [Test]
+        public void Layer_SelectHighlightsOnlyThePickupTarget_AndForgetsPickedItems()
+        {
+            var tuning = Resources.Load<GroundLootTuning>(GroundLootTuning.ResourceName);
+            Assert.IsNotNull(tuning);
+            var root = new GameObject("loot select test root");
+            try
+            {
+                var layer = new GroundLootLayer(root.transform, tuning, null, ItemCatalog.CreateBaseline(), null);
+                layer.Apply(new[] { Item(10, "SHOTGUN", 20, 20), Item(11, "KNIFE", 21, 20) }, 0);
+                Assert.IsTrue(layer.TryGetView(10, out var gun));
+                Assert.IsTrue(layer.TryGetView(11, out var knife));
+                gun.Render(1);
+                var normalHalo = gun.HaloRenderer.transform.localScale.x;
+                var normalGlow = gun.HaloRenderer.color.a;
+
+                layer.Select(10);
+                Assert.AreEqual(10, layer.SelectedId);
+                Assert.IsTrue(gun.Selected); Assert.IsFalse(knife.Selected);
+                gun.Render(1 + tuning.SelectedBlendSeconds + .01);
+                Assert.AreEqual(1f, gun.SelectBlend, 1e-4f);
+                Assert.Greater(gun.HaloRenderer.transform.localScale.x, normalHalo * 1.15f, "larger halo on the F target");
+                Assert.Greater(gun.HaloRenderer.color.a, normalGlow, "brighter glow on the F target");
+
+                layer.Select(11);
+                Assert.IsFalse(gun.Selected); Assert.IsTrue(knife.Selected);
+
+                // Picked up: the view goes back to the pool and is not highlighted when it is reused.
+                layer.Apply(new[] { Item(10, "SHOTGUN", 20, 20) }, 2);
+                Assert.AreEqual(0, layer.SelectedId);
+                layer.Apply(new[] { Item(10, "SHOTGUN", 20, 20), Item(12, "AXE", 22, 20) }, 3);
+                Assert.IsTrue(layer.TryGetView(12, out var axe));
+                Assert.IsFalse(axe.Selected);
+                layer.Select(0);
+                Assert.IsFalse(gun.Selected);
+            }
+            finally
+            {
+                Object.DestroyImmediate(root);
+            }
+        }
     }
 }

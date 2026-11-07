@@ -251,8 +251,8 @@ namespace JungleMaze.Presentation.World.Phase2
         }
 
         /// <summary>
-        /// Refreshes the F pickup list around <paramref name="hero"/> (mouse wheel moves its selection).
-        /// Returns the world Id F picks up, 0 when no item is in reach.
+        /// Refreshes the F pickup list around <paramref name="hero"/> (mouse wheel moves its selection) and highlights the
+        /// selected ground item. Returns the world Id F picks up, 0 when no item is in reach.
         /// </summary>
         private ushort UpdatePickupList(WorldObjectWire[] objects, Vector2 hero)
         {
@@ -261,12 +261,14 @@ namespace JungleMaze.Presentation.World.Phase2
             // Wheel down walks down the list (farther items), wheel up walks back; one notch = one row.
             var steps = wheel < 0f ? 1 : wheel > 0f ? -1 : 0;
             _picker.Update(objects, hero.x, hero.y, steps, Time.unscaledTimeAsDouble);
+            _loot?.Select(_picker.TargetId);
             return _picker.TargetId;
         }
 
         private void ClearPickupList()
         {
             if (_picker != null && _picker.Count > 0) _picker.Clear();
+            _loot?.Select(0);
         }
 
         private void Refresh()

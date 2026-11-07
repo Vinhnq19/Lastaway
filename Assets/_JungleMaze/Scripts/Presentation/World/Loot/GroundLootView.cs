@@ -44,6 +44,10 @@ namespace JungleMaze.Presentation.World.Loot
         private int _sparkleCount;
         private Color _itemColor;
         private bool _lit;
+        private float _haloSize;
+        private bool _selected;
+        private float _selectBlend;
+        private double _renderedAt;
 
         public ushort WorldId { get; private set; }
         public string ItemId { get; private set; }
@@ -56,6 +60,13 @@ namespace JungleMaze.Presentation.World.Loot
         public SpriteRenderer HaloRenderer => _halo;
         public SpriteRenderer BeamRenderer => _beam;
         public SortingGroup Body => _body;
+        /// <summary>True while the F pickup list targets this item.</summary>
+        public bool Selected => _selected;
+        /// <summary>0 = normal look, 1 = fully selected look (blends over SelectedBlendSeconds).</summary>
+        public float SelectBlend => _selectBlend;
+
+        /// <summary>Marks the item F would pick up: brighter, larger, breathing halo. Presentation only.</summary>
+        public void SetSelected(bool selected) => _selected = selected;
 
         /// <summary>Creates the child renderers once; called by the pool factory.</summary>
         public void Build(GroundLootTuning tuning)
@@ -101,8 +112,10 @@ namespace JungleMaze.Presentation.World.Loot
 
             _item.sprite = art.Sprite;
             _itemColor = art.Placeholder ? WorldObjectViewColor : Color.white;
+            _haloSize = _lit ? _style.HaloSize : _tuning.AmmoHaloSize;
+            _selected = false; _selectBlend = 0f; _renderedAt = now;
             _itemTransform.localScale = new Vector3(art.Scale, art.Scale, 1f);
-            _halo.transform.localScale = Vector3.one * (_lit ? _style.HaloSize : _tuning.AmmoHaloSize);
+            _halo.transform.localScale = Vector3.one * _haloSize;
             _beam.enabled = _lit && _style.BeamHeight > 0f;
             _beam.transform.localScale = new Vector3(_style.BeamWidth, _style.BeamHeight, 1f);
             for (var i = 0; i < MaxSparkles; i++)
@@ -124,6 +137,10 @@ namespace JungleMaze.Presentation.World.Loot
         {
             if (_tuning == null) return;
             var t = (float)(now - _shownAt);
+            var step = (float)(now - _renderedAt); _renderedAt = now;
+            _selectBlend = _tuning.SelectedBlendSeconds > 0f
+                ? Mathf.MoveTowards(_selectBlend, _selected ? 1f : 0f, Mathf.Max(0f, step) / _tuning.SelectedBlendSeconds)
+                : (_selected ? 1f : 0f);
             Vector2 point = _ground; float lift = 0f, appear = 1f, light, settle, spin = 0f;
             if (_arrival.Entry == GroundLootEntry.Launch)
             {
@@ -155,13 +172,17 @@ namespace JungleMaze.Presentation.World.Loot
             var bob = GroundLootMotion.Bob(now, WorldId, _tuning.BobAmplitude, _tuning.BobPeriod) * settle;
             var height = _tuning.FloatHeight + bob + lift;
             var rotation = Quaternion.Euler(0f, 0f, _art.Angle + spin);
-            var center = rotation * (Vector3)(_art.Center * _art.Scale);
+            var scale = _art.Scale * Mathf.Lerp(1f, _tuning.SelectedItemScale, _selectBlend);
+            _itemTransform.localScale = new Vector3(scale, scale, 1f);
+            var center = rotation * (Vector3)(_art.Center * scale);
             _itemTransform.localRotation = rotation;
             _itemTransform.localPosition = new Vector3(-center.x, height - center.y, 0f);
 
             var shadow = Mathf.Lerp(1f, _tuning.ShadowMinScale, Mathf.Clamp01((height - _tuning.FloatHeight) / Mathf.Max(.01f, _tuning.LaunchHeight)));
             _shadow.transform.localScale = new Vector3(_tuning.ShadowSize.x * shadow, _tuning.ShadowSize.y * shadow, 1f);
 
+            var breath = _selectBlend * _tuning.SelectedPulse * Mathf.Sin((float)(now / Mathf.Max(.1f, _tuning.SelectedPulsePeriod)) * Mathf.PI * 2f);
+            _halo.transform.localScale = Vector3.one * (_haloSize * Mathf.Lerp(1f, _tuning.SelectedHaloScale, _selectBlend) * (1f + breath));
             var pulse = 1f - _tuning.BeamPulse * .5f * (1f + Mathf.Sin((float)(now / Mathf.Max(.1f, _tuning.BeamPulsePeriod)) * Mathf.PI * 2f + GroundLootMotion.Phase(WorldId) * 6.283f));
             SetAlpha(appear, light, pulse);
             for (var i = 0; i < _sparkleCount; i++) Mote(i, now, light);
@@ -172,8 +193,9 @@ namespace JungleMaze.Presentation.World.Loot
             var c = _itemColor; c.a *= item; _item.color = c;
             var shadow = new Color(0f, 0f, 0f, _tuning.ShadowAlpha * item);
             _shadow.color = shadow;
-            var glow = _lit ? _style.Glow : _tuning.AmmoGlow; glow.a *= light; _halo.color = glow;
-            var beam = _style.Beam; beam.a *= light * pulse; _beam.color = beam;
+            var boost = Mathf.Lerp(1f, _tuning.SelectedGlowBoost, _selectBlend);
+            var glow = _lit ? _style.Glow : _tuning.AmmoGlow; glow.a = Mathf.Min(1f, glow.a * boost) * light; _halo.color = glow;
+            var beam = _style.Beam; beam.a = Mathf.Min(1f, beam.a * boost) * light * pulse; _beam.color = beam;
             if (light <= 0f) for (var i = 0; i < _sparkleCount; i++) _sparkles[i].color = Color.clear;
         }
 

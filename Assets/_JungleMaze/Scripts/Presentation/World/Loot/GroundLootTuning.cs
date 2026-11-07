@@ -99,6 +99,19 @@ namespace JungleMaze.Presentation.World.Loot
         public float SparkleSize = .14f;
         public float SparklePeriod = 1.3f;
 
+        [Header("Selected by the F pickup list (section 11)")]
+        [Tooltip("Halo size multiplier of the item F would pick up.")]
+        public float SelectedHaloScale = 1.4f;
+        [Tooltip("Glow and column alpha multiplier of the selected item (clamped to 1).")]
+        public float SelectedGlowBoost = 1.6f;
+        [Tooltip("Item art scale multiplier of the selected item.")]
+        public float SelectedItemScale = 1.1f;
+        [Tooltip("Halo breathing of the selected item (0 = steady).")]
+        [Range(0f, 1f)] public float SelectedPulse = .15f;
+        public float SelectedPulsePeriod = .9f;
+        [Tooltip("Seconds to blend in and out of the selected look.")]
+        public float SelectedBlendSeconds = .1f;
+
         [Header("Sorting")]
         [Tooltip("Order of shadow and halo in the Ground sorting layer (above floor decor at -80).")]
         public int GroundOrder = 5;

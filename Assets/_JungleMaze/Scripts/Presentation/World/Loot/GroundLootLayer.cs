@@ -29,6 +29,7 @@ namespace JungleMaze.Presentation.World.Loot
         private readonly List<GroundLootArrival> _arrivalBuffer = new List<GroundLootArrival>();
         private readonly HashSet<ushort> _seen = new HashSet<ushort>();
         private readonly List<ushort> _gone = new List<ushort>();
+        private GroundLootView _selected;
 
         /// <summary>Views created so far (pool growth); stays flat while snapshots repeat.</summary>
         public int Created { get; private set; }
@@ -55,6 +56,20 @@ namespace JungleMaze.Presentation.World.Loot
 
         public bool TryGetView(ushort id, out GroundLootView view) => _views.TryGetValue(id, out view);
 
+        /// <summary>World Id of the highlighted item (the F pickup target), 0 when none.</summary>
+        public ushort SelectedId => _selected != null ? _selected.WorldId : (ushort)0;
+
+        /// <summary>Highlights the item F would pick up (<paramref name="id"/> 0 = none); cheap to call every frame.</summary>
+        public void Select(ushort id)
+        {
+            GroundLootView view = null;
+            if (id != 0) _views.TryGetValue(id, out view);
+            if (view == _selected) return;
+            if (_selected != null) _selected.SetSelected(false);
+            if (view != null) view.SetSelected(true);
+            _selected = view;
+        }
+
         /// <summary>Shows the ground items of <paramref name="states"/> (other kinds are only read for container breaks).</summary>
         public void Apply(IReadOnlyList<WorldObjectWire> states, double now)
         {
@@ -70,6 +85,7 @@ namespace JungleMaze.Presentation.World.Loot
                 if (_new.TryGetValue(s.Id, out var arrival) || !known)
                 {
                     if (!known) { view = _pool.Get(); _views.Add(s.Id, view); }
+                    if (view == _selected) _selected = null; // Show resets the look; Select marks it again next frame
                     if (!_new.ContainsKey(s.Id)) arrival = new GroundLootArrival { Id = s.Id, FromX = s.X, FromY = s.Y };
                     view.Show(s.Id, s.ItemId, s.X, s.Y, ResolveArt(s.ItemId), arrival, now);
                 }
@@ -77,7 +93,11 @@ namespace JungleMaze.Presentation.World.Loot
             }
             _gone.Clear();
             foreach (var entry in _views) if (!_seen.Contains(entry.Key)) _gone.Add(entry.Key);
-            foreach (var id in _gone) { _pool.Release(_views[id]); _views.Remove(id); }
+            foreach (var id in _gone)
+            {
+                if (_views[id] == _selected) _selected = null;
+                _pool.Release(_views[id]); _views.Remove(id);
+            }
         }
 
         /// <summary>Hides every item and forgets the snapshot history (world hidden, new match).</summary>
@@ -85,6 +105,7 @@ namespace JungleMaze.Presentation.World.Loot
         {
             foreach (var view in _views.Values) _pool.Release(view);
             _views.Clear();
+            _selected = null;
             _arrivals.Reset();
         }
 
