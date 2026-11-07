@@ -15,9 +15,10 @@ Asset `Art/Rendering/Resources/GameplayPostTuning.asset`. Khi đang Play trong E
 
 | Nhóm | Trường | Mặc định | Ý nghĩa |
 | --- | --- | --- | --- |
-| Bloom | `BloomThreshold` | 0,78 | Độ sáng bắt đầu phát sáng; thấp hơn thì nhiều thứ phát sáng hơn |
-| | `BloomIntensity` | 1,1 | Độ mạnh của quầng sáng |
-| | `BloomScatter` | 0,72 | Quầng lan rộng hay gọn |
+| Bloom | `BloomThreshold` | 0,6 | Độ sáng bắt đầu phát sáng; thấp hơn thì nhiều thứ phát sáng hơn |
+| | `BloomIntensity` | 1 | Độ mạnh của quầng sáng |
+| | `BloomClamp` | 6 | Chặn độ sáng tối đa đưa vào glow, để chỗ HDR không lóa trắng màn hình |
+| | `BloomScatter` | 0,68 | Quầng lan rộng hay gọn |
 | | `BloomTint` | vàng kem | Màu quầng sáng |
 | Màu | `PostExposure` | 0,08 EV | Sáng toàn cảnh |
 | | `Contrast` | 14 | Tương phản |
@@ -30,18 +31,19 @@ Asset `Art/Rendering/Resources/GameplayPostTuning.asset`. Khi đang Play trong E
 
 Ánh sáng nằm **trên map** (Point Light 2D đứng yên theo thế giới), không phủ lên màn hình.
 
-- **Map nhận ánh sáng:** trong trận `LevelArtView` vẽ map bằng sprite Lit (mặc định của Renderer 2D), `litInGame` bật. Level Editor vẫn Unlit. Global Light 2D của scene `Game` giảm còn 0,82, màu hơi ấm (1; 0,97; 0,9) để vũng nắng nổi lên.
-- **Vũng nắng** (`MapLights`, dựng cùng art của map): mỗi khối 10×10 ô có tối đa một Point Light vàng nắng, vị trí lệch theo seed của map, chỉ đặt ở chỗ trống (ít nhất 60% ô quanh đó không có cây, tường hay vật), như nắng lọt qua tán xuống khoảng trống. Bán kính 3,5–6,5 ô, cường độ 0,35–0,6. Cùng map thì mọi máy thấy đèn ở cùng chỗ.
+- **Map nhận ánh sáng:** trong trận `LevelArtView` vẽ map bằng sprite Lit (mặc định của Renderer 2D), `litInGame` bật. Level Editor vẫn Unlit. Global Light 2D của scene `Game` giảm còn 0,82, màu hơi ấm (1; 0,97; 0,9) để mảng nắng nổi lên.
+- **Mảng nắng** (`MapLights`, dựng cùng art của map): Sprite Light 2D hình dải nắng dài, mép mềm hơi lượn, hai đầu mờ dần, bên trong loang lổ như nắng qua lá (texture sinh bằng code). Các dải song song theo một hướng nắng (`SunPatchAngle` 32°), cách nhau khoảng 20 ô, cắt thành đoạn dài 20–38 ô, rộng 5–10 ô, có khoảng hở và khoảng 30% đoạn bỏ trống để nắng rơi thành từng mảng. Vị trí theo seed của map, mọi máy giống nhau.
 - **Đèn vật thể:** đèn đá (`StoneLantern`) ánh cam ấm, cột rune ánh xanh nhạt, portal ánh xanh.
 - **Chỉnh màu nắng** (post): `HighlightTint` làm vùng sáng ngả vàng, `ShadowTint` giữ vùng tối hơi lạnh; `Temperature` 12, `BloomTint` vàng kem.
 
 | Trường (`GameplayPostTuning`) | Mặc định | Ý nghĩa |
 | --- | --- | --- |
 | `MapLightsEnabled` | bật | Tắt mọi đèn trên map |
-| `SunPoolSpacing` | 10 ô | Khoảng cách lưới giữa các vũng nắng (nhỏ hơn = dày hơn) |
-| `SunPoolOpen` | 0,6 | Tỉ lệ ô trống cần có quanh vũng nắng |
-| `SunPoolColor` | (1; 0,86; 0,55) | Màu nắng |
-| `SunPoolRadius` / `SunPoolIntensity` | 3,5–6,5 / 0,35–0,6 | Độ lớn và độ sáng |
+| `SunPatchAngle` | 32° | Hướng nắng |
+| `SunPatchSpacing` | 20 ô | Khoảng cách giữa các dải |
+| `SunPatchWidth` / `SunPatchLength` | 5–10 / 20–38 ô | Kích thước mảng nắng |
+| `SunPatchGap` / `SunPatchSkip` | 6–18 ô / 0,3 | Khoảng hở giữa các đoạn, tỉ lệ đoạn bỏ trống |
+| `SunPatchColor` / `SunPatchIntensity` | (1; 0,86; 0,55) / 0,4–0,65 | Màu và độ sáng nắng |
 | `Lantern*`, `Rune*`, `Portal*` | xem asset | Màu, bán kính, độ sáng đèn vật thể |
 
 Đèn được dựng khi art của map dựng (vào trận), nên sửa số đèn phải vào lại trận mới thấy; số post (bloom, màu) thấy ngay khi đang Play.

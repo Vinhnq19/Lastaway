@@ -18,11 +18,12 @@ namespace JungleMaze.Presentation.Rendering
 
         [Header("Bloom")]
         [Tooltip("Linear brightness where glow starts; lower = more of the scene glows.")]
-        [Min(0f)] public float BloomThreshold = .78f;
-        [Min(0f)] public float BloomIntensity = 1.1f;
-        [Range(0f, 1f)] public float BloomScatter = .72f;
+        [Min(0f)] public float BloomThreshold = .6f;
+        [Min(0f)] public float BloomIntensity = 1f;
+        [Range(0f, 1f)] public float BloomScatter = .68f;
         public Color BloomTint = new Color(1f, .92f, .76f);
-        [Min(0f)] public float BloomClamp = 65472f;
+        [Tooltip("Caps how bright a pixel can feed the glow, so HDR highlights never blow out the screen.")]
+        [Min(0f)] public float BloomClamp = 6f;
         public bool BloomHighQuality = false;
 
         [Header("Colour")]
@@ -42,15 +43,20 @@ namespace JungleMaze.Presentation.Rendering
 
         [Header("Map lights (Point Light 2D on the map)")]
         public bool MapLightsEnabled = true;
-        [Tooltip("Grid step in cells between sun pool candidates (one light at most per step x step block).")]
-        [Min(3)] public int SunPoolSpacing = 10;
-        [Tooltip("Share of open cells (no tree, wall or prop) needed around a sun pool; sunlight lands on clearings.")]
-        [Range(0f, 1f)] public float SunPoolOpen = .6f;
-        public Color SunPoolColor = new Color(1f, .86f, .55f);
-        [Tooltip("Outer radius range in cells.")]
-        public Vector2 SunPoolRadius = new Vector2(3.5f, 6.5f);
-        public Vector2 SunPoolIntensity = new Vector2(.35f, .6f);
-        [Range(0f, 1f)] public float SunPoolFalloff = .7f;
+        [Tooltip("Direction of the sun shafts in degrees (0 = vertical; positive leans them towards the top-left).")]
+        public float SunPatchAngle = 32f;
+        [Tooltip("Distance in cells between neighbouring shaft lines.")]
+        public float SunPatchSpacing = 20f;
+        [Tooltip("Shaft width range in cells.")]
+        public Vector2 SunPatchWidth = new Vector2(5f, 10f);
+        [Tooltip("Shaft length range in cells.")]
+        public Vector2 SunPatchLength = new Vector2(20f, 38f);
+        [Tooltip("Gap range in cells between shaft segments on the same line.")]
+        public Vector2 SunPatchGap = new Vector2(6f, 18f);
+        [Tooltip("Share of segments left dark so the light falls in patches.")]
+        [Range(0f, 1f)] public float SunPatchSkip = .3f;
+        public Color SunPatchColor = new Color(1f, .86f, .55f);
+        public Vector2 SunPatchIntensity = new Vector2(.4f, .65f);
         public Color LanternColor = new Color(1f, .68f, .32f);
         public float LanternRadius = 2.6f;
         public float LanternIntensity = .9f;

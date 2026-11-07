@@ -15,11 +15,11 @@ MonoBehaviour:
   Enabled: 1
   Scenes:
   - Game
-  BloomThreshold: 0.78
-  BloomIntensity: 1.1
-  BloomScatter: 0.72
+  BloomThreshold: 0.6
+  BloomIntensity: 1
+  BloomScatter: 0.68
   BloomTint: {r: 1, g: 0.92, b: 0.76, a: 1}
-  BloomClamp: 65472
+  BloomClamp: 6
   BloomHighQuality: 0
   PostExposure: 0.08
   Contrast: 14
@@ -30,12 +30,14 @@ MonoBehaviour:
   HighlightTint: {r: 1.08, g: 1.03, b: 0.88, a: 1}
   ShadowTint: {r: 0.94, g: 0.98, b: 1.06, a: 1}
   MapLightsEnabled: 1
-  SunPoolSpacing: 10
-  SunPoolOpen: 0.6
-  SunPoolColor: {r: 1, g: 0.86, b: 0.55, a: 1}
-  SunPoolRadius: {x: 3.5, y: 6.5}
-  SunPoolIntensity: {x: 0.35, y: 0.6}
-  SunPoolFalloff: 0.7
+  SunPatchAngle: 32
+  SunPatchSpacing: 20
+  SunPatchWidth: {x: 5, y: 10}
+  SunPatchLength: {x: 20, y: 38}
+  SunPatchGap: {x: 6, y: 18}
+  SunPatchSkip: 0.3
+  SunPatchColor: {r: 1, g: 0.86, b: 0.55, a: 1}
+  SunPatchIntensity: {x: 0.4, y: 0.65}
   LanternColor: {r: 1, g: 0.68, b: 0.32, a: 1}
   LanternRadius: 2.6
   LanternIntensity: 0.9
