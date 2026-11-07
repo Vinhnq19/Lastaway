@@ -39,6 +39,11 @@ cancel ELIXIR; Root and Reverse do not block normal item use. Ordinary damage do
 One floor AMMO unit adds one magazine. Loaded magazines/reload/fire validation and durability
 depletion remain WPN-02 responsibilities; they are not claimed implemented by this inventory layer.
 
+Each item has a `Rarity` (Common..Legendary, JSON string, default Common). `Loot.Floor` (`FloorLootProfile`,
+missing = defaults) configures floor loot, gun ammo companions and container drop scatter; see
+`Docs/hvu/07_Floor_Loot.vi.md`. The placement code lives in `../Loot` (`FloorLootPlanner`, `LootDrops`, `LootSurface`)
+because it needs `MapLayout`; checks: `dotnet run --project Backend/Tests/FloorLootChecks/FloorLootChecks.csproj`.
+
 Tests: from repository root, `dotnet run --project Backend/Tests/InventoryChecks/InventoryChecks.csproj`.
 The suite checks source/disabled loot rules across 100 seeds, data validation and defensive copies,
 two actors contesting loot, bounded dedupe and wrong match, carry/swap/ammo/armor, timer cancellation,

@@ -1,5 +1,6 @@
 using JungleMaze.World;
 using JungleMaze.World.Inventory;
+using JungleMaze.World.Loot;
 using JungleBackend.Protocol.Gameplay;
 namespace GameServer.Simulation;
 
@@ -14,6 +15,9 @@ public sealed partial class MatchWorldRuntime : ITransactionalDestructibleLootSi
     private readonly Dictionary<byte,double> _poisonDue=new();
     private readonly HashSet<byte> _registered=new();
     private readonly LootTable _loot;
+    private readonly LootSurface _lootSurface;
+    /// <summary>Floor capacity shared with <see cref="FloorLootPlanner.MaxFloorItems"/>.</summary>
+    private const int FloorCapacity=FloorLootPlanner.MaxFloorItems;
     private ushort _nextId;
     private uint _tick;
     private readonly Dictionary<byte,(ushort Source,uint Sequence,uint Tick)> _portals=new();
@@ -30,6 +34,10 @@ public sealed partial class MatchWorldRuntime : ITransactionalDestructibleLootSi
     public DestructibleService Destructibles {get;}
     public HazardService Hazards {get;}
     public uint Revision {get;private set;}=1;
+    /// <summary>Per-match loot seed derived from <see cref="MatchId"/>: floor items and container drops differ every match.</summary>
+    public uint LootSeed {get;}
+    /// <summary>Floor loot created when the world started (for checks/telemetry).</summary>
+    public FloorLootPlan InitialLoot {get;}
     public MatchWorldRuntime(Guid matchId,WorldSettings settings,IEntityRegistry entities,HealthService health,ItemCatalog? catalog=null,LootProfile? lootProfile=null)
     {
         MatchId=matchId;_entities=entities;_health=health;_heroRadius=settings.Map.HeroRadius;
@@ -44,8 +52,16 @@ public sealed partial class MatchWorldRuntime : ITransactionalDestructibleLootSi
         Hazards=new HazardService(Layout,settings.Hazards,this,this,this,Destructibles.IsBroken);
         Hazards.DoorChanged+=(_,_)=>Revision++;
         _health.DamageInterceptor=TryPreventDamage;
+        LootSeed=LootSeeds.FromGuid(matchId);
+        var floorProfile=_loot.Floor;
+        _lootSurface=new LootSurface(Layout,floorProfile.DropClearance,Destructibles.IsBroken);
+        // Authored maps use r = Size/2 for loot rings; the prototype generator has its own start-zone radius.
+        var spots=settings.FloorSpots is {} cached&&ReferenceEquals(cached.Layout,Layout)?cached:FloorLootPlanner.PlanSpots(Layout,_loot,settings.Layout==null?settings.Map.InitialZoneRadius:0,_heroRadius);
+        InitialLoot=FloorLootPlanner.Roll(spots,_loot,LootSeed);
+        foreach(var placed in InitialLoot.Placements)if(!Floor.TrySpawn(placed.Stack,placed.Position.X,placed.Position.Y,out _))break;
+        Revision++;
     }
-    private ushort AllocateId(){if(_nextId==0||Floor.Items.Count>=2048)return 0;return _nextId++;}
+    private ushort AllocateId(){if(_nextId==0||Floor.Items.Count>=FloorCapacity)return 0;return _nextId++;}
     public void SyncActors()
     {
         foreach(var e in _entities.All)
@@ -107,27 +123,24 @@ public sealed partial class MatchWorldRuntime : ITransactionalDestructibleLootSi
     }
     public void SpawnLoot(WorldObjectKind source,ushort worldId,WorldPoint position,uint seed)
     {
-        var kind=source==WorldObjectKind.Chest?LootSource.Chest:source==WorldObjectKind.Pot?LootSource.Pot:LootSource.Supply;
-        var items=_loot.Roll(kind,seed);
+        // Drops fan out 0.9-1.4 cells around the container (broken, so its center is free) and guns bring an AMMO box.
+        var placements=LootDrops.ForContainer(_loot,source,position,LootSeeds.Mix(seed,LootSeed),_lootSurface);
         // Preflight/rollback makes a full floor registry an explicit rejection, never partial loot.
-        if(Floor.Items.Count+items.Length>2048||_nextId+items.Length>ushort.MaxValue)
+        if(Floor.Items.Count+placements.Count>FloorCapacity||_nextId+placements.Count>ushort.MaxValue)
             return;
         var spawned=new List<ushort>();
-        for(var i=0;i<items.Length;i++)
+        foreach(var placed in placements)
         {
-            // Broken object no longer blocks its center; bounded deterministic spread remains close enough to pick up.
-            var p=new WorldPoint(position.X+(i%3-1)*.25f,position.Y+(i/3)*.25f);
-            if(!Layout.IsWalkable(p,.1f,Destructibles.IsBroken,Hazards.IsDoorClosed))p=position;
-            if(!Floor.TrySpawn(items[i],p.X,p.Y,out var id)){foreach(var old in spawned)Floor.Remove(old);return;}
+            if(!Floor.TrySpawn(placed.Stack,placed.Position.X,placed.Position.Y,out var id)){foreach(var old in spawned)Floor.Remove(old);return;}
             spawned.Add(id);
         }
         Revision++;
     }
     public bool CanSpawnLoot(WorldObjectKind source,ushort worldId,uint seed)
     {
-        var kind=source==WorldObjectKind.Chest?LootSource.Chest:source==WorldObjectKind.Pot?LootSource.Pot:LootSource.Supply;
-        var count=_loot.Roll(kind,seed).Length;
-        return Floor.Items.Count+count<=2048&&_nextId+count<=ushort.MaxValue&&Layout.Objects.Count+Floor.Items.Count+count<=WorldWire.MaxObjects;
+        // Counts ammo companions too, so the preflight matches what SpawnLoot will create.
+        var count=LootDrops.CountForContainer(_loot,source,LootSeeds.Mix(seed,LootSeed));
+        return Floor.Items.Count+count<=FloorCapacity&&_nextId+count<=ushort.MaxValue&&Layout.Objects.Count+Floor.Items.Count+count<=WorldWire.MaxObjects;
     }
     public void RequestDamage(byte actor,ushort source,uint tick,int amount,bool bypassArmor){ApplyEnvironmentalDamage(actor,amount);}
     private void ApplyEnvironmentalDamage(byte actor,int amount)

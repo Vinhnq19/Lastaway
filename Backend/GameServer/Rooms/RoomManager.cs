@@ -55,7 +55,7 @@ public sealed partial class RoomManager
         _time = time ?? TimeProvider.System;
         _profile = profile ?? MatchProfile.Current;
         Catalog = catalog;
-        if (catalog is not null) _worldSetup = MatchWorldSetup.Load();
+        if (catalog is not null) { _worldSetup = MatchWorldSetup.Load(); _worldSetup.Prewarm(catalog.Current.Maps.Values); }
 
         // Invalid or missing canonical data is a startup error; never substitute a different map.
         _map = map ?? catalog?.Current.Find(catalog.Current.DefaultMapId)?.Data ?? MapData.Load(GameDataLoader.ReadGameDataFile("map_demo.json"));
