@@ -103,3 +103,30 @@ Mặc định đã chọn (`Loot.Floor` trong `items_catalog.json`) và lý do:
 Kiểm: EditMode `GroundLootArrivalsTests` (8), `GroundLootViewTests` (5), `OfflineWorldSessionTests` thêm 2 test (rải sàn theo planner + đổi seed mỗi lượt; đồ rương toả quanh rương, súng có hộp đạn). Test offline cũ chạy với `Floor.Enabled = false` vì chúng đếm đồ trên sàn do chính test tạo.
 
 Giới hạn: online chưa playtest với GameServer (logic bắn ra chỉ dựa snapshot, đã test thuần); món nhặt lên rồi bỏ lại chỉ hiện dần; món rơi từ thùng mà bị đẩy ra xa hơn 2 ô (vướng vật cản) và không nằm cạnh món đã bay thì chỉ hiện dần.
+
+## 11. Danh sách nhặt đồ (client, 07/11/2026)
+
+Kiểu Fortnite, theo quyết định CPO 07/11/2026.
+
+**Cách hoạt động.** Khi có ≥ 1 món đồ sàn (`WorldObjectWire` kind 100) trong tầm nhặt **1,2 ô** (khoảng cách tâm, bằng `pickupRadius` của `InventoryService` trên server), một panel nền đen trong suốt (60%, bo góc `HudRound6`) hiện ở bên phải nhân vật. Panel bám theo nhân vật: mép trái cách nhân vật 1,3 ô (vừa qua tầm nhặt nên không đè lên món trong tầm), giữa panel cao hơn chân 0,5 ô. Panel bị kẹp trong màn hình và luôn nằm trên các khối HUD dưới nằm ngay bên dưới nó (Vitals, QuickBar, EffectsRow, PickupFeed). Mỗi dòng gồm dải màu độ hiếm bên trái (màu quầng sáng của `GroundLootTuning`), icon (`IItemIconProvider`), tên và "×N" cho thuốc, đồ ném và hộp đạn. Dòng xếp từ gần đến xa. Panel hiện tối đa 5 dòng, thừa thì thêm dòng "+N".
+- Tên lấy từ `HudItemLabels.DisplayName`, cùng nguồn với thông báo nhặt của HUD. Hiện đó là `displayName` tiếng Anh trong balance JSON (Q10 của UI-01). Chưa có tên tiếng Việt nên không đặt tên mới.
+- Dòng đang chọn có nền sáng hơn, viền vàng (`HudPalette.Amber`) và phím **[F] Nhặt**, cùng kiểu phím "R Nạp" của QuickBar. Món đó cũng được làm nổi trên sàn: quầng sáng to ×1,4, sáng ×1,6 và "thở" nhẹ, món to ×1,1, chuyển trong 0,1 s.
+- **Chọn:** mặc định chọn món gần nhất, và lựa chọn đi theo món gần nhất khi nhân vật di chuyển. **Lăn chuột** (chỉ khi có món trong tầm) đổi dòng chọn: lăn xuống là món xa hơn, lăn lên là món gần hơn, đi hết danh sách thì quay vòng. Món đã chọn bằng chuột giữ nguyên theo Id khi thứ tự thay đổi, miễn còn trong tầm. Ra khỏi tầm hoặc bị nhặt thì về lại món gần nhất. Nếu món đang chọn nằm sau dòng thứ 5 thì cửa sổ 5 dòng cuộn theo.
+- **F** nhặt đúng món đang chọn. Không có món nào trong tầm thì F vẫn mở/đóng cửa như cũ. Trước đây F chọn món gần **con trỏ chuột**, nay đổi sang món đang chọn trong danh sách.
+- **Chống nhấp nháy:** món vừa ra khỏi tầm còn ở lại trong danh sách 0,2 s (mờ 45%, F không nhặt được). Panel hiện/ẩn bằng fade 0,12 s. Khi đang mờ dần, panel giữ nguyên các dòng cuối.
+- Không chạy khi menu chặn input (`BlocksGameplayInput`), khi chết hay khi không ở scene Game: lúc đó danh sách bị xoá, panel mờ đi và bỏ làm nổi. Tự nhặt giáp, mũ và đạn (≤ 0,6 ô) giữ nguyên.
+- Client chỉ chọn món và gửi ý định nhặt. Server/phiên offline vẫn kiểm tầm và quyết định món có vào túi hay không.
+
+**File.**
+- `Application/World/NearbyLootPicker.cs`: lớp C# thuần, giữ danh sách, thứ tự, lựa chọn, lăn chuột, thời gian lưu lại và cửa sổ 5 dòng. Đăng ký một instance trong `Bootstrap.World.cs`.
+- `Presentation/World/Phase2/WorldSceneView.cs`: cả nhánh online (`Update`) lẫn offline (`UpdateOffline`) gọi chung `UpdatePickupList`, thay cho hai đoạn chọn món theo con trỏ bị trùng trước đây.
+- `Presentation/UI/Hud/PickupListView.cs` nằm trên `Hud.prefab → PickupList` (cùng Canvas, font `HudText`/`HudNumber` và sprite với HUD). Các dòng được dựng lúc Start dưới một Canvas con nên di chuyển theo nhân vật không làm dựng lại cả HUD.
+- `Presentation/World/Loot/GroundLootLayer.Select`, `GroundLootView.SetSelected`: phần làm nổi món đang chọn.
+
+**Chỉnh.** Bố cục, màu và thời gian của panel nằm ở `Hud.prefab → PickupList → Pickup List View → Layout`: `OffsetCells`, `RaiseCells`, `Width` 280, `RowHeight` 30, `Background` (alpha 0,6), `LingerAlpha`, `FadeSeconds`, màu phím. Muốn panel tránh thêm khối HUD nào thì thêm vào `Keep Clear Of`. Phần làm nổi trên sàn nằm ở `GroundLootTuning.asset`, nhóm "Selected by the F pickup list" (`SelectedHaloScale`, `SelectedGlowBoost`, `SelectedItemScale`, `SelectedPulse`, `SelectedBlendSeconds`). Tầm 1,2 ô, tối đa 5 dòng và thời gian lưu 0,2 s là tham số constructor của `NearbyLootPicker` trong `Bootstrap.World.cs`. Tầm phải khớp với server.
+
+**Ảnh** (`Docs/Reports/PickupList_2026-11-07/`, Luyện tập offline): `01_one_item.png` đứng cạnh một shotgun (Epic), `02_many_items_wheel_second.png` có 8 món trong tầm (5 dòng + "+3"), dòng thứ hai đang được chọn sau một nấc lăn chuột. Món trong ảnh được đặt thêm bằng code. Nấc lăn được giả lập bằng cách gọi `NearbyLootPicker.Update(..., scrollSteps: 1, ...)`, vì MCP không bơm được `Input.mouseScrollDelta`. Lệnh nhặt được kiểm bằng `OfflineWorldSession.Pickup(TargetId)`: món đã chọn vào túi, lựa chọn về lại món gần nhất.
+
+Kiểm: EditMode `NearbyLootPickerTests` (10), `GroundLootViewTests.Layer_SelectHighlightsOnlyThePickupTarget_AndForgetsPickedItems` (1), kèm chạy lại `Layer_SizesByArt_PoolsViews_AndLaunchesFromABrokenChest` vì `GroundLootView.Render` đã đổi.
+
+Giới hạn: chưa playtest online với GameServer (hai nhánh dùng chung một lớp). Phím F và lăn chuột thật chưa bấm tay qua MCP. Panel không có test PlayMode riêng. Lăn chuột hiện chưa có chức năng nào khác trong scene Game; nếu sau này lăn chuột dùng để zoom hay đổi vũ khí thì cần chia lại phím.
