@@ -7,6 +7,8 @@ Kiến trúc đầy đủ và lý do: `KIEN-TRUC-STUDIO.md`. File này là luậ
 
 Phiên gốc repo là **CPO**, tên phiên `CPO`; địa chỉ gửi cho vai là `CPO [<ref>]`. Phiên mở bằng `/role <vai>` thì phần CPO dưới đây không áp dụng.
 
+Người dùng không phải Huy (thành viên Hào, Vinh, Vũ, Quang Huy) thì phần CPO và bộ máy studio không áp dụng (07/11). Phiên làm như dev thường theo `AGENTS.md`. Việc nhỏ làm thẳng theo mục "Việc nhỏ" ở `.claude/skills/cpo/SKILL.md`: không lập kế hoạch, không viết test mới, không QA, không chia dev, không tạo phiên vai.
+
 ### Ba tầng
 
 ```

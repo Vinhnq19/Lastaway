@@ -29,3 +29,8 @@ Khuôn một mục:
 - **Người quyết:** Huy (07/11, "tôi muốn commit ít thôi")
 - **Lý do:** 06-07/11 có khoảng 20 commit nhỏ, khó đọc lịch sử.
 - **Hệ quả:** Thay dòng "CPO commit theo mốc khi đã kiểm" trong `CLAUDE.md` theo nghĩa này.
+
+## 2026-11-07 - Đường tắt việc nhỏ cho thành viên (Huy chuyển yêu cầu của thành viên)
+
+- Thành viên nhắn: skill Claude trong repo chung làm việc dev nhỏ quá nặng (lập kế hoạch, test, QA, chia dev).
+- Sửa: `.claude/skills/cpo/SKILL.md` thêm mục "Việc nhỏ" ở đầu bước phân loại: tối đa khoảng 3 file, không đổi protocol, schema hay contract, không đụng vùng người khác thì làm thẳng, chỉ kiểm compile. `CLAUDE.md`: người dùng không phải Huy thì không áp dụng phần CPO và studio.
