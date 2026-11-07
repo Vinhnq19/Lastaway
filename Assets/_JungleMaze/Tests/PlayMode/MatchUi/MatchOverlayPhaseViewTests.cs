@@ -61,7 +61,8 @@ namespace JungleMaze.Tests.PlayMode.MatchUi
             Build(false);
             Eliminate(EliminationCause.Player);
             Assert.IsTrue(_presenter.EliminatedFade.Visible, "shown in the same call (AC18)");
-            Assert.AreEqual("#4 / 10", _root.Eliminated.Rank.text);
+            Assert.AreEqual("#4", _root.Eliminated.Rank.text, "T-023 R3: '#4 / 10' shown as #4 (96) + / 10 (40)");
+            Assert.AreEqual("/ 10", _root.Eliminated.RankTotal.text);
             Assert.AreEqual("Bị Hào hạ bằng Nỏ · cách 6 ô", _root.Eliminated.Cause.text);
             Assert.IsTrue(_root.Eliminated.Kills.gameObject.activeSelf);
             Assert.IsTrue(_root.Eliminated.Spectate.interactable);
@@ -69,7 +70,7 @@ namespace JungleMaze.Tests.PlayMode.MatchUi
 
             _elimination.Update(new EliminationInfo(Match, 1, 5, 10, EliminationCause.Unknown, EliminationInfo.NoNetId, null, null, float.NaN, 75f, -1));
             Assert.IsFalse(_root.Eliminated.Kills.gameObject.activeSelf, "missing kills line hidden (AC20)");
-            Assert.AreEqual("Sống sót: 01:15", _root.Eliminated.Survival.text);
+            Assert.AreEqual("01:15", _root.Eliminated.Survival.text, "T-023 R3: value only, the card icon names it");
             Assert.IsTrue(_root.Eliminated.Home.interactable, "buttons still usable");
         }
 

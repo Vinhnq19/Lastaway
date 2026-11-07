@@ -93,7 +93,7 @@ namespace JungleMaze.Tests.PlayMode
             {
                 var slot = quickbar.GetSlotView(i); var item = _inventory.GetSlot(i);
                 Assert.AreEqual(expectedNames[i], slot.NameLabel.text, "slot " + i);
-                Assert.AreEqual(new Vector2(28, 28), ((RectTransform)slot.Icon.transform).sizeDelta, "slot " + i);
+                Assert.AreEqual(new Vector2(40f / 1.5f, 40f / 1.5f), ((RectTransform)slot.Icon.transform).sizeDelta, "slot " + i); // r11: 40 px icon in a 54 px slot
                 if (item.IsEmpty)
                 {
                     Assert.AreEqual(SlotVisual.Empty, slot.Visual);
@@ -139,7 +139,7 @@ namespace JungleMaze.Tests.PlayMode
             Assert.AreEqual(_core.Palette.IconPlaceholder, row.Icon.color);
             feed.SetRow(0, true, "GOD_LEAF", "God Leaf", 2, 1);
             Assert.AreSame(_icons.GetIcon("GOD_LEAF"), row.Icon.sprite);
-            Assert.AreEqual(new Vector2(18, 18), size);
+            Assert.AreEqual(new Vector2(72f / 1.5f, 72f / 1.5f), size, "T-022 R3: pickup toast icon 72 px at 1080p (HudPickupToast, kit_toast 308x92, T-028 b9), was 18 units");
             Assert.AreEqual(size, ((RectTransform)row.Icon.transform).sizeDelta);
 
             // Through the presenter: the newest pickup row shows its own icon.
@@ -225,7 +225,8 @@ namespace JungleMaze.Tests.PlayMode
                 Assert.True(frame.Edge.GetComponent<LayoutElement>().ignoreLayout, frame.name);
                 Assert.AreEqual(_core.Palette.Edge, frame.Edge.color, frame.name + " edge tint");
                 Assert.AreEqual(_core.Palette.Line, frame.Bevel.color, frame.name + " bevel tint");
-                Assert.AreEqual(WorldRect(frame), WorldRect(frame.Edge), frame.name + " overlay matches block");
+                var block = WorldRect(frame); var edge = WorldRect(frame.Edge); // r11 sizes are not whole units: compare within float noise
+                Assert.That(Vector4.Distance(new Vector4(block.x, block.y, block.width, block.height), new Vector4(edge.x, edge.y, edge.width, edge.height)), Is.LessThan(1e-3f), frame.name + " overlay matches block");
             }
             foreach (var block in new Component[] { _core.Vitals, _core.Minimap, _core.MatchStatus })
                 Assert.AreEqual(_core.Palette.Surface, block.GetComponent<Image>().color, block.name + " base keeps Surface, overlays tint separately");

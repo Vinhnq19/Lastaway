@@ -1,0 +1,14 @@
+Use your image generation tool to create ONE image as described below, and copy the generated file AS-IS (no cropping, no resizing, no padding) to:
+D:\Lastaway\projects\lastaway\art\inbox\T-015\src\v4\sheet-panels-r7.png
+Do not write any other files and do not post-process the image. Use only the built-in image tool, never the OpenAI API, curl or python.
+
+Image 1 is the approved MINIMAP FRAME. Image 2 is a 2x zoom of its top-left corner: it shows exactly how small the corner ornament block and the moss must be relative to the rim. Image 3 is an older sheet whose three panels (vitals frame with 3 inset rows, quick bar, match panel) must be redrawn.
+
+Draw ONE sprite sheet on a flat solid magenta background (#FF00FF, no gradient, at least 80 px of magenta between pieces and around the border) with THREE isolated pieces, drawn large and sharp, not cropped, top to bottom:
+1. VITALS-FRAME, aspect ratio 2.05 : 1, interior with THREE inset rounded rows separated by thin carved lines (as in image 3).
+2. QUICKBAR-FRAME, aspect ratio 5.3 : 1, plain wide panel, perfectly straight flat top edge, empty dark interior.
+3. MATCH-FRAME, aspect ratio 3.5 : 1, plain wide panel, empty dark interior.
+
+Every piece must reproduce the corner treatment of image 1 / image 2 at the same pixel scale: the thin olive stone rim (same pixel thickness as image 1 on all four sides, same on all three pieces), and at each of the four corners ONE SMALL square Greek-key spiral block that is only about 1.1 times as wide as the rim itself (it must NOT be a big block: it is barely wider than the rim and sticks into the interior by only a few pixels), identical in size at the four corners and on all three pieces, plus one small moss tuft per corner no larger than the ornament block. Leave the area between the corner blocks along the rim as plain stone course with thin joint lines. No oversized corner blocks, no big moss clumps, no extra ornaments along the straight sides.
+
+Interior: flat DARK warm brown-grey (#2b2821 to #38342b, almost no variation, faint grain), thin dark groove just inside the rim. NO text, NO numbers, NO icons, NO slots, NO bars. Empty frames only.

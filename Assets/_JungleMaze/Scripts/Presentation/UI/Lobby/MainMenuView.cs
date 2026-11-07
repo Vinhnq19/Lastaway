@@ -21,6 +21,10 @@ namespace JungleMaze.Presentation.UI.Lobby
         [SerializeField] private TMP_Text accountStatus;
         [SerializeField] private TMP_Text accountName;
         [SerializeField] private Button logout;
+        [Tooltip("Skin A (A2): check before the API line, only while the API is ready.")]
+        [SerializeField] private GameObject apiReadyIcon;
+        [Tooltip("Skin A (A2): \"v\" + Application.version, bottom right.")]
+        [SerializeField] private TMP_Text version;
 
         public Button Join => join;
         public Button OfflinePractice => offlinePractice;
@@ -33,5 +37,17 @@ namespace JungleMaze.Presentation.UI.Lobby
         public TMP_Text AccountStatus => accountStatus;
         public TMP_Text AccountName => accountName;
         public Button Logout => logout;
+        public GameObject ApiReadyIcon => apiReadyIcon;
+        public TMP_Text Version => version;
+
+        private void Awake()
+        {
+            if (version != null) version.text = "v" + Application.version;
+        }
+
+        public void ShowApiReady(bool ready)
+        {
+            if (apiReadyIcon != null) apiReadyIcon.SetActive(ready);
+        }
     }
 }

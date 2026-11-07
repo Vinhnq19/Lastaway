@@ -1,0 +1,3 @@
+Draw ONE small UI icon for a button, flat dark-ink style: a globe (circle with a vertical meridian ellipse, one horizontal equator line and two curved latitude lines), meaning view online / the internet.
+Style: exactly the same as the attached reference icons (ref-ico-gear.png, ref-ico-people.png, ref-ico-key.png): a solid very dark brown-black ink silhouette (#241A0E) with at most one slightly lighter inner detail tone (#4A3A22), chunky pixel art on a 24 by 24 pixel grid scaled up, crisp stepped pixel edges, NO colours, NO outline of another colour, NO gradients, NO text or letters. The icon fills about 85 percent of a square canvas and is centered.
+Background: perfectly flat solid magenta #FF00FF, nothing else (no shadow, no frame, no plate).

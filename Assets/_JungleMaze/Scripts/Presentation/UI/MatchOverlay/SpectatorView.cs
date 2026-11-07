@@ -1,4 +1,5 @@
 using JungleMaze.Domain.MatchUi;
+using JungleMaze.Presentation.UI.Hud;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,8 +7,8 @@ using UnityEngine.UI;
 namespace JungleMaze.Presentation.UI.MatchOverlay
 {
     /// <summary>
-    /// Spectator overlay (Figma v1 7:304, AC46): "Đang theo dõi" block (430,24) 420×71, key bar (440,640) h44,
-    /// "Về sảnh" (1114,640) 100×47, target card (24,560) 300×90, list from (24,130) with 9 pre-built rows. The card shows
+    /// Spectator overlay (T-021 b3-spectator, skin A, 1080p px): watching card (660,20) 600×120, keycaps A D (540,990),
+    /// E = killer (780,990), home (1620,976) 64, target card (30,770) 460×180, list from (30,190) with 9 rows. The card shows
     /// only what the state gives: name, HP if any, weapon if any; never ammo or backpack (Q12).
     /// </summary>
     public sealed class SpectatorView : MonoBehaviour
@@ -25,10 +26,14 @@ namespace JungleMaze.Presentation.UI.MatchOverlay
         [SerializeField] private RectTransform cardHpFill;
         [SerializeField] private TMP_Text cardHpText;
         [SerializeField] private TMP_Text cardWeapon;
+        [Tooltip("Weapon icon 44 px beside the weapon text (T-028 weapons-icons.md); hidden when the weapon has none.")]
+        [SerializeField] private Image cardWeaponIcon;
+        [SerializeField] private HudItemIconCatalog weaponIcons;
         [SerializeField] private SpectatorRowView[] rows = new SpectatorRowView[0];
 
         private int _shownAlive = -1, _shownStart = -1, _shownHp = -1, _shownMaxHp = -1;
         private string _shownName, _shownWeapon;
+        private Sprite _weaponSprite;
 
         public CanvasGroup Group => group;
         public RectTransform WatchingBlock => watchingBlock;
@@ -41,6 +46,7 @@ namespace JungleMaze.Presentation.UI.MatchOverlay
         public TMP_Text CardName => cardName;
         public GameObject CardHp => cardHp;
         public TMP_Text CardWeapon => cardWeapon;
+        public Image CardWeaponIcon => cardWeaponIcon;
         public SpectatorRowView[] Rows => rows;
 
         /// <summary>"Còn sống n/N"; rebuilt only when a number changes.</summary>
@@ -72,13 +78,25 @@ namespace JungleMaze.Presentation.UI.MatchOverlay
             }
             var weapon = has ? entry.WeaponName : null;
             if (cardWeapon.gameObject.activeSelf != (weapon != null)) cardWeapon.gameObject.SetActive(weapon != null);
-            if (weapon != null && weapon != _shownWeapon) { _shownWeapon = weapon; cardWeapon.text = weapon; }
+            if (weapon != null && weapon != _shownWeapon)
+            {
+                _shownWeapon = weapon;
+                cardWeapon.text = weapon;
+                _weaponSprite = WeaponIcons.Find(weaponIcons, weapon);
+            }
+            if (cardWeaponIcon != null)
+            {
+                var sprite = weapon != null ? _weaponSprite : null;
+                if (cardWeaponIcon.sprite != sprite) cardWeaponIcon.sprite = sprite;
+                if (cardWeaponIcon.gameObject.activeSelf != (sprite != null)) cardWeaponIcon.gameObject.SetActive(sprite != null);
+            }
         }
 
         public void ResetCache()
         {
             _shownAlive = _shownStart = _shownHp = _shownMaxHp = -1;
             _shownName = _shownWeapon = null;
+            _weaponSprite = null;
         }
     }
 }

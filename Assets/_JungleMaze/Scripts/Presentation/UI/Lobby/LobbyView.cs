@@ -18,6 +18,12 @@ namespace JungleMaze.Presentation.UI.Lobby
         [SerializeField] private Button start;
         [SerializeField] private Button leave;
         [SerializeField] private LobbySlotView[] slots;
+        [Header("Map and bot controls, used by RoomMapPanel when set (hidden until it binds)")]
+        [SerializeField] private ScrollRect mapCards;
+        [SerializeField] private Button mapCardTemplate;
+        [SerializeField] private Button addBot;
+        [SerializeField] private Button fillBots;
+        [SerializeField] private Button retryMap;
 
         public TMP_Text RoomCode => roomCode;
         public Button Copy => copy;
@@ -30,5 +36,10 @@ namespace JungleMaze.Presentation.UI.Lobby
         public Button Start => start;
         public Button Leave => leave;
         public LobbySlotView[] Slots => slots;
+        public ScrollRect MapCards => mapCards;
+        public Button MapCardTemplate => mapCardTemplate;
+        public Button AddBot => addBot;
+        public Button FillBots => fillBots;
+        public Button RetryMap => retryMap;
     }
 }

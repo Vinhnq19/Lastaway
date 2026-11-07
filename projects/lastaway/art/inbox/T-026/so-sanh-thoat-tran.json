@@ -1,0 +1,66 @@
+{
+ "Hiện tại": {
+  "chu": "#55140F",
+  "chu_tap_nhat": 5.25,
+  "chu_theo_trang_thai": [
+   5.27,
+   5.72,
+   5.25
+  ],
+  "x": "#55140F",
+  "x_tap_nhat": 5.25,
+  "x_theo_trang_thai": [
+   5.27,
+   5.72,
+   5.25
+  ]
+ },
+ "R1: chữ đỏ sáng nhất đạt 4,5": {
+  "chu": "#681812",
+  "chu_tap_nhat": 4.53,
+  "chu_theo_trang_thai": [
+   4.55,
+   4.94,
+   4.53
+  ],
+  "x": "#681812",
+  "x_tap_nhat": 4.53,
+  "x_theo_trang_thai": [
+   4.55,
+   4.94,
+   4.53
+  ]
+ },
+ "R2: chữ tối, X đỏ tươi": {
+  "chu": "#1F1A10",
+  "chu_tap_nhat": 6.46,
+  "chu_theo_trang_thai": [
+   6.48,
+   7.04,
+   6.46
+  ],
+  "x": "#94281F",
+  "x_tap_nhat": 3.03,
+  "x_theo_trang_thai": [
+   3.05,
+   3.31,
+   3.03
+  ]
+ },
+ "R3: chữ R1 + X đỏ tươi": {
+  "chu": "#681812",
+  "chu_tap_nhat": 4.53,
+  "chu_theo_trang_thai": [
+   4.55,
+   4.94,
+   4.53
+  ],
+  "x": "#94281F",
+  "x_tap_nhat": 3.03,
+  "x_theo_trang_thai": [
+   3.05,
+   3.31,
+   3.03
+  ]
+ }
+}

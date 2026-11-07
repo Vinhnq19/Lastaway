@@ -1,0 +1,33 @@
+#!/bin/sh
+# Chặn commit khi: file staged khớp đường dẫn cấm, BACKLOG sai cấu trúc, hoặc check của dự án đỏ.
+# Kích hoạt một lần: git config core.hooksPath .githooks   (script thiết lập studio-os đã làm)
+root=$(git rev-parse --show-toplevel) || exit 1
+cd "$root" || exit 1
+
+# 1. Đường dẫn cấm: mỗi dòng trong .githooks/blocked-paths là một regex (grep -E, không phân biệt hoa thường).
+#    Dòng trống và dòng bắt đầu bằng # bị bỏ qua. Không có file hoặc file rỗng thì bỏ qua bước này.
+cfg=.githooks/blocked-paths
+if [ -f "$cfg" ]; then
+  pattern=$(grep -vE '^[[:space:]]*(#|$)' "$cfg" | tr -d '\r' | paste -sd'|' -)
+  if [ -n "$pattern" ]; then
+    bad=$(git diff --cached --name-only --diff-filter=ACMR | grep -iE "$pattern" || true)
+    if [ -n "$bad" ]; then
+      echo "pre-commit: chặn file khớp $cfg (tài sản tham chiếu, ảnh thô, bí mật...):"; echo "$bad"; exit 1
+    fi
+  fi
+fi
+
+# 2. Cấu trúc BACKLOG: luôn chạy (cần Node).
+if [ -f scripts/backlog-check.mjs ]; then
+  command -v node >/dev/null 2>&1 || { echo "pre-commit: cần Node để kiểm BACKLOG"; exit 1; }
+  echo "pre-commit: kiểm BACKLOG"
+  node scripts/backlog-check.mjs || { echo "pre-commit: BACKLOG lỗi, không commit"; exit 1; }
+fi
+
+# 3. Check của dự án: chỉ khi package.json có script "check".
+if [ -f package.json ] && node -e "process.exit(require('./package.json').scripts?.check ? 0 : 1)" 2>/dev/null; then
+  echo "pre-commit: npm run check"
+  npm run --silent check || { echo "pre-commit: npm run check FAIL, không commit"; exit 1; }
+else
+  echo "pre-commit: chưa có script check trong package.json, bỏ qua"
+fi

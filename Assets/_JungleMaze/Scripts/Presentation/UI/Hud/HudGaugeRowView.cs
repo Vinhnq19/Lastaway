@@ -1,18 +1,25 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace JungleMaze.Presentation.UI.Hud
 {
-    /// <summary>One Vitals row (armor, helmet or adrenaline): label, 140×6 bar and a right-aligned number.</summary>
+    /// <summary>
+    /// One Vitals row (armor, helmet or adrenaline): label, bar and a number. HUD B (T-013) hides the label and the
+    /// armor/helmet bars and shows a baked-colour icon instead. T-019 (Huy 07/11 "Theo ref"): the icon keeps full
+    /// brightness and an empty row reads "0", as in the approved mock.
+    /// </summary>
     public sealed class HudGaugeRowView : MonoBehaviour
     {
         [SerializeField] private TMP_Text label;
         [SerializeField] private HudBarView bar;
         [SerializeField] private TMP_Text value;
+        [SerializeField] private Graphic icon;
 
         public TMP_Text Label => label;
         public TMP_Text Value => value;
         public HudBarView Bar => bar;
+        public Graphic Icon => icon;
 
         public void SetLabel(string text, Color color)
         {

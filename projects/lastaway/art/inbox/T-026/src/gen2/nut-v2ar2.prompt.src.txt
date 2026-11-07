@@ -1,0 +1,6 @@
+Image 1 is the current button sheet. Keep EVERYTHING in image 1 exactly the same: the 3 x 4 layout, button shapes and sizes, silhouettes, base thickness, plates, rivets, runes, brick lines, cracks, moss specks, outlines, magenta background and state logic (normal, hover, pressed shorter, disabled flat grey). Images 2 and 3 are only style references (the game concept and its close crops). Change ONLY the following, to make white text readable on the faces:
+1. All carved STONE parts (the frame around the gold and red plates in rows 1 and 3, and the whole stone face of row 2) become darker and less bright: stone upper face #6F675D, lower face #5F574E, front/base #3E372F. Keep brick grain, cracks and chips.
+2. HOVER faces are only about 8 percent lighter than NORMAL (stone hover upper #7A7166), NOT more.
+3. PRESSED faces are slightly darker than NORMAL.
+4. The gold plate keeps its colors (normal #D9A83A). The red plate keeps #A83228.
+Disabled buttons stay flat grey #6b6a63.

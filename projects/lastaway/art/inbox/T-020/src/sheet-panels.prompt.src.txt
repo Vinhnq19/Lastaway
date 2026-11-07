@@ -1,0 +1,8 @@
+Image 1 is the approved pixel-art HUD style. Image 2 is the sprite sheet of the approved empty frames (olive carved-stone rim of constant thickness, SMALL square Greek-key corner blocks, small moss tufts at the four corners, flat DARK warm brown-grey interior #2b2821 to #38342b, thin dark groove inside the rim). Draw a UI-kit sprite sheet of FOUR large empty panels in exactly this style, same pixel scale, same rim thickness and corner block size as image 2 (do not make the rim thicker on bigger pieces).
+
+Flat solid magenta background (#FF00FF, no gradient, never inside a piece), at least 80 px of pure magenta between pieces and around the border. NO text, NO icons, NO buttons. Every piece large, sharp, not cropped. Pieces, top to bottom, left to right:
+1. PANEL-S: aspect ratio 1.5 : 1, plain dark interior.
+2. PANEL-M: aspect ratio 1.6 : 1, plain dark interior.
+3. PANEL-L: aspect ratio 1.56 : 1, plain dark interior.
+4. POPUP: aspect ratio 1.5 : 1. Same frame, but the top of the interior has a TITLE BAR: a horizontal band across the full inner width, about 13 percent of the piece height, flat slightly lighter warm brown-grey (#4a4538) than the dark body, separated from the body only by that shade difference (no line, no groove, no ledge). The title bar is empty (no text, no close button).
+All four have identical rim, corner blocks and moss treatment.

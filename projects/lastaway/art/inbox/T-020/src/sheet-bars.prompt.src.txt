@@ -1,0 +1,8 @@
+Image 1 is the approved pixel-art HUD style (carved olive-grey stone, dark outline, dark warm brown-grey interior, gold #FFDC6E accents). Image 2 is the sprite sheet of empty frames in the same style. Draw a UI-kit sprite sheet of BARS in exactly this style and pixel scale.
+
+Flat solid magenta background (#FF00FF, no gradient, no shadow, never inside a piece), at least 50 px of pure magenta between pieces and around the border. NO text, NO numbers. Every piece sharp, not cropped, in a clean grid, rows top to bottom:
+ROW 1: PROGRESS TRACK, aspect 16 : 1: a long dark recessed groove with thin olive-tan stone rim and dark outline (hollow, empty inside, dark #1c1a16). Next to it PROGRESS FILL, aspect 16 : 1 slightly shorter: a flat solid bright gold-olive #c9a23a bar with a thin lighter top line and a dark outline (a stripe to be placed inside the track).
+ROW 2: SLIDER TRACK, aspect 24 : 1: a thin dark groove with olive rim (hollow), and SLIDER FILL, aspect 24 : 1: a thin solid gold #c9a23a stripe with dark outline.
+ROW 3: SCROLLBAR TRACK, vertical, aspect 1 : 12: a thin vertical dark groove with olive rim, and SCROLLBAR THUMB, vertical, aspect 1 : 6: a light olive-tan stone pill with dark outline and a bevel highlight on the left.
+ROW 4: DIM OVERLAY SAMPLE: a plain flat dark rectangle #1f1d18, aspect 1.8 : 1, no rim, no texture.
+All pieces use the same thin olive rim, dark outline and gold accents, simple and crisp.

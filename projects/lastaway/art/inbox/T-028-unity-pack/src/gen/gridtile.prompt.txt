@@ -1,0 +1,5 @@
+Use your image generation tool to create ONE image as described below, and copy the generated file AS-IS (no cropping, no resizing, no padding) to:
+D:\Lastaway\projects\lastaway\art\inbox\T-028-unity-pack\src\gen\gridtile.png
+Do not write any other files and do not post-process the image. Use only the built-in image tool, never the OpenAI API, curl or python.
+
+Draw ONE square grid tile of a dark map-grid in a pixel-art survival game, to be repeated in a 10x10 pattern. The tile is a perfectly square canvas. Only TWO very thin straight lines are drawn: one along the very top edge of the tile (full width) and one along the very left edge of the tile (full height), forming an "L" shape that touches the canvas edges. Line colour: a muted warm grey-brown (#3C392E), pixel-art crisp, thickness only about 1 percent of the tile width (very thin, low contrast). Everything else in the tile (the whole inside) is flat solid magenta #FF00FF. No text, no numbers, no decoration, no right or bottom line.

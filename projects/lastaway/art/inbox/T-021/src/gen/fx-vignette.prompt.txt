@@ -1,0 +1,5 @@
+Use your image generation tool to create ONE image as described below, and copy the generated file AS-IS (no cropping, no resizing, no padding) to:
+D:\Lastaway\projects\lastaway\art\inbox\T-021\src\gen\fx-vignette.png
+Do not write any other files and do not post-process the image. Use only the built-in image tool, never the OpenAI API, curl or python.
+
+Image 1 is the approved pixel-art HUD style (only for color mood). Draw ONE full-frame 16:9 image: a screen-edge damage vignette. The CENTER of the image (a large ellipse covering about 70 percent of width and 70 percent of height) must be flat solid magenta #FF00FF. Outside that ellipse the image is a deep blood-red #7A1E18 to near-black #1A0806 vignette, thickest at the four corners, with soft stepped pixel-dither transitions (ordered dither, 4 steps) toward the magenta center. No other detail, no text, no icons.

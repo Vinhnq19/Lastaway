@@ -1,0 +1,12 @@
+Use your image generation tool to create ONE image as described below, and copy the generated file AS-IS (no cropping, no resizing, no padding) to:
+D:\Lastaway\projects\lastaway\art\inbox\T-026\src\gen8\p1.png
+Do not write any other files and do not post-process the image. Use only the built-in image tool, never the OpenAI API, curl or python.
+
+Image 1 is the approved P0 sheet of the game UI (dark stone interior #2B2821 inside a thin khaki stone rim #B09A66 with light edge #CEB681, smooth clean pixel style, 1 px dark outline #1C1810, chamfered corners, no moss, no ornate corner pieces). Image 2 is the approved K2 button sheet and image 3 a crop of the real UI frame rim. Draw new pieces in EXACTLY this style and pixel density. No text, no letters, no icons inside any piece. Flat solid magenta (#FF00FF) background, never inside a piece, at least 60 px between pieces and around the border.
+
+Pieces:
+1. STAT-CARD: a small card about 300 x 130 px, dark stone interior with a thin 3 px khaki rim, chamfered corners (empty, label and big number go inside later).
+2. CAUSE-CARD: a wide card about 800 x 150 px, same style, with a slightly lighter dark interior (#352F27) and a small square recessed socket about 80 x 80 px at the left end (empty, for an icon).
+3. ITEM-SLOT x4 in a row, each about 140 x 150 px, square dark stone cells with thin khaki rim and chamfered corners, empty inside: NORMAL, SELECTED (rim soft gold #DDAF5D, interior slightly lighter), EMPTY (everything dimmer and desaturated, rim #7C6A46, interior darker #221E18), DRAGGING (rim soft gold dashed-looking with a lighter interior #4A4338).
+4. ITEM-DETAIL: a tooltip card about 420 x 300 px: dark stone interior with a thin khaki rim and a small notch pointer (a triangle) on the middle of the left edge pointing left; empty inside.
+5. DIVIDER: a thin horizontal carved groove line about 900 x 14 px: shadow line #94835A above a light line #CEB681, with small chamfered ends, no background.

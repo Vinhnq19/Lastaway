@@ -1,0 +1,9 @@
+screen=1920x1080 scale=1,5
+Vitals: x=36 y=871,5 w=310,5 h=172,5 left=36 right=1573,5 top=871,5 bottom=36 inside=True
+QuickBar: x=663,8 y=918 w=592,5 h=126 left=663,8 right=663,8 top=918 bottom=36 inside=True
+Minimap: x=1644 y=36 w=240 h=240 left=1644 right=36 top=36 bottom=804 inside=True
+MatchStatus: x=1644 y=288 w=240 h=88,5 left=1644 right=36 top=288 bottom=703,5 inside=True
+EffectsRow: x=36 y=772,5 w=441 h=87 left=36 right=1443 top=772,5 bottom=220,5 inside=True
+PickupFeed: x=1672,5 y=846 w=211,5 h=198 left=1672,5 right=36 top=846 bottom=36 inside=True
+DangerBanner: x=735 y=36 w=451,5 h=60 left=735 right=733,5 top=36 bottom=984 inside=True
+

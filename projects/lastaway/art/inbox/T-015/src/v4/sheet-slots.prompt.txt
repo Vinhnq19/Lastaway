@@ -1,0 +1,13 @@
+Use your image generation tool to create ONE image as described below, and copy the generated file AS-IS (no cropping, no resizing, no padding) to:
+D:\Lastaway\projects\lastaway\art\inbox\T-015\src\v4\sheet-slots.png
+Do not write any other files and do not post-process the image. Use only the built-in image tool, never the OpenAI API, curl or python.
+
+Image 1 is a full-screen concept of our pixel-art battle royale game with its HUD. Image 2 is zoomed crops of the HUD. Copy EXACTLY the style of the item slots and bars in the item bar and vitals panel of the concept: pixel-art, warm grey-brown stone, dark outline, the same colors and pixel scale.
+
+TASK: draw a clean UI-kit sprite sheet of EMPTY UI parts, each isolated on a perfectly flat solid magenta background (#FF00FF, no gradient, no noise, no shadow; magenta must not appear inside any piece). At least 80 px of pure magenta between pieces and around the border. NO text, NO numbers, NO icons. Draw every piece large and sharp; do not crop.
+
+PIECES (left to right, top to bottom), exact aspect ratios (width : height):
+1. SLOT-EMPTY: 1 : 1 square item slot with rounded corners: a thin light-tan carved stone rim with a bright top-left and darker bottom-right edge, dark outline, and a dark flat stone interior (#3e392e), exactly like the empty slots 2 to 8 of the concept item bar.
+2. SLOT-SELECTED: 1 : 1, the same slot but with a bright golden-yellow double rim (#ecba4c to #f5cd5a) instead of the stone rim, like slot 1 of the concept, the interior the same dark stone.
+3. BAR-TRACK-PLAIN: 7.8 : 1 (long and thin) empty rounded bar track: a dark interior (#1c1912) with a thin light stone rim and dark outline, like the empty ammo bar and HP bar background in the concept, no fill.
+4. BAR-TRACK-GOLD: 13.5 : 1 (very long and thin) empty rounded bar track with a thin bright golden-yellow rim and dark interior, like the lightning (adrenaline) bar in the concept, no fill.

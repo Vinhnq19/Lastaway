@@ -21,7 +21,7 @@ namespace JungleMaze.Presentation.UI.Hud
             if (background != null) background.color = palette.Surface;
             if (zoneLabel != null) zoneLabel.color = palette.Muted;
             if (aliveLabel != null) aliveLabel.color = palette.Muted;
-            if (zoneValue != null) zoneValue.color = palette.Purple;
+            if (zoneValue != null) zoneValue.color = palette.Cream;
             if (aliveValue != null) aliveValue.color = palette.Text;
         }
 

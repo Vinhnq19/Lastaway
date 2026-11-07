@@ -1,0 +1,12 @@
+Use your image generation tool to create ONE image as described below, and copy the generated file AS-IS (no cropping, no resizing, no padding) to:
+D:\Lastaway\projects\lastaway\art\inbox\T-020\src\sheet-sem3.png
+Do not write any other files and do not post-process the image. Use only the built-in image tool, never the OpenAI API, curl or python.
+
+Image 1 is the approved pixel-art HUD style (carved olive-grey stone, dark outline, dark warm brown-grey interior). Image 2 is the previous sheet of status glyph icons (bright check, X, warning triangle, dot) that were TOO saturated for the stone UI.
+
+Redraw ONLY the four glyph icons with MUTED, desaturated, earthy colors that sit well on dark carved stone, same shapes, same pixel-art style, flat, each about 32 px, each with a 1 px dark outline, no frame, isolated on a flat solid magenta background (#FF00FF, no gradient) with at least 60 px of magenta between them. One row of four, left to right:
+1. bold CHECK MARK in muted moss green #86b36b.
+2. bold X in muted brick red #d9695b.
+3. EXCLAMATION MARK inside a rounded triangle, muted amber #dba645, dark exclamation mark.
+4. plain round DOT in light stone grey #c8c8bc.
+Colors must NOT be neon or glossy; slightly desaturated like painted stone. NO text, NO frames, NO other pieces.

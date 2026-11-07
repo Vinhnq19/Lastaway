@@ -1,0 +1,11 @@
+Use your image generation tool to create ONE image as described below, and copy the generated file AS-IS (no cropping, no resizing, no padding) to:
+D:\Lastaway\projects\lastaway\art\inbox\T-015\src\v4\sheet-mm-r5.png
+Do not write any other files and do not post-process the image. Use only the built-in image tool, never the OpenAI API, curl or python.
+
+Image 1 is our current sprite sheet of empty carved-stone HUD frames on flat magenta; the square piece at the bottom-left is the minimap frame. Image 2 is the concept it must match in style (top-right minimap frame).
+
+Draw ONE new piece on a flat solid magenta background (#FF00FF, no gradient, at least 80 px of magenta around it): the MINIMAP-FRAME as a perfectly square frame, drawn large and sharp, not cropped, exactly symmetric left-right and top-bottom.
+
+Same style as the minimap frame in image 1 and the concept: olive-grey carved stone rim with thin dark joint lines, dark outline, chamfered corners, flat dark interior of the rim groove, but the rim must now be MUCH THINNER: the rim width is only about 7 percent of the overall width on all four sides (identical thickness on the left, right, top and bottom). Make the corner ornaments SMALL, a small carved square Greek-key spiral block at each of the four corners, only slightly wider than the rim itself, all four identical in size. Moss: a small even tuft of green moss on each of the four corners, equal on the left and the right side (mirror-symmetric, no heavier moss on one side). The square hole inside is flat solid magenta (#FF00FF), fully enclosed by the rim, large, and exactly centered (equal rim thickness on all four sides).
+
+NO text, NO numbers, NO icons, NO map inside.

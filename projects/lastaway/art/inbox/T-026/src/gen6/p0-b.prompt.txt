@@ -1,0 +1,11 @@
+Use your image generation tool to create ONE image as described below, and copy the generated file AS-IS (no cropping, no resizing, no padding) to:
+D:\Lastaway\projects\lastaway\art\inbox\T-026\src\gen6\p0-b.png
+Do not write any other files and do not post-process the image. Use only the built-in image tool, never the OpenAI API, curl or python.
+
+Image 1 is the approved K2 button sheet (khaki stone, soft gold, dusty red; smooth clean pixel style, 1 px dark outline #1C1810, thin base ledge). Image 2 is a crop of the game's real UI frame rim (khaki-yellow stone: #AA9360 to #B09A66, light edge #CEB681, shadow #94835A). Image 3 shows close crops of the game's HUD panels, slots and stone objects: dark stone interior (#2E251A to #2B2821) inside a thin khaki stone rim, tiny moss specks only at corners. Draw every piece in EXACTLY this pixel density, smooth style and palette. Semantic colors are tiny accents only. No text, no letters, no numbers on any piece unless stated. Flat solid magenta (#FF00FF) background, never inside a piece, at least 60 px between pieces and around the border.
+
+SHEET B contains these pieces, each isolated:
+1. HEADER: one wide screen-header bar about 1200 x 104 px: a dark stone interior (#2B2821) with a thin khaki stone rim (#B09A66, light top edge #CEB681) along top and bottom edges and small chamfered carved end caps at left and right, empty in the middle (title goes there later). No moss vines.
+2. FOOTER: one wide dialog-footer strip about 900 x 100 px: a slightly lighter dark stone band (#352F27) whose TOP edge has a carved khaki divider groove line (#94835A shadow, #CEB681 light) running across the whole width, empty, no ends.
+3. CODE-BOX x4 in a row, each about 70 x 82 px, a dark stone cell (#2B2821) with a thin khaki stone rim: EMPTY (normal rim), ACTIVE (rim becomes soft gold #DDAF5D, slightly brighter inside), FILLED (normal rim, inside slightly lighter #3A342B), ERROR (rim dusty red #C4695C). Empty inside, no characters.
+4. KEYCAP x3 in a row, each about 60 x 64 px: a small raised khaki key (same raised style as the khaki secondary button: face, thin base ledge) rounded-chamfered square: NORMAL (khaki face #B09A66), HIGHLIGHT (soft gold face #DDAF5D), DISABLED (flat grey #8A877D, base 1 px). Empty.
