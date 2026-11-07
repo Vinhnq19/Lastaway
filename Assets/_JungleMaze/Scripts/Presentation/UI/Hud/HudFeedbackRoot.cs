@@ -19,13 +19,16 @@ namespace JungleMaze.Presentation.UI.Hud
         [SerializeField] private DamageArcView[] damageArcs=new DamageArcView[4];
         [SerializeField] private DangerBannerView dangerBanner;
         [SerializeField] private DangerArrowView[] dangerArrows=new DangerArrowView[3];
-        private IHudState _hud;private IInventoryState _inventory;private IEffectState _effects;private IItemIconProvider _icons;
+        [SerializeField] private ReloadRingView reloadRing;
+        private IHudState _hud;private IInventoryState _inventory;private IEffectState _effects;private IItemIconProvider _icons;private IReloadProgressSource _reload;
         public HudFeedbackPresenter Presenter {get;private set;}
         public HudFeedbackTuning Tuning=>tuning;public HudEffectCatalog Catalog=>catalog;public UseActionView UseAction=>useAction;public EffectRowView EffectRow=>effectRow;
-        public PickupFeedView PickupFeed=>pickupFeed;public HitMarkerView HitMarker=>hitMarker;public DamageArcView[] DamageArcs=>damageArcs;public DangerBannerView DangerBanner=>dangerBanner;public DangerArrowView[] DangerArrows=>dangerArrows;
+        public PickupFeedView PickupFeed=>pickupFeed;public HitMarkerView HitMarker=>hitMarker;public DamageArcView[] DamageArcs=>damageArcs;public DangerBannerView DangerBanner=>dangerBanner;public DangerArrowView[] DangerArrows=>dangerArrows;public ReloadRingView ReloadRing=>reloadRing;
         [Inject] public void Construct(IHudState hud,IInventoryState inventory,IEffectState effects){_hud=hud;_inventory=inventory;_effects=effects;}
         /// <summary>Item icon provider for the pickup feed; separate from <see cref="Construct"/> so three-port helpers keep working (null keeps placeholders).</summary>
         [Inject] public void ConstructIcons(IItemIconProvider icons){_icons=icons;if(pickupFeed!=null)pickupFeed.ConfigureIcons(icons);if(useAction!=null)useAction.ConfigureIcons(icons);}
+        /// <summary>Local reload for the action bar and the ring above the hero; separate so three-port helpers keep working (null shows no reload).</summary>
+        [Inject] public void ConstructReload(IReloadProgressSource reload)=>_reload=reload;
         private void Start()
         {
             if(_hud==null||_inventory==null||_effects==null){Debug.LogWarning("[HUD] HudFeedbackRoot has no HUD state (no Bootstrap?); feedback disabled.");enabled=false;return;}
@@ -33,7 +36,9 @@ namespace JungleMaze.Presentation.UI.Hud
             if(core==null||useAction==null||effectRow==null||pickupFeed==null||hitMarker==null||dangerBanner==null){Debug.LogWarning("[HUD] HudFeedbackRoot is missing a view reference; feedback disabled.");enabled=false;return;}
             var palette=core.Palette;useAction.ApplyPalette(palette);effectRow.Configure(palette,catalog);pickupFeed.ApplyPalette(palette);pickupFeed.ConfigureIcons(_icons);useAction.ConfigureIcons(_icons);hitMarker.ApplyPalette(palette);dangerBanner.ApplyPalette(palette);
             foreach(var arc in damageArcs)if(arc!=null)arc.ApplyPalette(palette);foreach(var arrow in dangerArrows)if(arrow!=null)arrow.ApplyPalette(palette);
-            Presenter=new HudFeedbackPresenter(_hud,_inventory,_effects,tuning,new CameraWorldViewport(),core.Quickbar,useAction,effectRow,pickupFeed,hitMarker,new DamageArcViewGroup(damageArcs),dangerBanner,new DangerArrowViewGroup(dangerArrows));
+            // The ring above the hero is drawn by CombatWeaponPresenter's ReloadProgressView; this HUD only shows the action bar, so two rings never stack.
+            if(reloadRing!=null)reloadRing.gameObject.SetActive(false);
+            Presenter=new HudFeedbackPresenter(_hud,_inventory,_effects,tuning,new CameraWorldViewport(),core.Quickbar,useAction,effectRow,pickupFeed,hitMarker,new DamageArcViewGroup(damageArcs),dangerBanner,new DangerArrowViewGroup(dangerArrows),_reload,null);
         }
         private void LateUpdate(){if(Presenter==null)return;RectTransformUtility.ScreenPointToLocalPointInRectangle((RectTransform)transform,Input.mousePosition,null,out var p);Presenter.Tick(Time.deltaTime,p.x,p.y);}
         private void OnDestroy(){Presenter?.Dispose();Presenter=null;}

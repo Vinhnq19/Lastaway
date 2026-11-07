@@ -60,6 +60,10 @@ namespace JungleMaze.Composition
             catch (System.Exception e) { _log.Warn("[Throwables] " + e.Message); }
             _registry.Register(offlineWorld);
             ticks.Add(offlineWorld);
+            // Reload progress on the HUD action bar and the ring above the own hero, online and in offline practice.
+            _registry.Register<JungleMaze.App.Hud.Feedback.IReloadProgressSource>(new LocalReloadSource(match, combat, offlineWorld, offlineSession));
+            // F pickup list (07_Floor_Loot section 11): WorldSceneView fills it online and offline, the HUD panel draws it.
+            _registry.Register(new NearbyLootPicker(catalog));
             if (_registry.TryResolve<JungleMaze.App.Audio.MatchAudioEventSource>(out var audio))
                 audio.BindCombat(combat, offlineWorld, world, _registry.Resolve<IHudState>(), throwables);
             // The Game scene owns its world views and colliders; services survive scene changes.

@@ -20,4 +20,6 @@ namespace JungleMaze.Presentation.UI.Hud
     public interface IDangerBannerView {void Show(bool visible,char[] text,int length,float alpha);}
     /// <summary>Bounded offscreen warning arrow rendering.</summary>
     public interface IDangerArrowView {void SetArrow(int index,bool visible,float x,float y,float degrees,bool timed,int seconds,float alpha);}
+    /// <summary>Thin reload ring above the local hero; the world position is the HUD pose of the own player.</summary>
+    public interface IReloadRingView {void Show(bool visible,float fill,float worldX,float worldY);}
 }

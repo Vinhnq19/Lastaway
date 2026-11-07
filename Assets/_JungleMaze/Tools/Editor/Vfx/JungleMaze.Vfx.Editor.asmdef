@@ -1,0 +1,7 @@
+{
+  "name": "JungleMaze.Vfx.Editor",
+  "rootNamespace": "JungleMaze.EditorTools",
+  "references": ["JungleMaze.Core", "JungleMaze.Domain", "JungleMaze.Application", "JungleMaze.Presentation", "Unity.TextMeshPro"],
+  "includePlatforms": ["Editor"],
+  "autoReferenced": false
+}

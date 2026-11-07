@@ -1047,10 +1047,10 @@
       "name": "Wall",
       "centerX": 63.5,
       "centerY": 65.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
-      "minX": 63.0,
-      "maxX": 64.0,
+      "minX": 63.3438,
+      "maxX": 63.6562,
       "minY": 65.0,
       "maxY": 66.0,
       "scale": 1.0,
@@ -1061,10 +1061,10 @@
       "name": "Wall",
       "centerX": 63.5,
       "centerY": 66.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
-      "minX": 63.0,
-      "maxX": 64.0,
+      "minX": 63.3438,
+      "maxX": 63.6562,
       "minY": 66.0,
       "maxY": 67.0,
       "scale": 1.0,
@@ -1075,10 +1075,10 @@
       "name": "Wall",
       "centerX": 63.5,
       "centerY": 67.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
-      "minX": 63.0,
-      "maxX": 64.0,
+      "minX": 63.3438,
+      "maxX": 63.6562,
       "minY": 67.0,
       "maxY": 68.0,
       "scale": 1.0,
@@ -1089,10 +1089,10 @@
       "name": "Wall",
       "centerX": 63.5,
       "centerY": 68.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
-      "minX": 63.0,
-      "maxX": 64.0,
+      "minX": 63.3438,
+      "maxX": 63.6562,
       "minY": 68.0,
       "maxY": 69.0,
       "scale": 1.0,
@@ -1103,10 +1103,10 @@
       "name": "Wall",
       "centerX": 63.5,
       "centerY": 69.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
-      "minX": 63.0,
-      "maxX": 64.0,
+      "minX": 63.3438,
+      "maxX": 63.6562,
       "minY": 69.0,
       "maxY": 70.0,
       "scale": 1.0,
@@ -1117,10 +1117,10 @@
       "name": "Wall",
       "centerX": 63.5,
       "centerY": 70.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
-      "minX": 63.0,
-      "maxX": 64.0,
+      "minX": 63.3438,
+      "maxX": 63.6562,
       "minY": 70.0,
       "maxY": 71.0,
       "scale": 1.0,
@@ -1143,12 +1143,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 63.5,
+      "centerX": 63.1562,
       "centerY": 72.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 63.0,
-      "maxX": 64.0,
+      "maxX": 63.3125,
       "minY": 72.0,
       "maxY": 73.0,
       "scale": 1.0,
@@ -1157,12 +1157,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 63.5,
+      "centerX": 63.1562,
       "centerY": 73.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 63.0,
-      "maxX": 64.0,
+      "maxX": 63.3125,
       "minY": 73.0,
       "maxY": 74.0,
       "scale": 1.0,
@@ -1171,12 +1171,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 63.5,
+      "centerX": 63.1562,
       "centerY": 74.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 63.0,
-      "maxX": 64.0,
+      "maxX": 63.3125,
       "minY": 74.0,
       "maxY": 75.0,
       "scale": 1.0,
@@ -1185,12 +1185,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 63.5,
+      "centerX": 63.1562,
       "centerY": 76.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 63.0,
-      "maxX": 64.0,
+      "maxX": 63.3125,
       "minY": 76.0,
       "maxY": 77.0,
       "scale": 1.0,
@@ -1199,12 +1199,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 63.5,
+      "centerX": 63.1562,
       "centerY": 77.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 63.0,
-      "maxX": 64.0,
+      "maxX": 63.3125,
       "minY": 77.0,
       "maxY": 78.0,
       "scale": 1.0,
@@ -1213,12 +1213,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 63.5,
+      "centerX": 63.1562,
       "centerY": 78.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 63.0,
-      "maxX": 64.0,
+      "maxX": 63.3125,
       "minY": 78.0,
       "maxY": 79.0,
       "scale": 1.0,
@@ -1243,10 +1243,10 @@
       "name": "Wall",
       "centerX": 63.5,
       "centerY": 80.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
-      "minX": 63.0,
-      "maxX": 64.0,
+      "minX": 63.3438,
+      "maxX": 63.6562,
       "minY": 80.0,
       "maxY": 81.0,
       "scale": 1.0,
@@ -1257,10 +1257,10 @@
       "name": "Wall",
       "centerX": 63.5,
       "centerY": 81.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
-      "minX": 63.0,
-      "maxX": 64.0,
+      "minX": 63.3438,
+      "maxX": 63.6562,
       "minY": 81.0,
       "maxY": 82.0,
       "scale": 1.0,
@@ -1271,10 +1271,10 @@
       "name": "Wall",
       "centerX": 63.5,
       "centerY": 82.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
-      "minX": 63.0,
-      "maxX": 64.0,
+      "minX": 63.3438,
+      "maxX": 63.6562,
       "minY": 82.0,
       "maxY": 83.0,
       "scale": 1.0,
@@ -1285,10 +1285,10 @@
       "name": "Wall",
       "centerX": 63.5,
       "centerY": 83.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
-      "minX": 63.0,
-      "maxX": 64.0,
+      "minX": 63.3438,
+      "maxX": 63.6562,
       "minY": 83.0,
       "maxY": 84.0,
       "scale": 1.0,
@@ -1299,10 +1299,10 @@
       "name": "Wall",
       "centerX": 63.5,
       "centerY": 84.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
-      "minX": 63.0,
-      "maxX": 64.0,
+      "minX": 63.3438,
+      "maxX": 63.6562,
       "minY": 84.0,
       "maxY": 85.0,
       "scale": 1.0,
@@ -1313,10 +1313,10 @@
       "name": "Wall",
       "centerX": 86.5,
       "centerY": 65.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
-      "minX": 86.0,
-      "maxX": 87.0,
+      "minX": 86.3438,
+      "maxX": 86.6562,
       "minY": 65.0,
       "maxY": 66.0,
       "scale": 1.0,
@@ -1327,10 +1327,10 @@
       "name": "Wall",
       "centerX": 86.5,
       "centerY": 66.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
-      "minX": 86.0,
-      "maxX": 87.0,
+      "minX": 86.3438,
+      "maxX": 86.6562,
       "minY": 66.0,
       "maxY": 67.0,
       "scale": 1.0,
@@ -1341,10 +1341,10 @@
       "name": "Wall",
       "centerX": 86.5,
       "centerY": 67.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
-      "minX": 86.0,
-      "maxX": 87.0,
+      "minX": 86.3438,
+      "maxX": 86.6562,
       "minY": 67.0,
       "maxY": 68.0,
       "scale": 1.0,
@@ -1355,10 +1355,10 @@
       "name": "Wall",
       "centerX": 86.5,
       "centerY": 68.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
-      "minX": 86.0,
-      "maxX": 87.0,
+      "minX": 86.3438,
+      "maxX": 86.6562,
       "minY": 68.0,
       "maxY": 69.0,
       "scale": 1.0,
@@ -1369,10 +1369,10 @@
       "name": "Wall",
       "centerX": 86.5,
       "centerY": 69.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
-      "minX": 86.0,
-      "maxX": 87.0,
+      "minX": 86.3438,
+      "maxX": 86.6562,
       "minY": 69.0,
       "maxY": 70.0,
       "scale": 1.0,
@@ -1383,10 +1383,10 @@
       "name": "Wall",
       "centerX": 86.5,
       "centerY": 70.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
-      "minX": 86.0,
-      "maxX": 87.0,
+      "minX": 86.3438,
+      "maxX": 86.6562,
       "minY": 70.0,
       "maxY": 71.0,
       "scale": 1.0,
@@ -1409,11 +1409,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 86.5,
+      "centerX": 86.875,
       "centerY": 72.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 86.0,
+      "minX": 86.75,
       "maxX": 87.0,
       "minY": 72.0,
       "maxY": 73.0,
@@ -1423,11 +1423,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 86.5,
+      "centerX": 86.875,
       "centerY": 73.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 86.0,
+      "minX": 86.75,
       "maxX": 87.0,
       "minY": 73.0,
       "maxY": 74.0,
@@ -1437,11 +1437,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 86.5,
+      "centerX": 86.875,
       "centerY": 74.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 86.0,
+      "minX": 86.75,
       "maxX": 87.0,
       "minY": 74.0,
       "maxY": 75.0,
@@ -1451,11 +1451,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 86.5,
+      "centerX": 86.875,
       "centerY": 76.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 86.0,
+      "minX": 86.75,
       "maxX": 87.0,
       "minY": 76.0,
       "maxY": 77.0,
@@ -1465,11 +1465,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 86.5,
+      "centerX": 86.875,
       "centerY": 77.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 86.0,
+      "minX": 86.75,
       "maxX": 87.0,
       "minY": 77.0,
       "maxY": 78.0,
@@ -1479,11 +1479,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 86.5,
+      "centerX": 86.875,
       "centerY": 78.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 86.0,
+      "minX": 86.75,
       "maxX": 87.0,
       "minY": 78.0,
       "maxY": 79.0,
@@ -1509,10 +1509,10 @@
       "name": "Wall",
       "centerX": 86.5,
       "centerY": 80.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
-      "minX": 86.0,
-      "maxX": 87.0,
+      "minX": 86.3438,
+      "maxX": 86.6562,
       "minY": 80.0,
       "maxY": 81.0,
       "scale": 1.0,
@@ -1523,10 +1523,10 @@
       "name": "Wall",
       "centerX": 86.5,
       "centerY": 81.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
-      "minX": 86.0,
-      "maxX": 87.0,
+      "minX": 86.3438,
+      "maxX": 86.6562,
       "minY": 81.0,
       "maxY": 82.0,
       "scale": 1.0,
@@ -1537,10 +1537,10 @@
       "name": "Wall",
       "centerX": 86.5,
       "centerY": 82.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
-      "minX": 86.0,
-      "maxX": 87.0,
+      "minX": 86.3438,
+      "maxX": 86.6562,
       "minY": 82.0,
       "maxY": 83.0,
       "scale": 1.0,
@@ -1551,10 +1551,10 @@
       "name": "Wall",
       "centerX": 86.5,
       "centerY": 83.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
-      "minX": 86.0,
-      "maxX": 87.0,
+      "minX": 86.3438,
+      "maxX": 86.6562,
       "minY": 83.0,
       "maxY": 84.0,
       "scale": 1.0,
@@ -1565,10 +1565,10 @@
       "name": "Wall",
       "centerX": 86.5,
       "centerY": 84.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
-      "minX": 86.0,
-      "maxX": 87.0,
+      "minX": 86.3438,
+      "maxX": 86.6562,
       "minY": 84.0,
       "maxY": 85.0,
       "scale": 1.0,
@@ -1579,10 +1579,10 @@
       "name": "Wall",
       "centerX": 71.5,
       "centerY": 64.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
-      "minX": 71.0,
-      "maxX": 72.0,
+      "minX": 71.3438,
+      "maxX": 71.6562,
       "minY": 64.0,
       "maxY": 65.0,
       "scale": 1.0,
@@ -1593,10 +1593,10 @@
       "name": "Wall",
       "centerX": 71.5,
       "centerY": 65.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
-      "minX": 71.0,
-      "maxX": 72.0,
+      "minX": 71.3438,
+      "maxX": 71.6562,
       "minY": 65.0,
       "maxY": 66.0,
       "scale": 1.0,
@@ -1607,10 +1607,10 @@
       "name": "Wall",
       "centerX": 71.5,
       "centerY": 66.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
-      "minX": 71.0,
-      "maxX": 72.0,
+      "minX": 71.3438,
+      "maxX": 71.6562,
       "minY": 66.0,
       "maxY": 67.0,
       "scale": 1.0,
@@ -1621,10 +1621,10 @@
       "name": "Wall",
       "centerX": 71.5,
       "centerY": 67.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
-      "minX": 71.0,
-      "maxX": 72.0,
+      "minX": 71.3438,
+      "maxX": 71.6562,
       "minY": 67.0,
       "maxY": 68.0,
       "scale": 1.0,
@@ -1633,11 +1633,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 71.5,
+      "centerX": 71.875,
       "centerY": 69.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 71.0,
+      "minX": 71.75,
       "maxX": 72.0,
       "minY": 69.0,
       "maxY": 70.0,
@@ -1647,11 +1647,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 71.5,
+      "centerX": 71.875,
       "centerY": 70.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 71.0,
+      "minX": 71.75,
       "maxX": 72.0,
       "minY": 70.0,
       "maxY": 71.0,
@@ -1677,10 +1677,10 @@
       "name": "Wall",
       "centerX": 79.5,
       "centerY": 64.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
-      "minX": 79.0,
-      "maxX": 80.0,
+      "minX": 79.3438,
+      "maxX": 79.6562,
       "minY": 64.0,
       "maxY": 65.0,
       "scale": 1.0,
@@ -1691,10 +1691,10 @@
       "name": "Wall",
       "centerX": 79.5,
       "centerY": 65.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
-      "minX": 79.0,
-      "maxX": 80.0,
+      "minX": 79.3438,
+      "maxX": 79.6562,
       "minY": 65.0,
       "maxY": 66.0,
       "scale": 1.0,
@@ -1705,10 +1705,10 @@
       "name": "Wall",
       "centerX": 79.5,
       "centerY": 66.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
-      "minX": 79.0,
-      "maxX": 80.0,
+      "minX": 79.3438,
+      "maxX": 79.6562,
       "minY": 66.0,
       "maxY": 67.0,
       "scale": 1.0,
@@ -1719,10 +1719,10 @@
       "name": "Wall",
       "centerX": 79.5,
       "centerY": 67.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
-      "minX": 79.0,
-      "maxX": 80.0,
+      "minX": 79.3438,
+      "maxX": 79.6562,
       "minY": 67.0,
       "maxY": 68.0,
       "scale": 1.0,
@@ -1731,12 +1731,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 79.5,
+      "centerX": 79.1562,
       "centerY": 69.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 79.0,
-      "maxX": 80.0,
+      "maxX": 79.3125,
       "minY": 69.0,
       "maxY": 70.0,
       "scale": 1.0,
@@ -1745,12 +1745,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 79.5,
+      "centerX": 79.1562,
       "centerY": 70.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 79.0,
-      "maxX": 80.0,
+      "maxX": 79.3125,
       "minY": 70.0,
       "maxY": 71.0,
       "scale": 1.0,
@@ -1787,11 +1787,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 71.5,
+      "centerX": 71.875,
       "centerY": 80.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 71.0,
+      "minX": 71.75,
       "maxX": 72.0,
       "minY": 80.0,
       "maxY": 81.0,
@@ -1803,10 +1803,10 @@
       "name": "Wall",
       "centerX": 71.5,
       "centerY": 82.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
-      "minX": 71.0,
-      "maxX": 72.0,
+      "minX": 71.3438,
+      "maxX": 71.6562,
       "minY": 82.0,
       "maxY": 83.0,
       "scale": 1.0,
@@ -1817,10 +1817,10 @@
       "name": "Wall",
       "centerX": 71.5,
       "centerY": 83.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
-      "minX": 71.0,
-      "maxX": 72.0,
+      "minX": 71.3438,
+      "maxX": 71.6562,
       "minY": 83.0,
       "maxY": 84.0,
       "scale": 1.0,
@@ -1831,10 +1831,10 @@
       "name": "Wall",
       "centerX": 71.5,
       "centerY": 84.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
-      "minX": 71.0,
-      "maxX": 72.0,
+      "minX": 71.3438,
+      "maxX": 71.6562,
       "minY": 84.0,
       "maxY": 85.0,
       "scale": 1.0,
@@ -1845,10 +1845,10 @@
       "name": "Wall",
       "centerX": 71.5,
       "centerY": 85.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
-      "minX": 71.0,
-      "maxX": 72.0,
+      "minX": 71.3438,
+      "maxX": 71.6562,
       "minY": 85.0,
       "maxY": 86.0,
       "scale": 1.0,
@@ -1871,12 +1871,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 79.5,
+      "centerX": 79.1562,
       "centerY": 80.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 79.0,
-      "maxX": 80.0,
+      "maxX": 79.3125,
       "minY": 80.0,
       "maxY": 81.0,
       "scale": 1.0,
@@ -1887,10 +1887,10 @@
       "name": "Wall",
       "centerX": 79.5,
       "centerY": 82.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
-      "minX": 79.0,
-      "maxX": 80.0,
+      "minX": 79.3438,
+      "maxX": 79.6562,
       "minY": 82.0,
       "maxY": 83.0,
       "scale": 1.0,
@@ -1901,10 +1901,10 @@
       "name": "Wall",
       "centerX": 79.5,
       "centerY": 83.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
-      "minX": 79.0,
-      "maxX": 80.0,
+      "minX": 79.3438,
+      "maxX": 79.6562,
       "minY": 83.0,
       "maxY": 84.0,
       "scale": 1.0,
@@ -1915,10 +1915,10 @@
       "name": "Wall",
       "centerX": 79.5,
       "centerY": 84.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
-      "minX": 79.0,
-      "maxX": 80.0,
+      "minX": 79.3438,
+      "maxX": 79.6562,
       "minY": 84.0,
       "maxY": 85.0,
       "scale": 1.0,
@@ -1929,10 +1929,10 @@
       "name": "Wall",
       "centerX": 79.5,
       "centerY": 85.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
-      "minX": 79.0,
-      "maxX": 80.0,
+      "minX": 79.3438,
+      "maxX": 79.6562,
       "minY": 85.0,
       "maxY": 86.0,
       "scale": 1.0,
@@ -2893,12 +2893,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 14.5,
+      "centerX": 14.1562,
       "centerY": 99.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 14.0,
-      "maxX": 15.0,
+      "maxX": 14.3125,
       "minY": 99.0,
       "maxY": 100.0,
       "scale": 1.0,
@@ -2907,12 +2907,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 14.5,
+      "centerX": 14.1562,
       "centerY": 100.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 14.0,
-      "maxX": 15.0,
+      "maxX": 14.3125,
       "minY": 100.0,
       "maxY": 101.0,
       "scale": 1.0,
@@ -2921,12 +2921,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 14.5,
+      "centerX": 14.1562,
       "centerY": 101.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 14.0,
-      "maxX": 15.0,
+      "maxX": 14.3125,
       "minY": 101.0,
       "maxY": 102.0,
       "scale": 1.0,
@@ -2935,12 +2935,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 14.5,
+      "centerX": 14.1562,
       "centerY": 102.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 14.0,
-      "maxX": 15.0,
+      "maxX": 14.3125,
       "minY": 102.0,
       "maxY": 103.0,
       "scale": 1.0,
@@ -2949,12 +2949,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 14.5,
+      "centerX": 14.1562,
       "centerY": 103.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 14.0,
-      "maxX": 15.0,
+      "maxX": 14.3125,
       "minY": 103.0,
       "maxY": 104.0,
       "scale": 1.0,
@@ -2963,12 +2963,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 14.5,
+      "centerX": 14.1562,
       "centerY": 104.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 14.0,
-      "maxX": 15.0,
+      "maxX": 14.3125,
       "minY": 104.0,
       "maxY": 105.0,
       "scale": 1.0,
@@ -2977,11 +2977,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 23.5,
+      "centerX": 23.875,
       "centerY": 99.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 23.0,
+      "minX": 23.75,
       "maxX": 24.0,
       "minY": 99.0,
       "maxY": 100.0,
@@ -2991,11 +2991,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 23.5,
+      "centerX": 23.875,
       "centerY": 100.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 23.0,
+      "minX": 23.75,
       "maxX": 24.0,
       "minY": 100.0,
       "maxY": 101.0,
@@ -3005,11 +3005,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 23.5,
+      "centerX": 23.875,
       "centerY": 101.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 23.0,
+      "minX": 23.75,
       "maxX": 24.0,
       "minY": 101.0,
       "maxY": 102.0,
@@ -3019,11 +3019,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 23.5,
+      "centerX": 23.875,
       "centerY": 103.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 23.0,
+      "minX": 23.75,
       "maxX": 24.0,
       "minY": 103.0,
       "maxY": 104.0,
@@ -3033,11 +3033,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 23.5,
+      "centerX": 23.875,
       "centerY": 104.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 23.0,
+      "minX": 23.75,
       "maxX": 24.0,
       "minY": 104.0,
       "maxY": 105.0,
@@ -3341,12 +3341,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 14.5,
+      "centerX": 14.1562,
       "centerY": 112.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 14.0,
-      "maxX": 15.0,
+      "maxX": 14.3125,
       "minY": 112.0,
       "maxY": 113.0,
       "scale": 1.0,
@@ -3355,12 +3355,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 14.5,
+      "centerX": 14.1562,
       "centerY": 113.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 14.0,
-      "maxX": 15.0,
+      "maxX": 14.3125,
       "minY": 113.0,
       "maxY": 114.0,
       "scale": 1.0,
@@ -3369,12 +3369,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 14.5,
+      "centerX": 14.1562,
       "centerY": 114.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 14.0,
-      "maxX": 15.0,
+      "maxX": 14.3125,
       "minY": 114.0,
       "maxY": 115.0,
       "scale": 1.0,
@@ -3383,12 +3383,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 14.5,
+      "centerX": 14.1562,
       "centerY": 116.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 14.0,
-      "maxX": 15.0,
+      "maxX": 14.3125,
       "minY": 116.0,
       "maxY": 117.0,
       "scale": 1.0,
@@ -3397,12 +3397,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 14.5,
+      "centerX": 14.1562,
       "centerY": 117.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 14.0,
-      "maxX": 15.0,
+      "maxX": 14.3125,
       "minY": 117.0,
       "maxY": 118.0,
       "scale": 1.0,
@@ -3411,11 +3411,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 23.5,
+      "centerX": 23.875,
       "centerY": 112.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 23.0,
+      "minX": 23.75,
       "maxX": 24.0,
       "minY": 112.0,
       "maxY": 113.0,
@@ -3425,11 +3425,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 23.5,
+      "centerX": 23.875,
       "centerY": 113.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 23.0,
+      "minX": 23.75,
       "maxX": 24.0,
       "minY": 113.0,
       "maxY": 114.0,
@@ -3439,11 +3439,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 23.5,
+      "centerX": 23.875,
       "centerY": 114.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 23.0,
+      "minX": 23.75,
       "maxX": 24.0,
       "minY": 114.0,
       "maxY": 115.0,
@@ -3453,11 +3453,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 23.5,
+      "centerX": 23.875,
       "centerY": 115.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 23.0,
+      "minX": 23.75,
       "maxX": 24.0,
       "minY": 115.0,
       "maxY": 116.0,
@@ -3467,11 +3467,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 23.5,
+      "centerX": 23.875,
       "centerY": 116.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 23.0,
+      "minX": 23.75,
       "maxX": 24.0,
       "minY": 116.0,
       "maxY": 117.0,
@@ -3481,11 +3481,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 23.5,
+      "centerX": 23.875,
       "centerY": 117.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 23.0,
+      "minX": 23.75,
       "maxX": 24.0,
       "minY": 117.0,
       "maxY": 118.0,
@@ -3775,12 +3775,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 29.5,
+      "centerX": 29.1562,
       "centerY": 99.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 29.0,
-      "maxX": 30.0,
+      "maxX": 29.3125,
       "minY": 99.0,
       "maxY": 100.0,
       "scale": 1.0,
@@ -3789,12 +3789,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 29.5,
+      "centerX": 29.1562,
       "centerY": 100.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 29.0,
-      "maxX": 30.0,
+      "maxX": 29.3125,
       "minY": 100.0,
       "maxY": 101.0,
       "scale": 1.0,
@@ -3803,12 +3803,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 29.5,
+      "centerX": 29.1562,
       "centerY": 101.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 29.0,
-      "maxX": 30.0,
+      "maxX": 29.3125,
       "minY": 101.0,
       "maxY": 102.0,
       "scale": 1.0,
@@ -3817,12 +3817,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 29.5,
+      "centerX": 29.1562,
       "centerY": 103.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 29.0,
-      "maxX": 30.0,
+      "maxX": 29.3125,
       "minY": 103.0,
       "maxY": 104.0,
       "scale": 1.0,
@@ -3831,12 +3831,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 29.5,
+      "centerX": 29.1562,
       "centerY": 104.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 29.0,
-      "maxX": 30.0,
+      "maxX": 29.3125,
       "minY": 104.0,
       "maxY": 105.0,
       "scale": 1.0,
@@ -3845,11 +3845,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 38.5,
+      "centerX": 38.875,
       "centerY": 99.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 38.0,
+      "minX": 38.75,
       "maxX": 39.0,
       "minY": 99.0,
       "maxY": 100.0,
@@ -3859,11 +3859,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 38.5,
+      "centerX": 38.875,
       "centerY": 100.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 38.0,
+      "minX": 38.75,
       "maxX": 39.0,
       "minY": 100.0,
       "maxY": 101.0,
@@ -3873,11 +3873,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 38.5,
+      "centerX": 38.875,
       "centerY": 101.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 38.0,
+      "minX": 38.75,
       "maxX": 39.0,
       "minY": 101.0,
       "maxY": 102.0,
@@ -3887,11 +3887,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 38.5,
+      "centerX": 38.875,
       "centerY": 102.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 38.0,
+      "minX": 38.75,
       "maxX": 39.0,
       "minY": 102.0,
       "maxY": 103.0,
@@ -3901,11 +3901,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 38.5,
+      "centerX": 38.875,
       "centerY": 103.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 38.0,
+      "minX": 38.75,
       "maxX": 39.0,
       "minY": 103.0,
       "maxY": 104.0,
@@ -3915,11 +3915,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 38.5,
+      "centerX": 38.875,
       "centerY": 104.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 38.0,
+      "minX": 38.75,
       "maxX": 39.0,
       "minY": 104.0,
       "maxY": 105.0,
@@ -4195,12 +4195,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 29.5,
+      "centerX": 29.1562,
       "centerY": 112.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 29.0,
-      "maxX": 30.0,
+      "maxX": 29.3125,
       "minY": 112.0,
       "maxY": 113.0,
       "scale": 1.0,
@@ -4209,12 +4209,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 29.5,
+      "centerX": 29.1562,
       "centerY": 113.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 29.0,
-      "maxX": 30.0,
+      "maxX": 29.3125,
       "minY": 113.0,
       "maxY": 114.0,
       "scale": 1.0,
@@ -4223,12 +4223,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 29.5,
+      "centerX": 29.1562,
       "centerY": 114.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 29.0,
-      "maxX": 30.0,
+      "maxX": 29.3125,
       "minY": 114.0,
       "maxY": 115.0,
       "scale": 1.0,
@@ -4237,12 +4237,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 29.5,
+      "centerX": 29.1562,
       "centerY": 115.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 29.0,
-      "maxX": 30.0,
+      "maxX": 29.3125,
       "minY": 115.0,
       "maxY": 116.0,
       "scale": 1.0,
@@ -4251,12 +4251,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 29.5,
+      "centerX": 29.1562,
       "centerY": 116.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 29.0,
-      "maxX": 30.0,
+      "maxX": 29.3125,
       "minY": 116.0,
       "maxY": 117.0,
       "scale": 1.0,
@@ -4265,12 +4265,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 29.5,
+      "centerX": 29.1562,
       "centerY": 117.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 29.0,
-      "maxX": 30.0,
+      "maxX": 29.3125,
       "minY": 117.0,
       "maxY": 118.0,
       "scale": 1.0,
@@ -4279,11 +4279,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 38.5,
+      "centerX": 38.875,
       "centerY": 112.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 38.0,
+      "minX": 38.75,
       "maxX": 39.0,
       "minY": 112.0,
       "maxY": 113.0,
@@ -4293,11 +4293,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 38.5,
+      "centerX": 38.875,
       "centerY": 113.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 38.0,
+      "minX": 38.75,
       "maxX": 39.0,
       "minY": 113.0,
       "maxY": 114.0,
@@ -4307,11 +4307,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 38.5,
+      "centerX": 38.875,
       "centerY": 114.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 38.0,
+      "minX": 38.75,
       "maxX": 39.0,
       "minY": 114.0,
       "maxY": 115.0,
@@ -4321,11 +4321,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 38.5,
+      "centerX": 38.875,
       "centerY": 116.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 38.0,
+      "minX": 38.75,
       "maxX": 39.0,
       "minY": 116.0,
       "maxY": 117.0,
@@ -4335,11 +4335,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 38.5,
+      "centerX": 38.875,
       "centerY": 117.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 38.0,
+      "minX": 38.75,
       "maxX": 39.0,
       "minY": 117.0,
       "maxY": 118.0,
@@ -4629,12 +4629,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 44.5,
+      "centerX": 44.1562,
       "centerY": 99.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 44.0,
-      "maxX": 45.0,
+      "maxX": 44.3125,
       "minY": 99.0,
       "maxY": 100.0,
       "scale": 1.0,
@@ -4643,12 +4643,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 44.5,
+      "centerX": 44.1562,
       "centerY": 100.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 44.0,
-      "maxX": 45.0,
+      "maxX": 44.3125,
       "minY": 100.0,
       "maxY": 101.0,
       "scale": 1.0,
@@ -4657,12 +4657,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 44.5,
+      "centerX": 44.1562,
       "centerY": 101.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 44.0,
-      "maxX": 45.0,
+      "maxX": 44.3125,
       "minY": 101.0,
       "maxY": 102.0,
       "scale": 1.0,
@@ -4671,12 +4671,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 44.5,
+      "centerX": 44.1562,
       "centerY": 102.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 44.0,
-      "maxX": 45.0,
+      "maxX": 44.3125,
       "minY": 102.0,
       "maxY": 103.0,
       "scale": 1.0,
@@ -4685,12 +4685,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 44.5,
+      "centerX": 44.1562,
       "centerY": 103.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 44.0,
-      "maxX": 45.0,
+      "maxX": 44.3125,
       "minY": 103.0,
       "maxY": 104.0,
       "scale": 1.0,
@@ -4699,12 +4699,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 44.5,
+      "centerX": 44.1562,
       "centerY": 104.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 44.0,
-      "maxX": 45.0,
+      "maxX": 44.3125,
       "minY": 104.0,
       "maxY": 105.0,
       "scale": 1.0,
@@ -4713,11 +4713,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 53.5,
+      "centerX": 53.875,
       "centerY": 99.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 53.0,
+      "minX": 53.75,
       "maxX": 54.0,
       "minY": 99.0,
       "maxY": 100.0,
@@ -4727,11 +4727,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 53.5,
+      "centerX": 53.875,
       "centerY": 100.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 53.0,
+      "minX": 53.75,
       "maxX": 54.0,
       "minY": 100.0,
       "maxY": 101.0,
@@ -4741,11 +4741,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 53.5,
+      "centerX": 53.875,
       "centerY": 101.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 53.0,
+      "minX": 53.75,
       "maxX": 54.0,
       "minY": 101.0,
       "maxY": 102.0,
@@ -4755,11 +4755,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 53.5,
+      "centerX": 53.875,
       "centerY": 103.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 53.0,
+      "minX": 53.75,
       "maxX": 54.0,
       "minY": 103.0,
       "maxY": 104.0,
@@ -4769,11 +4769,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 53.5,
+      "centerX": 53.875,
       "centerY": 104.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 53.0,
+      "minX": 53.75,
       "maxX": 54.0,
       "minY": 104.0,
       "maxY": 105.0,
@@ -5063,12 +5063,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 44.5,
+      "centerX": 44.1562,
       "centerY": 112.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 44.0,
-      "maxX": 45.0,
+      "maxX": 44.3125,
       "minY": 112.0,
       "maxY": 113.0,
       "scale": 1.0,
@@ -5077,12 +5077,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 44.5,
+      "centerX": 44.1562,
       "centerY": 113.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 44.0,
-      "maxX": 45.0,
+      "maxX": 44.3125,
       "minY": 113.0,
       "maxY": 114.0,
       "scale": 1.0,
@@ -5091,12 +5091,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 44.5,
+      "centerX": 44.1562,
       "centerY": 114.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 44.0,
-      "maxX": 45.0,
+      "maxX": 44.3125,
       "minY": 114.0,
       "maxY": 115.0,
       "scale": 1.0,
@@ -5105,12 +5105,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 44.5,
+      "centerX": 44.1562,
       "centerY": 116.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 44.0,
-      "maxX": 45.0,
+      "maxX": 44.3125,
       "minY": 116.0,
       "maxY": 117.0,
       "scale": 1.0,
@@ -5119,12 +5119,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 44.5,
+      "centerX": 44.1562,
       "centerY": 117.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 44.0,
-      "maxX": 45.0,
+      "maxX": 44.3125,
       "minY": 117.0,
       "maxY": 118.0,
       "scale": 1.0,
@@ -5133,11 +5133,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 53.5,
+      "centerX": 53.875,
       "centerY": 112.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 53.0,
+      "minX": 53.75,
       "maxX": 54.0,
       "minY": 112.0,
       "maxY": 113.0,
@@ -5147,11 +5147,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 53.5,
+      "centerX": 53.875,
       "centerY": 113.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 53.0,
+      "minX": 53.75,
       "maxX": 54.0,
       "minY": 113.0,
       "maxY": 114.0,
@@ -5161,11 +5161,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 53.5,
+      "centerX": 53.875,
       "centerY": 114.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 53.0,
+      "minX": 53.75,
       "maxX": 54.0,
       "minY": 114.0,
       "maxY": 115.0,
@@ -5175,11 +5175,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 53.5,
+      "centerX": 53.875,
       "centerY": 115.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 53.0,
+      "minX": 53.75,
       "maxX": 54.0,
       "minY": 115.0,
       "maxY": 116.0,
@@ -5189,11 +5189,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 53.5,
+      "centerX": 53.875,
       "centerY": 116.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 53.0,
+      "minX": 53.75,
       "maxX": 54.0,
       "minY": 116.0,
       "maxY": 117.0,
@@ -5203,11 +5203,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 53.5,
+      "centerX": 53.875,
       "centerY": 117.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 53.0,
+      "minX": 53.75,
       "maxX": 54.0,
       "minY": 117.0,
       "maxY": 118.0,
@@ -14317,12 +14317,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 18.5,
+      "centerX": 18.1562,
       "centerY": 61.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 18.0,
-      "maxX": 19.0,
+      "maxX": 18.3125,
       "minY": 61.0,
       "maxY": 62.0,
       "scale": 1.0,
@@ -14331,12 +14331,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 18.5,
+      "centerX": 18.1562,
       "centerY": 62.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 18.0,
-      "maxX": 19.0,
+      "maxX": 18.3125,
       "minY": 62.0,
       "maxY": 63.0,
       "scale": 1.0,
@@ -14345,12 +14345,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 18.5,
+      "centerX": 18.1562,
       "centerY": 63.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 18.0,
-      "maxX": 19.0,
+      "maxX": 18.3125,
       "minY": 63.0,
       "maxY": 64.0,
       "scale": 1.0,
@@ -14359,12 +14359,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 18.5,
+      "centerX": 18.1562,
       "centerY": 64.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 18.0,
-      "maxX": 19.0,
+      "maxX": 18.3125,
       "minY": 64.0,
       "maxY": 65.0,
       "scale": 1.0,
@@ -14373,12 +14373,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 18.5,
+      "centerX": 18.1562,
       "centerY": 65.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 18.0,
-      "maxX": 19.0,
+      "maxX": 18.3125,
       "minY": 65.0,
       "maxY": 66.0,
       "scale": 1.0,
@@ -14387,12 +14387,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 18.5,
+      "centerX": 18.1562,
       "centerY": 66.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 18.0,
-      "maxX": 19.0,
+      "maxX": 18.3125,
       "minY": 66.0,
       "maxY": 67.0,
       "scale": 1.0,
@@ -14401,12 +14401,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 18.5,
+      "centerX": 18.1562,
       "centerY": 67.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 18.0,
-      "maxX": 19.0,
+      "maxX": 18.3125,
       "minY": 67.0,
       "maxY": 68.0,
       "scale": 1.0,
@@ -14415,11 +14415,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 29.5,
+      "centerX": 29.875,
       "centerY": 61.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 29.0,
+      "minX": 29.75,
       "maxX": 30.0,
       "minY": 61.0,
       "maxY": 62.0,
@@ -14429,11 +14429,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 29.5,
+      "centerX": 29.875,
       "centerY": 62.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 29.0,
+      "minX": 29.75,
       "maxX": 30.0,
       "minY": 62.0,
       "maxY": 63.0,
@@ -14443,11 +14443,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 29.5,
+      "centerX": 29.875,
       "centerY": 63.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 29.0,
+      "minX": 29.75,
       "maxX": 30.0,
       "minY": 63.0,
       "maxY": 64.0,
@@ -14457,11 +14457,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 29.5,
+      "centerX": 29.875,
       "centerY": 65.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 29.0,
+      "minX": 29.75,
       "maxX": 30.0,
       "minY": 65.0,
       "maxY": 66.0,
@@ -14471,11 +14471,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 29.5,
+      "centerX": 29.875,
       "centerY": 66.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 29.0,
+      "minX": 29.75,
       "maxX": 30.0,
       "minY": 66.0,
       "maxY": 67.0,
@@ -14485,11 +14485,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 29.5,
+      "centerX": 29.875,
       "centerY": 67.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 29.0,
+      "minX": 29.75,
       "maxX": 30.0,
       "minY": 67.0,
       "maxY": 68.0,
@@ -14765,12 +14765,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 36.5,
+      "centerX": 36.1562,
       "centerY": 81.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 36.0,
-      "maxX": 37.0,
+      "maxX": 36.3125,
       "minY": 81.0,
       "maxY": 82.0,
       "scale": 1.0,
@@ -14779,12 +14779,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 36.5,
+      "centerX": 36.1562,
       "centerY": 82.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 36.0,
-      "maxX": 37.0,
+      "maxX": 36.3125,
       "minY": 82.0,
       "maxY": 83.0,
       "scale": 1.0,
@@ -14793,12 +14793,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 36.5,
+      "centerX": 36.1562,
       "centerY": 83.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 36.0,
-      "maxX": 37.0,
+      "maxX": 36.3125,
       "minY": 83.0,
       "maxY": 84.0,
       "scale": 1.0,
@@ -14807,12 +14807,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 36.5,
+      "centerX": 36.1562,
       "centerY": 84.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 36.0,
-      "maxX": 37.0,
+      "maxX": 36.3125,
       "minY": 84.0,
       "maxY": 85.0,
       "scale": 1.0,
@@ -14821,12 +14821,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 36.5,
+      "centerX": 36.1562,
       "centerY": 85.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 36.0,
-      "maxX": 37.0,
+      "maxX": 36.3125,
       "minY": 85.0,
       "maxY": 86.0,
       "scale": 1.0,
@@ -14835,11 +14835,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 44.5,
+      "centerX": 44.875,
       "centerY": 81.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 44.0,
+      "minX": 44.75,
       "maxX": 45.0,
       "minY": 81.0,
       "maxY": 82.0,
@@ -14849,11 +14849,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 44.5,
+      "centerX": 44.875,
       "centerY": 82.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 44.0,
+      "minX": 44.75,
       "maxX": 45.0,
       "minY": 82.0,
       "maxY": 83.0,
@@ -14863,11 +14863,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 44.5,
+      "centerX": 44.875,
       "centerY": 83.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 44.0,
+      "minX": 44.75,
       "maxX": 45.0,
       "minY": 83.0,
       "maxY": 84.0,
@@ -14877,11 +14877,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 44.5,
+      "centerX": 44.875,
       "centerY": 84.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 44.0,
+      "minX": 44.75,
       "maxX": 45.0,
       "minY": 84.0,
       "maxY": 85.0,
@@ -14891,11 +14891,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 44.5,
+      "centerX": 44.875,
       "centerY": 85.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 44.0,
+      "minX": 44.75,
       "maxX": 45.0,
       "minY": 85.0,
       "maxY": 86.0,
@@ -15199,12 +15199,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 80.5,
+      "centerX": 80.1562,
       "centerY": 23.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 80.0,
-      "maxX": 81.0,
+      "maxX": 80.3125,
       "minY": 23.0,
       "maxY": 24.0,
       "scale": 1.0,
@@ -15213,12 +15213,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 80.5,
+      "centerX": 80.1562,
       "centerY": 24.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 80.0,
-      "maxX": 81.0,
+      "maxX": 80.3125,
       "minY": 24.0,
       "maxY": 25.0,
       "scale": 1.0,
@@ -15227,12 +15227,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 80.5,
+      "centerX": 80.1562,
       "centerY": 25.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 80.0,
-      "maxX": 81.0,
+      "maxX": 80.3125,
       "minY": 25.0,
       "maxY": 26.0,
       "scale": 1.0,
@@ -15241,12 +15241,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 80.5,
+      "centerX": 80.1562,
       "centerY": 26.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 80.0,
-      "maxX": 81.0,
+      "maxX": 80.3125,
       "minY": 26.0,
       "maxY": 27.0,
       "scale": 1.0,
@@ -15255,12 +15255,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 80.5,
+      "centerX": 80.1562,
       "centerY": 27.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 80.0,
-      "maxX": 81.0,
+      "maxX": 80.3125,
       "minY": 27.0,
       "maxY": 28.0,
       "scale": 1.0,
@@ -15269,12 +15269,12 @@
     },
     {
       "name": "Wall",
-      "centerX": 80.5,
+      "centerX": 80.1562,
       "centerY": 28.5,
-      "sizeX": 1.0,
+      "sizeX": 0.3125,
       "sizeY": 1.0,
       "minX": 80.0,
-      "maxX": 81.0,
+      "maxX": 80.3125,
       "minY": 28.0,
       "maxY": 29.0,
       "scale": 1.0,
@@ -15283,11 +15283,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 89.5,
+      "centerX": 89.875,
       "centerY": 23.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 89.0,
+      "minX": 89.75,
       "maxX": 90.0,
       "minY": 23.0,
       "maxY": 24.0,
@@ -15297,11 +15297,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 89.5,
+      "centerX": 89.875,
       "centerY": 24.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 89.0,
+      "minX": 89.75,
       "maxX": 90.0,
       "minY": 24.0,
       "maxY": 25.0,
@@ -15311,11 +15311,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 89.5,
+      "centerX": 89.875,
       "centerY": 25.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 89.0,
+      "minX": 89.75,
       "maxX": 90.0,
       "minY": 25.0,
       "maxY": 26.0,
@@ -15325,11 +15325,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 89.5,
+      "centerX": 89.875,
       "centerY": 26.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 89.0,
+      "minX": 89.75,
       "maxX": 90.0,
       "minY": 26.0,
       "maxY": 27.0,
@@ -15339,11 +15339,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 89.5,
+      "centerX": 89.875,
       "centerY": 27.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 89.0,
+      "minX": 89.75,
       "maxX": 90.0,
       "minY": 27.0,
       "maxY": 28.0,
@@ -15353,11 +15353,11 @@
     },
     {
       "name": "Wall",
-      "centerX": 89.5,
+      "centerX": 89.875,
       "centerY": 28.5,
-      "sizeX": 1.0,
+      "sizeX": 0.25,
       "sizeY": 1.0,
-      "minX": 89.0,
+      "minX": 89.75,
       "maxX": 90.0,
       "minY": 28.0,
       "maxY": 29.0,
@@ -19065,186 +19065,6 @@
     },
     {
       "id": 5,
-      "kind": "Door",
-      "pairId": 0,
-      "bounds": {
-        "minX": 75.0,
-        "minY": 63.0,
-        "maxX": 76.0,
-        "maxY": 64.0
-      },
-      "hp": 60,
-      "scale": 1.0,
-      "rotation": 0,
-      "flipX": false
-    },
-    {
-      "id": 6,
-      "kind": "Door",
-      "pairId": 0,
-      "bounds": {
-        "minX": 75.0,
-        "minY": 86.0,
-        "maxX": 76.0,
-        "maxY": 87.0
-      },
-      "hp": 60,
-      "scale": 1.0,
-      "rotation": 0,
-      "flipX": false
-    },
-    {
-      "id": 7,
-      "kind": "Door",
-      "pairId": 0,
-      "bounds": {
-        "minX": 63.0,
-        "minY": 75.0,
-        "maxX": 64.0,
-        "maxY": 76.0
-      },
-      "hp": 60,
-      "scale": 1.0,
-      "rotation": 0,
-      "flipX": false
-    },
-    {
-      "id": 8,
-      "kind": "Door",
-      "pairId": 0,
-      "bounds": {
-        "minX": 86.0,
-        "minY": 75.0,
-        "maxX": 87.0,
-        "maxY": 76.0
-      },
-      "hp": 60,
-      "scale": 1.0,
-      "rotation": 0,
-      "flipX": false
-    },
-    {
-      "id": 9,
-      "kind": "Door",
-      "pairId": 0,
-      "bounds": {
-        "minX": 71.0,
-        "minY": 68.0,
-        "maxX": 72.0,
-        "maxY": 69.0
-      },
-      "hp": 60,
-      "scale": 1.0,
-      "rotation": 0,
-      "flipX": false
-    },
-    {
-      "id": 10,
-      "kind": "Door",
-      "pairId": 0,
-      "bounds": {
-        "minX": 79.0,
-        "minY": 68.0,
-        "maxX": 80.0,
-        "maxY": 69.0
-      },
-      "hp": 60,
-      "scale": 1.0,
-      "rotation": 0,
-      "flipX": false
-    },
-    {
-      "id": 11,
-      "kind": "Door",
-      "pairId": 0,
-      "bounds": {
-        "minX": 71.0,
-        "minY": 81.0,
-        "maxX": 72.0,
-        "maxY": 82.0
-      },
-      "hp": 60,
-      "scale": 1.0,
-      "rotation": 0,
-      "flipX": false
-    },
-    {
-      "id": 12,
-      "kind": "Door",
-      "pairId": 0,
-      "bounds": {
-        "minX": 79.0,
-        "minY": 81.0,
-        "maxX": 80.0,
-        "maxY": 82.0
-      },
-      "hp": 60,
-      "scale": 1.0,
-      "rotation": 0,
-      "flipX": false
-    },
-    {
-      "id": 13,
-      "kind": "Door",
-      "pairId": 0,
-      "bounds": {
-        "minX": 68.0,
-        "minY": 71.0,
-        "maxX": 69.0,
-        "maxY": 72.0
-      },
-      "hp": 60,
-      "scale": 1.0,
-      "rotation": 0,
-      "flipX": false
-    },
-    {
-      "id": 14,
-      "kind": "Door",
-      "pairId": 0,
-      "bounds": {
-        "minX": 81.0,
-        "minY": 71.0,
-        "maxX": 82.0,
-        "maxY": 72.0
-      },
-      "hp": 60,
-      "scale": 1.0,
-      "rotation": 0,
-      "flipX": false
-    },
-    {
-      "id": 15,
-      "kind": "Door",
-      "pairId": 0,
-      "bounds": {
-        "minX": 68.0,
-        "minY": 79.0,
-        "maxX": 69.0,
-        "maxY": 80.0
-      },
-      "hp": 60,
-      "scale": 1.0,
-      "rotation": 0,
-      "flipX": false
-    },
-    {
-      "id": 16,
-      "kind": "Door",
-      "pairId": 0,
-      "bounds": {
-        "minX": 81.0,
-        "minY": 79.0,
-        "maxX": 82.0,
-        "maxY": 80.0
-      },
-      "hp": 60,
-      "scale": 1.0,
-      "rotation": 0,
-      "flipX": false
-    },
-    {
-      "id": 17,
       "kind": "Supply",
       "pairId": 0,
       "bounds": {
@@ -19258,7 +19078,7 @@
       "flipX": false
     },
     {
-      "id": 18,
+      "id": 6,
       "kind": "Supply",
       "pairId": 0,
       "bounds": {
@@ -19272,7 +19092,7 @@
       "flipX": false
     },
     {
-      "id": 19,
+      "id": 7,
       "kind": "Chest",
       "pairId": 0,
       "bounds": {
@@ -19286,7 +19106,7 @@
       "flipX": false
     },
     {
-      "id": 20,
+      "id": 8,
       "kind": "Chest",
       "pairId": 0,
       "bounds": {
@@ -19294,6 +19114,186 @@
         "minY": 67.0,
         "maxX": 69.0,
         "maxY": 68.0
+      },
+      "art": "CrateSmall",
+      "hp": 25,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "id": 9,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 67.0,
+        "minY": 68.0,
+        "maxX": 68.0,
+        "maxY": 69.0
+      },
+      "art": "Barrel",
+      "hp": 15,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "id": 10,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 69.0,
+        "minY": 69.0,
+        "maxX": 70.0,
+        "maxY": 70.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "id": 11,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 81.0,
+        "minY": 67.0,
+        "maxX": 82.0,
+        "maxY": 68.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "id": 12,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 82.0,
+        "minY": 67.0,
+        "maxX": 83.0,
+        "maxY": 68.0
+      },
+      "art": "CrateSmall",
+      "hp": 25,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "id": 13,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 81.0,
+        "minY": 68.0,
+        "maxX": 82.0,
+        "maxY": 69.0
+      },
+      "art": "Barrel",
+      "hp": 15,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "id": 14,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 83.0,
+        "minY": 69.0,
+        "maxX": 84.0,
+        "maxY": 70.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "id": 15,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 67.0,
+        "minY": 81.0,
+        "maxX": 68.0,
+        "maxY": 82.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "id": 16,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 68.0,
+        "minY": 81.0,
+        "maxX": 69.0,
+        "maxY": 82.0
+      },
+      "art": "CrateSmall",
+      "hp": 25,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "id": 17,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 67.0,
+        "minY": 82.0,
+        "maxX": 68.0,
+        "maxY": 83.0
+      },
+      "art": "Barrel",
+      "hp": 15,
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "id": 18,
+      "kind": "Pot",
+      "pairId": 0,
+      "bounds": {
+        "minX": 69.0,
+        "minY": 83.0,
+        "maxX": 70.0,
+        "maxY": 84.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "id": 19,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 81.0,
+        "minY": 81.0,
+        "maxX": 82.0,
+        "maxY": 82.0
+      },
+      "scale": 1.0,
+      "rotation": 0,
+      "flipX": false
+    },
+    {
+      "id": 20,
+      "kind": "Chest",
+      "pairId": 0,
+      "bounds": {
+        "minX": 82.0,
+        "minY": 81.0,
+        "maxX": 83.0,
+        "maxY": 82.0
       },
       "art": "CrateSmall",
       "hp": 25,
@@ -19306,10 +19306,10 @@
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
-        "minX": 67.0,
-        "minY": 68.0,
-        "maxX": 68.0,
-        "maxY": 69.0
+        "minX": 81.0,
+        "minY": 82.0,
+        "maxX": 82.0,
+        "maxY": 83.0
       },
       "art": "Barrel",
       "hp": 15,
@@ -19322,10 +19322,10 @@
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
-        "minX": 69.0,
-        "minY": 69.0,
-        "maxX": 70.0,
-        "maxY": 70.0
+        "minX": 83.0,
+        "minY": 83.0,
+        "maxX": 84.0,
+        "maxY": 84.0
       },
       "scale": 1.0,
       "rotation": 0,
@@ -19333,216 +19333,6 @@
     },
     {
       "id": 23,
-      "kind": "Chest",
-      "pairId": 0,
-      "bounds": {
-        "minX": 81.0,
-        "minY": 67.0,
-        "maxX": 82.0,
-        "maxY": 68.0
-      },
-      "scale": 1.0,
-      "rotation": 0,
-      "flipX": false
-    },
-    {
-      "id": 24,
-      "kind": "Chest",
-      "pairId": 0,
-      "bounds": {
-        "minX": 82.0,
-        "minY": 67.0,
-        "maxX": 83.0,
-        "maxY": 68.0
-      },
-      "art": "CrateSmall",
-      "hp": 25,
-      "scale": 1.0,
-      "rotation": 0,
-      "flipX": false
-    },
-    {
-      "id": 25,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 81.0,
-        "minY": 68.0,
-        "maxX": 82.0,
-        "maxY": 69.0
-      },
-      "art": "Barrel",
-      "hp": 15,
-      "scale": 1.0,
-      "rotation": 0,
-      "flipX": false
-    },
-    {
-      "id": 26,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 83.0,
-        "minY": 69.0,
-        "maxX": 84.0,
-        "maxY": 70.0
-      },
-      "scale": 1.0,
-      "rotation": 0,
-      "flipX": false
-    },
-    {
-      "id": 27,
-      "kind": "Chest",
-      "pairId": 0,
-      "bounds": {
-        "minX": 67.0,
-        "minY": 81.0,
-        "maxX": 68.0,
-        "maxY": 82.0
-      },
-      "scale": 1.0,
-      "rotation": 0,
-      "flipX": false
-    },
-    {
-      "id": 28,
-      "kind": "Chest",
-      "pairId": 0,
-      "bounds": {
-        "minX": 68.0,
-        "minY": 81.0,
-        "maxX": 69.0,
-        "maxY": 82.0
-      },
-      "art": "CrateSmall",
-      "hp": 25,
-      "scale": 1.0,
-      "rotation": 0,
-      "flipX": false
-    },
-    {
-      "id": 29,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 67.0,
-        "minY": 82.0,
-        "maxX": 68.0,
-        "maxY": 83.0
-      },
-      "art": "Barrel",
-      "hp": 15,
-      "scale": 1.0,
-      "rotation": 0,
-      "flipX": false
-    },
-    {
-      "id": 30,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 69.0,
-        "minY": 83.0,
-        "maxX": 70.0,
-        "maxY": 84.0
-      },
-      "scale": 1.0,
-      "rotation": 0,
-      "flipX": false
-    },
-    {
-      "id": 31,
-      "kind": "Chest",
-      "pairId": 0,
-      "bounds": {
-        "minX": 81.0,
-        "minY": 81.0,
-        "maxX": 82.0,
-        "maxY": 82.0
-      },
-      "scale": 1.0,
-      "rotation": 0,
-      "flipX": false
-    },
-    {
-      "id": 32,
-      "kind": "Chest",
-      "pairId": 0,
-      "bounds": {
-        "minX": 82.0,
-        "minY": 81.0,
-        "maxX": 83.0,
-        "maxY": 82.0
-      },
-      "art": "CrateSmall",
-      "hp": 25,
-      "scale": 1.0,
-      "rotation": 0,
-      "flipX": false
-    },
-    {
-      "id": 33,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 81.0,
-        "minY": 82.0,
-        "maxX": 82.0,
-        "maxY": 83.0
-      },
-      "art": "Barrel",
-      "hp": 15,
-      "scale": 1.0,
-      "rotation": 0,
-      "flipX": false
-    },
-    {
-      "id": 34,
-      "kind": "Pot",
-      "pairId": 0,
-      "bounds": {
-        "minX": 83.0,
-        "minY": 83.0,
-        "maxX": 84.0,
-        "maxY": 84.0
-      },
-      "scale": 1.0,
-      "rotation": 0,
-      "flipX": false
-    },
-    {
-      "id": 35,
-      "kind": "Door",
-      "pairId": 0,
-      "bounds": {
-        "minX": 19.0,
-        "minY": 98.0,
-        "maxX": 20.0,
-        "maxY": 99.0
-      },
-      "hp": 60,
-      "scale": 1.0,
-      "rotation": 0,
-      "flipX": false
-    },
-    {
-      "id": 36,
-      "kind": "Door",
-      "pairId": 0,
-      "bounds": {
-        "minX": 23.0,
-        "minY": 102.0,
-        "maxX": 24.0,
-        "maxY": 103.0
-      },
-      "hp": 60,
-      "scale": 1.0,
-      "rotation": 0,
-      "flipX": false
-    },
-    {
-      "id": 37,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -19556,7 +19346,7 @@
       "flipX": false
     },
     {
-      "id": 38,
+      "id": 24,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -19570,37 +19360,7 @@
       "flipX": false
     },
     {
-      "id": 39,
-      "kind": "Door",
-      "pairId": 0,
-      "bounds": {
-        "minX": 19.0,
-        "minY": 111.0,
-        "maxX": 20.0,
-        "maxY": 112.0
-      },
-      "hp": 60,
-      "scale": 1.0,
-      "rotation": 0,
-      "flipX": false
-    },
-    {
-      "id": 40,
-      "kind": "Door",
-      "pairId": 0,
-      "bounds": {
-        "minX": 14.0,
-        "minY": 115.0,
-        "maxX": 15.0,
-        "maxY": 116.0
-      },
-      "hp": 60,
-      "scale": 1.0,
-      "rotation": 0,
-      "flipX": false
-    },
-    {
-      "id": 41,
+      "id": 25,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -19616,7 +19376,7 @@
       "flipX": false
     },
     {
-      "id": 42,
+      "id": 26,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -19630,7 +19390,7 @@
       "flipX": false
     },
     {
-      "id": 43,
+      "id": 27,
       "kind": "Chest",
       "pairId": 0,
       "bounds": {
@@ -19646,37 +19406,7 @@
       "flipX": false
     },
     {
-      "id": 44,
-      "kind": "Door",
-      "pairId": 0,
-      "bounds": {
-        "minX": 34.0,
-        "minY": 98.0,
-        "maxX": 35.0,
-        "maxY": 99.0
-      },
-      "hp": 60,
-      "scale": 1.0,
-      "rotation": 0,
-      "flipX": false
-    },
-    {
-      "id": 45,
-      "kind": "Door",
-      "pairId": 0,
-      "bounds": {
-        "minX": 29.0,
-        "minY": 102.0,
-        "maxX": 30.0,
-        "maxY": 103.0
-      },
-      "hp": 60,
-      "scale": 1.0,
-      "rotation": 0,
-      "flipX": false
-    },
-    {
-      "id": 46,
+      "id": 28,
       "kind": "Chest",
       "pairId": 0,
       "bounds": {
@@ -19692,7 +19422,7 @@
       "flipX": false
     },
     {
-      "id": 47,
+      "id": 29,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -19708,7 +19438,7 @@
       "flipX": false
     },
     {
-      "id": 48,
+      "id": 30,
       "kind": "Chest",
       "pairId": 0,
       "bounds": {
@@ -19724,7 +19454,7 @@
       "flipX": false
     },
     {
-      "id": 49,
+      "id": 31,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -19740,37 +19470,7 @@
       "flipX": false
     },
     {
-      "id": 50,
-      "kind": "Door",
-      "pairId": 0,
-      "bounds": {
-        "minX": 34.0,
-        "minY": 111.0,
-        "maxX": 35.0,
-        "maxY": 112.0
-      },
-      "hp": 60,
-      "scale": 1.0,
-      "rotation": 0,
-      "flipX": false
-    },
-    {
-      "id": 51,
-      "kind": "Door",
-      "pairId": 0,
-      "bounds": {
-        "minX": 38.0,
-        "minY": 115.0,
-        "maxX": 39.0,
-        "maxY": 116.0
-      },
-      "hp": 60,
-      "scale": 1.0,
-      "rotation": 0,
-      "flipX": false
-    },
-    {
-      "id": 52,
+      "id": 32,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -19784,7 +19484,7 @@
       "flipX": false
     },
     {
-      "id": 53,
+      "id": 33,
       "kind": "Chest",
       "pairId": 0,
       "bounds": {
@@ -19800,7 +19500,7 @@
       "flipX": false
     },
     {
-      "id": 54,
+      "id": 34,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -19814,37 +19514,7 @@
       "flipX": false
     },
     {
-      "id": 55,
-      "kind": "Door",
-      "pairId": 0,
-      "bounds": {
-        "minX": 49.0,
-        "minY": 98.0,
-        "maxX": 50.0,
-        "maxY": 99.0
-      },
-      "hp": 60,
-      "scale": 1.0,
-      "rotation": 0,
-      "flipX": false
-    },
-    {
-      "id": 56,
-      "kind": "Door",
-      "pairId": 0,
-      "bounds": {
-        "minX": 53.0,
-        "minY": 102.0,
-        "maxX": 54.0,
-        "maxY": 103.0
-      },
-      "hp": 60,
-      "scale": 1.0,
-      "rotation": 0,
-      "flipX": false
-    },
-    {
-      "id": 57,
+      "id": 35,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -19860,7 +19530,7 @@
       "flipX": false
     },
     {
-      "id": 58,
+      "id": 36,
       "kind": "Chest",
       "pairId": 0,
       "bounds": {
@@ -19874,7 +19544,7 @@
       "flipX": false
     },
     {
-      "id": 59,
+      "id": 37,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -19888,37 +19558,7 @@
       "flipX": false
     },
     {
-      "id": 60,
-      "kind": "Door",
-      "pairId": 0,
-      "bounds": {
-        "minX": 49.0,
-        "minY": 111.0,
-        "maxX": 50.0,
-        "maxY": 112.0
-      },
-      "hp": 60,
-      "scale": 1.0,
-      "rotation": 0,
-      "flipX": false
-    },
-    {
-      "id": 61,
-      "kind": "Door",
-      "pairId": 0,
-      "bounds": {
-        "minX": 44.0,
-        "minY": 115.0,
-        "maxX": 45.0,
-        "maxY": 116.0
-      },
-      "hp": 60,
-      "scale": 1.0,
-      "rotation": 0,
-      "flipX": false
-    },
-    {
-      "id": 62,
+      "id": 38,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -19934,7 +19574,7 @@
       "flipX": false
     },
     {
-      "id": 63,
+      "id": 39,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -19950,7 +19590,7 @@
       "flipX": false
     },
     {
-      "id": 64,
+      "id": 40,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -19966,7 +19606,7 @@
       "flipX": false
     },
     {
-      "id": 65,
+      "id": 41,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -19982,7 +19622,7 @@
       "flipX": false
     },
     {
-      "id": 66,
+      "id": 42,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -19998,7 +19638,7 @@
       "flipX": false
     },
     {
-      "id": 67,
+      "id": 43,
       "kind": "Chest",
       "pairId": 0,
       "bounds": {
@@ -20014,7 +19654,7 @@
       "flipX": false
     },
     {
-      "id": 68,
+      "id": 44,
       "kind": "Chest",
       "pairId": 0,
       "bounds": {
@@ -20028,7 +19668,7 @@
       "flipX": false
     },
     {
-      "id": 69,
+      "id": 45,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -20042,7 +19682,7 @@
       "flipX": false
     },
     {
-      "id": 70,
+      "id": 46,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20056,7 +19696,7 @@
       "flipX": false
     },
     {
-      "id": 71,
+      "id": 47,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20070,7 +19710,7 @@
       "flipX": false
     },
     {
-      "id": 72,
+      "id": 48,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20084,7 +19724,7 @@
       "flipX": false
     },
     {
-      "id": 73,
+      "id": 49,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20098,7 +19738,7 @@
       "flipX": false
     },
     {
-      "id": 74,
+      "id": 50,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20112,7 +19752,7 @@
       "flipX": false
     },
     {
-      "id": 75,
+      "id": 51,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20126,7 +19766,7 @@
       "flipX": false
     },
     {
-      "id": 76,
+      "id": 52,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20140,7 +19780,7 @@
       "flipX": false
     },
     {
-      "id": 77,
+      "id": 53,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20154,7 +19794,7 @@
       "flipX": false
     },
     {
-      "id": 78,
+      "id": 54,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20168,7 +19808,7 @@
       "flipX": false
     },
     {
-      "id": 79,
+      "id": 55,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20182,7 +19822,7 @@
       "flipX": false
     },
     {
-      "id": 80,
+      "id": 56,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20196,7 +19836,7 @@
       "flipX": false
     },
     {
-      "id": 81,
+      "id": 57,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20210,7 +19850,7 @@
       "flipX": false
     },
     {
-      "id": 82,
+      "id": 58,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20224,7 +19864,7 @@
       "flipX": false
     },
     {
-      "id": 83,
+      "id": 59,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20238,7 +19878,7 @@
       "flipX": false
     },
     {
-      "id": 84,
+      "id": 60,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20252,7 +19892,7 @@
       "flipX": false
     },
     {
-      "id": 85,
+      "id": 61,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20266,7 +19906,7 @@
       "flipX": false
     },
     {
-      "id": 86,
+      "id": 62,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20280,7 +19920,7 @@
       "flipX": false
     },
     {
-      "id": 87,
+      "id": 63,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20294,7 +19934,7 @@
       "flipX": false
     },
     {
-      "id": 88,
+      "id": 64,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20308,7 +19948,7 @@
       "flipX": false
     },
     {
-      "id": 89,
+      "id": 65,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20322,7 +19962,7 @@
       "flipX": false
     },
     {
-      "id": 90,
+      "id": 66,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20336,7 +19976,7 @@
       "flipX": false
     },
     {
-      "id": 91,
+      "id": 67,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20350,7 +19990,7 @@
       "flipX": false
     },
     {
-      "id": 92,
+      "id": 68,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20364,7 +20004,7 @@
       "flipX": false
     },
     {
-      "id": 93,
+      "id": 69,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20378,7 +20018,7 @@
       "flipX": false
     },
     {
-      "id": 94,
+      "id": 70,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20392,7 +20032,7 @@
       "flipX": false
     },
     {
-      "id": 95,
+      "id": 71,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20406,7 +20046,7 @@
       "flipX": false
     },
     {
-      "id": 96,
+      "id": 72,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20420,7 +20060,7 @@
       "flipX": false
     },
     {
-      "id": 97,
+      "id": 73,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20434,7 +20074,7 @@
       "flipX": false
     },
     {
-      "id": 98,
+      "id": 74,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20448,7 +20088,7 @@
       "flipX": false
     },
     {
-      "id": 99,
+      "id": 75,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20462,7 +20102,7 @@
       "flipX": false
     },
     {
-      "id": 100,
+      "id": 76,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20476,7 +20116,7 @@
       "flipX": false
     },
     {
-      "id": 101,
+      "id": 77,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20490,7 +20130,7 @@
       "flipX": false
     },
     {
-      "id": 102,
+      "id": 78,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20504,7 +20144,7 @@
       "flipX": false
     },
     {
-      "id": 103,
+      "id": 79,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20518,7 +20158,7 @@
       "flipX": false
     },
     {
-      "id": 104,
+      "id": 80,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20532,7 +20172,7 @@
       "flipX": false
     },
     {
-      "id": 105,
+      "id": 81,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20546,7 +20186,7 @@
       "flipX": false
     },
     {
-      "id": 106,
+      "id": 82,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20560,7 +20200,7 @@
       "flipX": false
     },
     {
-      "id": 107,
+      "id": 83,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20574,7 +20214,7 @@
       "flipX": false
     },
     {
-      "id": 108,
+      "id": 84,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20588,7 +20228,7 @@
       "flipX": false
     },
     {
-      "id": 109,
+      "id": 85,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20602,7 +20242,7 @@
       "flipX": false
     },
     {
-      "id": 110,
+      "id": 86,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20616,7 +20256,7 @@
       "flipX": false
     },
     {
-      "id": 111,
+      "id": 87,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20630,7 +20270,7 @@
       "flipX": false
     },
     {
-      "id": 112,
+      "id": 88,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20644,7 +20284,7 @@
       "flipX": false
     },
     {
-      "id": 113,
+      "id": 89,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20658,7 +20298,7 @@
       "flipX": false
     },
     {
-      "id": 114,
+      "id": 90,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20672,7 +20312,7 @@
       "flipX": false
     },
     {
-      "id": 115,
+      "id": 91,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20686,7 +20326,7 @@
       "flipX": false
     },
     {
-      "id": 116,
+      "id": 92,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20700,7 +20340,7 @@
       "flipX": false
     },
     {
-      "id": 117,
+      "id": 93,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20714,7 +20354,7 @@
       "flipX": false
     },
     {
-      "id": 118,
+      "id": 94,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20728,7 +20368,7 @@
       "flipX": false
     },
     {
-      "id": 119,
+      "id": 95,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20742,7 +20382,7 @@
       "flipX": false
     },
     {
-      "id": 120,
+      "id": 96,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20756,7 +20396,7 @@
       "flipX": false
     },
     {
-      "id": 121,
+      "id": 97,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20770,7 +20410,7 @@
       "flipX": false
     },
     {
-      "id": 122,
+      "id": 98,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20784,7 +20424,7 @@
       "flipX": false
     },
     {
-      "id": 123,
+      "id": 99,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20798,7 +20438,7 @@
       "flipX": false
     },
     {
-      "id": 124,
+      "id": 100,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20812,7 +20452,7 @@
       "flipX": false
     },
     {
-      "id": 125,
+      "id": 101,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20826,7 +20466,7 @@
       "flipX": false
     },
     {
-      "id": 126,
+      "id": 102,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20840,7 +20480,7 @@
       "flipX": false
     },
     {
-      "id": 127,
+      "id": 103,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20854,7 +20494,7 @@
       "flipX": false
     },
     {
-      "id": 128,
+      "id": 104,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20868,7 +20508,7 @@
       "flipX": false
     },
     {
-      "id": 129,
+      "id": 105,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20882,7 +20522,7 @@
       "flipX": false
     },
     {
-      "id": 130,
+      "id": 106,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20896,7 +20536,7 @@
       "flipX": false
     },
     {
-      "id": 131,
+      "id": 107,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20910,7 +20550,7 @@
       "flipX": false
     },
     {
-      "id": 132,
+      "id": 108,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20924,7 +20564,7 @@
       "flipX": false
     },
     {
-      "id": 133,
+      "id": 109,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20938,7 +20578,7 @@
       "flipX": false
     },
     {
-      "id": 134,
+      "id": 110,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20952,7 +20592,7 @@
       "flipX": false
     },
     {
-      "id": 135,
+      "id": 111,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20966,7 +20606,7 @@
       "flipX": false
     },
     {
-      "id": 136,
+      "id": 112,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20980,7 +20620,7 @@
       "flipX": false
     },
     {
-      "id": 137,
+      "id": 113,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -20994,7 +20634,7 @@
       "flipX": false
     },
     {
-      "id": 138,
+      "id": 114,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -21008,7 +20648,7 @@
       "flipX": false
     },
     {
-      "id": 139,
+      "id": 115,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -21022,7 +20662,7 @@
       "flipX": false
     },
     {
-      "id": 140,
+      "id": 116,
       "kind": "Chest",
       "pairId": 0,
       "bounds": {
@@ -21038,7 +20678,7 @@
       "flipX": false
     },
     {
-      "id": 141,
+      "id": 117,
       "kind": "Chest",
       "pairId": 0,
       "bounds": {
@@ -21054,7 +20694,7 @@
       "flipX": false
     },
     {
-      "id": 142,
+      "id": 118,
       "kind": "Chest",
       "pairId": 0,
       "bounds": {
@@ -21070,7 +20710,7 @@
       "flipX": false
     },
     {
-      "id": 143,
+      "id": 119,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -21084,7 +20724,7 @@
       "flipX": false
     },
     {
-      "id": 144,
+      "id": 120,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -21098,7 +20738,7 @@
       "flipX": false
     },
     {
-      "id": 145,
+      "id": 121,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -21112,7 +20752,7 @@
       "flipX": false
     },
     {
-      "id": 146,
+      "id": 122,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -21126,7 +20766,7 @@
       "flipX": false
     },
     {
-      "id": 147,
+      "id": 123,
       "kind": "Chest",
       "pairId": 0,
       "bounds": {
@@ -21142,7 +20782,7 @@
       "flipX": false
     },
     {
-      "id": 148,
+      "id": 124,
       "kind": "Chest",
       "pairId": 0,
       "bounds": {
@@ -21158,7 +20798,7 @@
       "flipX": false
     },
     {
-      "id": 149,
+      "id": 125,
       "kind": "Chest",
       "pairId": 0,
       "bounds": {
@@ -21174,7 +20814,7 @@
       "flipX": false
     },
     {
-      "id": 150,
+      "id": 126,
       "kind": "Chest",
       "pairId": 0,
       "bounds": {
@@ -21190,7 +20830,7 @@
       "flipX": false
     },
     {
-      "id": 151,
+      "id": 127,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -21204,7 +20844,7 @@
       "flipX": false
     },
     {
-      "id": 152,
+      "id": 128,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -21220,7 +20860,7 @@
       "flipX": false
     },
     {
-      "id": 153,
+      "id": 129,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -21236,7 +20876,7 @@
       "flipX": false
     },
     {
-      "id": 154,
+      "id": 130,
       "kind": "Chest",
       "pairId": 0,
       "bounds": {
@@ -21252,7 +20892,7 @@
       "flipX": false
     },
     {
-      "id": 155,
+      "id": 131,
       "kind": "Chest",
       "pairId": 0,
       "bounds": {
@@ -21266,7 +20906,7 @@
       "flipX": false
     },
     {
-      "id": 156,
+      "id": 132,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -21280,7 +20920,7 @@
       "flipX": false
     },
     {
-      "id": 157,
+      "id": 133,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -21294,7 +20934,7 @@
       "flipX": false
     },
     {
-      "id": 158,
+      "id": 134,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -21308,7 +20948,7 @@
       "flipX": false
     },
     {
-      "id": 159,
+      "id": 135,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -21322,7 +20962,7 @@
       "flipX": false
     },
     {
-      "id": 160,
+      "id": 136,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -21336,7 +20976,7 @@
       "flipX": false
     },
     {
-      "id": 161,
+      "id": 137,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -21350,7 +20990,7 @@
       "flipX": false
     },
     {
-      "id": 162,
+      "id": 138,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -21364,7 +21004,7 @@
       "flipX": false
     },
     {
-      "id": 163,
+      "id": 139,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -21378,7 +21018,7 @@
       "flipX": false
     },
     {
-      "id": 164,
+      "id": 140,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -21392,7 +21032,7 @@
       "flipX": false
     },
     {
-      "id": 165,
+      "id": 141,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -21406,7 +21046,7 @@
       "flipX": false
     },
     {
-      "id": 166,
+      "id": 142,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -21420,7 +21060,7 @@
       "flipX": false
     },
     {
-      "id": 167,
+      "id": 143,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -21434,7 +21074,7 @@
       "flipX": false
     },
     {
-      "id": 168,
+      "id": 144,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -21448,7 +21088,7 @@
       "flipX": false
     },
     {
-      "id": 169,
+      "id": 145,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -21462,7 +21102,7 @@
       "flipX": false
     },
     {
-      "id": 170,
+      "id": 146,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -21476,7 +21116,7 @@
       "flipX": false
     },
     {
-      "id": 171,
+      "id": 147,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -21490,7 +21130,7 @@
       "flipX": false
     },
     {
-      "id": 172,
+      "id": 148,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -21504,7 +21144,7 @@
       "flipX": false
     },
     {
-      "id": 173,
+      "id": 149,
       "kind": "Chest",
       "pairId": 0,
       "bounds": {
@@ -21518,7 +21158,7 @@
       "flipX": false
     },
     {
-      "id": 174,
+      "id": 150,
       "kind": "Chest",
       "pairId": 0,
       "bounds": {
@@ -21532,37 +21172,7 @@
       "flipX": false
     },
     {
-      "id": 175,
-      "kind": "Door",
-      "pairId": 0,
-      "bounds": {
-        "minX": 24.0,
-        "minY": 60.0,
-        "maxX": 25.0,
-        "maxY": 61.0
-      },
-      "hp": 60,
-      "scale": 1.0,
-      "rotation": 0,
-      "flipX": false
-    },
-    {
-      "id": 176,
-      "kind": "Door",
-      "pairId": 0,
-      "bounds": {
-        "minX": 29.0,
-        "minY": 64.0,
-        "maxX": 30.0,
-        "maxY": 65.0
-      },
-      "hp": 60,
-      "scale": 1.0,
-      "rotation": 0,
-      "flipX": false
-    },
-    {
-      "id": 177,
+      "id": 151,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -21576,7 +21186,7 @@
       "flipX": false
     },
     {
-      "id": 178,
+      "id": 152,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -21590,7 +21200,7 @@
       "flipX": false
     },
     {
-      "id": 179,
+      "id": 153,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -21606,7 +21216,7 @@
       "flipX": false
     },
     {
-      "id": 180,
+      "id": 154,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -21622,22 +21232,7 @@
       "flipX": false
     },
     {
-      "id": 181,
-      "kind": "Door",
-      "pairId": 0,
-      "bounds": {
-        "minX": 40.0,
-        "minY": 80.0,
-        "maxX": 41.0,
-        "maxY": 81.0
-      },
-      "hp": 60,
-      "scale": 1.0,
-      "rotation": 0,
-      "flipX": false
-    },
-    {
-      "id": 182,
+      "id": 155,
       "kind": "Chest",
       "pairId": 0,
       "bounds": {
@@ -21653,7 +21248,7 @@
       "flipX": false
     },
     {
-      "id": 183,
+      "id": 156,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -21667,22 +21262,7 @@
       "flipX": false
     },
     {
-      "id": 184,
-      "kind": "Door",
-      "pairId": 0,
-      "bounds": {
-        "minX": 84.0,
-        "minY": 22.0,
-        "maxX": 85.0,
-        "maxY": 23.0
-      },
-      "hp": 60,
-      "scale": 1.0,
-      "rotation": 0,
-      "flipX": false
-    },
-    {
-      "id": 185,
+      "id": 157,
       "kind": "Chest",
       "pairId": 0,
       "bounds": {
@@ -21698,7 +21278,7 @@
       "flipX": false
     },
     {
-      "id": 186,
+      "id": 158,
       "kind": "Chest",
       "pairId": 0,
       "bounds": {
@@ -21714,7 +21294,7 @@
       "flipX": false
     },
     {
-      "id": 187,
+      "id": 159,
       "kind": "Chest",
       "pairId": 0,
       "bounds": {
@@ -21728,7 +21308,7 @@
       "flipX": false
     },
     {
-      "id": 188,
+      "id": 160,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -21744,7 +21324,7 @@
       "flipX": false
     },
     {
-      "id": 189,
+      "id": 161,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -21760,7 +21340,7 @@
       "flipX": false
     },
     {
-      "id": 190,
+      "id": 162,
       "kind": "Chest",
       "pairId": 0,
       "bounds": {
@@ -21776,7 +21356,7 @@
       "flipX": false
     },
     {
-      "id": 191,
+      "id": 163,
       "kind": "Chest",
       "pairId": 0,
       "bounds": {
@@ -21790,7 +21370,7 @@
       "flipX": false
     },
     {
-      "id": 192,
+      "id": 164,
       "kind": "Pot",
       "pairId": 0,
       "bounds": {
@@ -21804,7 +21384,7 @@
       "flipX": false
     },
     {
-      "id": 193,
+      "id": 165,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -21818,7 +21398,7 @@
       "flipX": false
     },
     {
-      "id": 194,
+      "id": 166,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -21832,7 +21412,7 @@
       "flipX": false
     },
     {
-      "id": 195,
+      "id": 167,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -21846,7 +21426,7 @@
       "flipX": false
     },
     {
-      "id": 196,
+      "id": 168,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -21860,7 +21440,7 @@
       "flipX": false
     },
     {
-      "id": 197,
+      "id": 169,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -21874,7 +21454,7 @@
       "flipX": false
     },
     {
-      "id": 198,
+      "id": 170,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -21888,7 +21468,7 @@
       "flipX": false
     },
     {
-      "id": 199,
+      "id": 171,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -21902,7 +21482,7 @@
       "flipX": false
     },
     {
-      "id": 200,
+      "id": 172,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -21916,7 +21496,7 @@
       "flipX": false
     },
     {
-      "id": 201,
+      "id": 173,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -21930,7 +21510,7 @@
       "flipX": false
     },
     {
-      "id": 202,
+      "id": 174,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -21944,7 +21524,7 @@
       "flipX": false
     },
     {
-      "id": 203,
+      "id": 175,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -21958,7 +21538,7 @@
       "flipX": false
     },
     {
-      "id": 204,
+      "id": 176,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -21972,7 +21552,7 @@
       "flipX": false
     },
     {
-      "id": 205,
+      "id": 177,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -21986,7 +21566,7 @@
       "flipX": false
     },
     {
-      "id": 206,
+      "id": 178,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22000,7 +21580,7 @@
       "flipX": false
     },
     {
-      "id": 207,
+      "id": 179,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22014,7 +21594,7 @@
       "flipX": false
     },
     {
-      "id": 208,
+      "id": 180,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22028,7 +21608,7 @@
       "flipX": false
     },
     {
-      "id": 209,
+      "id": 181,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22042,7 +21622,7 @@
       "flipX": false
     },
     {
-      "id": 210,
+      "id": 182,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22056,7 +21636,7 @@
       "flipX": false
     },
     {
-      "id": 211,
+      "id": 183,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22070,7 +21650,7 @@
       "flipX": false
     },
     {
-      "id": 212,
+      "id": 184,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22084,7 +21664,7 @@
       "flipX": false
     },
     {
-      "id": 213,
+      "id": 185,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22098,7 +21678,7 @@
       "flipX": false
     },
     {
-      "id": 214,
+      "id": 186,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22112,7 +21692,7 @@
       "flipX": false
     },
     {
-      "id": 215,
+      "id": 187,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22126,7 +21706,7 @@
       "flipX": false
     },
     {
-      "id": 216,
+      "id": 188,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22140,7 +21720,7 @@
       "flipX": false
     },
     {
-      "id": 217,
+      "id": 189,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22154,7 +21734,7 @@
       "flipX": false
     },
     {
-      "id": 218,
+      "id": 190,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22168,7 +21748,7 @@
       "flipX": false
     },
     {
-      "id": 219,
+      "id": 191,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22182,7 +21762,7 @@
       "flipX": false
     },
     {
-      "id": 220,
+      "id": 192,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22196,7 +21776,7 @@
       "flipX": false
     },
     {
-      "id": 221,
+      "id": 193,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22210,7 +21790,7 @@
       "flipX": false
     },
     {
-      "id": 222,
+      "id": 194,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22224,7 +21804,7 @@
       "flipX": false
     },
     {
-      "id": 223,
+      "id": 195,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22238,7 +21818,7 @@
       "flipX": false
     },
     {
-      "id": 224,
+      "id": 196,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22252,7 +21832,7 @@
       "flipX": false
     },
     {
-      "id": 225,
+      "id": 197,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22266,7 +21846,7 @@
       "flipX": false
     },
     {
-      "id": 226,
+      "id": 198,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22280,7 +21860,7 @@
       "flipX": false
     },
     {
-      "id": 227,
+      "id": 199,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22294,7 +21874,7 @@
       "flipX": false
     },
     {
-      "id": 228,
+      "id": 200,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22308,7 +21888,7 @@
       "flipX": false
     },
     {
-      "id": 229,
+      "id": 201,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22322,7 +21902,7 @@
       "flipX": false
     },
     {
-      "id": 230,
+      "id": 202,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22336,7 +21916,7 @@
       "flipX": false
     },
     {
-      "id": 231,
+      "id": 203,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22350,7 +21930,7 @@
       "flipX": false
     },
     {
-      "id": 232,
+      "id": 204,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22364,7 +21944,7 @@
       "flipX": false
     },
     {
-      "id": 233,
+      "id": 205,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22378,7 +21958,7 @@
       "flipX": false
     },
     {
-      "id": 234,
+      "id": 206,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22392,7 +21972,7 @@
       "flipX": false
     },
     {
-      "id": 235,
+      "id": 207,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22406,7 +21986,7 @@
       "flipX": false
     },
     {
-      "id": 236,
+      "id": 208,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22420,7 +22000,7 @@
       "flipX": false
     },
     {
-      "id": 237,
+      "id": 209,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22434,7 +22014,7 @@
       "flipX": false
     },
     {
-      "id": 238,
+      "id": 210,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22448,7 +22028,7 @@
       "flipX": false
     },
     {
-      "id": 239,
+      "id": 211,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22462,7 +22042,7 @@
       "flipX": false
     },
     {
-      "id": 240,
+      "id": 212,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22476,7 +22056,7 @@
       "flipX": false
     },
     {
-      "id": 241,
+      "id": 213,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22490,7 +22070,7 @@
       "flipX": false
     },
     {
-      "id": 242,
+      "id": 214,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22504,7 +22084,7 @@
       "flipX": false
     },
     {
-      "id": 243,
+      "id": 215,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22518,7 +22098,7 @@
       "flipX": false
     },
     {
-      "id": 244,
+      "id": 216,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22532,7 +22112,7 @@
       "flipX": false
     },
     {
-      "id": 245,
+      "id": 217,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22546,7 +22126,7 @@
       "flipX": false
     },
     {
-      "id": 246,
+      "id": 218,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22560,7 +22140,7 @@
       "flipX": false
     },
     {
-      "id": 247,
+      "id": 219,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22574,7 +22154,7 @@
       "flipX": false
     },
     {
-      "id": 248,
+      "id": 220,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22588,7 +22168,7 @@
       "flipX": false
     },
     {
-      "id": 249,
+      "id": 221,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22602,7 +22182,7 @@
       "flipX": false
     },
     {
-      "id": 250,
+      "id": 222,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -22616,7 +22196,7 @@
       "flipX": false
     },
     {
-      "id": 251,
+      "id": 223,
       "kind": "Bush",
       "pairId": 0,
       "bounds": {
@@ -36250,30 +35830,6 @@
         "cellY": 84
       },
       {
-        "type": "Door",
-        "group": "WorldObject",
-        "cellX": 75,
-        "cellY": 63
-      },
-      {
-        "type": "Door",
-        "group": "WorldObject",
-        "cellX": 75,
-        "cellY": 86
-      },
-      {
-        "type": "Door",
-        "group": "WorldObject",
-        "cellX": 63,
-        "cellY": 75
-      },
-      {
-        "type": "Door",
-        "group": "WorldObject",
-        "cellX": 86,
-        "cellY": 75
-      },
-      {
         "type": "Wall",
         "group": "Cover",
         "cellX": 71,
@@ -36559,54 +36115,6 @@
         "type": "Wall",
         "group": "Cover",
         "cellX": 85,
-        "cellY": 79
-      },
-      {
-        "type": "Door",
-        "group": "WorldObject",
-        "cellX": 71,
-        "cellY": 68
-      },
-      {
-        "type": "Door",
-        "group": "WorldObject",
-        "cellX": 79,
-        "cellY": 68
-      },
-      {
-        "type": "Door",
-        "group": "WorldObject",
-        "cellX": 71,
-        "cellY": 81
-      },
-      {
-        "type": "Door",
-        "group": "WorldObject",
-        "cellX": 79,
-        "cellY": 81
-      },
-      {
-        "type": "Door",
-        "group": "WorldObject",
-        "cellX": 68,
-        "cellY": 71
-      },
-      {
-        "type": "Door",
-        "group": "WorldObject",
-        "cellX": 81,
-        "cellY": 71
-      },
-      {
-        "type": "Door",
-        "group": "WorldObject",
-        "cellX": 68,
-        "cellY": 79
-      },
-      {
-        "type": "Door",
-        "group": "WorldObject",
-        "cellX": 81,
         "cellY": 79
       },
       {
@@ -37086,18 +36594,6 @@
         "cellY": 104
       },
       {
-        "type": "Door",
-        "group": "WorldObject",
-        "cellX": 19,
-        "cellY": 98
-      },
-      {
-        "type": "Door",
-        "group": "WorldObject",
-        "cellX": 23,
-        "cellY": 102
-      },
-      {
         "type": "Pot",
         "group": "WorldObject",
         "cellX": 15,
@@ -37300,18 +36796,6 @@
         "group": "Cover",
         "cellX": 23,
         "cellY": 117
-      },
-      {
-        "type": "Door",
-        "group": "WorldObject",
-        "cellX": 19,
-        "cellY": 111
-      },
-      {
-        "type": "Door",
-        "group": "WorldObject",
-        "cellX": 14,
-        "cellY": 115
       },
       {
         "type": "Barrel",
@@ -37524,18 +37008,6 @@
         "cellY": 104
       },
       {
-        "type": "Door",
-        "group": "WorldObject",
-        "cellX": 34,
-        "cellY": 98
-      },
-      {
-        "type": "Door",
-        "group": "WorldObject",
-        "cellX": 29,
-        "cellY": 102
-      },
-      {
         "type": "CrateSmall",
         "group": "Cover",
         "cellX": 30,
@@ -37750,18 +37222,6 @@
         "group": "Cover",
         "cellX": 38,
         "cellY": 117
-      },
-      {
-        "type": "Door",
-        "group": "WorldObject",
-        "cellX": 34,
-        "cellY": 111
-      },
-      {
-        "type": "Door",
-        "group": "WorldObject",
-        "cellX": 38,
-        "cellY": 115
       },
       {
         "type": "StoneLantern",
@@ -37971,18 +37431,6 @@
         "cellY": 104
       },
       {
-        "type": "Door",
-        "group": "WorldObject",
-        "cellX": 49,
-        "cellY": 98
-      },
-      {
-        "type": "Door",
-        "group": "WorldObject",
-        "cellX": 53,
-        "cellY": 102
-      },
-      {
         "type": "Barrel",
         "group": "Cover",
         "cellX": 52,
@@ -38188,18 +37636,6 @@
         "group": "Cover",
         "cellX": 53,
         "cellY": 117
-      },
-      {
-        "type": "Door",
-        "group": "WorldObject",
-        "cellX": 49,
-        "cellY": 111
-      },
-      {
-        "type": "Door",
-        "group": "WorldObject",
-        "cellX": 44,
-        "cellY": 115
       },
       {
         "type": "StoneLantern",
@@ -43094,18 +42530,6 @@
         "cellY": 67
       },
       {
-        "type": "Door",
-        "group": "WorldObject",
-        "cellX": 24,
-        "cellY": 60
-      },
-      {
-        "type": "Door",
-        "group": "WorldObject",
-        "cellX": 29,
-        "cellY": 64
-      },
-      {
         "type": "Pot",
         "group": "WorldObject",
         "cellX": 19,
@@ -43308,12 +42732,6 @@
         "group": "Cover",
         "cellX": 44,
         "cellY": 85
-      },
-      {
-        "type": "Door",
-        "group": "WorldObject",
-        "cellX": 40,
-        "cellY": 80
       },
       {
         "type": "CrateSmall",
@@ -43527,12 +42945,6 @@
         "group": "Cover",
         "cellX": 89,
         "cellY": 28
-      },
-      {
-        "type": "Door",
-        "group": "WorldObject",
-        "cellX": 84,
-        "cellY": 22
       },
       {
         "type": "CrateSmall",

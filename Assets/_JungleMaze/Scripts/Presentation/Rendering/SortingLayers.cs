@@ -13,6 +13,7 @@ namespace JungleMaze.Presentation.Rendering
         public const string WorldDynamic = "WorldDynamic";
         public const string Default = "Default";
         public const string Foreground = "Foreground";
+        public const string Vfx = "VFX";
 
         /// <summary>ID của layer; layer chưa tồn tại thì rơi về Default (0) thay vì lỗi.</summary>
         public static int IdOf(string layerName)

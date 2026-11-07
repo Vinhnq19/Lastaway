@@ -105,6 +105,8 @@ public sealed partial class RoomManager
 
     public void ApplyCatalog(MapCatalogSnapshot snapshot)
     {
+        // Floor-loot spots of new maps are planned off the tick thread; a match that starts first plans them itself.
+        if (_worldSetup is not null) { var setup = _worldSetup; _ = Task.Run(() => setup.Prewarm(snapshot.Maps.Values)); }
         foreach (var room in _byCode.Values)
         {
             if (room.Match.Phase == MatchPhase.Lobby) room.Match.CancelRoomCountdown();

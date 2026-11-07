@@ -195,8 +195,11 @@ try
     Check(!match.ProcessWorldRequest("p0",pickup),"pickup retry does not duplicate item");
     Check(active.Inventory.GetSnapshot(0).Weapons[0].ItemId=="TREE_BRANCH","inventory stores received item");
     var victimChest=active.Layout.Objects.First(o=>o.Kind==WorldObjectKind.Chest);
-    Check(active.Destructibles.DamageConfirmed(victimChest.Id,30,0,1)&&active.Floor.Items.Count>=3,"confirmed chest break creates floor items");
-    Check(!second.Destructibles.IsBroken(victimChest.Id)&&second.Floor.Items.Count==0,"room isolation of broken state and loot");
+    // Floor loot is spread at world start (07_Floor_Loot), so chest loot is counted on top of it.
+    Check(second.Floor.Items.Count==second.InitialLoot.Placements.Count,"world start spreads its own floor loot plan");
+    var floorBeforeBreak=active.Floor.Items.Count;
+    Check(active.Destructibles.DamageConfirmed(victimChest.Id,30,0,1)&&active.Floor.Items.Count>=floorBeforeBreak+3,"confirmed chest break creates floor items");
+    Check(!second.Destructibles.IsBroken(victimChest.Id)&&second.Floor.Items.Count==second.InitialLoot.Placements.Count,"room isolation of broken state and loot");
     active.Floor.TrySpawn(new ItemStack{ItemId="ELIXIR_OF_LIFE",Count=1},px,py,out var life);
     pickup.RequestId=2;pickup.TargetId=life;Check(match.ProcessWorldRequest("p0",pickup),"passive item picked into dược slot");
     match.Health.ApplyDamage(0,255,1);Check(actor.Hp==50&&actor.IsAlive,"lethal hit consumes passive and restores 50 HP");
@@ -215,7 +218,8 @@ try
     while (saturated.Floor.TrySpawn(new ItemStack("GOD_LEAF"), 1, 1, out _)) { }
     Check(!saturated.Destructibles.DamageConfirmed(saturatedChest.Id, 30, 0, 1) && !saturated.Destructibles.IsBroken(saturatedChest.Id), "full floor rejects lethal container hit without losing its loot");
     foreach (var item in saturated.Floor.Items.ToArray()) saturated.Floor.Remove(item.Id);
-    Check(saturated.Destructibles.DamageConfirmed(saturatedChest.Id, 30, 0, 1) && saturated.Floor.Items.Count is >= 3 and <= 4, "capacity recovery allows the same confirmed hit to spawn one complete loot batch");
+    // 3-4 chest items plus one AMMO stack per gun.
+    Check(saturated.Destructibles.DamageConfirmed(saturatedChest.Id, 30, 0, 1) && saturated.Floor.Items.Count is >= 3 and <= 8, "capacity recovery allows the same confirmed hit to spawn one complete loot batch");
     var batchCount = saturated.Floor.Items.Count;
     Check(!saturated.Destructibles.DamageConfirmed(saturatedChest.Id, 30, 0, 1) && saturated.Floor.Items.Count == batchCount, "retry after recovered destruction cannot duplicate the loot batch");
 }

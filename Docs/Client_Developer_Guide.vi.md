@@ -10,7 +10,7 @@ Cập nhật **01/11/2026**. Tài liệu dành cho người mới vào làm game
 2. **Chơi mạng:** setup stack API/Mongo/GameServer và secret theo [Phase2, mục1](Phase2_Match_Guest_Zone.vi.md#1-khởi-chạy-backend-local). Chọn profile `phase2-local`, đăng ký/đăng nhập trên menu rồi tạo/vào phòng bằng mã và tên. Không dùng RoomCode để bỏ bước account. LAN/VPN/AWS cần API HTTPS; HTTP chỉ loopback Local.
 3. Server `main` cần6 người, lobby15s/loading30s. Profile `test` chỉ dành Local2 người/timer tăng tốc; không dùng public. Chỉ bắt đầu từ Boot khi kiểm full flow mạng.
 4. Click **Game View**, WASD/mũi tên để đi và chuột ngắm. Client gửi input; online nhận vị trí/HP/bo từ server. Offline dùng HeroController và OfflineMatchSession, không chạy cùng hai mô phỏng.
-5. Chuột trái attack, R reload, F nhặt món đang trỏ,1–4 chọn vũ khí,5–8 dùng đồ, Backspace bỏ vũ khí. Scene dùng world/item/combat service đã ghép; trạng thái nghiệm thu từng bước và giới hạn đọc trong [báo cáo hiện hành](Reports/Phase2_Local/report.vi.md). Không dùng công cụ projectile foundation cũ để chứng minh PvP đã hoàn tất.
+5. Chuột trái attack, R reload, F nhặt món đang trỏ,1–4 chọn vũ khí,5–8 dùng đồ, Q (hoặc Backspace) bỏ vũ khí đang cầm. Scene dùng world/item/combat service đã ghép; trạng thái nghiệm thu từng bước và giới hạn đọc trong [báo cáo hiện hành](Reports/Phase2_Local/report.vi.md). Không dùng công cụ projectile foundation cũ để chứng minh PvP đã hoàn tất.
 6. F3 bật số đo; ESC mở menu và không dừng timer. Build Windows hiện giữ6000.3.15f1, có native quit BLOCKED; file evidence PASS chưa đủ nếu exit khác0.
 
 Nếu Editor không được focus mà game đứng hình, bật **Project Settings → Player → Run In Background**.
@@ -169,6 +169,24 @@ _effects.Apply(EffectKind.Poison, 3f, 3f);           // Slow không thời lư�
 - Bomb dùng id ổn định do nguồn cấp; bẫy không đồng hồ dùng `DangerKind.Trap`, làm mới ít nhất mỗi 4 giây nếu còn hiện. Nguồn quyết định tầm nhìn/LOS và quyền tiết lộ hướng; UI không suy vị trí đối thủ.
 - **F5** là panel phản hồi Editor/Development, có từng loại sự kiện và preset Dồn/Giao tranh; F4 vẫn là HUD lõi. `HudFeedbackTuning` trên prefab chỉnh thời gian/giới hạn; `HudEffectCatalog.asset` chỉnh nhãn/icon hiệu ứng. Icon vật phẩm thật vẫn thuộc ART-04.
 - QA đo 0 B trong Tick đồng bộ của store/presenter/view sau warm-up; chưa bao gồm deferred Canvas rebuild, toàn frame hay Release player. Xem báo cáo `Docs/Reports/UI-01-P2_2026-10-25/`.
+
+### 4.8. Phát VFX và seam visibility (VFX-01)
+
+VFX-01 vẽ phản hồi trên thân (nháy, số sát thương, hạt trúng đòn, quầng trạng thái), vòng cảnh báo ngòi nổ và rung màn hình. Nổ, khói, bẫy, dây leo, chuông do `ThrowableView` (WPN-03) vẽ; vùng bo do `ZoneOverlayView` vẽ. Mọi quyết định nằm ở `VfxDirector` (Application), hình nằm ở `VfxStage` (Presentation, pool CLI-03). Muốn có hiệu ứng thì **publish một event struct lên `IEventBus`**, không gọi view:
+
+```csharp
+_bus.Publish(new HitConfirmedEvent(eventKey, sourceNetId, targetNetId, damage, x, y));          // WPN-02: damage > 0
+_bus.Publish(new ExplosionEvent(key, "BANANA", ExplosionPhase.Fuse, x, y, 3, 3, fuseSeconds, owner)); // vòng ngòi nổ
+_bus.Publish(new ExplosionEvent(key, "BANANA", ExplosionPhase.Detonate, x, y, 3, 3, 0, owner));      // gỡ vòng + rung nếu gần
+_bus.Publish(new StatusEvent(key, netId, StatusKind.Stun, true, seconds, remaining));          // Game-10: chỉ cho NetId ≠ mình
+```
+
+- `EventKey` phải ổn định khi gói gửi lại (tick + nguồn + đích + seq, hoặc id sự kiện server); cùng khoá trong 5 s chỉ phát một lần. Khoá 0 = không khử trùng.
+- Đồ ném (WPN-03) đã nối sẵn qua `ThrowableVfxSource` (nghe `IThrowableEventSource`); trạng thái của chính mình đã nối qua `LocalEffectStatusSource` (đọc `IEffectState`). Không publish lại các event này.
+- Hit, nổ, trạng thái không bao giờ được dự đoán. Chỉ ra đòn của mình (`AttackPredicted`) được dự đoán, đối soát theo `RequestSeq`.
+- **FOW-01:** hiện thực `IVisibilityPolicy.IsVisible(x, y, netId)` (`netId = 255` khi hỏi theo vị trí) và đăng ký vào registry dưới `IVisibilityPolicy`, trước hoặc sau `ComposeVfx` đều được. VFX không đăng ký mặc định vào registry; khi chưa có policy thì `DeferredVisibilityPolicy` cho hiện tất cả và tự chuyển sang policy của FOW-01 khi nó xuất hiện. Director hỏi lại mọi hiệu ứng đang sống mỗi tick; người chơi local luôn hiện.
+- Số trình bày (0,16 s nháy, 0,7 s số, rung ≤ 0,15 cell, ngân sách 64) nằm trong `Art/Vfx/Resources/VfxRuntimeSet.asset`; prefab/catalog dựng lại bằng menu **Jungle Maze → VFX → Build VFX-01 Assets**.
+- Thử không cần GameServer: mở `Scenes/Dev/VfxPreview.unity`, Play, panel **F10** tự mở (hit, quầng, ném giả, lặp khoá, rollback, đổi phòng, ẩn mục tiêu, tải 10 nguồn). Ở scene Game, F10 vẫn bắn được event giả lên trận thật (Editor/Development).
 
 ## 5. Kiểm thử
 

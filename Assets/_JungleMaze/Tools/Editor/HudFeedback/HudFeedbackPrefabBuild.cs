@@ -55,7 +55,7 @@ namespace JungleMaze.EditorTools
                 var root = (RectTransform)go.transform;
                 var old = go.GetComponent<HudFeedbackRoot>();
                 if (old != null) Object.DestroyImmediate(old);
-                foreach (var name in new[] { "EffectsRow", "PickupFeed", "DangerBanner", "FeedbackOverlay", "HudKillFeed" }) Remove(root, name);
+                foreach (var name in new[] { "EffectsRow", "PickupFeed", "DangerBanner", "FeedbackOverlay", "HudKillFeed", "PickupList" }) Remove(root, name);
                 for (var child = root.Find("LowHpVignette"); child != null; child = root.Find("LowHpVignette")) Object.DestroyImmediate(child.gameObject);
                 Remove(core.Quickbar.transform, "UseActionStrip");
 
@@ -67,6 +67,7 @@ namespace JungleMaze.EditorTools
                 Vignette(root, core);
                 Set(feedback, "effectRow", EffectRow(root));
                 Set(feedback, "pickupFeed", PickupFeed(root));
+                PickupList(root);
                 Set(feedback, "useAction", UseStrip(core));
                 Set(feedback, "dangerBanner", Banner(root));
                 Overlay(root, feedback);
@@ -318,6 +319,66 @@ namespace JungleMaze.EditorTools
             return view;
         }
 
+        /// <summary>
+        /// F pickup list beside the hero (Vũ, 0ecca9e8; logic in PickupListView, rows built at runtime). Kept here so a
+        /// rebuild does not drop it. Skin A: Be Vietnam Pro Bold for name and count; panel, outline and key cap stay
+        /// Vũ's HudRound6 / KeyCap (the key cap matches the quickbar "R Nạp" hint).
+        /// </summary>
+        private static void PickupList(RectTransform root)
+        {
+            var list = UiKit.Node(root, "PickupList");
+            list.anchorMin = list.anchorMax = Vector2.zero;
+            list.pivot = new Vector2(0f, 0.5f);
+            list.anchoredPosition = new Vector2(700f, 360f); // moved next to the hero every frame by the view
+            list.sizeDelta = new Vector2(280f, 40f);
+            Group(list);
+            var view = list.gameObject.AddComponent<PickupListView>();
+            Set(view, "textFont", UiKit.Body);
+            Set(view, "numberFont", UiKit.Body);
+            Set(view, "panelSprite", Load<Sprite>("Assets/_JungleMaze/Art/Hud/HudRound6.png"));
+            Set(view, "outlineSprite", Load<Sprite>("Assets/_JungleMaze/Art/Hud/HudRound6Stroke1.png"));
+            Set(view, "keyCapSprite", Load<Sprite>("Assets/_JungleMaze/Art/Hud/KeyCap.png"));
+            // lootTuning stays empty: the view loads Resources/GroundLootTuning at start, and a prefab reference would pull
+            // ThrowableArtCatalog's JSurviv weapon sprites into Hud.prefab (Art04 AC17: no image under Imported/JSurviv).
+            var keepClear = new Object[] { Find(root, "Vitals"), Find(root, "QuickBar"), Find(root, "EffectsRow"), Find(root, "PickupFeed") };
+            SetArray(view, "keepClearOf", keepClear);
+            var feed = root.Find("PickupFeed");
+            if (feed != null) list.SetSiblingIndex(feed.GetSiblingIndex() + 1);
+        }
+
+        private static RectTransform Find(RectTransform root, string name)
+        {
+            foreach (var t in root.GetComponentsInChildren<RectTransform>(true)) if (t.name == name) return t;
+            throw new InvalidOperationException("Hud.prefab has no " + name);
+        }
+
+        /// <summary>
+        /// Reload ring above the hero (Vũ, a9c178e7): HudRing128 track and a radial fill from the top. HudFeedbackRoot hides
+        /// it at start (CombatWeaponPresenter draws the world ring), so it is wired only to keep main's references.
+        /// </summary>
+        private static ReloadRingView ReloadRing(RectTransform overlay)
+        {
+            var ring = UiKit.Node(overlay, "ReloadRing");
+            ring.anchorMin = ring.anchorMax = ring.pivot = new Vector2(0.5f, 0.5f);
+            ring.sizeDelta = new Vector2(30f, 30f);
+            var group = Group(ring);
+            var sprite = Load<Sprite>("Assets/_JungleMaze/Art/Hud/HudRing128.png");
+            var track = UiKit.Stretch(UiKit.Node(ring, "Track")).gameObject.AddComponent<Image>();
+            track.sprite = sprite;
+            var fill = UiKit.Stretch(UiKit.Node(ring, "Fill")).gameObject.AddComponent<Image>();
+            fill.sprite = sprite;
+            fill.type = Image.Type.Filled;
+            fill.fillMethod = Image.FillMethod.Radial360;
+            fill.fillOrigin = (int)Image.Origin360.Top;
+            fill.fillClockwise = true;
+            fill.fillAmount = 0f;
+            var view = ring.gameObject.AddComponent<ReloadRingView>();
+            Set(view, "group", group);
+            Set(view, "track", track);
+            Set(view, "fill", fill);
+            return view;
+        }
+
         /// <summary>Hit marker (fx_hitmarker 101×96 in a 96 px box at the aim point), 4 damage arcs, 3 danger arrows.</summary>
         private static void Overlay(RectTransform root, HudFeedbackRoot feedback)
         {
@@ -325,6 +386,7 @@ namespace JungleMaze.EditorTools
             overlay.anchorMin = overlay.anchorMax = overlay.pivot = new Vector2(0.5f, 0.5f);
             overlay.sizeDelta = new Vector2(1280, 720);
             overlay.gameObject.AddComponent<Canvas>();
+            Set(feedback, "reloadRing", ReloadRing(overlay));
 
             var hit = Centred(UiKit.Node(overlay, "HitMarker"), 96, 96);
             var hitGroup = Group(hit);

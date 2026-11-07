@@ -208,6 +208,7 @@ namespace JungleMaze.Composition
             ComposeLobby(bus, tickRunner, match, network, balance); // UI-02, Bootstrap.Lobby.cs
             _registry.InitializeAll();
             ComposeWorld(tickRunner, match); // MAP-02 / ITM-01 authoritative world stream.
+            ComposeVfx(tickRunner, match); // VFX-01, Bootstrap.Vfx.cs (after ComposeWorld: needs the throwable sessions)
 
             // View/vỏ MonoBehaviour sống cùng Bootstrap (DontDestroyOnLoad).
             Attach<NetworkManager>();

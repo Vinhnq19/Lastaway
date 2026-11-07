@@ -8,6 +8,7 @@ using JungleMaze.App.World;
 using JungleMaze.Core.DI;
 using JungleMaze.Presentation.Player;
 using JungleMaze.Presentation.UI.Hud;
+using JungleMaze.Presentation.World.Loot;
 using JungleMaze.World.Inventory;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -30,8 +31,13 @@ namespace JungleMaze.Presentation.World.Phase2
         private GameFlow _flow;
         private Transform _hero;
         private IItemIconProvider _icons;
+        private NearbyLootPicker _picker;
 
         [SerializeField] private WorldVisualSet visuals;
+        /// <summary>Ground loot look; empty loads Resources/GroundLootTuning (built by Jungle Maze → Loot → Build Ground Loot Assets).</summary>
+        [SerializeField] private GroundLootTuning lootTuning;
+        private GroundLootLayer _loot;
+        private bool _lootTuningMissing;
         private Transform _root;
         private Sprite _square;
         private Texture2D _texture;
@@ -56,6 +62,10 @@ namespace JungleMaze.Presentation.World.Phase2
         /// <summary>Ground item icons; the HUD's normalized catalog, never raw JSurviv art.</summary>
         [Inject]
         public void ConfigureIcons(IItemIconProvider icons) => _icons = icons;
+
+        /// <summary>The F pickup list shared with the HUD panel (Docs/hvu/07_Floor_Loot.vi.md section 11).</summary>
+        [Inject]
+        public void ConfigurePickupList(NearbyLootPicker picker) => _picker = picker;
 
         [Inject]
         public void ConfigureOffline(OfflineWorldSession offlineWorld, OfflineMatchSession offlineMatch, GameFlow flow)
@@ -131,7 +141,7 @@ namespace JungleMaze.Presentation.World.Phase2
                 return;
             }
 
-            if (_world == null || !_world.IsReady || SceneManager.GetActiveScene().name != "Game" || _match.OwnHp == 0 || (_menu?.BlocksGameplayInput ?? false)) return;
+            if (_world == null || !_world.IsReady || SceneManager.GetActiveScene().name != "Game" || _match.OwnHp == 0 || (_menu?.BlocksGameplayInput ?? false)) { ClearPickupList(); return; }
             if (Time.unscaledTime >= _autoPickupAt && _catalog != null)
             {
                 _autoPickupAt = Time.unscaledTime + .25f;
@@ -145,15 +155,18 @@ namespace JungleMaze.Presentation.World.Phase2
                 if (Input.GetKeyDown((KeyCode)((int)KeyCode.Alpha1 + i))) _world.Send(WorldActionKind.Select, 0, (byte)(_world.Inventory != null && _world.Inventory.ActiveWeapon == i ? 255 : i));
                 if (Input.GetKeyDown((KeyCode)((int)KeyCode.Alpha5 + i))) _world.Send(WorldActionKind.Use, 0, (byte)i);
             }
-            if (Input.GetKeyDown(KeyCode.Backspace) && _world.Inventory != null && _world.Inventory.ActiveWeapon >= 0) _world.Send(WorldActionKind.Drop, 0, (byte)_world.Inventory.ActiveWeapon);
+            if (DropPressed() && _world.Inventory != null && _world.Inventory.ActiveWeapon >= 0) _world.Send(WorldActionKind.Drop, 0, (byte)_world.Inventory.ActiveWeapon);
             if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0 || Input.GetMouseButtonDown(0))
                 if (_world.Inventory != null && _world.Inventory.IsUsing) _world.Send(WorldActionKind.CancelUse);
         }
 
+        /// <summary>Q (hoặc Backspace như cũ) bỏ vũ khí đang cầm xuống sàn.</summary>
+        private static bool DropPressed() => Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.Backspace);
+
         private void UpdateOffline()
         {
             if (!_offlineWorld.IsReady || SceneManager.GetActiveScene().name != "Game" ||
-                (_offlineMatch != null && _offlineMatch.IsDead)) return;
+                (_offlineMatch != null && _offlineMatch.IsDead)) { ClearPickupList(); return; }
 
             if (_hero == null)
             {
@@ -177,7 +190,7 @@ namespace JungleMaze.Presentation.World.Phase2
                 }
                 _offlineWorld.SetPlayerPose(_hero.position.x, _hero.position.y);
             }
-            if (_menu?.BlocksGameplayInput ?? false) return;
+            if (_menu?.BlocksGameplayInput ?? false) { ClearPickupList(); return; }
 
             if (Time.unscaledTime >= _autoPickupAt && _catalog != null && _hero != null)
             {
@@ -194,8 +207,8 @@ namespace JungleMaze.Presentation.World.Phase2
                 }
             }
 
-            if (_hero != null)
-                HandleInteraction(_offlineWorld.Objects, _hero.position, true);
+            if (_hero != null) HandleInteraction(_offlineWorld.Objects, _hero.position, true);
+            else ClearPickupList();
 
             for (var i = 0; i < 4; i++)
             {
@@ -210,7 +223,7 @@ namespace JungleMaze.Presentation.World.Phase2
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.Backspace))
+            if (DropPressed())
             {
                 var inv = _offlineWorld.Inventory;
                 if (inv != null && inv.ActiveWeapon >= 0)
@@ -223,6 +236,27 @@ namespace JungleMaze.Presentation.World.Phase2
                 if (inv != null && inv.IsUsing)
                     _offlineWorld.CancelUse();
             }
+        }
+
+        /// <summary>
+        /// Refreshes the F pickup list around <paramref name="hero"/> (mouse wheel moves its selection) and highlights the
+        /// selected ground item. Returns the world Id F picks up, 0 when no item is in reach.
+        /// </summary>
+        private ushort UpdatePickupList(WorldObjectWire[] objects, Vector2 hero)
+        {
+            if (_picker == null) return 0;
+            var wheel = Input.mouseScrollDelta.y;
+            // Wheel down walks down the list (farther items), wheel up walks back; one notch = one row.
+            var steps = wheel < 0f ? 1 : wheel > 0f ? -1 : 0;
+            _picker.Update(objects, hero.x, hero.y, steps, Time.unscaledTimeAsDouble);
+            _loot?.Select(_picker.TargetId);
+            return _picker.TargetId;
+        }
+
+        private void ClearPickupList()
+        {
+            if (_picker != null && _picker.Count > 0) _picker.Clear();
+            _loot?.Select(0);
         }
 
         // The prompt and the F action must always refer to the same object.
@@ -244,7 +278,37 @@ namespace JungleMaze.Presentation.World.Phase2
             return null;
         }
 
+        /// <summary>
+        /// F interacts with what is in reach: the item selected in the pickup list (mouse wheel moves the selection), else the
+        /// nearest door. The list draws its own [F] prompt; the floating [F] marker is kept for the door.
+        /// </summary>
         private void HandleInteraction(WorldObjectWire[] states, Vector2 own, bool offline)
+        {
+            if (_picker == null) { HandleCursorInteraction(states, own, offline); return; }
+            var item = UpdatePickupList(states, own);
+            ushort door = 0;
+            if (item == 0)
+            {
+                door = NearestDoor(states, own);
+                if (door != 0)
+                    foreach (var state in states)
+                        if (state.Id == door) { _interactionTarget = state; break; }
+            }
+            if (!Input.GetKeyDown(KeyCode.F)) return;
+            if (item != 0)
+            {
+                if (offline) _offlineWorld.Pickup(item);
+                else _world.Send(WorldActionKind.Pickup, item);
+            }
+            else if (door != 0)
+            {
+                if (offline) _offlineWorld.ToggleDoor(door);
+                else _world.Send(WorldActionKind.Interact, door);
+            }
+        }
+
+        /// <summary>Without the pickup list (no Bootstrap): F takes the item nearest the cursor, else the nearest door.</summary>
+        private void HandleCursorInteraction(WorldObjectWire[] states, Vector2 own, bool offline)
         {
             var camera = Camera.main;
             if (camera == null) return;
@@ -283,6 +347,7 @@ namespace JungleMaze.Presentation.World.Phase2
             {
                 _views.Clear();
                 _colliders.Clear();
+                _loot = null; // its views lived under the destroyed root
                 var go = new GameObject("Authoritative World Views");
                 _root = go.transform;
                 _root.SetParent(transform, false);
@@ -291,7 +356,7 @@ namespace JungleMaze.Presentation.World.Phase2
             var ready = isOffline ? _offlineWorld.IsReady : (_world != null && _world.IsReady);
             var show = SceneManager.GetActiveScene().name == "Game" && ready;
             _root.gameObject.SetActive(show);
-            if (!show) return;
+            if (!show) { _loot?.Clear(); return; }
 
             if (_square == null)
             {
@@ -301,10 +366,13 @@ namespace JungleMaze.Presentation.World.Phase2
                 _square = Sprite.Create(_texture, new Rect(0, 0, 1, 1), new Vector2(0.5f, 0.5f), 1);
             }
             var sourceObjects = isOffline ? _offlineWorld.Objects : _world.Objects;
+            // Ground items (kind 100) float with rarity light in their own pooled layer; WorldObjectView keeps the other kinds.
+            var loot = EnsureLootLayer();
+            loot?.Apply(sourceObjects, Time.unscaledTimeAsDouble);
             var dynamicStates = new List<WorldObjectWire>();
             // Cover (kind 1–4): offline do scene vẽ; khi có art Level Editor thì LevelArtView đã vẽ hình Cainos.
             var coversDrawn = isOffline || LevelArtView.CoversDrawn;
-            foreach (var state in sourceObjects) if (!coversDrawn || state.Kind > 4) dynamicStates.Add(state);
+            foreach (var state in sourceObjects) if ((!coversDrawn || state.Kind > 4) && (loot == null || state.Kind != GroundLootLayer.GroundItemKind)) dynamicStates.Add(state);
             var states = dynamicStates.ToArray();
             // Vật thể có hình Level Editor (rương, bình, bụi, portal, cửa trong JSON) không vẽ thêm art kiểu cũ.
             var drawn = new List<WorldObjectWire>(states.Length);
@@ -312,6 +380,23 @@ namespace JungleMaze.Presentation.World.Phase2
                 if (!LevelArtView.TryShowWorldObject(state.Kind, state.X, state.Y, state.Width, state.Height, state.Flags, state.Hp)) drawn.Add(state);
             ApplyViews(drawn.ToArray(), _root, _views, _visuals, _square, _icons);
             ApplyCollision(states);
+        }
+
+        private GroundLootLayer EnsureLootLayer()
+        {
+            if (_loot != null || _lootTuningMissing) return _loot;
+            var tuning = lootTuning != null ? lootTuning : Resources.Load<GroundLootTuning>(GroundLootTuning.ResourceName);
+            if (tuning == null)
+            {
+                // Without the tuning asset the old flat icon marker (WorldObjectView) still shows every item.
+                _lootTuningMissing = true;
+                Debug.LogWarning("[World] GroundLootTuning missing; run Jungle Maze/Loot/Build Ground Loot Assets.");
+                return null;
+            }
+            var go = new GameObject("Ground Loot");
+            go.transform.SetParent(_root, false);
+            _loot = new GroundLootLayer(go.transform, tuning, _icons, _catalog, _square);
+            return _loot;
         }
 
         private void ApplyCollision(WorldObjectWire[] states)

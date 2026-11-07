@@ -1,0 +1,130 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61cd1df5e9c093b4f984baf2f4bd9df9, type: 3}
+  m_Name: VfxCatalog
+  m_EditorClassIdentifier: JungleMaze.Presentation::JungleMaze.Presentation.Vfx.VfxCatalog
+  cues:
+  - cue: 1
+    prefab: {fileID: 633118967055148190, guid: 1b85123c70dda304c9d5d1fde192799a, type: 3}
+    prewarm: 8
+    priority: 0
+    lifetimeSeconds: 0.4
+    persistent: 0
+    sortingLayer: Default
+    anchorOffset: {x: 0, y: 0.3}
+  - cue: 2
+    prefab: {fileID: 5870712852369037265, guid: ffc7a57eb3a029d46919c948372286a2, type: 3}
+    prewarm: 8
+    priority: 0
+    lifetimeSeconds: 0
+    persistent: 0
+    sortingLayer: Default
+    anchorOffset: {x: 0, y: 0.6}
+  - cue: 3
+    prefab: {fileID: 10161812764771111, guid: 35eaacb408d7a124b99f6ca2138b9cc0, type: 3}
+    prewarm: 6
+    priority: 0
+    lifetimeSeconds: 0.25
+    persistent: 0
+    sortingLayer: Default
+    anchorOffset: {x: 0, y: 0}
+  - cue: 4
+    prefab: {fileID: 8694726664247596528, guid: 29c87433833634b44805c3545abcc95d, type: 3}
+    prewarm: 4
+    priority: 3
+    lifetimeSeconds: 0
+    persistent: 1
+    sortingLayer: VFX
+    anchorOffset: {x: 0, y: 0}
+  - cue: 12
+    prefab: {fileID: 5714164691638145343, guid: 7ed4d02e064ff0a4d8d9e1b379cb374a, type: 3}
+    prewarm: 2
+    priority: 1
+    lifetimeSeconds: 0
+    persistent: 1
+    sortingLayer: Default
+    anchorOffset: {x: 0, y: 0.75}
+  - cue: 14
+    prefab: {fileID: 2647395744192276965, guid: 31f535c44af93fc459be30517712d9a4, type: 3}
+    prewarm: 2
+    priority: 1
+    lifetimeSeconds: 0
+    persistent: 1
+    sortingLayer: Default
+    anchorOffset: {x: 0, y: 0.55}
+  - cue: 15
+    prefab: {fileID: 7853044745205376880, guid: 203799831f00b45408c712314362c38a, type: 3}
+    prewarm: 2
+    priority: 1
+    lifetimeSeconds: 0
+    persistent: 1
+    sortingLayer: Default
+    anchorOffset: {x: 0, y: 0}
+  - cue: 17
+    prefab: {fileID: 7853044745205376880, guid: 203799831f00b45408c712314362c38a, type: 3}
+    prewarm: 2
+    priority: 1
+    lifetimeSeconds: 0
+    persistent: 1
+    sortingLayer: Default
+    anchorOffset: {x: 0, y: 0}
+  - cue: 16
+    prefab: {fileID: 791582040649073376, guid: 15e0ac1ae149e224a965b6bbc37dce73, type: 3}
+    prewarm: 2
+    priority: 1
+    lifetimeSeconds: 0
+    persistent: 1
+    sortingLayer: Default
+    anchorOffset: {x: 0, y: 0}
+  - cue: 18
+    prefab: {fileID: 4236119154353591742, guid: c53cb1aa41cfba74c815ca5526829b54, type: 3}
+    prewarm: 2
+    priority: 1
+    lifetimeSeconds: 0
+    persistent: 1
+    sortingLayer: Default
+    anchorOffset: {x: 0, y: 0.1}
+  statuses:
+  - kind: 5
+    cue: 12
+    tint: 0
+  - kind: 7
+    cue: 14
+    tint: 0
+  - kind: 8
+    cue: 15
+    tint: 5
+  - kind: 100
+    cue: 17
+    tint: 4
+  - kind: 4
+    cue: 16
+    tint: 0
+  - kind: 2
+    cue: 18
+    tint: 0
+  - kind: 6
+    cue: 0
+    tint: 0
+  - kind: 3
+    cue: 0
+    tint: 0
+  - kind: 1
+    cue: 0
+    tint: 0
+  palette:
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 1, g: 0.36, b: 0.3, a: 1}
+  - {r: 0.82, g: 0.82, b: 0.82, a: 1}
+  - {r: 1, g: 0.82, b: 0.25, a: 1}
+  - {r: 1, g: 1, b: 1, a: 1}
