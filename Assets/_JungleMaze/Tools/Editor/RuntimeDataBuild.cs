@@ -13,7 +13,7 @@ namespace JungleMaze.EditorTools
     /// <summary>Canonical backend data is copied explicitly, then verified before every player build.</summary>
     public sealed class RuntimeDataBuild : IPreprocessBuildWithReport, IPostprocessBuildWithReport
     {
-        private static readonly string[] Files = { "map_demo.json", "match_settings.json", "zone_schedule.json", "world_settings.json", "items_catalog.json", "weapons.json" };
+        private static readonly string[] Files = { "map_demo.json", "match_settings.json", "zone_schedule.json", "world_settings.json", "items_catalog.json", "weapons.json", "airdrop_schedule.json" };
         private static string Source => Path.GetFullPath(Path.Combine(Application.dataPath, "../Backend/Shared/GameData"));
         private static string Target => Path.Combine(Application.streamingAssetsPath, "JungleMaze/runtime");
         public int callbackOrder => -1000;

@@ -148,7 +148,9 @@ namespace JungleMaze.Tests.Protocol
             using var sha = SHA256.Create();
             var hash = BitConverter.ToString(sha.ComputeHash(stream.ToArray())).Replace("-", "").ToLowerInvariant();
             var data = new ClientRuntimeData(Application.streamingAssetsPath);
-            Assert.IsNull(data.Verify("1.1.0", hash)); Assert.AreEqual(4, data.Covers.Count);
+            Assert.IsNull(data.Verify("1.1.0", hash));
+            var map=Newtonsoft.Json.Linq.JObject.Parse(File.ReadAllText(Path.Combine(source,"map_demo.json")));
+            Assert.AreEqual(((Newtonsoft.Json.Linq.JArray)map["obstacles"]).Count,data.Covers.Count);
             Assert.AreEqual(50, data.Bounds.MaxX); Assert.AreEqual(0, data.Bounds.MinY);
             Assert.IsNotNull(data.Verify("1.1.0", new string('0', 64)));
         }

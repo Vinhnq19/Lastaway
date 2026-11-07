@@ -133,7 +133,7 @@ MonoBehaviour:
   - id: 10
     clips:
     - {fileID: 8300000, guid: 3f8ac44c1acd5b1a9e63478557e2ae71, type: 3}
-    volume: 0.5
+    volume: 0.7
     pitchJitter: 0.05
     priority: 0
     bus: 1
@@ -349,5 +349,29 @@ MonoBehaviour:
     rangeCells: 0
     maxInstances: 1
     cooldownSeconds: 5
+    repeatCount: 1
+    repeatIntervalSeconds: 0
+  - id: 28
+    clips:
+    - {fileID: 8300000, guid: a15637dd91be495db550ebeac9dd85b0, type: 3}
+    volume: 0.85
+    pitchJitter: 0.04
+    priority: 2
+    bus: 1
+    rangeCells: 18
+    maxInstances: 3
+    cooldownSeconds: 0.1
+    repeatCount: 1
+    repeatIntervalSeconds: 0
+  - id: 29
+    clips:
+    - {fileID: 8300000, guid: 8ad40dd79dcf474ba54acfa717589008, type: 3}
+    volume: 0.85
+    pitchJitter: 0.04
+    priority: 2
+    bus: 1
+    rangeCells: 18
+    maxInstances: 3
+    cooldownSeconds: 0.1
     repeatCount: 1
     repeatIntervalSeconds: 0

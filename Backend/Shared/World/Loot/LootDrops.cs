@@ -27,24 +27,24 @@ namespace JungleMaze.World.Loot
         public static ItemStack AmmoStack(LootTable table) => new ItemStack(AmmoId, table.FloorProfile.AmmoBoxes);
 
         /// <summary>World objects a set of stacks will occupy once ammo companions are added.</summary>
-        public static int CountObjects(LootTable table, ItemStack[] items)
+        public static int CountObjects(LootTable table, ItemStack[] items, bool includeAmmo = true)
         {
             if (items == null) return 0;
             var count = items.Length;
-            foreach (var item in items) if (NeedsAmmo(table, item)) count++;
+            foreach (var item in items) if (includeAmmo && NeedsAmmo(table, item)) count++;
             return count;
         }
 
         /// <summary>Exact object count of <see cref="ForContainer"/> for the same arguments (use for CanSpawnLoot).</summary>
         public static int CountForContainer(LootTable table, WorldObjectKind kind, uint seed) =>
-            CountObjects(table, table.Roll(SourceOf(kind), seed));
+            CountObjects(table, table.Roll(SourceOf(kind), seed), kind != WorldObjectKind.Supply);
 
         /// <summary>Roll a broken container's loot and fan it out around <paramref name="center"/>, with ammo next to guns.</summary>
         public static List<LootPlacement> ForContainer(LootTable table, WorldObjectKind kind, WorldPoint center, uint seed, LootSurface surface)
         {
             if (table == null) throw new ArgumentNullException(nameof(table));
             var output = new List<LootPlacement>();
-            Spread(table, table.Roll(SourceOf(kind), seed), center, seed, surface, output);
+            Spread(table, table.Roll(SourceOf(kind), seed), center, seed, surface, output, kind != WorldObjectKind.Supply);
             return output;
         }
 
@@ -52,7 +52,7 @@ namespace JungleMaze.World.Loot
         /// Fan <paramref name="items"/> out ScatterMin..ScatterMax around the center: even angles with a seeded offset and jitter.
         /// A blocked point rotates around the circle, then pulls toward the center, and finally uses the center itself.
         /// </summary>
-        public static void Spread(LootTable table, ItemStack[] items, WorldPoint center, uint seed, LootSurface surface, List<LootPlacement> output)
+        public static void Spread(LootTable table, ItemStack[] items, WorldPoint center, uint seed, LootSurface surface, List<LootPlacement> output, bool includeAmmo = true)
         {
             if (table == null || surface == null || output == null) throw new ArgumentNullException();
             if (items == null || items.Length == 0) return;
@@ -67,7 +67,7 @@ namespace JungleMaze.World.Loot
             var count = output.Count;
             for (var i = first; i < count; i++)
             {
-                if (!NeedsAmmo(table, output[i].Stack)) continue;
+                if (!includeAmmo || !NeedsAmmo(table, output[i].Stack)) continue;
                 var ammo = TryAmmoPoint(table, output[i].Position, LootSeeds.Mix(seed, (uint)i + 1), surface, output, first, out var point) ? point : output[i].Position;
                 output.Add(new LootPlacement(AmmoStack(table), ammo, -1, true));
             }

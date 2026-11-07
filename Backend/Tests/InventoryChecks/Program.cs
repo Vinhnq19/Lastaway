@@ -32,6 +32,15 @@ for (uint seed = 1; seed <= 100; seed++)
     if (pot.Length < 1 || pot.Length > 2 || pot.Any(x => baseline.Get(x.ItemId).MagazineSize > 0)) throw new Exception("invalid pot loot");
 }
 Check(true, "100 seeds deterministic count/source/disabled rules");
+for (uint seed = 1; seed <= 512; seed++)
+{
+    var rolled = loot.Roll(LootSource.Supply, seed);
+    Check(rolled.Length >= 6 && rolled.Length <= 8 && rolled.Select(x => x.ItemId).Distinct().Count() == rolled.Length,
+        "supply count and distinct IDs seed " + seed);
+    Check(rolled.Any(x => x.ItemId == "MACE") && rolled.Any(x => x.ItemId == "COMPASS"), "supply guarantees seed " + seed);
+    Check(rolled.Select(x => x.ItemId).SequenceEqual(loot.Roll(LootSource.Supply, seed).Select(x => x.ItemId)),
+        "supply deterministic seed " + seed);
+}
 var supply = loot.Roll(LootSource.Supply, 42);
 Check(supply.Any(x => x.ItemId == "MACE") && supply.Any(x => x.ItemId == "COMPASS"), "supply guaranteed rare items");
 Throws(() => new LootTable(baseline, new LootProfile { ChestGroupWeights = new int[6] }), "infeasible zero-weight source rejected");

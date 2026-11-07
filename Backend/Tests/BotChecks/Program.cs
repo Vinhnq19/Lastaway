@@ -77,10 +77,15 @@ Check(pickRoom.Match.Phase==MatchPhase.InGame,"loot room reaches in game");
 if (!pickRoom.Match.Entities.TryGetBySession("loot-human", out var human) || human is null) throw new Exception("FAIL: human entity missing");
 var botPlayer=pickRoom.Match.GetRosterPacket().Players!.Single(p=>p.IsBot);
 if (!pickRoom.Match.Entities.TryGet(botPlayer.NetId, out var bot) || bot is null) throw new Exception("FAIL: bot entity missing");
-human.X=.5f;human.Y=.5f;pickRoom.Match.World!.Floor.Clear();pickRoom.Match.World.SyncActors();
+human.X=.5f;human.Y=.5f;pickRoom.Match.World!.Floor.Clear();
+// Fake clock expires initial spawn memory without letting the bot roam, break containers or collect other weapons.
+typeof(MatchRuntime).GetField("_matchElapsedSeconds",System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic)!.SetValue(pickRoom.Match,4d);
+pickRoom.Match.World.SyncActors();
+Check(pickRoom.Match.World.Inventory.GetSnapshot(bot.NetId).Weapons.All(s=>s.IsEmpty),"pickup fixture starts with an empty weapon bag");
 Check(pickRoom.Match.World.Floor.TrySpawn(new ItemStack("RUBBER_GUN",1),bot.X,bot.Y,out var disabledId),"disabled item fixture");
 Check(pickRoom.Match.World.Floor.TrySpawn(new ItemStack("KNIFE",1),bot.X,bot.Y,out var knifeId),"knife spawns on floor at bot");
 for(var i=0;i<30;i++)pickRooms.Tick(1d/30);
+if(!pickRoom.Match.World.Inventory.GetSnapshot(bot.NetId).Weapons.Any(s=>s.ItemId=="KNIFE"))Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(new {bot.X,bot.Y,bot.Hp,alive=bot.IsAlive,phase=pickRoom.Match.Phase.ToString(),elapsed=pickRoom.Match.ElapsedSeconds,state=pickRoom.Match.BotStates,bag=pickRoom.Match.World.Inventory.GetSnapshot(bot.NetId).Weapons.Select(s=>s.ItemId),usingItem=pickRoom.Match.World.Using(bot.NetId),floor=pickRoom.Match.World.Floor.Items.Select(f=>new{f.Id,f.X,f.Y,item=f.Stack.ItemId})}));
 Check(pickRoom.Match.World.Inventory.GetSnapshot(bot.NetId).Weapons.Count(s=>s.ItemId=="KNIFE")==1,"bot picks up one knife through brain");
 Check(!pickRoom.Match.World.Floor.TryGet(knifeId,out _),"picked up knife leaves the floor");
 Check(pickRoom.Match.World.Floor.TryGet(disabledId,out _)&&!pickRoom.Match.World.Inventory.GetSnapshot(bot.NetId).Weapons.Any(w=>w.ItemId=="RUBBER_GUN"),"bot ignores items disabled by current catalog");
@@ -96,6 +101,8 @@ Check(pickRoom.Match.World.Floor.TryGet(disabledId,out _)&&!pickRoom.Match.World
     Check(m.AcknowledgeMap(r,"fixture",new RoomMapReadyPacket{RoomId=r.Id,SelectionRevision=selection.SelectionRevision,MapHash=selection.MapHash,RulesHash=selection.RulesHash})==RoomMapError.None,"fixture verifies selected geometry");
     for(var i=0;i<botCount;i++)Check(m.ManageBots(r,"fixture",Command(r,m,RoomBotAction.Add))==RoomBotError.None,"fixture adds bot");
     Check(m.StartMatch(r,"fixture",new StartRoomMatchPacket{RoomId=r.Id,SelectionRevision=m.GetMapState(r).SelectionRevision})==RoomMapError.None,"fixture starts");
+    // Clock/perception geometry fixtures use a stable round seed before zone/world/brains are initialized.
+    typeof(MatchRuntime).GetProperty(nameof(MatchRuntime.MatchId))!.SetValue(r.Match,new Guid(42,0,0,new byte[8]));
     for(var t=0;t<60&&r.Match.Phase!=MatchPhase.InGame;t++){r.Match.SetPlayerLoaded("fixture",r.Match.MatchId);m.Tick(1d/30);}
     if(r.Match.Phase!=MatchPhase.InGame||!r.Match.Entities.TryGetBySession("fixture",out var h)||h is null)throw new Exception("Fixture failed to load human");
     var bp=r.Match.GetRosterPacket().Players!.First(p=>p.IsBot);
@@ -282,11 +289,37 @@ Check(sliced.ReachedGoal && sliced.Path.SequenceEqual(job.Path),"time-sliced end
 budget.Reset(3,1);Thread.Sleep(3);
 Check(!budget.CanWork&&!budget.Take()&&budget.Used==0,"expired time budget cannot consume a node");
 
+// Fake clock only in this fixture; all decisions, combat and pickups are the production bot brain.
+{
+    var fixture=Fixture();var match=fixture.Room.Match;var supplyWorld=match.World!;
+    typeof(MatchRuntime).GetField("_matchElapsedSeconds",System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic)!.SetValue(match,110d);
+    fixture.Manager.Tick(1d/30);
+    var drop=supplyWorld.Airdrops!.Runtime.States[0];
+    Check(drop.Phase==JungleMaze.World.Airdrops.AirdropPhase.Flying,"bot supply fixture announces a real scheduled drop");
+    var safeHuman=false;
+    for(float y=2;y<supplyWorld.Layout.Size-2&&!safeHuman;y++)for(float x=2;x<supplyWorld.Layout.Size-2&&!safeHuman;x++)
+        if(Safe(match,new Vector2(x,y))&&Vector2.Distance(new Vector2(x,y),new Vector2(drop.Position.X,drop.Position.Y))>16)
+        {fixture.Human.X=x;fixture.Human.Y=y;safeHuman=true;}
+    Check(safeHuman,"human stays safe outside bot perception for supply fixture");
+    for(var i=0;i<330&&supplyWorld.Airdrops.Runtime.States[0].Phase!=JungleMaze.World.Airdrops.AirdropPhase.Landed;i++)fixture.Manager.Tick(1d/30);
+    drop=supplyWorld.Airdrops.Runtime.States[0];Check(drop.Phase==JungleMaze.World.Airdrops.AirdropPhase.Landed,"bot target egg lands");
+    supplyWorld.Floor.Clear();var egg=supplyWorld.Layout.Objects.Single(o=>o.Id==drop.WorldId);var placed=false;
+    for(var i=0;i<4;i++){var a=i*MathF.PI/2;var point=new Vector2(drop.Position.X-MathF.Cos(a)*1.45f,drop.Position.Y-MathF.Sin(a)*1.45f);if(!Safe(match,point))continue;fixture.Bot.X=point.X;fixture.Bot.Y=point.Y;placed=true;break;}
+    Check(placed,"bot has an accessible egg approach");supplyWorld.SyncActors();
+    var hpChanges=0;supplyWorld.Destructibles.Changed+=state=>{if(state.Id==drop.WorldId&&state.Hp<150)hpChanges++;};
+    for(var i=0;i<600&&!supplyWorld.Destructibles.IsBroken(drop.WorldId);i++)fixture.Manager.Tick(1d/30);
+    Check(supplyWorld.Destructibles.IsBroken(drop.WorldId)&&hpChanges>0,"bot destroys dynamic egg through real combat intents");
+    for(var i=0;i<300;i++)fixture.Manager.Tick(1d/30);
+    var inventory=supplyWorld.Inventory.GetSnapshot(fixture.Bot.NetId);
+    Check(inventory.Weapons.Any(w=>w.ItemId=="MACE")||inventory.Consumables.Any(w=>w.ItemId=="COMPASS"),"bot picks up scheduled supply loot through inventory");
+}
 if(args.Contains("--stress"))
 {
+    int StressOption(string name,int fallback,int max){var index=Array.IndexOf(args,name);if(index<0)return fallback;if(index+1>=args.Length||!int.TryParse(args[index+1],out var value)||value<1||value>max)throw new ArgumentException(name);return value;}
+    var stressRooms=StressOption("--stress-rooms",5,5);var stressSeconds=StressOption("--stress-seconds",60,600);
     var stressProfile=new MatchProfile{Version=main.Version,MinPlayers=6,LobbyDurationSeconds=.1,LoadingTimeoutSeconds=1,ZoneTimeScale=1,WorldEnabled=true};
     var stress=Manager(stressProfile);var hosted=new List<(RoomManager.Room Room,string Human)>();
-    for(var i=0;i<5;i++)
+    for(var i=0;i<stressRooms;i++)
     {
         RoomManager.Room r;
         if(i==0)r=stress.AllRooms.Single();
@@ -301,8 +334,8 @@ if(args.Contains("--stress"))
         for(var b=0;b<9;b++)Check(stress.ManageBots(r,id,Command(r,stress,RoomBotAction.Add))==RoomBotError.None,"stress bot slot");
         hosted.Add((r,id));
     }
-    Check(stress.ReservedPeers==50&&stress.BotCount==45,"five rooms reserve exactly fifty human and bot slots");
-    var metrics=new ServerMetrics();var maxNodes=0;using var stop=new CancellationTokenSource(TimeSpan.FromSeconds(60));
+    Check(stress.ReservedPeers==stressRooms*10&&stress.BotCount==stressRooms*9,"five rooms reserve exactly fifty human and bot slots");
+    var metrics=new ServerMetrics();var maxNodes=0;using var stop=new CancellationTokenSource(TimeSpan.FromSeconds(stressSeconds));
     var loop=new FixedTickLoop(30,metrics);
     loop.Run(()=>
     {
@@ -314,7 +347,7 @@ if(args.Contains("--stress"))
             if(m.Phase==MatchPhase.Ending)m.ProcessReplayAck(entry.Human,m.MatchId);
         }
     },dt=>{stress.Tick(dt);maxNodes=Math.Max(maxNodes,stress.BotPathNodes);metrics.RecordBotWork(stress.BotPathNodes,stress.PendingBotPaths);},
-        ()=>metrics.ReportIfDue(5,5,5,0,stress.Count,stress.Occupancy(),stress.BotCount),stop.Token);
-    Check(maxNodes<=1500&&stress.ReservedPeers==50,"shared navigation budget and slots remain bounded during five-room stress");
+        ()=>metrics.ReportIfDue(stressRooms,stressRooms,stressRooms,0,stress.Count,stress.Occupancy(),stress.BotCount),stop.Token);
+    Check(maxNodes<=1500&&stress.ReservedPeers==stressRooms*10,"shared navigation budget and slots remain bounded during five-room stress");
 }
 Console.WriteLine($"BotChecks: {checks} passed, 0 failed");

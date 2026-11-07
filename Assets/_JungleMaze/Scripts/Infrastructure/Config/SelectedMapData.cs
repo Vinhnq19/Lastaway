@@ -14,7 +14,7 @@ namespace JungleMaze.Infrastructure.Config
     public sealed class SelectedMapData
     {
         const int MaxBytes = 2 * 1024 * 1024, RequiredSpawns = 10;
-        static readonly string[] RuleFiles = { "match_settings.json", "zone_schedule.json", "world_settings.json", "items_catalog.json", "weapons.json" };
+        static readonly string[] RuleFiles = { "match_settings.json", "zone_schedule.json", "world_settings.json", "items_catalog.json", "weapons.json", "airdrop_schedule.json" };
 
         public MapLayout Layout { get; }
         public RuntimeMapBounds Bounds { get; }

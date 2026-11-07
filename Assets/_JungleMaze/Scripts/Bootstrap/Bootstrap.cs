@@ -230,6 +230,7 @@ namespace JungleMaze.Composition
             {
                 JungleMaze.App.Testing.OnlineTestExtensions.Reset();
                 ConfigureOnlineChecks();
+                ConfigureAirdropCheck();
                 Attach<OnlineScenarioRunner>();
             }
             else if (Array.IndexOf(Environment.GetCommandLineArgs(), "-phase2Smoke") >= 0) Attach<Phase2DemoProbe>();

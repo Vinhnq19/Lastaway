@@ -76,7 +76,7 @@ namespace JungleMaze.Tests.Protocol
         { Assert.ThrowsAsync<InvalidOperationException>(async()=>await Files(url).Catalog(CancellationToken.None)); }
         private string RulesHash()
         {
-            using var stream=new MemoryStream();foreach(var file in new[]{"match_settings.json","zone_schedule.json","world_settings.json","items_catalog.json","weapons.json"})
+            using var stream=new MemoryStream();foreach(var file in new[]{"match_settings.json","zone_schedule.json","world_settings.json","items_catalog.json","weapons.json","airdrop_schedule.json"})
                 foreach(var bytes in new[]{Encoding.UTF8.GetBytes(file),Encoding.UTF8.GetBytes(File.ReadAllText(Path.Combine(Source,file)).Replace("\r\n","\n"))}) stream.Write(bytes,0,bytes.Length);
             return Sha(stream.ToArray());
         }

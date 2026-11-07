@@ -9,6 +9,7 @@ public sealed class WorldSettings
     public uint Seed=20261028;
     public string LayoutMode="Authored";
     public MapLayout? Layout;
+    [JsonIgnore] public JungleMaze.World.Airdrops.AirdropSettings? Airdrops;
     /// <summary>Floor-loot spots planned once per map (MatchWorldSetup cache); null = plan when the world starts.</summary>
     [JsonIgnore] public FloorLootSpots? FloorSpots;
     public MapLayoutConfig Map=new();

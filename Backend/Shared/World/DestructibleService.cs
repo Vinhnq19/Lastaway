@@ -18,6 +18,14 @@ namespace JungleMaze.World
         private readonly IDestructibleLootSink _loot;private readonly uint _seed;
         public event Action<DestructibleState> Changed;
         public DestructibleService(MapLayout layout,DestructibleConfig config,IDestructibleLootSink loot){if(layout==null||loot==null)throw new ArgumentNullException();config.Validate();_layout=layout;_loot=loot;_seed=layout.Seed;foreach(var o in layout.Objects)if(o.IsBreakable){_objects.Add(o.Id,o);_states.Add(o.Id,new DestructibleState{Id=o.Id,Hp=o.Hp!=0?o.Hp:o.Kind==WorldObjectKind.Chest?config.ChestHp:o.Kind==WorldObjectKind.Pot?config.PotHp:config.SupplyHp});}}
+        public bool TryRegister(WorldObjectDefinition definition)
+        {
+            if (definition == null || definition.Id == 0 || !definition.IsBreakable || definition.Hp == 0 ||
+                _objects.Count >= 4096 || _objects.ContainsKey(definition.Id)) return false;
+            _objects.Add(definition.Id, definition);
+            _states.Add(definition.Id, new DestructibleState { Id = definition.Id, Hp = definition.Hp });
+            return true;
+        }
         public IEnumerable<DestructibleState> States {get{foreach(var s in _states.Values)yield return Copy(s);}}
         public bool IsBroken(ushort id){return _states.TryGetValue(id,out var state)&&state.Broken;}
         public bool TryGet(ushort id,out DestructibleState state){if(_states.TryGetValue(id,out var found)){state=Copy(found);return true;}state=null;return false;}
@@ -30,7 +38,7 @@ namespace JungleMaze.World
             var center = blast.Center;
             foreach (var target in _objects.Values)
             {
-                if (target.Kind != WorldObjectKind.Chest && target.Kind != WorldObjectKind.Pot) continue;
+                if (target.Kind != WorldObjectKind.Chest && target.Kind != WorldObjectKind.Pot && target.Kind != WorldObjectKind.Supply) continue;
                 if (IsBroken(target.Id) || !blast.Overlaps(target.Bounds)) continue;
 
                 var bounds = target.Bounds;

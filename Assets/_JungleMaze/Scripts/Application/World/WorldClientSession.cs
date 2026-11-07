@@ -47,6 +47,8 @@ namespace JungleMaze.App.World
         public bool IsReady => Enabled && (_enabled == null || _enabled()) && _requested == _match.MatchId &&
             Layout != null && _hasRevision && _hasInventory && Error == null;
         public bool Required => Enabled && (_enabled == null || _enabled());
+        public readonly Dictionary<ushort,AirdropStatePacket> Airdrops=new Dictionary<ushort,AirdropStatePacket>();
+        public event Action<AirdropStatePacket> AirdropChanged;
         public event Action Changed;
         /// <summary>A recent, deduplicated portal traversal confirmed by the server.</summary>
         public event Action<ushort,uint> Teleported;
@@ -55,9 +57,9 @@ namespace JungleMaze.App.World
             IClientRuntimeData runtime, InventoryHudBinding hud, MapLayoutConfig config, Func<bool> enabled = null, IEffectStateWriter effects = null, MapLayout authored = null, Func<MapLayout> selectedMap = null)
         { _match=match; _sender=sender; _receiver=receiver; _runtime=runtime; _hud=hud; _config=config; _enabled=enabled; _effects=effects; _authored=authored; _selectedMap=selectedMap; }
         public void Initialize()
-        { _match.GameplayReady = GameplayReady; _receiver.Subscribe<WorldManifestPacket>(Manifest); _receiver.Subscribe<WorldObjectStatePacket>(Page); _receiver.Subscribe<InventoryStatePacket>(Items); }
+        { _match.GameplayReady = GameplayReady; _receiver.Subscribe<AirdropStatePacket>(Airdrop); _receiver.Subscribe<WorldManifestPacket>(Manifest); _receiver.Subscribe<WorldObjectStatePacket>(Page); _receiver.Subscribe<InventoryStatePacket>(Items); }
         public void Dispose()
-        { if (_match.GameplayReady == GameplayReady) _match.GameplayReady=null; _receiver.Unsubscribe<WorldManifestPacket>(Manifest); _receiver.Unsubscribe<WorldObjectStatePacket>(Page); _receiver.Unsubscribe<InventoryStatePacket>(Items); }
+        { if (_match.GameplayReady == GameplayReady) _match.GameplayReady=null; _receiver.Unsubscribe<AirdropStatePacket>(Airdrop); _receiver.Unsubscribe<WorldManifestPacket>(Manifest); _receiver.Unsubscribe<WorldObjectStatePacket>(Page); _receiver.Unsubscribe<InventoryStatePacket>(Items); }
         private bool GameplayReady() => !Required || IsReady;
         public void Tick(float dt)
         {
@@ -79,7 +81,13 @@ namespace JungleMaze.App.World
         {
             if(Layout!=null&&_runtime.PlayerRadius>0&&_runtime.PlayerSpeed>0)
                 _match.Prediction.SetWorld(new MovementSimulation(_runtime.Bounds,_runtime.Covers,_runtime.PlayerRadius,_runtime.PlayerSpeed));
-            _requested=Guid.Empty;Layout=null;Objects=Array.Empty<WorldObjectWire>();Inventory=null;EquipmentGeneration=0;_pages.Clear();_hasRevision=_hasInventory=_hasEffects=false;_request=_portalSequence=0;_collisionKey=null;Error=null;_movementMultiplier=1;_match.Prediction.MovementMultiplier=1;ClearEffects();_hud.Reset();Changed?.Invoke();
+            Airdrops.Clear();_requested=Guid.Empty;Layout=null;Objects=Array.Empty<WorldObjectWire>();Inventory=null;EquipmentGeneration=0;_pages.Clear();_hasRevision=_hasInventory=_hasEffects=false;_request=_portalSequence=0;_collisionKey=null;Error=null;_movementMultiplier=1;_match.Prediction.MovementMultiplier=1;ClearEffects();_hud.Reset();Changed?.Invoke();
+        }
+        private void Airdrop(AirdropStatePacket p)
+        {
+            if(!Required||!_match.Connected||p.MatchId!=_match.MatchId||p.MatchId==Guid.Empty)return;
+            if(Airdrops.TryGetValue(p.DropId,out var old)&&unchecked((int)(p.Revision-old.Revision))<=0)return;
+            Airdrops[p.DropId]=p;AirdropChanged?.Invoke(p);
         }
         private void Manifest(WorldManifestPacket p)
         {

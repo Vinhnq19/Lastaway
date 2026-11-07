@@ -225,7 +225,7 @@ foreach (var chest in map1.Objects.Where(o => o.Kind == WorldObjectKind.Chest ||
     var expected = LootDrops.CountForContainer(table, chest.Kind, LootSeeds.Mix(map1.Seed ^ ((uint)chest.Id * 2654435761u), w1.LootSeed));
     var gunsHere = added.Where(f => catalog.Get(f.Stack.ItemId).MagazineSize > 0).ToList();
     if (gunsHere.Count > 0) gunBreaks++;
-    Check(added.Count == expected && added.Count(f => f.Stack.ItemId == "AMMO" && f.Stack.Count == floor.AmmoBoxes) >= gunsHere.Count,
+    Check(added.Count == expected && (chest.Kind == WorldObjectKind.Supply ? added.All(f=>f.Stack.ItemId!="AMMO") : added.Count(f => f.Stack.ItemId == "AMMO" && f.Stack.Count == floor.AmmoBoxes) >= gunsHere.Count),
         "container " + chest.Id + " spawns exactly the CanSpawnLoot count, with an AMMO stack per gun");
     bool OnRing(FloorItem f) { var d = MathF.Sqrt(new WorldPoint(f.X, f.Y).DistanceSquared(center)); return d >= floor.ScatterMinRadius - 1e-3f && d <= floor.ScatterMaxRadius + 1e-3f; }
     bool NextToGun(FloorItem f) => gunsHere.Any(g => { var d = MathF.Sqrt(new WorldPoint(f.X, f.Y).DistanceSquared(new WorldPoint(g.X, g.Y))); return d >= floor.AmmoMinDistance - 1e-3f && d <= floor.AmmoMaxDistance + 1e-3f; });

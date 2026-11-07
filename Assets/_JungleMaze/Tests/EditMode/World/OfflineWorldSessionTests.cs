@@ -194,12 +194,13 @@ namespace JungleMaze.Tests.World
             audio.BindCombat(null, rig.Session); audio.BindCombat(null, rig.Session);
             rig.Session.Tick(.034f);
             Assert.IsTrue(rig.Session.TryAttack(0));
-            Assert.AreEqual(1, cues.Count);
-            Assert.AreEqual(JungleMaze.Domain.Audio.SfxId.MeleeSwing, cues[0].Id);
+            Assert.AreEqual(1,cues.Count(c=>c.Id==JungleMaze.Domain.Audio.SfxId.MeleeSwing));
+            Assert.LessOrEqual(cues.Count(c=>c.Id==JungleMaze.Domain.Audio.SfxId.MeleeHit),1);
+            var emitted=cues.Count;
             audio.Dispose();
             rig.Session.Tick(2);
             Assert.IsTrue(rig.Session.TryAttack(0));
-            Assert.AreEqual(1, cues.Count, "Null packet receiver must not prevent combat unsubscription");
+            Assert.AreEqual(emitted, cues.Count, "Null packet receiver must not prevent combat unsubscription");
         }
 
         [Test]

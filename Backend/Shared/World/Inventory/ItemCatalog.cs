@@ -167,6 +167,8 @@ namespace JungleMaze.World.Inventory
     public sealed class LootProfile
     {
         public int ChestMin = 3, ChestMax = 4, PotMin = 1, PotMax = 2;
+        public int SupplyMin = 6, SupplyMax = 8;
+        public string[] GuaranteedSupplyItems = { "MACE", "COMPASS" };
         public int[] ChestGroupWeights = { 15, 20, 25, 15, 15, 10 };
         public int[] PotGroupWeights = { 25, 8, 30, 12, 20, 5 };
         public SupplyDropRule[] Supply = {
@@ -267,6 +269,8 @@ namespace JungleMaze.World.Inventory
             _catalog = catalog ?? throw new ArgumentNullException(nameof(catalog));
             var source = profile ?? new LootProfile();
             _profile = new LootProfile { ChestMin = source.ChestMin, ChestMax = source.ChestMax, PotMin = source.PotMin, PotMax = source.PotMax,
+                SupplyMin = source.SupplyMin, SupplyMax = source.SupplyMax,
+                GuaranteedSupplyItems = source.GuaranteedSupplyItems == null ? null : (string[])source.GuaranteedSupplyItems.Clone(),
                 ChestGroupWeights = source.ChestGroupWeights == null ? null : (int[])source.ChestGroupWeights.Clone(),
                 PotGroupWeights = source.PotGroupWeights == null ? null : (int[])source.PotGroupWeights.Clone(),
                 Supply = source.Supply == null ? null : new SupplyDropRule[source.Supply.Length],
@@ -288,6 +292,7 @@ namespace JungleMaze.World.Inventory
             foreach (var rule in _profile.Supply)
                 if (rule == null || !_catalog.TryGet(rule.ItemId, out _) || rule.ChancePercent < 0 || rule.ChancePercent > 100 || rule.MinCount < 1 || rule.MaxCount < rule.MinCount || rule.MaxCount > 999 || rule.Ammo < 0)
                     throw new ArgumentException("Invalid supply drop rule.");
+            if (_profile.Supply.Length > 0) ValidateSupply();
             _profile.Floor.Validate();
             ValidateSources();
             if (_profile.Floor.Enabled) BuildFloorSamplers();
@@ -297,7 +302,7 @@ namespace JungleMaze.World.Inventory
         public FloorLootProfile Floor => _profile.Floor.Copy();
         internal FloorLootProfile FloorProfile => _profile.Floor;
         /// <summary>Upper bound of items a container source can roll (chest/pot max, or one per supply rule).</summary>
-        public int MaxRoll(LootSource source) => source == LootSource.Chest ? _profile.ChestMax : source == LootSource.Pot ? _profile.PotMax : _profile.Supply.Length;
+        public int MaxRoll(LootSource source) => source == LootSource.Chest ? _profile.ChestMax : source == LootSource.Pot ? _profile.PotMax : _profile.SupplyMax;
         public ItemStack[] Roll(LootSource source, uint seed)
         {
             if (source != LootSource.Pot && source != LootSource.Chest && source != LootSource.Supply) throw new ArgumentException("Unsupported loot source.");
@@ -330,16 +335,60 @@ namespace JungleMaze.World.Inventory
             foreach (var item in selected) itemWeights.Add(item.Weight);
             return selected[Weighted(itemWeights, rng)];
         }
+        public void ValidateSupply()
+        {
+            if (_profile.SupplyMin < 1 || _profile.SupplyMax < _profile.SupplyMin || _profile.SupplyMax > 64 ||
+                _profile.GuaranteedSupplyItems == null || _profile.GuaranteedSupplyItems.Length > _profile.SupplyMin)
+                throw new ArgumentException("Invalid supply counts or guaranteed items.");
+            var eligible = new HashSet<string>(StringComparer.Ordinal);
+            var ids = new HashSet<string>(StringComparer.Ordinal);
+            foreach (var rule in _profile.Supply)
+            {
+                if (!ids.Add(rule.ItemId)) throw new ArgumentException("Duplicate supply item.");
+                var item = _catalog.Get(rule.ItemId);
+                if (item.Enabled && (item.Sources & LootSource.Supply) != 0 && rule.ChancePercent > 0)
+                    eligible.Add(item.Id);
+            }
+            var guaranteed = new HashSet<string>(StringComparer.Ordinal);
+            foreach (var id in _profile.GuaranteedSupplyItems)
+                if (id == null || !guaranteed.Add(id) || !eligible.Contains(id))
+                    throw new ArgumentException("Guaranteed supply item is missing or disabled.");
+            if (eligible.Count < _profile.SupplyMax) throw new ArgumentException("Not enough distinct supply items.");
+        }
+
         private ItemStack[] Supply(ItemRandom rng)
         {
-            var result = new List<ItemStack>();
+            ValidateSupply();
+            var count = _profile.SupplyMin + rng.Next(_profile.SupplyMax - _profile.SupplyMin + 1);
+            var selected = new List<SupplyDropRule>();
+            var options = new List<SupplyDropRule>();
+            foreach (var id in _profile.GuaranteedSupplyItems)
+                foreach (var rule in _profile.Supply)
+                    if (rule.ItemId == id) { selected.Add(rule); break; }
             foreach (var rule in _profile.Supply)
             {
                 var item = _catalog.Get(rule.ItemId);
-                if (item.Enabled && (item.Sources & LootSource.Supply) != 0 && rng.Next(100) < rule.ChancePercent)
-                    result.Add(new ItemStack(item.Id, rule.MinCount + rng.Next(rule.MaxCount - rule.MinCount + 1), item.Durability, rule.Ammo));
+                if (item.Enabled && (item.Sources & LootSource.Supply) != 0 && rule.ChancePercent > 0 && !selected.Contains(rule))
+                    options.Add(rule);
             }
-            return result.ToArray();
+            while (selected.Count < count)
+            {
+                var total = 0;
+                foreach (var rule in options) total += rule.ChancePercent;
+                var roll = rng.Next(total);
+                var index = 0;
+                while (roll >= options[index].ChancePercent) roll -= options[index++].ChancePercent;
+                selected.Add(options[index]);
+                options.RemoveAt(index);
+            }
+            var result = new ItemStack[selected.Count];
+            for (var i = 0; i < result.Length; i++)
+            {
+                var rule = selected[i];
+                result[i] = new ItemStack(rule.ItemId, rule.MinCount + rng.Next(rule.MaxCount - rule.MinCount + 1),
+                    _catalog.Get(rule.ItemId).Durability, rule.Ammo);
+            }
+            return result;
         }
         private FloorSampler[] _floorAll, _floorNoGuns, _floorStarter;
         private sealed class FloorSampler

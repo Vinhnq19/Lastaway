@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "drg01-accelerated",
+  "maxDurationSeconds": 90,
+  "minConnectedSeconds": 16,
+  "expectedPlayers": 2,
+  "requireMovement": true,
+  "requireZone": true,
+  "requireHpDamage": false,
+  "requireResult": false,
+  "requireReplay": false,
+  "requireHistory": false,
+  "minInputHz": 28.5,
+  "minSnapshotHz": 28.5,
+  "maxPongTimeoutRatio": 0.01,
+  "driver": "movement",
+  "extraAssertions": [
+    "drg01.three-drops"
+  ]
+}

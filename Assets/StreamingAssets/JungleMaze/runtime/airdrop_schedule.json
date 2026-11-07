@@ -1,0 +1,18 @@
+{
+  "version": "1.0.0",
+  "status": "gdd-baseline-applied",
+  "enabled": true,
+  "eggSize": 2.0,
+  "eggHp": 150,
+  "edgeMargin": 3.0,
+  "retrySeconds": 1.0,
+  "maxRetries": 5,
+  "candidateLimit": 64,
+  "reservedEggs": 3,
+  "reservedLootStacks": 24,
+  "drops": [
+    { "id": 1, "flyAt": 110.0, "landAt": 120.0 },
+    { "id": 2, "flyAt": 230.0, "landAt": 240.0 },
+    { "id": 3, "flyAt": 320.0, "landAt": 330.0 }
+  ]
+}

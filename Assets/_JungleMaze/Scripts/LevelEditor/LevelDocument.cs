@@ -62,6 +62,8 @@ namespace JungleMaze.LevelEditor
         public bool Destructible;
         /// <summary>HP riêng khi phá được (rương/bình/thùng tiếp tế hoặc cover phá được); 0 = HP mặc định của loại.</summary>
         public ushort Hp;
+        // Imported zero-HP doors retain their authored behavior; newly placed doors use 60 HP.
+        public bool PreserveDoorHp;
         /// <summary>Bảng loot rơi khi vỡ (cover phá được): Pot, Chest hoặc Supply.</summary>
         public string Loot = nameof(WorldObjectKind.Pot);
 
@@ -79,7 +81,7 @@ namespace JungleMaze.LevelEditor
                                             (Array.IndexOf(LootKinds, Type) >= 0 || Type == nameof(WorldObjectKind.Door));
 
         /// <summary>HP ghi ra JSON game: HP riêng, hoặc HP mặc định của cửa; 0 = HP mặc định của loại (không ghi).</summary>
-        public ushort GameHp => Hp != 0 ? Hp : Group == LevelItemGroup.WorldObject && Type == nameof(WorldObjectKind.Door) ? DefaultDoorHp : (ushort)0;
+        public ushort GameHp => Hp != 0 ? Hp : Group == LevelItemGroup.WorldObject && Type == nameof(WorldObjectKind.Door) && !PreserveDoorHp ? DefaultDoorHp : (ushort)0;
         /// <summary>
         /// Có HP/loot trong game: cover đánh dấu "Phá được" hoặc rương/bình/thùng tiếp tế. Vật phá được dùng cả footprint
         /// làm bounds (giống rương/bình) để đánh trúng được; collider chân nhỏ chỉ dành cho hard cover.
@@ -307,8 +309,20 @@ namespace JungleMaze.LevelEditor
                 // File do editor mới ghi: danh sách placement là nguồn sự thật (một cover có thể ra nhiều obstacle).
                 if (editor["placements"] is JArray entries)
                 {
+                    var doorHealth = new Queue<ushort>();
+                    foreach (var item in Items(root, "worldObjects"))
+                        if ((string)item["kind"] == nameof(WorldObjectKind.Door)) doorHealth.Enqueue((ushort?)item["hp"] ?? 0);
                     foreach (var token in entries)
-                        if (token is JObject o) doc.Placements.Add(FromEditorEntry(o, shape));
+                        if (token is JObject o)
+                        {
+                            var placement = FromEditorEntry(o, shape);
+                            if (placement.Type == nameof(WorldObjectKind.Door) && doorHealth.Count > 0)
+                            {
+                                var hp = doorHealth.Dequeue();
+                                if (o["hp"] == null) { placement.Hp = hp; placement.PreserveDoorHp = true; }
+                            }
+                            doc.Placements.Add(placement);
+                        }
                     return doc;
                 }
             }
@@ -327,6 +341,11 @@ namespace JungleMaze.LevelEditor
                 var p = Make(LevelItemGroup.WorldObject, kind, (minX + maxX) / 2f, (minY + maxY) / 2f, maxX - minX, maxY - minY, o, baseSize);
                 p.PairId = (ushort?)o["pairId"] ?? 0;
                 p.Hp = (ushort?)o["hp"] ?? 0;
+                p.PreserveDoorHp = kind == nameof(WorldObjectKind.Door);
+                if ((string)o["art"] is string art && !string.IsNullOrEmpty(art) && Array.IndexOf(LevelPlacement.LootKinds, kind) >= 0)
+                {
+                    p.Group = LevelItemGroup.Cover; p.Destructible = true; p.Loot = kind; p.Type = art;
+                }
                 doc.Placements.Add(p);
             }
             foreach (var o in Items(root, "spawnPoints"))
@@ -385,9 +404,10 @@ namespace JungleMaze.LevelEditor
             }
             else
             {
-                o["x"] = R(p.X); o["y"] = R(p.Y);
-                o["baseWidth"] = R(p.BaseWidth); o["baseHeight"] = R(p.BaseHeight);
-                o["scale"] = R(p.Scale); o["rotation"] = p.Rotation;
+                // Editor state must retain full precision; rounding a midpoint twice changes the game bounds.
+                o["x"] = p.X; o["y"] = p.Y;
+                o["baseWidth"] = p.BaseWidth; o["baseHeight"] = p.BaseHeight;
+                o["scale"] = p.Scale; o["rotation"] = p.Rotation;
             }
             if (p.FlipX) o["flipX"] = true;
             if (p.PairId != 0) o["pairId"] = p.PairId;
@@ -396,7 +416,8 @@ namespace JungleMaze.LevelEditor
                 o["destructible"] = true;
                 o["loot"] = p.Loot;
             }
-            if (p.BreaksInGame && p.Hp != 0) o["hp"] = p.Hp;
+            if (p.Group == LevelItemGroup.WorldObject && p.Type == nameof(WorldObjectKind.Door)) o["hp"] = p.GameHp;
+            else if (p.BreaksInGame && p.Hp != 0) o["hp"] = p.Hp;
             return o;
         }
 
@@ -420,6 +441,7 @@ namespace JungleMaze.LevelEditor
             p.Destructible = group == LevelItemGroup.Cover && ((bool?)o["destructible"] ?? false);
             p.Loot = (string)o["loot"] ?? p.Loot;
             p.Hp = (ushort?)o["hp"] ?? 0;
+            p.PreserveDoorHp = type == nameof(WorldObjectKind.Door) && o["hp"] != null;
             return p;
         }
 
@@ -447,7 +469,7 @@ namespace JungleMaze.LevelEditor
             Func<string, (float, float)?> baseSize)
         {
             float x, y, w, h;
-            if (o["sizeX"] != null) { x = F(o, "centerX"); y = F(o, "centerY"); w = F(o, "sizeX"); h = F(o, "sizeY"); }
+            if (o["minX"] == null && o["sizeX"] != null) { x = F(o, "centerX"); y = F(o, "centerY"); w = F(o, "sizeX"); h = F(o, "sizeY"); }
             else
             {
                 var minX = F(o, "minX"); var maxX = F(o, "maxX"); var minY = F(o, "minY"); var maxY = F(o, "maxY");

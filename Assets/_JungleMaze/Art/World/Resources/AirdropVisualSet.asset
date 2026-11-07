@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbb911e74990d1d4493d9bb61547bf8c, type: 3}
+  m_Name: AirdropVisualSet
+  m_EditorClassIdentifier: JungleMaze.Presentation::JungleMaze.Presentation.World.Phase2.AirdropVisualSet
+  Dragon:
+    Sprites:
+    - {fileID: -4901695133838312497, guid: 542cd5cce3532ff46a29b219beb59d82, type: 3}
+    - {fileID: -614892872907024155, guid: 542cd5cce3532ff46a29b219beb59d82, type: 3}
+    - {fileID: -3340809482613237340, guid: 542cd5cce3532ff46a29b219beb59d82, type: 3}
+    - {fileID: -4281274718766390622, guid: 542cd5cce3532ff46a29b219beb59d82, type: 3}
+    Times:
+    - 0
+    - 0.21666667
+    - 0.45
+    - 0.6666667
+    Duration: 0.68333334
+    Loop: 1
+  Egg: {fileID: -4987371248746193744, guid: 93e6b284fea6b0c4a9a5c4138d6b35af, type: 3}
+  Disc: {fileID: -7439614752922242209, guid: 683d4b90bbcf27241a194eb1aae555a2, type: 3}

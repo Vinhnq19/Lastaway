@@ -77,6 +77,8 @@ namespace JungleMaze.Presentation.World.Phase2
 
         private void Start()
         {
+            var airdrops=gameObject.AddComponent<AirdropSceneView>();
+            airdrops.Construct(_world,_match,_offlineWorld,_flow);
             if (_world != null)
             {
                 _world.Changed += Refresh;

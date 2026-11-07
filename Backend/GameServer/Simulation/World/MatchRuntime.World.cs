@@ -1,5 +1,6 @@
 using JungleBackend.Protocol.Gameplay;
 using JungleMaze.World;
+using JungleMaze.World.Airdrops;
 using JungleMaze.World.Inventory;
 using JungleMaze.World.Throwables;
 using System.Text.Json;
@@ -27,6 +28,9 @@ public sealed partial class MatchRuntime
             return;
         }
         _worldSettings = WorldSettings.Load(GameDataLoader.ReadGameDataFile("world_settings.json"));
+        _worldSettings.Airdrops = JsonSerializer.Deserialize<AirdropSettings>(GameDataLoader.ReadGameDataFile("airdrop_schedule.json"),
+            new JsonSerializerOptions { IncludeFields = true, PropertyNameCaseInsensitive = true });
+        _worldSettings.Airdrops?.Validate();
         if (_worldSettings.LayoutMode == "Authored")
         {
             var mapDocument = JsonSerializer.Deserialize<AuthoredMapDocument>(GameDataLoader.ReadGameDataFile("map_demo.json"),
@@ -50,8 +54,15 @@ public sealed partial class MatchRuntime
     private void StartWorld()
     {
         if (_worldSettings == null || _worldCatalog == null) return;
-        World=new MatchWorldRuntime(MatchId,_worldSettings,this,_health,_worldCatalog,_worldLootProfile);
+        var forecast = new ZoneSimulation(_zoneSchedule, MatchId.GetHashCode(), 2f, _map, SelectedMap?.ReachableCells);
+        AirdropZone PredictZone(float seconds)
+        {
+            forecast.Update(seconds, (uint)(seconds * 30));
+            return new AirdropZone(forecast.CurrentCenter.X, forecast.CurrentCenter.Y, forecast.CurrentRadius);
+        }
+        World=new MatchWorldRuntime(MatchId,_worldSettings,this,_health,_worldCatalog,_worldLootProfile,PredictZone,(float)_profile.ZoneTimeScale);
         World.ThrowableDamage=(attacker,target,amount)=>{World.SetCombatTick(CurrentTick);return _combat.ApplyExternalDamage(attacker,target,amount,CurrentTick)?.Damage??0;};
+        if(World.Airdrops!=null)World.Airdrops.Changed+=BroadcastAirdrop;
         World.ThrowableRaised+=BroadcastThrowable;
         _worldMap=new MapData{Version=_map.Version,MinX=0,MinY=0,MaxX=World.Layout.Size,MaxY=World.Layout.Size};
         _worldPhysics=new PhysicsSimulation(_worldMap,_profile.PlayerRadius,_profile.PlayerSpeed);
@@ -88,6 +99,18 @@ public sealed partial class MatchRuntime
         var packet=new ThrowableEventPacket{MatchId=MatchId,Tick=CurrentTick,Event=(byte)e.Kind,Item=(byte)e.Item,Actor=e.Actor,Target=e.Target,Id=e.Id,
             FromX=e.FromX,FromY=e.FromY,ToX=e.ToX,ToY=e.ToY,Seconds=e.Seconds,Size=e.Size,Amount=e.Amount,Flags=e.Flags};
         BroadcastCombatResult(ref packet);
+    }
+    public AirdropStatePacket AirdropPacket(AirdropState value,bool baseline=false)
+    {
+        uint At(float seconds)=>_inGameStartTick+(uint)(seconds*_profile.ZoneTimeScale*30);
+        return new AirdropStatePacket{MatchId=MatchId,DropId=(ushort)value.DropId,WorldId=value.WorldId,Phase=(byte)value.Phase,
+            Revision=value.Revision,Tick=CurrentTick,Size=World?.Airdrops?.EggSize??2,MaxHp=World?.Airdrops?.EggHp??150,FlyTick=At(value.FlyAt),FallTick=At(value.FallAt),LandTick=At(value.LandAt),
+            X=value.Position.X,Y=value.Position.Y,EntryX=-8,EntryY=value.Position.Y,ExitX=(World?.Layout.Size??50)+8,ExitY=value.Position.Y,Baseline=baseline};
+    }
+    private void BroadcastAirdrop(AirdropState value)
+    {
+        if(value.Phase==AirdropPhase.Cancelled)Console.WriteLine($"[airdrop] cancelled match={MatchId} drop={value.DropId} reason=no-valid-landing");
+        var packet=AirdropPacket(value);BroadcastCombatResult(ref packet);
     }
     private void RefreshWorldGeometry()
     {

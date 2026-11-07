@@ -26,7 +26,7 @@ namespace JungleMaze.Tests.Audio
         {
             var names = Enum.GetNames(typeof(SfxId)).Where(n => n != nameof(SfxId.None)).ToArray();
             var rows = Rows("sfx").ToArray();
-            Assert.AreEqual(27, names.Length);
+            Assert.AreEqual(29, names.Length);
             CollectionAssert.AreEqual(names, rows.Select(r => r["sfx_id"]).ToArray());
             foreach (var r in rows)
                 CollectionAssert.Contains(new[] { "Có", "Cần chỉnh", "Thiếu" }, r["status"], r["sfx_id"]);

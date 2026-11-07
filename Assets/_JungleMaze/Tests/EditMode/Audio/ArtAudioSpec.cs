@@ -30,6 +30,7 @@ namespace JungleMaze.Tests.Audio
         /// </summary>
         public static readonly Dictionary<string, float> LevelExceptions = new Dictionary<string, float>
         {
+            { "empty_click", -21.5f }, // User clip hits the existing 6 dB limiter ceiling.
             { "bomb_fuse", -24.5f }, { "wear_armor_0", -23.5f }, { "wear_armor_1", -23.5f },
             { "wear_armor_2", -23.5f }, { "wear_armor_3", -23.5f },
         };
@@ -83,6 +84,7 @@ namespace JungleMaze.Tests.Audio
             new Row(SfxId.UseHeal, 3, 0.50f, 1.50f), new Row(SfxId.UseDrink, 3, 0.50f, 1.50f),
             new Row(SfxId.UseCancel, 3, 0.10f, 0.40f), new Row(SfxId.ZoneBell3, 1, 0.40f, 0.75f),
             new Row(SfxId.DragonRoar, 1, 1.50f, 4.00f), new Row(SfxId.MatchEnd, 1, 1.00f, 3.00f), new Row(SfxId.Victory, 1, 1.00f, 12.00f),
+            new Row(SfxId.EggLand,2,.10f,.80f),new Row(SfxId.EggBreak,2,.10f,.70f),
         };
 
         public static SfxCatalog LoadCatalog() => AssetDatabase.LoadAssetAtPath<SfxCatalog>(CatalogPath);

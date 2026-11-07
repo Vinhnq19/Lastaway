@@ -27,6 +27,8 @@ namespace JungleMaze.World.Loot
         public MapLayout Layout { get; internal set; }
         public LootSurface Surface { get; internal set; }
         public IReadOnlyList<FloorLootSpot> Spots => SpotArray;
+        /// <summary>Reachable cells, independent of the much sparser selected floor-loot spots; reused for dynamic eggs.</summary>
+        public IReadOnlyList<WorldPoint> ReachablePositions { get; internal set; }
         /// <summary>Spot indices NearSpawnMin..NearSpawnMax from each spawn, nearest first.</summary>
         public IReadOnlyList<int> NearSpawn(int spawn) => Rings[spawn];
         /// <summary>Reachable walkable cells inside the start zone.</summary>
@@ -115,6 +117,9 @@ namespace JungleMaze.World.Loot
             }
             void Visit(int c) { if (!blocked[c] && !reach[c]) { reach[c] = true; queue[tail++] = c; } }
 
+            var reachablePositions=new List<WorldPoint>(tail);
+            for(var c=0;c<cells;c++)if(reach[c])reachablePositions.Add(new WorldPoint(c%n+.5f,c/n+.5f));
+            result.ReachablePositions=reachablePositions.ToArray();
             // 3. Prefix sums of solid cells for the O(1) "cover within CoverProbe" box test.
             var sum = new int[(n + 1) * (n + 1)];
             for (var y = 0; y < n; y++) for (var x = 0; x < n; x++)

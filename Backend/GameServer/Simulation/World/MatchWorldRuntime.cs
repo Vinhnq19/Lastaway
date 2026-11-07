@@ -1,4 +1,5 @@
 using JungleMaze.World;
+using JungleMaze.World.Airdrops;
 using JungleMaze.World.Inventory;
 using JungleMaze.World.Loot;
 using JungleBackend.Protocol.Gameplay;
@@ -15,7 +16,11 @@ public sealed partial class MatchWorldRuntime : ITransactionalDestructibleLootSi
     private readonly Dictionary<byte,double> _poisonDue=new();
     private readonly HashSet<byte> _registered=new();
     private readonly LootTable _loot;
-    private readonly LootSurface _lootSurface;
+    private LootSurface _lootSurface;
+    private bool _usingSupplyReserve;
+    private readonly float _airdropTimeScale;
+    public AirdropController? Airdrops { get; }
+    private int FloorReserve => Math.Max(0, (Airdrops?.ReservedLootRemaining ?? 0) - (_usingSupplyReserve ? 8 : 0));
     /// <summary>Floor capacity shared with <see cref="FloorLootPlanner.MaxFloorItems"/>.</summary>
     private const int FloorCapacity=FloorLootPlanner.MaxFloorItems;
     private ushort _nextId;
@@ -38,10 +43,13 @@ public sealed partial class MatchWorldRuntime : ITransactionalDestructibleLootSi
     public uint LootSeed {get;}
     /// <summary>Floor loot created when the world started (for checks/telemetry).</summary>
     public FloorLootPlan InitialLoot {get;}
-    public MatchWorldRuntime(Guid matchId,WorldSettings settings,IEntityRegistry entities,HealthService health,ItemCatalog? catalog=null,LootProfile? lootProfile=null)
+    public MatchWorldRuntime(Guid matchId,WorldSettings settings,IEntityRegistry entities,HealthService health,ItemCatalog? catalog=null,LootProfile? lootProfile=null, Func<float,AirdropZone>? forecast=null,float airdropTimeScale=1)
     {
         MatchId=matchId;_entities=entities;_health=health;_heroRadius=settings.Map.HeroRadius;
         Layout=settings.Layout ?? (settings.LayoutMode=="Prototype" ? MapLayoutGenerator.Generate(settings.Map,settings.Seed) : throw new InvalidOperationException("Authored map must be loaded before starting world services."));
+        var authoredLayout = Layout;
+        Layout = AirdropController.CopyLayout(authoredLayout);
+        _airdropTimeScale = airdropTimeScale;
         _nextId=(ushort)(Layout.Objects.Count+1);
         Floor=new MemoryItemWorld(AllocateId);
         catalog??=ItemCatalog.CreateBaseline();_loot=lootProfile==null?new LootTable(catalog):new LootTable(catalog,lootProfile);
@@ -56,12 +64,25 @@ public sealed partial class MatchWorldRuntime : ITransactionalDestructibleLootSi
         var floorProfile=_loot.Floor;
         _lootSurface=new LootSurface(Layout,floorProfile.DropClearance,Destructibles.IsBroken);
         // Authored maps use r = Size/2 for loot rings; the prototype generator has its own start-zone radius.
-        var spots=settings.FloorSpots is {} cached&&ReferenceEquals(cached.Layout,Layout)?cached:FloorLootPlanner.PlanSpots(Layout,_loot,settings.Layout==null?settings.Map.InitialZoneRadius:0,_heroRadius);
+        var spots=settings.FloorSpots is {} cached&&ReferenceEquals(cached.Layout,authoredLayout)?cached:FloorLootPlanner.PlanSpots(Layout,_loot,settings.Layout==null?settings.Map.InitialZoneRadius:0,_heroRadius);
+        if (settings.Airdrops?.Enabled == true)
+        {
+            _loot.ValidateSupply();
+            if(Layout.Objects.Count+settings.Airdrops.ReservedEggs+settings.Airdrops.ReservedLootStacks>WorldWire.MaxObjects)
+                throw new InvalidOperationException("Map has no capacity reserved for scheduled eggs and their loot.");
+            if (forecast == null || !float.IsFinite(airdropTimeScale) || airdropTimeScale <= 0)
+                throw new ArgumentException("Airdrops require a valid forecast and clock scale.");
+            Airdrops = new AirdropController(settings.Airdrops, LootSeed, Layout, Destructibles,
+                spots.ReachablePositions, forecast, AllocateId,
+                () => { _lootSurface = new LootSurface(Layout, floorProfile.DropClearance, Destructibles.IsBroken); Revision++; },
+                (point, size) => _entities.All.Any(e => e.IsAlive && new WorldBounds(point.X,point.Y,size,size)
+                    .IntersectsCircle(new WorldPoint(e.X,e.Y),e.Radius)));
+        }
         InitialLoot=FloorLootPlanner.Roll(spots,_loot,LootSeed);
         foreach(var placed in InitialLoot.Placements)if(!Floor.TrySpawn(placed.Stack,placed.Position.X,placed.Position.Y,out _))break;
         Revision++;
     }
-    private ushort AllocateId(){if(_nextId==0||Floor.Items.Count>=FloorCapacity)return 0;return _nextId++;}
+    private ushort AllocateId(){if(_nextId==0||Floor.Items.Count>=Math.Min(FloorCapacity-FloorReserve,WorldWire.MaxObjects-Layout.Objects.Count-FloorReserve-(Airdrops?.ReservedEggsRemaining??0)))return 0;return _nextId++;}
     public void SyncActors()
     {
         foreach(var e in _entities.All)
@@ -99,6 +120,7 @@ public sealed partial class MatchWorldRuntime : ITransactionalDestructibleLootSi
                     Inventory.AutoPickup(e.NetId,floor.Id);
         }
         Inventory.Tick(now);
+        Airdrops?.Tick((float)(now / _airdropTimeScale));
     }
     public ItemResult Request(byte actor,in WorldActionRequestPacket request)
     {
@@ -128,19 +150,26 @@ public sealed partial class MatchWorldRuntime : ITransactionalDestructibleLootSi
         // Preflight/rollback makes a full floor registry an explicit rejection, never partial loot.
         if(Floor.Items.Count+placements.Count>FloorCapacity||_nextId+placements.Count>ushort.MaxValue)
             return;
+        _usingSupplyReserve = source == WorldObjectKind.Supply && Airdrops?.Owns(worldId) == true;
+        try
+        {
         var spawned=new List<ushort>();
         foreach(var placed in placements)
         {
             if(!Floor.TrySpawn(placed.Stack,placed.Position.X,placed.Position.Y,out var id)){foreach(var old in spawned)Floor.Remove(old);return;}
             spawned.Add(id);
         }
+        }
+        finally { _usingSupplyReserve = false; }
         Revision++;
     }
     public bool CanSpawnLoot(WorldObjectKind source,ushort worldId,uint seed)
     {
         // Counts ammo companions too, so the preflight matches what SpawnLoot will create.
         var count=LootDrops.CountForContainer(_loot,source,LootSeeds.Mix(seed,LootSeed));
-        return Floor.Items.Count+count<=FloorCapacity&&_nextId+count<=ushort.MaxValue&&Layout.Objects.Count+Floor.Items.Count+count<=WorldWire.MaxObjects;
+        var reserve = Math.Max(0, (Airdrops?.ReservedLootRemaining ?? 0) -
+            (source == WorldObjectKind.Supply && Airdrops?.Owns(worldId) == true ? 8 : 0));
+        return Floor.Items.Count+count<=FloorCapacity-reserve&&_nextId+count<=ushort.MaxValue&&Layout.Objects.Count+Floor.Items.Count+count<=WorldWire.MaxObjects-reserve-(Airdrops?.ReservedEggsRemaining??0);
     }
     public void RequestDamage(byte actor,ushort source,uint tick,int amount,bool bypassArmor){ApplyEnvironmentalDamage(actor,amount);}
     private void ApplyEnvironmentalDamage(byte actor,int amount)

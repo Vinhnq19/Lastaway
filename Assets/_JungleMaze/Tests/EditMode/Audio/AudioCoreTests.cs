@@ -8,10 +8,10 @@ namespace JungleMaze.Tests.Audio
     public sealed class SfxRuleTableTests
     {
         [Test]
-        public void SpecTable_Has27IdsWithoutGaps()
+        public void SpecTable_Has29IdsWithoutGaps()
         {
-            Assert.AreEqual(27, SfxIds.Count);
-            Assert.AreEqual(27, AudioSpec.Table.Length);
+            Assert.AreEqual(29, SfxIds.Count);
+            Assert.AreEqual(29, AudioSpec.Table.Length);
             for (var i = 0; i < AudioSpec.Table.Length; i++) Assert.AreEqual((SfxId)(i + 1), AudioSpec.Table[i].Id);
             var missing = new List<SfxId>();
             Assert.AreEqual(0, AudioSpec.Rules().CollectMissing(missing), string.Join(",", missing));

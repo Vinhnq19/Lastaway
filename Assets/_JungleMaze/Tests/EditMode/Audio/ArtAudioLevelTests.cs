@@ -131,7 +131,7 @@ namespace JungleMaze.Tests.Audio
                 Assert.AreEqual(expected, ArtAudioSpec.Peak(ArtAudioSpec.Samples(clip)), 0.05f, r["file"]);
                 checkedClips++;
             }
-            Assert.AreEqual(40, checkedClips);
+            Assert.AreEqual(43, checkedClips);
         }
     }
 }

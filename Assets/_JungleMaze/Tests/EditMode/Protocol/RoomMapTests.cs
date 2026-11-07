@@ -233,7 +233,7 @@ namespace JungleMaze.Tests.Protocol
         private static string RulesHash(string path)
         {
             using var stream = new MemoryStream();
-            foreach (var file in new[] { "match_settings.json", "zone_schedule.json", "world_settings.json", "items_catalog.json", "weapons.json" })
+            foreach (var file in new[] { "match_settings.json", "zone_schedule.json", "world_settings.json", "items_catalog.json", "weapons.json", "airdrop_schedule.json" })
                 foreach (var bytes in new[] { Encoding.UTF8.GetBytes(file), Encoding.UTF8.GetBytes(File.ReadAllText(Path.Combine(path,file)).Replace("\r\n","\n")) }) stream.Write(bytes,0,bytes.Length);
             using var hash = SHA256.Create(); return BitConverter.ToString(hash.ComputeHash(stream.ToArray())).Replace("-", "").ToLowerInvariant();
         }

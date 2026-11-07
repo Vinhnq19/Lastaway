@@ -1,4 +1,5 @@
 using System.IO;
+using UnityEditor;
 using JungleMaze.LevelEditor;
 using JungleMaze.World;
 using Newtonsoft.Json;
@@ -13,20 +14,51 @@ namespace JungleMaze.Tests.LevelEditor
     {
         private static string GameMap => File.ReadAllText(Path.GetFullPath(Path.Combine(Application.dataPath, "../Backend/Shared/GameData/map_demo.json")));
 
+        private static LevelDocument OpenGameMap()
+        {
+            var catalog = AssetDatabase.LoadAssetAtPath<LevelCatalog>("Assets/_JungleMaze/Art/LevelEditor/LevelEditorCatalog.asset");
+            Assert.IsNotNull(catalog);
+            return LevelDocument.FromJson(GameMap, catalog.BaseSizeOf, catalog.ShapeOf);
+        }
+
         private static string GameHash(string json) =>
             JsonConvert.DeserializeObject<AuthoredMapDocument>(json).Build(LevelDocument.GameWorldVersion).Hash;
 
         [Test] public void OpeningAndSavingGameMapKeepsTheSameGameHash()
         {
-            var doc = LevelDocument.FromJson(GameMap);
+            var doc = OpenGameMap();
             Assert.AreEqual(50, doc.Width);
             Assert.AreEqual(10, doc.Count(LevelItemGroup.Spawn));
-            Assert.AreEqual(4, doc.Count(LevelItemGroup.Cover));
-            Assert.AreEqual(211, doc.Count(LevelItemGroup.WorldObject));
+            Assert.Greater(doc.Count(LevelItemGroup.Cover), 0);
+            var breakableCovers = doc.Placements.FindAll(p => p.Group == LevelItemGroup.Cover && p.Destructible).Count;
+            Assert.AreEqual(((JArray)JObject.Parse(GameMap)["worldObjects"]).Count, doc.Count(LevelItemGroup.WorldObject) + breakableCovers);
             var exported = doc.ToJson();
             Assert.AreEqual(GameHash(GameMap), GameHash(exported));
             Assert.IsNull(doc.Validate(out var hash));
             Assert.AreEqual(GameHash(GameMap), hash);
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void ImportedZeroHpDoorDoesNotBecomeInteractiveOnSave(bool explicitZero)
+        {
+            var source = JObject.Parse(GameMap);
+            source.Remove("editor");
+            JObject door = null;
+            foreach (JObject entry in (JArray)source["worldObjects"])
+                if ((string)entry["kind"] == nameof(WorldObjectKind.Door)) { door = entry; break; }
+            Assert.IsNotNull(door, "fixture must contain a door");
+            if (explicitZero) door["hp"] = 0; else door.Remove("hp");
+            var original = source.ToString();
+            var first = LevelDocument.FromJson(original).ToJson();
+            Assert.AreEqual(GameHash(original), GameHash(first));
+            var savedObjects = (JArray)JObject.Parse(first)["worldObjects"];
+            var sourceObjects = (JArray)source["worldObjects"];
+            Assert.AreEqual(sourceObjects.Count, savedObjects.Count);
+            for (var i = 0; i < sourceObjects.Count; i++)
+                Assert.AreEqual((string)sourceObjects[i]["art"], (string)savedObjects[i]["art"], "destructible cover art survives legacy import");
+
+            Assert.AreEqual(GameHash(original), GameHash(LevelDocument.FromJson(first).ToJson()), "editor metadata retains zero HP too");
         }
 
         [Test] public void ScaleRotationAndFlipSurviveRoundTripAndRotationSwapsFootprint()
@@ -51,7 +83,10 @@ namespace JungleMaze.Tests.LevelEditor
 
         [Test] public void PlainGameMapWithoutEditorFieldsInfersScaleFromCatalogSize()
         {
-            var doc = LevelDocument.FromJson(GameMap, id => id == nameof(WorldObjectKind.Swamp) ? (2f, 2f) : ((float, float)?)null);
+            var source = JObject.Parse(GameMap);
+            source.Remove("editor");
+            source["worldObjects"] = JArray.Parse("[{\"id\":1,\"kind\":\"Swamp\",\"bounds\":{\"minX\":1,\"minY\":1,\"maxX\":5,\"maxY\":5}}]");
+            var doc = LevelDocument.FromJson(source.ToString(), id => id == nameof(WorldObjectKind.Swamp) ? (2f, 2f) : ((float, float)?)null);
             var swamp = doc.Placements.Find(p => p.Type == nameof(WorldObjectKind.Swamp));
             Assert.AreEqual(2f, swamp.Scale, 1e-4f, "4×4 trong file / 2×2 gốc");
             Assert.AreEqual(4f, swamp.Width, 1e-4f);
@@ -73,28 +108,31 @@ namespace JungleMaze.Tests.LevelEditor
 
         [Test] public void ValidationUsesGameRules()
         {
-            var doc = LevelDocument.FromJson(GameMap);
+            var doc = OpenGameMap();
             Assert.IsNull(doc.Validate(out _));
 
-            doc.Placements.Add(new LevelPlacement { Type = nameof(WorldObjectKind.Chest), Group = LevelItemGroup.WorldObject, X = 23, Y = 25 });
+            var cover = doc.Placements.Find(p => p.Group == LevelItemGroup.Cover);
+            Assert.IsNotNull(cover);
+            doc.Placements.Add(new LevelPlacement { Type = nameof(WorldObjectKind.Chest), Group = LevelItemGroup.WorldObject, X = cover.X, Y = cover.Y });
             StringAssert.Contains("overlap", doc.Validate(out _), "rương đè lên cột đá");
             doc.Placements.RemoveAt(doc.Placements.Count - 1);
 
             doc.Placements.RemoveAt(doc.Placements.FindIndex(p => p.Group == LevelItemGroup.Spawn));
             Assert.IsNotNull(doc.Validate(out _), "thiếu spawn");
 
-            var square = LevelDocument.FromJson(GameMap);
+            var square = OpenGameMap();
             square.Width = 60;
             StringAssert.Contains("vuông", square.Validate(out _));
         }
 
         [Test] public void DecorationsAreSavedButIgnoredByTheGame()
         {
-            var doc = LevelDocument.FromJson(GameMap);
+            var doc = OpenGameMap();
             var before = GameHash(doc.ToJson());
+            var existing = doc.Count(LevelItemGroup.Decoration);
             doc.Placements.Add(new LevelPlacement { Type = "River", Group = LevelItemGroup.Decoration, X = 2, Y = 2, BaseWidth = 4, BaseHeight = 1 });
             var json = doc.ToJson();
-            Assert.AreEqual(1, ((JArray)JObject.Parse(json)["decorations"]).Count);
+            Assert.AreEqual(existing + 1, ((JArray)JObject.Parse(json)["decorations"]).Count);
             Assert.AreEqual(before, GameHash(json));
         }
 
