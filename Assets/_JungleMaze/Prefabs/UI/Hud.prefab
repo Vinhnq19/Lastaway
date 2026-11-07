@@ -3949,6 +3949,7 @@ RectTransform:
   - {fileID: 3197936266568266730}
   - {fileID: 4067223216098922433}
   - {fileID: 844389221773916251}
+  - {fileID: 3492847546688687990}
   - {fileID: 1269125976890342315}
   - {fileID: 6390721884439275401}
   m_Father: {fileID: 0}
@@ -4042,6 +4043,8 @@ MonoBehaviour:
     Green: {r: 0.3882353, g: 0.7294118, b: 0.64705884, a: 1}
     HitMarker: {r: 1, g: 1, b: 1, a: 1}
     DangerFill: {r: 0.8980392, g: 0.28235295, b: 0.3019608, a: 0.15}
+    RedText: {r: 0.9411765, g: 0.41568628, b: 0.43137255, a: 1}
+    Scrim: {r: 0.043137256, g: 0.06666667, b: 0.078431375, a: 0.72}
     Edge: {r: 0.047058824, g: 0.078431375, b: 0.09019608, a: 1}
   vitals: {fileID: 4929245103803351135}
   quickbar: {fileID: 439067943569534569}
@@ -5612,6 +5615,99 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &6013004999381037521
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3492847546688687990}
+  - component: {fileID: 4227243865123376856}
+  - component: {fileID: 509958836826788279}
+  m_Layer: 5
+  m_Name: PickupList
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &3492847546688687990
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6013004999381037521}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5912236887643619615}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 700, y: 360}
+  m_SizeDelta: {x: 280, y: 40}
+  m_Pivot: {x: 0, y: 0.5}
+--- !u!225 &4227243865123376856
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6013004999381037521}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
+--- !u!114 &509958836826788279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6013004999381037521}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baee9c43a6c97d64fa42bc7238d5f079, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JungleMaze.Presentation::JungleMaze.Presentation.UI.Hud.PickupListView
+  layout:
+    OffsetCells: 1.3
+    RaiseCells: 0.5
+    Width: 280
+    RowHeight: 30
+    RowGap: 2
+    Padding: 5
+    Margin: 12
+    MoreHeight: 18
+    IconSize: 22
+    StripeWidth: 3
+    CountWidth: 30
+    KeySize: 22
+    KeyLabelWidth: 32
+    Background: {r: 0, g: 0, b: 0, a: 0.6}
+    SelectedFill: {r: 1, g: 1, b: 1, a: 0.12}
+    LingerAlpha: 0.45
+    FadeSeconds: 0.12
+    KeyFill: {r: 0.122, g: 0.2, b: 0.153, a: 1}
+    KeyBorder: {r: 0.204, g: 0.314, b: 0.247, a: 1}
+    KeyText: {r: 0.953, g: 0.933, b: 0.859, a: 1}
+  textFont: {fileID: 11400000, guid: f6c0771f50b43374e9afc03d0fef0e3d, type: 2}
+  numberFont: {fileID: 11400000, guid: edcf8e1745a80a442a6f5705f2b47627, type: 2}
+  panelSprite: {fileID: 21300000, guid: 4bf579afa92c33e4bab0368ff84a07d9, type: 3}
+  outlineSprite: {fileID: 21300000, guid: 4f153d5c1e2c3e64296712256d58100e, type: 3}
+  keyCapSprite: {fileID: 21300000, guid: 8346e125cbdb16249b3f374d93fd7c06, type: 3}
+  lootTuning: {fileID: 11400000, guid: 5b82d8719e337fc40b7c0b0e6185e990, type: 2}
+  keepClearOf:
+  - {fileID: 8829137320477013499}
+  - {fileID: 4044621110088195934}
+  - {fileID: 4067223216098922433}
+  - {fileID: 844389221773916251}
 --- !u!1 &6088256698405292164
 GameObject:
   m_ObjectHideFlags: 0

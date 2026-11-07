@@ -29,6 +29,7 @@ namespace JungleMaze.Presentation.World.Phase2
         private GameFlow _flow;
         private Transform _hero;
         private IItemIconProvider _icons;
+        private NearbyLootPicker _picker;
 
         [SerializeField] private WorldVisualSet visuals;
         /// <summary>Ground loot look; empty loads Resources/GroundLootTuning (built by Jungle Maze → Loot → Build Ground Loot Assets).</summary>
@@ -59,6 +60,10 @@ namespace JungleMaze.Presentation.World.Phase2
         /// <summary>Ground item icons; the HUD's normalized catalog, never raw JSurviv art.</summary>
         [Inject]
         public void ConfigureIcons(IItemIconProvider icons) => _icons = icons;
+
+        /// <summary>The F pickup list shared with the HUD panel (Docs/hvu/07_Floor_Loot.vi.md section 11).</summary>
+        [Inject]
+        public void ConfigurePickupList(NearbyLootPicker picker) => _picker = picker;
 
         [Inject]
         public void ConfigureOffline(OfflineWorldSession offlineWorld, OfflineMatchSession offlineMatch, GameFlow flow)
@@ -133,19 +138,17 @@ namespace JungleMaze.Presentation.World.Phase2
                 return;
             }
 
-            if (_world == null || !_world.IsReady || SceneManager.GetActiveScene().name != "Game" || _match.OwnHp == 0 || (_menu?.BlocksGameplayInput ?? false)) return;
+            if (_world == null || !_world.IsReady || SceneManager.GetActiveScene().name != "Game" || _match.OwnHp == 0 || (_menu?.BlocksGameplayInput ?? false)) { ClearPickupList(); return; }
             if (Time.unscaledTime >= _autoPickupAt && _catalog != null)
             {
                 _autoPickupAt = Time.unscaledTime + .25f;
                 foreach (var o in _world.Objects) if (o.Kind == 100 && Vector2.Distance(new Vector2(_match.Prediction.PredictedX, _match.Prediction.PredictedY), new Vector2(o.X, o.Y)) <= .6f && _catalog.TryGet(o.ItemId, out var item) &&
                     (item.Kind == ItemKind.Ammo || item.Kind == ItemKind.Helmet || item.Kind == ItemKind.Armor)) _world.Send(WorldActionKind.Pickup, o.Id);
             }
+            var own = new Vector2(_match.Prediction.PredictedX, _match.Prediction.PredictedY);
+            var target = UpdatePickupList(_world.Objects, own);
             if (Input.GetKeyDown(KeyCode.F))
             {
-                var camera = Camera.main; if (camera == null) return; var cursor = camera.ScreenToWorldPoint(Input.mousePosition); ushort target = 0; var best = float.MaxValue;
-                var own = new Vector2(_match.Prediction.PredictedX, _match.Prediction.PredictedY);
-                foreach (var o in _world.Objects) if (o.Kind == 100 && Vector2.Distance(own, new Vector2(o.X, o.Y)) <= 1.2f)
-                { var d = ((Vector2)cursor - new Vector2(o.X, o.Y)).sqrMagnitude; if (d < best) { best = d; target = o.Id; } }
                 if (target != 0) _world.Send(WorldActionKind.Pickup, target);
                 else { var door = NearestDoor(_world.Objects, own); if (door != 0) _world.Send(WorldActionKind.Interact, door); }
             }
@@ -162,7 +165,7 @@ namespace JungleMaze.Presentation.World.Phase2
         private void UpdateOffline()
         {
             if (!_offlineWorld.IsReady || SceneManager.GetActiveScene().name != "Game" ||
-                (_offlineMatch != null && _offlineMatch.IsDead)) return;
+                (_offlineMatch != null && _offlineMatch.IsDead)) { ClearPickupList(); return; }
 
             if (_hero == null)
             {
@@ -186,7 +189,7 @@ namespace JungleMaze.Presentation.World.Phase2
                 }
                 _offlineWorld.SetPlayerPose(_hero.position.x, _hero.position.y);
             }
-            if (_menu?.BlocksGameplayInput ?? false) return;
+            if (_menu?.BlocksGameplayInput ?? false) { ClearPickupList(); return; }
 
             if (Time.unscaledTime >= _autoPickupAt && _catalog != null && _hero != null)
             {
@@ -203,27 +206,17 @@ namespace JungleMaze.Presentation.World.Phase2
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.F) && _hero != null)
+            if (_hero == null) ClearPickupList();
+            else
             {
-                var camera = Camera.main;
-                if (camera != null)
+                var hero = new Vector2(_hero.position.x, _hero.position.y);
+                var target = UpdatePickupList(_offlineWorld.Objects, hero);
+                if (Input.GetKeyDown(KeyCode.F))
                 {
-                    var cursor = camera.ScreenToWorldPoint(Input.mousePosition);
-                    ushort target = 0;
-                    var best = float.MaxValue;
-                    var own = new Vector2(_hero.position.x, _hero.position.y);
-                    foreach (var o in _offlineWorld.Objects)
-                    {
-                        if (o.Kind == 100 && Vector2.Distance(own, new Vector2(o.X, o.Y)) <= 1.2f)
-                        {
-                            var d = ((Vector2)cursor - new Vector2(o.X, o.Y)).sqrMagnitude;
-                            if (d < best) { best = d; target = o.Id; }
-                        }
-                    }
                     if (target != 0) _offlineWorld.Pickup(target);
                     else
                     {
-                        var door = NearestDoor(_offlineWorld.Objects, own);
+                        var door = NearestDoor(_offlineWorld.Objects, hero);
                         if (door != 0) _offlineWorld.ToggleDoor(door);
                     }
                 }
@@ -255,6 +248,25 @@ namespace JungleMaze.Presentation.World.Phase2
                 if (inv != null && inv.IsUsing)
                     _offlineWorld.CancelUse();
             }
+        }
+
+        /// <summary>
+        /// Refreshes the F pickup list around <paramref name="hero"/> (mouse wheel moves its selection).
+        /// Returns the world Id F picks up, 0 when no item is in reach.
+        /// </summary>
+        private ushort UpdatePickupList(WorldObjectWire[] objects, Vector2 hero)
+        {
+            if (_picker == null) return 0;
+            var wheel = Input.mouseScrollDelta.y;
+            // Wheel down walks down the list (farther items), wheel up walks back; one notch = one row.
+            var steps = wheel < 0f ? 1 : wheel > 0f ? -1 : 0;
+            _picker.Update(objects, hero.x, hero.y, steps, Time.unscaledTimeAsDouble);
+            return _picker.TargetId;
+        }
+
+        private void ClearPickupList()
+        {
+            if (_picker != null && _picker.Count > 0) _picker.Clear();
         }
 
         private void Refresh()
