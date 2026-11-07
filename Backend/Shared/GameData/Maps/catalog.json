@@ -1,23 +1,23 @@
 {
   "schemaVersion": 1,
-  "generation": 3,
+  "generation": 5,
   "defaultMapId": "thap-co",
   "maps": [
     {
       "id": "thap-co",
-      "name": "Th\u00E1p c\u1ED5",
-      "description": "Th\u00E1p \u0111\u00E1 v\u00E0 c\u00E1c khu di t\u00EDch gi\u1EEFa r\u1EEBng.",
-      "version": "1.1.0",
-      "mapHash": "308ef963a7877479b767f10d0224dc32df091c24e9a31c166fe8d2305619f186",
-      "previewHash": "f0841c8468e0ae15627e4a16f8ad282dd521a29e9a82d3a34af7690d789ca9d9"
+      "name": "Tháp cổ",
+      "description": "Tháp đá và các khu di tích giữa rừng.",
+      "version": "1.2.0",
+      "mapHash": "0d51907a14bccb14a42534edde36923cff6a63f5ab42255ffab743fe2e14ca0f",
+      "previewHash": "bc6cff2d3232ca704ffe085efb1e69881e15617bed2f1b8d26d49adebc1c9d9f"
     },
     {
       "id": "thi-tran",
-      "name": "Th\u1ECB tr\u1EA5n",
-      "description": "Nh\u00E0 g\u1EA1ch, \u0111\u01B0\u1EDDng ph\u1ED1 v\u00E0 c\u00E1c l\u1ED1i giao tranh h\u1EB9p.",
-      "version": "1.1.0",
-      "mapHash": "8d365ce54e58e4fced1162f84440c9f95bec543814f46ea13291b9d646bcb2ca",
-      "previewHash": "ec793477435fac68c888d2c5b4395c7a8c85ff312b851560032c172340dd77c1"
+      "name": "Thị trấn",
+      "description": "Nhà gạch, đường phố và các lối giao tranh hẹp.",
+      "version": "1.2.0",
+      "mapHash": "5cebbe6fef0f8998ae76911cfbcc63ccd858972aa977de13b5185a1cf420e57e",
+      "previewHash": "a9b4a676ff08cf73d4356387d5e58fd74dcbe604038ba298db400d0e19e06b21"
     }
   ]
 }

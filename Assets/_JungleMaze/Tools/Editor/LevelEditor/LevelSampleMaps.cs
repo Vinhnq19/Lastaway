@@ -32,6 +32,8 @@ namespace JungleMaze.EditorTools
             for (var variant = 1; variant <= 2; variant++)
             {
                 var doc = new Builder(catalog, variant).Build(out var summary);
+                // Cửa chỉ giữ chỗ lúc dựng (không vật nào lấp lối vào); map phát hành không có cửa, lối vào để trống.
+                doc.Placements.RemoveAll(p => p.Type == "Door");
                 var error = doc.Validate(out var hash);
                 report.AppendLine($"{Files[variant - 1]}: {summary} → {(error ?? "hợp lệ, hash " + hash)}");
                 if (error != null) continue;

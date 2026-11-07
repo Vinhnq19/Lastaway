@@ -2,7 +2,7 @@
 
 ## Map phát hành cho phòng mạng
 
-Catalog Local và tự host gồm **Tháp cổ** (`thap-co`, mặc định) và **Thị trấn** (`thi-tran`), đều 150×150. Luyện tập offline mặc định dùng Tháp cổ. Cập nhật cả GameServer và client để dùng map mạng 150×150.
+Catalog Local và tự host gồm **Tháp cổ** (`thap-co`, mặc định) và **Thị trấn** (`thi-tran`), đều 150×150. Luyện tập offline mặc định dùng Tháp cổ. Từ 07/11/2026 (version 1.2.0) cả hai map **không còn cửa**: lối vào nhà/tháp là khe tường để trống; `LevelSampleMaps` vẫn đặt cửa lúc dựng để giữ trống lối vào rồi xoá trước khi lưu. Cập nhật cả GameServer và client để dùng map mạng 150×150.
 
 1. **Tạo/sửa:** mở Level Editor, Play, mở JSON map và chỉnh bố cục. Map phát hành phải vuông, cạnh 30–256 ô và đúng 10 spawn an toàn cách nhau tối thiểu 6 cell, portal đủ cặp, không chồng vật cản. Bấm **Kiểm tra**. Lưu bản nguồn bằng **Lưu thành…**; không sửa file theo hash đang phát hành.
 2. **Xuất:** menu **Jungle Maze → Level Editor → Export Published Map**. Nhập ID ổn định, tên, mô tả, version mới; chọn mặc định nếu cần. Khi Level Editor đang Play, công cụ dùng bản đồ đang mở; ngoài Play, chọn JSON. Bấm **Kiểm tra và xuất map + preview vào catalog**. Preview là ảnh sơ đồ sinh từ đúng geometry/placements/spawn. Scene và catalog asset của Level Editor được giữ nguyên.
