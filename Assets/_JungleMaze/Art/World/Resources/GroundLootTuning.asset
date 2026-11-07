@@ -1,0 +1,89 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2141232cc0a8dad4fb4c5cbb6fef93b3, type: 3}
+  m_Name: GroundLootTuning
+  m_EditorClassIdentifier: JungleMaze.Presentation::JungleMaze.Presentation.World.Loot.GroundLootTuning
+  HeldArt: {fileID: 11400000, guid: afd8cfb27d918b84ab83521b242db75e, type: 2}
+  ThrowableArt: {fileID: 11400000, guid: 0ceb6ff6da998824ab391c307d24aa8f, type: 2}
+  Halo: {fileID: 21300000, guid: 85895d7f1e957314dba9d046400620e5, type: 3}
+  Beam: {fileID: 21300000, guid: 9c56f050f3782364ba06854336e01aa1, type: 3}
+  Sparkle: {fileID: 21300000, guid: cd779f4eb072e2d4bb6f11850c99a1fd, type: 3}
+  AmmoBox: {fileID: 21300000, guid: ffc2a2bd939012442a4f96efbac92d8d, type: 3}
+  LightMaterial: {fileID: 2100000, guid: a6f0f08ea9058114dbcebb84e7420183, type: 2}
+  HeldScale: 1
+  ThrowableScale: 1.25
+  MaxThrowableAspect: 3
+  IconSize: 0.8
+  AmmoSize: 0.55
+  HeldAngle: 30
+  ThrowableAngle: 30
+  IconAngle: 0
+  FloatHeight: 0.22
+  BobAmplitude: 0.08
+  BobPeriod: 1.6
+  ShadowSize: {x: 0.55, y: 0.2}
+  ShadowAlpha: 0.35
+  ShadowMinScale: 0.55
+  FadeSeconds: 0.35
+  LaunchHeight: 0.8
+  LaunchSeconds: 0.45
+  BounceHeight: 0.1
+  BounceShare: 0.22
+  LaunchSpinDegrees: 360
+  LaunchStagger: 0.05
+  LaunchWindow: 0.5
+  LaunchRadius: 2
+  LaunchCompanionRadius: 1.25
+  LightFadeSeconds: 0.25
+  Rarities:
+  - Rarity: 0
+    Glow: {r: 1, g: 1, b: 1, a: 0.65}
+    HaloSize: 0.9
+    Beam: {r: 1, g: 1, b: 1, a: 0.5}
+    BeamHeight: 0.55
+    BeamWidth: 0.45
+    Sparkles: 0
+  - Rarity: 1
+    Glow: {r: 0.35, g: 1, b: 0.35, a: 0.65}
+    HaloSize: 1
+    Beam: {r: 0.35, g: 1, b: 0.35, a: 0.5}
+    BeamHeight: 0.9
+    BeamWidth: 0.5
+    Sparkles: 0
+  - Rarity: 2
+    Glow: {r: 0.3, g: 0.62, b: 1, a: 0.65}
+    HaloSize: 1.05
+    Beam: {r: 0.3, g: 0.62, b: 1, a: 0.5}
+    BeamHeight: 1.3
+    BeamWidth: 0.55
+    Sparkles: 0
+  - Rarity: 3
+    Glow: {r: 0.78, g: 0.38, b: 1, a: 0.65}
+    HaloSize: 1.15
+    Beam: {r: 0.78, g: 0.38, b: 1, a: 0.5}
+    BeamHeight: 1.75
+    BeamWidth: 0.6
+    Sparkles: 3
+  - Rarity: 4
+    Glow: {r: 1, g: 0.68, b: 0.12, a: 0.65}
+    HaloSize: 1.25
+    Beam: {r: 1, g: 0.68, b: 0.12, a: 0.5}
+    BeamHeight: 2.25
+    BeamWidth: 0.66
+    Sparkles: 5
+  AmmoGlow: {r: 1, g: 1, b: 1, a: 0.45}
+  AmmoHaloSize: 0.6
+  BeamPulse: 0.2
+  BeamPulsePeriod: 2.2
+  SparkleSize: 0.14
+  SparklePeriod: 1.3
+  GroundOrder: 5

@@ -8,6 +8,7 @@ using JungleMaze.App.World;
 using JungleMaze.Core.DI;
 using JungleMaze.Presentation.Player;
 using JungleMaze.Presentation.UI.Hud;
+using JungleMaze.Presentation.World.Loot;
 using JungleMaze.World.Inventory;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -30,6 +31,10 @@ namespace JungleMaze.Presentation.World.Phase2
         private IItemIconProvider _icons;
 
         [SerializeField] private WorldVisualSet visuals;
+        /// <summary>Ground loot look; empty loads Resources/GroundLootTuning (built by Jungle Maze → Loot → Build Ground Loot Assets).</summary>
+        [SerializeField] private GroundLootTuning lootTuning;
+        private GroundLootLayer _loot;
+        private bool _lootTuningMissing;
         private Transform _root;
         private Sprite _square;
         private Texture2D _texture;
@@ -258,6 +263,7 @@ namespace JungleMaze.Presentation.World.Phase2
             {
                 _views.Clear();
                 _colliders.Clear();
+                _loot = null; // its views lived under the destroyed root
                 var go = new GameObject("Authoritative World Views");
                 _root = go.transform;
                 _root.SetParent(transform, false);
@@ -266,7 +272,7 @@ namespace JungleMaze.Presentation.World.Phase2
             var ready = isOffline ? _offlineWorld.IsReady : (_world != null && _world.IsReady);
             var show = SceneManager.GetActiveScene().name == "Game" && ready;
             _root.gameObject.SetActive(show);
-            if (!show) return;
+            if (!show) { _loot?.Clear(); return; }
 
             if (_square == null)
             {
@@ -276,10 +282,13 @@ namespace JungleMaze.Presentation.World.Phase2
                 _square = Sprite.Create(_texture, new Rect(0, 0, 1, 1), new Vector2(0.5f, 0.5f), 1);
             }
             var sourceObjects = isOffline ? _offlineWorld.Objects : _world.Objects;
+            // Ground items (kind 100) float with rarity light in their own pooled layer; WorldObjectView keeps the other kinds.
+            var loot = EnsureLootLayer();
+            loot?.Apply(sourceObjects, Time.unscaledTimeAsDouble);
             var dynamicStates = new List<WorldObjectWire>();
             // Cover (kind 1–4): offline do scene vẽ; khi có art Level Editor thì LevelArtView đã vẽ hình Cainos.
             var coversDrawn = isOffline || LevelArtView.CoversDrawn;
-            foreach (var state in sourceObjects) if (!coversDrawn || state.Kind > 4) dynamicStates.Add(state);
+            foreach (var state in sourceObjects) if ((!coversDrawn || state.Kind > 4) && (loot == null || state.Kind != GroundLootLayer.GroundItemKind)) dynamicStates.Add(state);
             var states = dynamicStates.ToArray();
             // Vật thể có hình Level Editor (rương, bình, bụi, portal, cửa trong JSON) không vẽ thêm art kiểu cũ.
             var drawn = new List<WorldObjectWire>(states.Length);
@@ -287,6 +296,23 @@ namespace JungleMaze.Presentation.World.Phase2
                 if (!LevelArtView.TryShowWorldObject(state.Kind, state.X, state.Y, state.Width, state.Height, state.Flags, state.Hp)) drawn.Add(state);
             ApplyViews(drawn.ToArray(), _root, _views, _visuals, _square, _icons);
             ApplyCollision(states);
+        }
+
+        private GroundLootLayer EnsureLootLayer()
+        {
+            if (_loot != null || _lootTuningMissing) return _loot;
+            var tuning = lootTuning != null ? lootTuning : Resources.Load<GroundLootTuning>(GroundLootTuning.ResourceName);
+            if (tuning == null)
+            {
+                // Without the tuning asset the old flat icon marker (WorldObjectView) still shows every item.
+                _lootTuningMissing = true;
+                Debug.LogWarning("[World] GroundLootTuning missing; run Jungle Maze/Loot/Build Ground Loot Assets.");
+                return null;
+            }
+            var go = new GameObject("Ground Loot");
+            go.transform.SetParent(_root, false);
+            _loot = new GroundLootLayer(go.transform, tuning, _icons, _catalog, _square);
+            return _loot;
         }
 
         private void ApplyCollision(WorldObjectWire[] states)
