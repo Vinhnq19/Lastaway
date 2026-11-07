@@ -567,6 +567,219 @@ Ngoài ra có `VfxMatchFeedTests` (online/offline/mock, `SessionKey`/`InGame`) v
 
 Người duyệt **theo khuyến nghị**: mọi câu Q1–Q15 theo khuyến nghị của designer, T-1…T-8 theo mặc định trong 4.10. Cụ thể: bo tô #A274FF α 0,4 + viền đứt (Q1); chỉ dự đoán ra đòn của mình, đối soát theo `RequestSeq` (Q4); seam FOW mặc định `AlwaysVisible` (Q15); quầng/hit spark/số ở layer `Default` dưới tán cây, nổ/khói/ngòi/bo ở `VFX` (T-2); ẩn vòng debug `MatchDemoView` khi tắt F3 (T-1); thêm `VfxBodyAnchor` vào `Hero.prefab`/`PlayerView.prefab` (T-3); nháy tint đỏ nhạt (T-4). Q12 (deadline mới) chưa có trả lời, không chặn build.
 
+### 4.12. Điều chỉnh sau khi merge main (07/11/2026)
+
+Tech-lead viết lại một phần sau khi nhánh `hvu` merge `origin/main` (commit merge `11c78d20`, 40 commit mới). Mục 1–3 và 4.0–4.11 giữ nguyên để làm lịch sử. **Chỗ nào 4.12 nói khác thì làm theo 4.12**, sau khi người chốt D1 và D2 (4.12.11). Mọi điểm dưới đây đã đối chiếu bằng code sau merge.
+
+#### 4.12.1. Hiện trạng mới (bổ sung và sửa 4.0)
+
+| Điểm | Kết quả kiểm sau merge | Hệ quả cho VFX-01 |
+| --- | --- | --- |
+| Vùng bo trong thế giới | **Đã có**: `Scripts/Presentation/UI/ZoneOverlayView.cs` + `Resources/ZoneOverlay.shader` (Quang Huy, `529d59c1`, `ab940c6a`, `1924b47f`). Một quad lớn ở sorting layer `Foreground`, order 100. Phần ngoài bo tô **đỏ** `(.85, .025, .035)` α 0,62, viền bo đỏ đậm hơn α 0,88. Có đường trắng liền ở `TargetRadius` khi `InWarning` hoặc đang co. Minimap dùng cùng shader (đỏ đô, nét đứt). Khi r = 0 thì tô toàn bộ. `MatchDemoView.ShowZone` gọi overlay cho cả online (`MatchSession.Zone`) lẫn offline (`ZoneSimulation.GetStatePacket`). Overlay vẽ thẳng gói mới nhất (server gửi zone kèm mọi snapshot), không nội suy và không kẹp đơn điệu. Chữ cảnh báo đã bỏ, chuông âm thanh vẫn giữ | VFX-01 **không vẽ bo** nữa (D1). Tên `ZoneOverlayView` ở 4.3 trùng tên lớp này, nên bỏ hẳn |
+| Vòng debug của `MatchDemoView` | Đã xoá (không còn `LineRenderer` đỏ/vàng) | **T-1 không còn đối tượng.** R1 đóng. VFX-01 không sửa `MatchDemoView.cs` |
+| Camera | `HeroCameraFollow` có `[DefaultExecutionOrder(900)]` và `FollowOverride`. Online, camera bám `PlayerView` của mình; demo không còn đặt camera tổng (25,25) size 28. Spectator driver vẫn ở order 1000 | `CameraShakeApplier` ở order 1100 vẫn đúng. Test AC13 thêm một case có `FollowOverride` |
+| Người chơi local khi online | Online, `Hero` chỉ là proxy ẩn cho camera; nhân vật mình được vẽ bằng `PlayerView` của chính mình (`c8f8e4c2`, `8cd81b76`). `ThrowableView.ViewOf/IsLocal` đi theo đúng luật này | **R3 đổi cách làm:** khi online (`MatchSession.Connected`), registry phải ưu tiên anchor `PlayerView` có `NetId == OwnNetId`; khi offline thì dùng anchor `Hero` (netId 0). Ngược với dòng `VfxAnchorRegistry` ở 4.3 |
+| Protocol | Thêm `ThrowableRequestPacket` (client gửi server) và `ThrowableEventPacket` (server gửi cả phòng, ReliableOrdered) trong `Backend/Shared/Protocol/Gameplay/ThrowablePackets.cs`. Event 1..14 gồm `Thrown`, `Detonated`, `TrapArmed/Triggered/Expired`, `SmokeStarted/Ended`, `RopePulledTarget/Self`, `RopeMissed`, `BellRung`, `BatSwing`, `BatHit`, `Hit`. Có thêm `Actor`, `Target`, `Id`, `From/To`, `Seconds`, `Size`, `Amount` (sát thương thực), `Flags` (bit 0 = bị choáng). Phía client đi qua `IThrowableEventSource` (`OnlineThrowableSession`, `OfflineWorldSession`), và `ThrowableEvent` **không** mang `Tick`. `MatchProtocol.Version` lên 3 vì có field bot, không liên quan VFX | **Sửa 4.0:** đã có **nguồn thật** cho Explosion (`Thrown` = ngòi, `Detonated` = nổ), cho Hit có sát thương của đồ ném (`Hit`, `BatHit`, `RopePulledTarget`), và cho Status của **người khác** do đồ ném gây ra (Stun từ `TrapTriggered`/`BatHit` có cờ choáng; Reverse từ `Hit` của BELL; Root từ `Hit` của SEED). VFX-01 **vẫn không đổi protocol** |
+| `EventPacket.PlayerHit`, `PlayerStateFlags.Invulnerable` | Grep lại: server vẫn chỉ phát `PlayerDied`, vẫn chỉ bật cờ `Dead` | Hit của đạn và cận chiến vẫn chỉ có nguồn fake. Quầng bất tử vẫn chỉ có nguồn fake |
+| `ThrowableView` (Hào, `7b744214`) | Vẽ bằng sprite sheet JSurviv qua `ThrowableArtCatalog` (Resources): đường bay rồi nháy ngòi tại điểm rơi; nổ (sheet chuối; sheet thiên thạch cho cả METEORITE và CRYSTAL, CRYSTAL tô xanh); hạt dùng `seed_stun`. Kích cỡ nổ = `Size` cell. Vẽ thêm vỏ chuối, mây khói (1,15 × `Size`, sống theo `Seconds`), dây thừng, vòng vuông 7×7 của chuông, chuông lắc trên đầu, dây leo trên người bị trói, và animation của người dùng. Dùng free list riêng (không qua `IPoolService`). Sorting theo layer thân hero (`Default`), order 20 hoặc −5. **Không** hỏi seam visibility, **không** dọn khi đổi trận. Được tạo bằng `AddComponent` trong `CombatWeaponPresenter.Start`. Các thành viên public: `OnEvent`, `Advance(dt)`, `ActiveEffects` | Nổ, khói, bẫy, dây leo, chuông đã có hình (D2). VFX-01 không vẽ lại các phần này |
+| `Docs/Tickets/WPN-03.md` | Ghi rõ: "Particle và cảnh báo vùng nổ → VFX-01" và "Icon choáng trên đầu người bị stun (VFX-01)" | Hai việc này vẫn thuộc VFX-01 |
+| Luật đồ ném (`ThrowableService`) | `Seconds` trong event là thời lượng theo luật, gửi cả khi mục tiêu đang miễn nhiễm CC (`ApplyEffect` có thể đã từ chối). `Amount` = 0 khi mục tiêu bất tử hoặc khi là khói. `Id` (ushort) tăng trong mỗi trận cho nổ/bẫy/khói; `Hit` của BELL, `BatHit` và dây thừng có `Id = 0` | Adapter cần quy tắc riêng: bỏ quầng CC khi biết đích đang miễn nhiễm, không hiện số khi `Amount ≤ 0`, và không khử trùng theo `Id = 0` (4.12.3) |
+| HUD cảnh báo bom (UI-01 `SetDanger`) | Chưa có ai gọi; WPN-03 không nối vào | Q7 chưa có cặp để khớp id. Ngoài VFX-01, ghi follow-up |
+| `Hero.prefab`, `PlayerView.prefab` | WPN-01 (`01c2a1b8`) sửa nhiều: thêm tay và vũ khí cầm | T-3 vẫn làm được, nhưng dễ conflict (R20) |
+| Working tree | `Backend/JungleBackend.sln` đang bị sửa, không phải của VFX-01 | Không stage file này |
+
+#### 4.12.2. Bảng thay đổi phạm vi
+
+| Hạng mục | Kế hoạch cũ (4.1–4.6) | Sau merge | Lý do |
+| --- | --- | --- | --- |
+| Tô ngoài bo, viền bo, vòng báo bo thu | VFX-01: `ZoneVfxModel` + `ZoneOverlayView` (SpriteMask, tím α 0,4) | **Bỏ** (D1) | `ZoneOverlayView` của Quang Huy đã làm đủ ba việc, cho cả online, offline và minimap |
+| Nổ BANANA/METEORITE/CRYSTAL/SEED, vòng chuông, khói 10 s, bẫy chuối | VFX-01: 5 prefab nổ + `Vfx_Smoke` | **Bỏ** (D2) | `ThrowableView` đã vẽ bằng **cùng** sprite sheet JSurviv, cỡ theo `Size` từ server |
+| Quầng Root | `Vfx_Status_Root` | **Bỏ**; catalog map `Root` → NoVisual | `ThrowableView` đã vẽ dây leo trên người bị trói |
+| Tint Tinh thể (Q5) | Tint trong catalog VFX | **Bỏ** | `ThrowableView.BlastTint` đã tô xanh |
+| Vòng cảnh báo ngòi nổ (`FuseWarning`) | Nguồn fake `ExplosionEvent` | **Giữ, đổi nguồn**: `Thrown` (ToX/ToY, `Size`×`Size`, `Seconds`) mở vòng; `Detonated` cùng `Id` thì gỡ. Bỏ `BombFuse` ở tâm | WPN-03 giao cho VFX-01; `ThrowableView` đã nháy vật ở điểm rơi |
+| Hit flash, số sát thương, hit spark | Nguồn fake | **Giữ**. Nguồn thật mới: `Hit`/`BatHit`/`RopePulledTarget` có `Amount > 0`. Đạn và cận chiến vẫn fake | Như trên |
+| Quầng Stun, Reverse, CcImmune, Invulnerable, Invisible, Poison | Fake cho người khác, `IEffectState` cho mình | **Giữ**. Stun và Reverse của người khác có nguồn thật từ đồ ném. **Quy tắc mới:** không áp quầng CC (Stun/Root/Reverse) cho NetId đang có quầng CcImmune | WPN-03 giao icon choáng cho VFX-01; R16 |
+| Rung màn hình | Fake | **Giữ**. Nguồn thật: `Detonated` cách mình ≤ 6 cell và được seam cho phép; đồ ném trúng mình | — |
+| Attack puff + ledger đối soát | Có (T-5) | **Giữ** như G1. Nếu chồng với tay/vung của WPN-01 mà rối mắt, dev tắt bằng 1 dòng catalog và ghi ở mục 5 (không cần hỏi lại) | AC4 vẫn cần đối tượng để đo |
+| Khử trùng, reset khi đổi phòng, seam, ngân sách 64 | Có | **Giữ**; bỏ phần zone khỏi feed | — |
+| Scene `VfxPreview` | Có zone giả, nổ VFX | **Giữ, đổi nội dung**: thêm một `ThrowableView` chạy bằng `ThrowableEvent` giả để xem tích hợp; bỏ nút zone | Kiểm hai lớp cùng một event |
+| Kiểm kê 16 prefab | Bảng 2.1 | **Giữ đủ 16 dòng**; đổi quyết định (4.12.4) | AC1 |
+| T-1 (sửa `MatchDemoView`) | 2 dòng | **Bỏ** | Không còn vòng debug |
+
+#### 4.12.3. Cách nối với `ThrowableView`: hai lớp cùng nghe một nguồn, không sửa file của Hào
+
+Đã cân nhắc ba cách:
+
+- **(A) VFX-01 cấp particle cho `ThrowableView`:** phải sửa `ThrowableView`/`ThrowableArtCatalog`, có hai cơ chế pool chồng nhau, và thay art đã playtest. Không chọn.
+- **(B) VFX-01 gọi vào `ThrowableView`:** tạo phụ thuộc giữa hai view mà không được gì thêm. Không chọn.
+- **(C) Chọn:** cả hai nghe `IThrowableEventSource` (chỉ đọc). `ThrowableView` lo **vật và vùng** (bay, nổ, khói, bẫy, dây, dây leo). VFX-01 lo **phản hồi trên thân, cảnh báo trước và rung**. VFX-01 không sửa dòng nào trong `ThrowableView.cs`, `ThrowableArtCatalog.cs`, `OnlineThrowableSession.cs`, `OfflineWorldSession*.cs`.
+
+Adapter mới `Scripts/Application/Vfx/ThrowableVfxSource.cs` đổi `ThrowableEvent` thành 3 event của 4.2 rồi publish lên `IEventBus`. Director giữ nguyên hợp đồng; fake và nguồn thật đi chung một đường.
+
+```csharp
+public sealed class ThrowableVfxSource : IInitializable, IDisposable
+{
+    public ThrowableVfxSource(IEventBus bus, OfflineWorldSession offline, params IThrowableEventSource[] sources);
+    public void OnThrowable(in ThrowableEvent e);   // public cho test
+}
+```
+
+| `ThrowableEventKind` | `ThrowableView` (giữ nguyên) | VFX-01 (`ThrowableVfxSource` publish) |
+| --- | --- | --- |
+| `Thrown` (Item 1..5) | Bay, nháy ngòi | `ExplosionEvent(Fuse)` tại `ToX/ToY`, vùng `Size×Size`, `SecondsRemaining = Seconds` |
+| `Detonated` | Nổ | `ExplosionEvent(Detonate)`: gỡ vòng cùng khoá; rung nếu ≤ 6 cell và seam cho phép. **Không spawn nổ** |
+| `Hit` | Dây leo nếu SEED | `HitConfirmedEvent(Target, Amount, ToX/ToY)` nếu `Amount > 0`. Thêm `StatusEvent(Reverse, Seconds)` nếu Item = BELL và `Seconds > 0`. SEED → `StatusEvent(Root)`, mà Root là NoVisual |
+| `BatHit` | — (đã animate ở `BatSwing`) | `HitConfirmedEvent` nếu `Amount > 0`; `StatusEvent(Stun, Seconds)` nếu có cờ choáng và `Seconds > 0` |
+| `TrapTriggered` | Gỡ vỏ chuối | `StatusEvent(Stun, Seconds)` cho `Target` |
+| `RopePulledTarget` | Dây | `HitConfirmedEvent` nếu `Amount > 0` |
+| `TrapArmed/Expired`, `SmokeStarted/Ended`, `BellRung`, `BatSwing`, `RopePulledSelf/Missed` | Như hiện tại | Không làm gì |
+
+- **Chặn nguồn:** bỏ event online khi `OfflineWorldSession.IsActive`, giống cách bind combat. `OnlineThrowableSession` vốn đã lọc theo `MatchId`.
+- **Khoá khử trùng:**
+  - Khi `Id ≠ 0`: `SfxDeduper.Key(tag(kind), Id, Target)`.
+  - Khi `Id = 0`: dùng **bộ đếm riêng của adapter**, nên không bao giờ trùng. Kênh ReliableOrdered vốn không lặp gói; nếu khử trùng theo `Id = 0` thì hai cú chuông khác nhau trong 5 s sẽ bị nuốt mất một.
+  - `Id` reset mỗi trận, và deduper đã được xoá khi `SessionKey` đổi.
+- **Quầng CC khi đích miễn nhiễm:** Director bỏ `StatusEvent` Stun/Root/Reverse cho NetId đang có quầng `CcImmune`. Với chính mình, `CcImmune` đến từ `IEffectState` (nguồn thật). Với người khác, phải chờ Game-10 (R16).
+- **Hệ quả phụ:** `VfxSpawn` cần thêm `Seconds` để prefab `FuseWarning` nháy nhanh dần tới lúc nổ. `IVfxOutput.Stop` (chỉ dùng cho khói) bỏ đi.
+
+#### 4.12.4. Kiểm kê cập nhật (thay cột "Quyết định" của bảng 2.1 và bảng prefab 4.5)
+
+| Prefab JSurviv | Quyết định mới | Lý do |
+| --- | --- | --- |
+| `SmokeVfx` | **Loại bỏ** (trước: Chỉnh) | `ThrowableView` vẽ cùng sheet `smoke-Sheet.png` |
+| `BananaExploitVfx` | **Loại bỏ** (trước: Dùng lại) | `ThrowableView` dùng bản copy `banana_explosing-Sheet` đã cắt 8 khung (`Art/Combat/Throwables`) |
+| `MeteoExploitVfx` | **Loại bỏ** (trước: Dùng lại/Chỉnh) | `ThrowableView` dùng `meteorite_explosion-Sheet` cho METEORITE và CRYSTAL (tô xanh) |
+| `SeedExploit` | **Loại bỏ** (trước: Chỉnh) | `ThrowableView` dùng `seed_stun.png` cho cả nổ và dây leo |
+| `BellExploit` | **Loại bỏ** (trước: Chỉnh nặng) | `ThrowableView` vẽ vòng vuông 7×7 và chuông lắc |
+| `StunnedVfx` | Chỉnh (giữ) → `Vfx_Status_Stun` | Icon choáng, WPN-03 giao cho VFX-01 |
+| `ReverseVfx` | Chỉnh (giữ) → `Vfx_Status_Reverse` | Nay có nguồn thật (Hit của BELL) |
+| `ImmortalVfx` | Chỉnh (giữ) → `Vfx_Status_Shield` (Invulnerable vàng, CcImmune trắng) | Như 4.5 |
+| `ImmunityVfx` | Biến thể của Shield, không copy | Như 4.5 |
+| `PoisonsVfx` | Chỉnh, P2 (giữ) → `Vfx_Status_Poison` | Như 4.5 |
+| `BleedVfx`, `BlindVfx`, `BuffDamageVfx`, `BurnedVfx`, `CantUseWeaponVfx`, `WaterVfx` | Loại bỏ (không đổi) | Như 2.1 |
+| Epic Toon `Prefabs 2D/Explosions` | Giữ một bản cho `Vfx_Hit_Spark` và `Vfx_Attack_Puff` | Như 4.5 |
+| Epic Toon `Combat/BombFuse` | **Loại bỏ** (trước: tuỳ chọn) | `ThrowableView` đã nháy vật đang chờ nổ |
+| Các nhóm Epic Toon còn lại | Như 2.1 | — |
+
+**Prefab VFX-01 sẽ làm (9 cái, thay bảng 4.5):** `Vfx_Hit_Spark`, `Vfx_Attack_Puff`, `Vfx_FuseWarning` (khung 9-slice `vfx_area_frame.png`, layer `VFX`), `Vfx_DamageNumber`, `Vfx_Status_Stun`, `Vfx_Status_Reverse`, `Vfx_Status_Shield`, `Vfx_Status_Invisible`, `Vfx_Status_Poison`. Layer/order theo T-2 (quầng, hit spark, số ở `Default` order 100; ngòi nổ ở `VFX`). Không còn `ZoneOverlay.prefab`, `Vfx_Explosion_*`, `Vfx_Smoke`, `Vfx_Status_Root`.
+
+#### 4.12.5. File và lớp cập nhật (so với 4.3)
+
+| Lớp | File | Thay đổi |
+| --- | --- | --- |
+| Domain | `Domain/Vfx/ZoneVfxModel.cs` | **Bỏ** |
+| Domain | `Domain/Vfx/VfxCue.cs` | Bỏ cue `Explosion*`, `SmokeCloud`, `AuraRoot`. Bỏ `MapWeapon`/`WeaponVisual`/`LingerCue`. Bỏ `StopLeadSeconds` trong `VfxTuningValues` |
+| Domain | `Domain/CombatFeedback/CombatFeedbackEvents.cs` | `ExplosionEvent` bỏ `LingerSeconds` (khói không còn thuộc VFX-01). Giữ nguyên phần còn lại |
+| Application | `Application/Vfx/IVfxMatchFeed.cs`, `VfxMatchFeed.cs` | Bỏ `TryGetZone`/`FromPacket` |
+| Application | `Application/Vfx/IVfxOutput.cs`, `VfxSpawn.cs` | Bỏ `Stop`; thêm `VfxSpawn.Seconds` |
+| Application | `Application/Vfx/VfxDirector.cs` | Bỏ zone, spawn nổ và linger khói; giữ linger cho `FuseWarning`; thêm luật CcImmune; bỏ `HitConfirmedEvent` có `Damage ≤ 0` (adapter đã lọc, Director chặn thêm cho nguồn fake) |
+| Application | `Application/Vfx/ThrowableVfxSource.cs` | **Mới** (4.12.3) |
+| Application | `Application/Vfx/Mocks/FakeThrowableEventSource.cs` | **Mới** (Editor/Dev): `IThrowableEventSource` giả. Phát `Thrown` → `Detonated` → `Hit` cho từng dummy trong vùng, `SmokeStarted/Ended`, `TrapTriggered`, `BellRung` + `Hit`, `BatHit` có cờ choáng. Số lấy từ `ThrowableRules.Baseline()` hoặc `ThrowableRulesJson` |
+| Application | `Application/Vfx/Mocks/MockVfxMatch.cs` | Bỏ `ZoneSimulation`; chỉ còn `SessionKey`, `InGame`, `OwnNetId`, `NowTick` |
+| Application | `Application/Vfx/Mocks/VfxScenarios.cs` | Ném/nổ/khói đi qua `FakeThrowableEventSource`. Hit súng và Status giữ đường bus. Bỏ các nút zone |
+| Presentation | `Presentation/Vfx/ZoneOverlayView.cs` | **Bỏ** |
+| Presentation | `Presentation/Vfx/VfxAnchorRegistry.cs` | Online: own → `PlayerView`; offline: own → `Hero` (4.12.1) |
+| Presentation | `Presentation/Vfx/VfxRuntimeSet.cs`, `VfxCatalog.cs` | Bỏ `ZoneOverlayPrefab`, α/màu bo và bảng weapon → cue |
+| Presentation | `Presentation/Vfx/VfxPreviewRig.cs` | **Mới** (Editor/Dev, chỉ dùng trong `VfxPreview`): `AddComponent<ThrowableView>().Bind(dummy0, null, match, fakeSource)`. Chỉ gọi API public, không sửa lớp đó |
+| Bootstrap | `Bootstrap/Vfx/Bootstrap.Vfx.cs` | 4.4 đổi: bỏ bước 8 (ZoneOverlay). Thêm `Register(new ThrowableVfxSource(bus, offlineWorld, Resolve<OnlineThrowableSession>(), offlineWorld))`. Editor/Dev đăng ký thêm `FakeThrowableEventSource`. Vẫn gọi **sau** `ComposeWorld`, vì `OnlineThrowableSession` được tạo ở đó |
+| Editor tool | `Tools/Editor/Vfx/VfxPrefabSanitizer.cs` | Bỏ menu "Build Zone Overlay Prefab" |
+| Art | `Art/Vfx/Sprites/vfx_disc_1024.png`, `vfx_dash_8x2.png` | **Bỏ**. Giữ `vfx_area_frame.png`; thêm một sprite vòng nhỏ nếu Shield cần vòng 2D |
+| Không sửa (chỉ đọc) | `ThrowableView.cs`, `ThrowableArtCatalog.cs`, `OnlineThrowableSession.cs`, `OfflineWorldSession*.cs`, `ZoneOverlayView.cs`, `ZoneOverlay.shader`, `MatchDemoView.cs`, `CombatWeaponPresenter.cs`, `HeldWeaponView.cs`, toàn bộ `Backend/` | AC14 mở rộng |
+
+Các dòng khác của 4.3 giữ nguyên. Các file dùng chung phải ghi Agent_Coordination mục 4 trước khi sửa: `Bootstrap.cs` (1 dòng), `SortingLayers.cs` (1 dòng), `PlayerView.prefab`, `Hero.prefab`, `Scenes/Dev/VfxPreview.unity` (mới). `MatchDemoView.cs` rút khỏi danh sách.
+
+#### 4.12.6. Bản dở của unity-dev trước merge (21 file `.cs`, 0 test, 0 Presentation/Bootstrap/prefab)
+
+Bản dở được cất ở `C:/Users/HVU/AppData/Local/Temp/claude/c1594b47673d4e08/51975365-442b-4e2a-b21f-96220adeb628/scratchpad/vfx01_partial/` (giữ nguyên cấu trúc đường dẫn repo). Nó chỉ dùng API vẫn còn sau merge: `SfxDeduper`, `CombatEvent`, `OfflineWorldSession.CombatChanged`, `IBalanceConfigProvider.TryGetWeapon`, `IPlayerSettings`. Copy lại vào repo **kèm `.meta`**, giữ GUID.
+
+| Nhóm | File | Xử lý |
+| --- | --- | --- |
+| Dùng nguyên | `Domain/CombatFeedback/StatusKind.cs`, `Domain/Vfx/AttackVfxLedger.cs`, `StatusAuraTable.cs`, `VfxBudget.cs`, `ScreenShakeModel.cs`, `Application/Ports/IVisibilityPolicy.cs` (có `VisibilityQuery.PositionOnly`), `Application/Visibility/AlwaysVisiblePolicy.cs`, `Visibility/Mocks/ToggleVisibilityPolicy.cs`, `Application/Vfx/IVfxTargetLocator.cs`, `LocalEffectStatusSource.cs`, các `.meta` thư mục rỗng (`Bootstrap/Vfx`, `Presentation/Vfx`, `Tests/*/Vfx`, `Tools/Editor/Vfx`) | Copy vào |
+| Dùng, sửa nhỏ | `CombatFeedbackEvents.cs`, `VfxCue.cs`, `IVfxOutput.cs`, `VfxSpawn.cs`, `IVfxMatchFeed.cs`, `VfxMatchFeed.cs`, `MockVfxMatch.cs` | Theo 4.12.5 |
+| Dùng, sửa vừa | `VfxDirector.cs` (541 dòng): bỏ `Zone`, nhánh nổ có `TryGetWeapon` + `LingerCue`, `Stop`; giữ ledger, live/aura/linger/flash, seam hỏi lại mỗi tick, reset theo session. `VfxScenarios.cs`: viết lại phần ném qua nguồn throwable giả | Theo 4.12.3 và 4.12.5 |
+| Bỏ | `Domain/Vfx/ZoneVfxModel.cs` | D1 |
+| Chưa có, phải viết | Toàn bộ Presentation, Bootstrap, Editor tool, prefab, scene, mọi test EditMode/PlayMode, `ThrowableVfxSource`, `FakeThrowableEventSource`, `VfxPreviewRig` | — |
+
+#### 4.12.7. Tiêu chí nghiệm thu bị ảnh hưởng (đề xuất sửa mục 3; designer/CPO cập nhật sau khi người chốt)
+
+| AC | Đề xuất |
+| --- | --- |
+| AC1 | Giữ. Bảng 16 dòng theo 4.12.4; "mọi prefab dùng lại/chỉnh có bản trong `_JungleMaze`" áp cho 9 prefab |
+| AC2 | **Sửa:** scene preview phát được: hit (flash + số + hạt), stun, reverse, shield, **vòng ngòi nổ**, và một cú ném đầy đủ BANANA và SMOKE bằng `ThrowableEvent` giả. Cue của VFX-01 có active > 0 rồi về 0 đúng hạn. `ThrowableView.ActiveEffects` > 0 trong lúc nổ/khói (chỉ đọc, đo tích hợp). Vòng ngòi biến mất trong cùng frame với `Detonated`. Bỏ "cảnh báo bo" và "viền bo" |
+| AC3 | **Sửa:** bỏ dòng ZoneState. Thêm: cùng `ThrowableEvent` (Id ≠ 0) đến 2 lần → 1 spawn; hai event `Id = 0` khác nhau trong 1 s → 2 spawn |
+| AC6 | **Sửa:** bỏ "viền bo". Phạm vi là instance của VFX-01; `ThrowableView` không thuộc AC này (R14) |
+| AC8 | Giữ cho hiệu ứng của VFX-01. Thêm ghi chú: hình của `ThrowableView` và `CombatWeaponPresenter` chưa qua seam (R6, R15) |
+| AC10 | **Sửa:** bỏ phần kích cỡ vụ nổ (`ThrowableView` đã scale theo `Size`). Còn lại: khung ngòi nổ = `Size`×`Size` cell ±5%; quầng nằm trong ±1 cell quanh thân |
+| AC11 | **Bỏ khỏi VFX-01** (D1). Nghiệm thu vùng bo thuộc ticket của Quang Huy. Thay bằng một dòng trong AC14: VFX-01 không thêm renderer bo và không sửa `ZoneOverlayView`/shader |
+| AC12 | Giữ. Thêm: số lấy từ `Amount` của đồ ném; `Amount ≤ 0` → không có số, không flash |
+| AC13 | Giữ. Thêm case `FollowOverride` (camera bám `PlayerView` online) |
+| AC14 | **Mở rộng** danh sách file không được sửa (bảng 4.12.5) |
+| AC15 | Giữ. Tải 10 nguồn gồm cả ném giả; ngân sách 64 chỉ tính instance của VFX-01; frame time đo cả scene (có `ThrowableView`) |
+| AC16 | **Sửa:** VFX-01 chịu Stun / Reverse / Immune / Invulnerable / Poison / Invisible và vòng ngòi nổ. Root (dây leo) và "khói khác nổ" là hình của `ThrowableView`, chỉ ghi quan sát |
+
+**Đề xuất sửa mục 1–2:**
+
+- Mục 1 bỏ các cụm "nổ ném (chuối, thiên thạch, tinh thể, hạt, chuông), khói", "bo sắp thu" và "vùng ngoài bo tô tím α 0,4 kèm viền bo".
+- Mục 2 "Ngoài phạm vi" thêm hai dòng: vùng bo (thế giới + minimap) → `ZoneOverlayView` của Quang Huy; hình vật ném/nổ/khói/bẫy/dây/dây leo/chuông → `ThrowableView` (WPN-03).
+- Bảng 2.5 bỏ dòng "Bo tím alpha".
+
+#### 4.12.8. Test cập nhật (so với 4.7)
+
+- **Bỏ:** `ZoneVfxModelTests`, `ZoneOverlayPlayTests`, phần nổ của `VfxScaleTests`, các case zone trong `VfxDedupeTests`/`VfxMatchFeedTests`.
+- **Thêm (EditMode):**
+  - `ThrowableVfxSourceTests`: một case cho mỗi dòng bảng 4.12.3; `Amount = 0` → không có Hit; khoá `Id ≠ 0` lặp → 1; `Id = 0` × 2 → 2; khi offline active thì bỏ nguồn online; Item 6..8 không có `Thrown`.
+  - `StatusCcImmuneGuardTests`: có CcImmune thì Stun/Reverse → 0 quầng; gỡ CcImmune rồi mới áp → 1 quầng.
+  - `VfxAnchorRegistryTests`: online own → `PlayerView`, offline own → `Hero`.
+- **Thêm (PlayMode):** `VfxThrowableIntegrationPlayTests` trong preview. Một `FakeThrowableEventSource` cấp cho cả `ThrowableView` và adapter. Kiểm: vòng ngòi sống từ `Thrown` tới `Detonated`; `ThrowableView.ActiveEffects` > 0 (AC2).
+- Các test còn lại của 4.7 giữ nguyên.
+
+#### 4.12.9. Thứ tự build và agent (thay danh sách bước của 4.8)
+
+- **Agent:** chỉ unity-dev; backend-dev không có việc. Song song và quy tắc dùng chung Editor như 4.8. Commit như 4.8 (một commit build). Riêng 4.12 do CPO commit `docs(vfx-01): re-plan after merging main` sau khi người chốt D1/D2.
+- **Thứ tự** (mỗi bước compile và test của bước đó phải xanh rồi mới sang bước sau):
+  1. Copy Domain từ bản dở (bỏ `ZoneVfxModel`, cắt `VfxCue`) + EditMode test model.
+  2. Application: port; `VfxDirector` đã cắt + luật CcImmune; `VfxMatchFeed` không zone; `LocalEffectStatusSource`; **`ThrowableVfxSource`**; mocks (`MockVfxMatch`, `FakeThrowableEventSource`, `VfxScenarios`) + EditMode test.
+  3. Presentation: `VfxParticleEffect`, `DamageNumberVfx`, `VfxBodyAnchor`, `VfxAnchorRegistry` (luật mới), `VfxStage`, `CameraShakeApplier`, `VfxCatalog`, `VfxRuntimeSet`, `VfxDebugPanel`, `VfxPreviewRig`; `SortingLayers.Vfx`.
+  4. Editor tool sanitizer + `vfx_area_frame.png` + 9 prefab + asset catalog/runtime set. **Pull main trước**, rồi thêm `VfxBodyAnchor` vào root của `PlayerView.prefab`/`Hero.prefab`, không đụng con.
+  5. `Bootstrap.Vfx.cs` + 1 dòng `Bootstrap.cs`.
+  6. `VfxPreview.unity`.
+  7. PlayMode test + quét asset.
+  8. Mục 5 (kiểm kê + ảnh), Developer Guide 4.8.
+
+#### 4.12.10. Rủi ro mới hoặc đổi (bổ sung 4.9)
+
+| # | Rủi ro | Giảm thiểu |
+| --- | --- | --- |
+| R1, R4 | Vòng debug chồng; răng cưa SpriteMask | **Đóng** (không còn vòng debug; VFX-01 không vẽ bo) |
+| R3 | Nháy/quầng vào `Hero` ẩn khi online | Luật registry mới (4.12.1) + `VfxAnchorRegistryTests`; kiểm bằng GameServer local, ghi mục 5 |
+| R14 | `ThrowableView` không dọn khi đổi trận: vỏ chuối (20 s) hoặc khói (10 s) có thể còn ở trận mới | Ngoài VFX-01. Follow-up cho Hào: dọn khi `MatchId`/phiên offline đổi |
+| R15 | Hình của `ThrowableView` (bay, nổ, khói, dây leo, chuông) không qua seam: khi có FOW sẽ lộ vị trí người ném/bị trói | Mở rộng R6. FOW-01 gắn `IVisibilityPolicy` cho `ThrowableView` và `CombatWeaponPresenter` (follow-up) |
+| R16 | `Seconds` của event không phản ánh miễn nhiễm; người khác chưa có nguồn CcImmune, nên quầng choáng có thể hiện trên người đang miễn nhiễm | Luật CcImmune (đúng với mình); chấp nhận cho người khác tới Game-10 |
+| R17 | Thần dược gỡ stun/reverse trên server nhưng không có event gỡ cho người khác, nên quầng còn tới hết `Seconds` | Chấp nhận tới Game-10 |
+| R18 | `ZoneOverlay` (Foreground 100, α 0,62) phủ lên quầng/số ở `Default` khi người đứng ngoài bo; số có thể khó đọc | Dev chụp ảnh ngoài bo ở mục 5. Nếu khó đọc thì đổi order/layer của **số** trong catalog (AC9 cho phép theo catalog), không sửa overlay |
+| R19 | Hit spark + số chồng lên sprite nổ của `ThrowableView`, rối mắt | Catalog có cờ tắt hit spark cho Hit của đồ ném; dev quyết khi xem, ghi mục 5 |
+| R20 | `PlayerView.prefab`/`Hero.prefab` vừa bị WPN-01 sửa nhiều, dễ conflict | Pull trước, chỉ thêm component ở root, ghi Agent_Coordination, commit sớm trong commit build |
+| R21 | Đạn/cận chiến vẫn không có hit thật (`PlayerHit` chưa phát) | Như R7. Follow-up WPN-02 (server phát hit, cần G2 của ticket đó) |
+
+**Follow-up đề xuất cho CPO** (không chặn VFX-01):
+
+- Hào: `ThrowableView` dọn khi đổi trận (R14); nối `SetDanger` của HUD và dùng **`ThrowableEvent.Id`** làm id, để banner và vòng ngòi của VFX-01 khớp nhau (Q7).
+- FOW-01: R15.
+- WPN-02: R21.
+
+#### 4.12.11. Quyết định người cần chốt lại
+
+| # | Câu hỏi | Khuyến nghị |
+| --- | --- | --- |
+| D1 | G1 đã duyệt "bo tô #A274FF α 0,4 + viền đứt" (Q1), nhưng main đã có `ZoneOverlayView` tô **đỏ** α 0,62, viền đỏ đậm, đường trắng ở bo đích, cho cả thế giới và minimap. Giữ bản đỏ của Quang Huy và rút phần bo khỏi VFX-01 (bỏ AC11, bỏ dòng "Bo tím alpha" ở 2.5)? | **Có.** VFX-01 không vẽ bo. Nếu người vẫn muốn tím α 0,4 thì đó là việc đổi màu và `_FillAlpha` trong `ZoneOverlay.shader`, giao cho Quang Huy, không làm trong VFX-01 |
+| D2 | Nổ, khói, bẫy chuối, dây leo, vòng chuông: để `ThrowableView` (Hào) vẽ như hiện tại, VFX-01 không copy 5 prefab nổ/khói JSurviv. VFX-01 chỉ nghe `IThrowableEventSource` (chỉ đọc) để vẽ vòng ngòi nổ, hit/số, quầng choáng/đảo hướng và rung? | **Có** (cách C ở 4.12.3; không sửa file nào của Hào) |
+
+Mọi điểm khác của G1 (Q2–Q15 trừ Q1 và Q5; T-2…T-8) giữ nguyên. Q5 tự hết vì `ThrowableView` đã tô xanh Tinh thể. T-1 hết đối tượng.
+
+#### 4.12.x. Kết quả duyệt lại (07/11/2026)
+
+Người duyệt **phạm vi mới theo 4.12**: D1 = Có (giữ bo đỏ của `ZoneOverlayView`, rút toàn bộ phần bo khỏi VFX-01, bỏ AC11 và dòng "bo tím α 0,4"); D2 = Có (`ThrowableView` tiếp tục vẽ nổ/khói/bẫy/dây leo/vòng chuông; VFX-01 chỉ nghe `IThrowableEventSource` để vẽ vòng ngòi nổ, icon choáng, hit/số/hạt, quầng, rung; không sửa file của Hào/Quang Huy). Mọi quyết định G1 khác giữ nguyên. Đề xuất sửa spec ở 4.12.7 được coi là đã duyệt.
+
 ## 5. Nhật ký build
 
 (Dev ghi; gồm kết quả kiểm kê trong Editor cho các mục "cần dev xác minh".)
