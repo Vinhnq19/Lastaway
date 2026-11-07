@@ -129,6 +129,24 @@ namespace JungleMaze.Tests.Audio
             Assert.AreEqual(AppScreen.Results, _music.Screen);
         }
 
+        [TestCase(true, SfxId.Victory)]
+        [TestCase(false, SfxId.MatchEnd)]
+        public void ResultsSound_UsesTheLocalPlayersOutcome(bool won, SfxId expected)
+        {
+            var audio = new FakeAudioService();
+            var bus = new EventBus();
+            var router = new SfxRouter(audio, null, null, bus, null, isVictory: () => won);
+            router.Initialize();
+            try
+            {
+                bus.Publish(new AppScreenChanged(AppScreen.InMatch, AppScreen.Results, null));
+                Assert.AreEqual(new[] { expected }, audio.Ids().ToArray());
+                bus.Publish(new AppScreenChanged(AppScreen.Results, AppScreen.Results, null));
+                Assert.AreEqual(1, audio.Cues.Count);
+            }
+            finally { router.Dispose(); }
+        }
+
         [Test]
         public void LeavingMatch_StopsAllBeforeMatchEnd()
         {

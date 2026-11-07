@@ -1,6 +1,6 @@
 namespace JungleMaze.Domain.Audio
 {
-    /// <summary>The 26 gameplay sound effects of AUD-01 (spec table 2.1, same order). UI sounds are not part of this list.</summary>
+    /// <summary>The 27 gameplay sound effects of AUD-01 (spec table 2.1, same order). UI sounds are not part of this list.</summary>
     public enum SfxId : byte
     {
         None = 0,
@@ -29,7 +29,8 @@ namespace JungleMaze.Domain.Audio
         UseCancel,
         ZoneBell3,
         DragonRoar,
-        MatchEnd
+        MatchEnd,
+        Victory
     }
 
     /// <summary>Mixer bus a sound plays on. The user only sets Master, Sfx and Music; Alert follows Sfx.</summary>
@@ -54,7 +55,7 @@ namespace JungleMaze.Domain.Audio
     public static class SfxIds
     {
         /// <summary>Number of real ids (None excluded).</summary>
-        public const int Count = 26;
+        public const int Count = 27;
 
         /// <summary>Array length for tables indexed by <c>(int)SfxId</c>, including the None slot.</summary>
         public const int TableSize = Count + 1;

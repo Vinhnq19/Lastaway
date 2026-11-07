@@ -44,7 +44,16 @@ namespace JungleMaze.Composition
 #else
             var sources = new IAudioEventSource[] { matchSource };
 #endif
-            var router = new SfxRouter(service, hud, inventory, bus, balance, sources, music, set.SettleSeconds, () => flow.Screen);
+            var router = new SfxRouter(service, hud, inventory, bus, balance, sources, music, set.SettleSeconds, () => flow.Screen, () =>
+            {
+                var offline = _registry.Resolve<OfflineMatchSession>();
+                var result = flow.IsOffline ? offline.Result : match.Result;
+                var hasResult = flow.IsOffline ? offline.HasResult : match.HasResult;
+                var own = flow.IsOffline ? (byte)0 : match.OwnNetId;
+                return hasResult && own != 255 &&
+                    result.Reason == JungleBackend.Protocol.Gameplay.MatchEndReason.LastAlive &&
+                    result.WinnerNetId == own;
+            });
 
             _registry.Register<IAudioService>(service);
             _registry.Register(service);

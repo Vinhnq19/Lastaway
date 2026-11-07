@@ -71,7 +71,7 @@ namespace JungleMaze.Tests.Audio
                     Assert.AreEqual(asset, AssetDatabase.GUIDToAssetPath(guid), asset + " shares its GUID with another asset");
                     files++;
                 }
-            Assert.AreEqual(43, files, "40 SFX + 3 music");
+            Assert.AreEqual(44, files, "41 SFX + 3 music");
         }
 
         // AC13
@@ -80,7 +80,7 @@ namespace JungleMaze.Tests.Audio
         {
             var groups = new[]
             {
-                new[] { SfxId.HitMarker, SfxId.HurtLocal, SfxId.ZoneBell3, SfxId.DragonRoar, SfxId.MatchEnd, SfxId.Explosion },
+                new[] { SfxId.HitMarker, SfxId.HurtLocal, SfxId.ZoneBell3, SfxId.DragonRoar, SfxId.MatchEnd, SfxId.Victory, SfxId.Explosion },
                 new[] { SfxId.ShootRanged, SfxId.ShootCrossbow }, new[] { SfxId.MeleeSwing, SfxId.MeleeHit },
                 new[] { SfxId.PickupWeapon, SfxId.PickupItem, SfxId.WearArmor }
             };
