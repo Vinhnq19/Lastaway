@@ -61,6 +61,8 @@ Hiện trạng code đã kiểm (không giả định):
 
 ### 2.1. Kiểm kê VFX JSurviv
 
+> **Quyết định cuối (sau build 07/11/2026):** cột "Quyết định" dưới đây là bản trước merge. Bản chốt sau khi xem trong Editor nằm ở **mục 5.3** (theo 4.12.4).
+
 Nguồn kiểm: đọc file prefab/material (YAML), shader URP trong `Library/PackageCache`, `ProjectSettings/TagManager.asset`. Sorting layer `-1678964477` = layer **VFX** (id 2616002819 unsigned); `0` = `Default`. **Chưa mở Editor**: mọi mục "cần dev xác minh trong Editor" phải được dev chốt khi xem bằng Play preview và ghi lại ở mục 5. 1 world unit = 1 cell = 48 px (toạ độ server theo cell).
 
 Chung cho toàn bộ: material hiệu ứng dùng shader `Universal Render Pipeline/Particles/Unlit` (guid `0406db5a…`, có trong URP 17.3), nên **không phải shader pink**; 9 material Demo dùng URP `Lit` (chỉ trong `Epic Toon FX/Demo`, không dùng). Root scale (1,1,1). Đa số prefab ở sorting layer `Default`, order 0, tức **sai layer** cho VFX (project có layer `VFX`); chỉnh trong bản `_JungleMaze`.
@@ -782,7 +784,124 @@ Người duyệt **phạm vi mới theo 4.12**: D1 = Có (giữ bo đỏ của `
 
 ## 5. Nhật ký build
 
-(Dev ghi; gồm kết quả kiểm kê trong Editor cho các mục "cần dev xác minh".)
+Unity-dev, 07/11/2026, nhánh `hvu` sau merge `11c78d20`. Làm theo 4.12 (D1, D2 đã duyệt) và phần còn hiệu lực của 4.1–4.11. Hash commit build ghi trong báo cáo cuối, vì commit này chứa chính mục 5.
+
+### 5.1. Đã làm
+
+- **Bản dở trước merge**: đã chép lại theo bảng 4.12.6, giữ GUID `.meta`. Bỏ `ZoneVfxModel.cs`. `VfxCue`, `ExplosionEvent`, `IVfxOutput`, `VfxSpawn`, `IVfxMatchFeed`, `VfxMatchFeed`, `MockVfxMatch` sửa theo 4.12.5. `VfxDirector` đã cắt phần zone, phần nổ (`TryGetWeapon`/`LingerCue`) và `Stop`; giữ ledger, live, aura, flash, seam và reset. Thêm vòng ngòi nổ riêng (`Fuse`), luật CcImmune, và chặn hit có `Damage ≤ 0`. `VfxScenarios` viết lại để ném qua nguồn throwable giả.
+- **Mới ở Application**: `ThrowableVfxSource` (bảng 4.12.3; khoá theo `Id`, `Id = 0` dùng bộ đếm riêng; chỉ chặn `OnlineThrowableSession` khi offline đang chạy) và `Mocks/FakeThrowableEventSource` (cả chuỗi ném → ngòi → nổ → hit/bẫy/khói, chuông, gậy).
+- **Presentation**: `VfxParticleEffect` (+ `IVfxSpawnListener`), `DamageNumberVfx`, `FuseWarningVfx`, `VfxBodyAnchor`, `VfxAnchorRegistry` (luật R3 mới), `VfxStage`, `CameraShakeApplier`, `VfxCatalog`, `VfxRuntimeSet`, `VfxDebugPanel` (F10), `VfxPreviewRig`. Thêm `SortingLayers.Vfx`.
+- **Composition**: `Bootstrap/Vfx/Bootstrap.Vfx.cs`, cộng 1 dòng `ComposeVfx(tickRunner, match)` trong `Bootstrap.cs` ngay sau `ComposeWorld`.
+- **Editor tool** (`Tools/Editor/Vfx`, asmdef `JungleMaze.Vfx.Editor`):
+  - `VfxPrefabSanitizer`: bước máy móc ở 4.5, kèm menu "Sanitize Selected Prefab".
+  - `VfxAssetBuilder`: menu **Jungle Maze → VFX → Build VFX-01 Assets** dựng sprite hình học, 9 prefab, bản sao material, catalog và runtime set. Chạy lại thì ghi đè tại chỗ, GUID giữ nguyên.
+- **Asset**:
+  - 9 prefab trong `Prefabs/Vfx`.
+  - `Art/Vfx/Sprites/vfx_area_frame.png` (9-slice) và `vfx_area_fill.png`.
+  - 6 bản sao material `Art/Vfx/Materials/*_vfx.mat`.
+  - `Art/Vfx/VfxCatalog.asset`, `Art/Vfx/Resources/VfxRuntimeSet.asset`.
+- **Prefab dùng chung**: chỉ thêm component `VfxBodyAnchor` ở root. `PlayerView.prefab` +17 dòng, giá trị mặc định. `Hero.prefab` +17 dòng, `localHero: 1`. Không đổi gì khác (đã kiểm `git diff`).
+- **Scene** `Scenes/Dev/VfxPreview.unity` (không thêm vào Build Settings):
+  - camera size 8 như Game, lưới 1 cell;
+  - 11 dummy, dummy 0 là "own" (`localHero`), dummy 1–10 có `previewNetId`;
+  - `VfxPreviewRig` gắn `ThrowableView` thật vào cùng nguồn ném giả;
+  - panel F10 tự mở trong scene này.
+- **Docs**: `Client_Developer_Guide.vi.md` thêm mục 4.8; `Agent_Coordination.vi.md` mục 4 thêm dòng giữ/trả Editor và các file dùng chung đã sửa.
+
+### 5.2. Lệch kế hoạch và lý do
+
+| # | Lệch | Lý do |
+| --- | --- | --- |
+| L1 | `IVfxMatchFeed` thêm `bool Online`, bỏ `NowTick` và `TryGetZone` | Registry cần biết đang online để áp luật R3 mới (online thì thân mình là `PlayerView`, offline là `Hero`). `NowTick` chỉ phục vụ bo, mà bo đã bỏ (D1) |
+| L2 | Prefab dựng bằng tool lặp lại được (`VfxAssetBuilder`), không chỉnh tay trong Editor | Bước "phần tay" ở 4.5 được ghi thành công thức cho từng prefab, nên ai dựng lại cũng ra cùng kết quả. Root scale = 1; phần thu nhỏ nằm ở con `Fx` (scaling Hierarchy) |
+| L3 | Bản sao material `Art/Vfx/Materials/*_vfx.mat` với `_BaseColor` trắng | Material Epic Toon có `_BaseColor` = 0,5/0,5 (làm cho shader particle cũ nhân đôi), nên trong URP Particles/Unlit chỉ sáng một nửa. Ảnh lần 1 quá mờ. Đây là cách 4.5 bước 3 cho phép: copy, không sửa bản gốc |
+| L4 | Shield dùng material vòng trung tính của `StunnedVfx` thay cho `circlecurve_magic`, và bỏ sắc màu trong colour-over-lifetime | Texture/gradient gốc màu vàng, nhân với tint trắng vẫn ra vàng, nên CcImmune không trắng được (Equipments 13). Đã kiểm bằng ảnh: Invulnerable vàng, CcImmune trắng |
+| L5 | Stun: sao dùng `star_ADD` + quỹ đạo quanh đầu; vòng chuyển Mesh → Billboard | Sao alpha-blend quá tối. Sao bay thẳng ra xa không đọc được là "choáng" |
+| L6 | Thêm sprite `vfx_area_fill.png` (8 px trắng) | Khung 9-slice có tâm trong suốt; nền mờ của vùng ngòi nổ cần một sprite đặc |
+| L7 | Order trên layer `Default`: quầng 100, hạt 105, số 110; ngòi nổ ở `VFX`, order 10 (nền 9) | T-2. Tách order để số luôn nằm trên quầng |
+| L8 | `Tests/PlayMode/JungleMaze.Tests.PlayMode.asmdef` thêm reference `JungleMaze.World` | PlayMode test cần `ThrowableKind`/`ThrowableEvent` để chạy `ThrowableView` cùng adapter (4.12.8) |
+| L9 | `VfxStage.SceneChanged` là event; `Bootstrap.Vfx` nối nó vào `director.ResetAll` | Stage không biết Director (đúng chiều phụ thuộc). Stage vẫn tự `ReleaseAll` khi `activeSceneChanged` |
+| L10 | Hit spark vẫn hiện khi trúng đồ ném (R19) | Hạt nằm ở thân mục tiêu, còn nổ của `ThrowableView` nằm ở tâm vùng; xem ảnh thì không rối. Không thêm cờ |
+| L11 | `AttackPuff` giữ (T-5); làm từ `SparkExplosion2D` thu nhỏ (0,15), màu bụi nhạt | Cần đối tượng cho AC3/AC4 phần Attack |
+| L12 | Builder chỉ lưu asset của mình (`SaveAssetIfDirty`), không dùng `AssetDatabase.SaveAssets()` | Lượt dựng đầu dùng `SaveAssets()` nên đã ghi 26 material Epic Toon mà URP tự nâng cấp khi nạp. Đã `git checkout` toàn bộ, xem 5.6 |
+| L13 | Test tải AC15 chạy 60 s **mô phỏng** (3600 bước, không chờ thời gian thật) | Đo số instance và log lỗi, không đo frame time của cả frame. Số ms chỉ là của logic VFX trong Editor |
+
+### 5.3. Kiểm kê cuối (thay cột "Quyết định" của 2.1; chốt sau khi xem trong Editor)
+
+| Prefab JSurviv | Quyết định | Bản trong `_JungleMaze` | Chốt trong Editor |
+| --- | --- | --- | --- |
+| `SmokeVfx` | Loại bỏ | — | D2: `ThrowableView` vẽ khói bằng cùng sheet. Ảnh 06 cho thấy khói đã có |
+| `BananaExploitVfx` | Loại bỏ | — | D2 |
+| `MeteoExploitVfx` | Loại bỏ | — | D2 (CRYSTAL do `ThrowableView.BlastTint` tô xanh) |
+| `SeedExploit` | Loại bỏ | — | D2. Mục "giọt stretched trông 3D" không còn cần xác minh |
+| `BellExploit` | Loại bỏ | — | D2 (vòng vuông 7×7 và chuông lắc của `ThrowableView`) |
+| `StunnedVfx` | Chỉnh | `Vfx_Status_Stun` | Hệ gốc là **mesh Quad** (vòng `ring (alphablended)`), không phải sphere như 2.1 ghi. Đã chuyển sang Billboard, bỏ `ETFXRotation`, cho vòng tự xoay, sao `star_ADD` bay quỹ đạo quanh đầu, fit 0,6, offset +0,75 cell. 2 hệ particle |
+| `ReverseVfx` | Chỉnh | `Vfx_Status_Reverse` | Đổi sang màu cam (1, .55, .1); `Glow` chuyển World → Local; hạt 0,22, 14/s; offset +0,55. 2 hệ |
+| `ImmortalVfx` | Chỉnh | `Vfx_Status_Shield` | Hệ gốc là **mesh Quad** (`circlecurve_magic`), đã chuyển sang Billboard và đổi sang material vòng trung tính (L4); fit 0,45 (≈1,35 cell). Tint 4 = vàng (Invulnerable). 2 hệ |
+| `ImmunityVfx` | Biến thể của Shield, không copy | `Vfx_Status_Shield` tint 5 = trắng | Ảnh 03: vòng trắng, khác vòng vàng |
+| `PoisonsVfx` | Chỉnh (P2, đã làm) | `Vfx_Status_Poison` | Bỏ `Skull` (lệch phong cách); mây xanh lặp 4/s, cỡ 1,6, tốc 0,5; giọt 5/s. 2 hệ |
+| `BleedVfx`, `BlindVfx`, `BuffDamageVfx`, `BurnedVfx`, `CantUseWeaponVfx`, `WaterVfx` | Loại bỏ | — | Như 2.1 |
+| (không có nguồn riêng) | Mới từ sparkle của `ImmortalVfx` | `Vfx_Status_Invisible` | Chỉ có sparkle `sparkle_ADD`, xanh nhạt α 0,75, 16/s. **Rất mờ khi nhìn ở camera 8** (ảnh 03): đúng ý "aura mờ" nhưng cần người cảm nhận AC16 |
+| Root | NoVisual | — | Dây leo do `ThrowableView` vẽ |
+
+| Nhóm Epic Toon | Quyết định | Chốt |
+| --- | --- | --- |
+| `Prefabs 2D/Explosions` | Dùng **`SparkExplosion2D`** cho `Vfx_Hit_Spark` (fit 0,25: glow ≈ 0,68 cell, 0,2 s; tia 6 cell/s × 0,3 s) và `Vfx_Attack_Puff` (fit 0,15, ≤ 0,25 s) | Loại hai bản kia theo thông số đọc trong Editor, chưa dựng thử để chụp: `MetalHit2D` dùng scaling Shape, phần lóe chỉ 0,15 nên thu về 48 px gần như mất; `StarBurst2D` có tốc 16–28 nên văng ra xa quá 1 cell |
+| `Combat/BombFuse` | Loại bỏ | `ThrowableView` đã nháy vật ở điểm rơi; vòng ngòi nổ dùng khung `vfx_area_frame` |
+| Các nhóm còn lại (`Text`, `Blood`, `Muzzleflash`, `Sword`, `Nova`, `Demo`, `ETFX*`…) | Như 2.1 | — |
+
+`git diff --stat -- Assets/Imported/JSurviv` lúc commit: rỗng.
+
+### 5.4. Test (số thật, Unity 6000.3.15f1 qua MCP, 07/11/2026)
+
+| Bộ | Tổng | Pass | Fail | Ghi chú |
+| --- | --- | --- | --- | --- |
+| EditMode `JungleMaze.Tests.Vfx` (mới) | 107 | 107 | 0 | Model, dedupe (AC3), reconcile (AC4, mọi `CombatOutcome ≠ Accepted`), lifetime/CcImmune (AC5), reset với pool thật (AC6), pool reuse/handle cũ (AC7), seam (AC8), hit/số (AC12), luật rung (AC13), budget (AC15), `ThrowableVfxSource` (4.12.3), registry R3, nguồn local effect, feed, kiến trúc (AC12/AC14), catalog (AC1), quét prefab (AC9), khung ngòi ±5% (AC10) |
+| EditMode toàn bộ | 1089 | 1083 | 6 | 6 fail **không thuộc VFX** (xem dưới) |
+| PlayMode `JungleMaze.Tests.PlayMode.Vfx` (mới) | 13 | 13 | 0 | AC2 (hit; stun/reverse/shield; ném chuối có `ThrowableView`; ném khói), đổi phòng (AC6), seam (AC8), quầng trong 1 cell (AC10), 0 B GC/frame với 20 hiệu ứng sau 120 frame (AC7), console sạch sau 10 s (AC9), tải 60 s (AC15), rung ở mép map, `FollowOverride` và model 0 (AC13) |
+| PlayMode toàn bộ | 146 | 144 | 2 | Lần cuối. Lần trước đó: 145/146 |
+
+Test đỏ không thuộc VFX-01:
+
+- `LevelDocumentTests` (4 test), `Phase2Tests.PackagedMapHashMustMatchServer`, `OnlineWorldIntegrationTests.NormalWorldUsesAuthoredTeamMapWithFixedInteractivePlacements`. Cả sáu chỉ đếm vật thể trong JSON map ở `StreamingAssets` (vd mong 4 cover, đọc được 167). Dữ liệu map đổi ở commit main `68e23065` "Integrate Thap Co and Thi Tran as the default maps". VFX-01 không đụng `StreamingAssets`, `git status` sạch ở đó, và không test nào tham chiếu code VFX. **Chưa chạy lại trên bản HEAD tách riêng** để đối chứng.
+- `AudioAcceptanceTests.ZoneBell_ThreeBellsOnAlert_DucksMusic_SfxUntouched` ("three bell starts", mong 3, được 1). Fail ổn định cả khi chạy riêng. Test tự dựng audio, không dùng Bootstrap hay code VFX. Console có `FMOD failed to switch back to normal output … Error initializing output device`, nên có thể do thiết bị âm thanh của máy. **Chưa đối chứng trên HEAD.**
+- `DepthSortingPlayTests.HeroWithInterpolatedRigidbodySortsByFinalFramePose` fail một lần trong lượt chạy toàn bộ cuối (hero đi được 10,10, mong > 10,2), chạy riêng thì pass. Test tự tạo `GameObject` Hero, không dùng `Hero.prefab`; lỗi phụ thuộc thời gian physics (flaky).
+
+Console sau compile: 0 lỗi; chỉ còn cảnh báo cũ (`enableWordWrapping` obsolete, CS0067 trong `SoloOfflineTests`) và cảnh báo WebSocket của MCP.
+
+### 5.5. Kiểm trong Editor và ảnh
+
+Ảnh (Game view, camera `Main Camera`, khung 842×575) nằm ở `Docs/Reports/VFX-01_2026-11-07/`:
+
+| Ảnh | Nội dung |
+| --- | --- |
+| `01_overview_auras_camera8.png` | Toàn cảnh preview ở camera 8 (cỡ của Game), 6 quầng cùng lúc |
+| `02_stun_reverse_invulnerable.png` | Choáng (sao + vòng trên đầu), đảo hướng (cam), bất tử (vòng vàng) |
+| `03_immune_invisible_poison.png` | Miễn CC (vòng trắng), tàng hình (sparkle mờ), độc (mây xanh) |
+| `04_hit_flash_number_spark.png`, `04b_damage_number_closeup.png` | Nháy thân, số sát thương (font HudNumber, "45" và "12"), hạt trúng đòn |
+| `05_fuse_warning_banana3x3_smoke7x7.png` | Vòng ngòi nổ 3×3 (chuối) và 7×7 (khói) khớp lưới 1 cell; vật đang bay do `ThrowableView` vẽ |
+| `06_after_detonation_throwableview.png` | Sau `Detonated`: vòng ngòi đã mất; khói và vỏ chuối do `ThrowableView` vẽ |
+
+Kiểm thêm trong **trận offline thật** (Boot → Luyện tập offline → Game):
+
+- `VfxAnchorRegistry` trả anchor `Hero` (`localHero`) cho own net id 0.
+- `IEffectStateWriter.Apply(Poison)` hiện quầng độc trên Hero (đi qua `LocalEffectStatusSource`).
+- Hit lên chính mình: số đỏ, Hero nháy, rung biên độ 0,079 cell, offset camera (−0,01; 0,07).
+- Ném chuối giả: vòng 3×3 hiện.
+- Console 0 lỗi/0 cảnh báo VFX.
+- Ảnh tạm của lượt này ở `Temp/VfxShots/07_*` (không commit).
+
+**Rung màn hình chưa chụp được bằng ảnh tĩnh**; chỉ có số đo ở trên và test PlayMode.
+
+### 5.6. Mục "cần dev xác minh" và việc còn mở
+
+- **R3 online (GameServer local)**: **chưa kiểm chứng**. Muốn vào phòng online ở protocol v4 phải có vé tài khoản (API + MongoDB + GameServer, `NetworkClient` dòng 181). Lượt build này không dựng chuỗi đó. Phần đã có: luật đã code và có test `VfxAnchorRegistryTests.Online_OwnIsThePlayerView_NotTheHero` / `Offline_OwnIsTheHero`. Cần QA chạy online và nhìn quầng/nháy nằm trên `PlayerView` của mình.
+- **R18** (overlay bo `Foreground` 100 phủ lên số/quầng ở `Default` khi đứng ngoài bo): **chưa chụp ảnh ngoài bo**. Nếu khó đọc thì đổi layer/order của số trong catalog.
+- **AC16** (phân biệt 6 quầng ở 6 cell, ≥ 2 người) và **cảm nhận cường độ rung (AC13)**: cần người. Tàng hình là quầng dễ bị bỏ sót nhất.
+- **AC15 frame time cả scene** và **Profiler GC toàn frame**: chưa đo. Test chỉ đo logic VFX (0,072 ms mỗi bước mô phỏng, max 13 instance vì bộ sinh tải nhẹ) và 0 B trong `Director.Tick + Stage.Drive`.
+- **Material Epic Toon bị URP sửa khi nạp**: Unity tự nâng cấp material trong `Assets/Imported/JSurviv/Epic Toon FX/Materials` (`disabledShaderPasses`, `_DstBlendAlpha`…) khi chúng được nạp. Test Runner và `SaveAssets()` sẽ ghi các thay đổi đó xuống đĩa. Đã `git checkout` 2 lần và reimport, nên lúc commit `Assets/Imported` sạch. Phiên sau nếu thấy các `.mat` này bị sửa thì đừng commit, hãy `git checkout -- "Assets/Imported/JSurviv"`.
+- **Project map**: chưa chạy `Tools/update_project_map.py` vì checkout này không có `graphify-out/.graphify_python`.
+- **Follow-up giữ nguyên như 4.12.10**: R14 (Hào dọn `ThrowableView` khi đổi trận), Q7 (`SetDanger` dùng `ThrowableEvent.Id`), R15 (FOW cho `ThrowableView`), R21 (WPN-02 phát hit đạn/cận chiến).
 
 ## 6. Review
 
