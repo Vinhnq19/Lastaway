@@ -12,6 +12,8 @@ namespace JungleMaze.Presentation.Rendering
     /// tuning lists. Lives on the Bootstrap object (DontDestroyOnLoad); outside those scenes the volume has no weight and
     /// cameras are left as authored. Presentation only.
     /// </summary>
+    // After HeroCameraFollow (900) and the VFX camera shake (1100), so the sunlight overlay sits on this frame's view.
+    [DefaultExecutionOrder(1200)]
     public sealed class GameplayPostProcessing : MonoBehaviour
     {
         private GameplayPostTuning _tuning;
@@ -22,6 +24,8 @@ namespace JungleMaze.Presentation.Rendering
         private WhiteBalance _white;
         private Vignette _vignette;
         private Tonemapping _tonemapping;
+        private ShadowsMidtonesHighlights _grade;
+        private SunlightOverlay _sun;
         private bool _active;
         private Camera _camera;
 
@@ -54,10 +58,14 @@ namespace JungleMaze.Presentation.Rendering
             _color = _profile.Add<ColorAdjustments>(true);
             _white = _profile.Add<WhiteBalance>(true);
             _vignette = _profile.Add<Vignette>(true);
+            _grade = _profile.Add<ShadowsMidtonesHighlights>(true);
             // Pixel art keeps its palette: no tone curve, grading stays in the colour adjustments above.
             _tonemapping = _profile.Add<Tonemapping>(true);
             _tonemapping.mode.Override(TonemappingMode.None);
             _volume.sharedProfile = _profile;
+            _sun = new GameObject("Sunlight").AddComponent<SunlightOverlay>();
+            _sun.transform.SetParent(transform, false);
+            _sun.Configure(_tuning);
         }
 
         /// <summary>Copies the tuning into the profile (cheap; also run every frame in the Editor so Inspector edits show live).</summary>
@@ -80,6 +88,8 @@ namespace JungleMaze.Presentation.Rendering
             _vignette.intensity.Override(t.VignetteIntensity);
             _vignette.smoothness.Override(t.VignetteSmoothness);
             _vignette.color.Override(t.VignetteColor);
+            _grade.highlights.Override(new Vector4(t.HighlightTint.r, t.HighlightTint.g, t.HighlightTint.b, 0f));
+            _grade.shadows.Override(new Vector4(t.ShadowTint.r, t.ShadowTint.g, t.ShadowTint.b, 0f));
         }
 
         private void Refresh(Scene scene)
@@ -100,6 +110,7 @@ namespace JungleMaze.Presentation.Rendering
             Apply();
             Refresh(SceneManager.GetActiveScene());
 #endif
+            if (_sun != null) _sun.Render(Camera.main, _active, Time.time, Time.deltaTime);
             if (!_active) return;
             // The Game camera is authored without URP data; turn post-processing on once per camera instance.
             var main = Camera.main;

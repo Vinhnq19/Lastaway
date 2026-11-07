@@ -18,15 +18,33 @@ MonoBehaviour:
   BloomThreshold: 0.78
   BloomIntensity: 1.1
   BloomScatter: 0.72
-  BloomTint: {r: 1, g: 0.96, b: 0.88, a: 1}
+  BloomTint: {r: 1, g: 0.92, b: 0.76, a: 1}
   BloomClamp: 65472
   BloomHighQuality: 0
   PostExposure: 0.08
   Contrast: 14
   Saturation: 24
   ColorFilter: {r: 1, g: 1, b: 1, a: 1}
-  Temperature: 6
+  Temperature: 12
   Tint: 0
+  HighlightTint: {r: 1.08, g: 1.03, b: 0.88, a: 1}
+  ShadowTint: {r: 0.94, g: 0.98, b: 1.06, a: 1}
+  SunEnabled: 1
+  SunColor: {r: 1, g: 0.87, b: 0.55, a: 1}
+  SunHdrBoost: 1.35
+  SunAngle: 32
+  SunRays: 5
+  SunRayAlpha: 0.085
+  SunRayWidth: {x: 1.2, y: 3.4}
+  SunSway: 0.6
+  SunSwaySpeed: 0.22
+  SunCorner: {x: -0.95, y: 1}
+  SunGlowSize: 1.5
+  SunGlowAlpha: 0.2
+  DustCount: 40
+  DustSize: 0.12
+  DustAlpha: 0.55
+  DustSpeed: 0.35
   VignetteIntensity: 0.26
   VignetteSmoothness: 0.42
   VignetteColor: {r: 0.04, g: 0.06, b: 0.03, a: 1}
