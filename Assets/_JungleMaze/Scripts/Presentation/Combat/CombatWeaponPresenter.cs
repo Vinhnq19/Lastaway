@@ -13,6 +13,7 @@ using JungleMaze.Presentation.Player;
 using JungleMaze.Presentation.World;
 using JungleMaze.App.World;
 using JungleMaze.App.Flow;
+using JungleMaze.World.Throwables;
 using UnityEngine;
 
 namespace JungleMaze.Presentation.Combat
@@ -44,7 +45,7 @@ namespace JungleMaze.Presentation.Combat
         [SerializeField] private ShotFlashVisual flashPrefab;
 
         private PooledPrefabFactory<ShotFlashVisual> _flashes;
-        /// <summary>Distance from the wielder's centre to the barrel, where shots and flashes start.</summary>
+        /// <summary>Distance from the wielder's centre to the barrel when no in-hand weapon is drawn.</summary>
         private const float MuzzleReach = .45f;
 
         private HeroSpriteAnimator _heroAnimator;
@@ -70,6 +71,9 @@ namespace JungleMaze.Presentation.Combat
         private OfflineWorldSession _offlineWorld;
         private OfflineMatchSession _offlineMatch;
         private GameFlow _flow;
+        private OnlineThrowableSession _throwables;
+        private ThrowableView _throwView;
+        private ReloadProgressView _reloadProgress;
 
         [Inject]
         public void Construct(IBalanceConfigProvider balance, IPoolService pool, IHudStateWriter hud,
@@ -88,6 +92,9 @@ namespace JungleMaze.Presentation.Combat
             _offlineMatch = offlineMatch;
             _flow = flow;
         }
+
+        /// <summary>WPN-03 thrown and special weapons in networked matches; optional for tools and tests.</summary>
+        [Inject] public void ConfigureThrowables(OnlineThrowableSession throwables) => _throwables = throwables;
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
         /// <summary>Only development previews receive a fake backend; release online injection never requires it.</summary>
@@ -115,6 +122,8 @@ namespace JungleMaze.Presentation.Combat
                 if (renderer != null) _weaponSprites[i] = renderer.sprite;
             }
 
+            _throwView = gameObject.AddComponent<ThrowableView>();
+            _throwView.Bind(hero, remotePlayers, _match, _throwables, _offlineWorld);
             if (!_match.Connected && _server!=null) CreateOfflineController();
             _online.Changed+=OnCombatEvent;
             if (_offlineWorld != null) _offlineWorld.CombatChanged += OnCombatEvent;
@@ -136,6 +145,7 @@ namespace JungleMaze.Presentation.Combat
             if (_online==null || _pool==null || _projectiles==null) return;
             if (_match.Connected)
             {
+                if (HandleThrowable(true)) return;
                 if (!_online.CanAct || (_menu?.BlocksGameplayInput??false)) return;
                 if (Input.GetKeyDown(KeyCode.R)) _online.TryReload();
                 if (Input.GetMouseButton(0))
@@ -149,6 +159,7 @@ namespace JungleMaze.Presentation.Combat
             {
                 if (_offlineMatch != null && _offlineMatch.IsDead) return;
                 if (_menu?.BlocksGameplayInput ?? false) return;
+                if (HandleThrowable(false)) return;
                 if (Input.GetKeyDown(KeyCode.R)) _offlineWorld.TryReload();
                 if (Input.GetMouseButton(0))
                 {
@@ -184,6 +195,50 @@ namespace JungleMaze.Presentation.Combat
             _controller.Tick(Time.deltaTime);
         }
 
+        /// <summary>
+        /// WPN-03 input: with a thrown or special weapon in hand, a left click uses it toward the cursor (thrown items
+        /// land at the cursor, clamped by the server). Returns true when a throwable is held, so the normal weapon
+        /// path does not also fire.
+        /// </summary>
+        private bool HandleThrowable(bool online)
+        {
+            var kind = ThrowableRules.KindOf(_heroWeapon != null ? _heroWeapon.ItemId : null);
+            if (kind == ThrowableKind.None) return false;
+            if ((_menu?.BlocksGameplayInput ?? false) || !Input.GetMouseButtonDown(0)) return true;
+            var camera = Camera.main;
+            if (camera == null || !HeroAim.TryGetTargetDegrees(camera, hero.position, Input.mousePosition, out var aim)) return true;
+            var cursor = camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -camera.transform.position.z));
+            var distance = Vector2.Distance(hero.position, cursor);
+            if (online) _throwables?.TryUse(kind, aim, distance);
+            else _offlineWorld?.TryUseThrowable(aim, distance);
+            return true;
+        }
+
+        private void LateUpdate()
+        {
+            WeaponController controller = null;
+            if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Game" &&
+                !(_menu?.BlocksGameplayInput ?? false))
+            {
+                if (_match?.Connected == true && _online?.CanAct == true)
+                    controller = _online.Controller;
+                else if (_flow?.IsOffline == true && _offlineWorld?.IsReady == true &&
+                         _offlineMatch?.IsDead != true)
+                    controller = _offlineWorld.Combat?.Controller;
+            }
+            if (hero == null || controller == null || !controller.IsReloading)
+            {
+                if (_reloadProgress != null) _reloadProgress.Hide();
+                return;
+            }
+            if (_reloadProgress == null) _reloadProgress = gameObject.AddComponent<ReloadProgressView>();
+            var duration = Mathf.Max(.001f, controller.SelectedSlot.ReloadSeconds);
+            var progress = Mathf.Clamp01(1f - controller.ReloadRemainingSeconds / duration);
+            // A delayed confirmation must never look like a completed reload.
+            if (!controller.IsReloadConfirmed) progress = Mathf.Min(progress, .95f);
+            _reloadProgress.Show(LocalVisual(out _, out _), progress);
+        }
+
         private void OnDestroy()
         {
             if (_controller != null) _controller.Changed -= _onChanged;
@@ -195,34 +250,86 @@ namespace JungleMaze.Presentation.Combat
         {
             if (combatEvent.Kind == CombatEventKind.AttackPredicted)
             {
-                var swing = SpawnAttackVisual(combatEvent.Weapon, combatEvent.AimDegrees, hero.position, hero);
-                Animate(_heroAnimator, _heroWeapon, combatEvent.Weapon, swing);
+                var self = LocalVisual(out var body, out var hands);
+                var swing = SpawnAttackVisual(combatEvent.Weapon, combatEvent.AimDegrees, self.position, self, hands, out var arc);
+                Animate(body, hands, combatEvent.Weapon, swing, arc);
             }
             else if (combatEvent.Kind == CombatEventKind.RemoteAttackConfirmed && _poses!=null && _poses.TryGetPose(combatEvent.NetId,out var pose))
             {
-                var swing = SpawnAttackVisual(combatEvent.Weapon, pose.RotationDegrees, new Vector3(pose.X,pose.Y,0), null);
                 var view = remotePlayers != null ? remotePlayers.GetView(combatEvent.NetId) : null;
+                var held = view != null ? view.GetComponentInChildren<HeldWeaponView>() : null;
+                if (held != null) held.Show(CombatWeaponIds.ToJsonId(combatEvent.Weapon));
+                var swing = SpawnAttackVisual(combatEvent.Weapon, pose.RotationDegrees, new Vector3(pose.X,pose.Y,0), null, held, out var arc);
                 if (view != null)
-                    Animate(view.GetComponentInChildren<HeroSpriteAnimator>(), view.GetComponentInChildren<HeldWeaponView>(), combatEvent.Weapon, swing);
+                    Animate(view.GetComponentInChildren<HeroSpriteAnimator>(), held, combatEvent.Weapon, swing, arc);
+            }
+            else if (combatEvent.Kind == CombatEventKind.ReloadStarted)
+            {
+                LocalVisual(out _, out var hands);
+                AnimateReload(hands, combatEvent.Weapon);
+            }
+            else if (combatEvent.Kind == CombatEventKind.RemoteReloadStarted)
+            {
+                var view = remotePlayers != null ? remotePlayers.GetView(combatEvent.NetId) : null;
+                if (view != null) AnimateReload(view.GetComponentInChildren<HeldWeaponView>(), combatEvent.Weapon);
             }
         }
 
+        /// <summary>
+        /// The character the player sees as themselves. Offline that is the Hero; online the Hero is a hidden camera
+        /// proxy and the own PlayerView draws the player, so attacks must animate that view's body and hands.
+        /// </summary>
+        private Transform LocalVisual(out HeroSpriteAnimator body, out HeldWeaponView hands)
+        {
+            if (_match != null && _match.Connected && _match.OwnNetId != 255 && remotePlayers != null)
+            {
+                var view = remotePlayers.GetView(_match.OwnNetId);
+                if (view != null && view.isActiveAndEnabled)
+                {
+                    body = view.GetComponentInChildren<HeroSpriteAnimator>();
+                    hands = view.GetComponentInChildren<HeldWeaponView>();
+                    return view.transform;
+                }
+            }
+            body = _heroAnimator;
+            hands = _heroWeapon;
+            return hero;
+        }
+
+        /// <summary>Dips the held weapon for the weapon's reload time. Melee and unknown weapons have no reload.</summary>
+        private void AnimateReload(HeldWeaponView held, CombatWeaponId weapon)
+        {
+            if (held == null) return;
+            var controller = ActiveController();
+            if (controller == null) return;
+            var slot = controller.Slot(weapon);
+            if (slot.IsRanged) held.OnReload(slot.ReloadSeconds);
+        }
+
+        private WeaponController ActiveController() =>
+            _match.Connected ? _online.Controller : (_flow != null && _flow.IsOffline && _offlineWorld != null ? _offlineWorld.Combat?.Controller : _controller);
+
         /// <summary>Body attack swing plus in-hand weapon: remote hands switch to the weapon they attacked with.</summary>
-        private static void Animate(HeroSpriteAnimator body, HeldWeaponView held, CombatWeaponId weapon, float swingSeconds)
+        private static void Animate(HeroSpriteAnimator body, HeldWeaponView held, CombatWeaponId weapon, float swingSeconds, float arcDegrees)
         {
             if (swingSeconds < 0f) return;
             if (body != null) body.PlayAttack();
             if (held == null) return;
             held.Show(CombatWeaponIds.ToJsonId(weapon));
-            held.OnAttack(swingSeconds > 0f, swingSeconds);
+            held.OnAttack(swingSeconds > 0f, swingSeconds, arcDegrees);
         }
 
-        /// <summary>Spawns the projectile or swing. Returns the swing length (0 for ranged, -1 when nothing was shown).</summary>
-        private float SpawnAttackVisual(CombatWeaponId weapon, float aimDegrees, Vector3 origin, Transform anchor)
+        /// <summary>
+        /// Spawns the projectile, or the melee swing when the wielder has no in-hand view (a wielder with one swings
+        /// its own weapon, or punches bare-handed). Returns the swing length (0 for ranged, -1 when nothing was shown).
+        /// </summary>
+        private float SpawnAttackVisual(CombatWeaponId weapon, float aimDegrees, Vector3 origin, Transform anchor, HeldWeaponView wielder, out float arcDegrees)
         {
-            var controller = _match.Connected ? _online.Controller : (_flow != null && _flow.IsOffline && _offlineWorld != null ? _offlineWorld.Combat?.Controller : _controller);
+            arcDegrees = 0f;
+            var controller = ActiveController();
             if (controller==null) return -1f;
             var slot = controller.Slot(weapon);
+            arcDegrees = slot.ArcDegrees;
             if (slot.IsRanged)
             {
                 var itemId = CombatWeaponIds.ToJsonId(weapon);
@@ -243,14 +350,16 @@ namespace JungleMaze.Presentation.Combat
                 {
                     var aim = aimDegrees * Mathf.Deg2Rad;
                     var flash = _flashes.Create(SpawnPose.At(origin));
-                    flash.Play(art.Muzzle, origin + new Vector3(Mathf.Cos(aim), Mathf.Sin(aim), 0f) * MuzzleReach, aimDegrees, art.MuzzleScale);
+                    var muzzle = wielder != null && wielder.Visible ? wielder.MuzzlePosition : origin + new Vector3(Mathf.Cos(aim), Mathf.Sin(aim), 0f) * MuzzleReach;
+                    flash.Play(art.Muzzle, muzzle, aimDegrees, art.MuzzleScale);
                     _pool.Despawn(flash, flash.Duration + .05f);
                 }
                 return 0f;
             }
 
-            var swing = _swings.Create(SpawnPose.At(origin));
             var duration = Mathf.Max(0.1f, slot.CadenceSeconds * 0.6f);
+            if (wielder != null) return duration;
+            var swing = _swings.Create(SpawnPose.At(origin));
             if (_heldCatalog != null && _heldCatalog.TryGet(CombatWeaponIds.ToJsonId(weapon), out var held))
                 swing.Play(held.Sprite, anchor, aimDegrees, slot.ArcDegrees, slot.Range, duration, held.Scale, held.AngleOffset);
             else

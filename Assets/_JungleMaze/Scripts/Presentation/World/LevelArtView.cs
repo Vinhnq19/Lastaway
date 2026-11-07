@@ -16,7 +16,7 @@ namespace JungleMaze.Presentation.World
     /// <summary>
     /// Vẽ map như Level Editor: ground cỏ theo seed, đường đá, viền/tường mép, cỏ rải và hình Cainos của cover/decor,
     /// đọc từ khối <c>editor</c> của map JSON (game logic bỏ qua khối này). Chỉ là hình: collider/cover vẫn do dữ liệu
-    /// map và scene quyết định. Map không có khối <c>editor</c> hoặc phòng mạng đang chọn map khác thì giữ cách vẽ cũ.
+    /// map và scene quyết định. Map mạng dùng JSON đã xác minh. Map không có khối <c>editor</c> giữ cách vẽ cũ.
     /// Vật thể game có trong JSON (rương, bình, bụi, portal, cửa, cover "Phá được") cũng dùng hình Cainos; trạng thái
     /// (HP, vỡ, cửa mở) lấy từ snapshot world qua <see cref="TryShowWorldObject"/>, do <see cref="Phase2.WorldSceneView"/>
     /// gọi. Vật phá được nháy sáng bằng shader <c>JungleMaze/Sprite Hit Flash</c> mỗi lần HP giảm, ẩn khi vỡ.
@@ -116,7 +116,7 @@ namespace JungleMaze.Presentation.World
 
         private GameFlow _flow;
         private RoomMapSession _roomMaps;
-        private string _localHash;
+        private string _artKey;
         private bool _built, _applied;
         private Transform _root;
         private readonly List<Object> _owned = new List<Object>();
@@ -125,50 +125,74 @@ namespace JungleMaze.Presentation.World
         [Inject] public void Construct(GameFlow flow) => _flow = flow;
         [Inject] public void BindRoomMaps(RoomMapSession roomMaps) => _roomMaps = roomMaps;
 
-        private void Start()
+        private void Start() => RefreshArt();
+        private void Update() => RefreshArt();
+
+        private void RefreshArt()
         {
-            // Cùng map với world offline: map offline riêng nếu có, không thì map_demo của server.
+            if (catalog == null) return;
+            var offline = _flow == null || _flow.IsOffline;
+            var key = offline ? "offline" : _roomMaps != null && _roomMaps.Verified ? _roomMaps.State.MapHash : null;
+            if (key != _artKey)
+            {
+                ClearView();
+                _artKey = key;
+                if (key != null)
+                {
+                    try
+                    {
+                        var json = offline ? ReadOfflineMap() : _roomMaps.VerifiedMapJson;
+                        if (!string.IsNullOrEmpty(json) && json.Contains("\"editor\"") && (offline || Hash(json) == key))
+                            Build(LevelDocument.FromJson(json, catalog.BaseSizeOf, catalog.ShapeOf));
+                    }
+                    catch (System.Exception e) when (!(e is System.OutOfMemoryException))
+                    {
+                        ClearView();
+                        Debug.LogWarning("[LevelArt] Không đọc được art của map: " + e.Message);
+                    }
+                }
+            }
+            if (!_built || _applied || (grid != null && grid.MapSizeCells <= 0)) return;
+            _applied = true;
+            SetGridVisible(false);
+            CoversDrawn = true;
+            Changed?.Invoke();
+        }
+
+        private static string ReadOfflineMap()
+        {
             var runtime = Path.Combine(Application.streamingAssetsPath, "JungleMaze", "runtime");
             var path = Path.Combine(runtime, JungleMaze.App.Ports.RuntimeDataFiles.OfflineMap);
             if (!File.Exists(path)) path = Path.Combine(runtime, JungleMaze.App.Ports.RuntimeDataFiles.ServerMap);
-            if (catalog == null || !File.Exists(path)) return;
-            var json = File.ReadAllText(path);
-            _localHash = Hash(json);
-            LevelDocument doc;
-            try
-            {
-                if (!json.Contains("\"editor\"")) return;
-                doc = LevelDocument.FromJson(json, catalog.BaseSizeOf, catalog.ShapeOf);
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogWarning("[LevelArt] Không đọc được art của map: " + e.Message);
-                return;
-            }
-            Build(doc);
-            Apply();
+            return File.ReadAllText(path);
         }
 
-        private void Update() => Apply();
-
-        /// <summary>Hiện khi chơi offline hoặc phòng mạng đang chọn đúng map đóng gói.</summary>
-        private void Apply()
+        private void SetGridVisible(bool visible)
         {
-            if (!_built) return;
-            var offline = _flow == null || _flow.IsOffline;
-            var sameMap = _roomMaps == null || !_roomMaps.HasState || _roomMaps.State.MapHash == _localHash;
-            var show = offline || sameMap;
-            // MapGridView dựng nền/tường trong Start của nó, có thể sau Start của view này: đợi nó dựng xong rồi mới ẩn.
-            var gridReady = grid == null || grid.MapSizeCells > 0;
-            if (_applied && _root.gameObject.activeSelf == show) return;
-            _root.gameObject.SetActive(show);
-            var changed = CoversDrawn != show;
-            CoversDrawn = show;
-            if (changed) Changed?.Invoke();
-            if (!gridReady) return;
-            _applied = true;
             if (grid != null)
-                foreach (var r in grid.GetComponentsInChildren<SpriteRenderer>(true)) r.enabled = !show;
+                foreach (var renderer in grid.GetComponentsInChildren<SpriteRenderer>(true)) renderer.enabled = visible;
+        }
+
+        private void ClearView()
+        {
+            if (_root != null)
+            {
+                _root.gameObject.SetActive(false);
+                Destroy(_root.gameObject);
+                _root = null;
+            }
+            foreach (var item in _owned) if (item != null) Destroy(item);
+            _owned.Clear();
+            _tiles.Clear();
+            _worldObjects.Clear();
+            _flashing.Clear();
+            _built = _applied = false;
+            SetGridVisible(true);
+            if (_active != this) return;
+            _active = null;
+            if (!CoversDrawn) return;
+            CoversDrawn = false;
+            Changed?.Invoke();
         }
 
         private void Build(LevelDocument doc)
@@ -340,8 +364,7 @@ namespace JungleMaze.Presentation.World
 
         private void OnDestroy()
         {
-            if (_active == this) { _active = null; CoversDrawn = false; }
-            foreach (var o in _owned) if (o != null) Destroy(o);
+            ClearView();
         }
     }
 }

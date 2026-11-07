@@ -1,31 +1,23 @@
 {
   "schemaVersion": 1,
-  "generation": 2,
-  "defaultMapId": "rung-me-cung",
+  "generation": 3,
+  "defaultMapId": "thap-co",
   "maps": [
     {
-      "id": "di-tich-co",
-      "name": "Di tích cổ",
-      "description": "Bố cục di tích hiện tại, nhiều vật thể và portal.",
+      "id": "thap-co",
+      "name": "Th\u00E1p c\u1ED5",
+      "description": "Th\u00E1p \u0111\u00E1 v\u00E0 c\u00E1c khu di t\u00EDch gi\u1EEFa r\u1EEBng.",
       "version": "1.1.0",
-      "mapHash": "b4810e608a95b11fcd6e47e5be76c75786e67208c2e1ccb6b5e0f3143b5845b6",
-      "previewHash": "4fcebbe9cfb2f11eca862f02c93dc3e6a3f14379904850cf75465d45bc65450d"
+      "mapHash": "308ef963a7877479b767f10d0224dc32df091c24e9a31c166fe8d2305619f186",
+      "previewHash": "f0841c8468e0ae15627e4a16f8ad282dd521a29e9a82d3a34af7690d789ca9d9"
     },
     {
-      "id": "bai-da",
-      "name": "Bãi đá",
-      "description": "Cover bố trí khác, đường tiếp cận và vị trí vật thể thay đổi.",
-      "version": "1.0.0",
-      "mapHash": "f6980362fbce0fcb279b4ac7928ae89c3726ce5d418955198ac058586162bab2",
-      "previewHash": "3a6de3836851f4a3cba1b8e2f93157d0467b0cb146271e38a899a0ed047de2e2"
-    },
-    {
-      "id": "rung-me-cung",
-      "name": "Rừng mê cung",
-      "description": "Đền cổ giữa rừng: sân đền tường đá có cổng, vành spawn cây cối, trại góc có portal chéo.",
+      "id": "thi-tran",
+      "name": "Th\u1ECB tr\u1EA5n",
+      "description": "Nh\u00E0 g\u1EA1ch, \u0111\u01B0\u1EDDng ph\u1ED1 v\u00E0 c\u00E1c l\u1ED1i giao tranh h\u1EB9p.",
       "version": "1.1.0",
-      "mapHash": "a95853c7010b0deb57bb2fdcf17fc0b99899b6c03c1d53975d8724179adaedec",
-      "previewHash": "6dba1cf269865d1b917f46c81401e6138a1fedcd507973ff694e3bf9576eb69a"
+      "mapHash": "8d365ce54e58e4fced1162f84440c9f95bec543814f46ea13291b9d646bcb2ca",
+      "previewHash": "ec793477435fac68c888d2c5b4395c7a8c85ff312b851560032c172340dd77c1"
     }
   ]
 }

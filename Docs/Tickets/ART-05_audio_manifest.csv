@@ -25,6 +25,7 @@ sfx,UseCancel,Thiếu,Sfx/use_cancel.wav,,,,,,,,có bằng chứng: Docs/License
 sfx,ZoneBell3,Thiếu,Sfx/zone_bell.wav,,,,,,,,có bằng chứng: Docs/Licenses/Audio/Kenney_ImpactSounds_License.txt,,,,,,,,T1,,,,,,,,-17.47,1.00,-17.47,chưa,,clip cuối tải về
 sfx,DragonRoar,Thiếu,Sfx/dragon_roar.wav,,,,,,,,chưa kiểm chứng (nguồn tự khai CC0),,,,,,,,T1,,,,,,,,-16.00,1.00,-16.00,chưa,,clip cuối tải về
 sfx,MatchEnd,Có,Sfx/match_end.wav,TimeOver.wav,,,,,,,có bằng chứng: Docs/Licenses/Audio/Kenney_MusicJingles_License.txt,2.82,WAV PCM_16 2040 kbps,44100,2,719398,,,T1,,,,,,,,-16.00,1.00,-16.00,"có: V.Huy, 2026-10-27",,ứng viên JSurviv không dùng; clip cuối tải về
+sfx,Victory,Có,Sfx/victory.wav,Tools/Audio/Sources/UserSfx_20261107/victory.wav,,,,,,,chưa kiểm chứng,10.032,,,,,,,,,,,,,,,,,,chưa,,Người dùng cung cấp; chỉ phát khi người chơi thắng.
 jsurviv,,,Bo co.mp3,,,ngoài 26,ZON-01 (âm bo thu hẹp),,,,chưa kiểm chứng,15.06,MP3 MPEG_LAYER_III 256 kbps,44100,2,481489,95baeb3aa91501eb57a669a2ba3ec3ce,,,,,,,,,,,,,,,15.05 s; không phải chuông cảnh báo (Q8)
 jsurviv,,,Loading Music.mp3,,,BGM,Loading,,,,chưa kiểm chứng,43.70,MP3 MPEG_LAYER_III 256 kbps,44100,1,1396819,8fa92181b64baf698ea5163f03f8e6a0,có: Placeholder/JSurviv/Music/loading_music.mp3 (đã xóa sau G3),,,,,,,,,,,,,,không có thẻ
 jsurviv,,,Nhặt đồ/Gun Put On.mp3,,,mã SFX,PickupItem,,,,chưa kiểm chứng,2.07,MP3 MPEG_LAYER_III 320 kbps,44100,2,82616,ccd40d1a65b0187203f01f4dec2870b7,có: Placeholder/JSurviv/pickup_item_gun_put_on.mp3 (đã xóa sau G3),,,,,,,,,,,,,,năm 2020; LAME in FL Studio 10; BPM 80
@@ -98,3 +99,4 @@ clip,MatchEnd,,Sfx/match_end.wav,kenney_music-jingles.zip,jingles_NES00.ogg,,,Ke
 clip,,,Music/waiting_room.ogg,Waiting Room Music.wav,,,waiting_room,,,,chưa kiểm chứng,145.53,OGG Vorbis q0.5000,44100,2,2695023,d2fa46f921761bc9eb2631a6b858ccef,,,0.000,145.532,-11.49,0.00,-0.00,-14.52,-10.21,-26.00,,,chưa,,gốc WAV 25.7 MB không chép vào Assets
 clip,,,Music/loading.ogg,Loading Music.mp3,,,loading,,,,chưa kiểm chứng,43.65,OGG Vorbis q0.7000,44100,1,569649,37ae9873be6f993404bd504b87388715,,,0.000,43.651,0.08,0.00,-18.76,-26.08,-18.71,-25.95,,,chưa,,mono
 clip,,,Music/match.ogg,ParkingMapMusic.mp3,,,match,,,,chưa kiểm chứng,123.43,OGG Vorbis q0.5000,44100,2,2551882,e061e71d4b5bb4ce246f0e4faac911d6,,,0.000,123.428,-14.98,0.00,1.28,-11.05,-12.56,-25.98,,,chưa,,ID3 2023 Studio One 6.2.1
+clip,Victory,Có,Sfx/victory.wav,Tools/Audio/Sources/UserSfx_20261107/victory.wav,,,,,,,chưa kiểm chứng,10.032,,,,,,,,,,,,,,,,,,chưa,,"Người dùng cung cấp; giải mã WAV PCM, chỉ phát khi thắng."

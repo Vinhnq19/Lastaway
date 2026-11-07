@@ -104,6 +104,41 @@ namespace JungleMaze.Tests.World
             public void Dispose(){Combat.Dispose();World.Dispose();Match.Dispose();}
         }
 
+        [Test] public void ThrowableSession_SendsHeldKindAndAim_AndMirrorsBellReversal()
+        {
+            using(var r=new Rig())
+            {
+                r.Ready();
+                var throwables=new OnlineThrowableSession(r.Match,r.World,r.Sender,r.Network);
+                throwables.Initialize();
+                try
+                {
+                    throwables.Tick(0);
+                    var seen=new List<JungleMaze.World.Throwables.ThrowableEvent>();
+                    throwables.ThrowableRaised+=seen.Add;
+                    Assert.IsTrue(throwables.TryUse(JungleMaze.World.Throwables.ThrowableKind.Banana,90f,3.5f));
+                    var request=r.Sender.Last<ThrowableRequestPacket>();
+                    Assert.AreEqual(r.MatchId,request.MatchId);
+                    Assert.AreEqual(1u,request.RequestId);
+                    Assert.AreEqual(1,request.Kind);
+                    Assert.AreEqual(90f,CombatShotMath.DecodeAim(request.Aim),.01f);
+                    Assert.AreEqual(3.5f,request.Distance,1e-4f);
+                    Assert.IsTrue(throwables.TryUse(JungleMaze.World.Throwables.ThrowableKind.Banana,0f,1f));
+                    Assert.AreEqual(2u,r.Sender.Last<ThrowableRequestPacket>().RequestId,"request ids increase");
+
+                    r.Network.Push(new ThrowableEventPacket{MatchId=Guid.NewGuid(),Event=14,Item=7,Actor=3,Target=0,Seconds=10});
+                    Assert.AreEqual(0,seen.Count,"events of another match are ignored");
+                    r.Network.Push(new ThrowableEventPacket{MatchId=r.MatchId,Event=14,Item=7,Actor=3,Target=0,Seconds=10,Amount=15});
+                    throwables.Tick(.1f);
+                    Assert.AreEqual(1,seen.Count);
+                    Assert.IsTrue(throwables.Reversed&&r.Match.Prediction.Reversed,"a bell hit on this player reverses predicted movement");
+                    throwables.Tick(10f);
+                    Assert.IsFalse(r.Match.Prediction.Reversed,"the reversal ends after its 10 s");
+                }
+                finally{throwables.Dispose();}
+            }
+        }
+
         [Test] public void NormalWorldUsesAuthoredTeamMapWithFixedInteractivePlacements()
         {
             using(var r=new Rig(true))
@@ -239,6 +274,37 @@ namespace JungleMaze.Tests.World
             Assert.AreEqual(210,WorldSceneView.FindPortalDestination(objects,211));
             Assert.AreEqual(0,WorldSceneView.FindPortalDestination(objects,2));
         }
+        [Test] public void InteractionPromptUsesCursorPriorityAndTheSameReachAsPickup()
+        {
+            var objects = new[]
+            {
+                new WorldObjectWire { Id = 1, Kind = 100, X = .5f, Y = 0 },
+                new WorldObjectWire { Id = 2, Kind = 100, X = 1, Y = 0 },
+                new WorldObjectWire { Id = 3, Kind = 100, X = 1.21f, Y = 0 }
+            };
+            var target = WorldSceneView.InteractionTarget(objects, Vector2.zero, new Vector2(1.21f, 0));
+            Assert.IsTrue(target.HasValue);
+            Assert.AreEqual(2, target.Value.Id, "The cursor must not select loot beyond the player's reach.");
+            Assert.IsFalse(WorldSceneView.InteractionTarget(objects, new Vector2(10, 10), Vector2.zero).HasValue);
+        }
+
+        [Test] public void InteractionPromptFallsBackToUsableDoorOnlyWhenNoLootIsInReach()
+        {
+            var objects = new[]
+            {
+                new WorldObjectWire { Id = 1, Kind = 12, Hp = 100, Width = 1, Height = 1 },
+                new WorldObjectWire { Id = 2, Kind = 100, X = 1, Y = 0 }
+            };
+            Assert.AreEqual(2, WorldSceneView.InteractionTarget(objects, Vector2.zero, Vector2.zero).Value.Id);
+            objects[1].X = 20;
+            Assert.AreEqual(1, WorldSceneView.InteractionTarget(objects, Vector2.zero, Vector2.zero).Value.Id);
+            objects[0].Hp = 0;
+            Assert.IsFalse(WorldSceneView.InteractionTarget(objects, Vector2.zero, Vector2.zero).HasValue);
+            objects[0].Hp = 100;
+            objects[0].Flags = 1;
+            Assert.IsFalse(WorldSceneView.InteractionTarget(objects, Vector2.zero, Vector2.zero).HasValue);
+        }
+
         [Test] public void OnlinePresenterRequiredDependenciesExcludeDevelopmentBackend()
         {
             var construct=typeof(CombatWeaponPresenter).GetMethod("Construct");Assert.IsNotNull(construct);

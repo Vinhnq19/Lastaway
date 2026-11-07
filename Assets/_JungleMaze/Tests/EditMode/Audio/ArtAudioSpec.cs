@@ -82,7 +82,7 @@ namespace JungleMaze.Tests.Audio
             new Row(SfxId.PickupItem, 3, 0.15f, 0.80f), new Row(SfxId.WearArmor, 3, 0.30f, 1.20f),
             new Row(SfxId.UseHeal, 3, 0.50f, 1.50f), new Row(SfxId.UseDrink, 3, 0.50f, 1.50f),
             new Row(SfxId.UseCancel, 3, 0.10f, 0.40f), new Row(SfxId.ZoneBell3, 1, 0.40f, 0.75f),
-            new Row(SfxId.DragonRoar, 1, 1.50f, 4.00f), new Row(SfxId.MatchEnd, 1, 1.00f, 3.00f),
+            new Row(SfxId.DragonRoar, 1, 1.50f, 4.00f), new Row(SfxId.MatchEnd, 1, 1.00f, 3.00f), new Row(SfxId.Victory, 1, 1.00f, 12.00f),
         };
 
         public static SfxCatalog LoadCatalog() => AssetDatabase.LoadAssetAtPath<SfxCatalog>(CatalogPath);

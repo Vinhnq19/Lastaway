@@ -11,7 +11,8 @@ namespace JungleBackend.Protocol.Gameplay
         PlayerSpawned = 3,
         PlayerHit = 4,
         PlayerDied = 5,
-        ItemPickedUp = 6
+        ItemPickedUp = 6,
+        MeleeImpact = 7
     }
 
     /// <summary>

@@ -36,6 +36,7 @@ namespace JungleMaze.App.Audio
         private readonly IReadOnlyList<IAudioEventSource> _sources;
         private readonly MusicPlan _music;
         private readonly Func<AppScreen> _currentScreen;
+        private readonly Func<bool> _isVictory;
         private readonly float _settleSeconds;
         private readonly SfxDeduper _keyed = new SfxDeduper();
         private readonly SfxDeduper _unkeyed = new SfxDeduper(UnkeyedWindowSeconds, 32);
@@ -64,7 +65,7 @@ namespace JungleMaze.App.Audio
 
         public SfxRouter(IAudioService audio, IHudState hud, IInventoryState inventory, IEventBus bus,
             IBalanceConfigProvider balance, IReadOnlyList<IAudioEventSource> sources = null, MusicPlan music = null,
-            float settleSeconds = DefaultSettleSeconds, Func<AppScreen> currentScreen = null)
+            float settleSeconds = DefaultSettleSeconds, Func<AppScreen> currentScreen = null, Func<bool> isVictory = null)
         {
             _audio = audio ?? throw new ArgumentNullException(nameof(audio));
             _hud = hud;
@@ -74,6 +75,7 @@ namespace JungleMaze.App.Audio
             _sources = sources ?? Array.Empty<IAudioEventSource>();
             _music = music;
             _currentScreen = currentScreen;
+            _isVictory = isVictory;
             _settleSeconds = settleSeconds;
             _onHudChanged = OnHudChanged;
             _onPickup = OnPickup;
@@ -259,7 +261,7 @@ namespace JungleMaze.App.Audio
                 _settleUntil = _now + _settleSeconds;
             }
             if (change.Current == AppScreen.Results && change.Previous != AppScreen.Results)
-                _audio.Play(AudioCue.Global(SfxId.MatchEnd));
+                _audio.Play(AudioCue.Global(_isVictory?.Invoke() == true ? SfxId.Victory : SfxId.MatchEnd));
         }
 
         private bool IsRepeat(HudKind kind, uint payload) => _unkeyed.IsDuplicate(SfxDeduper.Key((byte)kind, payload), _now);

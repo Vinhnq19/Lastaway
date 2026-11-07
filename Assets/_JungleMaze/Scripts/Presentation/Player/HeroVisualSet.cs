@@ -19,6 +19,8 @@ namespace JungleMaze.Presentation.Player
             public WorldVisualSet.Frames IdleBack, IdleSide, IdleFront, MoveBack, MoveSide, MoveFront;
             /// <summary>One-shot attack swings per facing; null keeps the idle/move loop during an attack.</summary>
             public WorldVisualSet.Frames AttackBack, AttackSide, AttackFront;
+            /// <summary>This hero's fist, drawn at the same pixel scale as the body; null draws no hands.</summary>
+            public Sprite Hand;
 
             /// <summary>Attack clip for a facing, falling back to the side clip.</summary>
             public WorldVisualSet.Frames GetAttack(HeroFacing facing)

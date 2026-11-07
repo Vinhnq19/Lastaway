@@ -28,7 +28,7 @@ namespace JungleBackend.Protocol.Gameplay
     {
         public Guid MatchId;public uint Seed;public string Version,Hash;public ushort Size;public uint Revision;
         public void Serialize(NetDataWriter w){WorldWire.Header(w,MatchId);w.Put(Seed);w.Put(Version??"");w.Put(Hash??"");w.Put(Size);w.Put(Revision);}
-        public void Deserialize(NetDataReader r){MatchId=WorldWire.Header(r);Seed=r.GetUInt();Version=MatchWire.ReadString(r,48);Hash=MatchWire.ReadString(r,64);Size=r.GetUShort();Revision=r.GetUInt();WorldWire.Check(MatchId!=Guid.Empty&&Size>=30&&Size<=128&&Version.Length>0&&Hash.Length==64);foreach(var c in Hash)WorldWire.Check(c>='0'&&c<='9'||c>='a'&&c<='f');}
+        public void Deserialize(NetDataReader r){MatchId=WorldWire.Header(r);Seed=r.GetUInt();Version=MatchWire.ReadString(r,48);Hash=MatchWire.ReadString(r,64);Size=r.GetUShort();Revision=r.GetUInt();WorldWire.Check(MatchId!=Guid.Empty&&Size>=30&&Size<=256&&Version.Length>0&&Hash.Length==64);foreach(var c in Hash)WorldWire.Check(c>='0'&&c<='9'||c>='a'&&c<='f');}
     }
     public struct WorldObjectWire
     {

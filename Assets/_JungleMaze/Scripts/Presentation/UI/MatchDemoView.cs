@@ -39,11 +39,15 @@ namespace JungleMaze.Presentation.UI
         private MatchOverlayFlow _overlayFlow;
         private string _worldHash;
         private HeroController _hero;
+        private HeroSpriteAnimator _heroBody;
+        private IHeroSkinPreference _skins;
+        private int _offlineSkin = int.MinValue;
         private RemotePlayerSpawner _spawner;
         private Camera _camera;
-        private LineRenderer _currentRing, _nextRing;
-        private Material _ringMaterial;
-        private readonly Vector3[] _circle = new Vector3[96];
+        private HeroCameraFollow _follow;
+        private ZoneOverlayView _zoneOverlay;
+
+
         private Guid _loadedAck;
         private string _dataError;
         private bool _historyVisible;
@@ -100,11 +104,12 @@ namespace JungleMaze.Presentation.UI
                 {
                     if (_offlineRound != _offlineSession.MatchId) ResetOfflineHero();
                     _hero.enabled = !_offlineSession.IsDead && !(_menuState?.BlocksGameplayInput ?? false);
+                    SyncOfflineSkin();
                 }
+                FollowOwnView(null);
                 if (_offlineSession.Zone != null)
                 {
-                    DrawRing(ref _currentRing, "Current offline zone", _offlineSession.Zone.CurrentCenter.X, _offlineSession.Zone.CurrentCenter.Y, _offlineSession.Zone.CurrentRadius, Color.red);
-                    DrawRing(ref _nextRing, "Next offline zone", _offlineSession.Zone.NextCenter.X, _offlineSession.Zone.NextCenter.Y, _offlineSession.Zone.NextRadius, Color.yellow);
+                    ShowZone(_offlineSession.Zone.GetStatePacket(_offlineSession.CurrentTick), _offlineSession.CurrentTick);
                 }
                 else HideRings();
                 return;
@@ -144,13 +149,24 @@ namespace JungleMaze.Presentation.UI
             {
                 var view = _spawner != null ? _spawner.GetView(_session.OwnNetId) : null;
                 _hero.transform.position = view != null ? view.transform.position : origin;
+                FollowOwnView(view != null ? view.transform : null);
             }
             if (_session.HasZone && _session.Phase == MatchPhase.InGame)
             {
-                DrawRing(ref _currentRing, "Current server zone", _session.Zone.CurrentCenterX, _session.Zone.CurrentCenterY, _session.Zone.CurrentRadius, Color.red);
-                DrawRing(ref _nextRing, "Next server zone", _session.Zone.TargetCenterX, _session.Zone.TargetCenterY, _session.Zone.TargetRadius, Color.yellow);
+                ShowZone(_session.Zone, _session.ServerTick);
             }
             else HideRings();
+        }
+
+        /// <summary>Points the camera at the own PlayerView online (null: back to the Hero).</summary>
+        private void FollowOwnView(Transform view)
+        {
+            if (_follow == null)
+            {
+                if (_camera == null) _camera = Camera.main;
+                if (_camera == null || !_camera.TryGetComponent(out _follow)) return;
+            }
+            _follow.FollowOverride = view;
         }
 
         private void PrepareScene()
@@ -213,30 +229,31 @@ namespace JungleMaze.Presentation.UI
             return null;
         }
 
-        private void DrawRing(ref LineRenderer ring, string title, float x, float y, float radius, Color color)
+        private void ShowZone(ZoneStatePacket state, uint tick)
         {
-            if (ring == null)
+            if (_zoneOverlay == null) _zoneOverlay = gameObject.AddComponent<ZoneOverlayView>();
+            _zoneOverlay.Show(state, tick, _data.Bounds);
+        }
+        /// <summary>Home's skin choice for the offline hero (default hero when none). Optional: views built in tests skip it.</summary>
+        [Inject] public void BindSkins(IHeroSkinPreference skins) => _skins = skins;
+
+        /// <summary>
+        /// Draws the offline hero with the chosen skin; only touches the animator when the skin changes. A reloaded Game
+        /// scene brings a fresh Hero with the prefab's default skin, so finding a new body forgets the applied skin.
+        /// </summary>
+        private void SyncOfflineSkin()
+        {
+            if (_hero == null) return;
+            if (_heroBody == null)
             {
-                var obj = new GameObject(title); ring = obj.AddComponent<LineRenderer>();
-                obj.transform.SetParent(transform, false);
-                if (_ringMaterial == null)
-                {
-                    var shader = Shader.Find("Sprites/Default");
-                    if (shader == null) shader = Shader.Find("Universal Render Pipeline/Unlit");
-                    _ringMaterial = new Material(shader);
-                }
-                ring.sharedMaterial = _ringMaterial; ring.useWorldSpace = true; ring.loop = true;
-                ring.widthMultiplier = .08f; ring.positionCount = _circle.Length; ring.sortingOrder = 20;
-                ring.startColor = ring.endColor = color;
+                _heroBody = _hero.GetComponentInChildren<HeroSpriteAnimator>(true);
+                _offlineSkin = int.MinValue;
+                if (_heroBody == null) return;
             }
-            ring.enabled = radius > .001f;
-            if (!ring.enabled) return;
-            for (var i = 0; i < _circle.Length; i++)
-            {
-                var angle = i * Mathf.PI * 2 / _circle.Length;
-                _circle[i] = new Vector3(x + Mathf.Cos(angle) * radius, y + Mathf.Sin(angle) * radius, -.1f);
-            }
-            ring.SetPositions(_circle);
+            var skin = HeroSkinRules.Offline(_skins?.Selected ?? HeroSkinRules.Automatic);
+            if (skin == _offlineSkin) return;
+            _offlineSkin = skin;
+            _heroBody.SetHero(skin);
         }
 
         private void ResetOfflineHero()
@@ -252,8 +269,8 @@ namespace JungleMaze.Presentation.UI
         }
 
         private void HideRings()
-        { if (_currentRing != null) _currentRing.enabled = false; if (_nextRing != null) _nextRing.enabled = false; }
-        private void OnDestroy() { if (_offlineSession != null) _offlineSession.RoundStarted -= ResetOfflineHero; if (_ringMaterial != null) Destroy(_ringMaterial); }
+        { if (_zoneOverlay != null) _zoneOverlay.Hide(); }
+        private void OnDestroy() { if (_offlineSession != null) _offlineSession.RoundStarted -= ResetOfflineHero; if (_zoneOverlay != null) Destroy(_zoneOverlay); }
 
         private void OnGUI()
         {

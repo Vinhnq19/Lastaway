@@ -221,6 +221,8 @@ namespace JungleMaze.Tests.Protocol
                 var crlf = "\uFEFF" + json.Replace("\r\n", "\n").Replace("\n", "\r\n");
                 Assert.IsNull(data.ActivateSelectedMap(crlf, (string)entry["mapHash"], hash));
                 Assert.AreEqual((string)entry["mapHash"], data.SelectedMapHash); Assert.AreEqual(10, data.SelectedLayout.Spawns.Count);
+                var bounds = JObject.Parse(json)["mapBounds"];
+                Assert.AreEqual((int)bounds["maxX"] - (int)bounds["minX"], data.SelectedLayout.Size);
                 Assert.IsNull(data.Verify((string)JObject.Parse(File.ReadAllText(Path.Combine(rules, "match_settings.json")))["version"], hash));
                 var previous = data.SelectedLayout;
                 Assert.IsNotNull(data.ActivateSelectedMap("{}", (string)entry["mapHash"], hash));

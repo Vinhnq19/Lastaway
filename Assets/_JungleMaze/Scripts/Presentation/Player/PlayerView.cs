@@ -1,4 +1,7 @@
+using JungleMaze.App.Match;
+using JungleMaze.App.Player;
 using JungleMaze.App.Ports;
+using JungleMaze.Core.DI;
 using JungleMaze.Core.Pooling;
 using JungleMaze.Domain.Player;
 using JungleBackend.Protocol.Gameplay;
@@ -12,7 +15,8 @@ namespace JungleMaze.Presentation.Player
     /// Hiển thị một người chơi (không đọc packet). Vị trí lấy từ <see cref="IPlayerPoseSource"/>: prediction cho nhân vật
     /// của mình (MOV-02), interpolation cho người khác (MOV-03). Chưa có pose thì đặt thẳng theo snapshot mới nhất.
     /// Được lấy từ pool nên reset trạng thái trong OnSpawned/OnDespawned.
-    /// Body có <see cref="HeroSpriteAnimator"/> thì mỗi NetId nhận một hero riêng (không tô màu, animator giữ scale).
+    /// Body có <see cref="HeroSpriteAnimator"/> thì mỗi NetId nhận một hero riêng (không tô màu, animator giữ scale);
+    /// riêng nhân vật của mình dùng skin đã chọn ở Home (<see cref="IHeroSkinPreference"/>) nếu có.
     /// </summary>
     public sealed class PlayerView : MonoBehaviour, IPoolable
     {
@@ -22,6 +26,10 @@ namespace JungleMaze.Presentation.Player
         [SerializeField] private HeldWeaponView heldWeapon;
         private int _appliedHeldCode = -1;
         private string _appliedHeldItem = "";
+        private IHeroSkinPreference _skins;
+        private MatchSession _match;
+        private HeroSpriteAnimator _hero;
+        private int _appliedSkin = int.MinValue;
 
         private PlayerModel _model;
         private IPlayerPoseSource _poses;
@@ -36,12 +44,15 @@ namespace JungleMaze.Presentation.Player
             _model = model;
             _poses = poses;
             _snapNext = true;
+            _appliedSkin = int.MinValue;
             if (body != null && body.TryGetComponent<HeroSpriteAnimator>(out var hero) && hero.enabled)
             {
+                _hero = hero;
                 body.color = Color.white;
-                hero.SetHero(model.NetId);
+                SyncSkin();
                 if (hero.HasVisuals) { Refresh(); return; }
             }
+            _hero = null;
             if (body != null)
             {
                 body.color = Color.HSVToRGB(model.NetId * 0.1f % 1f, 0.6f, 1f);
@@ -53,6 +64,29 @@ namespace JungleMaze.Presentation.Player
                 }
             }
             Refresh();
+        }
+
+        /// <summary>Own-character skin choice; optional (tests and tools may bind views without it).</summary>
+        [Inject]
+        public void ConfigureSkin(IHeroSkinPreference skins, MatchSession match)
+        {
+            _skins = skins;
+            _match = match;
+            _appliedSkin = int.MinValue;
+        }
+
+        /// <summary>
+        /// Applies the skin rule: the local choice on your own character (known once the server sends OwnNetId),
+        /// the NetId skin for everyone else. Cheap to call every frame; it only touches the animator on a change.
+        /// </summary>
+        private void SyncSkin()
+        {
+            if (_hero == null || _model == null) return;
+            var own = _match != null && _match.OwnNetId == _model.NetId;
+            var skin = HeroSkinRules.Resolve(_skins?.Selected ?? HeroSkinRules.Automatic, own, _model.NetId);
+            if (skin == _appliedSkin) return;
+            _appliedSkin = skin;
+            _hero.SetHero(skin);
         }
 
         private void Awake()
@@ -94,6 +128,7 @@ namespace JungleMaze.Presentation.Player
         {
             if (_model == null) return;
             SyncHeldWeapon();
+            SyncSkin();
             if (_poses != null && _poses.TryGetPose(_model.NetId, out var pose))
             {
                 // Pose đã mượt sẵn: đặt thẳng, không làm mượt thêm (sẽ cộng độ trễ).

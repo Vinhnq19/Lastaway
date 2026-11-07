@@ -4,6 +4,7 @@ using JungleMaze.App.Match;
 using JungleMaze.App.Combat;
 using JungleMaze.App.Hud.State;
 using JungleMaze.World;
+using JungleMaze.World.Throwables;
 using JungleMaze.App.World;
 using JungleMaze.App.Ports;
 using JungleMaze.Core.DI;
@@ -66,6 +67,7 @@ namespace JungleMaze.App.Audio
         private readonly OfflineMatchSession _offline;
         private bool _wasOfflineDead;
         private OnlineCombatSession _combat;
+        private IThrowableEventSource _throwables;
         private OfflineWorldSession _offlineWorld;
         private WorldClientSession _world;
         private IHudState _hud;
@@ -98,14 +100,31 @@ namespace JungleMaze.App.Audio
         }
 
         // ComposeWorld runs after audio; rebind safely when a world is recreated.
-        public void BindCombat(OnlineCombatSession online, OfflineWorldSession offline, WorldClientSession world = null, IHudState hud = null)
+        public void BindCombat(OnlineCombatSession online, OfflineWorldSession offline, WorldClientSession world = null, IHudState hud = null, IThrowableEventSource throwables = null)
         {
             if (_combat != null) _combat.Changed -= OnOnlineCombat;
             if (_offlineWorld != null) _offlineWorld.CombatChanged -= OnOfflineCombat;
+            if (_throwables != null) _throwables.ThrowableRaised -= OnOnlineThrow;
+            if (_offlineWorld != null) _offlineWorld.ThrowableRaised -= OnOfflineThrow;
+            _throwables = throwables;
             _combat = online; _offlineWorld = offline; _world = world; _hud = hud;
             _hasMotionPose = false; _stepDistance = 0; _inBush = false;
+            if (_throwables != null) _throwables.ThrowableRaised += OnOnlineThrow;
+            if (_offlineWorld != null) _offlineWorld.ThrowableRaised += OnOfflineThrow;
             if (_combat != null) _combat.Changed += OnOnlineCombat;
             if (_offlineWorld != null) _offlineWorld.CombatChanged += OnOfflineCombat;
+        }
+
+        private void OnOnlineThrow(ThrowableEvent value)
+        { if (_offlineWorld?.IsActive != true) OnThrowable(value); }
+        private void OnOfflineThrow(ThrowableEvent value)
+        { if (_offlineWorld?.IsActive == true) OnThrowable(value); }
+
+        public void OnThrowable(ThrowableEvent value)
+        {
+            if (value.Kind != ThrowableEventKind.Thrown) return;
+            CueRaised?.Invoke(AudioCue.At(SfxId.Throw, value.FromX, value.FromY, value.Actor,
+                SfxDeduper.Key(7, value.Actor, value.Id, (uint)value.Item)));
         }
 
         private void OnOnlineCombat(CombatEvent value)
@@ -117,6 +136,17 @@ namespace JungleMaze.App.Audio
         public void OnCombat(CombatEvent value)
         {
             var own = _feed != null && value.NetId == _feed.OwnNetId;
+            if (value.Kind == CombatEventKind.EmptyFire && own)
+            {
+                CueRaised?.Invoke(AudioCue.Global(SfxId.EmptyClick, value.NetId,
+                    SfxDeduper.Key(5, value.NetId, value.RequestSeq)));
+                return;
+            }
+            if (value.Kind == CombatEventKind.MeleeImpact)
+            {
+                EmitImpact(value.NetId, SfxDeduper.Key(6, value.NetId, value.RequestSeq));
+                return;
+            }
             var shot = value.Kind == CombatEventKind.AttackPredicted && own ||
                        value.Kind == CombatEventKind.RemoteAttackConfirmed && !own;
             var reload = value.Kind == CombatEventKind.ReloadStarted && own ||
@@ -129,6 +159,14 @@ namespace JungleMaze.App.Audio
             if (own) CueRaised?.Invoke(AudioCue.Global(id, value.NetId, key));
             else if (_poses != null && _poses.TryGetPose(value.NetId, out var pose))
                 CueRaised?.Invoke(AudioCue.At(id, pose.X, pose.Y, value.NetId, key));
+        }
+
+        private void EmitImpact(byte actor, ulong key)
+        {
+            if (_feed != null && actor == _feed.OwnNetId)
+                CueRaised?.Invoke(AudioCue.Global(SfxId.MeleeHit, actor, key));
+            else if (_poses != null && _poses.TryGetPose(actor, out var pose))
+                CueRaised?.Invoke(AudioCue.At(SfxId.MeleeHit, pose.X, pose.Y, actor, key));
         }
 
         public void Tick(float deltaTime)
@@ -192,6 +230,11 @@ namespace JungleMaze.App.Audio
         /// <summary>Handles one server event; public so tests can feed packets without a network.</summary>
         public void OnEvent(EventPacket packet)
         {
+            if (packet.EventType == GameEventType.MeleeImpact)
+            {
+                EmitImpact(packet.SourceNetId, SfxDeduper.Key(6, packet.SourceNetId, packet.Tick));
+                return;
+            }
             if (packet.EventType != GameEventType.PlayerDied || packet.TargetNetId == EventPacket.NoTarget) return;
             var key = SfxDeduper.Key(KindPlayerDied, packet.Tick, packet.SourceNetId, packet.TargetNetId);
             var target = packet.TargetNetId;

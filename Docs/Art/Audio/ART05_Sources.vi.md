@@ -36,3 +36,7 @@ Xử lý chung: trộn mono, 44,1 kHz (đổi tần số bằng sinc nếu ngu�
 | MatchEnd | `match_end.wav` | [kenney_music-jingles.zip: jingles_NES00.ogg](https://kenney.nl/assets/music-jingles) | Kenney Vleugels (Kenney.nl) | 2026-10-27 | 0.000–1.758 | -2.0 | 0.00 | -16.00 | 1.762 | có bằng chứng: Docs/Licenses/Audio/Kenney_MusicJingles_License.txt |
 
 Tổng: 26 clip tải về. 17 file còn lại trong `Sfx/` và `Music/` dẫn xuất từ JSurviv, giấy phép `chưa kiểm chứng`; xem dòng `clip` và `jsurviv` của manifest.
+
+## Cập nhật clip do người dùng cung cấp ngày 07/11/2026
+
+Các clip runtime melee_hit.wav, empty_click.wav, throw.wav và victory.wav dùng bản âm thanh người dùng cung cấp. File nguồn được giữ tại Tools/Audio/Sources/UserSfx_20261107/. EmptyClick được rút xuống 0,28 giây và thêm fade. Throw và Victory có dữ liệu MP3 trong file đuôi WAV, đã giải mã thành WAV PCM cho runtime. Victory dùng toàn bộ victory.wav dài 10,032 giây và chỉ phát khi người chơi thắng. MatchEnd khôi phục clip cũ cho thua, hòa hoặc trận bị hủy. Nguồn và quyền sử dụng của các clip người dùng cung cấp chưa được xác minh. Các dòng nguồn cũ phía trên mô tả phiên bản trước khi thay clip.

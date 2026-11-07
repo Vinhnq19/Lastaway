@@ -123,7 +123,7 @@ public sealed class RoomGameplaySmoke : IDisposable
         if (_verified && !_roomReadySent && SelectionSettled()) EmitRoomReady();
         EmitSnapshotAck();
         ApplyPhaseAcks();
-        if (_verified && _phase == MatchPhase.Waiting && _ownNetId == _hostNetId && _botCount < _desiredBots)
+        if (_verified && SelectionSettled() && _phase == MatchPhase.Waiting && _ownNetId == _hostNetId && _botCount < _desiredBots)
         {
             if (!_botPending) { var p = new RoomBotCommandPacket { RoomId = _roomId, Revision = _lobbyRevision, RequestId = ++_botRequest, Action = RoomBotAction.Add }; Emit(ref p, true, GameplayProtocol.GameplayChannel); _botPending = true; }
             return;
@@ -375,7 +375,7 @@ public sealed class RoomGameplaySmoke : IDisposable
                 ?? throw new InvalidOperationException("Authored map document is empty.");
             // Existing authored builder validates geometry, object counts, hazards and spawn connectivity.
             var layout = document.Build(LayoutVersion);
-            if (layout is null || layout.Spawns.Count != 10 || layout.Size != 50)
+            if (layout is null || layout.Spawns.Count != 10)
                 throw new InvalidOperationException("Authored map geometry is outside supported bounds.");
             return new(roomId, revision, mapHash, true, null, target);
         }

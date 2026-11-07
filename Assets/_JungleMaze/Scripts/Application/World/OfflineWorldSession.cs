@@ -18,7 +18,7 @@ namespace JungleMaze.App.World
     /// Runs authored map placements, destructible one-time loot drops, floor items, inventory,
     /// hazards, armor absorption, and inventory-backed combat locally without network or WorldDemoController.
     /// </summary>
-    public sealed class OfflineWorldSession : ITickable, IDisposable,
+    public sealed partial class OfflineWorldSession : ITickable, IDisposable,
         ITransactionalDestructibleLootSink, IEnvironmentDamageSink, IEnvironmentEffectSink, IEnvironmentMovementSink, IItemGameplayPort
     {
         private readonly OfflineMatchSession _match;
@@ -132,6 +132,7 @@ namespace JungleMaze.App.World
             _boostUntil = 0;
             _slow.Clear();
             _pendingPortalDestination = null;
+            ResetThrowables();
 
             if (_map != null)
             {
@@ -219,6 +220,8 @@ namespace JungleMaze.App.World
                 _actors.Add(new WorldActor(0, _playerPose.X, _playerPose.Y, isAlive));
                 _hazards.Tick(_tick, _actors);
             }
+
+            TickThrowables();
 
             if (_poisonUntil > _now && _poisonDue <= _now)
             {
@@ -378,6 +381,7 @@ namespace JungleMaze.App.World
                 return;
             }
 
+            var meleeHit = false;
             foreach (var target in _map.Objects)
             {
                 if (!target.IsBreakable || _destructibles.IsBroken(target.Id)) continue;
@@ -393,10 +397,14 @@ namespace JungleMaze.App.World
                 var damage = stats.Damage * (weapon == CombatWeaponId.Axe ? 1.5f : 1f);
                 if (_destructibles.DamageConfirmed(target.Id, (int)Math.Round(damage), 0, ++_hitSequence))
                 {
+                    meleeHit = true;
                     RebuildWireObjects();
                     Changed?.Invoke();
                 }
             }
+            if (meleeHit)
+                CombatChanged?.Invoke(new CombatEvent(CombatEventKind.MeleeImpact, weapon, 0,
+                    (ushort)_hitSequence, aimDegrees, CombatOutcome.Accepted));
         }
 
         private WorldObjectDefinition NearestHit(WorldPoint origin, WorldPoint direction, float range, out float distance)

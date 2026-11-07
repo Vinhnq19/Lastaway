@@ -46,6 +46,9 @@ namespace JungleMaze.Composition
             var combat = new OnlineCombatSession(match, world, _registry.Resolve<IBalanceConfigProvider>(), _registry.Resolve<IPacketSender>(), _registry.Resolve<IPacketReceiver>(), hudWriter);
             _registry.Register(combat);
             ticks.Add(combat);
+            var throwables = new OnlineThrowableSession(match, world, _registry.Resolve<IPacketSender>(), _registry.Resolve<IPacketReceiver>());
+            _registry.Register(throwables);
+            ticks.Add(throwables);
 
             // In-process offline world session for local solo play (MAP-02 / ITM-01)
             var offlineSession = _registry.Resolve<OfflineMatchSession>();
@@ -53,10 +56,12 @@ namespace JungleMaze.Composition
             var effectWriter = _registry.Resolve<IEffectStateWriter>();
             var balance = _registry.Resolve<IBalanceConfigProvider>();
             var offlineWorld = new OfflineWorldSession(offlineSession, data?.Layout, data?.Destructibles, data?.Hazards, catalog, lootTable, balance, hudWriter, inventoryWriter, effectWriter, flow, binding);
+            try { offlineWorld.ThrowableRules = ThrowableRulesJson.Load(Application.streamingAssetsPath); }
+            catch (System.Exception e) { _log.Warn("[Throwables] " + e.Message); }
             _registry.Register(offlineWorld);
             ticks.Add(offlineWorld);
             if (_registry.TryResolve<JungleMaze.App.Audio.MatchAudioEventSource>(out var audio))
-                audio.BindCombat(combat, offlineWorld, world, _registry.Resolve<IHudState>());
+                audio.BindCombat(combat, offlineWorld, world, _registry.Resolve<IHudState>(), throwables);
             // The Game scene owns its world views and colliders; services survive scene changes.
         }
     }

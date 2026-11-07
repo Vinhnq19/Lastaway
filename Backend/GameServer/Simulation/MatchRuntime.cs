@@ -287,7 +287,18 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
 
         _combatHits.Clear();
         World?.SetCombatTick(CurrentTick);
+        var obstacleHits = World?.ConfirmedObstacleHits;
         result = _combat.TryAttack(entity.NetId, request, CurrentTick, _combatHits);
+        if (result.Outcome == CombatOutcome.Accepted && request.Weapon < CombatWeaponId.RubberGun &&
+            (_combatHits.Any(hit => hit.Damage > 0) || World?.ConfirmedObstacleHits != obstacleHits))
+        {
+            var impact = new EventPacket { Tick = CurrentTick, EventType = GameEventType.MeleeImpact,
+                SourceNetId = entity.NetId, TargetNetId = EventPacket.NoTarget };
+            var impactWriter = new NetDataWriter();
+            PacketRegistry.BeginFrame(impactWriter);
+            _packets.Write(impactWriter, ref impact);
+            ReliableBroadcast?.Invoke(impactWriter.CopyData());
+        }
         if (result.Outcome == CombatOutcome.Accepted) BroadcastCombatResult(ref result);
         return true;
     }
@@ -545,6 +556,8 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
             var isStale = (CurrentTick - entity.LastInputTick >= staleTicks) || entity.IsDisconnected;
             var mx = isStale ? 0f : (entity.MoveX / 127f);
             var my = isStale ? 0f : (entity.MoveY / 127f);
+            // WPN-03 bell: reversed controls invert the movement input (clients mirror it in prediction).
+            if (World?.IsReversed(entity.NetId) == true) { mx = -mx; my = -my; }
 
             if (World != null && (mx != 0 || my != 0)) World.Inventory.CancelForAction(entity.NetId, JungleMaze.World.Inventory.ItemCancelAction.Move);
             var speed = World?.SpeedMultiplier(entity.NetId) ?? 1f;
@@ -817,7 +830,7 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
 
         // Initialize zone
         var seed = MatchId.GetHashCode();
-        _zone = new ZoneSimulation(_zoneSchedule, seed, 2.0f, _map);
+        _zone = new ZoneSimulation(_zoneSchedule, seed, 2.0f, _map, SelectedMap?.ReachableCells);
 
         // Spawn players at pair-distance >= 6 safe points
         var spawnList = _map.SpawnPoints;

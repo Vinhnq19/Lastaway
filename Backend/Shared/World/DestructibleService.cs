@@ -14,13 +14,44 @@ namespace JungleMaze.World
         private readonly Dictionary<ushort,WorldObjectDefinition> _objects=new Dictionary<ushort,WorldObjectDefinition>();
         private readonly Dictionary<ushort,DestructibleState> _states=new Dictionary<ushort,DestructibleState>();
         private readonly Dictionary<ulong,uint> _lastAction=new Dictionary<ulong,uint>();
+        private readonly MapLayout _layout;
         private readonly IDestructibleLootSink _loot;private readonly uint _seed;
         public event Action<DestructibleState> Changed;
-        public DestructibleService(MapLayout layout,DestructibleConfig config,IDestructibleLootSink loot){if(layout==null||loot==null)throw new ArgumentNullException();config.Validate();_loot=loot;_seed=layout.Seed;foreach(var o in layout.Objects)if(o.IsBreakable){_objects.Add(o.Id,o);_states.Add(o.Id,new DestructibleState{Id=o.Id,Hp=o.Hp!=0?o.Hp:o.Kind==WorldObjectKind.Chest?config.ChestHp:o.Kind==WorldObjectKind.Pot?config.PotHp:config.SupplyHp});}}
+        public DestructibleService(MapLayout layout,DestructibleConfig config,IDestructibleLootSink loot){if(layout==null||loot==null)throw new ArgumentNullException();config.Validate();_layout=layout;_loot=loot;_seed=layout.Seed;foreach(var o in layout.Objects)if(o.IsBreakable){_objects.Add(o.Id,o);_states.Add(o.Id,new DestructibleState{Id=o.Id,Hp=o.Hp!=0?o.Hp:o.Kind==WorldObjectKind.Chest?config.ChestHp:o.Kind==WorldObjectKind.Pot?config.PotHp:config.SupplyHp});}}
         public IEnumerable<DestructibleState> States {get{foreach(var s in _states.Values)yield return Copy(s);}}
         public bool IsBroken(ushort id){return _states.TryGetValue(id,out var state)&&state.Broken;}
         public bool TryGet(ushort id,out DestructibleState state){if(_states.TryGetValue(id,out var found)){state=Copy(found);return true;}state=null;return false;}
         private static DestructibleState Copy(DestructibleState state){return new DestructibleState{Id=state.Id,Hp=state.Hp,Broken=state.Broken,Revision=state.Revision};}
+
+        /// <summary>Apply one detonation to exposed chests and pots. Cover is checked to the nearest point on each container.</summary>
+        public void DamageContainersInBlast(WorldBounds blast, int damage, byte source, uint actionSequence, Func<ushort, bool> isDoorClosed)
+        {
+            if (damage <= 0 || actionSequence == 0) return;
+            var center = blast.Center;
+            foreach (var target in _objects.Values)
+            {
+                if (target.Kind != WorldObjectKind.Chest && target.Kind != WorldObjectKind.Pot) continue;
+                if (IsBroken(target.Id) || !blast.Overlaps(target.Bounds)) continue;
+
+                var bounds = target.Bounds;
+                float x = Math.Max(bounds.MinX, Math.Min(bounds.MaxX, center.X));
+                float y = Math.Max(bounds.MinY, Math.Min(bounds.MaxY, center.Y));
+                if (!BlastBlocked(center, x, y, isDoorClosed))
+                    DamageConfirmed(target.Id, damage, source, actionSequence);
+            }
+        }
+
+        private bool BlastBlocked(WorldPoint center, float x, float y, Func<ushort, bool> isDoorClosed)
+        {
+            foreach (var cover in _layout.Objects)
+            {
+                bool blocks = cover.IsHardCover || (cover.Kind == WorldObjectKind.Door && isDoorClosed(cover.Id));
+                if (blocks && cover.Bounds.TrySegmentEntry(center.X, center.Y, x, y, out float entry) && entry < 1f)
+                    return true;
+            }
+            return false;
+        }
+
         public bool DamageConfirmed(ushort id,int damage,byte source,uint actionSequence)
         {
             if(damage<=0||actionSequence==0||!_states.TryGetValue(id,out var state)||state.Broken)return false;

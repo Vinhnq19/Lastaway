@@ -118,6 +118,40 @@ namespace JungleMaze.Tests.World
         }
 
         [Test]
+        public void OfflineThrowables_UseSharedRules_SpendItems_AndRopePullsTheHero()
+        {
+            using var rig = new TestRig();
+            var events = new List<JungleMaze.World.Throwables.ThrowableEvent>();
+            rig.Session.ThrowableRaised += events.Add;
+            rig.Session.SetPlayerPose(20f, 25f);
+
+            int Hold(string item, int count)
+            {
+                Assert.IsTrue(rig.Session.Floor.TrySpawn(new ItemStack(item, count), 20f, 25f, out var floorId));
+                Assert.IsTrue(rig.Session.Pickup(floorId), "pick up " + item);
+                var slot = Array.FindIndex(rig.Session.Inventory.Weapons, w => w.ItemId == item);
+                if (rig.Session.Inventory.ActiveWeapon != slot) Assert.IsTrue(rig.Session.SelectWeapon((byte)slot), "hold " + item);
+                return slot;
+            }
+
+            var bananaSlot = Hold("BANANA", 2);
+            Assert.IsTrue(rig.Session.TryUseThrowable(180f, 3f), "throw west");
+            Assert.AreEqual(1, rig.Session.Inventory.Weapons[bananaSlot].Count, "one banana spent");
+            var thrown = events.Single(e => e.Kind == JungleMaze.World.Throwables.ThrowableEventKind.Thrown);
+            Assert.AreEqual(17f, thrown.ToX, .01f);
+            for (var i = 0; i < 60; i++) rig.Session.Tick(1f / 30f);
+            Assert.IsTrue(events.Any(e => e.Kind == JungleMaze.World.Throwables.ThrowableEventKind.Detonated), "fuse ran out");
+            Assert.IsTrue(events.Any(e => e.Kind == JungleMaze.World.Throwables.ThrowableEventKind.TrapArmed), "peel left behind");
+
+            var ropeSlot = Hold("ROPE", 1);
+            Assert.IsTrue(rig.Session.TryUseThrowable(0f, 0f), "rope east toward the chest");
+            Assert.IsTrue(events.Any(e => e.Kind == JungleMaze.World.Throwables.ThrowableEventKind.RopePulledSelf));
+            Assert.IsTrue(rig.Session.TryConsumePortalTeleport(out var destination), "the scene moves the hero like a portal jump");
+            Assert.AreEqual(24.5f - .4f - .05f, destination.X, .11f, "stopped in front of the chest");
+            Assert.AreEqual(1, rig.Session.Inventory.Weapons[ropeSlot].Magazine, "rope keeps one of its two charges");
+        }
+
+        [Test]
         public void WalkingAudio_UsesActualPoseAndSurface_NotIdleOrPortalJump()
         {
             using var rig = new TestRig();
@@ -221,6 +255,24 @@ namespace JungleMaze.Tests.World
             var brokenAgain = session.Destructibles.DamageConfirmed(101, 30, 0, 2);
             Assert.IsFalse(brokenAgain);
             Assert.AreEqual(itemCount, session.Floor.Items.Count, "Broken chest cannot be destroyed twice.");
+        }
+
+        [Test]
+        public void BananaBlast_BreaksChestAndSpawnsLootAfterFuse()
+        {
+            using var rig = new TestRig();
+            var session = rig.Session;
+            session.SetPlayerPose(22f, 25f);
+            Assert.IsTrue(session.Floor.TrySpawn(new ItemStack("BANANA"), 22f, 25f, out var bananaId));
+            Assert.IsTrue(session.Pickup(bananaId));
+            Assert.IsTrue(session.SelectWeapon(0));
+            Assert.IsTrue(session.TryUseThrowable(0, 2));
+            Assert.IsFalse(session.Destructibles.IsBroken(101));
+
+            for (var i = 0; i < 60; i++) session.Tick(1f / 30f);
+
+            Assert.IsTrue(session.Destructibles.IsBroken(101));
+            Assert.That(session.Floor.Items.Count, Is.InRange(3, 4));
         }
 
         [Test]

@@ -72,7 +72,7 @@ namespace JungleMaze.EditorTools
         }
 
         /// <summary>Frames of the prefab's animator clip, or its single sprite when it has no clip.</summary>
-        private static WorldVisualSet.Frames FramesOf(string prefabName, bool loop)
+        internal static WorldVisualSet.Frames FramesOf(string prefabName, bool loop)
         {
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(Projectiles + prefabName + ".prefab");
             if (prefab == null) throw new System.InvalidOperationException("Missing JSurviv projectile " + prefabName);
@@ -89,7 +89,7 @@ namespace JungleMaze.EditorTools
         }
 
         /// <summary>Longest drawn side over all frames (Tight mesh vertices), in sprite units, so a growing clip never outgrows its length.</summary>
-        private static float Longest(WorldVisualSet.Frames frames)
+        internal static float Longest(WorldVisualSet.Frames frames)
         {
             var longest = 0f;
             foreach (var sprite in frames.Sprites)

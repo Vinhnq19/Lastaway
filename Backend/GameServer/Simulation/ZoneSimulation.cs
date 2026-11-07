@@ -41,6 +41,55 @@ public sealed class ZoneSchedule
         if(previousRadius!=0)throw new ArgumentException("Final safe zone must shrink to zero.");
     }
 
+    /// <summary>
+    /// Returns a scaled copy of this schedule for the given square map, or this unchanged
+    /// schedule for a null map or a map already matching the base size (InitialCenter.X * 2 == 50).
+    /// Interval times, warning duration, damage and version are preserved; radii and shrink
+    /// speed are multiplied by (map width / base size) so the zone covers the whole map.
+    /// </summary>
+    public ZoneSchedule ForMap(MapData? map)
+    {
+        if (map is null) return this;
+        map.Validate();
+
+        var width = map.MaxX - map.MinX;
+        var height = map.MaxY - map.MinY;
+        if (!float.IsFinite(width) || !float.IsFinite(height) || width <= 0f || height <= 0f ||
+            MathF.Abs(width - height) > 1e-3f)
+            throw new ArgumentException("Zone scaling requires a square map with finite bounds.");
+
+        var baseSize = InitialCenter.X * 2f;
+        if (!float.IsFinite(baseSize) || baseSize <= 0f)
+            throw new ArgumentException("Zone base initial center must be finite and positive.");
+        if (MathF.Abs(width - baseSize) <= 1e-3f) return this;
+
+        var factor = width / baseSize;
+        var scaled = new ZoneSchedule
+        {
+            Version = Version,
+            InitialCenter = ((map.MinX + map.MaxX) * 0.5f, (map.MinY + map.MaxY) * 0.5f),
+            InitialRadius = InitialRadius * factor,
+            WarningDurationSeconds = WarningDurationSeconds,
+            ShrinkSpeedCellsPerSecond = ShrinkSpeedCellsPerSecond * factor,
+            DamagePerSecond = DamagePerSecond
+        };
+        foreach (var interval in Intervals)
+        {
+            scaled.Intervals.Add(new ZoneInterval
+            {
+                Index = interval.Index,
+                StartSecond = interval.StartSecond,
+                EndSecond = interval.EndSecond,
+                StartRadius = interval.StartRadius * factor,
+                EndRadius = interval.EndRadius * factor,
+                TargetCenter = interval.TargetCenter
+            });
+        }
+
+        scaled.Validate();
+        return scaled;
+    }
+
     public static ZoneSchedule Load(string json)
     {
         using var doc = JsonDocument.Parse(json);
@@ -102,13 +151,17 @@ public sealed class ZoneSimulation
 
     public ZoneSchedule Schedule => _schedule;
 
-    public ZoneSimulation(ZoneSchedule schedule, int seed, float margin = 2.0f, MapData? map = null)
+    public ZoneSimulation(ZoneSchedule schedule, int seed, float margin = 2.0f, MapData? map = null,
+        IReadOnlySet<(int X, int Y)>? reachableCells = null)
     {
+        // Scale first so planning and every later reference use the map-sized schedule.
+        schedule = schedule.ForMap(map);
         _schedule = schedule;
         _schedule.Validate();
         _targetCenters = new (float X, float Y)[schedule.Intervals.Count];
 
-        var reachable=map?.ReachableCells();
+        // Catalog geometry is immutable and validated off the tick thread.
+        var reachable = reachableCells ?? map?.ReachableCells();
         bool Valid(float x,float y) => map is null || map.IsWalkable(x,y) && reachable!.Contains(((int)MathF.Floor(x),(int)MathF.Floor(y)));
         // Seed deterministic target centers ensuring distance(new, old) + rNew <= rOld
         var currentCenter = schedule.InitialCenter;
