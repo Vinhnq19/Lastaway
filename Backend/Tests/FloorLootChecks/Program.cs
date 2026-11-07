@@ -22,6 +22,14 @@ var catalog = document.Build();
 var table = new LootTable(catalog, document.Loot);
 var floor = table.Floor;
 const float hero = .4f;
+var rangedIds = new[] { "RUBBER_GUN", "SCEPTER", "CROSSBOW", "SHOTGUN" };
+var floorWeaponsSeen = new HashSet<string>();
+Check(rangedIds.All(id => catalog.Get(id).Enabled), "all four ranged weapons enabled in the shipped catalog");
+var chestWeaponsSeen = new HashSet<string>();
+for (uint seed = 1; seed <= 2000; seed++)
+    foreach (var item in table.Roll(LootSource.Chest, seed))
+        chestWeaponsSeen.Add(item.ItemId);
+Check(rangedIds.All(chestWeaponsSeen.Contains), "all four ranged weapons can drop from chests");
 
 // ---- Catalog: rarity and the Floor block ----
 var baseline = ItemCatalog.CreateBaseline();
@@ -116,6 +124,7 @@ foreach (var name in mapFiles)
             var def = catalog.Get(p.Stack.ItemId); tierRarity[(int)spots.Spots[p.Spot].Tier, (int)def.Rarity]++;
             if (def.MagazineSize > 0)
             {
+                floorWeaponsSeen.Add(def.Id);
                 guns++;
                 var companion = plan.Placements.Where(q => q.Companion && q.Spot == p.Spot).ToList();
                 if (companion.Count != 1 || companion[0].Stack.ItemId != "AMMO" || companion[0].Stack.Count != floor.AmmoBoxes) { ammoBad++; continue; }
@@ -181,6 +190,8 @@ foreach (var name in mapFiles)
     }
     stats.Add($"|   rarity by ring ({name}) | {string.Join(" ; ", rarity)} |");
 }
+
+Check(rangedIds.All(floorWeaponsSeen.Contains), "all four ranged weapons spawn as floor loot across the authored map rolls");
 
 // Spots do not change with the seed; fewer containers mean more floor spots (map3 with all pots removed simulates section 8).
 var map3 = layouts["map3_rung_sinh_ton"];
