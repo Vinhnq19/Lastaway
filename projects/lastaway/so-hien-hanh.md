@@ -6,7 +6,7 @@ Số liệu cân bằng gốc nằm trong GDD (`Docs/[GDD] - Lastaway.xlsx`, cá
 |---|---|---|---|
 | Kích thước Vitals và Quick bar | Giảm 30% so với HUD v2 (24/10) | 2026-11-06 | Huy, chat |
 | Minimap | Hiện bản đồ thật, chưa thêm chức năng (thay bằng dòng 07/11) | 2026-11-06 | Huy, chat |
-| Minimap chức năng (Giai đoạn 3) | Hiện địch khi vào vùng Hero thấy; hiện vùng địa hình; hiện bo; hiện đồng đội; phóng to thu nhỏ. Số cụ thể chờ spec T-017 | 2026-11-07 | Huy, chat |
+| Minimap chức năng (Giai đoạn 3) | Phương án M của `de-xuat/minimap-chuc-nang.md`: minimap 2 mức (toàn map 50 cell, gần 30 cell theo Hero), đổi bằng N hoặc cuộn chuột khi trỏ trên minimap; M vẫn mở bản đồ lớn; bản đồ lớn texture 1024, chặn tấn công khi mở, vẫn đi được; 1 waypoint cá nhân (click trái bản đồ lớn đặt, chuột phải xóa, tự xóa khi Hero vào 1,5 cell); hiện địch khi thấy, mất thấy để dấu mờ 2,0 s; không ping kiểu PUBG, không đồng đội; 0 gói mạng mới. Số 30 cell, 1,5 cell, 2,0 s do designer đặt, để config, chỉnh sau cổng Huy chơi | 2026-11-08 | Huy, chat ("Chốt gói M") |
 | Chỉ số HUD | Icon kèm số nhỏ, bỏ nhãn chữ; khi bằng 0 icon vẫn sáng và hiện "0" (07/11) | 2026-11-06 | Huy, chat |
 | Quick bar | Số phím ở góc dưới phải trong ô; hàng ô căn giữa dọc; không có tab đạn | 2026-11-07 | Huy, chat |
 | Viền panel HUD | 24 px (1080p) mọi panel, cùng cỡ hoa văn góc | 2026-11-07 | Huy, chat |
