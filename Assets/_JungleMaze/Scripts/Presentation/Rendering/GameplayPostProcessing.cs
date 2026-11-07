@@ -12,8 +12,6 @@ namespace JungleMaze.Presentation.Rendering
     /// tuning lists. Lives on the Bootstrap object (DontDestroyOnLoad); outside those scenes the volume has no weight and
     /// cameras are left as authored. Presentation only.
     /// </summary>
-    // After HeroCameraFollow (900) and the VFX camera shake (1100), so the sunlight overlay sits on this frame's view.
-    [DefaultExecutionOrder(1200)]
     public sealed class GameplayPostProcessing : MonoBehaviour
     {
         private GameplayPostTuning _tuning;
@@ -25,7 +23,6 @@ namespace JungleMaze.Presentation.Rendering
         private Vignette _vignette;
         private Tonemapping _tonemapping;
         private ShadowsMidtonesHighlights _grade;
-        private SunlightOverlay _sun;
         private bool _active;
         private Camera _camera;
 
@@ -63,9 +60,6 @@ namespace JungleMaze.Presentation.Rendering
             _tonemapping = _profile.Add<Tonemapping>(true);
             _tonemapping.mode.Override(TonemappingMode.None);
             _volume.sharedProfile = _profile;
-            _sun = new GameObject("Sunlight").AddComponent<SunlightOverlay>();
-            _sun.transform.SetParent(transform, false);
-            _sun.Configure(_tuning);
         }
 
         /// <summary>Copies the tuning into the profile (cheap; also run every frame in the Editor so Inspector edits show live).</summary>
@@ -110,7 +104,6 @@ namespace JungleMaze.Presentation.Rendering
             Apply();
             Refresh(SceneManager.GetActiveScene());
 #endif
-            if (_sun != null) _sun.Render(Camera.main, _active, Time.time, Time.deltaTime);
             if (!_active) return;
             // The Game camera is authored without URP data; turn post-processing on once per camera instance.
             var main = Camera.main;

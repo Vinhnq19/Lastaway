@@ -29,22 +29,22 @@ MonoBehaviour:
   Tint: 0
   HighlightTint: {r: 1.08, g: 1.03, b: 0.88, a: 1}
   ShadowTint: {r: 0.94, g: 0.98, b: 1.06, a: 1}
-  SunEnabled: 1
-  SunColor: {r: 1, g: 0.87, b: 0.55, a: 1}
-  SunHdrBoost: 1.35
-  SunAngle: 32
-  SunRays: 5
-  SunRayAlpha: 0.085
-  SunRayWidth: {x: 1.2, y: 3.4}
-  SunSway: 0.6
-  SunSwaySpeed: 0.22
-  SunCorner: {x: -0.95, y: 1}
-  SunGlowSize: 1.5
-  SunGlowAlpha: 0.2
-  DustCount: 40
-  DustSize: 0.12
-  DustAlpha: 0.55
-  DustSpeed: 0.35
+  MapLightsEnabled: 1
+  SunPoolSpacing: 10
+  SunPoolOpen: 0.6
+  SunPoolColor: {r: 1, g: 0.86, b: 0.55, a: 1}
+  SunPoolRadius: {x: 3.5, y: 6.5}
+  SunPoolIntensity: {x: 0.35, y: 0.6}
+  SunPoolFalloff: 0.7
+  LanternColor: {r: 1, g: 0.68, b: 0.32, a: 1}
+  LanternRadius: 2.6
+  LanternIntensity: 0.9
+  RuneColor: {r: 0.5, g: 0.85, b: 1, a: 1}
+  RuneRadius: 2
+  RuneIntensity: 0.55
+  PortalColor: {r: 0.55, g: 0.75, b: 1, a: 1}
+  PortalRadius: 3.2
+  PortalIntensity: 0.9
   VignetteIntensity: 0.26
   VignetteSmoothness: 0.42
   VignetteColor: {r: 0.04, g: 0.06, b: 0.03, a: 1}

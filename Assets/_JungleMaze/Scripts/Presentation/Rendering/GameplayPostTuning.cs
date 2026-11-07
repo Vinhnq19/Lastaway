@@ -40,32 +40,26 @@ namespace JungleMaze.Presentation.Rendering
         [Tooltip("Multiplier on the dark tones; a little blue keeps shade cool against the sun.")]
         public Color ShadowTint = new Color(.94f, .98f, 1.06f);
 
-        [Header("Sunlight overlay")]
-        public bool SunEnabled = true;
-        [Tooltip("Colour of the shafts, glow and dust (warm sunlight).")]
-        public Color SunColor = new Color(1f, .87f, .55f);
-        [Tooltip("HDR brightness of the overlay so it blooms.")]
-        [Min(0f)] public float SunHdrBoost = 1.35f;
-        [Tooltip("Shaft tilt in degrees; positive leans the light from the top-left.")]
-        public float SunAngle = 32f;
-        [Range(0, 8)] public int SunRays = 5;
-        [Range(0f, 1f)] public float SunRayAlpha = .085f;
-        [Tooltip("Shaft width range in cells.")]
-        public Vector2 SunRayWidth = new Vector2(1.2f, 3.4f);
-        [Tooltip("Sideways sway of each shaft in cells, and its speed.")]
-        public float SunSway = .6f;
-        public float SunSwaySpeed = .22f;
-        [Tooltip("Where the sun glow sits on screen (-1..1 from the centre; top-left = (-1, 1)).")]
-        public Vector2 SunCorner = new Vector2(-.95f, 1f);
-        [Tooltip("Sun glow diameter as a fraction of the screen height.")]
-        public float SunGlowSize = 1.5f;
-        [Range(0f, 1f)] public float SunGlowAlpha = .2f;
-        [Range(0, 96)] public int DustCount = 40;
-        [Tooltip("Dust mote size in cells.")]
-        public float DustSize = .12f;
-        [Range(0f, 1f)] public float DustAlpha = .55f;
-        [Tooltip("Dust drift in cells per second.")]
-        public float DustSpeed = .35f;
+        [Header("Map lights (Point Light 2D on the map)")]
+        public bool MapLightsEnabled = true;
+        [Tooltip("Grid step in cells between sun pool candidates (one light at most per step x step block).")]
+        [Min(3)] public int SunPoolSpacing = 10;
+        [Tooltip("Share of open cells (no tree, wall or prop) needed around a sun pool; sunlight lands on clearings.")]
+        [Range(0f, 1f)] public float SunPoolOpen = .6f;
+        public Color SunPoolColor = new Color(1f, .86f, .55f);
+        [Tooltip("Outer radius range in cells.")]
+        public Vector2 SunPoolRadius = new Vector2(3.5f, 6.5f);
+        public Vector2 SunPoolIntensity = new Vector2(.35f, .6f);
+        [Range(0f, 1f)] public float SunPoolFalloff = .7f;
+        public Color LanternColor = new Color(1f, .68f, .32f);
+        public float LanternRadius = 2.6f;
+        public float LanternIntensity = .9f;
+        public Color RuneColor = new Color(.5f, .85f, 1f);
+        public float RuneRadius = 2f;
+        public float RuneIntensity = .55f;
+        public Color PortalColor = new Color(.55f, .75f, 1f);
+        public float PortalRadius = 3.2f;
+        public float PortalIntensity = .9f;
 
         [Header("Vignette")]
         [Range(0f, 1f)] public float VignetteIntensity = .26f;

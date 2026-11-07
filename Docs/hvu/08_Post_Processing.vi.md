@@ -28,19 +28,23 @@ Asset `Art/Rendering/Resources/GameplayPostTuning.asset`. Khi đang Play trong E
 
 ## Ánh nắng (kiểu HD-2D)
 
-Mục tiêu: cảnh như có nắng vàng chiếu xiên từ góc trên trái. Gồm hai phần:
+Ánh sáng nằm **trên map** (Point Light 2D đứng yên theo thế giới), không phủ lên màn hình.
 
-- **Chỉnh màu nắng:** `HighlightTint` (1,08; 1,03; 0,88) làm vùng sáng ngả vàng; `ShadowTint` (0,94; 0,98; 1,06) giữ vùng tối hơi lạnh cho tương phản; `Temperature` 12, `BloomTint` vàng kem.
-- **Lớp nắng** (`SunlightOverlay`, dựng lúc chạy, texture sinh bằng code): 5 cột nắng mềm nghiêng `SunAngle` 32°, đung đưa chậm và sáng tối nhẹ; một quầng nắng ở góc trên trái (`SunCorner`); 40 hạt bụi sáng trôi lên chậm và lấp lánh. Vẽ ở layer `VFX` (trên tán cây, dưới HUD), màu HDR ×1,35 nên có bloom.
+- **Map nhận ánh sáng:** trong trận `LevelArtView` vẽ map bằng sprite Lit (mặc định của Renderer 2D), `litInGame` bật. Level Editor vẫn Unlit. Global Light 2D của scene `Game` giảm còn 0,82, màu hơi ấm (1; 0,97; 0,9) để vũng nắng nổi lên.
+- **Vũng nắng** (`MapLights`, dựng cùng art của map): mỗi khối 10×10 ô có tối đa một Point Light vàng nắng, vị trí lệch theo seed của map, chỉ đặt ở chỗ trống (ít nhất 60% ô quanh đó không có cây, tường hay vật), như nắng lọt qua tán xuống khoảng trống. Bán kính 3,5–6,5 ô, cường độ 0,35–0,6. Cùng map thì mọi máy thấy đèn ở cùng chỗ.
+- **Đèn vật thể:** đèn đá (`StoneLantern`) ánh cam ấm, cột rune ánh xanh nhạt, portal ánh xanh.
+- **Chỉnh màu nắng** (post): `HighlightTint` làm vùng sáng ngả vàng, `ShadowTint` giữ vùng tối hơi lạnh; `Temperature` 12, `BloomTint` vàng kem.
 
-| Trường | Mặc định | Ý nghĩa |
+| Trường (`GameplayPostTuning`) | Mặc định | Ý nghĩa |
 | --- | --- | --- |
-| `SunEnabled` | bật | Tắt hẳn lớp nắng |
-| `SunColor` | vàng nắng (1; 0,87; 0,55) | Màu cột, quầng, bụi |
-| `SunRays` / `SunRayAlpha` | 5 / 0,085 | Số cột và độ đậm |
-| `SunRayWidth` | 1,2–3,4 ô | Độ rộng cột |
-| `SunGlowAlpha` / `SunGlowSize` | 0,2 / 1,5 màn hình | Quầng nắng ở góc |
-| `DustCount` / `DustAlpha` / `DustSpeed` | 40 / 0,55 / 0,35 ô/s | Bụi sáng |
+| `MapLightsEnabled` | bật | Tắt mọi đèn trên map |
+| `SunPoolSpacing` | 10 ô | Khoảng cách lưới giữa các vũng nắng (nhỏ hơn = dày hơn) |
+| `SunPoolOpen` | 0,6 | Tỉ lệ ô trống cần có quanh vũng nắng |
+| `SunPoolColor` | (1; 0,86; 0,55) | Màu nắng |
+| `SunPoolRadius` / `SunPoolIntensity` | 3,5–6,5 / 0,35–0,6 | Độ lớn và độ sáng |
+| `Lantern*`, `Rune*`, `Portal*` | xem asset | Màu, bán kính, độ sáng đèn vật thể |
+
+Đèn được dựng khi art của map dựng (vào trận), nên sửa số đèn phải vào lại trận mới thấy; số post (bloom, màu) thấy ngay khi đang Play.
 
 ## Nguồn sáng HDR
 
