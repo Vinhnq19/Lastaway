@@ -454,6 +454,7 @@ GameObject:
   - component: {fileID: 1140707430495988283}
   - component: {fileID: 4004306988520629231}
   - component: {fileID: 3657678237323901720}
+  - component: {fileID: 4823797744930910688}
   m_Layer: 0
   m_Name: PlayerView
   m_TagString: Untagged
@@ -520,3 +521,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: JungleMaze.Presentation::JungleMaze.Presentation.Rendering.DepthSortable
   sortPoint: {fileID: 0}
   sortingGroup: {fileID: 4004306988520629231}
+--- !u!114 &4823797744930910688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8167461162328765544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4a5e80f49e92364991bb8bb0cc6b47c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: JungleMaze.Presentation::JungleMaze.Presentation.Vfx.VfxBodyAnchor
+  body: {fileID: 0}
+  localHero: 0
+  previewNetId: -1
+  flashTint: {r: 1, g: 0.55, b: 0.5, a: 1}

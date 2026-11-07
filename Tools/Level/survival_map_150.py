@@ -9,9 +9,11 @@ khớp game. Tất định theo seed.
 Nguyên tắc cân bằng (số đo in ra bằng --report):
 - Bo đầu (map 50 r=25, nhân 3) là hình tròn r=75 quanh tâm: góc map nằm ngoài bo ngay từ đầu, nên loot/portal/POI
   chỉ đặt trong r <= 68; góc là rừng rậm không loot.
-- Tầng loot: Bình (vũ khí cận chiến, máu, giáp gỗ) khắp nơi; Rương (súng, giáp) trong nhà/POI; Thùng tiếp tế
-  (chùy, đồ phép) chỉ ở đền trung tâm và vòng đá tây bắc → điểm nóng có rủi ro.
-- Mỗi spawn có 2–3 bình trong 6 ô, không có rương trong 8 ô (phải di chuyển), giá trị loot trong 25 ô đều nhau.
+- Loot chủ yếu rải sàn: GameServer/Luyện tập offline tự rải đồ theo hình học map lúc vào trận (FloorLootPlanner,
+  Docs/hvu/07_Floor_Loot.vi.md), kể cả công bằng quanh spawn. Map chỉ giữ khoảng 1/3 số rương cũ, đặt trong nhà và
+  phòng đền (mỗi phòng đền 1 rương), cùng 3 thùng tiếp tế (chùy, đồ phép) ở đền trung tâm và vòng đá tây bắc → điểm
+  nóng có rủi ro. Không còn bình, thùng gỗ, thùng tròn: mỗi vật phá được chiếm ngân sách object mà rải sàn cần.
+- Spawn không có rương trong 8 ô (phải di chuyển).
 - Cover thật (đá, khối đá, tường, tượng...) đủ dày để ô trống xa cover nhất vẫn trong tầm súng ngắn.
 """
 import json, math, random, sys
@@ -104,8 +106,9 @@ class Map:
                     self.put('Wall', x, y)
 
     # ---------- khu vực ----------
-    def house(self, x, y, w, h, doors, loot, chest_share=.35, inner=None):
-        """Nhà tường gạch kín, lối vào để trống (không cửa). Loot dọc chân tường, chừa trống quanh mỗi lối vào."""
+    def house(self, x, y, w, h, doors, loot, chest_share=1 / 3, inner=None):
+        """Nhà tường gạch kín, lối vào để trống (không cửa). Rương dọc chân tường (khoảng chest_share của `loot` chỗ cũ),
+        chừa trống quanh mỗi lối vào; phần còn lại của nhà do rải sàn lấp."""
         d = set(doors)
         self.wall_line(x, y, x + w - 1, y, d)
         self.wall_line(x, y + h - 1, x + w - 1, y + h - 1, d)
@@ -125,20 +128,12 @@ class Map:
         spots = [(i, j) for i in range(x + 1, x + w - 1) for j in range(y + 1, y + h - 1)
                  if (i in (x + 1, x + w - 2) or j in (y + 1, y + h - 2)) and (i, j) not in keep]
         self.rng.shuffle(spots)
+        chests = max(1, round(loot * chest_share))
         placed = 0
-        for s in spots:
-            if placed >= loot:
+        for s in spots[:loot]:
+            if placed >= chests:
                 break
-            r = self.rng.random()
-            if r < chest_share:
-                ok = self.put('Chest', *s)
-            elif r < chest_share + .15:
-                ok = self.breakable('CrateSmall', *s, 25, 'Chest')
-            elif r < chest_share + .45:
-                ok = self.put('Pot', *s)
-            else:
-                ok = self.breakable('Barrel', *s, 15, 'Pot')
-            placed += 1 if ok else 0
+            placed += 1 if self.put('Chest', *s) else 0
         # nội thất làm cover trong nhà
         for s in spots[loot:loot + max(1, (w * h) // 30)]:
             self.put(self.rng.choice(['StoneLantern', 'BenchS', 'StoneCube']), *s)
@@ -176,9 +171,6 @@ class Map:
             ax = rx + (2 if sx == 1 else 6)
             ay = ry + (2 if sy == 1 else 6)
             self.put('Chest', ax, ay)
-            self.put('Pot', ax + sx * 2, ay)
-            self.breakable('CrateSmall', ax, ay + sy * 2, 25, 'Chest')
-            self.breakable('Barrel', ax + sx * 3, ay + sy * 3, 15, 'Pot')
             self.put('StoneLantern', ax + sx * 4, ay + sy * 1)
         # sân giữa: 2 thùng tiếp tế đối xứng, tượng/cột làm cover, giếng giữa
         self.put('Well', m - 1, n)
@@ -190,8 +182,6 @@ class Map:
             self.put('RunePillarX3', m + sx * 7 - (1 if sx < 0 else 0), n + sy * 7 - (1 if sy < 0 else 0))
         self.put('StoneCube', m - 6, n + 2)
         self.put('StoneCube', m + 5, n - 3)
-        self.put('Pot', m + 2, n - 6)
-        self.put('Pot', m - 3, n + 6)
         # sân ngoài: vòng đường đá + cột rune / đèn làm cover tiếp cận
         self.road(x - 4, y - 4, x + s + 3, y - 3)
         self.road(x - 4, y + s + 2, x + s + 3, y + s + 3)
@@ -216,8 +206,6 @@ class Map:
             self.put('StoneLantern', cx + dx, cy + dy)
         self.put('BenchS', cx - 7, cy + 1)
         self.put('BenchS', cx + 6, cy - 2)
-        self.breakable('Barrel', cx + 9, cy + 1, 15, 'Pot')
-        self.breakable('Barrel', cx - 10, cy - 2, 15, 'Pot')
         self.put('SignE', cx + 2, cy - 12)
 
     def graveyard(self, cx, cy):
@@ -231,13 +219,15 @@ class Map:
         self.wall_line(x0 + w - 1, y0 + 1, x0 + w - 1, y0 + h - 2, gaps)
         self.road(cx - 1, y0, cx, y0 + h - 2)
         # hầm mộ 8x6 ở cuối lối
-        self.house(cx - 4, y0 + h - 8, 8, 6, [(cx - 1, y0 + h - 8)], 3, chest_share=.6)
+        self.house(cx - 4, y0 + h - 8, 8, 6, [(cx - 1, y0 + h - 8)], 3, chest_share=.67)
         for gx in range(x0 + 2, x0 + w - 2, 3):
             for gy in range(y0 + 3, y0 + h - 9, 3):
                 if abs(gx - cx) < 3:
                     continue
                 r = self.rng.random()
-                t = 'Gravestone01' if r < .3 else 'Gravestone03' if r < .55 else 'Gravestone02' if r < .7 else 'CoffinH' if r < .85 else 'Pot'
+                t = 'Gravestone01' if r < .3 else 'Gravestone03' if r < .55 else 'Gravestone02' if r < .7 else 'CoffinH' if r < .85 else None
+                if t is None:   # trước đây là bình: giờ để trống cho rải sàn
+                    continue
                 self.put(t, gx, gy)
         self.put('Statue01', x0 + 2, y0 + h - 3)
         self.put('Statue01', x0 + w - 3, y0 + h - 3, flip=True)
@@ -245,21 +235,18 @@ class Map:
         self.put('StoneLantern', cx + 2, y0 + 1)
 
     def farm(self, cx, cy):
-        """Trang trại phía đông: kho lớn nhiều lối vào + bãi thùng."""
+        """Trang trại phía đông: kho lớn nhiều lối vào + bãi đá."""
         self.house(cx - 9, cy - 1, 14, 10, [(cx - 2, cy - 1), (cx - 9, cy + 4), (cx + 4, cy + 4)], 7)
         self.house(cx + 7, cy - 12, 8, 7, [(cx + 7, cy - 9)], 3)
         self.road(cx - 12, cy - 6, cx + 4, cy - 3)
         for i in range(6):
             x = cx - 8 + 3 * i
-            self.breakable('CrateSmall' if i % 2 else 'Barrel', x, cy - 9, 25 if i % 2 else 15, 'Chest' if i % 2 else 'Pot')
             self.put('Rock06' if i % 3 == 0 else 'StoneCube', x + 1, cy - 11)
         for k in range(0, 18, 3):           # hàng rào ghế đá
             self.put('BenchS', cx - 10 + k, cy - 14)
-        self.put('Pot', cx - 11, cy - 8)
-        self.put('Pot', cx + 3, cy - 8)
 
     def quarry(self, cx, cy):
-        """Mỏ đá đông nam: cover dày, ít loot nhưng có lán thợ mỏ."""
+        """Mỏ đá đông nam: cover dày, có lán thợ mỏ."""
         for x in range(cx - 13, cx + 13, 3):
             for y in range(cy - 11, cy + 11, 3):
                 tx, ty = x + self.rng.randrange(2), y + self.rng.randrange(2)
@@ -270,30 +257,23 @@ class Map:
                     self.put('StoneCube', tx, ty, natural=True)
                 elif r < .7:
                     self.put('Rock06', tx, ty, natural=True)
-                elif r < .78:
-                    self.breakable('CrateSmall', tx, ty, 25, 'Chest')
-                elif r < .86:
-                    self.put('Pot', tx, ty, natural=True)
         self.house(cx - 4, cy - 3, 8, 6, [(cx, cy - 3)], 3)
         self.road(cx - 1, cy - 14, cx, cy - 4)
 
     def market(self, cx, cy):
-        """Chợ phía nam: 3 nhà dọc phố + sạp hàng (thùng phá được)."""
+        """Chợ phía nam: 3 nhà dọc phố + dãy ghế đá trước sạp."""
         self.road(cx - 18, cy - 1, cx + 18, cy + 1)
         self.house(cx - 18, cy + 3, 10, 8, [(cx - 13, cy + 3)], 5)
         self.house(cx + 8, cy + 3, 10, 8, [(cx + 13, cy + 3)], 5)
         self.house(cx - 5, cy - 11, 10, 8, [(cx, cy - 4), (cx - 5, cy - 8)], 5)
         for k in (-6, -3, 3, 6):
-            self.breakable('CrateSmall', cx + k, cy + 3, 25, 'Chest') if k % 2 else self.breakable('Barrel', cx + k, cy + 3, 15, 'Pot')
             self.put('BenchS', cx + k - 1, cy + 5)
         self.put('Well', cx - 1, cy + 7)
         self.put('StoneLantern', cx - 9, cy - 3)
         self.put('StoneLantern', cx + 9, cy - 3)
-        self.put('Pot', cx - 10, cy - 6)
-        self.put('Pot', cx + 11, cy - 6)
 
     def ruins(self, cx, cy):
-        """Phế tích tây nam: lưới cột + cổng đá, chiến trường tầm trung, rương ở bệ giữa."""
+        """Phế tích tây nam: lưới cột + cổng đá, chiến trường tầm trung; đồ do rải sàn đặt."""
         self.road(cx - 10, cy - 10, cx + 9, cy + 9)
         for gx in range(-9, 10, 4):
             for gy in range(-9, 10, 4):
@@ -306,22 +286,11 @@ class Map:
         self.put('Gate01', cx - 1, cy - 5)
         self.put('Statue01', cx - 3, cy)
         self.put('Statue01', cx + 2, cy, flip=True)
-        self.put('Chest', cx, cy)
-        self.put('Chest', cx - 1, cy)
-        self.put('Pot', cx - 7, cy + 7)
-        self.put('Pot', cx + 7, cy - 7)
-        self.breakable('CrateSmall', cx + 7, cy + 7, 25, 'Chest')
-        self.breakable('Barrel', cx - 7, cy - 7, 15, 'Pot')
 
     def camp(self, cx, cy):
         """Trại thợ săn trong rừng phía tây + chòi canh."""
         self.house(cx - 4, cy + 2, 9, 7, [(cx, cy + 2), (cx + 4, cy + 5)], 4)
-        self.breakable('Barrel', cx - 3, cy - 2, 15, 'Pot')
-        self.breakable('Barrel', cx - 2, cy - 2, 15, 'Pot')
-        self.breakable('CrateSmall', cx - 3, cy - 1, 25, 'Chest')
         self.put('BenchE', cx + 3, cy - 3)
-        self.put('Chest', cx + 2, cy - 4)
-        self.put('Pot', cx - 5, cy - 4)
         self.put('StoneLantern', cx + 5, cy - 1)
         self.put('SignE', cx - 6, cy)
         self.road(cx - 6, cy - 5, cx + 6, cy + 1)
@@ -337,8 +306,6 @@ class Map:
             a = k * math.pi / 3 + .5
             self.put('StoneLantern', cx + round(4 * math.cos(a)) - 1, cy + round(4 * math.sin(a)) - 1)
         self.put('Supply', cx - 1, cy - 1)
-        self.put('Pot', cx + 2, cy + 1)
-        self.put('Pot', cx - 3, cy - 3)
 
     # ---------- thiên nhiên ----------
     def field(self, centers, sigma):
@@ -350,8 +317,8 @@ class Map:
         return f
 
     def nature(self):
-        """Rải từng ô theo xác suất: cụm rừng (dày ở nửa tây), cụm đá (dày ở đông nam), đồng cỏ có bụi + đá lẻ; bình
-        rải đều. Góc ngoài bo đầu là rừng rậm không loot."""
+        """Rải từng ô theo xác suất: cụm rừng (dày ở nửa tây), cụm đá (dày ở đông nam), đồng cỏ có bụi + đá lẻ. Không rải
+        bình: đồ ngoài đồng do rải sàn đặt. Góc ngoài bo đầu là rừng rậm."""
         u = self.rng.uniform
         forest = self.field([(u(5, 65), u(5, 145)) for _ in range(9)] + [(u(5, 145), u(5, 145)) for _ in range(5)], (8, 14))
         rocks = self.field([(u(80, 145), u(5, 70)) for _ in range(5)] + [(u(5, 145), u(5, 145)) for _ in range(8)], (4, 8))
@@ -383,7 +350,7 @@ class Map:
             elif r < trees + rock + bush:
                 self.put('Bush', x, y, natural=True)
             elif r < trees + rock + bush + pot:
-                self.put('Pot', x, y, natural=True)
+                continue        # chỗ bình cũ: để trống (giữ chuỗi ngẫu nhiên nên rừng/đá không đổi)
             elif self.rng.random() < .006:
                 self.put(self.rng.choice(['Flower', 'GrassTuft', 'Pebble']), x, y, natural=True)
 
@@ -474,39 +441,18 @@ def build():
         m.reserve(x - 1, y - 1, x + 1, y + 1)
         spawn_cells.append((x, y))
 
-    # Loot khởi đầu quanh spawn: 3 bình + 2 bụi trong 3–6 ô.
+    # Quanh spawn: 2 bụi trong 3–6 ô làm chỗ nấp. Đồ khởi đầu và công bằng giữa các spawn do rải sàn lo
+    # (FloorLootPlanner: mỗi spawn có đồ trong 6–14 ô, ít nhất một vũ khí cận chiến hoặc thuốc).
     for (sx, sy) in spawn_cells:
-        pots = bushes = tries = 0
-        while (pots < 3 or bushes < 2) and tries < 300:
+        bushes = tries = 0
+        while bushes < 2 and tries < 300:
             tries += 1
             a = m.rng.random() * 2 * math.pi
             d = 2.5 + m.rng.random() * 2.5
             x, y = round(sx + d * math.cos(a)), round(sy + d * math.sin(a))
-            if pots < 3 and m.put('Pot', x, y, natural=True):
-                pots += 1
-            elif bushes < 2 and m.put('Bush', x, y, natural=True):
+            if m.put('Bush', x, y, natural=True):
                 bushes += 1
     m.nature()
-
-    # Cân bằng: spawn nghèo được thêm bình / thùng gỗ (rương) ở 10–22 ô tới khi đạt 85% spawn giàu nhất.
-    for _ in range(3):
-        values = [loot_value(m, x, y) for x, y in spawn_cells]
-        target = .85 * max(values)
-        for (sx, sy), v in zip(spawn_cells, values):
-            tries = 0
-            while v < target and tries < 400:
-                tries += 1
-                a = m.rng.random() * 2 * math.pi
-                d = 10 + m.rng.random() * 12
-                x, y = round(sx + d * math.cos(a)), round(sy + d * math.sin(a))
-                if math.hypot(x + .5 - C, y + .5 - C) > 68 or not m.free('Pot', x, y, True):
-                    continue
-                if target - v >= 3 and m.rng.random() < .4:
-                    m.breakable('CrateSmall', x, y, 25, 'Chest')
-                    v += 3
-                else:
-                    m.put('Pot', x, y)
-                    v += 1
 
     spawns = []
     for (x, y) in spawn_cells:
@@ -549,7 +495,7 @@ def report(m, items, spawns):
                     cover.append((p['cellX'] + i, p['cellY'] + j))
     print('Vật:', dict(kinds))
     val = {'Pot': 1, 'Chest': 3, 'Supply': 8}
-    print('Spawn  pot<=6  chest<=8  gầnRương  giáTrị<=25')
+    print('Spawn  pot<=6  chest<=8  gầnRương  giáTrị<=25  (đồ sàn không tính)')
     vs = []
     for (x, y) in spawns:
         def within(kind, r):
@@ -558,7 +504,7 @@ def report(m, items, spawns):
         v = sum(val[k] for k, a, b in loot if math.hypot(a - x - .5, b - y - .5) <= 25)
         vs.append(v)
         print(f'({x:3},{y:3})  {within("Pot", 6):5}  {within("Chest", 8):8}  {near:7.1f}  {v:6}')
-    print(f'giá trị loot quanh spawn: min {min(vs)} max {max(vs)} tỉ lệ {max(vs) / min(vs):.2f}')
+    print(f'giá trị loot quanh spawn: min {min(vs)} max {max(vs)} tỉ lệ {max(vs) / max(min(vs), 1):.2f}')
     # khoảng cách tới cover thật (BFS đa nguồn, Chebyshev) trên ô trong bo đầu
     dist = {}
     q = deque()

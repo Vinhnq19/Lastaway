@@ -38,9 +38,9 @@ MonoBehaviour:
     ContentMin: {x: -0.3375, y: -0.31875}
     ContentSize: {x: 0.675, y: 0.6375}
   - ItemId: AXE
-    Sprite: {fileID: 6674386295937086461, guid: 3311395943ddc924589a15c64ce516db, type: 3}
-    AngleOffset: -135
-    Grip: {x: 0.92, y: 0.08}
+    Sprite: {fileID: 21300000, guid: 63dffe0a8ab6409a98703639560f9930, type: 3}
+    AngleOffset: -45
+    Grip: {x: 0.08, y: 0.08}
     Length: 0.65
     Support: 0
     ContentMin: {x: -0.484375, y: -0.453125}
@@ -143,8 +143,8 @@ MonoBehaviour:
     ContentSize: {x: 0.63720703, y: 0.6020508}
   - ItemId: SAHUR_BAT
     Sprite: {fileID: -2414027456312203395, guid: f2f6ead158665ad45afd5c30860dc8a1, type: 3}
-    AngleOffset: -55
-    Grip: {x: 0.12, y: 0.08}
+    AngleOffset: 120
+    Grip: {x: 0.9, y: 0.92}
     Length: 0.72
     Support: 0
     ContentMin: {x: -0.7060371, y: -0.9529009}

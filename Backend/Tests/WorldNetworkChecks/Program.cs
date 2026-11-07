@@ -81,6 +81,7 @@ try
     var attacker=serverMatch.Entities.All.First(e=>e.NetId==clients[0].OwnNetId);
     var approach=new WorldPoint(chest.Bounds.MinX-.45f,chest.Bounds.Center.Y);
     if(!world.Layout.IsWalkable(approach,.4f,world.Destructibles.IsBroken,world.Hazards.IsDoorClosed))throw new Exception("Fixture chest approach blocked");
+    var floorAtStart=world.Floor.Items.Select(f=>f.Id).ToHashSet();
     attacker.X=approach.X;attacker.Y=approach.Y;
     for(ushort seq=1;seq<=4;seq++)
     {
@@ -95,8 +96,10 @@ try
     clients[0].Send(ref retry,true);WaitTicks(2);
     Check(world.Floor.Items.Count==beforeRetry,"duplicate attack request cannot create loot twice");
     Pump(() => clients.All(c => c.WorldObjects.Any(o => o.Id == chest.Id && (o.Flags & 1) != 0) && c.WorldObjects.Any(o => o.Kind == 100)));
-    var drop = world.Floor.Items.First(f=>f.Stack.ItemId!="AMMO"&&!f.Stack.ItemId.Contains("ARMOR")&&!f.Stack.ItemId.Contains("HELMET"));
-    Check(world.Floor.Items.Count is >= 3 and <= 4, "one chest yields one 3-4 item batch");
+    // Floor loot spread at world start stays; the chest batch is what appeared after the break (3-4 items + AMMO per gun).
+    var chestDrops = world.Floor.Items.Where(f=>!floorAtStart.Contains(f.Id)).ToList();
+    var drop = chestDrops.First(f=>f.Stack.ItemId!="AMMO"&&!f.Stack.ItemId.Contains("ARMOR")&&!f.Stack.ItemId.Contains("HELMET"));
+    Check(chestDrops.Count is >= 3 and <= 8, "one chest yields one 3-4 item batch");
     Check(clients[0].WorldObjects.Count(o => o.Kind == 100) == clients[1].WorldObjects.Count(o => o.Kind == 100), "both transports receive same floor loot");
     foreach (var actor in serverMatch.Entities.All) { actor.X = drop.X; actor.Y = drop.Y; }
     world.SyncActors();
@@ -175,8 +178,9 @@ try
     var blastHit = witness.ThrowableEvents.First(e => e.Event == 14 && e.Target == witness.OwnNetId);
     Check(blastHit.Amount > 0 && blastHit.Amount <= 30 && throwDamage == blastHit.Amount, "banana blast removes HP through the combat service (30 before armor)");
     Check(owner.ThrowableEvents.Any(e => e.Event == 14 && e.Target == witness.OwnNetId && e.Amount == blastHit.Amount), "both clients see the same hit on the witness");
+    // Container drops fan out 0.9-1.4 cells (a gun's AMMO up to 1.2 further).
     var potDrops = world.Floor.Items.Where(item => !floorBeforeBlast.Contains(item.Id) &&
-        Math.Abs(item.X - targetPot.Bounds.Center.X) <= .25f && Math.Abs(item.Y - targetPot.Bounds.Center.Y) <= .25f)
+        Math.Abs(item.X - targetPot.Bounds.Center.X) <= 2.6f && Math.Abs(item.Y - targetPot.Bounds.Center.Y) <= 2.6f)
         .Select(item => item.Id).ToArray();
     Check(world.Destructibles.IsBroken(targetPot.Id) && potDrops.Length > 0, "the network throw breaks the pot and spawns loot");
     Pump(() => clients.Take(2).All(client => client.WorldObjects.Any(o => o.Id == targetPot.Id && (o.Flags & 1) != 0) &&
@@ -196,7 +200,7 @@ try
     Pump(() => clients.Take(2).All(c => c.Result.HasValue));
     foreach (var c in clients.Take(2)) c.Replay();
     Pump(() => clients.Take(2).All(c => c.MatchId != oldMatch && c.Phase == MatchPhase.InGame), 8000);
-    Check(serverMatch.World != null && serverMatch.World.MatchId != oldMatch && serverMatch.World.Floor.Items.Count == 0, "next round resets world floor and MatchId");
+    Check(serverMatch.World != null && serverMatch.World.MatchId != oldMatch && serverMatch.World.Floor.Items.Count == serverMatch.World.InitialLoot.Placements.Count, "next round resets world floor and MatchId");
     Check(serverMatch.World!.Inventory.GetSnapshot(owner.OwnNetId).Weapons.All(s => s.IsEmpty), "next round clears previous inventory");
     var report = new { mode, passed, elapsedSeconds = clock.Elapsed.TotalSeconds, realSocketClients = clients.Select(c => new { c.Transport, c.SnapshotCount, c.WorldPacketsSeen, c.InvalidFrames }) };
     if (args.Length > 1) { var path = Path.GetFullPath(args[1]); Directory.CreateDirectory(Path.GetDirectoryName(path)!); File.WriteAllText(path, JsonSerializer.Serialize(report, new JsonSerializerOptions { WriteIndented = true })); }

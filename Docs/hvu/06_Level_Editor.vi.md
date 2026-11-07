@@ -2,7 +2,7 @@
 
 ## Map phát hành cho phòng mạng
 
-Catalog Local và tự host gồm **Tháp cổ** (`thap-co`, mặc định) và **Thị trấn** (`thi-tran`), đều 150×150. Luyện tập offline mặc định dùng Tháp cổ. Cập nhật cả GameServer và client để dùng map mạng 150×150.
+Catalog Local và tự host gồm **Tháp cổ** (`thap-co`, mặc định) và **Thị trấn** (`thi-tran`), đều 150×150. Luyện tập offline mặc định dùng Tháp cổ. Từ 07/11/2026 (version 1.2.0) cả hai map **không còn cửa**: lối vào nhà/tháp là khe tường để trống; `LevelSampleMaps` vẫn đặt cửa lúc dựng để giữ trống lối vào rồi xoá trước khi lưu. Cập nhật cả GameServer và client để dùng map mạng 150×150.
 
 1. **Tạo/sửa:** mở Level Editor, Play, mở JSON map và chỉnh bố cục. Map phát hành phải vuông, cạnh 30–256 ô và đúng 10 spawn an toàn cách nhau tối thiểu 6 cell, portal đủ cặp, không chồng vật cản. Bấm **Kiểm tra**. Lưu bản nguồn bằng **Lưu thành…**; không sửa file theo hash đang phát hành.
 2. **Xuất:** menu **Jungle Maze → Level Editor → Export Published Map**. Nhập ID ổn định, tên, mô tả, version mới; chọn mặc định nếu cần. Khi Level Editor đang Play, công cụ dùng bản đồ đang mở; ngoài Play, chọn JSON. Bấm **Kiểm tra và xuất map + preview vào catalog**. Preview là ảnh sơ đồ sinh từ đúng geometry/placements/spawn. Scene và catalog asset của Level Editor được giữ nguyên.
@@ -132,22 +132,22 @@ Bản nháp sinh bằng `Tools/Level/survival_map_150.py` (tất định theo se
 
 | Khu | Vị trí | Vai trò |
 |---|---|---|
-| Đền trung tâm 28×28 | tâm | Hot drop: 2 thùng tiếp tế, 4 phòng góc có rương, 4 cổng rộng 2 ô |
-| Làng (4 nhà) | bắc | Rương + bình trong nhà |
-| Nghĩa địa + hầm mộ | đông bắc | Bia mộ làm cover, rương trong hầm |
-| Trang trại | đông | Kho lớn 3 lối vào, bãi thùng |
-| Mỏ đá | đông nam | Cover dày, ít loot |
-| Chợ (3 nhà) | nam | Sạp thùng phá được |
-| Phế tích | tây nam | Lưới cột/cổng đá, chiến tầm trung |
+| Đền trung tâm 28×28 | tâm | Hot drop: 2 thùng tiếp tế, 4 phòng góc mỗi phòng 1 rương, 4 cổng rộng 2 ô |
+| Làng (4 nhà) | bắc | 2 rương mỗi nhà |
+| Nghĩa địa + hầm mộ | đông bắc | Bia mộ làm cover, 2 rương trong hầm |
+| Trang trại | đông | Kho lớn 3 lối vào, bãi đá |
+| Mỏ đá | đông nam | Cover dày, lán có 1 rương |
+| Chợ (3 nhà) | nam | 2 rương mỗi nhà, ghế đá trước sạp |
+| Phế tích | tây nam | Lưới cột/cổng đá, chiến tầm trung (đồ do rải sàn) |
 | Trại thợ săn | tây | Trong rừng dày |
 | Vòng đá rune | tây bắc | Thùng tiếp tế thứ 3, trống trải → phải liều |
 
 Luật cân bằng (số đo lúc tạo):
 - Bo đầu là hình tròn r=75 quanh tâm (lịch bo map 50 nhân 3), nên góc map nằm ngoài bo ngay từ đầu: loot/portal/khu chỉ đặt trong r ≤ 68; góc là rừng rậm không loot.
-- 10 spawn quanh vòng r≈57, giữa các khu. Mỗi spawn có 3–5 bình trong 6 ô; rương gần nhất cách ≥ 9 ô. Giá trị loot trong 25 ô (bình 1, rương 3, tiếp tế 8) lệch tối đa **1.17 lần** giữa các spawn (map1 cũ: 2.24).
-- Cover thật (đá, khối đá, tường, tượng, cột; không tính cây vì gốc cây chỉ ~0.3 ô): ô trống trong bo cách cover gần nhất trung vị 2 ô, p90 5 ô; chỉ 4.9% ô xa hơn 6 ô (tầm súng ngắn nhất).
+- 10 spawn quanh vòng r≈57, giữa các khu, có 2 bụi trong 3–6 ô; rương gần nhất cách ≥ 9 ô. Đồ khởi đầu và công bằng giữa các spawn do rải sàn lo (`FloorLootPlanner`, [07_Floor_Loot.vi.md](07_Floor_Loot.vi.md)): mỗi spawn có ít nhất 2 chỗ có đồ trong 6–14 ô, trong đó có vũ khí cận chiến hoặc thuốc.
+- Cover thật (đá, khối đá, tường, tượng, cột; không tính cây vì gốc cây chỉ ~0.3 ô): ô trống trong bo cách cover gần nhất trung vị 3 ô, p90 6 ô; 7.3% ô xa hơn 6 ô (tầm súng ngắn nhất). Trước khi bỏ thùng gỗ: trung vị 2, p90 5, 4.9%.
 - 3 cặp portal (r=37) nối hai phía đối diện để xoay vòng nhanh khi bo co.
-- Tổng: 64 rương, 201 bình (+ thùng gỗ/thùng tròn phá được), 3 thùng tiếp tế, 340 bụi.
+- Tổng (07/11/2026, sau khi chuyển sang rải sàn): **3233 object**, 25 rương (khoảng 1/3 số cũ, chỉ trong nhà/phòng đền), 0 bình, 0 thùng gỗ/thùng tròn, 3 thùng tiếp tế, 333 bụi. Rải sàn cho map này: 169 chỗ, trung bình 128.8 món sàn + 3.8 hộp đạn mỗi trận, ~3366 object/trận (trần 4096), tổng món mỗi trận ≈ 233 (104 trong thùng). Trước đó: 3459 object, 64 rương, 201 bình (+ thùng gỗ/thùng tròn), không còn ngân sách cho rải sàn.
 - Không có cửa: lối vào nhà/đền/phòng là khe tường để trống, lát đá liền sàn; không vật nào được đặt chắn khe (map sinh tồn cần vào/ra nhanh, cửa gỗ chỉ làm chậm và che tầm nhìn). Trước đây có 36 cửa.
 
 `MapLayoutGenerator.Validate` tính trước ô bị chặn cho bước kiểm spawn thông nhau (cùng luật `IsWalkable`), nên `Build` map này mất 0.14 s thay vì 6.4 s, hash không đổi.

@@ -15,6 +15,11 @@ namespace JungleMaze.App.Hud.Feedback
             var n=0;Append(buffer,ref n,status.Phase==ItemUsePhase.Cancelled?"Đã hủy":status.Phase==ItemUsePhase.Completed?"Xong":"Đang dùng ");
             if(status.Phase==ItemUsePhase.Using)Append(buffer,ref n,status.DisplayName??status.ItemId);return n;
         }
+        /// <summary>Action-bar label of the local reload: "Đang nạp đạn", then "Xong" or "Đã hủy" like item use.</summary>
+        public static int ReloadLabel(char[] buffer,ItemUsePhase phase)
+        {
+            var n=0;Append(buffer,ref n,phase==ItemUsePhase.Cancelled?"Đã hủy":phase==ItemUsePhase.Completed?"Xong":"Đang nạp đạn");return n;
+        }
         public static int Tenths(char[] b,float seconds)
         {
             var n=0;var value=(int)Math.Min(int.MaxValue,Math.Ceiling(Math.Max(0,seconds)*10-0.00001));Number(b,ref n,value/10);Char(b,ref n,'.');Char(b,ref n,(char)('0'+value%10));Char(b,ref n,'s');return n;

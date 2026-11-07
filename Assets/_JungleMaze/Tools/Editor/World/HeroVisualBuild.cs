@@ -92,7 +92,7 @@ namespace JungleMaze.EditorTools
             { "TREE_BRANCH", (-50f, new Vector2(.10f, .05f), .70f, 0f) },
             { "KNIFE", (0f, new Vector2(.12f, .50f), .60f, 0f) },
             { "BONE", (-45f, new Vector2(.12f, .12f), .60f, 0f) },
-            { "AXE", (-135f, new Vector2(.92f, .08f), .65f, 0f) },
+            { "AXE", (-45f, new Vector2(.08f, .08f), .65f, 0f) },
             { "MACE", (-135f, new Vector2(.90f, .08f), .65f, 0f) },
             { "RUBBER_GUN", (-90f, new Vector2(.50f, .08f), .80f, 0f) },
             { "SCEPTER", (-90f, new Vector2(.50f, .05f), .85f, 0f) },
@@ -105,7 +105,17 @@ namespace JungleMaze.EditorTools
             { "SEED", (0f, new Vector2(.50f, .50f), .25f, 0f) },
             { "ROPE", (0f, new Vector2(.10f, .50f), .60f, 0f) },
             { "BELL", (0f, new Vector2(.50f, .50f), .40f, 0f) },
-            { "SAHUR_BAT", (-55f, new Vector2(.12f, .08f), .72f, 0f) },
+            { "SAHUR_BAT", (120f, new Vector2(.90f, .92f), .72f, 0f) },
+        };
+
+        /// <summary>
+        /// Held art that replaces the ART-04 source sprite. The JSurviv axe draws its blade on the side that faces up when
+        /// aimed right, so a swing (raised back, then struck down) would hit with the back of the head; this copy is the
+        /// same slice mirrored left↔right so the edge leads the strike.
+        /// </summary>
+        private static readonly Dictionary<string, string> SpriteOverrides = new Dictionary<string, string>
+        {
+            { "AXE", "Assets/_JungleMaze/Art/Characters/axe_held.png" },
         };
 
         /// <summary>Reads each weapon's source sprite and slice from the ART-04 inventory and applies <see cref="Tuning"/>.</summary>
@@ -130,15 +140,17 @@ namespace JungleMaze.EditorTools
                 if (cut >= 0) slice = slice.Substring(0, cut);
                 slice = slice.Trim();
                 if (slice == "full image") slice = "";
+                var source = cells[6];
+                if (SpriteOverrides.TryGetValue(cells[2], out var replacement)) { source = replacement; slice = ""; }
                 Sprite sprite = null, first = null;
-                foreach (var asset in AssetDatabase.LoadAllAssetsAtPath(cells[6]))
+                foreach (var asset in AssetDatabase.LoadAllAssetsAtPath(source))
                 {
                     if (!(asset is Sprite candidate)) continue;
                     if (first == null) first = candidate;
                     if (slice.Length > 0 && candidate.name == slice) { sprite = candidate; break; }
                 }
                 sprite = sprite != null ? sprite : first;
-                if (sprite == null) { Debug.LogWarning("[HeroVisualBuild] No sprite for " + cells[2] + ": " + cells[6]); continue; }
+                if (sprite == null) { Debug.LogWarning("[HeroVisualBuild] No sprite for " + cells[2] + ": " + source); continue; }
                 var min = new Vector2(float.MaxValue, float.MaxValue);
                 var max = new Vector2(float.MinValue, float.MinValue);
                 foreach (var v in sprite.vertices) { min = Vector2.Min(min, v); max = Vector2.Max(max, v); }

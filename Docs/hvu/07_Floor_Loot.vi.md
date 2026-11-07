@@ -1,0 +1,132 @@
+# Loot rải sàn, hiệu ứng độ hiếm và đồ bắn ra khi phá thùng
+
+Cập nhật 07/11/2026. Yêu cầu của người: bớt dựa vào thùng/hộp phá được, thay bằng thuật toán rải đồ quanh map (cân bằng, ở những chỗ nhất định); đồ trên sàn to bằng cỡ cầm tay, lơ lửng và có ánh sáng theo độ hiếm (kiểu Fortnite/Borderlands); đồ trong thùng khi đập thì bắn bật ra có animation (kiểu Fortnite); súng cần đạn thì có hộp đạn ở gần (lơ lửng, ánh sáng trắng common).
+
+Người đã bỏ qua phần hỏi thiết kế; mọi mục dưới đây là quyết định của Claude, ghi để người sửa nếu không đúng ý.
+
+## 1. Nguyên tắc
+
+- **Server quyết loot.** Rải sàn chạy lúc bắt đầu trận trong code dùng chung `Backend/Shared/World` (package `com.junglemaze.world`), dùng cho cả GameServer (`MatchWorldRuntime`) lẫn Luyện tập offline (`OfflineWorldSession`). Client chỉ vẽ.
+- **Không đổi protocol.** Đồ trên sàn vẫn là `WorldObjectWire` Kind 100 (`ItemId`, `Count`) như hiện nay. Hoạt ảnh bắn ra suy từ snapshot (mục 5).
+- **Số liệu trong JSON** (`Backend/Shared/GameData/items_catalog.json`, đồng bộ sang `StreamingAssets/JungleMaze/runtime/` bằng menu *Jungle Maze → Phase 2 → Sync Runtime Data*; giữ manifest Sync sinh ra).
+
+## 2. Chỗ rải đồ (cố định theo map) — `FloorLootPlanner`
+
+Chỗ rải được tính **tất định từ hình học map** (cùng map = cùng chỗ, không cần sửa map hay Level Editor); thứ rơi ra ở mỗi chỗ thì **ngẫu nhiên theo trận**, giống loot sàn của Fortnite.
+
+1. Ứng viên: tâm các ô đi được với bán kính hero (`MapLayout.IsWalkable`, cửa coi là mở), không nằm trên hazard (đầm/lava/độc), cách portal, cửa và vật phá được ≥ 1 ô, cách điểm spawn ≥ 3 ô, nằm trong bo đầu trận (`InitialZoneRadius`; với map tác giả dùng r = size/2).
+2. Điểm ưu tiên của ô:
+   - **Trong nhà** (có tường/che cứng trong 4 ô ở ít nhất 3 trong 4 hướng): cao nhất.
+   - **Sát cover** (che cứng trong 2 ô): vừa.
+   - **Bãi trống**: thấp.
+3. Chọn theo điểm ưu tiên giảm dần với khoảng cách tối thiểu (Poisson): 3 ô giữa hai chỗ trong nhà, 5 ô ở ngoài. Dừng khi đủ số lượng.
+4. Số chỗ = `diện tích đi được / AreaPerSpot` − `giá trị đồ của thùng có sẵn` (bình = 1, rương = 2 chỗ). Vì vậy map nhiều thùng tự rải ít đồ sàn hơn, map ít thùng rải nhiều hơn. Chặn trên theo ngân sách object: `WorldWire.MaxObjects − Layout.Objects.Count − ReserveObjects` (dự phòng cho đồ rơi từ thùng/xác chết).
+
+## 3. Đồ ở mỗi chỗ (ngẫu nhiên theo trận)
+
+- Seed trận khác nhau mỗi trận (server: seed của trận; offline: seed mới mỗi lần vào luyện tập). Cùng seed = cùng kết quả (test được).
+- Mỗi chỗ có `SpotChance` (mặc định 0,75) để có đồ.
+- Vòng độ khó theo khoảng cách tới tâm map: ngoài (r > 0,66R), giữa, trong (r < 0,33R). Vòng trong nhiều đồ hiếm hơn.
+- Chọn đồ: nhóm theo `FloorGroupWeights` (6 nhóm như `LootTable`), món trong nhóm theo `Weight × hệ số độ hiếm của vòng` (`TierRarityMultipliers[vòng][độ hiếm]`). Chỉ món `Enabled` có nguồn `Pot` hoặc `Chest` (không lấy món chỉ có ở `Supply`).
+- **Công bằng spawn:** mỗi spawn có ít nhất `MinNearSpawn` (2) chỗ có đồ trong 6–14 ô, trong đó ít nhất một vũ khí cận chiến hoặc thuốc hồi máu (ép bật chỗ gần nhất nếu thiếu).
+
+## 4. Súng kèm hộp đạn
+
+Mọi lần sinh súng có băng đạn (`MagazineSize > 0`) — rải sàn, rơi từ rương, từ thùng tiếp tế — đều sinh thêm `AMMO` (`AmmoBoxes`, mặc định 2 hộp) ở điểm đi được cách súng 0,8–1,2 ô. Logic đặt trong helper dùng chung (một chỗ), không chép ở từng nơi.
+
+## 5. Đồ rơi từ thùng
+
+- Server: đồ rơi ra **toả vòng 0,9–1,4 ô** quanh tâm thùng (góc chia đều + lệch theo seed), mỗi món ở điểm đi được (không được thì kéo dần vào tâm). Thay cho cụm 0,25 ô hiện nay.
+- Client: một món Kind 100 **mới xuất hiện** trong cùng lần cập nhật (hoặc ≤ 0,5 s sau) với một rương/bình/thùng tiếp tế cách ≤ 2 ô **vừa chuyển sang vỡ** → bay từ tâm thùng theo đường cong (cao ~0,8 ô, 0,45 s, ease-out, nảy nhẹ khi chạm đất), mỗi món trễ hơn món trước 0,05 s, rồi chuyển sang lơ lửng. Đồ có sẵn lúc vào trận (rải sàn) chỉ hiện dần, không bay.
+
+## 6. Độ hiếm
+
+Thêm trường `Rarity` (`Common, Uncommon, Rare, Epic, Legendary`) vào `ItemDefinition` và `items_catalog.json`:
+
+| Độ hiếm | Món |
+| --- | --- |
+| Common (trắng) | TREE_BRANCH, KNIFE, BONE, BANANA, SEED, WOODEN_HELMET, WOODEN_ARMOR, GOD_LEAF, SPIRIT_TEAR, AMMO |
+| Uncommon (xanh lá) | AXE, SMOKE, METEORITE_FRAGMENT, SPIKE_HELMET, ARMOR, MERMAID_TAIL, ADRENALINE, RUBBER_GUN |
+| Rare (xanh dương) | CRYSTAL, ROPE, SAHUR_BAT, PHOENIX_FEATHERS, MAGIC, CROSSBOW |
+| Epic (tím) | SHOTGUN, BELL, MAGIC_HELMET, MAGIC_ARMOR, ELIXIR, UNICORN_BLOOD, SCEPTER |
+| Legendary (vàng cam) | MACE, ELIXIR_OF_LIFE, COMPASS |
+
+## 7. Hình đồ trên sàn (client)
+
+- **Cỡ cầm tay:** vũ khí cận chiến/súng dùng sprite và `Length` của `HeldWeaponCatalog`; đồ ném dùng `ThrowableArtCatalog`; giáp, thuốc và hộp đạn dùng icon (`IItemIconProvider`) cỡ ~0,8 ô (hộp đạn ~0,55 ô). Nghiêng ~30° cho dễ nhìn.
+- **Lơ lửng:** nhấp nhô ±0,08 ô, chu kỳ ~1,6 s, lệch pha theo Id; bóng elip mờ dưới đất co giãn theo độ cao.
+- **Ánh sáng độ hiếm:** quầng sáng mềm dưới chân + cột sáng dọc (cao hơn với độ hiếm cao hơn), màu theo bảng mục 6; Epic/Legendary có thêm vài đốm lấp lánh. Hộp đạn: quầng trắng nhỏ, không cột sáng.
+- Vẽ ở layer `Default` (theo Y như vật khác) để tán cây che được; pooled, không `Destroy` mỗi lần cập nhật.
+
+## 8. Map Rừng Sinh Tồn
+
+`Tools/Level/survival_map_150.py` bớt hẳn bình/thùng gỗ/thùng tròn rải ngoài đồng; nhà vẫn giữ một ít rương; thùng tiếp tế giữ nguyên. Phần đồ còn lại do rải sàn bù (mục 2.4). Map `map1_thap_co`/`map2_thi_tran` của Vinh không sửa: rải sàn tự bù theo số thùng của chúng.
+
+## 9. Số đo (phần shared/server, 07/11/2026)
+
+Đo bằng `dotnet run --project Backend/Tests/FloorLootChecks/FloorLootChecks.csproj` (203 check), 200 seed mỗi map, map đọc từ `Assets/_JungleMaze/Levels/`. "Món" = món loot không tính hộp đạn đi kèm súng; giá trị thùng là kỳ vọng `LootTable.Roll` (rương 3,5, bình 1,5, tiếp tế ~6 món).
+
+| Map | Object map | Rương/bình/tiếp tế | Ô đi được trong bo | Chỗ theo diện tích | Ngân sách object | Chỗ (công bằng / trong nhà) | Món sàn/trận | Hộp đạn kèm súng/trận | Object/trận (trần 4096) | Món trong thùng | Tổng món | PlanSpots |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| map1_thap_co | 1605 | 32/56/2 | 16349 | 41 | 1632 | 52 (11 / 41) | 43,2 | 1,6 | ~1650 (max 1656) | 207 | 250 | 4,9 ms |
+| map2_thi_tran | 1493 | 35/45/2 | 16518 | 52 | 1642 | 62 (10 / 51) | 50,8 | 1,5 | ~1545 (max 1554) | 201 | 252 | 4,8 ms |
+| map3_rung_sinh_ton (trước mục 8) | 3459 | 64/201/3 | 15080 | 0 | **0** | 0 | 0 | 0 | 3459 | 542 | 542 | 5,0 ms |
+| map3 mô phỏng mục 8 (0 bình, giữ 1/3 rương) | 3216 | 22/0/3 | 15335 | 179 | 608 | 181 | 136,9 | – | – | 94 | 230 | – |
+| map3_rung_sinh_ton (sau mục 8, mục 10) | 3233 | 25/0/3 | 15339 | 166 | 579 | 169 (3 / 167) | 128,8 | 3,8 | ~3366 (max 3382) | 104 | 233 | 5,3 ms |
+
+- Thời gian: `PlanSpots` 4–8 ms cho map 150×150 (lưới ô tính trước + tổng tiền tố, không gọi `IsWalkable` từng ô); `Roll` ~0,02 ms. So với `AuthoredMapDocument.Build`+Validate cùng máy: 18–78 ms. Server tính chỗ một lần mỗi map lúc khởi động (`MatchWorldSetup.Prewarm`, cả khi reload catalog trên thread phụ), mỗi trận chỉ `Roll`.
+- Phân bố độ hiếm (map1, theo vòng): ngoài Common 67% / Uncommon 25% / Rare 5% / Epic 3%; giữa 53/28/10/9; trong 36/30/17/17. Legendary chỉ có ở tiếp tế nên không xuất hiện trên sàn.
+- **map3 hiện tại không còn chỗ cho đồ sàn**: 3459 object + dự phòng xấu nhất cho đồ rơi từ thùng (64×4 + 201×2 + 3×8 = 682) + `ReserveObjects` 160 đã vượt 4096. Cần mục 8 (bớt bình/thùng) thì rải sàn mới có tác dụng; bản mô phỏng ở dòng cuối cho thấy sau khi bớt, 60% món nằm trên sàn và tổng món (230) ngang map1/map2.
+
+Mặc định đã chọn (`Loot.Floor` trong `items_catalog.json`) và lý do:
+
+- `AreaPerSpot = 55`, `ChestSpots = 4.5`, `PotSpots = 2`, `SupplySpots = 0`, `SpotChance = 0.75`. Một chỗ ra trung bình 0,75 món, nên một rương (3,5 món) tương đương 4,5 chỗ và một bình (1,5 món) tương đương 2 chỗ. Với các hệ số này, tổng món mỗi trận ≈ 0,75 × diện tích / 55 ≈ 220–230, **không phụ thuộc số thùng** (miễn còn chỗ dương). Map nhiều thùng thì đồ chủ yếu nằm trong thùng, map ít thùng thì nằm trên sàn. map1: 207 món trong thùng + 43 món sàn = 250 (+21% so với hiện trạng 207). Phần dư chủ yếu đến từ chỗ công bằng spawn (11 chỗ). *Khác mục 2.4*: tài liệu ghi bình = 1, rương = 2 chỗ. Với số đó, map ít thùng chỉ được khoảng một nửa tổng đồ của map1, trái với mục tiêu "tương đương".
+- `GroupWeights = [22, 8, 3, 22, 25, 20]` (cận chiến, súng, đạn, ném, tiêu hao, giáp). Tên trong JSON là `Floor.GroupWeights` (tài liệu gọi `FloorGroupWeights`). Súng thấp vì rương đã ra nhiều súng (nhóm súng của rương là 20). Đạn lẻ thấp vì súng đã có hộp đi kèm.
+- `TierRarityMultipliers` (hàng: ngoài, giữa, trong; cột: Common…Legendary) = `[1.3, 1, .45, .2, .1]`, `[1, 1.1, 1, .6, .3]`, `[.6, 1, 1.5, 1, 1]`. Trọng số món = `GroupWeights[nhóm] × Weight × hệ số / tổng Weight của nhóm`. Khi mọi hệ số bằng 1, công thức này đúng bằng "chọn nhóm rồi chọn món theo Weight". Khi hệ số khác 1 thì nó dời được cả nhóm có một món duy nhất (SHOTGUN): nếu chỉ nhân trong nhóm thì shotgun ngoài rìa vẫn ra như ở tâm.
+- Chỗ: trong nhà = có tường/che cứng/cửa trong 4 ô ở **ít nhất 7/8 hướng**. *Khác mục 2.2* (3/4 hướng): cây import thành `Wall` nên với 3/4 hướng, 100% chỗ ở map rừng bị coi là trong nhà. Sát cover = có che cứng trong ô vuông ±2. Ngoài ra còn tránh bụi cây (đồ trong bụi bị che mất) và giữ ≥ 1 ô khỏi portal/cửa/vật phá được.
+- Ngân sách object = `min(4096 − object map, 2048) − ReserveObjects (160) − số món tối đa thùng có thể rơi`. *Khác mục 2.4*: dự phòng cho đồ thùng tính theo số thùng thực tế thay vì một hằng số, vì map3 riêng phần đồ thùng đã cần tới 682 object.
+- `MinNearSpawn = 2` trong 6–14 ô, `AmmoBoxes = 2` (một stack AMMO số lượng 2; chỗ sàn ra đạn lẻ cũng là stack 2), hộp đạn cách súng 0,8–1,2 ô, toả đồ thùng 0,9–1,4 ô, `DropClearance = 0.3`, `ReserveObjects = 160`.
+- Seed: server lấy `LootSeeds.FromGuid(MatchId)`. Đồ trong thùng giờ cũng trộn seed trận (`LootSeeds.Mix(seed, LootSeed)`). Trước đây map tác giả có `Layout.Seed = 0` nên cùng một rương luôn ra cùng một bộ đồ ở mọi trận.
+
+## 10. Client (07/11/2026)
+
+**Luyện tập offline** (`Application/World/OfflineWorldSession.cs`) dùng đúng helper của server: dựng `LootSurface(map, Floor.DropClearance, IsBroken)` và `FloorLootPlanner.PlanSpots` một lần khi tạo phiên; mỗi lần vào luyện tập (MatchId mới) lấy `LootSeeds.FromGuid(MatchId)` rồi `Roll` và rải lên sàn (`InitialLoot`, `LootSeed`). Đồ rơi từ thùng dùng `LootDrops.ForContainer` (toả 0,9–1,4 ô, súng kèm hộp đạn, rải hết hoặc không rải gì), `CanSpawnLoot` dùng `CountForContainer`. Seed thùng trộn seed trận như server. Map offline vẫn là `map1_thap_co`.
+
+**Hình đồ trên sàn** (`Presentation/World/Loot/`): `WorldSceneView` chuyển mọi `WorldObjectWire` kind 100 cho `GroundLootLayer`; `WorldObjectView` chỉ còn lo các kind khác. Mỗi món là một `GroundLootView` lấy từ pool (`Core.Pooling.ObjectPool`): bóng và quầng sáng ở sorting layer `Ground`, cột sáng + món + đốm lấp lánh trong `SortingGroup` ở `WorldDynamic` xếp theo Y tại điểm chạm đất như rương/hero, nên tán cây (`Foreground`) che được. GameObject layer `Default`. Cỡ: vũ khí cận chiến/súng theo `HeldWeaponCatalog.Length` (nghiêng 30°), đồ ném theo `ThrowableArtCatalog.FlightSize` × 1,25 (art bay dạng sợi dài hơn 3:1 như dây thừng thì dùng icon HUD), giáp/thuốc icon 0,8 ô, hộp đạn 0,55 ô. Catalog HUD chưa có icon AMMO nên builder vẽ một hộp đạn pixel 16×14.
+
+**Bắn ra khi phá thùng:** `Application/World/GroundLootArrivals.cs` (C# thuần, chỉ đọc snapshot nên chạy cả online lẫn offline): món kind 100 mới xuất hiện ≤ 0,5 s sau khi rương/bình/thùng tiếp tế cách ≤ 2 ô chuyển sang vỡ thì bay từ tâm thùng, mỗi món trễ 0,05 s; món mới nằm trong 1,25 ô quanh một món vừa bay cùng lần cập nhật (như hộp đạn của súng, có thể cách thùng tới ~2,6 ô) bay theo cùng thùng; snapshot đầu tiên (vào trận) và mọi món khác chỉ hiện dần. Đường bay `GroundLootMotion.Flight`: ease-out, cao 0,8 ô, 0,45 s (22% cuối là cú nảy 0,1 ô), xoay một vòng; quầng/cột sáng hiện dần 0,25 s sau khi chạm đất.
+
+**Chỉnh số:** mọi màu/kích thước/thời gian nằm trong `Assets/_JungleMaze/Art/World/Resources/GroundLootTuning.asset` (bảng `Rarities` theo độ hiếm: màu quầng, cỡ quầng, màu/cao/rộng cột, số đốm). Sprite quầng/cột/đốm/hộp đạn và material unlit (`Universal Render Pipeline/2D/Sprite-Unlit-Default`, alpha blend, không additive) sinh bằng menu **Jungle Maze → Loot → Build Ground Loot Assets** (`Tools/Editor/World/GroundLootAssetBuilder.cs`); chạy lại chỉ cập nhật tham chiếu art, giữ số đã chỉnh.
+
+**Ảnh** (`Docs/Reports/FloorLoot_2026-11-07/`, Luyện tập offline map1): `01_rarity_light.jpg` năm độ hiếm (hàng trên vũ khí, hàng dưới giáp/thuốc/đồ ném) và hộp đạn; `02_gun_ammo_indoor.jpg` shotgun (Epic) do planner rải trong nhà kèm hộp đạn; `03_chest_burst_frames.jpg` chuỗi khung hình đập rương (trước, 20–900 ms); `04_ingame_hud.jpg` khung hình game có HUD. Ảnh 01/03/04 có món đặt thêm bằng code để chụp đủ độ hiếm; ảnh 03 dựng từng khung bằng `GroundLootView.Render(t)` để thời điểm chính xác.
+
+Kiểm: EditMode `GroundLootArrivalsTests` (8), `GroundLootViewTests` (5), `OfflineWorldSessionTests` thêm 2 test (rải sàn theo planner + đổi seed mỗi lượt; đồ rương toả quanh rương, súng có hộp đạn). Test offline cũ chạy với `Floor.Enabled = false` vì chúng đếm đồ trên sàn do chính test tạo.
+
+Giới hạn: online chưa playtest với GameServer (logic bắn ra chỉ dựa snapshot, đã test thuần); món nhặt lên rồi bỏ lại chỉ hiện dần; món rơi từ thùng mà bị đẩy ra xa hơn 2 ô (vướng vật cản) và không nằm cạnh món đã bay thì chỉ hiện dần.
+
+## 11. Danh sách nhặt đồ (client, 07/11/2026)
+
+Kiểu Fortnite, theo quyết định CPO 07/11/2026.
+
+**Cách hoạt động.** Khi có ≥ 1 món đồ sàn (`WorldObjectWire` kind 100) trong tầm nhặt **1,2 ô** (khoảng cách tâm, bằng `pickupRadius` của `InventoryService` trên server), một panel nền đen trong suốt (60%, bo góc `HudRound6`) hiện ở bên phải nhân vật. Panel bám theo nhân vật: mép trái cách nhân vật 1,3 ô (vừa qua tầm nhặt nên không đè lên món trong tầm), giữa panel cao hơn chân 0,5 ô. Panel bị kẹp trong màn hình và luôn nằm trên các khối HUD dưới nằm ngay bên dưới nó (Vitals, QuickBar, EffectsRow, PickupFeed). Mỗi dòng gồm dải màu độ hiếm bên trái (màu quầng sáng của `GroundLootTuning`), icon (`IItemIconProvider`), tên và "×N" cho thuốc, đồ ném và hộp đạn. Dòng xếp từ gần đến xa. Panel hiện tối đa 5 dòng, thừa thì thêm dòng "+N".
+- Tên lấy từ `HudItemLabels.DisplayName`, cùng nguồn với thông báo nhặt của HUD. Hiện đó là `displayName` tiếng Anh trong balance JSON (Q10 của UI-01). Chưa có tên tiếng Việt nên không đặt tên mới.
+- Dòng đang chọn có nền sáng hơn, viền vàng (`HudPalette.Amber`) và phím **[F] Nhặt**, cùng kiểu phím "R Nạp" của QuickBar. Món đó cũng được làm nổi trên sàn: quầng sáng to ×1,4, sáng ×1,6 và "thở" nhẹ, món to ×1,1, chuyển trong 0,1 s.
+- **Chọn:** mặc định chọn món gần nhất, và lựa chọn đi theo món gần nhất khi nhân vật di chuyển. **Lăn chuột** (chỉ khi có món trong tầm) đổi dòng chọn: lăn xuống là món xa hơn, lăn lên là món gần hơn, đi hết danh sách thì quay vòng. Món đã chọn bằng chuột giữ nguyên theo Id khi thứ tự thay đổi, miễn còn trong tầm. Ra khỏi tầm hoặc bị nhặt thì về lại món gần nhất. Nếu món đang chọn nằm sau dòng thứ 5 thì cửa sổ 5 dòng cuộn theo.
+- **F** nhặt đúng món đang chọn. Không có món nào trong tầm thì F vẫn mở/đóng cửa như cũ. Trước đây F chọn món gần **con trỏ chuột**, nay đổi sang món đang chọn trong danh sách.
+- **Chống nhấp nháy:** món vừa ra khỏi tầm còn ở lại trong danh sách 0,2 s (mờ 45%, F không nhặt được). Panel hiện/ẩn bằng fade 0,12 s. Khi đang mờ dần, panel giữ nguyên các dòng cuối.
+- Không chạy khi menu chặn input (`BlocksGameplayInput`), khi chết hay khi không ở scene Game: lúc đó danh sách bị xoá, panel mờ đi và bỏ làm nổi. Tự nhặt giáp, mũ và đạn (≤ 0,6 ô) giữ nguyên.
+- Client chỉ chọn món và gửi ý định nhặt. Server/phiên offline vẫn kiểm tầm và quyết định món có vào túi hay không.
+
+**File.**
+- `Application/World/NearbyLootPicker.cs`: lớp C# thuần, giữ danh sách, thứ tự, lựa chọn, lăn chuột, thời gian lưu lại và cửa sổ 5 dòng. Đăng ký một instance trong `Bootstrap.World.cs`.
+- `Presentation/World/Phase2/WorldSceneView.cs`: cả nhánh online (`Update`) lẫn offline (`UpdateOffline`) gọi chung `UpdatePickupList`, thay cho hai đoạn chọn món theo con trỏ bị trùng trước đây.
+- `Presentation/UI/Hud/PickupListView.cs` nằm trên `Hud.prefab → PickupList` (cùng Canvas, font `HudText`/`HudNumber` và sprite với HUD). Các dòng được dựng lúc Start dưới một Canvas con nên di chuyển theo nhân vật không làm dựng lại cả HUD.
+- `Presentation/World/Loot/GroundLootLayer.Select`, `GroundLootView.SetSelected`: phần làm nổi món đang chọn.
+
+**Chỉnh.** Bố cục, màu và thời gian của panel nằm ở `Hud.prefab → PickupList → Pickup List View → Layout`: `OffsetCells`, `RaiseCells`, `Width` 280, `RowHeight` 30, `Background` (alpha 0,6), `LingerAlpha`, `FadeSeconds`, màu phím. Muốn panel tránh thêm khối HUD nào thì thêm vào `Keep Clear Of`. Phần làm nổi trên sàn nằm ở `GroundLootTuning.asset`, nhóm "Selected by the F pickup list" (`SelectedHaloScale`, `SelectedGlowBoost`, `SelectedItemScale`, `SelectedPulse`, `SelectedBlendSeconds`). Tầm 1,2 ô, tối đa 5 dòng và thời gian lưu 0,2 s là tham số constructor của `NearbyLootPicker` trong `Bootstrap.World.cs`. Tầm phải khớp với server.
+
+**Ảnh** (`Docs/Reports/PickupList_2026-11-07/`, Luyện tập offline): `01_one_item.png` đứng cạnh một shotgun (Epic), `02_many_items_wheel_second.png` có 8 món trong tầm (5 dòng + "+3"), dòng thứ hai đang được chọn sau một nấc lăn chuột. Món trong ảnh được đặt thêm bằng code. Nấc lăn được giả lập bằng cách gọi `NearbyLootPicker.Update(..., scrollSteps: 1, ...)`, vì MCP không bơm được `Input.mouseScrollDelta`. Lệnh nhặt được kiểm bằng `OfflineWorldSession.Pickup(TargetId)`: món đã chọn vào túi, lựa chọn về lại món gần nhất.
+
+Kiểm: EditMode `NearbyLootPickerTests` (10), `GroundLootViewTests.Layer_SelectHighlightsOnlyThePickupTarget_AndForgetsPickedItems` (1), kèm chạy lại `Layer_SizesByArt_PoolsViews_AndLaunchesFromABrokenChest` vì `GroundLootView.Render` đã đổi.
+
+Giới hạn: chưa playtest online với GameServer (hai nhánh dùng chung một lớp). Phím F và lăn chuột thật chưa bấm tay qua MCP. Panel không có test PlayMode riêng. Lăn chuột hiện chưa có chức năng nào khác trong scene Game; nếu sau này lăn chuột dùng để zoom hay đổi vũ khí thì cần chia lại phím.

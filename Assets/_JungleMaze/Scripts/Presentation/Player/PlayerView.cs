@@ -39,6 +39,9 @@ namespace JungleMaze.Presentation.Player
 
         public byte NetId => _model?.NetId ?? 0;
 
+        /// <summary>True between <see cref="Bind"/> and despawn; <see cref="NetId"/> reads 0 while unbound.</summary>
+        public bool IsBound => _model != null;
+
         public void Bind(PlayerModel model, IPlayerPoseSource poses = null)
         {
             _model = model;
