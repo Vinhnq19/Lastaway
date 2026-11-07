@@ -954,11 +954,41 @@ Nên sửa:
 
 Gợi ý: (1) `VfxBodyAnchor` coi `PlayerView` chưa `Bind` (NetId 0) là hợp lệ; (2) `Bootstrap.Vfx.cs:44-47` đăng ký `AlwaysVisiblePolicy` vào registry — FOW-01 đăng ký sau sẽ ném trùng kiểu; (3) `VfxDirector` dùng `App.Audio.SfxDeduper` (phụ thuộc chéo feature); (4) số trình bày mặc định lặp ở 3 nơi, nhịp nháy vòng ngòi cứng trong `FuseWarningVfx.cs:48`; (5) `VfxDirector.cs:486` vòng ngòi tự gỡ khi `Remaining ≤ 0` có thể biến mất trước vụ nổ khi lag → thêm dung sai 0,1–0,2 s.
 
+### Vòng 2 (07/11/2026, code-reviewer, commit `843da542`): **Qua** — 0 Chặn, 2 Nên sửa (nhẹ), 2 Gợi ý
+
+Đã kiểm đạt: test GC gọi đúng đường chạy thật (`VfxBodyAnchor.Update`, `DamageNumberVfx.LateUpdate`, `FuseWarningVfx.LateUpdate`, `VfxStage.LateUpdate` → `Advance`/`Drive`), recorder có đối chứng dương; chấp nhận "từng lệnh VFX 0 B + VFX ≤ nền Editor" thay cho "tổng = 0 B". `DeferredVisibilityPolicy`: FOW-01 đăng ký trước/sau đều không ném, không alloc mỗi lần hỏi. `FuseGraceSeconds` 0,15 s từ `VfxRuntimeSet`, `Detonated` gỡ ngay. `PlayerView.IsBound` không đổi hành vi (`_model = null` ở `OnDespawned`), registry lọc anchor chưa bind. Không chạm Backend/ProjectSettings/Imported/file của Hào và Quang Huy.
+
+Nên sửa (không chặn, để sau): (1) so trung vị có/không VFX đo theo thứ tự cố định nên nền Editor tăng dần có thể che alloc nhỏ — coi là chống alloc lớn, hoặc xen kẽ bật/tắt; (2) khối `Is.Not.AllocatingGCMemory` chỉ chạy 1 frame, có thể lọt alloc theo chu kỳ — bọc 60–120 lần gọi. Gợi ý: tra registry thêm mỗi query khi chưa có FOW-01 (không đáng kể); `VfxDirector.cs:497` hợp lý.
+
 ## 7. QA
+
+**Không chạy QA** cho ticket này theo yêu cầu của người (07/11/2026: chỉ chạy QA khi người yêu cầu). Các mục chỉ QA chứng minh được ghi "chưa kiểm chứng" trong bảng dưới.
+
+
+Bảng tổng hợp của CPO từ bằng chứng build (mục 5) và review (mục 6), không có lượt QA độc lập:
 
 | # | Kết quả | Bằng chứng |
 | --- | --- | --- |
-| AC1 | chưa kiểm chứng | |
+| AC1 | ✓ | Kiểm kê cuối ở 5.3; `git diff --stat -- Assets/Imported` rỗng ở cả hai commit |
+| AC2 (sửa theo 4.12.7) | ✓ | Scene `Scenes/Dev/VfxPreview.unity` + F10; ảnh `Docs/Reports/VFX-01_2026-11-07/01–06`; PlayMode nhóm Vfx 15/15 |
+| AC3 | ✓ | EditMode nhóm Vfx (khử trùng theo `EventKey`, `Id = 0` không khử) |
+| AC4 | ✓ | EditMode `AttackVfxLedger` (predicted/confirmed/rejected/muộn) |
+| AC5 | ✓ | EditMode `StatusAuraTable` với đồng hồ giả |
+| AC6 | ✓ | EditMode + PlayMode reset khi đổi phòng/scene |
+| AC7 | ✓ một phần | Từng lệnh VFX mỗi frame 0 B (`VfxFrameGcPlayTests`); VFX ≤ nền Editor; chưa đo trên Player build |
+| AC8 | ✓ | EditMode/PlayMode với `ToggleVisibilityPolicy`; mặc định `DeferredVisibilityPolicy` |
+| AC9 | ✓ | Test quét prefab VFX (không Light/ETFX/mesh 3D, layer, shader URP) |
+| AC10 | ✓ | Ảnh `05_fuse_warning_banana3x3_smoke7x7.png` có lưới 1 cell |
+| AC11 | — | Bỏ khỏi VFX-01 (D1: bo do `ZoneOverlayView`) |
+| AC12 | ✓ | Test nháy 100 lần trả màu gốc; ảnh `04`/`04b` (số 45, 12) |
+| AC13 | ✓ phần đo | Test offset = 0 khi tắt; trận offline đo biên độ 0,079 cell; **cảm nhận chưa kiểm** |
+| AC14 | ✓ | Review vòng 1–2 |
+| AC15 | chưa kiểm chứng | Chỉ mô phỏng logic 60 s (0,072 ms/bước); chưa đo frame time cả scene |
+| AC16 | chưa kiểm chứng | Cần ≥ 2 người cảm nhận khi playtest |
+| R3 online | chưa kiểm chứng | Chỉ có `VfxAnchorRegistryTests`; chưa chạy phòng online thật |
+| R18 | chưa kiểm chứng | Chưa có ảnh số/quầng khi đứng ngoài bo đỏ |
+
+Test đỏ không thuộc VFX (chưa đối chứng trên `83e11065`): EditMode 6 test dữ liệu map (`LevelDocumentTests` ×4, `Phase2Tests.PackagedMapHashMustMatchServer`, `OnlineWorldIntegrationTests.NormalWorld…`); PlayMode `AudioAcceptanceTests.ZoneBell_ThreeBellsOnAlert…`, `DepthSortingPlayTests.HeroWithInterpolatedRigidbody…` (flaky).
 
 ## 8. Nghiệm thu
 
