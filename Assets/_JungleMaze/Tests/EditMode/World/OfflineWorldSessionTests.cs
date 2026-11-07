@@ -17,6 +17,7 @@ using JungleMaze.Domain.Player;
 using JungleMaze.Infrastructure.Config;
 using JungleMaze.World;
 using JungleMaze.World.Inventory;
+using JungleMaze.World.Loot;
 using LiteNetLib.Utils;
 using NUnit.Framework;
 using UnityEngine;
@@ -66,7 +67,8 @@ namespace JungleMaze.Tests.World
             public readonly WorldConfigData ConfigData;
             public readonly OfflineWorldSession Session;
 
-            public TestRig()
+            /// <param name="floorLoot">Floor loot spread at round start; off for tests that count floor items they create themselves.</param>
+            public TestRig(bool floorLoot = false)
             {
                 Bus = new EventBus();
                 Network = new FakeNetwork(Bus);
@@ -87,10 +89,11 @@ namespace JungleMaze.Tests.World
                 Match.StartRound();
 
                 Catalog = ItemCatalog.CreateBaseline();
-                Loot = new LootTable(Catalog);
+                Loot = new LootTable(Catalog, new LootProfile { Floor = new FloorLootProfile { Enabled = floorLoot } });
 
                 Layout = new MapLayout { Version = "test-layout", Seed = 20261028, Size = 50 };
-                Layout.Spawns.Add(new WorldPoint(25f, 25f));
+                // The floor planner measures reachable area from the spawn, so it must not sit inside the chest.
+                Layout.Spawns.Add(new WorldPoint(floorLoot ? 20f : 25f, 25f));
                 Layout.Objects.Add(new WorldObjectDefinition
                 {
                     Id = 101,
@@ -272,7 +275,8 @@ namespace JungleMaze.Tests.World
             for (var i = 0; i < 60; i++) session.Tick(1f / 30f);
 
             Assert.IsTrue(session.Destructibles.IsBroken(101));
-            Assert.That(session.Floor.Items.Count, Is.InRange(3, 4));
+            // Three or four chest items, each gun bringing one AMMO box (LootDrops).
+            Assert.That(session.Floor.Items.Count, Is.InRange(3, 8));
         }
 
         [Test]
@@ -392,6 +396,55 @@ namespace JungleMaze.Tests.World
 
             Assert.IsTrue(session.Inventory.Weapons[0].IsEmpty, "Inventory reset on replay without stale items.");
             Assert.AreEqual(0, session.Floor.Items.Count, "Floor reset without stale items.");
+        }
+
+        [Test]
+        public void FloorLoot_SpreadsWithThePlanner_AndRerollsEveryPracticeRound()
+        {
+            using var rig = new TestRig(floorLoot: true);
+            var session = rig.Session;
+            var first = session.InitialLoot;
+            Assert.IsNotNull(first);
+            Assert.Greater(first.Placements.Count, 0, "The open 50x50 test map has room for floor spots.");
+            Assert.AreEqual(first.Placements.Count, session.Floor.Items.Count, "Every planned stack lies on the floor.");
+
+            // Same shared planner and seed as the server path: identical placements.
+            var expected = FloorLootPlanner.Plan(rig.Layout, rig.Loot, session.LootSeed, 0, rig.ConfigData.Hazards.HeroRadius);
+            CollectionAssert.AreEquivalent(
+                expected.Placements.Select(p => p.Stack.ItemId + "@" + p.Position.X + "," + p.Position.Y),
+                session.Floor.Items.Select(i => i.Stack.ItemId + "@" + i.X + "," + i.Y));
+            Assert.IsTrue(session.Objects.Count(o => o.Kind == 100) == first.Placements.Count, "Floor loot is in the wire snapshot.");
+
+            var seed = session.LootSeed;
+            rig.Match.Replay();
+            Assert.AreNotEqual(seed, session.LootSeed, "A new practice round gets a new loot seed.");
+            Assert.AreEqual(session.InitialLoot.Placements.Count, session.Floor.Items.Count, "Old floor items are gone, the new roll is on the floor.");
+        }
+
+        [Test]
+        public void ContainerDrops_FanOutAroundTheChest_AndGunsBringAmmo()
+        {
+            for (var round = 0; round < 6; round++)
+            {
+                using var rig = new TestRig();
+                var center = rig.Layout.Objects[0].Bounds.Center;
+                Assert.IsTrue(rig.Session.Destructibles.DamageConfirmed(101, 30, 0, 1));
+                var items = rig.Session.Floor.Items.ToList();
+                var profile = rig.Loot.Floor;
+                Assert.GreaterOrEqual(items.Count, 3);
+                var guns = 0;
+                foreach (var item in items)
+                {
+                    var d = (float)Math.Sqrt(new WorldPoint(item.X, item.Y).DistanceSquared(center));
+                    Assert.LessOrEqual(d, profile.ScatterMaxRadius + profile.AmmoMaxDistance + .01f, item.Stack.ItemId + " stays near the chest");
+                    if (!rig.Catalog.TryGet(item.Stack.ItemId, out var def) || !LootTable.IsGun(def)) continue;
+                    guns++;
+                    Assert.LessOrEqual(d, profile.ScatterMaxRadius + .01f, "the gun itself lies on the drop ring");
+                    Assert.IsTrue(items.Any(a => a.Stack.ItemId == LootDrops.AmmoId && Math.Sqrt(new WorldPoint(a.X, a.Y).DistanceSquared(new WorldPoint(item.X, item.Y))) <= profile.AmmoMaxDistance + .01f),
+                        "a gun has an AMMO box next to it");
+                }
+                Assert.LessOrEqual(items.Count, 4 + guns, "three or four chest items plus one ammo box per gun");
+            }
         }
     }
 }

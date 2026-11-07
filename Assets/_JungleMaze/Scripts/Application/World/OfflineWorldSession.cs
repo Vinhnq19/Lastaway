@@ -10,6 +10,7 @@ using JungleMaze.Core.Ticking;
 using JungleMaze.Domain.Hud;
 using JungleMaze.World;
 using JungleMaze.World.Inventory;
+using JungleMaze.World.Loot;
 
 namespace JungleMaze.App.World
 {
@@ -39,6 +40,8 @@ namespace JungleMaze.App.World
         private MemoryItemWorld _floor;
         private InventoryService _items;
         private WorldDemoCombatSession _combat;
+        private LootSurface _lootSurface;
+        private FloorLootSpots _floorSpots;
 
         private readonly List<WorldActor> _actors = new List<WorldActor>(1);
         private readonly Dictionary<ushort, double> _slow = new Dictionary<ushort, double>();
@@ -46,6 +49,7 @@ namespace JungleMaze.App.World
 
         private Guid _matchId;
         private uint _nextFloorId = 10000;
+        private uint _lootSeed;
         private uint _requestSeq;
         private uint _tick;
         private uint _hitSequence;
@@ -74,6 +78,10 @@ namespace JungleMaze.App.World
         public HazardService Hazards => _hazards;
         public MemoryItemWorld Floor => _floor;
         public InventoryService Items => _items;
+        /// <summary>Loot seed of the current practice round (from its fresh MatchId): floor items and container drops change every round.</summary>
+        public uint LootSeed => _lootSeed;
+        /// <summary>Floor loot spread when the current round started (Docs/hvu/07_Floor_Loot.vi.md section 2-3).</summary>
+        public FloorLootPlan InitialLoot { get; private set; }
 
         public event Action Changed;
         public event Action<ushort, uint> Teleported;
@@ -104,6 +112,13 @@ namespace JungleMaze.App.World
             _destructibleConfig = destructibles ?? new DestructibleConfig();
             _hazardConfig = hazards ?? new HazardConfig();
             _map = map;
+            if (_map != null)
+            {
+                // Same shared helpers as MatchWorldRuntime: a broken container stops blocking drops; spots depend only on
+                // map geometry, so they are planned once per session and only rolled again each round.
+                _lootSurface = new LootSurface(_map, _lootTable.Floor.DropClearance, id => _destructibles != null && _destructibles.IsBroken(id));
+                _floorSpots = FloorLootPlanner.PlanSpots(_map, _lootTable, 0, _hazardConfig.HeroRadius);
+            }
 
             if (_match != null)
             {
@@ -136,7 +151,7 @@ namespace JungleMaze.App.World
 
             if (_map != null)
             {
-                _floor = new MemoryItemWorld(() => _nextFloorId >= ushort.MaxValue || _floor.Items.Count >= 2048 ? (ushort)0 : (ushort)++_nextFloorId);
+                _floor = new MemoryItemWorld(() => _nextFloorId >= ushort.MaxValue || _floor.Items.Count >= FloorLootPlanner.MaxFloorItems ? (ushort)0 : (ushort)++_nextFloorId);
                 _items = new InventoryService(_matchId, _catalog, this, _floor);
                 _items.Register(0);
                 _items.Changed += _ => _dirty = true;
@@ -166,6 +181,7 @@ namespace JungleMaze.App.World
 
                 _playerPose = _map.Spawns != null && _map.Spawns.Count > 0 ? _map.Spawns[0] : new WorldPoint(25f, 25f);
                 _items.SetActorState(0, _playerPose.X, _playerPose.Y, true);
+                SpawnFloorLoot();
                 // Hero trong scene đứng sẵn ở tâm map: đưa về spawn đầu của map (cùng đường dịch chuyển như portal).
                 _pendingPortalDestination = _playerPose;
 
@@ -430,26 +446,36 @@ namespace JungleMaze.App.World
 
         public bool CanSpawnLoot(WorldObjectKind source, ushort worldId, uint seed)
         {
-            var kind = source == WorldObjectKind.Pot ? LootSource.Pot : source == WorldObjectKind.Chest ? LootSource.Chest : LootSource.Supply;
-            var count = _lootTable.Roll(kind, seed).Length;
-            return _floor != null && _floor.Items.Count + count <= 2048 && _nextFloorId + count <= ushort.MaxValue && _map.Objects.Count + _floor.Items.Count + count <= WorldWire.MaxObjects;
+            // Counts gun ammo companions too, so the preflight matches what SpawnLoot creates (same as the server).
+            var count = LootDrops.CountForContainer(_lootTable, source, LootSeeds.Mix(seed, _lootSeed));
+            return _floor != null && _floor.Items.Count + count <= FloorLootPlanner.MaxFloorItems && _nextFloorId + count <= ushort.MaxValue && _map.Objects.Count + _floor.Items.Count + count <= WorldWire.MaxObjects;
         }
 
         public void SpawnLoot(WorldObjectKind source, ushort worldId, WorldPoint position, uint seed)
         {
-            if (_lootTable == null || _floor == null) return;
-            var lootSource = source == WorldObjectKind.Pot ? LootSource.Pot : source == WorldObjectKind.Chest ? LootSource.Chest : LootSource.Supply;
-            var loot = _lootTable.Roll(lootSource, seed);
-            if (loot != null)
+            if (_lootTable == null || _floor == null || _lootSurface == null) return;
+            // Drops fan out 0.9-1.4 cells around the broken container and guns bring an AMMO box (shared LootDrops).
+            var placements = LootDrops.ForContainer(_lootTable, source, position, LootSeeds.Mix(seed, _lootSeed), _lootSurface);
+            var spawned = new List<ushort>(placements.Count);
+            foreach (var placed in placements)
             {
-                for (var i = 0; i < loot.Length; i++)
-                {
-                    var p = new WorldPoint(position.X + (i % 2) * 0.3f, position.Y + (i / 2) * 0.3f);
-                    _floor.TrySpawn(loot[i], p.X, p.Y, out _);
-                }
+                if (_floor.TrySpawn(placed.Stack, placed.Position.X, placed.Position.Y, out var id)) { spawned.Add(id); continue; }
+                // All or nothing, like MatchWorldRuntime: a full floor never leaves partial loot.
+                foreach (var old in spawned) _floor.Remove(old);
+                break;
             }
             RebuildWireObjects();
             Changed?.Invoke();
+        }
+
+        /// <summary>Rolls this round's floor loot on the precomputed spots with a fresh seed (new MatchId every round).</summary>
+        private void SpawnFloorLoot()
+        {
+            _lootSeed = LootSeeds.FromGuid(_matchId);
+            InitialLoot = _floorSpots != null ? FloorLootPlanner.Roll(_floorSpots, _lootTable, _lootSeed) : null;
+            if (InitialLoot == null) return;
+            foreach (var placed in InitialLoot.Placements)
+                if (!_floor.TrySpawn(placed.Stack, placed.Position.X, placed.Position.Y, out _)) break;
         }
 
         public void RequestDamage(byte actor, ushort source, uint tick, int amount, bool bypassArmor)
