@@ -1,0 +1,12 @@
+Use your image generation tool to create ONE image as described below, and copy the generated file AS-IS (no cropping, no resizing, no padding) to:
+D:\Lastaway\projects\lastaway\art\inbox\T-021\src\gen\fx-sheet-feedback.png
+Do not write any other files and do not post-process the image. Use only the built-in image tool, never the OpenAI API, curl or python.
+
+Image 1 is the approved pixel-art HUD style of the game (carved olive stone, moss, dark stone interior, thin warm-tan rim, hard pixel edges, no anti-aliased glow, no gradients beyond simple 2-3 tone shading). Draw ONE sprite sheet on a flat solid magenta background (#FF00FF, no gradient, never used inside a piece), at least 70 px of pure magenta between pieces and around the border. No text, no letters, no numbers anywhere. Same pixel size grain as the HUD in image 1.
+
+Pieces, in one row/grid, each isolated:
+1. HIT-MARKER: four short bright white diagonal ticks arranged around an empty center like a crosshair burst (NE, NW, SE, SW), each tick about 14 px long, thin dark outline, overall about 90 x 90 px, center empty.
+2. DAMAGE-ARC: one thick curved arc segment like a closing bracket ')' covering about 50 degrees of a large circle, color coral red #E0594A with a darker red #8A2A22 edge, hard pixel edges, about 60 px wide x 200 px tall.
+3. DANGER-ARROW: one bold chevron arrow pointing left '<', coral red #E0594A with dark outline, about 90 x 110 px.
+4. EFFECT-CHIP-POISON, 5. EFFECT-CHIP-SLOW, 6. EFFECT-CHIP-STEALTH: three identical small rounded-square stone chips (dark stone interior, olive-tan rim, about 110 x 120 px, empty lower third reserved for a timer), each with ONE small glyph centered in the upper two thirds: a droplet (poison, glyph color #86B36B), a snail-like spiral shell (slow, glyph color #DBA645), a half-closed eye (stealth, glyph light grey-blue #B8C8D4). Only the glyph carries color; the chip stays neutral stone.
+Keep every piece clean, symmetrical where natural, flat color pixel art.

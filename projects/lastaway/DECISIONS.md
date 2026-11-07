@@ -181,3 +181,35 @@ Khoảng trống chặn QA-01 theo PIC người (MAP-02, Game-10, DRG-01, ZON-01
 - **Người quyết:** Huy (07/11, "sao lại cái thì icon + text cái thì chỉ có Text... màu nút X nên là màu đỏ... icon nên to hơn chút").
 - **CPO áp dụng:** mọi nút có chữ đều kèm icon bên trái, trừ tab, keycap và nút chỉ chữ; X dùng đỏ #94281F (đỏ sáng nhất đạt 3:1 trên kaki) cho nút đóng, Thoát trận, Rời phòng; Thoát trận chọn R2 (chữ tối, X đỏ), vì Huy chưa chọn R2/R3 bằng lời và R2 khớp luật "màu ở icon", Huy đổi được. Căn giữa thành cổng máy (script đo lệch tâm mực chữ/icon so với mặt nút, không tính đế, ngưỡng 1 px) vì đây là lần thứ hai lỗi chữ lệch. Icon trên mạng chỉ làm tham chiếu phong cách kèm URL; không tải, không mua; asset vẫn gen bằng GPT.
 - **Duyệt 07/11:** Huy duyệt UI kit T-026 (họ nút K2 icon + chữ, X đỏ, P0) và mock đợt A dựng lại; T-026 đóng, T-021 làm lại đợt B trên kit mới ("Duyệt, làm đợt B"). Thoát trận theo R2 coi như được duyệt cùng bộ.
+
+## 2026-11-07 - Màn gameplay hạn chế chữ, dùng icon và UX thay chữ
+- **Quyết định:** Trong màn gameplay, thông tin hiển thị bằng icon vật phẩm, icon trạng thái và hình UX (thanh, ô, mũi tên, màu). Hạn chế chữ.
+- **Người quyết:** Huy (07/11, "Hạn chế Text trong màn gameplay sử dụng UX/UI hoặc icon của các item").
+- **CPO áp dụng:**
+  - **Phạm vi:** áp cho mọi thứ hiện khi đang chơi: HUD, B3 Spectator, B4 Túi đồ, B5 Bản đồ lớn, B9 Phản hồi HUD.
+  - **Màn menu và kết quả:** B1 ESC, B2 Bị loại, B6 Thắng, B7 Thua, B8 Mất kết nối giữ chữ theo luật nút icon + chữ, nhưng chữ phải ngắn nhất có thể.
+  - **Chữ còn được giữ:** tên người chơi, con số (máu, đạn, số lượng, thời gian, n/N), phím tắt trên keycap.
+  - **Chữ chuyển thành icon:** nhãn ô, tiêu đề cột, toast nhặt đồ (icon vật phẩm + số), kill feed (tên + icon vũ khí + tên), ô trống (ô rỗng, không ghi "Trống").
+  - **Tên vật phẩm:** chỉ hiện ở tooltip khi rê chuột.
+  - **Icon vật phẩm:** lấy icon có sẵn trong game trước. Thiếu thì art-ux báo, không tự vẽ thay ART-04.
+- **Cập nhật 07/11:** Khi nhặt đồ phải thấy cả icon và tên vật phẩm. Toast nhặt đồ gồm icon, tên và số lượng; đây là ngoại lệ được giữ chữ. Icon vật phẩm trong màn gameplay to hơn bản hiện tại. Huy chưa nói cỡ: art-ux đề xuất cỡ trên mock để Huy duyệt (Huy, "Khi nhặt cũng cần thấy icon và tên item. icon làm to chút").
+
+## 2026-11-07 - Thang cỡ chữ cho toàn game (T-027)
+- **Quyết định:** Game chưa có hệ thống phân cấp cỡ chữ. Cỡ chữ đang to nhỏ lẫn lộn, có chỗ nhỏ tới mức không đọc được. Art-ux nghiên cứu, đề xuất thang cỡ chữ và làm demo trước/sau. Huy duyệt xong mới sửa kit và mock.
+- **Người quyết:** Huy (07/11: "phân cấp các size Text đang không có trong hệ thống game... trước hết hãy bàn với tôi bạn tính sửa như nào, có demo rõ ràng").
+- **CPO:**
+  - Dừng đợt B của T-021, đặt T-021 sang blocked chờ T-027, để không phải sửa chữ ở 18 mock hai lần.
+  - Mock đợt A đã duyệt sẽ áp thang chữ mới sau khi Huy duyệt T-027.
+  - Cỡ chữ là tham số người chơi nhìn thấy, nên Huy chốt.
+- **Chốt 07/11 (CPO, Huy giao "duyệt nốt"):** Chọn thang 5 bậc 96/40/30/24/20 px ở 1080p. Sàn tuyệt đối 20 px; chữ gameplay sàn 24 px, riêng số phím và số trên ô được 20 px. Chữ trên nút theo cỡ nút: S 24, M 30, L 40. Lý do: 5 bậc phủ đủ vai trò, dễ làm cổng máy; 24 px đã vượt sàn XAG cho PC (18 px). Bỏ việc tải ảnh game khác.
+- **Thêm 07/11 (Huy):** Thêm một font để phân tầng chính/phụ: font chính cho tiêu đề và số lớn, Be Vietnam Pro giữ cho thân, nút, chú thích. Huy giao CPO duyệt font. Font phải đủ dấu tiếng Việt và có giấy phép dùng thương mại. Ưu tiên font đã có trong repo; phải tải font mới thì hỏi Huy trước.
+- **Hệ quả:** áp thang chữ và font vào kit và mock đợt A, mở lại đợt B của T-021. Đổi cỡ chữ trong prefab Unity (47 chữ 19,5 px) thuộc T-022 và T-024. Xong hết thì báo Huy xem một lần.
+- **Chốt font 07/11 (CPO):** Font chính là Denk One (OFL 1.1, có sẵn trong repo, kèm `DenkOne SDF.asset` cho TMP). Đây là font duy nhất trong repo đủ dấu tiếng Việt và có giấy phép thương mại; trang so sánh `art/inbox/T-027/font-so-sanh.png`. Denk One dùng cho bậc 96 và 40 (tiêu đề màn và panel, CHIẾN THẮNG, hạng, đếm ngược). Be Vietnam Pro Bold dùng cho bậc 30, 24, 20, kể cả số HUD (Denk One ở 30 px quá mảnh). Phải đặt file OFL.txt cạnh font. Không tải font ngoài (Tilt Warp...).
+- **Cập nhật 07/11 (Huy):** "Thử với Font ngoài nếu oke thì dùng không thì bỏ". Huy cho tải font ngoài để so với Denk One. Chỉ lấy font Google Fonts có giấy phép OFL và có subset vietnamese, tải từ repo github.com/google/fonts. CPO chọn: font ngoài nào rõ hơn Denk One thì thay, không thì giữ Denk One.
+- **Kết quả thử font ngoài 07/11 (CPO):** giữ Denk One, bỏ font ngoài. Thử 4 font (`art/inbox/T-027/font-so-sanh-2.png`):
+  - Tilt Warp: thiếu chữ đ.
+  - Bangers: chỉ có chữ hoa, chữ nghiêng làm dấu chồng bị ép.
+  - Chakra Petch Bold: rõ nhưng không hơn Denk One, và quá giống Be Vietnam Pro nên mất phân tầng.
+  - Tiny5: dấu là điểm ảnh rời, "CHIẾN" đọc ra "CHIỂN".
+  Không dùng Tiny5 riêng cho số lớn vì sẽ thành font thứ ba. File thử ở `font-ngoai/` giữ lại làm bằng chứng, không đưa vào Assets, không commit.
+- **Chốt font 07/11 (Huy, bằng lời, gửi kèm ảnh "CHIẾN THẮNG"):** "dùng font này". Chakra Petch Bold thay Denk One cho bậc 96 và 40. Huy quyết định này dù CPO đã lo font này quá giống font thân nên phân tầng yếu. Be Vietnam Pro Bold giữ nguyên cho bậc 30, 24, 20. Chakra Petch Bold kèm OFL.txt được đưa vào `Assets/_JungleMaze/Art/JSurviv/Fonts/`. File Denk One không xóa và không commit.

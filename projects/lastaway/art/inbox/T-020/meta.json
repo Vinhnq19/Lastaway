@@ -1087,5 +1087,89 @@
   ],
   "border_LRTB": null,
   "slice": false
+ },
+ "kit_card_stat": {
+  "size": [
+   278,
+   130
+  ],
+  "border_LRTB": [
+   28,
+   28,
+   28,
+   28
+  ],
+  "slice": true
+ },
+ "kit_card_cause": {
+  "size": [
+   768,
+   150
+  ],
+  "border_LRTB": [
+   110,
+   28,
+   28,
+   28
+  ],
+  "slice": true
+ },
+ "kit_slot_item_normal": {
+  "size": [
+   139,
+   140
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_slot_item_selected": {
+  "size": [
+   139,
+   140
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_slot_item_empty": {
+  "size": [
+   139,
+   140
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_slot_item_drag": {
+  "size": [
+   137,
+   140
+  ],
+  "border_LRTB": null,
+  "slice": false
+ },
+ "kit_tip_item": {
+  "size": [
+   387,
+   230
+  ],
+  "border_LRTB": [
+   30,
+   30,
+   30,
+   30
+  ],
+  "slice": true
+ },
+ "kit_divider": {
+  "size": [
+   1069,
+   14
+  ],
+  "border_LRTB": [
+   10,
+   10,
+   2,
+   2
+  ],
+  "slice": true
  }
 }

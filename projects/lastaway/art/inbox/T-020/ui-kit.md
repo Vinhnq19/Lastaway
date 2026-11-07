@@ -211,3 +211,35 @@ Tham chiếu "cao xấp xỉ chiều cao chữ hoa + dấu": chữ hoa của Be 
 - Stonebase UI Pack (viền đá, pixel): https://itchabop.itch.io/stonebase-ui-pack
 - Unity Asset Store, Classic Fantasy RPG UI Kit (không phải pixel): https://marketplace.unity.com/packages/2d/gui/classic-fantasy-rpg-ui-kit-193841
 Kết luận từ tham chiếu: mới là danh sách tên gói và cỡ (16x16, 32x32), chưa đủ để kết luận bộ icon hiện tại quá mảnh hay quá nhỏ; quyết định giữ bộ 16 icon cũ dựa trên mắt ở cỡ 22 đến 30 px. Chưa dựng trong Unity.
+
+## 12. P1 cho đợt B (T-021 B, 07/11)
+
+Gen GPT 1 sheet (`T-026/src/gen8/p1.png`, ref: P0 + K2 + crop viền Huy), nhập bằng `T-026/src/import_p1.py`.
+
+| Sprite (có @2x) | Cỡ @1x | 9-slice LRTB | Dùng ở |
+|---|---|---|---|
+| `kit_card_stat` | 278x130 | 28,28,28,28 | thẻ thống kê (nhãn nhỏ + số lớn): Bị loại, Thắng, Thua, thẻ mục tiêu spectator |
+| `kit_card_cause` | 768x150 | 110,28,28,28 | thẻ nguyên nhân bị loại: ô vuông lõm bên trái để icon (sọ), chữ ở phải; không kéo ô icon |
+| `kit_slot_item_{normal,selected,empty,drag}` | 139x140 | không | ô vật phẩm lớn trong túi đồ; icon vật phẩm chờ ART-04 |
+| `kit_tip_item` | 387x230 | 30,30,30,30 | thẻ chi tiết vật phẩm khi rê chuột (có mũi tên nhỏ bên trái; Unity chọn lật trái/phải theo vị trí) |
+| `kit_divider` | 1069x14 | 10,10,2,2 | đường chia mục trong hộp thoại và màn toàn phần |
+
+## 13. Chữ (T-027, CPO chốt 07/11; thay mọi cỡ chữ ghi ở các mục trên)
+
+Thang 5 bậc, px cỡ font ở 1080p. Lớp áp thang nằm ở `T-021/src/tools/thang.py` (gọi từ `mock.py`; `LASTAWAY_THANG=0` để dựng lại bản trước thang).
+
+| Bậc | px | Font | Đậm | Line-height | Dùng cho |
+|---|---:|---|---|---:|---|
+| H1 Số lớn | 96 | Chakra Petch | Bold | 1,05 | hạng, đếm ngược, CHIẾN THẮNG |
+| H2 Tiêu đề | 40 | Chakra Petch | Bold | 1,2 | tiêu đề màn, panel, popup; số thống kê lớn |
+| B1 Thân lớn | 30 | Be Vietnam Pro | Bold | 1,3 | nút M; tên nổi bật; số HUD chính (máu) |
+| B2 Thân | 24 | Be Vietnam Pro | Bold | 1,35 | nút S; thân; danh sách; toast; tooltip; số HUD phụ; sàn chữ gameplay |
+| C Chú thích | 20 | Be Vietnam Pro | Bold | 1,4 | chú thích, nhãn phụ, số trên ô, số phím; sàn tuyệt đối |
+
+- **Chữ nút theo cỡ nút:** S 48 = 24, M 64 = 30, L 80 = 40; mọi chữ nút (kể cả L) dùng Be Vietnam Pro. Cỡ nút lệch (52, 56, 72) tính theo cỡ nút gần nhất (hòa thì xuống). Icon cạnh chữ cao bằng cỡ chữ.
+- **Sàn:** không chữ nào dưới 20 px; gameplay (HUD, túi đồ, toast, spectator, bản đồ lớn) không dưới 24 px, riêng số phím và số trên ô được 20 px.
+- **Viền chữ:** `max(2, round(em/12))` px, màu #0A0C0C; ưu tiên chữ nằm trên backplate (toast, tag, row, thẻ). Cổng tương phản đo ở p10 và p90 độ sáng nền, 4,5:1.
+- **Dấu chồng:** Ắ Ặ Ề Ộ Ữ cao hơn chữ hoa khoảng 0,44 em; line-height một dòng không dưới 1,3, khối nhiều dòng 1,5.
+- **Font chính (Huy chốt 07/11, thay Denk One):** Chakra Petch Bold cho bậc 96 và 40, tải từ Google Fonts (`ofl/chakrapetch`, OFL 1.1, bản gốc ở `T-027/font-ngoai/chakrapetch/`). Giấy phép: `Assets/_JungleMaze/Art/JSurviv/Fonts/ChakraPetch-OFL.txt` (cạnh `ChakraPetch-Bold.ttf`; dòng copyright của font: Copyright 2018 The Chakra Petch Project Authors). Denk One (`DenkOne.ttf`, `DenkOne-OFL.txt`, `DenkOne SDF.asset`) còn trong repo, không dùng. File meta do Unity sinh khi import. Be Vietnam Pro: `Assets/_JungleMaze/Art/Fonts/BeVietnamPro-OFL.txt`.
+- **Cổng máy:** `T-027/src/do_co_chu.py --gate` (cỡ thuộc thang, sàn, gameplay 24, font đúng tầng); `T-021/src/tools/check_center.py` (căn giữa nút và chữ nút đúng bậc); tương phản `a|b/contrast.md`.
+- **Chưa áp:** Unity prefab (Hud, LobbyUi, MatchOverlay) vẫn theo cỡ cũ: 206/353 thành phần chữ chưa đúng thang; việc của vai unity (m_fontSize x 1,5 vào bậc, Chakra Petch Bold cho 40 và 96).

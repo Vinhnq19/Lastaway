@@ -1,0 +1,16 @@
+Use your image generation tool to create ONE image as described below, and copy the generated file AS-IS (no cropping, no resizing, no padding) to:
+D:\Lastaway\projects\lastaway\art\inbox\T-021\src\gen\fx-sheet-emblems.png
+Do not write any other files and do not post-process the image. Use only the built-in image tool, never the OpenAI API, curl or python.
+
+Image 1 is the approved pixel-art HUD style of the game (carved olive stone, moss, dark stone interior, thin warm-tan rim, hard pixel edges, no anti-aliased glow, no gradients beyond simple 2-3 tone shading). Draw ONE sprite sheet on a flat solid magenta background (#FF00FF, no gradient, never used inside a piece), at least 70 px of pure magenta between pieces and around the border. No text, no letters, no numbers anywhere. Same pixel size grain as the HUD in image 1.
+
+Pieces, in one grid, each isolated:
+1. EMBLEM-WIN: a golden laurel wreath open at the top with a small crown above an empty center, carved-gold on olive stone feel, about 260 x 220 px.
+2. EMBLEM-LOSE: a cracked grey stone medallion with a small skull relief in the center, muted desaturated, about 260 x 220 px, no red.
+3. MAP-PLAYER: a round map marker, bright coral dot with white ring and a small triangular heading pointer on top, about 56 x 66 px.
+4. MAP-MARK: a map pin (teardrop) in light green #A9D18E with dark outline, about 50 x 70 px.
+5. MAP-DROP: a small supply crate hanging under a parachute, pale pink #F4A3A3 canopy, about 70 x 90 px.
+6. ICON-DISCONNECT: a wifi symbol with a diagonal slash, light cream #EDF2EE with dark outline, about 80 x 80 px.
+7. ICON-SPECTATE: an open eye symbol, light cream #EDF2EE with dark outline, about 80 x 56 px.
+8. ICON-SKULL-SMALL: a tiny cream skull glyph for kill counts, about 48 x 48 px.
+Keep hard pixel edges, flat color.

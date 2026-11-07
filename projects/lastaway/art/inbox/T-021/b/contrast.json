@@ -1,0 +1,9074 @@
+[
+{
+"mock": "b1-esc-cai-dat",
+"text": "Hào",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+37,
+57,
+87,
+76
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b1-esc-cai-dat",
+"text": "Linh",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+143,
+58,
+194,
+76
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b1-esc-cai-dat",
+"text": "Vinh",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+37,
+102,
+91,
+120
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b1-esc-cai-dat",
+"text": "Mai",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+147,
+102,
+191,
+120
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b1-esc-cai-dat",
+"text": "Vũ",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+37,
+146,
+69,
+164
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b1-esc-cai-dat",
+"text": "Sơn",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+125,
+146,
+171,
+164
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b1-esc-cai-dat",
+"text": "100",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+355,
+887,
+410,
+909
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.71
+},
+{
+"mock": "b1-esc-cai-dat",
+"text": "0",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+132,
+947,
+153,
+969
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 9.24
+},
+{
+"mock": "b1-esc-cai-dat",
+"text": "0",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+308,
+947,
+329,
+969
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 9.24
+},
+{
+"mock": "b1-esc-cai-dat",
+"text": "0",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+385,
+1003,
+406,
+1025
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.66
+},
+{
+"mock": "b1-esc-cai-dat",
+"text": "1/1",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1673,
+385,
+1706,
+410
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.17
+},
+{
+"mock": "b1-esc-cai-dat",
+"text": "1:21",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1786,
+387,
+1830,
+405
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.17
+},
+{
+"mock": "b1-esc-cai-dat",
+"text": "1",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+759,
+1012,
+768,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b1-esc-cai-dat",
+"text": "2",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+815,
+1012,
+828,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b1-esc-cai-dat",
+"text": "3",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+875,
+1012,
+889,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b1-esc-cai-dat",
+"text": "4",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+934,
+1012,
+948,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b1-esc-cai-dat",
+"text": "5",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1015,
+1012,
+1029,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b1-esc-cai-dat",
+"text": "6",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1075,
+1012,
+1089,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b1-esc-cai-dat",
+"text": "7",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1136,
+1012,
+1148,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b1-esc-cai-dat",
+"text": "8",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1194,
+1012,
+1207,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b1-esc-cai-dat",
+"text": "Cài đặt",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+892,
+220,
+1027,
+257
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 6.67
+},
+{
+"mock": "b1-esc-cai-dat",
+"text": "Âm lượng",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+664,
+332,
+777,
+361
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.98
+},
+{
+"mock": "b1-esc-cai-dat",
+"text": "80%",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1246,
+337,
+1300,
+355
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.4
+},
+{
+"mock": "b1-esc-cai-dat",
+"text": "Hiệu ứng",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+664,
+400,
+768,
+425
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.98
+},
+{
+"mock": "b1-esc-cai-dat",
+"text": "70%",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1248,
+401,
+1300,
+419
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.27
+},
+{
+"mock": "b1-esc-cai-dat",
+"text": "Nhạc nền",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+664,
+461,
+777,
+489
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.98
+},
+{
+"mock": "b1-esc-cai-dat",
+"text": "50%",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1246,
+465,
+1300,
+483
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.4
+},
+{
+"mock": "b1-esc-cai-dat",
+"text": "Nhạc",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+664,
+543,
+728,
+567
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.82
+},
+{
+"mock": "b1-esc-cai-dat",
+"text": "Chuột",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+664,
+613,
+739,
+637
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.92
+},
+{
+"mock": "b1-esc-cai-dat",
+"text": "1,0",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1265,
+613,
+1300,
+634
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.4
+},
+{
+"mock": "b1-esc-cai-dat",
+"text": "Rung",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+664,
+677,
+725,
+700
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.98
+},
+{
+"mock": "b1-esc-cai-dat",
+"text": "Mặc định",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+660,
+769,
+799,
+799
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.37
+},
+{
+"mock": "b1-esc-cai-dat",
+"text": "Thoát trận",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+888,
+769,
+1051,
+799
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.35
+},
+{
+"mock": "b1-esc-cai-dat",
+"text": "Tiếp tục",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+1155,
+765,
+1281,
+799
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 7.74
+},
+{
+"mock": "b1-esc-xac-nhan-thoat",
+"text": "Hào",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+37,
+57,
+87,
+76
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b1-esc-xac-nhan-thoat",
+"text": "Linh",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+143,
+58,
+194,
+76
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b1-esc-xac-nhan-thoat",
+"text": "Vinh",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+37,
+102,
+91,
+120
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b1-esc-xac-nhan-thoat",
+"text": "Mai",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+147,
+102,
+191,
+120
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b1-esc-xac-nhan-thoat",
+"text": "Vũ",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+37,
+146,
+69,
+164
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b1-esc-xac-nhan-thoat",
+"text": "Sơn",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+125,
+146,
+171,
+164
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b1-esc-xac-nhan-thoat",
+"text": "100",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+355,
+887,
+410,
+909
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.71
+},
+{
+"mock": "b1-esc-xac-nhan-thoat",
+"text": "0",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+132,
+947,
+153,
+969
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 9.24
+},
+{
+"mock": "b1-esc-xac-nhan-thoat",
+"text": "0",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+308,
+947,
+329,
+969
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 9.24
+},
+{
+"mock": "b1-esc-xac-nhan-thoat",
+"text": "0",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+385,
+1003,
+406,
+1025
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.66
+},
+{
+"mock": "b1-esc-xac-nhan-thoat",
+"text": "1/1",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1673,
+385,
+1706,
+410
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.17
+},
+{
+"mock": "b1-esc-xac-nhan-thoat",
+"text": "1:21",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1786,
+387,
+1830,
+405
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.17
+},
+{
+"mock": "b1-esc-xac-nhan-thoat",
+"text": "1",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+759,
+1012,
+768,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b1-esc-xac-nhan-thoat",
+"text": "2",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+815,
+1012,
+828,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b1-esc-xac-nhan-thoat",
+"text": "3",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+875,
+1012,
+889,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b1-esc-xac-nhan-thoat",
+"text": "4",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+934,
+1012,
+948,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b1-esc-xac-nhan-thoat",
+"text": "5",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1015,
+1012,
+1029,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b1-esc-xac-nhan-thoat",
+"text": "6",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1075,
+1012,
+1089,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b1-esc-xac-nhan-thoat",
+"text": "7",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1136,
+1012,
+1148,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b1-esc-xac-nhan-thoat",
+"text": "8",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1194,
+1012,
+1207,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b1-esc-xac-nhan-thoat",
+"text": "Cài đặt",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+892,
+220,
+1027,
+257
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 6.67
+},
+{
+"mock": "b1-esc-xac-nhan-thoat",
+"text": "Âm lượng",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+664,
+332,
+777,
+361
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.98
+},
+{
+"mock": "b1-esc-xac-nhan-thoat",
+"text": "80%",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1246,
+337,
+1300,
+355
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.4
+},
+{
+"mock": "b1-esc-xac-nhan-thoat",
+"text": "Hiệu ứng",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+664,
+400,
+768,
+425
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.98
+},
+{
+"mock": "b1-esc-xac-nhan-thoat",
+"text": "70%",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1248,
+401,
+1300,
+419
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.27
+},
+{
+"mock": "b1-esc-xac-nhan-thoat",
+"text": "Nhạc nền",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+664,
+461,
+777,
+489
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.98
+},
+{
+"mock": "b1-esc-xac-nhan-thoat",
+"text": "50%",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1246,
+465,
+1300,
+483
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.4
+},
+{
+"mock": "b1-esc-xac-nhan-thoat",
+"text": "Nhạc",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+664,
+543,
+728,
+567
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.82
+},
+{
+"mock": "b1-esc-xac-nhan-thoat",
+"text": "Chuột",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+664,
+613,
+739,
+637
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.92
+},
+{
+"mock": "b1-esc-xac-nhan-thoat",
+"text": "1,0",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1265,
+613,
+1300,
+634
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.4
+},
+{
+"mock": "b1-esc-xac-nhan-thoat",
+"text": "Rung",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+664,
+677,
+725,
+700
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.98
+},
+{
+"mock": "b1-esc-xac-nhan-thoat",
+"text": "Mặc định",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+660,
+769,
+799,
+799
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.37
+},
+{
+"mock": "b1-esc-xac-nhan-thoat",
+"text": "Thoát trận",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+888,
+769,
+1051,
+799
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.35
+},
+{
+"mock": "b1-esc-xac-nhan-thoat",
+"text": "Tiếp tục",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+1155,
+765,
+1281,
+799
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 7.74
+},
+{
+"mock": "b1-esc-xac-nhan-thoat",
+"text": "Thoát trận?",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+847,
+390,
+1072,
+427
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 6.67
+},
+{
+"mock": "b1-esc-xac-nhan-thoat",
+"text": "Bạn sẽ bị loại khỏi trận.",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+817,
+514,
+1102,
+540
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.92
+},
+{
+"mock": "b1-esc-xac-nhan-thoat",
+"text": "Thoát trận",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+743,
+619,
+906,
+649
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.35
+},
+{
+"mock": "b1-esc-xac-nhan-thoat",
+"text": "Ở lại",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+1102,
+611,
+1172,
+649
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 7.74
+},
+{
+"mock": "b2-bi-loai",
+"text": "Hào",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+37,
+57,
+87,
+76
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b2-bi-loai",
+"text": "Linh",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+143,
+58,
+194,
+76
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b2-bi-loai",
+"text": "Vinh",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+37,
+102,
+91,
+120
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b2-bi-loai",
+"text": "Mai",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+147,
+102,
+191,
+120
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b2-bi-loai",
+"text": "Vũ",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+37,
+146,
+69,
+164
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b2-bi-loai",
+"text": "Sơn",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+125,
+146,
+171,
+164
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b2-bi-loai",
+"text": "100",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+355,
+887,
+410,
+909
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.71
+},
+{
+"mock": "b2-bi-loai",
+"text": "0",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+132,
+947,
+153,
+969
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 9.24
+},
+{
+"mock": "b2-bi-loai",
+"text": "0",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+308,
+947,
+329,
+969
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 9.24
+},
+{
+"mock": "b2-bi-loai",
+"text": "0",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+385,
+1003,
+406,
+1025
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.66
+},
+{
+"mock": "b2-bi-loai",
+"text": "1/1",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1673,
+385,
+1706,
+410
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.17
+},
+{
+"mock": "b2-bi-loai",
+"text": "1:21",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1786,
+387,
+1830,
+405
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.17
+},
+{
+"mock": "b2-bi-loai",
+"text": "1",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+759,
+1012,
+768,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b2-bi-loai",
+"text": "2",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+815,
+1012,
+828,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b2-bi-loai",
+"text": "3",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+875,
+1012,
+889,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b2-bi-loai",
+"text": "4",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+934,
+1012,
+948,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b2-bi-loai",
+"text": "5",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1015,
+1012,
+1029,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b2-bi-loai",
+"text": "6",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1075,
+1012,
+1089,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b2-bi-loai",
+"text": "7",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1136,
+1012,
+1148,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b2-bi-loai",
+"text": "8",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1194,
+1012,
+1207,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b2-bi-loai",
+"text": "BỊ LOẠI",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+898,
+179,
+1011,
+208
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.98
+},
+{
+"mock": "b2-bi-loai",
+"text": "#4",
+"size": 96,
+"font": "Main",
+"btn": false,
+"bbox": [
+853,
+266,
+977,
+333
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.97
+},
+{
+"mock": "b2-bi-loai",
+"text": "/ 10",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+995,
+306,
+1067,
+334
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.4
+},
+{
+"mock": "b2-bi-loai",
+"text": "Hào",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+720,
+453,
+782,
+476
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 9.84
+},
+{
+"mock": "b2-bi-loai",
+"text": "6",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+906,
+456,
+923,
+474
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 8.1
+},
+{
+"mock": "b2-bi-loai",
+"text": "2",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+823,
+619,
+846,
+647
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 11.78
+},
+{
+"mock": "b2-bi-loai",
+"text": "04:38",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+1101,
+619,
+1209,
+647
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 11.86
+},
+{
+"mock": "b2-bi-loai",
+"text": "Về sảnh",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+701,
+816,
+821,
+843
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.8
+},
+{
+"mock": "b2-bi-loai",
+"text": "Theo dõi",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+1141,
+820,
+1275,
+843
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 7.8
+},
+{
+"mock": "b2-bi-loai-bo",
+"text": "Hào",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+37,
+57,
+87,
+76
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b2-bi-loai-bo",
+"text": "Linh",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+143,
+58,
+194,
+76
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b2-bi-loai-bo",
+"text": "Vinh",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+37,
+102,
+91,
+120
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b2-bi-loai-bo",
+"text": "Mai",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+147,
+102,
+191,
+120
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b2-bi-loai-bo",
+"text": "Vũ",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+37,
+146,
+69,
+164
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b2-bi-loai-bo",
+"text": "Sơn",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+125,
+146,
+171,
+164
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b2-bi-loai-bo",
+"text": "100",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+355,
+887,
+410,
+909
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.71
+},
+{
+"mock": "b2-bi-loai-bo",
+"text": "0",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+132,
+947,
+153,
+969
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 9.24
+},
+{
+"mock": "b2-bi-loai-bo",
+"text": "0",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+308,
+947,
+329,
+969
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 9.24
+},
+{
+"mock": "b2-bi-loai-bo",
+"text": "0",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+385,
+1003,
+406,
+1025
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.66
+},
+{
+"mock": "b2-bi-loai-bo",
+"text": "1/1",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1673,
+385,
+1706,
+410
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.17
+},
+{
+"mock": "b2-bi-loai-bo",
+"text": "1:21",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1786,
+387,
+1830,
+405
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.17
+},
+{
+"mock": "b2-bi-loai-bo",
+"text": "1",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+759,
+1012,
+768,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b2-bi-loai-bo",
+"text": "2",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+815,
+1012,
+828,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b2-bi-loai-bo",
+"text": "3",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+875,
+1012,
+889,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b2-bi-loai-bo",
+"text": "4",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+934,
+1012,
+948,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b2-bi-loai-bo",
+"text": "5",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1015,
+1012,
+1029,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b2-bi-loai-bo",
+"text": "6",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1075,
+1012,
+1089,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b2-bi-loai-bo",
+"text": "7",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1136,
+1012,
+1148,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b2-bi-loai-bo",
+"text": "8",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1194,
+1012,
+1207,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b2-bi-loai-bo",
+"text": "BỊ LOẠI",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+898,
+179,
+1011,
+208
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.98
+},
+{
+"mock": "b2-bi-loai-bo",
+"text": "#4",
+"size": 96,
+"font": "Main",
+"btn": false,
+"bbox": [
+853,
+266,
+977,
+333
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.97
+},
+{
+"mock": "b2-bi-loai-bo",
+"text": "/ 10",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+995,
+306,
+1067,
+334
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.4
+},
+{
+"mock": "b2-bi-loai-bo",
+"text": "Bo thu",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+720,
+453,
+817,
+476
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 9.91
+},
+{
+"mock": "b2-bi-loai-bo",
+"text": "04:38",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+941,
+619,
+1049,
+647
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 11.86
+},
+{
+"mock": "b2-bi-loai-bo",
+"text": "Về sảnh",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+701,
+816,
+821,
+843
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.8
+},
+{
+"mock": "b2-bi-loai-bo",
+"text": "Theo dõi",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+1141,
+820,
+1275,
+843
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 7.8
+},
+{
+"mock": "b2-bi-loai-het-nguoi",
+"text": "Hào",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+37,
+57,
+87,
+76
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b2-bi-loai-het-nguoi",
+"text": "Linh",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+143,
+58,
+194,
+76
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b2-bi-loai-het-nguoi",
+"text": "Vinh",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+37,
+102,
+91,
+120
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b2-bi-loai-het-nguoi",
+"text": "Mai",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+147,
+102,
+191,
+120
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b2-bi-loai-het-nguoi",
+"text": "Vũ",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+37,
+146,
+69,
+164
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b2-bi-loai-het-nguoi",
+"text": "Sơn",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+125,
+146,
+171,
+164
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b2-bi-loai-het-nguoi",
+"text": "100",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+355,
+887,
+410,
+909
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.71
+},
+{
+"mock": "b2-bi-loai-het-nguoi",
+"text": "0",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+132,
+947,
+153,
+969
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 9.24
+},
+{
+"mock": "b2-bi-loai-het-nguoi",
+"text": "0",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+308,
+947,
+329,
+969
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 9.24
+},
+{
+"mock": "b2-bi-loai-het-nguoi",
+"text": "0",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+385,
+1003,
+406,
+1025
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.66
+},
+{
+"mock": "b2-bi-loai-het-nguoi",
+"text": "1/1",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1673,
+385,
+1706,
+410
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.17
+},
+{
+"mock": "b2-bi-loai-het-nguoi",
+"text": "1:21",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1786,
+387,
+1830,
+405
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.17
+},
+{
+"mock": "b2-bi-loai-het-nguoi",
+"text": "1",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+759,
+1012,
+768,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b2-bi-loai-het-nguoi",
+"text": "2",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+815,
+1012,
+828,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b2-bi-loai-het-nguoi",
+"text": "3",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+875,
+1012,
+889,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b2-bi-loai-het-nguoi",
+"text": "4",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+934,
+1012,
+948,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b2-bi-loai-het-nguoi",
+"text": "5",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1015,
+1012,
+1029,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b2-bi-loai-het-nguoi",
+"text": "6",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1075,
+1012,
+1089,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b2-bi-loai-het-nguoi",
+"text": "7",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1136,
+1012,
+1148,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b2-bi-loai-het-nguoi",
+"text": "8",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1194,
+1012,
+1207,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b2-bi-loai-het-nguoi",
+"text": "BỊ LOẠI",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+898,
+179,
+1011,
+208
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.98
+},
+{
+"mock": "b2-bi-loai-het-nguoi",
+"text": "#4",
+"size": 96,
+"font": "Main",
+"btn": false,
+"bbox": [
+853,
+266,
+977,
+333
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.97
+},
+{
+"mock": "b2-bi-loai-het-nguoi",
+"text": "/ 10",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+995,
+306,
+1067,
+334
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.4
+},
+{
+"mock": "b2-bi-loai-het-nguoi",
+"text": "Hào",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+720,
+453,
+782,
+476
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 9.84
+},
+{
+"mock": "b2-bi-loai-het-nguoi",
+"text": "6",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+906,
+456,
+923,
+474
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 8.1
+},
+{
+"mock": "b2-bi-loai-het-nguoi",
+"text": "2",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+823,
+619,
+846,
+647
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 11.78
+},
+{
+"mock": "b2-bi-loai-het-nguoi",
+"text": "04:38",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+1101,
+619,
+1209,
+647
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 11.86
+},
+{
+"mock": "b2-bi-loai-het-nguoi",
+"text": "Về sảnh",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+701,
+816,
+821,
+843
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.8
+},
+{
+"mock": "b2-bi-loai-het-nguoi",
+"text": "Theo dõi",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+1141,
+825,
+1275,
+848
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 5.21
+},
+{
+"mock": "b3-spectator",
+"text": "Tuan",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+800,
+69,
+877,
+91
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 9.78
+},
+{
+"mock": "b3-spectator",
+"text": "9/10",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1026,
+69,
+1083,
+94
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 11.6
+},
+{
+"mock": "b3-spectator",
+"text": "#4",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1151,
+71,
+1188,
+89
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 11.6
+},
+{
+"mock": "b3-spectator",
+"text": "Tuan",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+50,
+205,
+110,
+223
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 6.63
+},
+{
+"mock": "b3-spectator",
+"text": "Hào",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+50,
+260,
+100,
+279
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 10.65
+},
+{
+"mock": "b3-spectator",
+"text": "Vinh",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+50,
+317,
+104,
+335
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.71
+},
+{
+"mock": "b3-spectator",
+"text": "Vũ",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+50,
+373,
+82,
+391
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 10.67
+},
+{
+"mock": "b3-spectator",
+"text": "Quang Huy",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+50,
+429,
+182,
+452
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.71
+},
+{
+"mock": "b3-spectator",
+"text": "Khoa",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+50,
+485,
+114,
+503
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 10.65
+},
+{
+"mock": "b3-spectator",
+"text": "Khánh",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+50,
+540,
+127,
+559
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.71
+},
+{
+"mock": "b3-spectator",
+"text": "Minh",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+50,
+597,
+107,
+615
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 10.65
+},
+{
+"mock": "b3-spectator",
+"text": "Long",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+50,
+653,
+111,
+676
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.71
+},
+{
+"mock": "b3-spectator",
+"text": "Tuan",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+84,
+799,
+161,
+821
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 11.76
+},
+{
+"mock": "b3-spectator",
+"text": "86",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+400,
+863,
+433,
+881
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 11.86
+},
+{
+"mock": "b3-spectator",
+"text": "A",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+557,
+1004,
+575,
+1022
+],
+"game": true,
+"fill": "#1F1A10",
+"ratio": 6.07
+},
+{
+"mock": "b3-spectator",
+"text": "D",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+619,
+1004,
+637,
+1022
+],
+"game": true,
+"fill": "#1F1A10",
+"ratio": 6.07
+},
+{
+"mock": "b3-spectator",
+"text": "E",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+798,
+1004,
+813,
+1022
+],
+"game": true,
+"fill": "#1F1A10",
+"ratio": 6.07
+},
+{
+"mock": "b3-spectator-chuyen",
+"text": "Tuan",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+800,
+69,
+877,
+91
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 9.78
+},
+{
+"mock": "b3-spectator-chuyen",
+"text": "9/10",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1026,
+69,
+1083,
+94
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 11.6
+},
+{
+"mock": "b3-spectator-chuyen",
+"text": "#4",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1151,
+71,
+1188,
+89
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 11.6
+},
+{
+"mock": "b3-spectator-chuyen",
+"text": "Tuan",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+50,
+205,
+110,
+223
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 6.63
+},
+{
+"mock": "b3-spectator-chuyen",
+"text": "Hào",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+50,
+260,
+100,
+279
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 10.65
+},
+{
+"mock": "b3-spectator-chuyen",
+"text": "Vinh",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+50,
+317,
+104,
+335
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.71
+},
+{
+"mock": "b3-spectator-chuyen",
+"text": "Vũ",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+50,
+373,
+82,
+391
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 10.67
+},
+{
+"mock": "b3-spectator-chuyen",
+"text": "Quang Huy",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+50,
+429,
+182,
+452
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.71
+},
+{
+"mock": "b3-spectator-chuyen",
+"text": "Khoa",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+50,
+485,
+114,
+503
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 10.65
+},
+{
+"mock": "b3-spectator-chuyen",
+"text": "Khánh",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+50,
+540,
+127,
+559
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.71
+},
+{
+"mock": "b3-spectator-chuyen",
+"text": "Minh",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+50,
+597,
+107,
+615
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 10.65
+},
+{
+"mock": "b3-spectator-chuyen",
+"text": "Long",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+50,
+653,
+111,
+676
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.71
+},
+{
+"mock": "b3-spectator-chuyen",
+"text": "Tuan",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+84,
+799,
+161,
+821
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 11.76
+},
+{
+"mock": "b3-spectator-chuyen",
+"text": "86",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+400,
+863,
+433,
+881
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 11.86
+},
+{
+"mock": "b3-spectator-chuyen",
+"text": "A",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+557,
+1004,
+575,
+1022
+],
+"game": true,
+"fill": "#1F1A10",
+"ratio": 6.07
+},
+{
+"mock": "b3-spectator-chuyen",
+"text": "D",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+619,
+1004,
+637,
+1022
+],
+"game": true,
+"fill": "#1F1A10",
+"ratio": 6.07
+},
+{
+"mock": "b3-spectator-chuyen",
+"text": "E",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+798,
+1004,
+813,
+1022
+],
+"game": true,
+"fill": "#1F1A10",
+"ratio": 6.07
+},
+{
+"mock": "b3-spectator-chuyen",
+"text": "Vinh",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+830,
+196,
+884,
+214
+],
+"game": true,
+"fill": "#D6DAD6",
+"ratio": 9.49
+},
+{
+"mock": "b3-spectator-chuyen",
+"text": "Tuan",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1038,
+196,
+1098,
+214
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 11.83
+},
+{
+"mock": "b3-spectator-het",
+"text": "Tuan",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+800,
+69,
+877,
+91
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 9.78
+},
+{
+"mock": "b3-spectator-het",
+"text": "9/10",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1026,
+69,
+1083,
+94
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 11.6
+},
+{
+"mock": "b3-spectator-het",
+"text": "#4",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1151,
+71,
+1188,
+89
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 11.6
+},
+{
+"mock": "b3-spectator-het",
+"text": "Tuan",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+50,
+205,
+110,
+223
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 6.63
+},
+{
+"mock": "b3-spectator-het",
+"text": "Tuan",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+84,
+799,
+161,
+821
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 11.76
+},
+{
+"mock": "b3-spectator-het",
+"text": "86",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+400,
+863,
+433,
+881
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 11.86
+},
+{
+"mock": "b3-spectator-het",
+"text": "A",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+557,
+1004,
+575,
+1022
+],
+"game": true,
+"fill": "#1F1A10",
+"ratio": 6.07
+},
+{
+"mock": "b3-spectator-het",
+"text": "D",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+619,
+1004,
+637,
+1022
+],
+"game": true,
+"fill": "#1F1A10",
+"ratio": 6.07
+},
+{
+"mock": "b3-spectator-het",
+"text": "E",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+798,
+1004,
+813,
+1022
+],
+"game": true,
+"fill": "#1F1A10",
+"ratio": 6.07
+},
+{
+"mock": "b4-tui-do",
+"text": "Hào",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+37,
+57,
+87,
+76
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b4-tui-do",
+"text": "Linh",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+143,
+58,
+194,
+76
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b4-tui-do",
+"text": "Vinh",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+37,
+102,
+91,
+120
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b4-tui-do",
+"text": "Mai",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+147,
+102,
+191,
+120
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b4-tui-do",
+"text": "Vũ",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+37,
+146,
+69,
+164
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b4-tui-do",
+"text": "Sơn",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+125,
+146,
+171,
+164
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b4-tui-do",
+"text": "100",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+355,
+887,
+410,
+909
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.71
+},
+{
+"mock": "b4-tui-do",
+"text": "0",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+132,
+947,
+153,
+969
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 9.24
+},
+{
+"mock": "b4-tui-do",
+"text": "0",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+308,
+947,
+329,
+969
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 9.24
+},
+{
+"mock": "b4-tui-do",
+"text": "0",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+385,
+1003,
+406,
+1025
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.66
+},
+{
+"mock": "b4-tui-do",
+"text": "1/1",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1673,
+385,
+1706,
+410
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.17
+},
+{
+"mock": "b4-tui-do",
+"text": "1:21",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1786,
+387,
+1830,
+405
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.17
+},
+{
+"mock": "b4-tui-do",
+"text": "1",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+759,
+1012,
+768,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b4-tui-do",
+"text": "2",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+815,
+1012,
+828,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b4-tui-do",
+"text": "3",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+875,
+1012,
+889,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b4-tui-do",
+"text": "4",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+934,
+1012,
+948,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b4-tui-do",
+"text": "5",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1015,
+1012,
+1029,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b4-tui-do",
+"text": "6",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1075,
+1012,
+1089,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b4-tui-do",
+"text": "7",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1136,
+1012,
+1148,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b4-tui-do",
+"text": "8",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1194,
+1012,
+1207,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b4-tui-do",
+"text": "Tab",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1651,
+138,
+1699,
+156
+],
+"game": true,
+"fill": "#1F1A10",
+"ratio": 6.07
+},
+{
+"mock": "b4-tui-do",
+"text": "F",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+549,
+346,
+564,
+364
+],
+"game": true,
+"fill": "#1F1A10",
+"ratio": 8.14
+},
+{
+"mock": "b4-tui-do",
+"text": "×2",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+539,
+423,
+570,
+441
+],
+"game": true,
+"fill": "#D6DAD6",
+"ratio": 10.19
+},
+{
+"mock": "b4-tui-do",
+"text": "×1",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+545,
+497,
+570,
+515
+],
+"game": true,
+"fill": "#D6DAD6",
+"ratio": 10.19
+},
+{
+"mock": "b4-tui-do",
+"text": "1",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+721,
+328,
+731,
+346
+],
+"game": true,
+"fill": "#D6DAD6",
+"ratio": 9.65
+},
+{
+"mock": "b4-tui-do",
+"text": "2",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+871,
+328,
+887,
+346
+],
+"game": true,
+"fill": "#D6DAD6",
+"ratio": 7.78
+},
+{
+"mock": "b4-tui-do",
+"text": "3",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1021,
+328,
+1037,
+346
+],
+"game": true,
+"fill": "#D6DAD6",
+"ratio": 9.65
+},
+{
+"mock": "b4-tui-do",
+"text": "4",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1171,
+328,
+1188,
+346
+],
+"game": true,
+"fill": "#D6DAD6",
+"ratio": 10.57
+},
+{
+"mock": "b4-tui-do",
+"text": "5",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+721,
+548,
+737,
+566
+],
+"game": true,
+"fill": "#D6DAD6",
+"ratio": 9.65
+},
+{
+"mock": "b4-tui-do",
+"text": "×6",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+791,
+548,
+823,
+566
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 11.91
+},
+{
+"mock": "b4-tui-do",
+"text": "6",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+871,
+548,
+888,
+566
+],
+"game": true,
+"fill": "#D6DAD6",
+"ratio": 9.65
+},
+{
+"mock": "b4-tui-do",
+"text": "×1",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+948,
+548,
+973,
+566
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 11.91
+},
+{
+"mock": "b4-tui-do",
+"text": "7",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1021,
+548,
+1035,
+566
+],
+"game": true,
+"fill": "#D6DAD6",
+"ratio": 10.54
+},
+{
+"mock": "b4-tui-do",
+"text": "8",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1171,
+548,
+1187,
+566
+],
+"game": true,
+"fill": "#D6DAD6",
+"ratio": 9.65
+},
+{
+"mock": "b4-tui-do",
+"text": "×4",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1241,
+548,
+1273,
+566
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 11.91
+},
+{
+"mock": "b4-tui-do",
+"text": "18",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1667,
+353,
+1700,
+375
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.71
+},
+{
+"mock": "b4-tui-do",
+"text": "48",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1658,
+451,
+1700,
+473
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.71
+},
+{
+"mock": "b4-tui-do",
+"text": "55",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1660,
+549,
+1700,
+571
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.71
+},
+{
+"mock": "b4-tui-do",
+"text": "4/90",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1620,
+645,
+1700,
+675
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.71
+},
+{
+"mock": "b4-tui-do-tooltip",
+"text": "Hào",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+37,
+57,
+87,
+76
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b4-tui-do-tooltip",
+"text": "Linh",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+143,
+58,
+194,
+76
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b4-tui-do-tooltip",
+"text": "Vinh",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+37,
+102,
+91,
+120
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b4-tui-do-tooltip",
+"text": "Mai",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+147,
+102,
+191,
+120
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b4-tui-do-tooltip",
+"text": "Vũ",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+37,
+146,
+69,
+164
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b4-tui-do-tooltip",
+"text": "Sơn",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+125,
+146,
+171,
+164
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b4-tui-do-tooltip",
+"text": "100",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+355,
+887,
+410,
+909
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.71
+},
+{
+"mock": "b4-tui-do-tooltip",
+"text": "0",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+132,
+947,
+153,
+969
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 9.24
+},
+{
+"mock": "b4-tui-do-tooltip",
+"text": "0",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+308,
+947,
+329,
+969
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 9.24
+},
+{
+"mock": "b4-tui-do-tooltip",
+"text": "0",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+385,
+1003,
+406,
+1025
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.66
+},
+{
+"mock": "b4-tui-do-tooltip",
+"text": "1/1",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1673,
+385,
+1706,
+410
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.17
+},
+{
+"mock": "b4-tui-do-tooltip",
+"text": "1:21",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1786,
+387,
+1830,
+405
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.17
+},
+{
+"mock": "b4-tui-do-tooltip",
+"text": "1",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+759,
+1012,
+768,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b4-tui-do-tooltip",
+"text": "2",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+815,
+1012,
+828,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b4-tui-do-tooltip",
+"text": "3",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+875,
+1012,
+889,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b4-tui-do-tooltip",
+"text": "4",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+934,
+1012,
+948,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b4-tui-do-tooltip",
+"text": "5",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1015,
+1012,
+1029,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b4-tui-do-tooltip",
+"text": "6",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1075,
+1012,
+1089,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b4-tui-do-tooltip",
+"text": "7",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1136,
+1012,
+1148,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b4-tui-do-tooltip",
+"text": "8",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1194,
+1012,
+1207,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b4-tui-do-tooltip",
+"text": "Tab",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1651,
+138,
+1699,
+156
+],
+"game": true,
+"fill": "#1F1A10",
+"ratio": 6.07
+},
+{
+"mock": "b4-tui-do-tooltip",
+"text": "F",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+549,
+346,
+564,
+364
+],
+"game": true,
+"fill": "#1F1A10",
+"ratio": 8.14
+},
+{
+"mock": "b4-tui-do-tooltip",
+"text": "×2",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+539,
+423,
+570,
+441
+],
+"game": true,
+"fill": "#D6DAD6",
+"ratio": 10.19
+},
+{
+"mock": "b4-tui-do-tooltip",
+"text": "×1",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+545,
+497,
+570,
+515
+],
+"game": true,
+"fill": "#D6DAD6",
+"ratio": 10.19
+},
+{
+"mock": "b4-tui-do-tooltip",
+"text": "1",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+721,
+328,
+731,
+346
+],
+"game": true,
+"fill": "#D6DAD6",
+"ratio": 9.65
+},
+{
+"mock": "b4-tui-do-tooltip",
+"text": "2",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+871,
+328,
+887,
+346
+],
+"game": true,
+"fill": "#D6DAD6",
+"ratio": 7.78
+},
+{
+"mock": "b4-tui-do-tooltip",
+"text": "3",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1021,
+328,
+1037,
+346
+],
+"game": true,
+"fill": "#D6DAD6",
+"ratio": 9.65
+},
+{
+"mock": "b4-tui-do-tooltip",
+"text": "4",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1171,
+328,
+1188,
+346
+],
+"game": true,
+"fill": "#D6DAD6",
+"ratio": 10.57
+},
+{
+"mock": "b4-tui-do-tooltip",
+"text": "5",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+721,
+548,
+737,
+566
+],
+"game": true,
+"fill": "#D6DAD6",
+"ratio": 9.65
+},
+{
+"mock": "b4-tui-do-tooltip",
+"text": "×6",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+791,
+548,
+823,
+566
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 11.91
+},
+{
+"mock": "b4-tui-do-tooltip",
+"text": "6",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+871,
+548,
+888,
+566
+],
+"game": true,
+"fill": "#D6DAD6",
+"ratio": 9.65
+},
+{
+"mock": "b4-tui-do-tooltip",
+"text": "×1",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+948,
+548,
+973,
+566
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 11.91
+},
+{
+"mock": "b4-tui-do-tooltip",
+"text": "7",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1021,
+548,
+1035,
+566
+],
+"game": true,
+"fill": "#D6DAD6",
+"ratio": 10.54
+},
+{
+"mock": "b4-tui-do-tooltip",
+"text": "8",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1171,
+548,
+1187,
+566
+],
+"game": true,
+"fill": "#D6DAD6",
+"ratio": 9.65
+},
+{
+"mock": "b4-tui-do-tooltip",
+"text": "×4",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1241,
+548,
+1273,
+566
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 11.91
+},
+{
+"mock": "b4-tui-do-tooltip",
+"text": "18",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1667,
+353,
+1700,
+375
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.71
+},
+{
+"mock": "b4-tui-do-tooltip",
+"text": "48",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1658,
+451,
+1700,
+473
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.71
+},
+{
+"mock": "b4-tui-do-tooltip",
+"text": "55",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1660,
+549,
+1700,
+571
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.71
+},
+{
+"mock": "b4-tui-do-tooltip",
+"text": "4/90",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1620,
+645,
+1700,
+675
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.71
+},
+{
+"mock": "b4-tui-do-tooltip",
+"text": "Shotgun",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+560,
+431,
+662,
+454
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 10.09
+},
+{
+"mock": "b4-tui-do-tooltip",
+"text": "Vũ khí",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+505,
+496,
+580,
+515
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 11.9
+},
+{
+"mock": "b4-tui-do-tooltip",
+"text": "Tiếp tế, rương gỗ, xác",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+505,
+524,
+773,
+552
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 11.87
+},
+{
+"mock": "b4-tui-do-trong",
+"text": "Hào",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+37,
+57,
+87,
+76
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b4-tui-do-trong",
+"text": "Linh",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+143,
+58,
+194,
+76
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b4-tui-do-trong",
+"text": "Vinh",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+37,
+102,
+91,
+120
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b4-tui-do-trong",
+"text": "Mai",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+147,
+102,
+191,
+120
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b4-tui-do-trong",
+"text": "Vũ",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+37,
+146,
+69,
+164
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b4-tui-do-trong",
+"text": "Sơn",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+125,
+146,
+171,
+164
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b4-tui-do-trong",
+"text": "100",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+355,
+887,
+410,
+909
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.71
+},
+{
+"mock": "b4-tui-do-trong",
+"text": "0",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+132,
+947,
+153,
+969
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 9.24
+},
+{
+"mock": "b4-tui-do-trong",
+"text": "0",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+308,
+947,
+329,
+969
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 9.24
+},
+{
+"mock": "b4-tui-do-trong",
+"text": "0",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+385,
+1003,
+406,
+1025
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.66
+},
+{
+"mock": "b4-tui-do-trong",
+"text": "1/1",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1673,
+385,
+1706,
+410
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.17
+},
+{
+"mock": "b4-tui-do-trong",
+"text": "1:21",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1786,
+387,
+1830,
+405
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.17
+},
+{
+"mock": "b4-tui-do-trong",
+"text": "1",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+759,
+1012,
+768,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b4-tui-do-trong",
+"text": "2",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+815,
+1012,
+828,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b4-tui-do-trong",
+"text": "3",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+875,
+1012,
+889,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b4-tui-do-trong",
+"text": "4",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+934,
+1012,
+948,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b4-tui-do-trong",
+"text": "5",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1015,
+1012,
+1029,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b4-tui-do-trong",
+"text": "6",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1075,
+1012,
+1089,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b4-tui-do-trong",
+"text": "7",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1136,
+1012,
+1148,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b4-tui-do-trong",
+"text": "8",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1194,
+1012,
+1207,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b4-tui-do-trong",
+"text": "Tab",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1651,
+138,
+1699,
+156
+],
+"game": true,
+"fill": "#1F1A10",
+"ratio": 6.07
+},
+{
+"mock": "b4-tui-do-trong",
+"text": "1",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+721,
+328,
+731,
+346
+],
+"game": true,
+"fill": "#D6DAD6",
+"ratio": 9.65
+},
+{
+"mock": "b4-tui-do-trong",
+"text": "2",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+871,
+328,
+887,
+346
+],
+"game": true,
+"fill": "#D6DAD6",
+"ratio": 7.78
+},
+{
+"mock": "b4-tui-do-trong",
+"text": "3",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1021,
+328,
+1037,
+346
+],
+"game": true,
+"fill": "#D6DAD6",
+"ratio": 9.65
+},
+{
+"mock": "b4-tui-do-trong",
+"text": "4",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1171,
+328,
+1188,
+346
+],
+"game": true,
+"fill": "#D6DAD6",
+"ratio": 10.57
+},
+{
+"mock": "b4-tui-do-trong",
+"text": "5",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+721,
+548,
+737,
+566
+],
+"game": true,
+"fill": "#D6DAD6",
+"ratio": 9.65
+},
+{
+"mock": "b4-tui-do-trong",
+"text": "×6",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+791,
+548,
+823,
+566
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 11.91
+},
+{
+"mock": "b4-tui-do-trong",
+"text": "6",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+871,
+548,
+888,
+566
+],
+"game": true,
+"fill": "#D6DAD6",
+"ratio": 9.65
+},
+{
+"mock": "b4-tui-do-trong",
+"text": "×1",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+948,
+548,
+973,
+566
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 11.91
+},
+{
+"mock": "b4-tui-do-trong",
+"text": "7",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1021,
+548,
+1035,
+566
+],
+"game": true,
+"fill": "#D6DAD6",
+"ratio": 10.54
+},
+{
+"mock": "b4-tui-do-trong",
+"text": "8",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1171,
+548,
+1187,
+566
+],
+"game": true,
+"fill": "#D6DAD6",
+"ratio": 9.65
+},
+{
+"mock": "b4-tui-do-trong",
+"text": "×4",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1241,
+548,
+1273,
+566
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 11.91
+},
+{
+"mock": "b4-tui-do-trong",
+"text": "18",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1667,
+353,
+1700,
+375
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.71
+},
+{
+"mock": "b4-tui-do-trong",
+"text": "48",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1658,
+451,
+1700,
+473
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.71
+},
+{
+"mock": "b4-tui-do-trong",
+"text": "55",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1660,
+549,
+1700,
+571
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.71
+},
+{
+"mock": "b4-tui-do-trong",
+"text": "4/90",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1620,
+645,
+1700,
+675
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.71
+},
+{
+"mock": "b5-ban-do-lon",
+"text": "Hào",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+37,
+57,
+87,
+76
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b5-ban-do-lon",
+"text": "Linh",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+143,
+58,
+194,
+76
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b5-ban-do-lon",
+"text": "Vinh",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+37,
+102,
+91,
+120
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b5-ban-do-lon",
+"text": "Mai",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+147,
+102,
+191,
+120
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b5-ban-do-lon",
+"text": "Vũ",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+37,
+146,
+69,
+164
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b5-ban-do-lon",
+"text": "Sơn",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+125,
+146,
+171,
+164
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b5-ban-do-lon",
+"text": "100",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+355,
+887,
+410,
+909
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.71
+},
+{
+"mock": "b5-ban-do-lon",
+"text": "0",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+132,
+947,
+153,
+969
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 9.24
+},
+{
+"mock": "b5-ban-do-lon",
+"text": "0",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+308,
+947,
+329,
+969
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 9.24
+},
+{
+"mock": "b5-ban-do-lon",
+"text": "0",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+385,
+1003,
+406,
+1025
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.66
+},
+{
+"mock": "b5-ban-do-lon",
+"text": "1/1",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1673,
+385,
+1706,
+410
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.17
+},
+{
+"mock": "b5-ban-do-lon",
+"text": "1:21",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1786,
+387,
+1830,
+405
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.17
+},
+{
+"mock": "b5-ban-do-lon",
+"text": "1",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+759,
+1012,
+768,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b5-ban-do-lon",
+"text": "2",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+815,
+1012,
+828,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b5-ban-do-lon",
+"text": "3",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+875,
+1012,
+889,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b5-ban-do-lon",
+"text": "4",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+934,
+1012,
+948,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b5-ban-do-lon",
+"text": "5",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1015,
+1012,
+1029,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b5-ban-do-lon",
+"text": "6",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1075,
+1012,
+1089,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b5-ban-do-lon",
+"text": "7",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1136,
+1012,
+1148,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b5-ban-do-lon",
+"text": "8",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1194,
+1012,
+1207,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b5-ban-do-lon",
+"text": "3",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+1255,
+101,
+1279,
+129
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 10.96
+},
+{
+"mock": "b5-ban-do-lon",
+"text": "01:24",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+1410,
+101,
+1507,
+129
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.98
+},
+{
+"mock": "b5-ban-do-lon",
+"text": "420",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+1645,
+101,
+1717,
+129
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.82
+},
+{
+"mock": "b5-ban-do-lon",
+"text": "M",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1265,
+643,
+1286,
+661
+],
+"game": true,
+"fill": "#1F1A10",
+"ratio": 6.07
+},
+{
+"mock": "b6-thang",
+"text": "Xếp hạng",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1130,
+174,
+1275,
+208
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 11.0
+},
+{
+"mock": "b6-thang",
+"text": "#1",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1075,
+251,
+1105,
+269
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 6.6
+},
+{
+"mock": "b6-thang",
+"text": "Huy",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1160,
+251,
+1206,
+274
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 7.91
+},
+{
+"mock": "b6-thang",
+"text": "3",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1729,
+251,
+1745,
+269
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 6.17
+},
+{
+"mock": "b6-thang",
+"text": "#2",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1075,
+319,
+1111,
+337
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 8.56
+},
+{
+"mock": "b6-thang",
+"text": "Hào",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1160,
+318,
+1210,
+337
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 10.64
+},
+{
+"mock": "b6-thang",
+"text": "4",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1728,
+319,
+1745,
+337
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 8.43
+},
+{
+"mock": "b6-thang",
+"text": "#3",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1075,
+387,
+1111,
+405
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.18
+},
+{
+"mock": "b6-thang",
+"text": "Vinh",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1160,
+387,
+1214,
+405
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.71
+},
+{
+"mock": "b6-thang",
+"text": "1",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1735,
+387,
+1745,
+405
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.19
+},
+{
+"mock": "b6-thang",
+"text": "#4",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1075,
+455,
+1112,
+473
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 8.56
+},
+{
+"mock": "b6-thang",
+"text": "V.Huy",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1160,
+455,
+1232,
+478
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 10.64
+},
+{
+"mock": "b6-thang",
+"text": "2",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1729,
+455,
+1745,
+473
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 8.43
+},
+{
+"mock": "b6-thang",
+"text": "#5",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1075,
+523,
+1111,
+541
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.18
+},
+{
+"mock": "b6-thang",
+"text": "Vũ",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1160,
+523,
+1192,
+541
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.71
+},
+{
+"mock": "b6-thang",
+"text": "0",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1728,
+523,
+1745,
+541
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.19
+},
+{
+"mock": "b6-thang",
+"text": "#6",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1075,
+591,
+1112,
+609
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 8.56
+},
+{
+"mock": "b6-thang",
+"text": "Quang Huy",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1160,
+591,
+1292,
+614
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 10.63
+},
+{
+"mock": "b6-thang",
+"text": "1",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1735,
+591,
+1745,
+609
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 8.43
+},
+{
+"mock": "b6-thang",
+"text": "#7",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1075,
+659,
+1109,
+677
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.18
+},
+{
+"mock": "b6-thang",
+"text": "Khoa",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1160,
+659,
+1224,
+677
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.71
+},
+{
+"mock": "b6-thang",
+"text": "0",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1728,
+659,
+1745,
+677
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.19
+},
+{
+"mock": "b6-thang",
+"text": "#8",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1075,
+727,
+1111,
+745
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 8.56
+},
+{
+"mock": "b6-thang",
+"text": "Khánh",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1160,
+726,
+1237,
+745
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 10.64
+},
+{
+"mock": "b6-thang",
+"text": "0",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1728,
+727,
+1745,
+745
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 8.43
+},
+{
+"mock": "b6-thang",
+"text": "#9",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1075,
+795,
+1112,
+813
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.18
+},
+{
+"mock": "b6-thang",
+"text": "Minh",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1160,
+795,
+1217,
+813
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.71
+},
+{
+"mock": "b6-thang",
+"text": "0",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1728,
+795,
+1745,
+813
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.19
+},
+{
+"mock": "b6-thang",
+"text": "#10",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1075,
+863,
+1122,
+881
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 8.56
+},
+{
+"mock": "b6-thang",
+"text": "Long",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1160,
+863,
+1221,
+886
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 10.64
+},
+{
+"mock": "b6-thang",
+"text": "0",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1728,
+863,
+1745,
+881
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 8.43
+},
+{
+"mock": "b6-thang",
+"text": "CHIẾN THẮNG",
+"size": 96,
+"font": "Main",
+"btn": false,
+"bbox": [
+169,
+369,
+791,
+473
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 7.18
+},
+{
+"mock": "b6-thang",
+"text": "#1 / 10",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+416,
+531,
+544,
+559
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 8.47
+},
+{
+"mock": "b6-thang",
+"text": "3",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+308,
+649,
+332,
+677
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 11.79
+},
+{
+"mock": "b6-thang",
+"text": "07:00",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+617,
+649,
+723,
+677
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 11.86
+},
+{
+"mock": "b6-thang",
+"text": "Về sảnh",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+246,
+846,
+366,
+873
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.8
+},
+{
+"mock": "b6-thang",
+"text": "Chơi lại",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+607,
+850,
+722,
+880
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 7.74
+},
+{
+"mock": "b7-thua",
+"text": "Xếp hạng",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1130,
+174,
+1275,
+208
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 11.0
+},
+{
+"mock": "b7-thua",
+"text": "#1",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1075,
+251,
+1105,
+269
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.18
+},
+{
+"mock": "b7-thua",
+"text": "Huy",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1160,
+251,
+1206,
+274
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.71
+},
+{
+"mock": "b7-thua",
+"text": "3",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1729,
+251,
+1745,
+269
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.19
+},
+{
+"mock": "b7-thua",
+"text": "#2",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1075,
+319,
+1111,
+337
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 8.56
+},
+{
+"mock": "b7-thua",
+"text": "Hào",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1160,
+318,
+1210,
+337
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 10.64
+},
+{
+"mock": "b7-thua",
+"text": "4",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1728,
+319,
+1745,
+337
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 8.43
+},
+{
+"mock": "b7-thua",
+"text": "#3",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1075,
+387,
+1111,
+405
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.18
+},
+{
+"mock": "b7-thua",
+"text": "Vinh",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1160,
+387,
+1214,
+405
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.71
+},
+{
+"mock": "b7-thua",
+"text": "1",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1735,
+387,
+1745,
+405
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.19
+},
+{
+"mock": "b7-thua",
+"text": "#4",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1075,
+455,
+1112,
+473
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 6.6
+},
+{
+"mock": "b7-thua",
+"text": "V.Huy",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1160,
+455,
+1232,
+478
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 7.86
+},
+{
+"mock": "b7-thua",
+"text": "2",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1729,
+455,
+1745,
+473
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 6.17
+},
+{
+"mock": "b7-thua",
+"text": "#5",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1075,
+523,
+1111,
+541
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.18
+},
+{
+"mock": "b7-thua",
+"text": "Vũ",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1160,
+523,
+1192,
+541
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.71
+},
+{
+"mock": "b7-thua",
+"text": "0",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1728,
+523,
+1745,
+541
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.19
+},
+{
+"mock": "b7-thua",
+"text": "#6",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1075,
+591,
+1112,
+609
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 8.56
+},
+{
+"mock": "b7-thua",
+"text": "Quang Huy",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1160,
+591,
+1292,
+614
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 10.63
+},
+{
+"mock": "b7-thua",
+"text": "1",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1735,
+591,
+1745,
+609
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 8.43
+},
+{
+"mock": "b7-thua",
+"text": "#7",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1075,
+659,
+1109,
+677
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.18
+},
+{
+"mock": "b7-thua",
+"text": "Khoa",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1160,
+659,
+1224,
+677
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.71
+},
+{
+"mock": "b7-thua",
+"text": "0",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1728,
+659,
+1745,
+677
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.19
+},
+{
+"mock": "b7-thua",
+"text": "#8",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1075,
+727,
+1111,
+745
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 8.56
+},
+{
+"mock": "b7-thua",
+"text": "Khánh",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1160,
+726,
+1237,
+745
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 10.64
+},
+{
+"mock": "b7-thua",
+"text": "0",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1728,
+727,
+1745,
+745
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 8.43
+},
+{
+"mock": "b7-thua",
+"text": "#9",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1075,
+795,
+1112,
+813
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.18
+},
+{
+"mock": "b7-thua",
+"text": "Minh",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1160,
+795,
+1217,
+813
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.71
+},
+{
+"mock": "b7-thua",
+"text": "0",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1728,
+795,
+1745,
+813
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 10.19
+},
+{
+"mock": "b7-thua",
+"text": "#10",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1075,
+863,
+1122,
+881
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 8.56
+},
+{
+"mock": "b7-thua",
+"text": "Long",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1160,
+863,
+1221,
+886
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 10.64
+},
+{
+"mock": "b7-thua",
+"text": "0",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1728,
+863,
+1745,
+881
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 8.43
+},
+{
+"mock": "b7-thua",
+"text": "HẠNG #4",
+"size": 96,
+"font": "Main",
+"btn": false,
+"bbox": [
+274,
+406,
+685,
+491
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 8.47
+},
+{
+"mock": "b7-thua",
+"text": "Hào",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+280,
+563,
+342,
+586
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 9.85
+},
+{
+"mock": "b7-thua",
+"text": "6",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+466,
+566,
+483,
+584
+],
+"game": false,
+"fill": "#D6DAD6",
+"ratio": 8.07
+},
+{
+"mock": "b7-thua",
+"text": "2",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+308,
+714,
+331,
+742
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 11.79
+},
+{
+"mock": "b7-thua",
+"text": "04:38",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+616,
+714,
+724,
+742
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 11.86
+},
+{
+"mock": "b7-thua",
+"text": "Về sảnh",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+246,
+846,
+366,
+873
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.8
+},
+{
+"mock": "b7-thua",
+"text": "Chơi lại",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+607,
+850,
+722,
+880
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 7.74
+},
+{
+"mock": "b8-mat-ket-noi",
+"text": "Hào",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+37,
+57,
+87,
+76
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b8-mat-ket-noi",
+"text": "Linh",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+143,
+58,
+194,
+76
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b8-mat-ket-noi",
+"text": "Vinh",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+37,
+102,
+91,
+120
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b8-mat-ket-noi",
+"text": "Mai",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+147,
+102,
+191,
+120
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b8-mat-ket-noi",
+"text": "Vũ",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+37,
+146,
+69,
+164
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b8-mat-ket-noi",
+"text": "Sơn",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+125,
+146,
+171,
+164
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b8-mat-ket-noi",
+"text": "100",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+355,
+887,
+410,
+909
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.71
+},
+{
+"mock": "b8-mat-ket-noi",
+"text": "0",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+132,
+947,
+153,
+969
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 9.24
+},
+{
+"mock": "b8-mat-ket-noi",
+"text": "0",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+308,
+947,
+329,
+969
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 9.24
+},
+{
+"mock": "b8-mat-ket-noi",
+"text": "0",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+385,
+1003,
+406,
+1025
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.66
+},
+{
+"mock": "b8-mat-ket-noi",
+"text": "1/1",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1673,
+385,
+1706,
+410
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.17
+},
+{
+"mock": "b8-mat-ket-noi",
+"text": "1:21",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1786,
+387,
+1830,
+405
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.17
+},
+{
+"mock": "b8-mat-ket-noi",
+"text": "1",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+759,
+1012,
+768,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b8-mat-ket-noi",
+"text": "2",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+815,
+1012,
+828,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b8-mat-ket-noi",
+"text": "3",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+875,
+1012,
+889,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b8-mat-ket-noi",
+"text": "4",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+934,
+1012,
+948,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b8-mat-ket-noi",
+"text": "5",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1015,
+1012,
+1029,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b8-mat-ket-noi",
+"text": "6",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1075,
+1012,
+1089,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b8-mat-ket-noi",
+"text": "7",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1136,
+1012,
+1148,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b8-mat-ket-noi",
+"text": "8",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1194,
+1012,
+1207,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b8-mat-ket-noi",
+"text": "Đang kết nối lại...",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+797,
+481,
+1123,
+523
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.94
+},
+{
+"mock": "b8-mat-ket-noi",
+"text": "11",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1250,
+611,
+1270,
+629
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 11.0
+},
+{
+"mock": "b8-mat-ket-noi",
+"text": "Về sảnh",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+761,
+652,
+881,
+679
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.55
+},
+{
+"mock": "b8-mat-ket-noi",
+"text": "Thử lại ngay",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+1047,
+654,
+1232,
+686
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 7.74
+},
+{
+"mock": "b8-mat-ket-noi-that-bai",
+"text": "Hào",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+37,
+57,
+87,
+76
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b8-mat-ket-noi-that-bai",
+"text": "Linh",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+143,
+58,
+194,
+76
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b8-mat-ket-noi-that-bai",
+"text": "Vinh",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+37,
+102,
+91,
+120
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b8-mat-ket-noi-that-bai",
+"text": "Mai",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+147,
+102,
+191,
+120
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b8-mat-ket-noi-that-bai",
+"text": "Vũ",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+37,
+146,
+69,
+164
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b8-mat-ket-noi-that-bai",
+"text": "Sơn",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+125,
+146,
+171,
+164
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b8-mat-ket-noi-that-bai",
+"text": "100",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+355,
+887,
+410,
+909
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.71
+},
+{
+"mock": "b8-mat-ket-noi-that-bai",
+"text": "0",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+132,
+947,
+153,
+969
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 9.24
+},
+{
+"mock": "b8-mat-ket-noi-that-bai",
+"text": "0",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+308,
+947,
+329,
+969
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 9.24
+},
+{
+"mock": "b8-mat-ket-noi-that-bai",
+"text": "0",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+385,
+1003,
+406,
+1025
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.66
+},
+{
+"mock": "b8-mat-ket-noi-that-bai",
+"text": "1/1",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1673,
+385,
+1706,
+410
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.17
+},
+{
+"mock": "b8-mat-ket-noi-that-bai",
+"text": "1:21",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1786,
+387,
+1830,
+405
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.17
+},
+{
+"mock": "b8-mat-ket-noi-that-bai",
+"text": "1",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+759,
+1012,
+768,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b8-mat-ket-noi-that-bai",
+"text": "2",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+815,
+1012,
+828,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b8-mat-ket-noi-that-bai",
+"text": "3",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+875,
+1012,
+889,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b8-mat-ket-noi-that-bai",
+"text": "4",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+934,
+1012,
+948,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b8-mat-ket-noi-that-bai",
+"text": "5",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1015,
+1012,
+1029,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b8-mat-ket-noi-that-bai",
+"text": "6",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1075,
+1012,
+1089,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b8-mat-ket-noi-that-bai",
+"text": "7",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1136,
+1012,
+1148,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b8-mat-ket-noi-that-bai",
+"text": "8",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1194,
+1012,
+1207,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b8-mat-ket-noi-that-bai",
+"text": "Chưa kết nối lại được",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+757,
+481,
+1163,
+522
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.92
+},
+{
+"mock": "b8-mat-ket-noi-that-bai",
+"text": "Còn 6 s",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+922,
+545,
+1013,
+564
+],
+"game": false,
+"fill": "#FF8A78",
+"ratio": 6.35
+},
+{
+"mock": "b8-mat-ket-noi-that-bai",
+"text": "Về sảnh",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+761,
+652,
+881,
+679
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 6.55
+},
+{
+"mock": "b8-mat-ket-noi-that-bai",
+"text": "Thử lại",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+1088,
+654,
+1190,
+686
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 7.72
+},
+{
+"mock": "b8-mat-ket-noi-het-han",
+"text": "Hào",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+37,
+57,
+87,
+76
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b8-mat-ket-noi-het-han",
+"text": "Linh",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+143,
+58,
+194,
+76
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b8-mat-ket-noi-het-han",
+"text": "Vinh",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+37,
+102,
+91,
+120
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b8-mat-ket-noi-het-han",
+"text": "Mai",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+147,
+102,
+191,
+120
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b8-mat-ket-noi-het-han",
+"text": "Vũ",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+37,
+146,
+69,
+164
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b8-mat-ket-noi-het-han",
+"text": "Sơn",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+125,
+146,
+171,
+164
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b8-mat-ket-noi-het-han",
+"text": "100",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+355,
+887,
+410,
+909
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.71
+},
+{
+"mock": "b8-mat-ket-noi-het-han",
+"text": "0",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+132,
+947,
+153,
+969
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 9.24
+},
+{
+"mock": "b8-mat-ket-noi-het-han",
+"text": "0",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+308,
+947,
+329,
+969
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 9.24
+},
+{
+"mock": "b8-mat-ket-noi-het-han",
+"text": "0",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+385,
+1003,
+406,
+1025
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.66
+},
+{
+"mock": "b8-mat-ket-noi-het-han",
+"text": "1/1",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1673,
+385,
+1706,
+410
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.17
+},
+{
+"mock": "b8-mat-ket-noi-het-han",
+"text": "1:21",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1786,
+387,
+1830,
+405
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.17
+},
+{
+"mock": "b8-mat-ket-noi-het-han",
+"text": "1",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+759,
+1012,
+768,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b8-mat-ket-noi-het-han",
+"text": "2",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+815,
+1012,
+828,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b8-mat-ket-noi-het-han",
+"text": "3",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+875,
+1012,
+889,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b8-mat-ket-noi-het-han",
+"text": "4",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+934,
+1012,
+948,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b8-mat-ket-noi-het-han",
+"text": "5",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1015,
+1012,
+1029,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b8-mat-ket-noi-het-han",
+"text": "6",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1075,
+1012,
+1089,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b8-mat-ket-noi-het-han",
+"text": "7",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1136,
+1012,
+1148,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b8-mat-ket-noi-het-han",
+"text": "8",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1194,
+1012,
+1207,
+1027
+],
+"game": false,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b8-mat-ket-noi-het-han",
+"text": "Đã mất kết nối",
+"size": 40,
+"font": "Main",
+"btn": false,
+"bbox": [
+820,
+481,
+1099,
+514
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.98
+},
+{
+"mock": "b8-mat-ket-noi-het-han",
+"text": "Hạng #4 / 10",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+861,
+547,
+1059,
+578
+],
+"game": false,
+"fill": "#EDF2EE",
+"ratio": 12.92
+},
+{
+"mock": "b8-mat-ket-noi-het-han",
+"text": "Về sảnh",
+"size": 30,
+"font": "BVP",
+"btn": true,
+"bbox": [
+921,
+652,
+1041,
+679
+],
+"game": false,
+"fill": "#1F1A10",
+"ratio": 7.8
+},
+{
+"mock": "b9-phan-hoi-hud",
+"text": "Hào",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+37,
+57,
+87,
+76
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b9-phan-hoi-hud",
+"text": "Linh",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+143,
+58,
+194,
+76
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b9-phan-hoi-hud",
+"text": "Vinh",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+37,
+102,
+91,
+120
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b9-phan-hoi-hud",
+"text": "Mai",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+147,
+102,
+191,
+120
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b9-phan-hoi-hud",
+"text": "Vũ",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+37,
+146,
+69,
+164
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b9-phan-hoi-hud",
+"text": "Sơn",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+125,
+146,
+171,
+164
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b9-phan-hoi-hud",
+"text": "100",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+355,
+887,
+410,
+909
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.71
+},
+{
+"mock": "b9-phan-hoi-hud",
+"text": "0",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+132,
+947,
+153,
+969
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 9.24
+},
+{
+"mock": "b9-phan-hoi-hud",
+"text": "0",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+308,
+947,
+329,
+969
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 9.24
+},
+{
+"mock": "b9-phan-hoi-hud",
+"text": "0",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+385,
+1003,
+406,
+1025
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.66
+},
+{
+"mock": "b9-phan-hoi-hud",
+"text": "1/1",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1673,
+385,
+1706,
+410
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.17
+},
+{
+"mock": "b9-phan-hoi-hud",
+"text": "1:21",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1786,
+387,
+1830,
+405
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.17
+},
+{
+"mock": "b9-phan-hoi-hud",
+"text": "1",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+759,
+1012,
+768,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b9-phan-hoi-hud",
+"text": "2",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+815,
+1012,
+828,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b9-phan-hoi-hud",
+"text": "3",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+875,
+1012,
+889,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b9-phan-hoi-hud",
+"text": "4",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+934,
+1012,
+948,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b9-phan-hoi-hud",
+"text": "5",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1015,
+1012,
+1029,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b9-phan-hoi-hud",
+"text": "6",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1075,
+1012,
+1089,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b9-phan-hoi-hud",
+"text": "7",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1136,
+1012,
+1148,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b9-phan-hoi-hud",
+"text": "8",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1194,
+1012,
+1207,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b9-phan-hoi-hud",
+"text": "8",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+602,
+581,
+618,
+599
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 9.51
+},
+{
+"mock": "b9-phan-hoi-hud",
+"text": "8",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+912,
+57,
+928,
+75
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 11.72
+},
+{
+"mock": "b9-phan-hoi-hud",
+"text": "4",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1030,
+57,
+1047,
+75
+],
+"game": true,
+"fill": "#D6DAD6",
+"ratio": 9.49
+},
+{
+"mock": "b9-phan-hoi-hud",
+"text": "3",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+82,
+781,
+98,
+799
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 9.48
+},
+{
+"mock": "b9-phan-hoi-hud",
+"text": "5",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+206,
+781,
+222,
+799
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 9.48
+},
+{
+"mock": "b9-phan-hoi-hud",
+"text": "9",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+329,
+781,
+346,
+799
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 9.48
+},
+{
+"mock": "b9-phan-hoi-hud",
+"text": "1,2",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1110,
+873,
+1144,
+894
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 10.03
+},
+{
+"mock": "b9-phan-hoi-hud",
+"text": "F",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1054,
+634,
+1069,
+652
+],
+"game": true,
+"fill": "#1F1A10",
+"ratio": 8.14
+},
+{
+"mock": "b9-phan-hoi-hud",
+"text": "Shotgun",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1188,
+637,
+1290,
+660
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 11.83
+},
+{
+"mock": "b9-phan-hoi-hud",
+"text": "+",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1614,
+848,
+1630,
+861
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 10.68
+},
+{
+"mock": "b9-phan-hoi-hud",
+"text": "Giáp gai",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1706,
+842,
+1809,
+866
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 10.63
+},
+{
+"mock": "b9-phan-hoi-hud",
+"text": "×1",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1861,
+843,
+1886,
+861
+],
+"game": true,
+"fill": "#D6DAD6",
+"ratio": 8.46
+},
+{
+"mock": "b9-phan-hoi-hud",
+"text": "+",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1614,
+922,
+1630,
+935
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 10.68
+},
+{
+"mock": "b9-phan-hoi-hud",
+"text": "Lá thần",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1706,
+913,
+1799,
+935
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 10.57
+},
+{
+"mock": "b9-phan-hoi-hud",
+"text": "×2",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1855,
+917,
+1886,
+935
+],
+"game": true,
+"fill": "#D6DAD6",
+"ratio": 8.46
+},
+{
+"mock": "b9-phan-hoi-hud",
+"text": "+",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1614,
+996,
+1630,
+1009
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 10.68
+},
+{
+"mock": "b9-phan-hoi-hud",
+"text": "Shotgun",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1706,
+991,
+1808,
+1014
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 10.63
+},
+{
+"mock": "b9-phan-hoi-hud",
+"text": "×1",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1861,
+991,
+1886,
+1009
+],
+"game": true,
+"fill": "#D6DAD6",
+"ratio": 8.46
+},
+{
+"mock": "b9-phan-hoi-hud",
+"text": "+2",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1839,
+779,
+1871,
+797
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 9.51
+},
+{
+"mock": "b9-phan-hoi-mau-thap",
+"text": "Hào",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+37,
+57,
+87,
+76
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b9-phan-hoi-mau-thap",
+"text": "Linh",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+143,
+58,
+194,
+76
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b9-phan-hoi-mau-thap",
+"text": "Vinh",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+37,
+102,
+91,
+120
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b9-phan-hoi-mau-thap",
+"text": "Mai",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+147,
+102,
+191,
+120
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b9-phan-hoi-mau-thap",
+"text": "Vũ",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+37,
+146,
+69,
+164
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b9-phan-hoi-mau-thap",
+"text": "Sơn",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+125,
+146,
+171,
+164
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 16.38
+},
+{
+"mock": "b9-phan-hoi-mau-thap",
+"text": "100",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+355,
+887,
+410,
+909
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.71
+},
+{
+"mock": "b9-phan-hoi-mau-thap",
+"text": "0",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+132,
+947,
+153,
+969
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 9.24
+},
+{
+"mock": "b9-phan-hoi-mau-thap",
+"text": "0",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+308,
+947,
+329,
+969
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 9.24
+},
+{
+"mock": "b9-phan-hoi-mau-thap",
+"text": "0",
+"size": 30,
+"font": "BVP",
+"btn": false,
+"bbox": [
+385,
+1003,
+406,
+1025
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.66
+},
+{
+"mock": "b9-phan-hoi-mau-thap",
+"text": "1/1",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1673,
+385,
+1706,
+410
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.17
+},
+{
+"mock": "b9-phan-hoi-mau-thap",
+"text": "1:21",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1786,
+387,
+1830,
+405
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 12.17
+},
+{
+"mock": "b9-phan-hoi-mau-thap",
+"text": "1",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+759,
+1012,
+768,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b9-phan-hoi-mau-thap",
+"text": "2",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+815,
+1012,
+828,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b9-phan-hoi-mau-thap",
+"text": "3",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+875,
+1012,
+889,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b9-phan-hoi-mau-thap",
+"text": "4",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+934,
+1012,
+948,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b9-phan-hoi-mau-thap",
+"text": "5",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1015,
+1012,
+1029,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b9-phan-hoi-mau-thap",
+"text": "6",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1075,
+1012,
+1089,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b9-phan-hoi-mau-thap",
+"text": "7",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1136,
+1012,
+1148,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b9-phan-hoi-mau-thap",
+"text": "8",
+"size": 20,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1194,
+1012,
+1207,
+1027
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 12.95
+},
+{
+"mock": "b9-phan-hoi-mau-thap",
+"text": "8",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+602,
+581,
+618,
+599
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 9.51
+},
+{
+"mock": "b9-phan-hoi-mau-thap",
+"text": "8",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+912,
+57,
+928,
+75
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 11.72
+},
+{
+"mock": "b9-phan-hoi-mau-thap",
+"text": "4",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1030,
+57,
+1047,
+75
+],
+"game": true,
+"fill": "#D6DAD6",
+"ratio": 9.49
+},
+{
+"mock": "b9-phan-hoi-mau-thap",
+"text": "3",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+82,
+781,
+98,
+799
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 9.48
+},
+{
+"mock": "b9-phan-hoi-mau-thap",
+"text": "5",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+206,
+781,
+222,
+799
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 9.48
+},
+{
+"mock": "b9-phan-hoi-mau-thap",
+"text": "9",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+329,
+781,
+346,
+799
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 9.48
+},
+{
+"mock": "b9-phan-hoi-mau-thap",
+"text": "1,2",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1110,
+873,
+1144,
+894
+],
+"game": true,
+"fill": "#FFDC6E",
+"ratio": 10.03
+},
+{
+"mock": "b9-phan-hoi-mau-thap",
+"text": "F",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1054,
+634,
+1069,
+652
+],
+"game": true,
+"fill": "#1F1A10",
+"ratio": 8.14
+},
+{
+"mock": "b9-phan-hoi-mau-thap",
+"text": "Shotgun",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1188,
+637,
+1290,
+660
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 11.83
+},
+{
+"mock": "b9-phan-hoi-mau-thap",
+"text": "+",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1614,
+848,
+1630,
+861
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 10.68
+},
+{
+"mock": "b9-phan-hoi-mau-thap",
+"text": "Giáp gai",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1706,
+842,
+1809,
+866
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 10.63
+},
+{
+"mock": "b9-phan-hoi-mau-thap",
+"text": "×1",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1861,
+843,
+1886,
+861
+],
+"game": true,
+"fill": "#D6DAD6",
+"ratio": 8.46
+},
+{
+"mock": "b9-phan-hoi-mau-thap",
+"text": "+",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1614,
+922,
+1630,
+935
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 10.68
+},
+{
+"mock": "b9-phan-hoi-mau-thap",
+"text": "Lá thần",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1706,
+913,
+1799,
+935
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 10.57
+},
+{
+"mock": "b9-phan-hoi-mau-thap",
+"text": "×2",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1855,
+917,
+1886,
+935
+],
+"game": true,
+"fill": "#D6DAD6",
+"ratio": 8.46
+},
+{
+"mock": "b9-phan-hoi-mau-thap",
+"text": "+",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1614,
+996,
+1630,
+1009
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 10.68
+},
+{
+"mock": "b9-phan-hoi-mau-thap",
+"text": "Shotgun",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1706,
+991,
+1808,
+1014
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 10.63
+},
+{
+"mock": "b9-phan-hoi-mau-thap",
+"text": "×1",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1861,
+991,
+1886,
+1009
+],
+"game": true,
+"fill": "#D6DAD6",
+"ratio": 8.46
+},
+{
+"mock": "b9-phan-hoi-mau-thap",
+"text": "+2",
+"size": 24,
+"font": "BVP",
+"btn": false,
+"bbox": [
+1839,
+779,
+1871,
+797
+],
+"game": true,
+"fill": "#EDF2EE",
+"ratio": 9.51
+}
+]
