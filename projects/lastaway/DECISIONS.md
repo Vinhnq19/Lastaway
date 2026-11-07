@@ -213,3 +213,7 @@ Khoảng trống chặn QA-01 theo PIC người (MAP-02, Game-10, DRG-01, ZON-01
   - Tiny5: dấu là điểm ảnh rời, "CHIẾN" đọc ra "CHIỂN".
   Không dùng Tiny5 riêng cho số lớn vì sẽ thành font thứ ba. File thử ở `font-ngoai/` giữ lại làm bằng chứng, không đưa vào Assets, không commit.
 - **Chốt font 07/11 (Huy, bằng lời, gửi kèm ảnh "CHIẾN THẮNG"):** "dùng font này". Chakra Petch Bold thay Denk One cho bậc 96 và 40. Huy quyết định này dù CPO đã lo font này quá giống font thân nên phân tầng yếu. Be Vietnam Pro Bold giữ nguyên cho bậc 30, 24, 20. Chakra Petch Bold kèm OFL.txt được đưa vào `Assets/_JungleMaze/Art/JSurviv/Fonts/`. File Denk One không xóa và không commit.
+
+## 2026-11-07 - Ngoại lệ màu đỏ cho phản hồi sát thương (Huy)
+
+- **Chốt 07/11 (Huy, bằng lời):** "Giữ đỏ". Cung chỉ hướng bị bắn và viền màn khi máu thấp giữ màu đỏ, là ngoại lệ của luật màu kaki. Asset FX đỏ art-ux đang giữ trong T-021 được dùng nguyên, Unity làm theo ở T-022.
