@@ -28,6 +28,8 @@ namespace JungleMaze.Presentation.UI
             if (_map != null)
             {
                 Apply(_mapMaterial, state, bounds, state.TargetRadius > 0);
+                // Phase zero includes the initial warning; later phases keep the existing danger area visible.
+                _mapMaterial.SetFloat("_FillAlpha", state.PhaseIndex > 0 ? .62f : 0f);
                 _map.enabled = true;
             }
         }
