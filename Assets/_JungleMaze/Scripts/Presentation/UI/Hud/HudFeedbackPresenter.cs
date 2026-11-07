@@ -53,8 +53,10 @@ namespace JungleMaze.Presentation.UI.Hud
         {
             var s=Use.Status;var tenths=(int)Math.Ceiling(Math.Max(0,s.RemainingSeconds)*10-.00001f);
             if(_first||Use.Visible!=_lastUseVisible||Use.Fill!=_lastUseFill||s.Phase!=_lastUse.Phase||s.DisplayName!=_lastUse.DisplayName||s.Cancellable!=_lastUse.Cancellable||tenths!=_lastTenths){
-                _useView?.Show(Use.Visible,_text,HudFeedbackFormat.UseLabel(_text,s),_seconds,HudFeedbackFormat.Tenths(_seconds,s.RemainingSeconds),Use.Fill,Use.Hint,s.Phase==ItemUsePhase.Cancelled);
+                var named=new ItemUseStatus(s.Phase,s.ItemId,HudItemNames.Get(s.ItemId,s.DisplayName),s.SlotIndex,s.TotalSeconds,s.RemainingSeconds,s.Cancellable); // T-022 R3: Vietnamese item name (GDD ITEM LIST), format untouched
+                _useView?.Show(Use.Visible,_text,HudFeedbackFormat.UseLabel(_text,named),_seconds,HudFeedbackFormat.Tenths(_seconds,s.RemainingSeconds),Use.Fill,Use.Hint,s.Phase==ItemUsePhase.Cancelled);
                 if(_first||Use.Visible!=_lastUseVisible)_quickbar?.SetWeaponStripVisible(!Use.Visible);
+                if(_useView is IUseActionIconView icon&&(_first||s.ItemId!=_lastUse.ItemId))icon.SetItem(s.ItemId); // T-022: image assignment only
                 _lastUse=s;_lastUseVisible=Use.Visible;_lastUseFill=Use.Fill;_lastTenths=tenths;
             }
             var slot=Use.SlotInUse;if(_first||slot!=_lastSlot){if(_lastSlot>=0)_quickbar?.SetSlotInUse(_lastSlot,false);if(slot>=0)_quickbar?.SetSlotInUse(slot,true);_lastSlot=slot;}

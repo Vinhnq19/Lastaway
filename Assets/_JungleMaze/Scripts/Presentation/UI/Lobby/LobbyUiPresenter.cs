@@ -113,11 +113,19 @@ namespace JungleMaze.Presentation.UI.Lobby
             foreach (var panel in _root.Panels) panel.Show(panel == target);
             if (screen == LobbyScreen.JoinForm) _root.MainMenu.ShowUnder(); // modal over Home, behind its scrim
             if (_root.Canvas != null) _root.Canvas.enabled = screen != LobbyScreen.InGame;
-            if (_root.Backdrop != null) _root.Backdrop.SetActive(LobbyScreenRules.IsMenu(screen));
+            if (_root.Backdrop != null) _root.Backdrop.SetActive(HasFloor(screen)); // skin A: floor behind A6, A7, B6, B7 too
             _shown = screen;
             _drawnKey = int.MinValue;
             OnEnter(screen);
         }
+
+        /// <summary>
+        /// Screens drawn on the floor backdrop (mocks A2 to A7, B6, B7, B8 hết hạn); only the in-match reconnect countdown
+        /// (B8 đếm ngược) keeps the HUD behind.
+        /// </summary>
+        public static bool HasFloor(LobbyScreen s) =>
+            LobbyScreenRules.IsMenu(s) || s == LobbyScreen.Lobby || s == LobbyScreen.Loading || s == LobbyScreen.LoadError
+            || s == LobbyScreen.Results || s == LobbyScreen.Disconnected;
 
         private void OnEnter(LobbyScreen screen)
         {
@@ -175,8 +183,10 @@ namespace JungleMaze.Presentation.UI.Lobby
             var v = _root.MainMenu;
             var api = _flow.Api?.Text ?? ApiMessages.NoApi;
             var user = _flow.Account?.Username?.Trim() ?? "";
-            if (!Changed(Hash(api, user))) return;
+            var ready = _flow.Api != null && _flow.Api.Ready;
+            if (!Changed(Hash(api, user, ready ? 1 : 0))) return;
             v.ApiStatus.text = api;
+            v.ShowApiReady(ready);
             v.AccountStatus.text = "Đã đăng nhập";
             v.AccountName.text = user;
             SetLabel(v.Logout, "Đăng xuất");
@@ -385,6 +395,7 @@ namespace JungleMaze.Presentation.UI.Lobby
             v.Hint.text = _flow.Options.ControlsHint;
             var tips = _flow.Options.Tips;
             v.Tip.text = tips != null && tips.Length > 0 ? "Mẹo: " + tips[(int)((uint)_flow.Lobby.MatchId.GetHashCode() % tips.Length)] : "";
+            v.SetCountdown(seconds);
         }
 
         private void DrawResults()
@@ -400,6 +411,7 @@ namespace JungleMaze.Presentation.UI.Lobby
             SetOptional(v.Kills, r.KillsText);
             SetOptional(v.Survival, r.SurvivalText);
             SetOptional(v.Cause, r.CauseText);
+            v.ShowDecor(r.HasData && r.Headline == ResultHeadline.Victory);
             v.OnlineLine.text = isOffline ? "" : (apiReady ? "" : ApiMessages.HistoryUnavailableLine);
             v.Online.gameObject.SetActive(apiReady && r.HasData && !isOffline);
             v.Replay.interactable = ending && !_flow.ReplayPending;
@@ -426,14 +438,18 @@ namespace JungleMaze.Presentation.UI.Lobby
             if (!Changed(left)) return;
             _root.Reconnect.Message.text = "Đang kết nối lại…";
             _root.Reconnect.Seconds.text = "Còn khoảng " + left + " s";
+            _root.Reconnect.SetCountdown(left);
         }
 
         private void DrawNotice(LobbyScreen screen)
         {
             var text = screen == LobbyScreen.LoadError ? _flow.LoadErrorText : _flow.Notice;
             if (!Changed(Hash((int)screen, text))) return;
-            _root.Notice.Title.text = screen == LobbyScreen.LoadError ? "Không vào được trận" : "Mất kết nối";
-            _root.Notice.Message.text = text;
+            var title = screen == LobbyScreen.LoadError ? "Không vào được trận" : "Mất kết nối";
+            _root.Notice.Title.text = title;
+            // QA T25-2: ReconnectController.LostText is the title itself; show it once (mock B8 hết hạn has no repeat).
+            _root.Notice.Message.text = string.Equals(text?.Trim(), title, StringComparison.OrdinalIgnoreCase) ? "" : text;
+            _root.Notice.ShowKind(screen == LobbyScreen.LoadError);
         }
 
         // ---- input ---------------------------------------------------------------------------------------------

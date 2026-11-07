@@ -4,7 +4,7 @@ Nguồn sự thật duy nhất về việc cần làm. CPO sở hữu cấu trú
 
 Trạng thái: `todo` · `doing` · `review` · `done` · `blocked` (thêm `loại`, `gộp vào T-###`). Ước lượng: S (một lượt ngắn) · M (một lượt đầy) · L (phải chia nhỏ).
 
-Mã task lớn nhất đã cấp: **T-027**. Task mới lấy số tiếp theo.
+Mã task lớn nhất đã cấp: **T-028**. Task mới lấy số tiếp theo.
 
 Kiểm cấu trúc sau mỗi lần sửa: `node scripts/backlog-check.mjs`.
 
@@ -33,12 +33,13 @@ Kiểm cấu trúc sau mỗi lần sửa: `node scripts/backlog-check.mjs`.
 | T-019 | lastaway: icon giáp, mũ, Adrenaline khi bằng 0 sáng và hiện "0" theo ref | unity | T-016 | S | done | Game view 1920x1080 đầu trận (giáp 0, mũ 0) khớp dung-thu-hud-A.png; ca có giáp vẫn đúng; test HUD xanh; qa ĐẠT. qa ĐẠT 07/11 (VERIFIED Editor, 0 Nặng) |
 | T-020 | lastaway: UI kit skin A (nút đủ trạng thái, panel S/M/L, popup, tab, slider, toggle, ô nhập, dòng danh sách, thanh cuộn, badge, toast; token màu, chữ) gen bằng GPT | art-ux | T-015 | M | done | Mỗi thành phần đủ trạng thái, viền 24 px và hoa văn góc như HUD; 9-slice ghi meta; chữ >= 4,5:1; trang so sánh Huy duyệt. Huy duyệt 07/11 (kèm màu ngữ nghĩa bản sửa) |
 | T-021 | lastaway: mock 1920x1080 mọi màn (sảnh, tìm/tạo phòng, phòng chờ, loading, ESC, spectator, balo, bản đồ lớn, thắng/thua, mất kết nối) bằng UI kit, theo wireframe và GDD; sơ đồ luồng | art-ux | T-020, T-026, T-027 | M | done | Huy duyệt 07/11: 36 mock trên thang chữ 5 bậc, Chakra Petch Bold + Be Vietnam Pro, 4 cổng 0 lỗi. Mở lại 07/11: thang chữ đã chốt, đợt B làm tiếp trên thang và font mới (font chốt trước khi dựng). Mỗi màn có mock đặt cạnh wireframe; nội dung đúng GDD (10 người, 4+4 khe); Huy duyệt từng màn. Bỏ chặn 07/11 sau T-026 (đợt A dựng lại đã duyệt), đang làm lại đợt B; trước đó chặn chờ T-026 bổ sung thành phần kit (Huy thấy thiếu thẻ, phân loại nút) |
-| T-022 | lastaway: skin A trong Unity cho phản hồi HUD (sát thương, nguy hiểm, nhặt đồ, effect, phím), balo/nhặt đồ, bản đồ lớn | unity | T-021 | M | todo | Game view 1920x1080 khớp mock T-021; test xanh; qa ĐẠT |
-| T-023 | lastaway: UI-03 trong Unity: menu ESC cài đặt và spectator skin A | unity | T-021 | M | todo | Theo UI-03.md và mock T-021; ESC không dừng simulation; test xanh; qa ĐẠT |
-| T-024 | lastaway: đổi skin LobbyUi và MatchOverlay sang UI kit (chỉ hình, không đổi logic) | unity | T-021 | M | todo | Vinh đồng ý 07/11 (qua Huy). Game view khớp mock; luồng UI-02 hiện có không vỡ; qa ĐẠT |
-| T-025 | lastaway: màn còn thiếu của UI-02 (loading, mất kết nối/reconnect) và chuyển cảnh | unity | T-024 | M | todo | Vinh đồng ý 07/11 (qua Huy). Theo UI-02.md và mock T-021; chạy bằng mock state; qa ĐẠT |
+| T-022 | lastaway: skin A trong Unity cho phản hồi HUD (sát thương, nguy hiểm, nhặt đồ, effect, phím), balo/nhặt đồ, bản đồ lớn | unity | T-021 | M | done | QA ĐẠT 07/11 (R3), VERIFIED Editor, chưa PLAYTESTED. Game view 1920x1080 khớp mock T-021; test xanh; qa ĐẠT |
+| T-023 | lastaway: UI-03 trong Unity: menu ESC cài đặt và spectator skin A | unity | T-021 | M | done | QA ĐẠT 07/11 (R3), VERIFIED Editor, chưa PLAYTESTED. Theo UI-03.md và mock T-021; ESC không dừng simulation; test xanh; qa ĐẠT |
+| T-024 | lastaway: đổi skin LobbyUi và MatchOverlay sang UI kit (chỉ hình, không đổi logic) | unity | T-021 | M | done | QA ĐẠT 07/11 (R3), VERIFIED Editor, chưa PLAYTESTED. Vinh đồng ý 07/11 (qua Huy). Game view khớp mock; luồng UI-02 hiện có không vỡ; qa ĐẠT |
+| T-025 | lastaway: màn còn thiếu của UI-02 (loading, mất kết nối/reconnect) và chuyển cảnh | unity | T-024 | M | done | QA ĐẠT 07/11 (R3), VERIFIED Editor, chưa PLAYTESTED. Vinh đồng ý 07/11 (qua Huy). Theo UI-02.md và mock T-021; chạy bằng mock state; qa ĐẠT |
 | T-026 | lastaway: nghiên cứu thành phần UI game (có nguồn), so với UI kit T-020 tìm chỗ thiếu (thẻ, phân loại nút theo ngữ cảnh: trong hộp thoại, ngoài màn, HUD...), đề xuất rồi gen bổ sung bằng GPT | art-ux | T-020 | M | done | Bảng phân loại thành phần có nguồn mở được; bảng đối chiếu kit hiện có / thiếu / màn nào cần; luật đặt nút theo ngữ cảnh; Huy duyệt danh sách trước khi gen; phần gen đủ trạng thái, cùng nét skin A. Huy duyệt 07/11: nút K2 (kaki, vàng dịu, đỏ dịu), luật icon + chữ, X đỏ, cổng căn giữa; P0 đã gen |
 | T-027 | lastaway: thang cỡ chữ (type scale) và cặp font chính/phụ cho toàn game: nghiên cứu có nguồn, đo hiện trạng, đề xuất, demo trước/sau; áp vào kit và mock đợt A; cổng máy cỡ chữ | art-ux | T-020 | M | done | Huy duyệt 07/11: font chính Chakra Petch Bold (Huy chọn, thay Denk One), font phụ Be Vietnam Pro Bold. Chốt 07/11 (CPO được Huy giao duyệt): 5 bậc 96/40/30/24/20, sàn gameplay 24; thêm font chính. Bảng đo hiện trạng (mọi cỡ chữ đang dùng, cỡ nào dưới ngưỡng đọc được); nguồn mở được; thang 5-7 bậc có px ở 1080p, đậm nhạt, dùng cho gì; trang demo trước/sau trên 4 màn tiêu biểu xem ở cỡ thật; Huy duyệt trước khi áp vào kit và mock |
+| T-028 | lastaway: gói asset cho Unity đợt T-022..T-025: cắt từng thành phần kit và FX dùng trong mock T-021 thành PNG kèm border 9-slice, cỡ ở 1080p, bảng ánh xạ phần tử mock -> file; gen bù bằng GPT (song song) chỗ unity báo thiếu | art-ux | T-021 | M | done | CPO duyệt 07/11: 3 đợt gen GPT, unity đã nhập. Mỗi màn T-021 có bảng ánh xạ; mọi file có border và cỡ; asset gen mới qua cổng duyệt cùng nét skin A; unity nhập được không phải đo lại |
 
 ## Icebox
 

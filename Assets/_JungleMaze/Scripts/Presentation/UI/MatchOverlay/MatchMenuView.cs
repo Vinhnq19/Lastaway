@@ -28,6 +28,8 @@ namespace JungleMaze.Presentation.UI.MatchOverlay
         [SerializeField] private Button leave;
         [Tooltip("G-7: \"Chưa thoát được, thử lại\".")]
         [SerializeField] private TMP_Text retryNotice;
+        [Tooltip("X at the popup's top right (skin A): same as Tiếp tục, one layer closed.")]
+        [SerializeField] private Button close;
 
         public CanvasGroup Group => group;
         public Slider Master => master;
@@ -45,5 +47,12 @@ namespace JungleMaze.Presentation.UI.MatchOverlay
         public Button Defaults => defaults;
         public Button Leave => leave;
         public TMP_Text RetryNotice => retryNotice;
+        public Button Close => close;
+
+        // The X adds no new path: it presses Tiếp tục, so the lock on leave (Resume not interactable) holds for it too.
+        private void Awake()
+        {
+            if (close != null && resume != null) close.onClick.AddListener(() => { if (resume.interactable) resume.onClick.Invoke(); });
+        }
     }
 }

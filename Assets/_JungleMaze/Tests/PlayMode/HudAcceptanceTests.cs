@@ -408,6 +408,11 @@ namespace JungleMaze.Tests.PlayMode
             yield return null;
             yield return null;
             Assert.IsTrue(capture.RingImage.enabled);
+            // T-022 R3 (CPO 07/11): the captured lines stay out of the terrain but are not shown; sprite rings (RingGraphic,
+            // map_ring_zone / map_ring_safe, fixed stroke) are drawn instead, the same as the big map.
+            Assert.IsFalse(capture.RingImage.gameObject.activeSelf, "captured red/yellow lines hidden");
+            Assert.AreEqual("map_ring_zone", area.Find("ZoneRing").GetComponent<RingGraphic>().Sprite.name);
+            Assert.AreEqual("map_ring_safe", area.Find("SafeRing").GetComponent<RingGraphic>().Sprite.name);
             Assert.AreSame(capture.RingTexture, capture.RingImage.texture);
             Assert.AreEqual(ringLayer, ring.gameObject.layer, "ring layer restored after the capture");
             Assert.IsFalse(ring.forceRenderingOff, "ring visible again after the capture");
@@ -511,13 +516,8 @@ namespace JungleMaze.Tests.PlayMode
             var required = new List<string> { "VŨ KHÍ", "DƯỢC PHẨM", "Bo thu sau", "Còn sống", "Nạp", "Tay không", "Giáp", "Mũ", "Adrenaline", "…" };
             foreach (var weapon in _balance.Weapons) required.Add(weapon.DisplayName);
             foreach (var equipment in _balance.Equipments) required.Add(equipment.DisplayName);
-            // Pixel numbers stay on the feedback layer and the hidden ammo tab. The skin A blocks (vitals, match, slot
-            // keys and counts) use Be Vietnam Pro Bold like the approved mock (T-015 r11 asset-list section 3).
-            var numberTexts = new HashSet<TMP_Text>
-            {
-                _root.Quickbar.WeaponStrip.Find("Ammo/Magazine").GetComponent<TMP_Text>(),
-                _root.Quickbar.ReloadHint.transform.Find("KeyCap/Label").GetComponent<TMP_Text>()
-            };
+            // T-022 type scale: every HUD text is Be Vietnam Pro Bold (UiKit tiers 30/24/20), the old pixel numbers of the
+            // feedback layer and the hidden ammo tab included. The B4/B5 panels (Chakra Petch 40) have their own test.
             var boldNumbers = new HashSet<TMP_Text>
             {
                 _root.Vitals.HpNumber, _root.Vitals.ArmorRow.Value, _root.Vitals.HelmetRow.Value, _root.Vitals.AdrenalineRow.Value,
@@ -529,19 +529,11 @@ namespace JungleMaze.Tests.PlayMode
                 boldNumbers.Add(_root.Quickbar.GetSlotView(i).CountLabel);
             }
             foreach (var text in boldNumbers) Assert.AreEqual("HudTextBold SDF", text.font.name, text.name + " bold numbers");
-            var feedback = _root.GetComponent<HudFeedbackRoot>();
-            if (feedback != null)
-            {
-                numberTexts.Add(feedback.UseAction.Seconds);
-                numberTexts.Add(feedback.DangerBanner.Timer);
-                foreach (var chip in feedback.EffectRow.Chips) numberTexts.Add(chip.Seconds);
-                foreach (var arrow in feedback.DangerArrows) numberTexts.Add(arrow.Seconds);
-                foreach (var row in feedback.PickupFeed.Rows) numberTexts.Add(row.transform.Find("Count").GetComponent<TMP_Text>());
-            }
             var all = new List<TMP_Text>(_root.GetComponentsInChildren<TMP_Text>(true));
             foreach (var path in new[] { SlotPrefabPath, KeyCapPrefabPath })
                 all.AddRange(AssetDatabase.LoadAssetAtPath<GameObject>(path).GetComponentsInChildren<TMP_Text>(true));
             Assert.That(all.Count, Is.GreaterThan(30));
+            all.RemoveAll(InPanel);
             foreach (var text in all)
             {
                 var min = HudLayoutB.MinFontSize(text);
@@ -552,10 +544,15 @@ namespace JungleMaze.Tests.PlayMode
                     Assert.IsTrue(text.font.HasCharacters(s, out uint[] missing, true), $"{text.name} ({text.font.name}) misses '{s}': {Codepoints(missing)}");
             }
             foreach (var text in _root.GetComponentsInChildren<TMP_Text>(true))
-            {
-                var expected = numberTexts.Contains(text) ? "Pixelify Sans" : "Be Vietnam Pro";
-                Assert.AreEqual(expected, text.font.faceInfo.familyName, text.name);
-            }
+                if (!InPanel(text)) Assert.AreEqual("Be Vietnam Pro", text.font.faceInfo.familyName, text.name);
+        }
+
+        /// <summary>Texts of the B4/B5 panels nested in Hud.prefab (HudPanelsBuild).</summary>
+        private static bool InPanel(TMP_Text text)
+        {
+            for (var t = text.transform; t != null; t = t.parent)
+                if (t.name == "HudInventory" || t.name == "HudBigMap") return true;
+            return false;
         }
 
         [UnityTest]

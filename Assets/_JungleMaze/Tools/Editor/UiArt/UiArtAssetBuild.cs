@@ -20,9 +20,9 @@ namespace JungleMaze.EditorTools
     /// Repeatable import + binding of the direction A UI art (ADHOC-UI-ASSETS-A): texture importer settings, item /
     /// effect / menu catalogs, palette and frame overlays on the HUD prefabs, and the Boot scene Bootstrap reference.
     /// Idempotent: running it twice finds the overlays it created instead of adding new ones, and it never touches
-    /// RectTransform geometry of existing blocks. Also re-applied after <see cref="HudFeedbackPrefabBuild.Build"/>.
+    /// RectTransform geometry of existing blocks. T-022..T-025: no longer hooked to HudFeedbackPrefabBuild and never
+    /// touches the kit skin (Art/UI/Kit importers, feedback prefabs, quick-bar strip), so re-running the menu is safe.
     /// </summary>
-    [InitializeOnLoad]
     public static class UiArtAssetBuild
     {
         public const string Ui = "Assets/_JungleMaze/Prefabs/UI/";
@@ -36,6 +36,7 @@ namespace JungleMaze.EditorTools
         public const string BootScene = "Assets/_JungleMaze/Scenes/Boot.unity";
         public const string EdgeName = "ArtEdge";
         public const string BevelName = "ArtBevel";
+        public const string KitFolder = "Assets/_JungleMaze/Art/UI/Kit/";
 
         /// <summary>9-slice border (px, all sides) per sprite name, from Docs/Art/Production_A/UI/asset_mapping.json.</summary>
         public static readonly Dictionary<string, int> Borders = new Dictionary<string, int>(StringComparer.Ordinal)
@@ -46,8 +47,6 @@ namespace JungleMaze.EditorTools
             { "AFrameEdge96", 24 }, { "AFrameEdgeSlot128", 20 }, { "HudCircle16", 0 }, { "Crosshair", 0 }, { "HitMarker", 0 },
             { "ButtonPrimary", 32 }, { "ButtonSecondary", 32 }, { "ButtonGhost", 32 }, { "Logo", 0 }, { "KeyArt", 0 }, { "Background", 0 }
         };
-
-        static UiArtAssetBuild() => HudFeedbackPrefabBuild.AfterBuild += ApplyPrefabs;
 
         [MenuItem("Jungle Maze/UI Art/Build And Bind Direction A")]
         public static void BuildAll()
@@ -66,7 +65,11 @@ namespace JungleMaze.EditorTools
         public static void ConfigureImporters()
         {
             var paths = new List<string>();
-            foreach (var guid in AssetDatabase.FindAssets("t:Texture2D", new[] { "Assets/_JungleMaze/Art/UI" })) paths.Add(AssetDatabase.GUIDToAssetPath(guid));
+            foreach (var guid in AssetDatabase.FindAssets("t:Texture2D", new[] { "Assets/_JungleMaze/Art/UI" }))
+            {
+                var path = AssetDatabase.GUIDToAssetPath(guid);
+                if (!path.StartsWith(KitFolder)) paths.Add(path); // UiKit imports its own (300 PPU, Bilinear, meta.json borders)
+            }
             foreach (var name in Borders.Keys)
                 if (File.Exists(Hud + name + ".png")) paths.Add(Hud + name + ".png");
             foreach (var path in paths)
@@ -143,7 +146,11 @@ namespace JungleMaze.EditorTools
             AssetDatabase.SaveAssets();
         }
 
-        /// <summary>Palette A, frame overlays and A sprites on the HUD child prefabs, then on Hud.prefab.</summary>
+        /// <summary>
+        /// Palette A and frame overlays on the slot, key cap and Hud.prefab blocks. The feedback prefabs (effect chip,
+        /// pickup toast, overflow, danger banner, use strip), the old "QuickBar/WeaponStrip" frame and HudRoot.artFrames
+        /// now belong to the kit builders (HudFeedbackPrefabBuild, HudLayoutBBuild) and are left alone.
+        /// </summary>
         public static void ApplyPrefabs()
         {
             Edit("HudSlot", slot =>
@@ -157,22 +164,6 @@ namespace JungleMaze.EditorTools
                 foreach (var name in new[] { "Border", "InUseFrame" }) slot.transform.Find(name).GetComponent<Image>().pixelsPerUnitMultiplier = 1f;
             });
             Edit("HudKeyCap", key => StyleKeyCap(key.transform));
-            Edit("HudEffectChip", chip =>
-            {
-                var border = chip.transform.Find("Box/Border").GetComponent<Image>();
-                SetSprite(border, "EffectFrame", 1f);
-                var icon = chip.transform.Find("Box/Icon").GetComponent<Image>();
-                icon.preserveAspect = true;
-                icon.type = Image.Type.Simple;
-                icon.color = Color.white;
-            });
-            Edit("HudPickupToast", toast =>
-            {
-                SetSprite(toast.GetComponent<Image>(), "ToastBg", 2f); // 31 px tall toast, 20 px border
-                var icon = toast.transform.Find("Icon").GetComponent<Image>();
-                icon.pixelsPerUnitMultiplier = 3f; // 18 px placeholder square
-                icon.preserveAspect = false;
-            });
             Edit("Hud", hud =>
             {
                 var root = hud.GetComponent<HudRoot>();
@@ -182,18 +173,8 @@ namespace JungleMaze.EditorTools
                 foreach (var field in typeof(HudPalette).GetFields(BindingFlags.Public | BindingFlags.Instance))
                     palette.FindPropertyRelative(field.Name).colorValue = (Color)field.GetValue(defaults);
                 so.ApplyModifiedPropertiesWithoutUndo();
-                var frames = new List<Object>();
                 foreach (var path in new[] { "Vitals", "Minimap", "MatchStatus" })
-                    frames.Add(EnsureFrame(hud.transform.Find(path), "AFrameEdge96", "ABevel96", 0, 1f));
-                frames.Add(EnsureFrame(hud.transform.Find("QuickBar/WeaponStrip"), "AFrameEdge96", "ABevel96", 0, 2f)); // 38 px tall strip
-                SetArray(root, "artFrames", frames.ToArray());
-                StyleKeyCap(hud.transform.Find("QuickBar/WeaponStrip/ReloadHint/KeyCap"));
-                var use = hud.transform.Find("QuickBar/UseActionStrip");
-                if (use != null) use.GetComponent<Image>().pixelsPerUnitMultiplier = 2f; // 32 px tall, 20 px border
-                var overflow = hud.transform.Find("PickupFeed/Overflow");
-                if (overflow != null) SetSprite(overflow.GetComponent<Image>(), "ToastBg", 2f);
-                var danger = hud.transform.Find("DangerBanner");
-                if (danger != null) SetSprite(danger.GetComponent<Image>(), "DangerBanner", 2f);
+                    EnsureFrame(hud.transform.Find(path), "AFrameEdge96", "ABevel96", 0, 1f); // HudRoot.artFrames is set by HudLayoutBBuild
                 foreach (var graphic in hud.GetComponentsInChildren<Graphic>(true)) graphic.raycastTarget = false;
                 root.ApplyPalette();
             });
@@ -338,15 +319,6 @@ namespace JungleMaze.EditorTools
         {
             var so = new SerializedObject(target);
             so.FindProperty(field).objectReferenceValue = value;
-            so.ApplyModifiedPropertiesWithoutUndo();
-        }
-
-        private static void SetArray(Object target, string field, Object[] values)
-        {
-            var so = new SerializedObject(target);
-            var array = so.FindProperty(field);
-            array.arraySize = values.Length;
-            for (var i = 0; i < values.Length; i++) array.GetArrayElementAtIndex(i).objectReferenceValue = values[i];
             so.ApplyModifiedPropertiesWithoutUndo();
         }
     }

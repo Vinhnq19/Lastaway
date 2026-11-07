@@ -1,0 +1,7 @@
+Use your image generation tool to create ONE image as described below, and copy the generated file AS-IS (no cropping, no resizing, no padding) to:
+D:\Lastaway\projects\lastaway\art\inbox\T-028-unity-pack\src\gen\zonecause.png
+Do not write any other files and do not post-process the image. Use only the built-in image tool, never the OpenAI API, curl or python.
+
+Draw ONE bold, solid game icon meaning "killed by the shrinking storm zone": a small square-ish chunk of dark stone ground (filled, not hollow), with a thick wall of red (#C8452F) and purple-red storm smoke clouds with an orange glowing edge (#DBA645) rolling in from the top-left and covering about half of the tile, and one tiny pixel-art adventurer character (about one eighth of the icon height, simple silhouette) standing on the clear ground side right next to the storm edge.
+Style: exactly the same chunky pixel-art look, boldness and density as the attached reference icons (ref-zone-timer.png hourglass, ref-kill.png skull): dark brown outline (#3A2410), thick shapes, flat shading with few colours, crisp stepped pixel edges, no thin hairlines, no hollow ring, no crosshair, no arrows, no text. The whole icon is a filled mass that fills about 90 percent of a square canvas.
+Background: perfectly flat solid magenta #FF00FF, nothing else.

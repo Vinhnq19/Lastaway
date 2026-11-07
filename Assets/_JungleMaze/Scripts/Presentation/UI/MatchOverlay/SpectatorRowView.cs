@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace JungleMaze.Presentation.UI.MatchOverlay
 {
-    /// <summary>One row of the spectator list (SpectatorRow.prefab, 160×32, G-12). Colors are prefab data (AC47).</summary>
+    /// <summary>One row of the spectator list (SpectatorRow.prefab, kit row 300×48 px, G-12). Colors are prefab data (AC47).</summary>
     public sealed class SpectatorRowView : MonoBehaviour
     {
         [SerializeField] private Button button;
@@ -12,8 +12,12 @@ namespace JungleMaze.Presentation.UI.MatchOverlay
         [SerializeField] private TMP_Text label;
         [Tooltip("Outline shown on the selected row only.")]
         [SerializeField] private Image selectedOutline;
-        [SerializeField] private Color normal = new Color(0.125f, 0.165f, 0.176f, 0.92f);
-        [SerializeField] private Color selected = new Color(0.776f, 0.682f, 0.471f, 0.35f);
+        [Tooltip("Tint of the kit row sprite; white keeps the art as drawn (skin A).")]
+        [SerializeField] private Color normal = Color.white;
+        [SerializeField] private Color selected = Color.white;
+        [Tooltip("Name color: text on a normal row, gold on the selected one (b3-spectator).")]
+        [SerializeField] private Color labelNormal = new Color(0.929f, 0.949f, 0.933f);
+        [SerializeField] private Color labelSelected = new Color(1f, 0.863f, 0.431f);
 
         private byte _netId = 255;
         private string _name;
@@ -34,6 +38,7 @@ namespace JungleMaze.Presentation.UI.MatchOverlay
             }
             Selected = isSelected;
             background.color = isSelected ? selected : normal;
+            label.color = isSelected ? labelSelected : labelNormal;
             if (selectedOutline != null && selectedOutline.enabled != isSelected) selectedOutline.enabled = isSelected;
         }
 

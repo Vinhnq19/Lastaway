@@ -11,10 +11,18 @@ namespace JungleMaze.Presentation.UI.MatchOverlay
         [SerializeField] private TMP_Text message;
         [SerializeField] private Button confirm;
         [SerializeField] private Button stay;
+        [Tooltip("X at the popup's top right (skin A): same as Ở lại.")]
+        [SerializeField] private Button close;
 
         public CanvasGroup Group => group;
         public TMP_Text Message => message;
         public Button Confirm => confirm;
         public Button Stay => stay;
+        public Button Close => close;
+
+        private void Awake()
+        {
+            if (close != null && stay != null) close.onClick.AddListener(() => { if (stay.interactable) stay.onClick.Invoke(); });
+        }
     }
 }

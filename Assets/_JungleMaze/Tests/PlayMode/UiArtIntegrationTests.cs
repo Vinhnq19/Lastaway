@@ -139,7 +139,7 @@ namespace JungleMaze.Tests.PlayMode
             Assert.AreEqual(_core.Palette.IconPlaceholder, row.Icon.color);
             feed.SetRow(0, true, "GOD_LEAF", "God Leaf", 2, 1);
             Assert.AreSame(_icons.GetIcon("GOD_LEAF"), row.Icon.sprite);
-            Assert.AreEqual(new Vector2(18, 18), size);
+            Assert.AreEqual(new Vector2(72f / 1.5f, 72f / 1.5f), size, "T-022 R3: pickup toast icon 72 px at 1080p (HudPickupToast, kit_toast 308x92, T-028 b9), was 18 units");
             Assert.AreEqual(size, ((RectTransform)row.Icon.transform).sizeDelta);
 
             // Through the presenter: the newest pickup row shows its own icon.

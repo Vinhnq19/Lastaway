@@ -14,6 +14,10 @@ namespace JungleMaze.Presentation.UI.Hud
         [SerializeField] private HudGaugeRowView armorRow;
         [SerializeField] private HudGaugeRowView helmetRow;
         [SerializeField] private HudGaugeRowView adrenalineRow;
+        /// <summary>B9 low-HP edge (fx_vignette, full screen, drawn under the HUD); on while the HP number is in the low state.</summary>
+        [SerializeField] private Graphic lowHpVignette;
+        /// <summary>More fx_vignette layers stacked on the first for a stronger edge (builder VignetteLayers); toggled with it.</summary>
+        [SerializeField] private Graphic[] lowHpVignetteExtra = new Graphic[0];
 
         private HudPalette _palette = HudPalette.Default;
 
@@ -23,6 +27,8 @@ namespace JungleMaze.Presentation.UI.Hud
         public HudGaugeRowView ArmorRow => armorRow;
         public HudGaugeRowView HelmetRow => helmetRow;
         public HudGaugeRowView AdrenalineRow => adrenalineRow;
+        public Graphic LowHpVignette => lowHpVignette;
+        public Graphic[] LowHpVignetteExtra => lowHpVignetteExtra;
 
         /// <summary>Applies static colors (background, bars, "/max").</summary>
         public void ApplyPalette(HudPalette palette)
@@ -42,6 +48,10 @@ namespace JungleMaze.Presentation.UI.Hud
             if (hpNumber == null) return;
             hpNumber.SetCharArray(text, 0, length);
             hpNumber.color = low ? _palette.Red : _palette.Text;
+            if (lowHpVignette != null && lowHpVignette.enabled != low) lowHpVignette.enabled = low;
+            if (lowHpVignetteExtra != null)
+                foreach (var layer in lowHpVignetteExtra)
+                    if (layer != null && layer.enabled != low) layer.enabled = low;
         }
 
         public void SetHpMax(char[] text, int length)

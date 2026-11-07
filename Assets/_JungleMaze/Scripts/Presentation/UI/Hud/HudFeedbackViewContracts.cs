@@ -6,6 +6,8 @@ namespace JungleMaze.Presentation.UI.Hud
     public interface IQuickbarFeedbackHooks {void SetWeaponStripVisible(bool visible);void SetSlotInUse(int index,bool inUse);}
     /// <summary>Use strip rendering with caller-owned text buffers.</summary>
     public interface IUseActionView {void Show(bool visible,char[] label,int labelLength,char[] seconds,int secondsLength,float fill,bool hint,bool cancelled);}
+    /// <summary>Optional: the use strip also shows the item icon (T-022 skin A); only called when the item changes.</summary>
+    public interface IUseActionIconView {void SetItem(string itemId);}
     /// <summary>Bounded effect row rendering.</summary>
     public interface IEffectRowView {void SetChip(int index,bool visible,EffectKind kind,EffectPolarity polarity,bool timed,float fill,int seconds,int overflow,float alpha);}
     /// <summary>Bounded pickup feed rendering.</summary>

@@ -61,15 +61,16 @@ namespace JungleMaze.Tests.PlayMode
         [UnityTest] public IEnumerator FeedbackLayout_BlocksMatchFigma_At1280x720()
         {
             yield return Spawn();RectIs(HudFigmaV2Feedback.Effects,Measure(_feedback.EffectRow.transform),"effects");RectIs(HudFigmaV2Feedback.Pickup,Measure(_feedback.PickupFeed.transform),"pickup");RectIs(HudFigmaV2Feedback.Banner,Measure(_feedback.DangerBanner.transform),"banner");RectIs(HudFigmaV2Feedback.Use,Measure(_feedback.UseAction.transform),"use");
-            for(var i=0;i<6;i++)RectIs(new Rect(24+i*50,HudFigmaV2Feedback.Effects.y,44,58),Measure(_feedback.EffectRow.Chips[i].transform),"chip"+i);
+            // T-022 skin A: chips 116 px on a 124 px step, three per line, 0-2 on the bottom line (mock B9).
+            for(var i=0;i<6;i++)RectIs(new Rect(HudFigmaV2Feedback.Effects.x+i%3*124/1.5f,HudFigmaV2Feedback.Effects.y+(1-i/3)*124/1.5f,116/1.5f,116/1.5f),Measure(_feedback.EffectRow.Chips[i].transform),"chip"+i);
             _hud.NotifyPickup("GOD_LEAF",1);_hud.NotifyPickup("SPIRIT_TEAR",1);_hud.NotifyPickup("MERMAID_TAIL",1);_hud.NotifyPickup("UNICORN_BLOOD",1);_hud.NotifyPickup("ADRENALINE",1);Tick(0);
-            for(var i=0;i<3;i++)RectIs(new Rect(1115,591+i*37,141,31),Measure(_feedback.PickupFeed.Rows[i].transform),"toast"+i);
-            RectIs(new Rect(1164,564,92,21),Measure(_feedback.PickupFeed.OverflowGroup.transform),"overflow");
+            for(var i=0;i<3;i++)RectIs(new Rect(HudFigmaV2Feedback.Pickup.x,HudFigmaV2Feedback.Pickup.y+(48+i*98)/1.5f,308/1.5f,92/1.5f),Measure(_feedback.PickupFeed.Rows[i].transform),"toast"+i);
+            RectIs(new Rect((1900-180)/1.5f,HudFigmaV2Feedback.Pickup.y,180/1.5f,36/1.5f),Measure(_feedback.PickupFeed.OverflowGroup.transform),"overflow");
         }
         [UnityTest] public IEnumerator FeedbackLayout_ScalesAt1080And1440_WithSafeMargins()
         {
             yield return Spawn();var roots=new[]{_feedback.EffectRow.transform,_feedback.PickupFeed.transform,_feedback.DangerBanner.transform,_feedback.UseAction.transform};var expected=FeedbackRects();
-            foreach(var height in new[]{1080f,1440f}){var scale=height/720;_canvas.localScale=Vector3.one*scale;Canvas.ForceUpdateCanvases();for(var i=0;i<roots.Length;i++){RectIs(expected[i],Measure(roots[i]),roots[i].name);var corners=new Vector3[4];((RectTransform)roots[i]).GetWorldCorners(corners);Assert.That(corners[2].x-corners[0].x,Is.EqualTo(expected[i].width*scale).Within(expected[i].width*scale*.01f));}var canvasCorners=new Vector3[4];var pickupCorners=new Vector3[4];_canvas.GetWorldCorners(canvasCorners);((RectTransform)_feedback.PickupFeed.transform).GetWorldCorners(pickupCorners);Assert.That(canvasCorners[2].x-pickupCorners[2].x,Is.EqualTo(24*scale).Within(.01));Assert.That(pickupCorners[0].y-canvasCorners[0].y,Is.EqualTo(24*scale).Within(.01));}
+            foreach(var height in new[]{1080f,1440f}){var scale=height/720;_canvas.localScale=Vector3.one*scale;Canvas.ForceUpdateCanvases();for(var i=0;i<roots.Length;i++){RectIs(expected[i],Measure(roots[i]),roots[i].name);var corners=new Vector3[4];((RectTransform)roots[i]).GetWorldCorners(corners);Assert.That(corners[2].x-corners[0].x,Is.EqualTo(expected[i].width*scale).Within(expected[i].width*scale*.01f));}var canvasCorners=new Vector3[4];var pickupCorners=new Vector3[4];_canvas.GetWorldCorners(canvasCorners);((RectTransform)_feedback.PickupFeed.transform).GetWorldCorners(pickupCorners);Assert.That(canvasCorners[2].x-pickupCorners[2].x,Is.EqualTo(20/1.5f*scale).Within(.01));Assert.That(pickupCorners[0].y-canvasCorners[0].y,Is.EqualTo(46/1.5f*scale).Within(.01));}
         }
         [UnityTest] public IEnumerator FeedbackLayout_NoOverlapWithCoreAndCenter()
         {
@@ -79,7 +80,7 @@ namespace JungleMaze.Tests.PlayMode
         [UnityTest] public IEnumerator Use_GodLeafJsonProgress_HintAndSlotFrame_SelectedKept()
         {
             yield return Spawn();_inventory.SetConsumableSlot(0,"GOD_LEAF",6);_inventory.SetActiveSlot(4);_inventory.BeginUse(4,"GOD_LEAF",.5f,.5f,true);Tick(0);
-            Assert.AreEqual(1,_feedback.UseAction.Group.alpha);Assert.AreEqual("Đang dùng God Leaf",_feedback.UseAction.Label.GetParsedText());Assert.AreEqual("0.5s",_feedback.UseAction.Seconds.GetParsedText());Assert.AreEqual(0,_feedback.UseAction.Fill.anchorMax.x);Assert.True(_feedback.UseAction.Hint.enabled);
+            Assert.AreEqual(1,_feedback.UseAction.Group.alpha);Assert.AreEqual("Đang dùng Lá thần mộc",_feedback.UseAction.Label.GetParsedText()); // T-022 R3: Vietnamese UI nameAssert.AreEqual("0.5s",_feedback.UseAction.Seconds.GetParsedText());Assert.AreEqual(0,_feedback.UseAction.Fill.anchorMax.x);Assert.True(_feedback.UseAction.Hint.enabled);
             Assert.True(_core.Quickbar.GetSlotView(4).InUseFrame.enabled);Assert.AreEqual(SlotVisual.Selected,_core.Quickbar.GetSlotView(4).Visual);Assert.AreEqual(_core.Palette.Amber,_core.Quickbar.GetSlotView(4).InUseFrame.color);Assert.AreEqual(0,_core.Quickbar.WeaponStrip.GetComponent<CanvasGroup>().alpha);
             Tick(.25f);Assert.That(_feedback.UseAction.Fill.anchorMax.x,Is.EqualTo(.5f).Within(.05f));Assert.AreEqual("0.3s",_feedback.UseAction.Seconds.GetParsedText());var fillRect=Measure(_feedback.UseAction.Fill.parent);var timeRect=Measure(_feedback.UseAction.Seconds.transform);
             _inventory.BeginUse(4,"GOD_LEAF",.5f,.25f,false);Tick(0);Assert.False(_feedback.UseAction.Hint.enabled);Assert.AreEqual(fillRect,Measure(_feedback.UseAction.Fill.parent));Assert.AreEqual(timeRect,Measure(_feedback.UseAction.Seconds.transform));
@@ -99,14 +100,14 @@ namespace JungleMaze.Tests.PlayMode
         }
         [UnityTest] public IEnumerator Pickup_NewestAtBottom_MergesAndDoesNotWriteInventory()
         {
-            yield return Spawn();var hp=_hud.Hp;_hud.NotifyPickup("RUBBER_GUN",1);Tick(0);Assert.AreEqual(1,Visible(_feedback.PickupFeed.Rows));Assert.AreEqual(665,Measure(_feedback.PickupFeed.Rows[0].transform).y);Assert.AreEqual("Rubber Slingshot",_feedback.PickupFeed.Rows[0].Label.GetParsedText());
-            Tick(1);_hud.NotifyPickup("RUBBER_GUN",1);Tick(0);Assert.AreEqual(1,Visible(_feedback.PickupFeed.Rows));Assert.AreEqual(2,_feedback.Presenter.Pickups.GetAt(0).Count);Assert.AreEqual(hp,_hud.Hp);for(var i=1;i<8;i++)Assert.True(_inventory.GetSlot(i).IsEmpty);
+            yield return Spawn();var hp=_hud.Hp;_hud.NotifyPickup("RUBBER_GUN",1);Tick(0);Assert.AreEqual(1,Visible(_feedback.PickupFeed.Rows));Assert.That(Measure(_feedback.PickupFeed.Rows[0].transform).y,Is.EqualTo((1080-46-92)/1.5f).Within(.01));Assert.AreEqual("Ná cao su",_feedback.PickupFeed.Rows[0].Label.GetParsedText());Assert.AreEqual("×1",_feedback.PickupFeed.Rows[0].Count.GetParsedText()); // T-022 R3: Vietnamese UI name (GDD ITEM LIST); count line must still be written after the name
+            Tick(1);_hud.NotifyPickup("RUBBER_GUN",1);Tick(0);Assert.AreEqual(1,Visible(_feedback.PickupFeed.Rows));Assert.AreEqual(2,_feedback.Presenter.Pickups.GetAt(0).Count);Assert.AreEqual("×2",_feedback.PickupFeed.Rows[0].Count.GetParsedText());Assert.AreEqual(hp,_hud.Hp);for(var i=1;i<8;i++)Assert.True(_inventory.GetSlot(i).IsEmpty);
             Tick(3.25f);Assert.That(_feedback.PickupFeed.Rows[0].Group.alpha,Is.EqualTo(.5).Within(.01));Tick(.25f);Assert.AreEqual(0,Visible(_feedback.PickupFeed.Rows));
         }
         [UnityTest] public IEnumerator HitMarker_FollowsThreeAimPoints_AndOtherTargetsAreIgnored()
         {
             yield return Spawn();_hud.NotifyHitDealt(HitTargetKind.Other);Tick(0);Assert.AreEqual(0,_feedback.HitMarker.Group.alpha);
-            foreach(var aim in new[]{new Vector2(820,288),new Vector2(200,500),new Vector2(1100,100)}){_hud.NotifyHitDealt(HitTargetKind.Hero);Tick(0,aim.x-640,360-aim.y);var rect=Measure(_feedback.HitMarker.transform);Assert.AreEqual(new Vector2(56,56),rect.size);Assert.That(Vector2.Distance(rect.center,aim),Is.LessThan(2));Assert.AreEqual(1,_feedback.HitMarker.Group.alpha);}
+            foreach(var aim in new[]{new Vector2(820,288),new Vector2(200,500),new Vector2(1100,100)}){_hud.NotifyHitDealt(HitTargetKind.Hero);Tick(0,aim.x-640,360-aim.y);var rect=Measure(_feedback.HitMarker.transform);Assert.That(Vector2.Distance(new Vector2(64,64),rect.size),Is.LessThan(.01f));Assert.That(Vector2.Distance(rect.center,aim),Is.LessThan(2));Assert.AreEqual(1,_feedback.HitMarker.Group.alpha);}
             Tick(.1f);Assert.AreEqual(1,_feedback.HitMarker.Group.alpha);Tick(.1f);Assert.AreEqual(0,_feedback.HitMarker.Group.alpha);foreach(var tick in _feedback.HitMarker.Ticks)Assert.AreEqual(Color.white,tick.color);
         }
         [UnityTest] public IEnumerator DamageArc_PositionOnRing_TrueAnglesEvery15Degrees()
@@ -150,9 +151,9 @@ namespace JungleMaze.Tests.PlayMode
         [UnityTest] public IEnumerator FeedbackText_MinSize13_VietnameseGlyphsAndFontRoles()
         {
             yield return Spawn();var phrases="Đang dùng Đã hủy Di chuyển để hủy hướng Tây Nam món khác Có bẫy Độc Chậm Ẩn Ngất Trói Đảo Miễn";
-            foreach(var text in _feedback.GetComponentsInChildren<TMP_Text>(true)){Assert.GreaterOrEqual(text.fontSize,HudLayoutB.MinFontSize(text),text.name);Assert.False(text.enableAutoSizing,text.name);Assert.NotNull(text.font,text.name);Assert.True(text.font.faceInfo.familyName.Contains("Be Vietnam Pro")||text.font.faceInfo.familyName.Contains("Pixelify Sans"));}
-            foreach(var chip in _feedback.EffectRow.Chips){Assert.True(chip.Label.font.HasCharacters(phrases,out uint[] missing,false,false),missing==null?"":string.Join(",",missing));Assert.AreEqual(TextOverflowModes.Ellipsis,chip.Label.overflowMode);Assert.True(chip.Seconds.font.faceInfo.familyName.Contains("Pixelify"));}
-            Assert.True(_feedback.UseAction.Seconds.font.faceInfo.familyName.Contains("Pixelify"));Assert.True(_feedback.UseAction.Label.font.faceInfo.familyName.Contains("Be Vietnam"));foreach(var e in _feedback.Catalog.Entries)if(e.Kind!=EffectKind.Adrenaline)Assert.LessOrEqual(e.Label.Length,4);
+            foreach(var text in _feedback.GetComponentsInChildren<TMP_Text>(true)){if(InPanel(text.transform))continue;Assert.GreaterOrEqual(text.fontSize,HudLayoutB.MinFontSize(text),text.name);Assert.False(text.enableAutoSizing,text.name);Assert.NotNull(text.font,text.name);Assert.True(text.font.faceInfo.familyName.Contains("Be Vietnam Pro")||text.font.faceInfo.familyName.Contains("Pixelify Sans"));}
+            foreach(var chip in _feedback.EffectRow.Chips){Assert.True(chip.Label.font.HasCharacters(phrases,out uint[] missing,false,false),missing==null?"":string.Join(",",missing));Assert.AreEqual(TextOverflowModes.Ellipsis,chip.Label.overflowMode);Assert.True(chip.Seconds.font.faceInfo.familyName.Contains("Be Vietnam"));}
+            Assert.True(_feedback.UseAction.Seconds.font.faceInfo.familyName.Contains("Be Vietnam"));Assert.True(_feedback.UseAction.Label.font.faceInfo.familyName.Contains("Be Vietnam"));foreach(var e in _feedback.Catalog.Entries)if(e.Kind!=EffectKind.Adrenaline)Assert.LessOrEqual(e.Label.Length,4);
         }
         [UnityTest] public IEnumerator SwapPlaceholderSprites_LeavesGeometryAndBehaviorUnchanged()
         {
@@ -171,13 +172,19 @@ namespace JungleMaze.Tests.PlayMode
             yield return null;
         }
         private void WithinLimits(){Assert.LessOrEqual(Visible(_feedback.PickupFeed.Rows),3);Assert.LessOrEqual(Visible(_feedback.EffectRow.Chips),6);Assert.LessOrEqual(Visible(_feedback.DamageArcs),4);Assert.LessOrEqual(Visible(_feedback.DangerArrows),3);Assert.LessOrEqual(_feedback.DangerBanner.Group.alpha,1);Assert.LessOrEqual(_feedback.HitMarker.Group.alpha,1);Assert.LessOrEqual(_feedback.UseAction.Group.alpha,1);}
+        /// <summary>
+        /// The graphic may reach at most 8 u into the clear centre. T-022: measured as the depth of the overlap (its
+        /// thinner side), so a long arc lying along the ring near a corner is judged by how far it pokes in, not by its length.
+        /// </summary>
         private static void GraphicOutsideCenter(Rect graphic,Vector2 center)
         {
             var clean=HudFigmaV2Feedback.Center;Assert.False(clean.Contains(center));
             if(Overlap(graphic,clean)<=0)return;
-            if(center.x<=clean.xMin)Assert.LessOrEqual(Mathf.Max(0,graphic.xMax-clean.xMin),8.01f);if(center.x>=clean.xMax)Assert.LessOrEqual(Mathf.Max(0,clean.xMax-graphic.xMin),8.01f);
-            if(center.y<=clean.yMin)Assert.LessOrEqual(Mathf.Max(0,graphic.yMax-clean.yMin),8.01f);if(center.y>=clean.yMax)Assert.LessOrEqual(Mathf.Max(0,clean.yMax-graphic.yMin),8.01f);
+            var depthX=Mathf.Min(graphic.xMax,clean.xMax)-Mathf.Max(graphic.xMin,clean.xMin);var depthY=Mathf.Min(graphic.yMax,clean.yMax)-Mathf.Max(graphic.yMin,clean.yMin);
+            Assert.LessOrEqual(Mathf.Min(depthX,depthY),8.01f,graphic+" in the clear centre");
         }
+        /// <summary>B4/B5 panels (HudPanelsBuild) have their own font rules (Chakra Petch 40) and test (HudPanelsTests).</summary>
+        private static bool InPanel(Transform t){for(;t!=null;t=t.parent)if(t.name=="HudInventory"||t.name=="HudBigMap")return true;return false;}
         private sealed class ArrowRecorder:IDangerArrowView{private readonly JungleMaze.Presentation.UI.Hud.Feedback.DangerArrowViewGroup _views;public ArrowRecorder(JungleMaze.Presentation.UI.Hud.Feedback.DangerArrowView[] views){_views=new JungleMaze.Presentation.UI.Hud.Feedback.DangerArrowViewGroup(views);}public void SetArrow(int i,bool visible,float x,float y,float degrees,bool timed,int seconds,float alpha)=>_views.SetArrow(i,visible,x,y,degrees,timed,seconds,alpha);}
         private sealed class BannerRecorder:IDangerBannerView{private readonly JungleMaze.Presentation.UI.Hud.Feedback.DangerBannerView _view;public BannerRecorder(JungleMaze.Presentation.UI.Hud.Feedback.DangerBannerView view){_view=view;}public void Show(bool visible,char[] text,int length,float alpha)=>_view.Show(visible,text,length,alpha);}
     }

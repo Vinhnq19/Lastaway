@@ -16,9 +16,9 @@ using Object = UnityEngine.Object;
 namespace JungleMaze.Tests.PlayMode.MatchUi
 {
     /// <summary>
-    /// UI-03 art binding (ticket section 8): the 19 overlay sprites are imported per Docs/Art/Production_A/MatchOverlay/
-    /// asset_mapping.json and sit on the prefab elements it names, with the reused HUD and menu sprites. Icons never
-    /// cover text or push it into an ellipsis; the cause icon follows the cause, the killer mark the killer.
+    /// UI-03 art binding: the 19 overlay sprites are still imported per asset_mapping.json (the killcam uses them); since
+    /// T-023 the other panels wear the skin A kit of mocks B1-B3. Icons never cover text or push it into an ellipsis;
+    /// the cause icon follows the cause, the killer mark the killer.
     /// </summary>
     public sealed class MatchOverlayArtTests
     {
@@ -83,6 +83,8 @@ namespace JungleMaze.Tests.PlayMode.MatchUi
             }
         }
 
+        // T-023 skin A: the ESC menu, confirm, eliminated, spectator and notice wear the kit (T-020) sprites of mocks B1-B3;
+        // the killcam keeps its asset_mapping.json art (no mock).
         [Test]
         public void Prefab_BindsMappedSprites()
         {
@@ -90,53 +92,51 @@ namespace JungleMaze.Tests.PlayMode.MatchUi
             var menu = root.Menu;
             foreach (var slider in new[] { menu.Master, menu.Sfx, menu.Music, menu.Sensitivity })
             {
-                Assert.AreEqual("SliderHandle", SpriteOf(slider.handleRect), slider.name);
-                Assert.AreEqual("BarFill", SpriteOf(slider.fillRect), slider.name);
-                Assert.AreEqual("BarTrack", SpriteOf(slider.transform.Find("Background")), slider.name);
+                Assert.AreEqual("kit_knob", SpriteOf(slider.handleRect), slider.name);
+                Assert.AreEqual("kit_slider_fill", SpriteOf(slider.fillRect), slider.name);
+                Assert.AreEqual("kit_slider_track", SpriteOf(slider.transform.Find("Background")), slider.name);
             }
             foreach (var toggle in new[] { menu.MusicEnabled, menu.ScreenShake })
             {
-                var box = (Image)toggle.targetGraphic;
-                Assert.AreEqual("ToggleBox", box.sprite.name, toggle.name);
-                Assert.AreEqual(Image.Type.Sliced, box.type, toggle.name);
-                Assert.AreEqual("ToggleCheck", ((Image)toggle.graphic).sprite.name, toggle.name);
+                Assert.AreEqual("kit_toggle_off", ((Image)toggle.targetGraphic).sprite.name, toggle.name);
+                Assert.AreEqual("kit_toggle_on", ((Image)toggle.graphic).sprite.name, toggle.name);
             }
             var icons = new Dictionary<string, string>
             {
-                { "MasterRow", "IconVolume" }, { "SfxRow", "IconVolume" }, { "MusicRow", "IconMusic" },
-                { "SensitivityRow", "IconMouse" }, { "ShakeRow", "IconShake" }
+                { "MasterRow", "kit_ico_sound" }, { "SfxRow", "kit_ico_sound" }, { "MusicRow", "kit_ico_music" },
+                { "MusicToggleRow", "kit_ico_music" }, { "ShakeRow", "kit_ico_vibrate" }
             };
-            foreach (var pair in icons) Assert.AreEqual(pair.Value, Child(menu, pair.Key + "/Icon").sprite.name, pair.Key);
-            Assert.AreEqual("IconExit", Child(menu.Leave, "Icon").sprite.name);
-            Assert.AreEqual("IconExit", Child(root.Confirm.Confirm, "Icon").sprite.name);
-            Assert.AreEqual("IconSpectate", Child(root.Spectator.WatchingBlock, "Icon").sprite.name);
+            foreach (var pair in icons)
+            {
+                Assert.AreEqual("kit_iconbtn_round_normal", Child(menu, "Panel/" + pair.Key + "/IconPlate").sprite.name, pair.Key);
+                Assert.AreEqual(pair.Value, Child(menu, "Panel/" + pair.Key + "/IconPlate/Icon").sprite.name, pair.Key);
+            }
+            Assert.IsNull(menu.transform.Find("Panel/SensitivityRow/IconPlate"), "Chuột has no icon in the mock");
+            Assert.AreEqual("kit_icon_cross_red", Child(menu.Leave, "Face/Group/Icon").sprite.name);
+            Assert.AreEqual("kit_icon_cross_red", Child(root.Confirm.Confirm, "Face/Group/Icon").sprite.name);
+            Assert.AreEqual("kit_ico_eye", Child(root.Spectator.WatchingBlock, "IconPlate/Icon").sprite.name);
             Assert.NotNull(root.Eliminated.CauseIcon);
 
-            // Panels: HudRound10 base, then edge and bevel overlays behind the content.
-            foreach (var panel in new Component[] { menu, root.Eliminated.Frame, root.Spectator.Card, root.Confirm.transform.Find("Box") })
-            {
-                Assert.AreEqual("HudRound10", SpriteOf(panel), panel.name);
-                Assert.AreEqual("AFrameEdge96", Child(panel, "ArtEdge").sprite.name, panel.name);
-                Assert.AreEqual("ABevel96", Child(panel, "ArtBevel").sprite.name, panel.name);
-                Assert.AreEqual(0, panel.transform.Find("ArtEdge").GetSiblingIndex(), panel.name + " edge behind content");
-                Assert.AreEqual(1, panel.transform.Find("ArtBevel").GetSiblingIndex(), panel.name + " bevel behind content");
-            }
-            Assert.AreEqual("HudRound10", SpriteOf(root.Spectator.WatchingBlock));
-            Assert.AreEqual("HudRound6", SpriteOf(root.Spectator.KeyBar));
-            Assert.AreEqual("ToastBg", SpriteOf(root.Notice));
+            Assert.AreEqual("kit_panel_popup", SpriteOf(menu.transform.Find("Panel")));
+            Assert.AreEqual("kit_panel_popup", SpriteOf(root.Confirm.transform.Find("Box")));
+            Assert.AreEqual("kit_panel_s", SpriteOf(root.Eliminated.Frame), "panel M = 9-sliced S source");
+            Assert.AreEqual("kit_card_stat", SpriteOf(root.Spectator.Card));
+            Assert.AreEqual("kit_card_room_selected", SpriteOf(root.Spectator.WatchingBlock));
+            Assert.AreEqual("kit_keycap_normal", SpriteOf(root.Spectator.KeyBar.Find("KeyA")));
+            Assert.AreEqual("kit_keycap_normal", SpriteOf(root.Spectator.Killer.transform.Find("KeyE")));
+            Assert.AreEqual("kit_toast", SpriteOf(root.Notice));
             var row = root.Spectator.Rows[0];
-            Assert.AreEqual("HudRound6", SpriteOf(row));
-            Assert.AreEqual("AFrameEdgeSlot128", Child(row, "ArtEdge").sprite.name);
-            Assert.AreEqual("ABevelSlot128", Child(row, "ArtBevel").sprite.name);
-            Assert.AreEqual("HudRound6Stroke2", Child(row, "Selected").sprite.name);
-            Assert.AreEqual("BarTrack", SpriteOf(root.Spectator.CardHp.transform.Find("Track")));
+            Assert.AreEqual("kit_row_normal", SpriteOf(row));
+            Assert.AreEqual("kit_row_alt", SpriteOf(root.Spectator.Rows[1]), "odd rows alternate");
+            Assert.AreEqual("kit_row_selected", Child(row, "Selected").sprite.name);
+            Assert.AreEqual("kit_progress_track", SpriteOf(root.Spectator.CardHp.transform.Find("Track")));
 
-            foreach (var b in new[] { menu.Resume, root.Eliminated.Spectate, root.Spectator.Home, root.Confirm.Stay })
-                Assert.AreEqual("ButtonPrimary", SpriteOf(b), b.name);
-            foreach (var b in new[] { menu.Defaults, root.Eliminated.Home, root.Spectator.Killer, root.Killcam.Skip })
-                Assert.AreEqual("ButtonSecondary", SpriteOf(b), b.name);
-            foreach (var b in new[] { menu.Leave, root.Confirm.Confirm }) // AES-02: destructive buttons use the Danger face
-                Assert.AreEqual("ButtonDanger", SpriteOf(b), b.name);
+            foreach (var b in new[] { menu.Resume, root.Eliminated.Spectate, root.Confirm.Stay })
+                Assert.AreEqual("kit_btn_primary_normal", SpriteOf(b), b.name);
+            foreach (var b in new[] { menu.Defaults, root.Eliminated.Home, menu.Leave, root.Confirm.Confirm }) // Exit = secondary face + red X
+                Assert.AreEqual("kit_btn_secondary_normal", SpriteOf(b), b.name);
+            Assert.AreEqual("kit_iconbtn_square_normal", SpriteOf(root.Spectator.Home));
+            Assert.AreEqual("ButtonSecondary", SpriteOf(root.Killcam.Skip), "killcam keeps its art (no mock)");
 
             var killcam = root.Killcam;
             var grid = killcam.Board.GetComponent<Image>();
@@ -176,19 +176,20 @@ namespace JungleMaze.Tests.PlayMode.MatchUi
         public void Icons_CoverNoText_NoEllipsis()
         {
             var root = Spawn();
-            var checks = new List<(Image icon, TMP_Text text)>();
-            foreach (var row in new[] { "MasterRow", "SfxRow", "MusicRow", "SensitivityRow", "ShakeRow" })
+            var checks = new List<(Image icon, TMP_Text text, float size)>();
+            foreach (var row in new[] { "MasterRow", "SfxRow", "MusicRow", "MusicToggleRow", "ShakeRow" })
             {
-                var r = root.Menu.transform.Find(row);
-                checks.Add((r.Find("Icon").GetComponent<Image>(), r.Find("Label").GetComponent<TMP_Text>()));
+                var r = root.Menu.transform.Find("Panel/" + row);
+                checks.Add((r.Find("IconPlate").GetComponent<Image>(), r.Find("Label").GetComponent<TMP_Text>(), 44f / 1.5f));
             }
-            foreach (var b in new[] { root.Menu.Leave, root.Confirm.Confirm })
-                checks.Add((Child(b, "Icon"), b.GetComponentInChildren<TMP_Text>()));
+            foreach (var b in new[] { root.Menu.Leave, root.Confirm.Confirm, root.Menu.Resume, root.Menu.Defaults, root.Confirm.Stay })
+                checks.Add((Child(b, "Face/Group/Icon"), b.GetComponentInChildren<TMP_Text>(), 30f / 1.5f));
             var watching = root.Spectator.WatchingBlock;
-            checks.Add((Child(watching, "Icon"), watching.Find("Caption").GetComponent<TMP_Text>()));
-            checks.Add((Child(watching, "Icon"), root.Spectator.WatchingName));
+            checks.Add((Child(watching, "IconPlate"), root.Spectator.WatchingName, 50f / 1.5f));
+            checks.Add((Child(watching, "AliveIcon"), root.Spectator.AliveCount, 36f / 1.5f));
+            Canvas.ForceUpdateCanvases();
 
-            foreach (var (icon, text) in checks)
+            foreach (var (icon, text, size) in checks)
             {
                 var label = text.transform.parent.name + "/" + text.name;
                 var glyphs = TextRect(text);
@@ -196,16 +197,17 @@ namespace JungleMaze.Tests.PlayMode.MatchUi
                 Assert.IsFalse(WorldRect(icon.rectTransform).Overlaps(glyphs), label + " under its icon");
                 var box = WorldRect(text.rectTransform);
                 Assert.IsTrue(glyphs.xMin >= box.xMin - 0.5f && glyphs.xMax <= box.xMax + 0.5f, label + " runs past its rect");
-                Assert.AreEqual(28f, icon.rectTransform.rect.width, 0.01f, label + " icon size");
+                Assert.AreEqual(size, icon.rectTransform.rect.width, 0.01f, label + " icon size");
             }
         }
 
-        [TestCase(EliminationCause.Player, "CausePlayer")]
-        [TestCase(EliminationCause.Zone, "CauseZone")]
-        [TestCase(EliminationCause.LeftMatch, "CauseLeft")]
-        [TestCase(EliminationCause.Disconnected, "CauseDisconnect")]
-        [TestCase(EliminationCause.Unknown, "CauseUnknown")]
-        public void CauseIcon_FollowsCause_LeftOfTheCentredText(EliminationCause cause, string sprite)
+        // Skin A: the cause icon sits on a kaki plate in the card's left slot (110 px border), the text right of it.
+        [TestCase(EliminationCause.Player, "kit_ico_skull")]
+        [TestCase(EliminationCause.Zone, "icon_zone_cause")]
+        [TestCase(EliminationCause.LeftMatch, "kit_ico_door")]
+        [TestCase(EliminationCause.Disconnected, "kit_ico_wifi")]
+        [TestCase(EliminationCause.Unknown, "kit_icon_warn")]
+        public void CauseIcon_FollowsCause_InTheCardSlot(EliminationCause cause, string sprite)
         {
             var root = Spawn();
             var view = root.Eliminated;
@@ -213,12 +215,16 @@ namespace JungleMaze.Tests.PlayMode.MatchUi
             Assert.AreEqual(sprite, view.CauseIcon.sprite.name);
             Assert.IsTrue(view.CauseIcon.gameObject.activeInHierarchy);
             var icon = WorldRect(view.CauseIcon.rectTransform);
+            var card = WorldRect((RectTransform)view.Cause.transform.parent);
             var text = TextRect(view.Cause);
+            Assert.AreEqual("CauseCard", view.Cause.transform.parent.name);
+            Assert.LessOrEqual(icon.center.x, card.xMin + 110f / 1.5f, "icon centred in the card's left slot");
+            var plated = cause != EliminationCause.Zone;
+            Assert.AreEqual(plated, view.CauseIcon.transform.parent.GetComponent<Image>().enabled, "plate only under ink icons");
+            Assert.AreEqual((plated ? 40f : 60f) / 1.5f, icon.width, 0.5f, "40 on the plate, 60 alone (T-028 b2-bi-loai-bo)");
             Assert.LessOrEqual(icon.xMax, text.xMin, "icon left of the text");
-            Assert.AreEqual(8f, text.xMin - icon.xMax, 1f, "8 px gap");
-            Assert.AreEqual(icon.center.y, WorldRect(view.Cause.rectTransform).center.y, 1f, "icon on the text line");
-            var frame = WorldRect(view.Frame);
-            Assert.AreEqual(frame.center.x, (icon.xMin + text.xMax) / 2f, 4f, "icon + text centred in the frame");
+            Assert.AreEqual(card.center.y, icon.center.y, 3f, "icon on the card's middle line");
+            Assert.IsFalse(view.Cause.isTextTruncated, view.Cause.text);
         }
 
         // The killer mark is on the killer's dot only; the selected spectator row shows its outline, the others none.

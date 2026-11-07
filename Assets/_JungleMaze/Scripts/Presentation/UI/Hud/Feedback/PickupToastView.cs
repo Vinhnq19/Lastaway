@@ -11,15 +11,15 @@ namespace JungleMaze.Presentation.UI.Hud.Feedback
         [SerializeField] private CanvasGroup group;[SerializeField] private TMP_Text label,count,plus;[SerializeField] private Image background,icon;
         private readonly char[] _buffer=new char[24];
         private IItemIconProvider _icons;private string _iconId;private Sprite _placeholder;private Image.Type _placeholderType;private bool _hasPlaceholder,_iconValid;private Color _placeholderColor=Color.white;
-        public CanvasGroup Group=>group;public TMP_Text Label=>label;public Image Icon=>icon;
-        public void ApplyPalette(HudPalette p){background.color=p.Surface;label.color=p.Text;count.color=p.Muted;plus.color=p.Green;_placeholderColor=p.IconPlaceholder;CapturePlaceholder();icon.color=icon.sprite==_placeholder?_placeholderColor:Color.white;}
+        public CanvasGroup Group=>group;public TMP_Text Label=>label;public TMP_Text Count=>count;public Image Icon=>icon;
+        public void ApplyPalette(HudPalette p){background.color=Color.white;label.color=p.Text;count.color=p.Muted;plus.color=p.Text;_placeholderColor=p.IconPlaceholder;CapturePlaceholder();icon.color=icon.sprite==_placeholder?_placeholderColor:Color.white;}
         /// <summary>Sets the ID→sprite provider; the current icon is looked up again on the next <see cref="Show(bool,string,string,int,float)"/>.</summary>
         public void ConfigureIcons(IItemIconProvider icons){_icons=icons;_iconValid=false;}
         public void Show(bool visible,string name,int quantity,float alpha)=>Show(visible,null,name,quantity,alpha);
         /// <summary>Shows the row; the icon is looked up only when <paramref name="id"/> changes, unknown IDs fall back to the placeholder.</summary>
         public void Show(bool visible,string id,string name,int quantity,float alpha)
         {
-            group.alpha=visible?alpha:0;if(!visible)return;if(label.text!=name)label.text=name;count.SetCharArray(_buffer,0,HudFeedbackFormat.Count(_buffer,quantity));
+            group.alpha=visible?alpha:0;if(!visible)return;var shown=HudItemNames.Get(id,name);if(label.text!=shown)label.text=shown;/* Vietnamese UI name (GDD ITEM LIST), data name as fallback */count.SetCharArray(_buffer,0,HudFeedbackFormat.Count(_buffer,quantity));
             if(!_iconValid||!string.Equals(_iconId,id,System.StringComparison.Ordinal))SetIcon(id);
         }
         private void SetIcon(string id)

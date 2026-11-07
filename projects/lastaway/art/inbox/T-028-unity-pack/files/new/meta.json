@@ -1,0 +1,134 @@
+{
+ "icon_ammo": {
+  "size": [
+   64,
+   64
+  ],
+  "border_LRTB": null,
+  "slice": false,
+  "nguon": "gen GPT qua codex-img.sh, prompt `src/gen/ammo.prompt.src.txt`, ref nét: kit T-020 + icon Assets"
+ },
+ "icon_ground": {
+  "size": [
+   64,
+   64
+  ],
+  "border_LRTB": null,
+  "slice": false,
+  "nguon": "gen GPT qua codex-img.sh, prompt `src/gen/ground.prompt.src.txt`, ref nét: kit T-020 + icon Assets"
+ },
+ "kit_badge_key": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": [
+   14,
+   14,
+   14,
+   14
+  ],
+  "slice": true,
+  "nguon": "gen GPT qua codex-img.sh, prompt `src/gen/badge-key.prompt.src.txt`, ref nét: kit T-020 + icon Assets"
+ },
+ "kit_killfeed_panel": {
+  "size": [
+   192,
+   64
+  ],
+  "border_LRTB": [
+   16,
+   16,
+   16,
+   16
+  ],
+  "slice": true,
+  "nguon": "gen GPT qua codex-img.sh, prompt `src/gen/killfeed.prompt.src.txt`; panel kill feed (Image #14120E nền, kéo giãn theo số dòng)"
+ },
+ "kit_map_bg": {
+  "size": [
+   256,
+   256
+  ],
+  "border_LRTB": [
+   24,
+   24,
+   24,
+   24
+  ],
+  "slice": true,
+  "nguon": "gen GPT qua codex-img.sh, prompt `src/gen/mapbg.prompt.src.txt`; nền khung bản đồ lớn"
+ },
+ "map_grid": {
+  "size": [
+   840,
+   840
+  ],
+  "border_LRTB": null,
+  "slice": false,
+  "nguon": "gen GPT 1 ô lưới (prompt `src/gen/gridtile.prompt.src.txt`: chỉ hai nét mảnh trên và trái, độ tương phản thấp), script lát 10x10 ô 83 px vào vùng trong của `kit_map_bg` (lề 5 px mỗi cạnh, mép phải và dưới do khung đóng); lưới 840x840, nền trong suốt"
+ },
+ "map_ring_zone": {
+  "size": [
+   512,
+   512
+  ],
+  "border_LRTB": null,
+  "slice": false,
+  "nguon": "gen GPT qua codex-img.sh, prompt `src/gen/ringzone.prompt.src.txt`; vòng bo hiện tại (nét vàng cam), vẽ 680x680"
+ },
+ "map_ring_safe": {
+  "size": [
+   256,
+   256
+  ],
+  "border_LRTB": null,
+  "slice": false,
+  "nguon": "gen GPT qua codex-img.sh, prompt `src/gen/ringsafe.prompt.src.txt`; vòng bo tiếp theo, vùng an toàn (nét trắng), vẽ 180x180; cỡ 32x32 làm chú giải"
+ },
+ "kit_ico_practice": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false,
+  "nguon": "gen GPT qua codex-img.sh, prompt `src/gen/practice.prompt.src.txt`; icon mục tối cho nút Luyện tập offline (bia tập bắn có mũi tên)"
+ },
+ "kit_ico_save": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false,
+  "nguon": "gen GPT qua codex-img.sh, prompt `src/gen/save.prompt.src.txt`; icon mục tối cho nút Lưu endpoint (đĩa mềm)"
+ },
+ "kit_ico_globe": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false,
+  "nguon": "gen GPT qua codex-img.sh, prompt `src/gen/globe.prompt.src.txt`; icon mục tối cho nút Xem online (quả địa cầu)"
+ },
+ "kit_ico_fill": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false,
+  "nguon": "gen GPT qua codex-img.sh, prompt `src/gen/fill.prompt.src.txt`; icon mục tối cho nút Điền đủ (nhóm 3 người và dấu cộng)"
+ },
+ "icon_zone_cause": {
+  "size": [
+   64,
+   64
+  ],
+  "border_LRTB": null,
+  "slice": false,
+  "nguon": "gen GPT qua codex-img.sh, prompt `src/gen/zonecause.prompt.src.txt`; icon màu nguyên nhân chết Bo thu v2 (khói bo đỏ lấn vào nền đá, nhân vật nhỏ ở ngoài vòng; lấp khoảng 90% ô)"
+ }
+}

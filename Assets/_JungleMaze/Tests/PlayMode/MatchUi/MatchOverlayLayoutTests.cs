@@ -12,8 +12,8 @@ namespace JungleMaze.Tests.PlayMode.MatchUi
 {
     /// <summary>
     /// AC44–AC47 on the 1280×720 reference canvas. The prefab's canvas is switched to world space at 1 unit = 1 canvas
-    /// pixel, so rects are measured independent of the Game view size; values are top-left based like Figma.
-    /// Tolerance 20 px (spec H: hand-drawn Figma coordinates).
+    /// pixel, so rects are measured independent of the Game view size; values are top-left based. Since T-023 (skin A)
+    /// the expected rects are the 1920×1080 px of mocks B1-B3 (T-028 pack), divided by 1.5. Tolerance 20 canvas px.
     /// </summary>
     public sealed class MatchOverlayLayoutTests
     {
@@ -76,40 +76,57 @@ namespace JungleMaze.Tests.PlayMode.MatchUi
             Assert.AreEqual(h, m.height, Tolerance, what + " h");
         }
 
+        /// <summary>Same as <see cref="Near"/> with 1080p mock px.</summary>
+        private static void NearPx(RectTransform r, float x, float y, float w, float h, string what) =>
+            Near(r, x / 1.5f, y / 1.5f, w / 1.5f, h / 1.5f, what);
+
+        private static readonly int[] Scale = { 96, 40, 30, 24, 20 };
+
         private static string Codes(uint[] missing) =>
             missing == null ? "" : string.Join(" ", System.Array.ConvertAll(missing, c => "U+" + c.ToString("X4")));
 
         private static IEnumerable<T> All<T>(Component root) where T : Component => root.GetComponentsInChildren<T>(true);
 
-        // AC44
+        // AC44 on skin A (b1-esc-cai-dat): popup 820×700 px at (550,180), 10 px above centre as in the mock; rows 48 px
+        // (kit slider and toggle), buttons kit M 64 px and the close X 52 px; every text on the T-027 scale in its tier font.
         [Test]
         public void EscPanel()
         {
-            var panel = (RectTransform)_root.Menu.transform;
+            var panel = (RectTransform)_root.Menu.transform.Find("Panel");
             var m = Measure(panel);
-            Assert.AreEqual(560f, m.width, Tolerance);
+            Assert.AreEqual(820f / 1.5f, m.width, 1f);
+            Assert.AreEqual(700f / 1.5f, m.height, 1f);
             Assert.AreEqual(640f, m.center.x, 1f, "centred horizontally");
-            Assert.AreEqual(360f, m.center.y, 1f, "centred vertically");
-            Assert.LessOrEqual(m.height, 720f * 0.6f, "≤ 60 % of the screen height");
+            Assert.AreEqual(530f / 1.5f, m.center.y, 1f, "mock: 10 px above the vertical centre");
+            Assert.LessOrEqual(m.height, 720f * 0.65f, "≤ 65 % of the screen height (mock 64.8 %)");
             Assert.GreaterOrEqual(m.xMin, 0f);
             Assert.LessOrEqual(m.yMax, 720f);
             foreach (var slider in new[] { _root.Menu.Master, _root.Menu.Sfx, _root.Menu.Music, _root.Menu.Sensitivity })
-                Assert.GreaterOrEqual(Measure((RectTransform)slider.transform.parent).height, 44f, slider.name + " row");
-            Assert.GreaterOrEqual(Measure((RectTransform)_root.Menu.ScreenShake.transform.parent).height, 44f);
+                Assert.GreaterOrEqual(Measure((RectTransform)slider.transform.parent).height, 48f / 1.5f - 0.01f, slider.name + " row");
+            Assert.GreaterOrEqual(Measure((RectTransform)_root.Menu.ScreenShake.transform.parent).height, 48f / 1.5f - 0.01f);
             foreach (var button in All<Button>(_root.Menu))
-                Assert.GreaterOrEqual(Measure((RectTransform)button.transform).height, 44f, button.name);
-            foreach (var text in All<TMP_Text>(_root.Menu))
-                Assert.GreaterOrEqual(text.fontSize, 13f, text.name);
+                Assert.GreaterOrEqual(Measure((RectTransform)button.transform).height, 48f / 1.5f - 0.01f, button.name);
+            var chakra = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>("Assets/_JungleMaze/Art/Fonts/TMP/ChakraPetch-Bold SDF.asset");
+            var body = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>("Assets/_JungleMaze/Art/Fonts/TMP/HudTextBold SDF.asset");
             foreach (var text in All<TMP_Text>(_root))
-                StringAssert.Contains("Hud", text.font.name, "HUD fonts (Be Vietnam Pro / Pixelify Sans) on " + text.name);
+            {
+                var px = Mathf.RoundToInt(text.fontSize * 1.5f);
+                CollectionAssert.Contains(Scale, px, text.name + " on the 96/40/30/24/20 scale");
+                Assert.AreEqual(px >= 40 ? chakra : body, text.font, text.name + " font of its tier (no L buttons here)");
+            }
         }
 
-        // TR9: every character the overlay prints exists in its own HUD font, so TMP never falls back to (and writes
-        // glyphs into) the JSurviv LiberationSans fallback asset.
+        // TR9: every character the overlay prints exists in its own font, so TMP never falls back to (and writes
+        // glyphs into) the JSurviv LiberationSans fallback asset. Skin A prints in Be Vietnam Pro Bold (HudTextBold)
+        // and Chakra Petch Bold (titles, rank, countdown); runtime lines are checked in both.
         [Test]
         public void AllText_IsInTheHudFonts()
         {
-            var textFont = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>("Assets/_JungleMaze/Art/Fonts/TMP/HudText SDF.asset");
+            var fonts = new[]
+            {
+                AssetDatabase.LoadAssetAtPath<TMP_FontAsset>("Assets/_JungleMaze/Art/Fonts/TMP/HudTextBold SDF.asset"),
+                AssetDatabase.LoadAssetAtPath<TMP_FontAsset>("Assets/_JungleMaze/Art/Fonts/TMP/ChakraPetch-Bold SDF.asset")
+            };
             var runtime = new[]
             {
                 JungleMaze.App.MatchUi.EliminationText.Title, "Bị Hào hạ bằng Nỏ · cách 6 ô", "Bị bo thu hẹp loại", "Bạn đã rời trận",
@@ -125,37 +142,36 @@ namespace JungleMaze.Tests.PlayMode.MatchUi
                 Assert.IsTrue(text.font.HasCharacters(text.text, out var missing, false, false),
                     text.name + " misses " + Codes(missing));
             }
-            foreach (var line in runtime)
-                Assert.IsTrue(textFont.HasCharacters(line, out var missing, false, false),
-                    line + " misses " + Codes(missing));
+            foreach (var font in fonts)
+                foreach (var line in runtime)
+                    Assert.IsTrue(font.HasCharacters(line, out var missing, false, false),
+                        font.name + ": " + line + " misses " + Codes(missing));
         }
 
-        // AC45
+        // AC45 on skin A (b2-bi-loai): panel M 920×860 at (500,110), buttons kit M at y 804 (mock 72 tall, kit M 64).
         [Test]
         public void EliminatedScreen()
         {
-            Near(_root.Eliminated.Frame, 320, 141, 640, 417, "frame");
-            Near((RectTransform)_root.Eliminated.Home.transform, 461, 508, 126, 50, "Về menu");
-            Near((RectTransform)_root.Eliminated.Spectate.transform, 599, 508, 220, 48, "Theo dõi người khác");
+            NearPx(_root.Eliminated.Frame, 500, 110, 920, 860, "frame");
+            NearPx((RectTransform)_root.Eliminated.Home.transform, 560, 804, 360, 64, "Về sảnh");
+            NearPx((RectTransform)_root.Eliminated.Spectate.transform, 1000, 804, 360, 64, "Theo dõi");
         }
 
-        // AC46
+        // AC46 on skin A (b3-spectator): watching card, keycaps, home square, target card, 9 rows 56 px apart.
         [Test]
         public void Spectator()
         {
             var v = _root.Spectator;
-            Near(v.WatchingBlock, 430, 24, 420, 71, "Đang theo dõi");
-            var keys = Measure(v.KeyBar);
-            Assert.AreEqual(440f, keys.x, Tolerance);
-            Assert.AreEqual(640f, keys.y, Tolerance);
-            Assert.AreEqual(44f, keys.height, Tolerance);
-            Near((RectTransform)v.Home.transform, 1114, 640, 100, 47, "Về sảnh");
-            Near(v.Card, 24, 560, 300, 90, "thẻ mục tiêu");
+            NearPx(v.WatchingBlock, 660, 20, 600, 120, "Đang theo dõi");
+            NearPx(v.KeyBar, 540, 990, 184, 52, "A D");
+            NearPx((RectTransform)v.Killer.transform, 780, 990, 124, 52, "E kẻ hạ bạn");
+            NearPx((RectTransform)v.Home.transform, 1620, 976, 64, 64, "Về sảnh");
+            NearPx(v.Card, 30, 770, 460, 180, "thẻ mục tiêu");
             Assert.AreEqual(9, v.Rows.Length);
             for (var i = 0; i < v.Rows.Length; i++)
-                Near((RectTransform)v.Rows[i].transform, 24, 130 + i * 38, 160, 32, "row " + (i + 1));
-            // The killfeed area (24,24) 171×90 stays empty.
-            var killfeed = new Rect(24, 24, 171, 90);
+                NearPx((RectTransform)v.Rows[i].transform, 30, 190 + i * 56, 300, 48, "row " + (i + 1));
+            // The HUD killfeed area (15,34) 270×154 px of the mock stays empty.
+            var killfeed = new Rect(15 / 1.5f, 34 / 1.5f, 270 / 1.5f, 154 / 1.5f);
             foreach (var g in All<Graphic>(v))
                 Assert.IsFalse(killfeed.Overlaps(Measure(g.rectTransform)), g.name + " in the killfeed area");
         }
@@ -166,7 +182,7 @@ namespace JungleMaze.Tests.PlayMode.MatchUi
         {
             var watched = new List<RectTransform>
             {
-                (RectTransform)_root.Menu.transform, _root.Eliminated.Frame, (RectTransform)_root.Eliminated.Home.transform,
+                (RectTransform)_root.Menu.transform.Find("Panel"), _root.Eliminated.Frame, (RectTransform)_root.Eliminated.Home.transform,
                 (RectTransform)_root.Eliminated.Spectate.transform, _root.Spectator.WatchingBlock, _root.Spectator.KeyBar,
                 (RectTransform)_root.Spectator.Home.transform, _root.Spectator.Card
             };

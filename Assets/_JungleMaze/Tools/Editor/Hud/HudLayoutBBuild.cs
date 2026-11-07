@@ -40,7 +40,8 @@ namespace JungleMaze.EditorTools
                 QuickBar(root.transform.Find("QuickBar"));
                 Minimap(root.transform.Find("Minimap"));
                 MatchStatus(root.transform.Find("MatchStatus"));
-                Rect(root.transform.Find("EffectsRow"), new Vector2(24, 157)); // 8 u above the r11 Vitals (top 148.7 u)
+                // T-022: feedback nodes (effects row, use strip) are placed by HudFeedbackPrefabBuild from mock B9.
+                TypeScale(root.transform);
                 HudSkinABuild.Apply(root.transform);
                 PrefabUtility.SaveAsPrefabAsset(root, PrefabPath);
             }
@@ -89,7 +90,7 @@ namespace JungleMaze.EditorTools
             Place(hpValue, Px(290), Px(41 - 22.5f), Px(90), Px(45)); // right edge x 380, centre y 41
             var layout = hpValue.GetComponent<HorizontalLayoutGroup>();
             layout.childAlignment = TextAnchor.MiddleRight;
-            Text(view.HpNumber, Px(30), TextAlignmentOptions.MidlineRight, true);
+            Tier(view.HpNumber, UiKit.Tier.B1, TextAlignmentOptions.MidlineRight);
             view.HpMax.gameObject.SetActive(false);
 
             Row(vitals, view.ArmorRow, "ArmorIcon", "armor", 65, 100, 103, 101, 70, TextAlignmentOptions.MidlineLeft, false);
@@ -101,7 +102,7 @@ namespace JungleMaze.EditorTools
 
         /// <summary>
         /// The row becomes a transparent container over the whole block so children use block coordinates. Icon centre
-        /// (icx, icy) and number box (left vx, centre y vcy, width vw) in 1080p px; numbers are 28 px bold.
+        /// (icx, icy) and number box (left vx, centre y vcy, width vw) in 1080p px; numbers are 30 px (T-022 type scale).
         /// </summary>
         private static void Row(Transform block, HudGaugeRowView row, string iconName, string sprite, float icx, float icy,
             float vx, float vcy, float vw, TextAlignmentOptions align, bool keepBar)
@@ -115,7 +116,7 @@ namespace JungleMaze.EditorTools
             row.Bar.gameObject.SetActive(keepBar);
             var icon = AddIconAt(row.transform, iconName, sprite, icx, icy);
             Place(row.Value.transform, Px(vx), Px(vcy - 18), Px(vw), Px(36));
-            Text(row.Value, Px(28), align, true);
+            Tier(row.Value, UiKit.Tier.B1, align);
             var so = new SerializedObject(row);
             so.FindProperty("icon").objectReferenceValue = icon;
             so.ApplyModifiedPropertiesWithoutUndo();
@@ -181,17 +182,18 @@ namespace JungleMaze.EditorTools
             stripLayout.padding = new RectOffset(0, 0, 0, 0);
             stripLayout.childAlignment = TextAnchor.MiddleCenter;
             stripLayout.childForceExpandWidth = true;
-            Text(view.WeaponName, 12, TextAlignmentOptions.MidlineLeft);
-            Text(strip.Find("Ammo/Magazine").GetComponent<TMP_Text>(), 16, null);
-            Text(strip.Find("Ammo/Reserve").GetComponent<TMP_Text>(), 12, null);
+            // Hidden in r11; still put on the type scale (gameplay floor 24, key 20).
+            Tier(view.WeaponName, UiKit.Tier.B2, TextAlignmentOptions.MidlineLeft);
+            Tier(strip.Find("Ammo/Magazine").GetComponent<TMP_Text>(), UiKit.Tier.B2, null);
+            Tier(strip.Find("Ammo/Reserve").GetComponent<TMP_Text>(), UiKit.Tier.B2, null);
             strip.Find("Ammo").GetComponent<HorizontalLayoutGroup>().childAlignment = TextAnchor.MiddleCenter;
             var reload = strip.Find("ReloadHint");
             reload.GetComponent<HorizontalLayoutGroup>().childAlignment = TextAnchor.MiddleRight;
             var keyCap = reload.Find("KeyCap");
             var keyLayout = keyCap.GetComponent<LayoutElement>();
             keyLayout.preferredWidth = keyLayout.preferredHeight = Px(22); // fits the 22 px strip
-            Text(keyCap.Find("Label").GetComponent<TMP_Text>(), 13, null);
-            Text(reload.Find("Label").GetComponent<TMP_Text>(), 13, null);
+            Tier(keyCap.Find("Label").GetComponent<TMP_Text>(), UiKit.Tier.C, null);
+            Tier(reload.Find("Label").GetComponent<TMP_Text>(), UiKit.Tier.B2, null);
             // r11 (Huy 07/11): no weapon name / ammo tab. QuickbarView still writes to it, so it stays in the prefab, hidden.
             area.gameObject.SetActive(false);
 
@@ -199,19 +201,6 @@ namespace JungleMaze.EditorTools
             Place(bar.Find("Slots"), Px(50), Px(29), Px(494), Px(54));
             Group(bar.Find("Slots/WeaponGroup"), 0);
             Group(bar.Find("Slots/ConsumableGroup"), Px(260));
-
-            // Use-item strip: the panel has no room for it any more, so it shows just above the bar while an item is used.
-            var use = bar.Find("UseActionStrip");
-            var stripH = Px(22);
-            Place(use, Px(40), -Px(28), Px(512), stripH);
-            // "Di chuyển để hủy" needs ~108 u at 13 u and must not be ellipsized (UI-01 part 2). Texts are 18 u boxes
-            // centred on the 14.7 u strip height.
-            var ty = (stripH - 18) / 2;
-            // Label must hold "Đang dùng God Leaf" (UI-01 test), hint "Di chuyển để hủy".
-            PlaceText(use.Find("Label"), 2, ty, 136, 18, 13);
-            Place(use.Find("Track"), 140, stripH / 2 - 2, 44, 4);
-            PlaceText(use.Find("Seconds"), 188, ty, 30, 18, 13);
-            PlaceText(use.Find("Hint"), 220, ty, 119, 18, 13);
         }
 
         private static void Group(Transform group, float x)
@@ -222,23 +211,20 @@ namespace JungleMaze.EditorTools
         }
 
         /// <summary>
-        /// Slot 54 px: item icon up to 40 px centred, key number 16 px bold anchored bottom-right at (50, 50) (Huy 07/11),
-        /// count top-right, name hidden.
+        /// Slot 54 px: item icon up to 40 px centred; key number 20 px centred on the 30x30 key badge at (31, 27), the
+        /// slot's bottom-right corner (mock B9: badge centres x 764.., y 1021; badge sprite in HudSkinABuild); count 20 px
+        /// top-right; name hidden.
         /// </summary>
         private static void Slot(Transform slot, float x)
         {
             var size = Px(54);
             Place(slot, x, 0, size, size);
             Place(slot.Find("Icon"), Px(7), Px(7), Px(40), Px(40));
-            PlaceText(slot.Find("Key"), Px(20), Px(28), Px(30), Px(22), Px(16));
-            var key = slot.Find("Key").GetComponent<TMP_Text>();
-            key.alignment = TextAlignmentOptions.BottomRight;
-            Bold(key);
-            // 13 u text needs a box taller than its ~17 u line, or TMP's ellipsis mode drops the whole line.
-            PlaceText(slot.Find("Count"), Px(12), 0, Px(40), Px(28), 13);
-            var count = slot.Find("Count").GetComponent<TMP_Text>();
-            count.alignment = TextAlignmentOptions.TopRight;
-            Bold(count);
+            Place(slot.Find("Key"), Px(KeyBadge.x), Px(KeyBadge.y), Px(KeyBadge.width), Px(KeyBadge.height));
+            Tier(slot.Find("Key").GetComponent<TMP_Text>(), UiKit.Tier.C, TextAlignmentOptions.Center);
+            // A 20 px line is ~18 u tall; the 28 px box keeps TMP's ellipsis mode from dropping it.
+            Place(slot.Find("Count"), Px(12), 0, Px(40), Px(28));
+            Tier(slot.Find("Count").GetComponent<TMP_Text>(), UiKit.Tier.C, TextAlignmentOptions.TopRight);
             slot.Find("Name").gameObject.SetActive(false);
             var inUse = (RectTransform)slot.Find("InUseFrame");
             inUse.sizeDelta = new Vector2(size, size);
@@ -294,7 +280,10 @@ namespace JungleMaze.EditorTools
             captureSo.ApplyModifiedPropertiesWithoutUndo();
         }
 
-        // ---- Match status 318×90 px at (1577, 350): alive left, divider at x 155, zone timer right ----
+        // ---- Match status 318×90 px at (1577, 350): alive left, divider at x 162, zone timer right ----
+        // T-022 type scale: both numbers 24 px. Widths (Be Vietnam Pro Bold 24, PIL advance): "10/10" 67 px, "00:48"
+        // 75 px. Alive icon centre 71 -> 66 and value box 90..160 (70 px), divider 155 -> 162, zone icon 185 -> 188 and
+        // value box 212..290 (78 px), still left of the frame corner block (x 292). Panel rect unchanged.
         private static void MatchStatus(Transform status)
         {
             Rect(status, new Vector2(-Px(1920 - 1577 - 318), -Px(350)), new Vector2(Px(318), Px(90)));
@@ -306,12 +295,10 @@ namespace JungleMaze.EditorTools
                 row.sizeDelta = new Vector2(Px(318), Px(90));
                 row.Find("Label").gameObject.SetActive(false);
             }
-            AddIconAt(status.Find("AliveRow"), "AliveIcon", "alive", 71, 45);
-            Place(status.Find("AliveRow/Value"), Px(97), Px(45 - 16), Px(56), Px(32));
+            AddIconAt(status.Find("AliveRow"), "AliveIcon", "alive", 66, 45);
+            Place(status.Find("AliveRow/Value"), Px(90), Px(45 - 16), Px(70), Px(32));
             var alive = status.Find("AliveRow/Value").GetComponent<TMP_Text>();
-            // Asset-list says 22 px, but a 10-player "10/10" is 62 px there and would cross the divider at x 155. 20 px
-            // fits it in the 56 px box; no auto-size (HUD rule, FeedbackText_MinSize13_VietnameseGlyphsAndFontRoles).
-            Text(alive, Px(20), TextAlignmentOptions.MidlineLeft, true);
+            Tier(alive, UiKit.Tier.B2, TextAlignmentOptions.MidlineLeft);
             // The divider is not in the panel sprite; colour sampled from the approved mock dung-thu-hud-A.png.
             var divider = status.Find("Divider");
             if (divider == null)
@@ -319,36 +306,46 @@ namespace JungleMaze.EditorTools
                 divider = new GameObject("Divider", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image)).transform;
                 divider.SetParent(status, false);
             }
-            Place(divider, Px(155), Px(28), Px(2), Px(34));
+            Place(divider, Px(162), Px(28), Px(2), Px(34));
             var line = divider.GetComponent<Image>();
             line.color = new Color32(0xBE, 0xB4, 0x96, 0xFF);
             line.raycastTarget = false;
-            AddIconAt(status.Find("ZoneRow"), "ZoneIcon", "zone-timer", 185, 45);
-            // Left x 211; "00:48" at 22 px is 69 px wide, ends ~280 px, still 12 px clear of the corner block (x 292).
-            Place(status.Find("ZoneRow/Value"), Px(211), Px(45 - 16), Px(74), Px(32));
-            Text(status.Find("ZoneRow/Value").GetComponent<TMP_Text>(), Px(22), TextAlignmentOptions.MidlineLeft, true);
+            AddIconAt(status.Find("ZoneRow"), "ZoneIcon", "zone-timer", 188, 45);
+            Place(status.Find("ZoneRow/Value"), Px(212), Px(45 - 16), Px(78), Px(32));
+            Tier(status.Find("ZoneRow/Value").GetComponent<TMP_Text>(), UiKit.Tier.B2, TextAlignmentOptions.MidlineLeft);
         }
 
         // ---- helpers ----
         /// <summary>1080p pixels (skin A asset-list) to reference units of the 1280×720 canvas.</summary>
         private static float Px(float px) => px / 1.5f;
 
-        private const string BoldFontPath = "Assets/_JungleMaze/Art/Fonts/TMP/HudTextBold SDF.asset";
+        /// <summary>Quick-bar key badge in a 54 px slot, 1080p px (x, y from the slot's top-left).</summary>
+        public static readonly UnityEngine.Rect KeyBadge = new UnityEngine.Rect(31, 27, 30, 30);
 
-        /// <summary>Asset-list r11: HUD numbers in Be Vietnam Pro Bold, as in the approved mock.</summary>
-        private static void Bold(TMP_Text text)
+        /// <summary>
+        /// T-022: every text of the four core blocks onto the T-027 scale, gameplay floor 24 (UiKit, Be Vietnam Pro Bold).
+        /// Slot key and count numbers and the reload key cap get 20 (numbers on a slot or key). Feedback texts are left alone.
+        /// </summary>
+        private static void TypeScale(Transform hud)
         {
-            var font = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(BoldFontPath);
-            if (font == null) throw new InvalidOperationException("Font missing: " + BoldFontPath);
-            text.font = font;
-            text.fontSharedMaterial = font.material;
-            text.fontStyle = FontStyles.Normal; // the face is already bold
+            foreach (var block in new[] { "Vitals", "Minimap", "MatchStatus" }) UiKit.SnapAll(hud.Find(block).gameObject, 24f);
+            var bar = hud.Find("QuickBar");
+            var use = bar.Find("UseActionStrip");
+            foreach (var text in bar.GetComponentsInChildren<TMP_Text>(true))
+                if (use == null || !text.transform.IsChildOf(use)) UiKit.ApplyTier(text, UiKit.Snap(text.fontSize * UiKit.Scale, 24f));
+            foreach (var slot in bar.GetComponentsInChildren<QuickbarSlotView>(true))
+            {
+                UiKit.ApplyTier(slot.KeyLabel, UiKit.Tier.C);
+                UiKit.ApplyTier(slot.CountLabel, UiKit.Tier.C);
+            }
+            var key = bar.Find("StripArea/WeaponStrip/ReloadHint/KeyCap/Label");
+            if (key != null) UiKit.ApplyTier(key.GetComponent<TMP_Text>(), UiKit.Tier.C);
         }
 
-        private static void Text(TMP_Text text, float size, TextAlignmentOptions? align, bool bold)
+        private static void Tier(TMP_Text text, UiKit.Tier tier, TextAlignmentOptions? align)
         {
-            Text(text, size, align);
-            if (bold) Bold(text);
+            UiKit.ApplyTier(text, tier);
+            if (align.HasValue) text.alignment = align.Value;
         }
 
         /// <summary>Icon centred at (cx, cy) 1080p px; the box is the icon's own canvas (@2x / 2), so art keeps its size.</summary>
@@ -372,19 +369,6 @@ namespace JungleMaze.EditorTools
             rt.anchorMin = rt.anchorMax = rt.pivot = new Vector2(0, 1);
             rt.anchoredPosition = new Vector2(x, -y);
             rt.sizeDelta = new Vector2(w, h);
-        }
-
-        private static void PlaceText(Transform t, float x, float y, float w, float h, float size)
-        {
-            Place(t, x, y, w, h);
-            Text(t.GetComponent<TMP_Text>(), size, null);
-        }
-
-        private static void Text(TMP_Text text, float size, TextAlignmentOptions? align)
-        {
-            text.enableAutoSizing = false;
-            text.fontSize = size;
-            if (align.HasValue) text.alignment = align.Value;
         }
 
         private static Image AddIcon(Transform parent, string name, string sprite, float x, float y, float size)

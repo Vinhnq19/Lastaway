@@ -1,0 +1,7 @@
+Use your image generation tool to create ONE image as described below, and copy the generated file AS-IS (no cropping, no resizing, no padding) to:
+D:\Lastaway\projects\lastaway\art\inbox\T-028-unity-pack\src\gen\ground.png
+Do not write any other files and do not post-process the image. Use only the built-in image tool, never the OpenAI API, curl or python.
+
+Draw ONE small game UI icon meaning "items lying on the ground nearby": a tiny patch of stone floor tile seen from the front-top, with a small pile of loot on it (a green leaf, a small red potion bottle and a short wooden stick), and a small downward-pointing arrow above the pile.
+Style: exactly the same pixel-art look as the attached reference icons (ref-crossbow.png, ref-leaf.png, ref-shotgun.png): chunky pixel art on a 64x64 grid, dark brown outline, flat shading with a small number of colours, warm earthy palette, no anti-aliased soft gradients. Draw it large and centered, filling about 80 percent of the canvas.
+Background: perfectly flat solid magenta #FF00FF, nothing else (no extra shadow outside the icon, no text, no letters, no frame).

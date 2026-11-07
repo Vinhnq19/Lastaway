@@ -217,3 +217,11 @@ Khoảng trống chặn QA-01 theo PIC người (MAP-02, Game-10, DRG-01, ZON-01
 ## 2026-11-07 - Ngoại lệ màu đỏ cho phản hồi sát thương (Huy)
 
 - **Chốt 07/11 (Huy, bằng lời):** "Giữ đỏ". Cung chỉ hướng bị bắn và viền màn khi máu thấp giữ màu đỏ, là ngoại lệ của luật màu kaki. Asset FX đỏ art-ux đang giữ trong T-021 được dùng nguyên, Unity làm theo ở T-022.
+
+## 2026-11-07 - Đợt UI Unity chạy đồng loạt (Huy)
+
+- **Huy 07/11:** "Triển khai làm đồng loạt luôn, cho GPT làm nhiều phiên song song". T-022, T-023, T-024, T-025 cùng mở. Unity chia tối đa 3 làn module-engineer có file không chồng nhau, Editor chạy tuần tự. Art-ux làm T-028 gói asset cho Unity, chạy GPT tối đa 3 job song song.
+- **Huy xác nhận 07/11:** "ý tôi là tạo ảnh với nhiều phiên". GPT chỉ dùng để tạo ảnh, được chạy nhiều phiên Codex song song, vượt mức 3 job cũ (CPO đặt trần 6). Code Unity vẫn do unity viết.
+- **Vignette máu thấp 07/11 (CPO):** dùng 2 lớp. Ảnh so sánh ở `qa/T-022/so-sanh-vignette.png`; ở 22% máu trên nền cỏ thấy rõ mà không che nhân vật.
+- **Màu vòng bo 07/11 (CPO):** vòng bo hiện tại màu cam, vòng an toàn kế tiếp màu trắng, giống nhau ở minimap và bản đồ lớn, dùng sprite `map_ring_zone` và `map_ring_safe` của T-028. Đường bo vẽ trên world giữ nguyên quy ước cũ: vàng khi ở trong bo, đỏ khi ở ngoài.
+- **R3 đợt UI Unity 07/11 (CPO):** tiêu đề màn bị loại là "BỊ LOẠI", theo mock. `Application.version` giữ 1.0; "v0.2" trong mock chỉ là chỗ giữ chỗ, không sửa ProjectSettings. Tên vật phẩm lấy theo GDD ITEM LIST ("Lá thần mộc", "Nước tăng lực"), thay chữ mock.

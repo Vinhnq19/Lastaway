@@ -1,0 +1,2 @@
+Draw ONE big perfect circle OUTLINE (ring only) used as the current danger-zone boundary on a map in a pixel-art survival game: an amber-orange line (#DBA645) with a slightly darker dark-brown edge (#5A3A12) on both sides, line thickness about 2 percent of the diameter, chunky pixel-art style, crisp stepped pixel edges (no soft gradients). The inside of the circle and the outside must both be flat solid magenta #FF00FF (only the ring itself is drawn). No text, no icons, no glow.
+Draw it large and centered, filling about 94 percent of the square canvas.

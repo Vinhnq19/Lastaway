@@ -194,8 +194,26 @@ namespace JungleMaze.EditorTools
             slot.Border.color = Color.white;
             var rect = ((RectTransform)slot.transform).rect;
             slot.Border.pixelsPerUnitMultiplier = FitMultiplier(slot.Border.sprite, rect.width, rect.height);
+            KeyBadge(slot);
             slot.KeyLabel.fontSharedMaterial = KeyOutline(slot.KeyLabel.font);
             slot.CountLabel.fontSharedMaterial = KeyOutline(slot.CountLabel.font); // ×n also sits over the icon
+        }
+
+        /// <summary>
+        /// T-022 (T-028 pack): kit_badge_key (48x48 @1x, border 14) drawn 30x30 behind the key number in the slot's
+        /// bottom-right corner, same rect as the Key text (<see cref="HudLayoutBBuild.KeyBadge"/>).
+        /// </summary>
+        private static void KeyBadge(QuickbarSlotView slot)
+        {
+            var key = slot.KeyLabel.rectTransform;
+            var badge = slot.transform.Find("KeyBadge") as RectTransform;
+            if (badge == null) badge = UiKit.Node((RectTransform)slot.transform, "KeyBadge");
+            var target = key.GetSiblingIndex(); // just under the key; only the added badge moves (slot is a nested prefab)
+            if (badge.GetSiblingIndex() < target) target--;
+            badge.SetSiblingIndex(target);
+            var r = HudLayoutBBuild.KeyBadge;
+            UiKit.Place(badge, r.x, r.y, r.width, r.height);
+            UiKit.FitHeight(UiKit.Image(badge, "kit_badge_key"), r.height);
         }
 
         private const string KeyMaterialPath = "Assets/_JungleMaze/Art/Fonts/TMP/HudTextBold SDF - Key Outline.mat";
@@ -273,11 +291,62 @@ namespace JungleMaze.EditorTools
             var so = new SerializedObject(capture);
             so.FindProperty("ringImage").objectReferenceValue = raw;
             so.ApplyModifiedPropertiesWithoutUndo();
+            // T-022 R3 (CPO 07/11): the captured red/yellow lines stay out of the terrain (split render) but are not shown;
+            // the minimap draws the same orange/white sprite rings as the big map, stroke at minimap scale.
+            ring.gameObject.SetActive(false);
+            var rings = ZoneRings((RectTransform)area, MinimapRingPx);
+            rings.ZoneRing.transform.SetSiblingIndex(3);
+            rings.SafeRing.transform.SetSiblingIndex(4);
 
             var frame = Child(minimap, "Frame", minimap.childCount - 1);
             frame.SetAsLastSibling();
             Stretch(frame, 0, 0);
             Simple(frame, "hud_minimap_frame");
+        }
+
+        /// <summary>Zone ring stroke on the minimap, 1080p px (measured on T-015/dung-thu-hud-A.png: about 2 px).</summary>
+        public const float MinimapRingPx = 2f;
+
+        /// <summary>
+        /// Band of the ring art in the imported @2x sprites, fraction of the sprite size from its centre (measured on
+        /// T-028 files/new: map_ring_zone@2x 1024 px, band 6 px at the edge; map_ring_safe@2x 512 px, band 20 px).
+        /// </summary>
+        public static readonly Vector2 ZoneBand = new Vector2(505f / 1024f, 511f / 1024f), SafeBand = new Vector2(236f / 512f, 255.5f / 512f);
+
+        /// <summary>
+        /// Orange current zone and white next safe zone as <see cref="RingGraphic"/> (fixed stroke) under <paramref name="area"/>,
+        /// driven by a <see cref="HudZoneRings"/> on the area. Idempotent: reuses the rings and component it finds.
+        /// </summary>
+        public static HudZoneRings ZoneRings(RectTransform area, float strokePx)
+        {
+            var rings = area.GetComponent<HudZoneRings>();
+            if (rings == null) rings = area.gameObject.AddComponent<HudZoneRings>();
+            var so = new SerializedObject(rings);
+            so.FindProperty("area").objectReferenceValue = area;
+            so.FindProperty("zoneRing").objectReferenceValue = Ring(area, "ZoneRing", "map_ring_zone", ZoneBand, strokePx);
+            so.FindProperty("safeRing").objectReferenceValue = Ring(area, "SafeRing", "map_ring_safe", SafeBand, strokePx);
+            so.ApplyModifiedPropertiesWithoutUndo();
+            return rings;
+        }
+
+        private static RingGraphic Ring(RectTransform area, string name, string sprite, Vector2 band, float strokePx)
+        {
+            var t = area.Find(name) as RectTransform;
+            if (t == null) t = UiKit.Node(area, name);
+            t.anchorMin = t.anchorMax = Vector2.zero; // positioned from the map's bottom-left, like the minimap marker
+            t.pivot = new Vector2(0.5f, 0.5f);
+            var g = t.GetComponent<RingGraphic>();
+            if (g == null) g = t.gameObject.AddComponent<RingGraphic>();
+            var so = new SerializedObject(g);
+            so.FindProperty("sprite").objectReferenceValue = UiKit.Sprite(sprite);
+            so.FindProperty("thickness").floatValue = UiKit.Px(strokePx);
+            so.FindProperty("uvInner").floatValue = band.x;
+            so.FindProperty("uvOuter").floatValue = band.y;
+            so.ApplyModifiedPropertiesWithoutUndo();
+            g.color = Color.white; // colour comes from the art
+            g.raycastTarget = false;
+            t.gameObject.SetActive(false);
+            return g;
         }
 
         private static RectTransform Child(Transform parent, string name, int index)
