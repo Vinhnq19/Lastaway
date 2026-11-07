@@ -27,7 +27,7 @@ namespace JungleMaze.Presentation.UI
             _renderer.enabled = true;
             if (_map != null)
             {
-                Apply(_mapMaterial, state, bounds, preview);
+                Apply(_mapMaterial, state, bounds, state.TargetRadius > 0);
                 _map.enabled = true;
             }
         }
