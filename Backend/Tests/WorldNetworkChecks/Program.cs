@@ -22,6 +22,16 @@ Environment.SetEnvironmentVariable("WORLD_LAYOUT_MODE", "Prototype");
 Environment.SetEnvironmentVariable("MATCH_PROFILE", "test");
 Environment.SetEnvironmentVariable("WS_ENABLED", "true");
 Environment.SetEnvironmentVariable("WS_BIND_ADDRESS", "127.0.0.1");
+// Several full reloads need a normal zone clock. Keep the fast lobby but change only this fixture's data copy.
+var previousDataPath = Environment.GetEnvironmentVariable("GAME_DATA_PATH");
+var sourceData = previousDataPath ?? Path.Combine(AppContext.BaseDirectory, "GameData");
+var fixtureData = Path.Combine(Path.GetTempPath(), "JungleMaze-WorldNetwork-" + Guid.NewGuid().ToString("N"));
+Directory.CreateDirectory(fixtureData);
+foreach (var file in Directory.GetFiles(sourceData)) File.Copy(file, Path.Combine(fixtureData, Path.GetFileName(file)));
+var fixtureSettings = System.Text.Json.Nodes.JsonNode.Parse(File.ReadAllText(Path.Combine(fixtureData, "match_settings.json")))!;
+fixtureSettings["profiles"]!["test"]!["zoneTimeScale"] = 1;
+File.WriteAllText(Path.Combine(fixtureData, "match_settings.json"), fixtureSettings.ToJsonString());
+Environment.SetEnvironmentVariable("GAME_DATA_PATH", fixtureData);
 var udpPort = FreePort(SocketType.Dgram); var wsPort = FreePort(SocketType.Stream);
 Environment.SetEnvironmentVariable("WS_PORT", wsPort.ToString());
 using var host = new NetworkHost(new ServerOptions(IPAddress.Loopback, udpPort, 10, 30, 1, "RoomCode", "WORLD_TEST"), new ServerMetrics());
@@ -202,8 +212,78 @@ try
     Pump(() => clients.Take(2).All(c => c.MatchId != oldMatch && c.Phase == MatchPhase.InGame), 8000);
     Check(serverMatch.World != null && serverMatch.World.MatchId != oldMatch && serverMatch.World.Floor.Items.Count == serverMatch.World.InitialLoot.Placements.Count, "next round resets world floor and MatchId");
     Check(serverMatch.World!.Inventory.GetSnapshot(owner.OwnNetId).Weapons.All(s => s.IsEmpty), "next round clears previous inventory");
+
+    // Exercise the new firearms through actual inventory/combat packets on both transports.
+    world = serverMatch.World!;
+    var firearmDocument = JsonSerializer.Deserialize<JungleMaze.World.Inventory.ItemCatalogDocument>(
+        GameServer.Simulation.GameDataLoader.ReadGameDataFile("items_catalog.json"),
+        new JsonSerializerOptions { IncludeFields = true, PropertyNameCaseInsensitive = true,
+            Converters = { new System.Text.Json.Serialization.JsonStringEnumConverter() } })!;
+    var firearmCatalog = firearmDocument.Build();
+    var firearmLoot = new JungleMaze.World.Inventory.LootTable(firearmCatalog, firearmDocument.Loot);
+    uint firearmRequest = 100;
+    ushort firearmSequence = 100;
+    foreach (var client in clients.Take(2))
+    foreach (var weapon in new[] { CombatWeaponId.Pistol, CombatWeaponId.AssaultRifle, CombatWeaponId.SniperRifle })
+    {
+        var itemId = GameServer.Simulation.MatchWorldRuntime.WeaponItemId(weapon);
+        var definition = firearmCatalog.Get(itemId);
+        var actor = serverMatch.Entities.All.First(a => a.NetId == client.OwnNetId);
+        var other = clients.Take(2).First(c => c != client);
+        uint lootSeed = 1;
+        while (!firearmLoot.Roll(JungleMaze.World.Inventory.LootSource.Chest,
+            JungleMaze.World.Loot.LootSeeds.Mix(lootSeed, world.LootSeed)).Any(s => s.ItemId == itemId))
+            if (++lootSeed > 10000) throw new Exception("No chest seed for " + itemId);
+        var previousFloorIds = world.Floor.Items.Select(f => f.Id).ToHashSet();
+        world.SpawnLoot(WorldObjectKind.Chest, 0, new WorldPoint(actor.X, actor.Y), lootSeed);
+        var firearmDrop = world.Floor.Items.First(f => !previousFloorIds.Contains(f.Id) && f.Stack.ItemId == itemId);
+        var firearmId = firearmDrop.Id;
+        actor.X = firearmDrop.X; actor.Y = firearmDrop.Y;
+        world.SyncActors();
+        Check(true, client.Transport + " server chest loot spawns " + itemId);
+        WaitTicks(9);
+        foreach (var peer in clients.Take(2)) Send(peer, firearmRequest++, WorldActionKind.Resync);
+        Pump(() => clients.Take(2).All(c => c.WorldObjects.Any(o => o.Id == firearmId && o.ItemId == itemId)));
+        Check(true, client.Transport + " " + itemId + " floor spawn reaches both clients");
+        WaitTicks(9);
+        Send(client, firearmRequest++, WorldActionKind.Pickup, firearmId);
+        Pump(() => client.Inventory.HasValue && client.Inventory.Value.Slots.Take(4).Any(s => s.ItemId == itemId));
+        var slot = (byte)Array.FindIndex(client.Inventory!.Value.Slots, s => s.ItemId == itemId);
+        WaitTicks(9);
+        Send(client, firearmRequest++, WorldActionKind.Select, 0, null, slot);
+        Pump(() => client.Inventory!.Value.ActiveWeapon == slot && Enumerable.Range(0, other.Snapshot.PlayerCount)
+            .Select(other.Snapshot.GetPlayer).Any(p => p.NetId == client.OwnNetId && p.TryGetHeldWeapon(out var held) && held == weapon));
+        Check(true, client.Transport + " " + itemId + " pickup, selection and remote held code agree");
+        var reserveBeforeShot = client.Inventory!.Value.Slots[slot].Ammo;
+        Check(reserveBeforeShot > 0, client.Transport + " " + itemId + " chest loot includes usable reserve ammo");
+        var away = Math.Atan2(actor.Y - serverMatch.Entities.All.First(a => a.NetId == other.OwnNetId).Y,
+            actor.X - serverMatch.Entities.All.First(a => a.NetId == other.OwnNetId).X);
+        var aim = (ushort)((int)(away * 65536 / (2 * Math.PI)) & 65535);
+        var attackSeq = firearmSequence++;
+        var attack = new AttackRequestPacket { RequestSeq = attackSeq, Weapon = weapon, Aim = aim };
+        client.Send(ref attack, true);
+        Pump(() => clients.Take(2).All(c => c.Attacks.Any(a => a.NetId == client.OwnNetId && a.RequestSeq == attackSeq && a.Outcome == CombatOutcome.Accepted)));
+        Pump(() => client.Inventory!.Value.Slots[slot].Magazine == definition.MagazineSize - 1);
+        Check(true, client.Transport + " " + itemId + " accepted shot broadcasts and authoritative ammo decrements");
+        var reloadSeq = firearmSequence++;
+        var reload = new ReloadRequestPacket { RequestSeq = reloadSeq, Weapon = weapon };
+        client.Send(ref reload, true);
+        Pump(() => clients.Take(2).All(c => c.Reloads.Any(r => r.NetId == client.OwnNetId && r.RequestSeq == reloadSeq && r.Outcome == CombatOutcome.Accepted)));
+        Pump(() => client.Inventory!.Value.Slots[slot].Magazine == definition.MagazineSize && client.Inventory.Value.Slots[slot].Ammo == reserveBeforeShot - 1);
+        Check(true, client.Transport + " " + itemId + " timed reload reaches both clients and consumes one reserve round");
+        WaitTicks(9);
+        Send(client, firearmRequest++, WorldActionKind.Drop, 0, null, slot);
+        Pump(() => client.Inventory!.Value.Slots[slot].ItemId != itemId && clients.Take(2).All(c => c.WorldObjects.Any(o => o.Kind == 100 && o.ItemId == itemId)));
+        Check(true, client.Transport + " " + itemId + " dropped weapon returns to synchronized floor loot");
+    }
+    Check(clients.All(c => c.InvalidFrames == 0), "firearm pickup, combat, reload and drop packets deserialize without errors");
     var report = new { mode, passed, elapsedSeconds = clock.Elapsed.TotalSeconds, realSocketClients = clients.Select(c => new { c.Transport, c.SnapshotCount, c.WorldPacketsSeen, c.InvalidFrames }) };
     if (args.Length > 1) { var path = Path.GetFullPath(args[1]); Directory.CreateDirectory(Path.GetDirectoryName(path)!); File.WriteAllText(path, JsonSerializer.Serialize(report, new JsonSerializerOptions { WriteIndented = true })); }
     Console.WriteLine($"WorldNetworkChecks {mode}: {passed.Count} passed, 0 failed");
 }
-finally { foreach (var c in clients) await c.DisposeAsync(); }
+finally
+{
+    foreach (var c in clients) await c.DisposeAsync();
+    Environment.SetEnvironmentVariable("GAME_DATA_PATH", previousDataPath);
+    Directory.Delete(fixtureData, true);
+}

@@ -58,7 +58,12 @@ public sealed class WorldNetworkClient : IAsyncDisposable
         Transport = transport;
         _registry.Subscribe<MatchPhasePacket>(p =>
         {
-            if (MatchId != p.MatchId) { _hasSnapshot = false; _loaded = false; }
+            if (MatchId != p.MatchId)
+            {
+                _hasSnapshot = false; _loaded = false;
+                Pages.Clear(); _pageRevision = 0; CompletedRevision = 0;
+                WorldObjects = Array.Empty<WorldObjectWire>(); Inventory = null; Manifest = null; HeldItems = null;
+            }
             MatchId = p.MatchId; Phase = p.Phase;
             if (Phase != MatchPhase.Loading) _loaded = false;
         });

@@ -24,12 +24,43 @@ var floor = table.Floor;
 const float hero = .4f;
 var rangedIds = new[] { "RUBBER_GUN", "SCEPTER", "CROSSBOW", "SHOTGUN", "PISTOL", "ASSAULT_RIFLE", "SNIPER_RIFLE" };
 var floorWeaponsSeen = new HashSet<string>();
+var firearmFloorCounts = new Dictionary<string, int> { ["PISTOL"] = 0, ["ASSAULT_RIFLE"] = 0, ["SNIPER_RIFLE"] = 0 };
 Check(rangedIds.All(id => catalog.Get(id).Enabled), "all seven ranged weapons enabled in the shipped catalog");
 var chestWeaponsSeen = new HashSet<string>();
 for (uint seed = 1; seed <= 2000; seed++)
     foreach (var item in table.Roll(LootSource.Chest, seed))
         chestWeaponsSeen.Add(item.ItemId);
 Check(rangedIds.All(chestWeaponsSeen.Contains), "all seven ranged weapons can drop from chests");
+
+var firearms = new[] { "PISTOL", "ASSAULT_RIFLE", "SNIPER_RIFLE" };
+var supplyCounts = firearms.ToDictionary(id => id, _ => 0);
+var chestCounts = firearms.ToDictionary(id => id, _ => 0);
+const int lootSamples = 10000;
+for (uint seed = 1; seed <= lootSamples; seed++)
+{
+    foreach (var stack in table.Roll(LootSource.Supply, seed))
+        if (supplyCounts.ContainsKey(stack.ItemId))
+        {
+            supplyCounts[stack.ItemId]++;
+            CheckAmmo(stack);
+        }
+    foreach (var stack in table.Roll(LootSource.Chest, seed))
+        if (chestCounts.ContainsKey(stack.ItemId)) chestCounts[stack.ItemId]++;
+}
+void CheckAmmo(ItemStack stack)
+{
+    if (stack.Ammo != catalog.Get(stack.ItemId).ReserveCapacity)
+        throw new Exception("Supply firearm reserve ammo differs from its catalog: " + stack.ItemId);
+}
+foreach (var id in firearms)
+{
+    var expected = document.Loot.Supply.Single(r => r.ItemId == id).ChancePercent;
+    var actual = supplyCounts[id] * 100.0 / lootSamples;
+    Check(Math.Abs(actual - expected) < 2, $"{id}: supply frequency {actual:F2}% agrees with configured {expected}% over {lootSamples} rolls");
+    Console.WriteLine($"FIREARM_LOOT {id} chestItems={chestCounts[id]} supplyDrops={supplyCounts[id]} rolls={lootSamples}");
+}
+Check(chestCounts["PISTOL"] > chestCounts["ASSAULT_RIFLE"] && chestCounts["ASSAULT_RIFLE"] > chestCounts["SNIPER_RIFLE"],
+    "chest firearm frequencies retain pistol > rifle > sniper ordering");
 
 // ---- Catalog: rarity and the Floor block ----
 var baseline = ItemCatalog.CreateBaseline();
@@ -125,6 +156,7 @@ foreach (var name in mapFiles)
             if (def.MagazineSize > 0)
             {
                 floorWeaponsSeen.Add(def.Id);
+                if (firearmFloorCounts.ContainsKey(def.Id)) firearmFloorCounts[def.Id]++;
                 guns++;
                 var companion = plan.Placements.Where(q => q.Companion && q.Spot == p.Spot).ToList();
                 if (companion.Count != 1 || companion[0].Stack.ItemId != "AMMO" || companion[0].Stack.Count != floor.AmmoBoxes) { ammoBad++; continue; }
@@ -191,7 +223,10 @@ foreach (var name in mapFiles)
     stats.Add($"|   rarity by ring ({name}) | {string.Join(" ; ", rarity)} |");
 }
 
-Check(rangedIds.All(floorWeaponsSeen.Contains), "all four ranged weapons spawn as floor loot across the authored map rolls");
+Check(rangedIds.All(floorWeaponsSeen.Contains), "all seven ranged weapons spawn as floor loot across the authored map rolls");
+foreach (var count in firearmFloorCounts) Console.WriteLine($"FIREARM_FLOOR {count.Key} count={count.Value} over 600 authored-map rolls");
+Check(firearmFloorCounts["PISTOL"] > firearmFloorCounts["ASSAULT_RIFLE"] && firearmFloorCounts["ASSAULT_RIFLE"] > firearmFloorCounts["SNIPER_RIFLE"],
+    "floor firearm frequencies retain pistol > rifle > sniper ordering across authored maps");
 
 // Spots do not change with the seed; fewer containers mean more floor spots (map3 with all pots removed simulates section 8).
 var map3 = layouts["map3_rung_sinh_ton"];

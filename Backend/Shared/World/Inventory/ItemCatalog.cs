@@ -173,6 +173,9 @@ namespace JungleMaze.World.Inventory
         public SupplyDropRule[] Supply = {
             new SupplyDropRule { ItemId="MACE" }, new SupplyDropRule { ItemId="COMPASS" },
             new SupplyDropRule { ItemId="SHOTGUN",ChancePercent=70,Ammo=20 },
+            new SupplyDropRule { ItemId="PISTOL",ChancePercent=40,Ammo=60 },
+            new SupplyDropRule { ItemId="ASSAULT_RIFLE",ChancePercent=25,Ammo=96 },
+            new SupplyDropRule { ItemId="SNIPER_RIFLE",ChancePercent=10,Ammo=20 },
             new SupplyDropRule { ItemId="MAGIC_ARMOR",ChancePercent=60 },
             new SupplyDropRule { ItemId="MAGIC_HELMET",ChancePercent=50 },
             new SupplyDropRule { ItemId="ELIXIR_OF_LIFE",ChancePercent=35 },

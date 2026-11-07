@@ -839,6 +839,27 @@
         "MinCount": 1,
         "MaxCount": 1,
         "Ammo": 0
+      },
+      {
+        "ItemId": "PISTOL",
+        "ChancePercent": 40,
+        "MinCount": 1,
+        "MaxCount": 1,
+        "Ammo": 60
+      },
+      {
+        "ItemId": "ASSAULT_RIFLE",
+        "ChancePercent": 25,
+        "MinCount": 1,
+        "MaxCount": 1,
+        "Ammo": 96
+      },
+      {
+        "ItemId": "SNIPER_RIFLE",
+        "ChancePercent": 10,
+        "MinCount": 1,
+        "MaxCount": 1,
+        "Ammo": 20
       }
     ],
     "Floor": {
