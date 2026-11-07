@@ -157,10 +157,13 @@ namespace JungleMaze.Presentation.World.Phase2
                 if (Input.GetKeyDown((KeyCode)((int)KeyCode.Alpha1 + i))) _world.Send(WorldActionKind.Select, 0, (byte)(_world.Inventory != null && _world.Inventory.ActiveWeapon == i ? 255 : i));
                 if (Input.GetKeyDown((KeyCode)((int)KeyCode.Alpha5 + i))) _world.Send(WorldActionKind.Use, 0, (byte)i);
             }
-            if (Input.GetKeyDown(KeyCode.Backspace) && _world.Inventory != null && _world.Inventory.ActiveWeapon >= 0) _world.Send(WorldActionKind.Drop, 0, (byte)_world.Inventory.ActiveWeapon);
+            if (DropPressed() && _world.Inventory != null && _world.Inventory.ActiveWeapon >= 0) _world.Send(WorldActionKind.Drop, 0, (byte)_world.Inventory.ActiveWeapon);
             if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0 || Input.GetMouseButtonDown(0))
                 if (_world.Inventory != null && _world.Inventory.IsUsing) _world.Send(WorldActionKind.CancelUse);
         }
+
+        /// <summary>Q (hoặc Backspace như cũ) bỏ vũ khí đang cầm xuống sàn.</summary>
+        private static bool DropPressed() => Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.Backspace);
 
         private void UpdateOffline()
         {
@@ -235,7 +238,7 @@ namespace JungleMaze.Presentation.World.Phase2
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.Backspace))
+            if (DropPressed())
             {
                 var inv = _offlineWorld.Inventory;
                 if (inv != null && inv.ActiveWeapon >= 0)
