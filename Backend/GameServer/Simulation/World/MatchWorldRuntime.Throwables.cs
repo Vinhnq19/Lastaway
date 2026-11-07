@@ -95,7 +95,7 @@ public sealed partial class MatchWorldRuntime : IThrowableWorld
         {
             var blocks = o.IsHardCover || (o.IsDestructible && !Destructibles.IsBroken(o.Id)) || (o.Kind == WorldObjectKind.Door && Hazards.IsDoorClosed(o.Id));
             if (!blocks) continue;
-            if (SegmentEntry(x0, y0, x1, y1, o.Bounds, out var t) && t < best) best = t;
+            if (o.Bounds.TrySegmentEntry(x0, y0, x1, y1, out var t) && t < best) best = t;
         }
         return best;
     }
@@ -104,6 +104,9 @@ public sealed partial class MatchWorldRuntime : IThrowableWorld
         Layout.IsWalkable(new WorldPoint(x, y), radius, Destructibles.IsBroken, Hazards.IsDoorClosed);
 
     int IThrowableWorld.Damage(byte attacker, byte target, int amount) => ThrowableDamage?.Invoke(attacker, target, amount) ?? 0;
+
+    void IThrowableWorld.DamageContainers(byte attacker, WorldBounds blast, int amount) =>
+        Destructibles.DamageContainersInBlast(blast, amount, attacker, NextConfirmedWorldAction(), Hazards.IsDoorClosed);
 
     void IThrowableWorld.ApplyEffect(byte target, ThrowableEffect effect, double seconds)
     {
@@ -138,25 +141,6 @@ public sealed partial class MatchWorldRuntime : IThrowableWorld
         return Math.Abs(span) < 1e-6f ? 1f : Math.Clamp((limit - from) / span, 0f, 1f);
     }
 
-    private static bool SegmentEntry(float x0, float y0, float x1, float y1, WorldBounds b, out float t)
-    {
-        float tMin = 0f, tMax = 1f;
-        t = 0f;
-        if (!Clip(x0, x1 - x0, b.MinX, b.MaxX, ref tMin, ref tMax) || !Clip(y0, y1 - y0, b.MinY, b.MaxY, ref tMin, ref tMax)) return false;
-        t = tMin;
-        return true;
-    }
-
-    private static bool Clip(float origin, float delta, float min, float max, ref float tMin, ref float tMax)
-    {
-        if (Math.Abs(delta) < 1e-6f) return origin >= min && origin <= max;
-        var a = (min - origin) / delta;
-        var b = (max - origin) / delta;
-        if (a > b) (a, b) = (b, a);
-        tMin = Math.Max(tMin, a);
-        tMax = Math.Min(tMax, b);
-        return tMin <= tMax;
-    }
 }
 
 /// <summary>Reads the thrown and special rows of weapons.json into <see cref="ThrowableRules"/>.</summary>

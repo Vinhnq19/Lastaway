@@ -79,7 +79,7 @@ namespace JungleMaze.App.World
             {
                 var blocks = o.IsHardCover || (o.IsDestructible && (_destructibles == null || !_destructibles.IsBroken(o.Id))) ||
                              (o.Kind == WorldObjectKind.Door && _hazards != null && _hazards.IsDoorClosed(o.Id));
-                if (blocks && Entry(x0, y0, x1, y1, o.Bounds, out var t) && t < best) best = t;
+                if (blocks && o.Bounds.TrySegmentEntry(x0, y0, x1, y1, out var t) && t < best) best = t;
             }
             return best;
         }
@@ -89,6 +89,13 @@ namespace JungleMaze.App.World
                 _hazards != null ? _hazards.IsDoorClosed : (Func<ushort, bool>)null);
 
         int IThrowableWorld.Damage(byte attacker, byte target, int amount) => 0;
+
+        void IThrowableWorld.DamageContainers(byte attacker, WorldBounds blast, int amount)
+        {
+            if (_destructibles == null || _hazards == null) return;
+            if (++_hitSequence == 0) _hitSequence = 1;
+            _destructibles.DamageContainersInBlast(blast, amount, attacker, _hitSequence, _hazards.IsDoorClosed);
+        }
 
         void IThrowableWorld.ApplyEffect(byte target, ThrowableEffect effect, double seconds) { }
 
@@ -111,24 +118,5 @@ namespace JungleMaze.App.World
             return Math.Abs(span) < 1e-6f ? 1f : Math.Max(0f, Math.Min(1f, (limit - from) / span));
         }
 
-        private static bool Entry(float x0, float y0, float x1, float y1, WorldBounds b, out float t)
-        {
-            float tMin = 0f, tMax = 1f;
-            t = 0f;
-            if (!ClipSlab(x0, x1 - x0, b.MinX, b.MaxX, ref tMin, ref tMax) || !ClipSlab(y0, y1 - y0, b.MinY, b.MaxY, ref tMin, ref tMax)) return false;
-            t = tMin;
-            return true;
-        }
-
-        private static bool ClipSlab(float origin, float delta, float min, float max, ref float tMin, ref float tMax)
-        {
-            if (Math.Abs(delta) < 1e-6f) return origin >= min && origin <= max;
-            var a = (min - origin) / delta;
-            var b = (max - origin) / delta;
-            if (a > b) { var swap = a; a = b; b = swap; }
-            tMin = Math.Max(tMin, a);
-            tMax = Math.Min(tMax, b);
-            return tMin <= tMax;
-        }
     }
 }

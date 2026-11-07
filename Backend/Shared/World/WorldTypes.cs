@@ -12,6 +12,24 @@ namespace JungleMaze.World
         public bool Contains(WorldPoint p,float margin=0){return p.X>=MinX-margin&&p.X<=MaxX+margin&&p.Y>=MinY-margin&&p.Y<=MaxY+margin;}
         public bool Overlaps(WorldBounds b,float gap=0){return MinX<b.MaxX+gap&&MaxX>b.MinX-gap&&MinY<b.MaxY+gap&&MaxY>b.MinY-gap;}
         public bool IntersectsCircle(WorldPoint p,float radius){var x=Math.Max(MinX,Math.Min(MaxX,p.X));var y=Math.Max(MinY,Math.Min(MaxY,p.Y));return (x-p.X)*(x-p.X)+(y-p.Y)*(y-p.Y)<radius*radius;}
+
+        public bool TrySegmentEntry(float x0, float y0, float x1, float y1, out float fraction)
+        {
+            float entry = 0f, exit = 1f;
+            bool intersects = ClipAxis(x0, x1 - x0, MinX, MaxX, ref entry, ref exit) &&
+                ClipAxis(y0, y1 - y0, MinY, MaxY, ref entry, ref exit);
+            fraction = intersects ? entry : 0f;
+            return intersects;
+        }
+
+        private static bool ClipAxis(float origin, float delta, float min, float max, ref float entry, ref float exit)
+        {
+            if (Math.Abs(delta) < 1e-6f) return origin >= min && origin <= max;
+            float a = (min - origin) / delta, b = (max - origin) / delta;
+            entry = Math.Max(entry, Math.Min(a, b));
+            exit = Math.Min(exit, Math.Max(a, b));
+            return entry <= exit;
+        }
     }
     public enum WorldObjectKind:byte { Pillar=1,Wall=2,Rock=3,Statue=4,Chest=5,Pot=6,Bush=7,Swamp=8,Lava=9,Poison=10,Portal=11,Door=12,Supply=13 }
     public sealed class WorldObjectDefinition

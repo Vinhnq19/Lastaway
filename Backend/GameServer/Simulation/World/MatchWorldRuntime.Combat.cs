@@ -54,8 +54,13 @@ public sealed partial class MatchWorldRuntime : IEffectService, GameServer.Simul
     public void ApplyDamage(AABB obstacle, int damage, byte attackerNetId)
     {
         if (!TryFindDestructible(obstacle, out var id)) return;
+        Destructibles.DamageConfirmed(id, damage, attackerNetId, NextConfirmedWorldAction());
+    }
+
+    private uint NextConfirmedWorldAction()
+    {
         if (++_confirmedWorldAction == 0) _confirmedWorldAction = 1;
-        Destructibles.DamageConfirmed(id, damage, attackerNetId, _confirmedWorldAction);
+        return _confirmedWorldAction;
     }
     private bool TryFindDestructible(AABB obstacle, out ushort id)
     {
