@@ -61,7 +61,7 @@ namespace JungleMaze.Composition
             _registry.Register(offlineWorld);
             ticks.Add(offlineWorld);
             if (_registry.TryResolve<JungleMaze.App.Audio.MatchAudioEventSource>(out var audio))
-                audio.BindCombat(combat, offlineWorld, world, _registry.Resolve<IHudState>());
+                audio.BindCombat(combat, offlineWorld, world, _registry.Resolve<IHudState>(), throwables);
             // The Game scene owns its world views and colliders; services survive scene changes.
         }
     }

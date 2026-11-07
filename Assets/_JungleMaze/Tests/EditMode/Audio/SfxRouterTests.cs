@@ -394,6 +394,46 @@ namespace JungleMaze.Tests.Audio
         }
 
         [Test]
+        public void EmptyFire_PlaysOnlyForLocalPlayer()
+        {
+            _source.OnCombat(new CombatEvent(CombatEventKind.EmptyFire, CombatWeaponId.Shotgun, 2, 70, 0, CombatOutcome.NoAmmo));
+            _source.OnCombat(new CombatEvent(CombatEventKind.EmptyFire, CombatWeaponId.Shotgun, 5, 70, 0, CombatOutcome.NoAmmo));
+            Assert.AreEqual(1, _cues.Count);
+            Assert.AreEqual(SfxId.EmptyClick, _cues[0].Id);
+        }
+
+        [Test]
+        public void MeleeImpact_RequiresConfirmedContact()
+        {
+            _source.OnCombat(new CombatEvent(CombatEventKind.AttackConfirmed, CombatWeaponId.Knife, 2, 12, 0, CombatOutcome.Accepted));
+            Assert.AreEqual(0, _cues.Count, "A successful swing alone does not prove contact.");
+            _source.OnCombat(new CombatEvent(CombatEventKind.MeleeImpact, CombatWeaponId.Knife, 2, 12, 0, CombatOutcome.Accepted));
+            Assert.AreEqual(SfxId.MeleeHit, _cues[0].Id);
+            var packet = new EventPacket { Tick = 30, EventType = GameEventType.MeleeImpact, SourceNetId = 2 };
+            _source.OnEvent(packet);
+            _source.OnEvent(packet);
+            Assert.AreEqual(_cues[1].DedupeKey, _cues[2].DedupeKey);
+        }
+
+        [Test]
+        public void ThrowCue_UsesConfirmedLaunchAndIgnoresOtherThrowableStages()
+        {
+            var e = new JungleMaze.World.Throwables.ThrowableEvent
+            {
+                Kind = JungleMaze.World.Throwables.ThrowableEventKind.Thrown,
+                Item = JungleMaze.World.Throwables.ThrowableKind.Banana, Actor = 2, Id = 8,
+                FromX = 4, FromY = 7
+            };
+            _source.OnThrowable(e);
+            e.Kind = JungleMaze.World.Throwables.ThrowableEventKind.Detonated;
+            _source.OnThrowable(e);
+            Assert.AreEqual(1, _cues.Count);
+            Assert.AreEqual(SfxId.Throw, _cues[0].Id);
+            Assert.AreEqual(4, _cues[0].X);
+            Assert.AreEqual(7, _cues[0].Y);
+        }
+
+        [Test]
         public void RemoteAttackAndReload_UseKnownPose_AndSkipUnconfirmedReload()
         {
             _poses.Poses[5] = new PlayerPose { X = 7, Y = 9 };

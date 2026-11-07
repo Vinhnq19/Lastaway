@@ -274,6 +274,37 @@ namespace JungleMaze.Tests.World
             Assert.AreEqual(210,WorldSceneView.FindPortalDestination(objects,211));
             Assert.AreEqual(0,WorldSceneView.FindPortalDestination(objects,2));
         }
+        [Test] public void InteractionPromptUsesCursorPriorityAndTheSameReachAsPickup()
+        {
+            var objects = new[]
+            {
+                new WorldObjectWire { Id = 1, Kind = 100, X = .5f, Y = 0 },
+                new WorldObjectWire { Id = 2, Kind = 100, X = 1, Y = 0 },
+                new WorldObjectWire { Id = 3, Kind = 100, X = 1.21f, Y = 0 }
+            };
+            var target = WorldSceneView.InteractionTarget(objects, Vector2.zero, new Vector2(1.21f, 0));
+            Assert.IsTrue(target.HasValue);
+            Assert.AreEqual(2, target.Value.Id, "The cursor must not select loot beyond the player's reach.");
+            Assert.IsFalse(WorldSceneView.InteractionTarget(objects, new Vector2(10, 10), Vector2.zero).HasValue);
+        }
+
+        [Test] public void InteractionPromptFallsBackToUsableDoorOnlyWhenNoLootIsInReach()
+        {
+            var objects = new[]
+            {
+                new WorldObjectWire { Id = 1, Kind = 12, Hp = 100, Width = 1, Height = 1 },
+                new WorldObjectWire { Id = 2, Kind = 100, X = 1, Y = 0 }
+            };
+            Assert.AreEqual(2, WorldSceneView.InteractionTarget(objects, Vector2.zero, Vector2.zero).Value.Id);
+            objects[1].X = 20;
+            Assert.AreEqual(1, WorldSceneView.InteractionTarget(objects, Vector2.zero, Vector2.zero).Value.Id);
+            objects[0].Hp = 0;
+            Assert.IsFalse(WorldSceneView.InteractionTarget(objects, Vector2.zero, Vector2.zero).HasValue);
+            objects[0].Hp = 100;
+            objects[0].Flags = 1;
+            Assert.IsFalse(WorldSceneView.InteractionTarget(objects, Vector2.zero, Vector2.zero).HasValue);
+        }
+
         [Test] public void OnlinePresenterRequiredDependenciesExcludeDevelopmentBackend()
         {
             var construct=typeof(CombatWeaponPresenter).GetMethod("Construct");Assert.IsNotNull(construct);

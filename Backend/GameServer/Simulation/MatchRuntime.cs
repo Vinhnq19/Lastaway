@@ -287,7 +287,18 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
 
         _combatHits.Clear();
         World?.SetCombatTick(CurrentTick);
+        var obstacleHits = World?.ConfirmedObstacleHits;
         result = _combat.TryAttack(entity.NetId, request, CurrentTick, _combatHits);
+        if (result.Outcome == CombatOutcome.Accepted && request.Weapon < CombatWeaponId.RubberGun &&
+            (_combatHits.Any(hit => hit.Damage > 0) || World?.ConfirmedObstacleHits != obstacleHits))
+        {
+            var impact = new EventPacket { Tick = CurrentTick, EventType = GameEventType.MeleeImpact,
+                SourceNetId = entity.NetId, TargetNetId = EventPacket.NoTarget };
+            var impactWriter = new NetDataWriter();
+            PacketRegistry.BeginFrame(impactWriter);
+            _packets.Write(impactWriter, ref impact);
+            ReliableBroadcast?.Invoke(impactWriter.CopyData());
+        }
         if (result.Outcome == CombatOutcome.Accepted) BroadcastCombatResult(ref result);
         return true;
     }
