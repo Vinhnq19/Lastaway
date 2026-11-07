@@ -903,7 +903,56 @@ Kiểm thêm trong **trận offline thật** (Boot → Luyện tập offline →
 - **Project map**: chưa chạy `Tools/update_project_map.py` vì checkout này không có `graphify-out/.graphify_python`.
 - **Follow-up giữ nguyên như 4.12.10**: R14 (Hào dọn `ThrowableView` khi đổi trận), Q7 (`SetDanger` dùng `ThrowableEvent.Id`), R15 (FOW cho `ThrowableView`), R21 (WPN-02 phát hit đạn/cận chiến).
 
+### 5.7. Sửa sau review vòng 1 (07/11/2026, trên `7adb1aa5`)
+
+Hash commit sửa ghi trong báo cáo cuối, vì commit này chứa chính mục này.
+
+| Mục review | Đã sửa | File |
+| --- | --- | --- |
+| Nên sửa 1 (AC7, GC cả frame) | Thêm PlayMode test `VfxFrameGcPlayTests.WholeFrame_NumberFuseFlashAuras_VfxAddsZeroGcAfterWarmup`. Test chạy trên frame thật, có camera nên particle, sprite và số TMP đều được render. Logic VFX được tick từ `Update` (`VfxFrameDriver`). Lúc đo có: 1 số "45" đang bay, 1 vòng ngòi nổ 3×3 đang nháy, thân số 3 đang nháy, 4 quầng (choáng, độc, bất tử, tàng hình) có hạt đang sống. Flash và số dùng thời lượng 60 s để vẫn còn chạy sau 120 frame warmup. Đọc counter `ProfilerRecorder` "GC Allocated In Frame" (Memory) qua 300 frame. Có thêm kiểm tra chính xác `Is.Not.AllocatingGCMemory` trên mọi lệnh VFX chạy mỗi frame (`Director.Tick`, `Stage.Drive`, `VfxBodyAnchor.Advance` ×11, `DamageNumberVfx.Advance`, `FuseWarningVfx.Advance`) | `Tests/PlayMode/Vfx/VfxFramePlayTests.cs` (mới), `VfxPlayTests.cs` (`VfxPlayRig` nhận tuning tuỳ chọn) |
+| Gợi ý 2 (đăng ký `AlwaysVisiblePolicy`) | `Bootstrap.Vfx` không đăng ký policy mặc định vào registry nữa. Nếu registry chưa có `IVisibilityPolicy` thì dùng `DeferredVisibilityPolicy` (Application). Policy này mỗi lần hỏi sẽ tra registry, đến khi FOW-01 đăng ký thì chuyển hẳn sang policy đó; trước lúc ấy cho hiện tất cả. FOW-01 đăng ký trước hay sau `ComposeVfx` đều không ném lỗi trùng kiểu. Doc `IVisibilityPolicy` và `Client_Developer_Guide` 4.8 đã cập nhật | `Application/Visibility/DeferredVisibilityPolicy.cs` (mới), `Bootstrap/Vfx/Bootstrap.Vfx.cs`, `Application/Ports/IVisibilityPolicy.cs`, `Docs/Client_Developer_Guide.vi.md` |
+| Gợi ý 5 (vòng ngòi tự gỡ khi hết giờ) | Thêm `VfxTuningValues.FuseGraceSeconds` = 0,15 s (field `fuseGraceSeconds` trong `VfxRuntimeSet`/asset). Vòng ngòi chỉ tự gỡ khi `Remaining ≤ −grace`. `Detonated` vẫn gỡ ngay trong cùng lệnh. Vòng đang bị che lúc hết giờ thì không vẽ lại trong khoảng grace | `Domain/Vfx/VfxCue.cs`, `Presentation/Vfx/VfxRuntimeSet.cs`, `Art/Vfx/Resources/VfxRuntimeSet.asset`, `Application/Vfx/VfxDirector.cs` |
+| Gợi ý 1 (`PlayerView` chưa Bind) | `PlayerView` thêm getter `IsBound` (đúng một dòng, read-only, không đổi hành vi). `VfxBodyAnchor.NetId` trả 255 khi view chưa bind. Thêm `HasIdentity`: Hero, dummy preview, hoặc view đã bind. `IsShowing` cần `HasIdentity`, nên registry bỏ qua view chưa bind (và view đã despawn) | `Presentation/Player/PlayerView.cs` (+3 dòng), `Presentation/Vfx/VfxBodyAnchor.cs` |
+| Gợi ý 3, 4 | **Để sau**, không làm trong vòng này: `VfxDirector` dùng `App.Audio.SfxDeduper`; số trình bày mặc định lặp 3 nơi và nhịp nháy vòng ngòi cứng trong `FuseWarningVfx` | — |
+
+Lệch so với yêu cầu sửa:
+
+- **Gợi ý 1, "chỉ đăng ký anchor khi đã bind"**: anchor vẫn tự đăng ký khi `OnEnable`, nhưng registry không trả anchor chưa bind (`IsShowing` = false, `NetId` = 255). Lý do: `RemotePlayerSpawner` gọi `Create` (kích hoạt `OnEnable`) rồi mới gọi `Bind` ngay sau đó. Nếu chờ bind mới đăng ký thì cần một hook bind trong `PlayerView`, hoặc chịu trễ 1 frame (hit đến đúng frame spawn sẽ không có nháy). Lọc lúc tra cứu thì cho cùng kết quả mà không cần hook. Không có cách nào biết view đã bind mà không thêm getter: `NetId` của view chưa bind cũng là 0, trùng với net id 0 thật. Vì vậy đã thêm getter `IsBound`, đúng phạm vi người giao cho phép (file của MOV-03).
+- **Nên sửa 1, assert "0 B"**: trong Editor, counter "GC Allocated In Frame" tính cả phần Editor và test runner cấp phát, nên tổng cả frame không bao giờ bằng 0. Test vì vậy assert hai điều: (a) mọi lệnh VFX chạy mỗi frame cấp phát 0 B (`AllocatingGCMemory`, chính xác); (b) trung vị và min mỗi frame khi có VFX ≤ khi đã gỡ hết VFX, trong cùng scene, cùng driver, đo ngay sau đó. Số đo:
+
+| Lượt | Recorder | Kiểm soát (+64 KB trong `Update`) | Có VFX (300 frame) | Không VFX (300 frame) | Phần của VFX |
+| --- | --- | --- | --- | --- | --- |
+| Chạy riêng test | `Valid = true` | 80 919 B (nền ≈ 16 KB + 65 536 B) | trung vị 14 241 B, min 14 241, max 31 798, tổng 4 369 533 | trung vị 14 653 B, min 14 653, max 63 072, tổng 4 460 063 | **≤ 0 B/frame** |
+| Bản đầu của test (assert tổng = 0) | `Valid = true` | 81 221 B | trung vị 16 065 B | nền trước VFX: 15 653 B | +412 B, **không phải VFX** (xem dưới) |
+
+Đo chẩn đoán từng hiệu ứng riêng (test tạm, đã xoá, không commit): 120 frame trước và 120 frame sau khi bật **một** hiệu ứng. Số, ngòi, nháy, choáng, độc, bất tử, tàng hình, hạt trúng đòn: chênh **0 B/frame**. Trường hợp `none` (không bật gì) cũng chênh +412 B. Trường hợp `nodriver` (không tick VFX) nền vẫn là 16 065 B/frame. Kết luận: khoảng 14–16 KB/frame là của Editor/test runner, có cả khi scene không có object VFX. Bước +412 B là nền Editor tăng theo thời gian sau khi vào Play mode, không phụ thuộc VFX. Lượt này không mở Profiler để chỉ ra cụ thể đoạn code Editor nào cấp phát. Số GC trên bản build (Development + Profiler) vẫn là việc QA (Nên sửa 1, phần QA).
+
+Test (số thật, Unity 6000.3.15f1 qua MCP, 07/11/2026):
+
+| Bộ | Tổng | Pass | Fail | Ghi chú |
+| --- | --- | --- | --- | --- |
+| EditMode `JungleMaze.Tests.Vfx` | 114 | 114 | 0 | +7 so với lượt build: fuse grace (3 test mới, `NoDetonate_WarningEndsWithTheFuse` đổi thành `…PlusTheGrace`), `DeferredVisibilityPolicyTests` (4) |
+| PlayMode `JungleMaze.Tests.PlayMode.Vfx` | 15 | 15 | 0 | +2: `VfxFrameGcPlayTests` (AC7 cả frame), `VfxBodyAnchorBindingPlayTests` (view chưa bind / despawn không phải anchor; online lẫn offline) |
+| EditMode toàn bộ | 1096 | 1090 | 6 | Vẫn đúng 6 test map-data như 5.4 (`LevelDocumentTests` ×4, `Phase2Tests.PackagedMapHashMustMatchServer`, `OnlineWorldIntegrationTests.NormalWorldUsesAuthoredTeamMapWithFixedInteractivePlacements`). Không có test mới đỏ |
+| PlayMode toàn bộ | — | — | — | Không chạy lại trong vòng này |
+
+- Console sau compile: 0 lỗi. Cảnh báo còn lại là cảnh báo cũ (`enableWordWrapping`, CS0067), cộng log cảnh báo do các test khác cố ý tạo (`[Pool] … Despawn hai lần`, `[Audio] No clip for SFX 'Throw'`).
+- `git diff -- Assets/Imported`: rỗng.
+- `ProjectSettings/EditorSettings.asset` bị lượt chạy PlayMode đổi `m_EnterPlayModeOptions` 0 → 1. Đã đặt lại `None` trong Editor rồi `git checkout`, không commit.
+
 ## 6. Review
+
+### Vòng 1 (07/11/2026, code-reviewer, commit `7adb1aa5`): **Qua** — 0 Chặn, 4 Nên sửa, 5 Gợi ý
+
+Đã kiểm đạt: phạm vi 4.12 (không vẽ bo/nổ/khói, không chạm `Throwable*`/`ZoneOverlay*`, `Assets/Imported` và `Backend` không đổi); `Hero.prefab`/`PlayerView.prefab` chỉ thêm `VfxBodyAnchor`; lớp (Domain không UnityEngine, Application không tham chiếu Presentation); DI qua Bootstrap/`[Inject]`, không singleton/`FindObjectOfType`; không ghi HUD/HP; khử trùng (`Id = 0` không khử), đối soát `RequestSeq`, reset khi đổi phòng (64 slot + generation, `activeSceneChanged`), seam visibility hỏi lại mỗi tick, hẹn giờ trạng thái làm mới không cộng dồn, `CameraShakeApplier` (order 1100, trả vị trí, tắt khi `ScreenShakeEnabled = false`), nháy thân không rò tint. Nghi vấn chữ số "2" bị lật: **không phải lỗi** — ảnh `04b` là số 45 (glyph "5" của Pixelify Sans giống "S"), ảnh `04` có "12" đúng chiều.
+
+Nên sửa:
+1. AC7: test GC chỉ bọc `Director.Tick`/`Stage.Drive`; chưa đo cả frame (`VfxBodyAnchor.Update`, `DamageNumberVfx.LateUpdate`, `FuseWarningVfx.LateUpdate`, hạt) → thêm PlayMode test `ProfilerRecorder` "GC Allocated In Frame" (dev) + QA ghi số Profiler.
+2. R3 online (`VfxAnchorRegistry.cs:35-58`) chưa chạy thật → QA chạy GameServer local, ảnh quầng/nháy trên `PlayerView` của mình (P0).
+3. Test đỏ "không thuộc VFX" chưa đối chứng trên `83e11065`, nhất là `AudioAcceptanceTests.ZoneBell_ThreeBellsOnAlert…` → QA đối chứng trên bản copy sạch.
+4. AC15 chỉ mô phỏng logic, chưa đo frame time cả scene → giữ là việc mở.
+
+Gợi ý: (1) `VfxBodyAnchor` coi `PlayerView` chưa `Bind` (NetId 0) là hợp lệ; (2) `Bootstrap.Vfx.cs:44-47` đăng ký `AlwaysVisiblePolicy` vào registry — FOW-01 đăng ký sau sẽ ném trùng kiểu; (3) `VfxDirector` dùng `App.Audio.SfxDeduper` (phụ thuộc chéo feature); (4) số trình bày mặc định lặp ở 3 nơi, nhịp nháy vòng ngòi cứng trong `FuseWarningVfx.cs:48`; (5) `VfxDirector.cs:486` vòng ngòi tự gỡ khi `Remaining ≤ 0` có thể biến mất trước vụ nổ khi lag → thêm dung sai 0,1–0,2 s.
 
 ## 7. QA
 

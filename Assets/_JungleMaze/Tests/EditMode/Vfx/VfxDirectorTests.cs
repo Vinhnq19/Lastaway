@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using JungleBackend.Protocol.Gameplay;
 using JungleMaze.App.Combat;
+using JungleMaze.App.Ports;
+using JungleMaze.App.Visibility;
+using JungleMaze.Core.DI;
 using JungleMaze.Domain.CombatFeedback;
 using JungleMaze.Domain.Vfx;
 using NUnit.Framework;
@@ -377,6 +380,66 @@ namespace JungleMaze.Tests.Vfx
         }
     }
 
+    /// <summary>
+    /// Review round 1, suggestion 2: the VFX default visibility is not registered, so FOW-01 can register its policy after
+    /// VFX is composed without a duplicate-type error, and VFX then follows that policy.
+    /// </summary>
+    public sealed class DeferredVisibilityPolicyTests
+    {
+        private sealed class HideAll : IVisibilityPolicy
+        {
+            public bool IsVisible(float x, float y, byte netId) => false;
+        }
+
+        private static DeferredVisibilityPolicy Deferred(ServiceRegistry registry) =>
+            new DeferredVisibilityPolicy(() => registry.TryResolve<IVisibilityPolicy>(out var fow) ? fow : null);
+
+        [Test]
+        public void NothingRegistered_EverythingVisible_AndTheRegistryStaysEmpty()
+        {
+            var registry = new ServiceRegistry();
+            var policy = Deferred(registry);
+            Assert.IsTrue(policy.IsVisible(1f, 2f, 3));
+            Assert.IsTrue(policy.IsVisible(1f, 2f, VisibilityQuery.PositionOnly));
+            Assert.IsFalse(policy.IsResolved);
+            Assert.IsFalse(registry.IsRegistered(typeof(IVisibilityPolicy)));
+        }
+
+        [Test]
+        public void FowRegisteredAfterVfx_NoThrow_AndVfxFollowsIt()
+        {
+            var registry = new ServiceRegistry();
+            var policy = Deferred(registry);
+            var rig = new VfxRig(visibility: policy);
+            rig.Status(1, 4, StatusKind.Stun, 5f);
+            Assert.AreEqual(1, rig.Output.Live(VfxCue.AuraStun));
+            Assert.DoesNotThrow(() => registry.Register<IVisibilityPolicy>(new HideAll()));
+            rig.Director.Tick(VfxRig.Dt);
+            Assert.IsTrue(policy.IsResolved);
+            Assert.AreEqual(0, rig.Output.Live(VfxCue.AuraStun), "the late FOW policy hides the aura");
+        }
+
+        [Test]
+        public void LookupReturningItself_IsIgnored()
+        {
+            DeferredVisibilityPolicy policy = null;
+            policy = new DeferredVisibilityPolicy(() => policy);
+            Assert.IsTrue(policy.IsVisible(0f, 0f, 1));
+            Assert.IsFalse(policy.IsResolved);
+        }
+
+        [Test]
+        public void ResolvedLookup_IsNotAskedAgain()
+        {
+            var calls = 0;
+            var hide = new HideAll();
+            var policy = new DeferredVisibilityPolicy(() => { calls++; return hide; });
+            Assert.IsFalse(policy.IsVisible(0f, 0f, 1));
+            Assert.IsFalse(policy.IsVisible(0f, 0f, 2));
+            Assert.AreEqual(1, calls);
+        }
+    }
+
     /// <summary>AC12: one number per event showing the damage, no number for zero damage, nothing on a missing body.</summary>
     public sealed class HitFeedbackTests
     {
@@ -496,7 +559,10 @@ namespace JungleMaze.Tests.Vfx
         }
     }
 
-    /// <summary>Fuse warning lifetime (AC2 part): from Fuse until Detonate in the same call, or until the fuse ends.</summary>
+    /// <summary>
+    /// Fuse warning lifetime (AC2 part): from Fuse until Detonate in the same call, or until the fuse ends plus the
+    /// tuning grace (review round 1).
+    /// </summary>
     public sealed class FuseWarningTests
     {
         [Test]
@@ -514,14 +580,59 @@ namespace JungleMaze.Tests.Vfx
         }
 
         [Test]
-        public void NoDetonate_WarningEndsWithTheFuse()
+        public void NoDetonate_WarningEndsAfterTheFusePlusTheGrace()
+        {
+            var rig = new VfxRig();
+            Assert.AreEqual(.15f, VfxTuningValues.Default.FuseGraceSeconds, 1e-6f, "review round 1: grace from the tuning");
+            rig.Fuse(4, 20f, 20f, 3f, 1.5f);
+            rig.Director.Tick(1.45f);
+            Assert.AreEqual(1, rig.Output.Live(VfxCue.FuseWarning));
+            rig.Director.Tick(.1f); // 0.05 s past the fuse: still waiting for a late Detonated
+            Assert.AreEqual(1, rig.Output.Live(VfxCue.FuseWarning));
+            Assert.AreEqual(1, rig.Director.FuseCount);
+            rig.Director.Tick(.11f); // 0.16 s past the fuse: gone
+            Assert.AreEqual(0, rig.Output.Live(VfxCue.FuseWarning));
+            Assert.AreEqual(0, rig.Director.FuseCount);
+        }
+
+        [Test]
+        public void LateDetonate_InsideTheGrace_StillRemovesTheWarningInTheSameCall()
         {
             var rig = new VfxRig();
             rig.Fuse(4, 20f, 20f, 3f, 1.5f);
-            rig.Tick(1.45f);
+            rig.Director.Tick(1.6f);
             Assert.AreEqual(1, rig.Output.Live(VfxCue.FuseWarning));
-            rig.Tick(.1f);
+            rig.Detonate(4, 20f, 20f);
             Assert.AreEqual(0, rig.Output.Live(VfxCue.FuseWarning));
+            Assert.AreEqual(0, rig.Director.FuseCount);
+        }
+
+        [Test]
+        public void ZeroGrace_WarningEndsExactlyWithTheFuse()
+        {
+            var d = VfxTuningValues.Default;
+            var tuning = new VfxTuningValues(d.FlashSeconds, d.NumberSeconds, d.NumberRiseCells, d.ShakeMaxCells, d.ShakeSeconds,
+                d.ShakeRadiusCells, d.DedupeSeconds, d.DedupeCapacity, d.Budget, d.HitShakeCells, 0f);
+            var rig = new VfxRig(tuning);
+            rig.Fuse(4, 20f, 20f, 3f, 1.5f);
+            rig.Director.Tick(1.45f);
+            Assert.AreEqual(1, rig.Output.Live(VfxCue.FuseWarning));
+            rig.Director.Tick(.1f);
+            Assert.AreEqual(0, rig.Output.Live(VfxCue.FuseWarning));
+        }
+
+        [Test]
+        public void HiddenWhenTheFuseRunsOut_NotDrawnAgainDuringTheGrace()
+        {
+            var rig = new VfxRig();
+            rig.Fuse(4, 20f, 20f, 3f, 1.5f, owner: 1);
+            rig.Visibility.HideRect(15f, 15f, 25f, 25f);
+            rig.Director.Tick(1.55f);
+            Assert.AreEqual(0, rig.Output.Live(VfxCue.FuseWarning));
+            rig.Visibility.ClearRect();
+            rig.Director.Tick(VfxRig.Dt);
+            Assert.AreEqual(0, rig.Output.Live(VfxCue.FuseWarning), "no new warning after its timer ran out");
+            Assert.AreEqual(1, rig.Output.Count(VfxCue.FuseWarning), "only the first spawn");
         }
     }
 

@@ -108,10 +108,15 @@ namespace JungleMaze.Domain.Vfx
         public readonly int Budget;
         /// <summary>Shake added when the local player is hit; explosions use <see cref="ShakeMaxCells"/>.</summary>
         public readonly float HitShakeCells;
+        /// <summary>
+        /// Extra seconds a fuse warning stays after its timer runs out while waiting for <c>Detonated</c> (a late or
+        /// lagging blast); <c>Detonated</c> still removes it at once.
+        /// </summary>
+        public readonly float FuseGraceSeconds;
 
         public VfxTuningValues(float flashSeconds, float numberSeconds, float numberRiseCells, float shakeMaxCells,
             float shakeSeconds, float shakeRadiusCells, float dedupeSeconds, int dedupeCapacity, int budget,
-            float hitShakeCells)
+            float hitShakeCells, float fuseGraceSeconds = DefaultFuseGraceSeconds)
         {
             FlashSeconds = flashSeconds;
             NumberSeconds = numberSeconds;
@@ -123,10 +128,14 @@ namespace JungleMaze.Domain.Vfx
             DedupeCapacity = dedupeCapacity;
             Budget = budget;
             HitShakeCells = hitShakeCells;
+            FuseGraceSeconds = fuseGraceSeconds > 0f ? fuseGraceSeconds : 0f;
         }
+
+        /// <summary>Grace after a fuse runs out (review round 1, suggestion 5).</summary>
+        public const float DefaultFuseGraceSeconds = .15f;
 
         /// <summary>Values agreed at G1 (spec 2.5, T-8).</summary>
         public static VfxTuningValues Default =>
-            new VfxTuningValues(.16f, .7f, .6f, .15f, .3f, 6f, 5f, 256, 64, .08f);
+            new VfxTuningValues(.16f, .7f, .6f, .15f, .3f, 6f, 5f, 256, 64, .08f, DefaultFuseGraceSeconds);
     }
 }

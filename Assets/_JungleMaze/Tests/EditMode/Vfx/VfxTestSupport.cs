@@ -121,14 +121,16 @@ namespace JungleMaze.Tests.Vfx
         public readonly EventBus Bus = new EventBus();
         public readonly FakeMatchFeed Feed = new FakeMatchFeed();
         public readonly FakeLocator Targets = new FakeLocator();
-        public readonly ToggleVisibilityPolicy Visibility = new ToggleVisibilityPolicy();
+        public readonly ToggleVisibilityPolicy Visibility;
         public readonly FakeVfxOutput Output = new FakeVfxOutput();
         public readonly FakeLog Log = new FakeLog();
         public readonly FakeSettings Settings = new FakeSettings();
         public readonly VfxDirector Director;
 
-        public VfxRig(VfxTuningValues? tuning = null, VfxRuleTable rules = null)
+        /// <param name="visibility">Policy wrapped by <see cref="Visibility"/> (the seam the director asks); none = all visible.</param>
+        public VfxRig(VfxTuningValues? tuning = null, VfxRuleTable rules = null, IVisibilityPolicy visibility = null)
         {
+            Visibility = new ToggleVisibilityPolicy(visibility);
             for (byte i = 0; i <= 10; i++) Targets.Put(i, 10f + i * 2f, 10f);
             Director = new VfxDirector(Bus, Feed, Targets, Visibility, Output, rules ?? Rules(), tuning ?? VfxTuningValues.Default,
                 Settings, Log);

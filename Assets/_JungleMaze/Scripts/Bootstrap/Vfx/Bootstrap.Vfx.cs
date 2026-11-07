@@ -41,11 +41,10 @@ namespace JungleMaze.Composition
             var offlineWorld = _registry.Resolve<OfflineWorldSession>();
             var tuning = set.TuningValues;
 
+            // The default is not registered: FOW-01 may register IVisibilityPolicy after this without a duplicate-type
+            // error, and the deferred policy then forwards to it (review round 1, suggestion 2).
             if (!_registry.TryResolve<IVisibilityPolicy>(out var visibility))
-            {
-                visibility = new AlwaysVisiblePolicy();
-                _registry.Register<IVisibilityPolicy>(visibility);
-            }
+                visibility = new DeferredVisibilityPolicy(() => _registry.TryResolve<IVisibilityPolicy>(out var fow) ? fow : null);
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
             // Fake fog of war for the preview and the F10 panel: wraps the real policy, registered by its own type.
             var toggle = new ToggleVisibilityPolicy(visibility);

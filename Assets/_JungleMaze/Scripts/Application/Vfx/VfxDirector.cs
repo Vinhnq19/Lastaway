@@ -483,9 +483,9 @@ namespace JungleMaze.App.Vfx
             {
                 _fuses[i].Remaining -= dt;
                 var handle = _fuses[i].Handle;
-                if (_fuses[i].Remaining <= 0f)
+                if (_fuses[i].Remaining <= -_tuning.FuseGraceSeconds)
                 {
-                    // No Detonated arrived (lost or late): the warning still ends on time.
+                    // No Detonated arrived (lost, or later than the grace): the warning still ends.
                     _fuses[i] = _fuses[--_fuseCount];
                     _fuses[_fuseCount] = default;
                     if (handle != 0) ReleaseHandle(handle);
@@ -493,7 +493,8 @@ namespace JungleMaze.App.Vfx
                 }
                 var shown = _fuses[i].Owner == _feed.OwnNetId || Visible(_fuses[i].X, _fuses[i].Y, VisibilityQuery.PositionOnly);
                 if (!shown && handle != 0) ReleaseHandle(handle);
-                else if (shown && handle == 0) TrySpawnFuse(i);
+                // A warning hidden when its timer ran out is not drawn again during the grace.
+                else if (shown && handle == 0 && _fuses[i].Remaining > 0f) TrySpawnFuse(i);
             }
         }
 

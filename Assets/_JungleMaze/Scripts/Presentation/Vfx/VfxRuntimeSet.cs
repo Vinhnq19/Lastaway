@@ -26,9 +26,11 @@ namespace JungleMaze.Presentation.Vfx
             [Min(0f)] public float dedupeSeconds = 5f;
             [Min(1)] public int dedupeCapacity = 256;
             [Min(1)] public int budget = 64;
+            [Tooltip("Seconds a fuse warning waits for Detonated after its timer runs out (lag); Detonated removes it at once.")]
+            [Min(0f)] public float fuseGraceSeconds = VfxTuningValues.DefaultFuseGraceSeconds;
 
             public VfxTuningValues ToValues() => new VfxTuningValues(flashSeconds, numberSeconds, numberRiseCells, shakeMaxCells,
-                shakeSeconds, shakeRadiusCells, dedupeSeconds, dedupeCapacity, budget, hitShakeCells);
+                shakeSeconds, shakeRadiusCells, dedupeSeconds, dedupeCapacity, budget, hitShakeCells, fuseGraceSeconds);
         }
 
         [SerializeField] private VfxCatalog catalog;

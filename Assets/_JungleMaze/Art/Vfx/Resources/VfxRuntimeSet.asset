@@ -24,3 +24,4 @@ MonoBehaviour:
     dedupeSeconds: 5
     dedupeCapacity: 256
     budget: 64
+    fuseGraceSeconds: 0.15

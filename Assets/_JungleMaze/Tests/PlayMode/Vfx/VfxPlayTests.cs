@@ -64,11 +64,13 @@ namespace JungleMaze.Tests.PlayMode.Vfx
         public readonly VfxRuntimeSet Set;
         public readonly VfxBodyAnchor[] Bodies = new VfxBodyAnchor[11];
 
-        public VfxPlayRig()
+        /// <param name="tuning">Overrides the shipped tuning (e.g. long lifetimes for steady-state measurements).</param>
+        public VfxPlayRig(VfxTuningValues? tuning = null)
         {
             Set = Resources.Load<VfxRuntimeSet>(VfxRuntimeSet.ResourcePath);
             Assert.IsNotNull(Set, "Resources/VfxRuntimeSet");
             Assert.IsTrue(Set.IsComplete);
+            var values = tuning ?? Set.TuningValues;
             var poolParent = new GameObject("PoolParent");
             Owned.Add(poolParent);
             Pool = new PoolService(null, Log, poolParent.transform);
@@ -89,8 +91,8 @@ namespace JungleMaze.Tests.PlayMode.Vfx
             Owned.Add(stageGo);
             Stage = stageGo.AddComponent<VfxStage>();
             Stage.Construct(Pool, Anchors);
-            Stage.Configure(Set.Catalog, Set.TuningValues);
-            Director = new VfxDirector(Bus, Feed, Anchors, Visibility, Stage, Set.Catalog.BuildRules(), Set.TuningValues, null, Log);
+            Stage.Configure(Set.Catalog, values);
+            Director = new VfxDirector(Bus, Feed, Anchors, Visibility, Stage, Set.Catalog.BuildRules(), values, null, Log);
             Director.Initialize();
             Stage.SceneChanged += Director.ResetAll;
             Throwables = new FakeThrowableEventSource(ThrowableRules.Baseline(), Anchors);

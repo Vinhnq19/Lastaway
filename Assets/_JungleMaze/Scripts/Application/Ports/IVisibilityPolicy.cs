@@ -2,8 +2,8 @@ namespace JungleMaze.App.Ports
 {
     /// <summary>
     /// Fog-of-war seam (VFX-01 spec 2.4): may the local player see a sign at world position (x, y), optionally on the
-    /// body of <paramref name="netId"/>? FOW-01 owns the policy and registers it before VFX is composed; until then
-    /// everything is visible. This is presentation only, not an anti-cheat measure (SRV-03 filters state).
+    /// body of <paramref name="netId"/>? FOW-01 owns the policy and registers it, before or after VFX is composed
+    /// (see <c>DeferredVisibilityPolicy</c>); until then everything is visible. This is presentation only, not an anti-cheat measure (SRV-03 filters state).
     /// </summary>
     public interface IVisibilityPolicy
     {

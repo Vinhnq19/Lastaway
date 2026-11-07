@@ -184,7 +184,7 @@ _bus.Publish(new StatusEvent(key, netId, StatusKind.Stun, true, seconds, remaini
 - `EventKey` phải ổn định khi gói gửi lại (tick + nguồn + đích + seq, hoặc id sự kiện server); cùng khoá trong 5 s chỉ phát một lần. Khoá 0 = không khử trùng.
 - Đồ ném (WPN-03) đã nối sẵn qua `ThrowableVfxSource` (nghe `IThrowableEventSource`); trạng thái của chính mình đã nối qua `LocalEffectStatusSource` (đọc `IEffectState`). Không publish lại các event này.
 - Hit, nổ, trạng thái không bao giờ được dự đoán. Chỉ ra đòn của mình (`AttackPredicted`) được dự đoán, đối soát theo `RequestSeq`.
-- **FOW-01:** hiện thực `IVisibilityPolicy.IsVisible(x, y, netId)` (`netId = 255` khi hỏi theo vị trí) và đăng ký **trước** `ComposeVfx` trong `Bootstrap`. Mặc định là `AlwaysVisiblePolicy`. Director hỏi lại mọi hiệu ứng đang sống mỗi tick; người chơi local luôn hiện.
+- **FOW-01:** hiện thực `IVisibilityPolicy.IsVisible(x, y, netId)` (`netId = 255` khi hỏi theo vị trí) và đăng ký vào registry dưới `IVisibilityPolicy`, trước hoặc sau `ComposeVfx` đều được. VFX không đăng ký mặc định vào registry; khi chưa có policy thì `DeferredVisibilityPolicy` cho hiện tất cả và tự chuyển sang policy của FOW-01 khi nó xuất hiện. Director hỏi lại mọi hiệu ứng đang sống mỗi tick; người chơi local luôn hiện.
 - Số trình bày (0,16 s nháy, 0,7 s số, rung ≤ 0,15 cell, ngân sách 64) nằm trong `Art/Vfx/Resources/VfxRuntimeSet.asset`; prefab/catalog dựng lại bằng menu **Jungle Maze → VFX → Build VFX-01 Assets**.
 - Thử không cần GameServer: mở `Scenes/Dev/VfxPreview.unity`, Play, panel **F10** tự mở (hit, quầng, ném giả, lặp khoá, rollback, đổi phòng, ẩn mục tiêu, tải 10 nguồn). Ở scene Game, F10 vẫn bắn được event giả lên trận thật (Editor/Development).
 

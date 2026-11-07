@@ -31,11 +31,18 @@ namespace JungleMaze.Presentation.Vfx
         public bool IsFlashing => _flashing;
         public SpriteRenderer Body => body;
 
-        /// <summary>Net id of this body; 255 when unknown (unbound view).</summary>
-        public byte NetId => previewNetId >= 0 && previewNetId < 255 ? (byte)previewNetId : _view != null ? _view.NetId : (byte)255;
+        /// <summary>Net id of this body; 255 when unknown (a PlayerView not bound yet, or no PlayerView).</summary>
+        public byte NetId => previewNetId >= 0 && previewNetId < 255 ? (byte)previewNetId
+            : _view != null && _view.IsBound ? _view.NetId : (byte)255;
 
-        /// <summary>False while the body is hidden (dead) or inactive: nothing is drawn on it.</summary>
-        public bool IsShowing => enabled && gameObject.activeInHierarchy && (body == null || body.enabled);
+        /// <summary>
+        /// True when this body may carry VFX: the Hero, a preview dummy, or a PlayerView after <c>Bind</c>. An unbound
+        /// PlayerView (fresh from the pool, NetId reads 0) is ignored by the registry until it is bound (review round 1).
+        /// </summary>
+        public bool HasIdentity => localHero || (previewNetId >= 0 && previewNetId < 255) || (_view != null && _view.IsBound);
+
+        /// <summary>False while the body is unbound, hidden (dead) or inactive: nothing is drawn on it.</summary>
+        public bool IsShowing => HasIdentity && enabled && gameObject.activeInHierarchy && (body == null || body.enabled);
 
         [Inject]
         public void Construct(VfxAnchorRegistry registry)
