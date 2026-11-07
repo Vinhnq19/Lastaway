@@ -70,8 +70,9 @@ Thêm trường `Rarity` (`Common, Uncommon, Rare, Epic, Legendary`) vào `ItemD
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | map1_thap_co | 1605 | 32/56/2 | 16349 | 41 | 1632 | 52 (11 / 41) | 43,2 | 1,6 | ~1650 (max 1656) | 207 | 250 | 4,9 ms |
 | map2_thi_tran | 1493 | 35/45/2 | 16518 | 52 | 1642 | 62 (10 / 51) | 50,8 | 1,5 | ~1545 (max 1554) | 201 | 252 | 4,8 ms |
-| map3_rung_sinh_ton (hiện tại) | 3459 | 64/201/3 | 15080 | 0 | **0** | 0 | 0 | 0 | 3459 | 542 | 542 | 5,0 ms |
+| map3_rung_sinh_ton (trước mục 8) | 3459 | 64/201/3 | 15080 | 0 | **0** | 0 | 0 | 0 | 3459 | 542 | 542 | 5,0 ms |
 | map3 mô phỏng mục 8 (0 bình, giữ 1/3 rương) | 3216 | 22/0/3 | 15335 | 179 | 608 | 181 | 136,9 | – | – | 94 | 230 | – |
+| map3_rung_sinh_ton (sau mục 8, mục 10) | 3233 | 25/0/3 | 15339 | 166 | 579 | 169 (3 / 167) | 128,8 | 3,8 | ~3366 (max 3382) | 104 | 233 | 5,3 ms |
 
 - Thời gian: `PlanSpots` 4–8 ms cho map 150×150 (lưới ô tính trước + tổng tiền tố, không gọi `IsWalkable` từng ô); `Roll` ~0,02 ms. So với `AuthoredMapDocument.Build`+Validate cùng máy: 18–78 ms. Server tính chỗ một lần mỗi map lúc khởi động (`MatchWorldSetup.Prewarm`, cả khi reload catalog trên thread phụ), mỗi trận chỉ `Roll`.
 - Phân bố độ hiếm (map1, theo vòng): ngoài Common 67% / Uncommon 25% / Rare 5% / Epic 3%; giữa 53/28/10/9; trong 36/30/17/17. Legendary chỉ có ở tiếp tế nên không xuất hiện trên sàn.
