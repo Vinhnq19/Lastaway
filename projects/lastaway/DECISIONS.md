@@ -237,3 +237,13 @@ Khoảng trống chặn QA-01 theo PIC người (MAP-02, Game-10, DRG-01, ZON-01
 - **Quyết định:** Làm phương án M của `de-xuat/minimap-chuc-nang.md`: phím K1 (M mở bản đồ lớn như cũ, N và cuộn chuột trên minimap đổi mức), 1 waypoint cá nhân, dấu địch thấy lần cuối tự động, bỏ ping kiểu PUBG, bỏ "hiện đồng đội" khỏi đợt này (mục 8 giữ làm hồ sơ chế độ đội). Số trong `so-hien-hanh.md`.
 - **Người quyết:** Huy (08/11, "Chốt gói M"), chốt cả 3 câu hỏi theo phương án nghiêng về của designer.
 - **Hệ quả:** T-017 done. T-018 dựng theo 2 chặng có cổng Huy chơi giữa. T-029 (art-ux) làm icon và mock song song chặng 1. Chặn tấn công khi mở bản đồ lớn không được sửa file input của Hào; không làm được từ phía UI thì báo CPO để hỏi Hào. Lớp địch dùng adapter tạm có công tắc tới khi FOW-01 (Quang Huy) có interface; CPO soạn tin cho Quang Huy.
+
+## 2026-11-08 - Minimap giữ 2 mức zoom
+- **Quyết định:** Giữ 2 mức zoom minimap (Toàn map, Gần 30 cell), không thêm mức giữa.
+- **Người quyết:** Huy (08/11, "Giữ 2 mức"), sau báo cáo T-018 chặng 1.
+- **Bối cảnh:** map thật 150 cell (đề xuất giả định 50). Ở 1080p: mức Toàn 1,8 px/cell, mức Gần 8,97 px/cell, bản đồ lớn 5,8 px/cell (đề xuất >= 17, không đạt nếu không zoom bản đồ lớn; chấp nhận, texture 1024 không bị phóng nên vẫn nét).
+
+## 2026-11-08 - CPO tự duyệt, thu gọn minimap
+- **Quyết định của Huy:** "Bạn tự duyệt hết đi đừng vẽ ra quá nhiều tính năng và cx ko động tới tính năng của người khác." CPO duyệt asset và mock T-029 thay Huy.
+- **CPO áp dụng cho T-018:** (1) Chặng 2 chỉ còn waypoint cá nhân. (2) Lớp địch và dấu thấy lần cuối hoãn: luật tầm nhìn là FOW-01 của Quang Huy, không dựng adapter tạm. (3) Bỏ cuộn chuột đổi mức trên minimap, chỉ dùng phím N: cuộn đang là của danh sách nhặt (Vũ), không xin sửa file của Vũ. (4) Không chặn Dash khi mở bản đồ lớn, không thêm tính năng ngoài đề xuất.
+- **Hệ quả:** icon `map_enemy_dot`, `map_lastseen_ring` của T-029 nằm chờ, chưa nhập Unity. Không cần tin cho Vũ về WorldSceneView.

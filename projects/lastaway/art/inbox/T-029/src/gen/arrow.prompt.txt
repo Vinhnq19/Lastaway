@@ -1,0 +1,6 @@
+Use your image generation tool to create ONE image as described below, and copy the generated file AS-IS (no cropping, no resizing, no padding) to:
+D:\Lastaway\projects\lastaway\art\inbox\T-029\src\gen\arrow.png
+Do not write any other files and do not post-process the image. Use only the built-in image tool, never the OpenAI API, curl or python.
+
+Draw ONE map screen-edge direction arrow pointing straight UP: a chunky triangular arrowhead with a short stem (like a bold chevron-arrow), fill sky blue (#5BB8E8) with darker blue (#2F7FB0) shade on the right half and a thin light highlight (#BDE6F8) on the left edge, thick dark outline (#0A0C0C) about 2 pixels. Symmetric, perfectly vertical. No text, no number.
+Style: chunky pixel art on a 64x64 grid like the attached reference sprites (kit T-020 khaki stone-and-moss UI kit, ref-pin.png green map pin, ref-tag.png), hard pixel edges, no anti-aliased gradients, a small number of flat colours with one shade step, DARK outline (#0A0C0C) 1 pixel thick around every shape so it stays readable on olive green terrain and on pink zone overlay. Draw it large and centered, filling about 85 percent of a square canvas. Background: perfectly flat solid magenta #FF00FF, nothing else (no shadow, no ground, no text, no frame).

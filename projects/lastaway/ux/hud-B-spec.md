@@ -71,7 +71,18 @@ Padding ngang 10 u, trên 8 u, dưới 8 u. Nền Surface. Bỏ nhãn nhóm "VŨ
 
 - `MapArea` phủ toàn khung. **Hiển thị bản đồ thật**: nền địa hình, tường và vật cản, vòng bo (viền `Purple`), marker bản thân **14 x 14 u** kèm hướng xoay Hero. Bắc ở trên, không xoay (như UI-01).
 - Lưới `Grid` giữ 4 vạch, mỗi **32 u** (= 10 cell, như v2 ở 200 px là 40 px). Màu `Grid`.
-- **Không thêm chức năng** (không zoom, ping, mở rộng) theo quyết định Huy. Nguồn dữ liệu bản đồ (texture dựng sẵn hay vẽ từ dữ liệu map) do unity chọn; art-ux chưa quy định.
+- **Chức năng thêm theo phương án M (Huy chốt 08/11, thay quyết định "không thêm chức năng")**: 2 mức zoom, waypoint, lớp địch; luật ở `de-xuat/minimap-chuc-nang.md` mục 4, 5. Nguồn dữ liệu bản đồ do unity chọn.
+- Asset và mock T-029: `art/inbox/T-029/` (`README.md` có bảng file, cỡ 1080p). Lỗ minimap 269 px (1080p), vị trí (1600, 55) tới (1869, 324).
+
+| Phần tử | Sprite | Cỡ vẽ 1080p | Ghi chú |
+|---|---|---|---|
+| Cờ waypoint (W10) | `wp_flag_mini` (minimap), `wp_flag` (bản đồ lớn 24, world 40) | 18 đề xuất (mock 14), 24, 40 | xanh trời `#5BB8E8`, không trùng đỏ địch, trắng vòng bo kế, Amber bản thân |
+| Mũi tên mép màn + số cell | `wp_arrow_edge` xoay + `kit_badge_key` 64x36 | 40; chữ 24 Be Vietnam Pro Bold | cờ trong màn: chỉ icon cờ, không số |
+| Chấm địch (E7) | `map_enemy_dot` | 12 minimap, 16 bản đồ lớn | đỏ `#E5484D` viền tối |
+| Dấu thấy lần cuối (E4) | `map_lastseen_ring` | 12 / 16 | alpha 0,6 về 0 trong 2,0 s |
+| Marker bản thân | `map_self_marker` | 26 minimap, 40 bản đồ lớn | Amber `#C6AE78`, mũi nhọn chỉ hướng |
+| Chỉ báo mức zoom | `kit_badge_key` 150x48 + `kit_ico_zoom` 24 + chữ 24 "Toàn" / "Gần" | góc trên trái lỗ, cách mép 8 px | |
+| Đường kẻ Hero - cờ | code | 1 px, alpha 0,5 đến 0,6 | |
 - Khung ngoài, `ArtBevel`, `ArtEdge`: giữ, scale theo size mới.
 
 ## 6. Match status (160 x 59 u)
