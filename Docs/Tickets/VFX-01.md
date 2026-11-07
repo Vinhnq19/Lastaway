@@ -7,7 +7,7 @@
 | Ưu tiên | P2 |
 | PIC | Vũ (sở hữu pooling và VFX-01: runtime, prefab VFX, vòng đời hiệu ứng) |
 | Phụ thuộc | CLI-03: Done (`IPoolService`, `PooledPrefabFactory<T>`, `PoolService`, `PooledObject`, đăng ký trong `Bootstrap`). Tích hợp về sau với WPN-02/WPN-03/Game-10/ZON-01 (Not Yet trong sheet), FOW-01 (Not Yet); ticket làm độc lập bằng fake event |
-| Trạng thái | Build (G1 đã duyệt 07/11/2026) |
+| Trạng thái | Done (G3 nghiệm thu 07/11/2026) |
 | Sheet GDD tham chiếu | PROJECT TRACKING (VFX-01); Assets dòng 5 (VFX hành động/nguy hiểm), 7 (Visibility/Pressure), 9; WIREFRAME dòng 11–13 (ghi "13–15" trong ticket nhưng sheet chỉ có tới dòng 13, xem Q13); Weapons; Equipments; Obstacles; MATCH DESIGN DATA (Config, ZONE BASELINE) |
 
 ## 1. Mục tiêu
@@ -991,6 +991,16 @@ Bảng tổng hợp của CPO từ bằng chứng build (mục 5) và review (m�
 Test đỏ không thuộc VFX (chưa đối chứng trên `83e11065`): EditMode 6 test dữ liệu map (`LevelDocumentTests` ×4, `Phase2Tests.PackagedMapHashMustMatchServer`, `OnlineWorldIntegrationTests.NormalWorld…`); PlayMode `AudioAcceptanceTests.ZoneBell_ThreeBellsOnAlert…`, `DepthSortingPlayTests.HeroWithInterpolatedRigidbody…` (flaky).
 
 ## 8. Nghiệm thu
+
+**G3 07/11/2026: người nghiệm thu, ticket Done.** Commit: `b5694dc3` (spec + plan), `83e11065` (re-plan sau merge main), `7adb1aa5` (build), `843da542` (sửa review vòng 1), `a1cd1eb5` + commit đóng (review vòng 2, trạng thái AC). Không chạy QA theo yêu cầu của người.
+
+Việc còn mở (không chặn Done):
+- Chạy phòng online thật để xác nhận quầng/nháy/số của mình nằm trên `PlayerView` (R3) và ảnh khi đứng ngoài bo đỏ (R18).
+- Đo GC/frame time trên Player build (AC7, AC15); playtest ≥ 2 người cho AC16 và cảm nhận rung (AC13).
+- Đối chứng các test đỏ không thuộc VFX trên `83e11065`.
+- Follow-up ticket khác: Hào/WPN-03 — `ThrowableView` dọn khi đổi trận; FOW-01 — đưa `ThrowableView` qua seam `IVisibilityPolicy` (đăng ký policy trước hay sau `ComposeVfx` đều được); WPN-02 — server phát `PlayerHit` cho đạn/cận chiến (VFX-01 đã có đường nhận); Game-10 — nguồn trạng thái thật của người khác (Invulnerable, CcImmune).
+- Báo Hào/MOV-03: `PlayerView` thêm getter chỉ đọc `IsBound`.
+- Gợi ý review để sau: chuyển `SfxDeduper` lên Core nếu có nơi thứ ba dùng; gom số trình bày mặc định về một nơi; test GC chặt hơn (xen kẽ bật/tắt, bọc nhiều frame).
 
 ## Phụ lục. Câu hỏi mở cần chốt ở G1 (kèm khuyến nghị)
 
