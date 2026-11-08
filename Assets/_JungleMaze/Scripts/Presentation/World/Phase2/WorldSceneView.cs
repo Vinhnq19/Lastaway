@@ -162,8 +162,8 @@ namespace JungleMaze.Presentation.World.Phase2
                 if (_world.Inventory != null && _world.Inventory.IsUsing) _world.Send(WorldActionKind.CancelUse);
         }
 
-        /// <summary>Q (hoặc Backspace như cũ) bỏ vũ khí đang cầm xuống sàn.</summary>
-        private static bool DropPressed() => Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.Backspace);
+        /// <summary>Q bỏ vũ khí đang cầm xuống sàn.</summary>
+        private static bool DropPressed() => Input.GetKeyDown(KeyCode.Q);
 
         private void UpdateOffline()
         {

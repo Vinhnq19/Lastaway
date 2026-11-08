@@ -392,8 +392,8 @@ namespace JungleMaze.EditorTools
             Set(v, "status", Txt(info, "Status", Tier.H2, "", C.Gold, 60, 86, 710));
             PlateIcon(info, "PlayerIcon", "kit_ico_person", 76, 150, 26);
             Set(v, "count", Txt(info, "Count", Tier.B2, "", C.Text, 118, 150, 652));
-            Set(v, "notice", Txt(info, "Notice", Tier.B2, "", C.Gold, 60, 200, 710));
-            Set(v, "rule", Para(info, "Rule", Tier.B2, "", C.Muted, 60, 222, 710, 66));
+            Set(v, "notice", Para(info, "Notice", Tier.B2, "", C.Gold, 60, 188, 710, 54));
+            Set(v, "rule", Para(info, "Rule", Tier.B2, "", C.Muted, 60, 250, 710, 40));
             var cards = MapCards(info, 60, 300, 710, 180, out var template);
             Set(v, "mapCards", cards);
             Set(v, "mapCardTemplate", template);
@@ -446,9 +446,9 @@ namespace JungleMaze.EditorTools
             template = card.gameObject.AddComponent<Button>();
             template.targetGraphic = image;
             Box(card, "Selected", "kit_card_room_selected", 0, 0, 340, h).gameObject.SetActive(false);
-            Rel(card, "Preview", 16, 20, 140, 140).gameObject.AddComponent<RawImage>().raycastTarget = false;
-            Para(card, "Title", Tier.B2, "", C.Text, 170, 16, 156, 70);
-            Para(card, "Description", Tier.C, "", C.Muted, 170, 90, 156, 76);
+            Rel(card, "Preview", 16, 12, 308, 84).gameObject.AddComponent<RawImage>().raycastTarget = false;
+            Para(card, "Title", Tier.B2, "", C.Text, 16, 100, 308, 38);
+            Para(card, "Description", Tier.C, "", C.Muted, 16, 138, 308, 36);
             card.gameObject.SetActive(false);
             return scroll;
         }
@@ -844,7 +844,11 @@ namespace JungleMaze.EditorTools
                 t.color = t.transform.parent == r ? C.Text : C.Ink; // list items sit on the template's light background
             }
             var label = r.Find("Label") as RectTransform;
-            if (label != null) { label.offsetMin = new Vector2(UiKit.Px(20), label.offsetMin.y); label.offsetMax = new Vector2(-UiKit.Px(68), label.offsetMax.y); }
+            if (label != null) { label.offsetMin = new Vector2(UiKit.Px(20), 0); label.offsetMax = new Vector2(-UiKit.Px(100), 0); }
+            var caption = go.GetComponent<TMP_Dropdown>().captionText;
+            caption.alignment = TextAlignmentOptions.MidlineLeft;
+            caption.textWrappingMode = TextWrappingModes.NoWrap;
+            caption.overflowMode = TextOverflowModes.Ellipsis;
             var arrow = r.Find("Arrow");
             if (arrow != null) arrow.gameObject.SetActive(false); // QA m-a: TMP default arrow has no sprite (white box)
             go.GetComponent<TMP_Dropdown>().ClearOptions();

@@ -13,7 +13,7 @@ namespace JungleMaze.EditorTools
     /// Units are reference units of the 1280×720 canvas. Children are placed by their top-left corner inside the block,
     /// y downwards, as in the spec tables. Idempotent: running it again gives the same prefab.
     /// T-016 r11 (Huy 07/11): block rects and content follow art/inbox/T-015/asset-list.md section 3, measured on the
-    /// 1920×1080 concept (1080p px; Px() divides by 1.5), replacing the HUD B numbers; no weapon/ammo tab.
+    /// 1920×1080 concept (1080p px; Px() divides by 1.5), replacing the HUD B numbers; the held-weapon ammo strip stays visible above the slots.
     /// <see cref="HudSkinABuild"/> then puts the carved-stone sprites on.
     /// </summary>
     public static class HudLayoutBBuild
@@ -158,8 +158,8 @@ namespace JungleMaze.EditorTools
             viewSo.ApplyModifiedPropertiesWithoutUndo();
             RegisterFrame(bar.root, frame, strip.GetComponent<HudArtFrameView>());
 
-            // Weapon strip: fixed 375×22, name left, ammo middle, reload key right.
-            // The strip stretches inside a fixed 375×22 area. Scenes still carry an old layout-driven override
+            // Weapon strip above the slots: name left, ammo middle, reload key right.
+            // The strip stretches inside its fixed area. Scenes still carry an old layout-driven override
             // "WeaponStrip m_SizeDelta.x = 0" (Game.unity, WorldDemo.unity); with stretch anchors 0 is the right value,
             // so those scenes need no edit. The fitter goes off first, otherwise it snaps the width back.
             strip.GetComponent<ContentSizeFitter>().horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
@@ -171,7 +171,7 @@ namespace JungleMaze.EditorTools
                 area.SetSiblingIndex(strip.GetSiblingIndex());
                 strip.SetParent(area, false);
             }
-            Place(area, Px(40), Px(18), Px(512), Px(22));
+            Place(area, 0, Px(-48), Px(593), Px(40));
             var stripRt = (RectTransform)strip;
             stripRt.anchorMin = Vector2.zero;
             stripRt.anchorMax = Vector2.one;
@@ -182,7 +182,7 @@ namespace JungleMaze.EditorTools
             stripLayout.padding = new RectOffset(0, 0, 0, 0);
             stripLayout.childAlignment = TextAnchor.MiddleCenter;
             stripLayout.childForceExpandWidth = true;
-            // Hidden in r11; still put on the type scale (gameplay floor 24, key 20).
+            // Keep the gameplay type scale (floor 24, key 20).
             Tier(view.WeaponName, UiKit.Tier.B2, TextAlignmentOptions.MidlineLeft);
             Tier(strip.Find("Ammo/Magazine").GetComponent<TMP_Text>(), UiKit.Tier.B2, null);
             Tier(strip.Find("Ammo/Reserve").GetComponent<TMP_Text>(), UiKit.Tier.B2, null);
@@ -194,8 +194,9 @@ namespace JungleMaze.EditorTools
             keyLayout.preferredWidth = keyLayout.preferredHeight = Px(22); // fits the 22 px strip
             Tier(keyCap.Find("Label").GetComponent<TMP_Text>(), UiKit.Tier.C, null);
             Tier(reload.Find("Label").GetComponent<TMP_Text>(), UiKit.Tier.B2, null);
-            // r11 (Huy 07/11): no weapon name / ammo tab. QuickbarView still writes to it, so it stays in the prefab, hidden.
-            area.gameObject.SetActive(false);
+            // Keep held ammo readable above the slot row; never overlap the inventory icons.
+            area.gameObject.SetActive(true);
+            stripImage.enabled = true;
 
             // Slots: two groups of 4 × 54 px, step 60, groups at x 50 and 310, row centred at y 29.
             Place(bar.Find("Slots"), Px(50), Px(29), Px(494), Px(54));

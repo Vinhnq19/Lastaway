@@ -341,3 +341,12 @@ Sửa lịch, HP hoặc kích thước tại `Backend/Shared/GameData/airdrop_sc
 **Hai PC thật:** PC host publish UDP/WS và API theo profile LAN/VPN đang có; PC thứ hai đăng nhập, vào cùng RoomCode, xác minh map rồi chơi cùng. So sánh đường bay, marker, HP, tranh loot, disconnect/resume và chơi lại trên cả hai màn hình; kiểm riêng UDP và WS/Auto. Hai process trên một PC chỉ là kiểm tích hợp, không thay nghiệm thu LAN/VPN hai thiết bị. Bàn giao luôn ở camera Follow Player.
 
 Bằng chứng và các tiêu chí chưa kiểm: [DRG-01](Reports/DRG01/report.vi.md).
+
+
+### Khi phòng chờ báo map/luật khác server sau merge
+
+Client xác minh cả MapHash và RulesHash; không tắt kiểm hash để vào trận. Khi source có thay đổi vũ khí, loot, bo hoặc lịch rồng, phải cập nhật cả hai phía: Unity chạy **Jungle Maze → Phase 2 → Sync Runtime Data**, build client mới; tại `Backend` chạy `docker compose --profile account up -d --build api game-server`. Mongo không cần xóa hay reset. Để chơi thường giữ profile `main`; profile `test` chỉ dành cho kiểm thử riêng.
+
+Local dùng tài khoản API Local và chọn **Local** trong Cài đặt máy chủ. AWS chỉ dùng được khi release server và client cùng phiên bản dữ liệu; Sync Runtime Data trên PC không cập nhật EC2. Xóa cache không sửa được RulesHash lệch. Skin ở phòng chờ được lưu cùng lựa chọn nhân vật trên menu của thiết bị; giữ cơ chế hiển thị skin hiện có, không đổi sang xác thực hay đồng bộ skin mới.
+
+Nhạc nền menu dùng `Assets/_JungleMaze/Art/Audio/Music/game_menu_looping.ogg`, chạy lặp ở đăng nhập/menu, danh sách phòng, phòng chờ và kết quả. Cài đặt mới bật nhạc mặc định; nếu máy đã lưu tùy chọn tắt nhạc, bật lại tại **Cài đặt → Âm thanh → Nhạc**. Khi kết nối/tải và trong trận, nhạc nền tắt; SFX gameplay vẫn hoạt động. Trở về menu/phòng chờ/kết quả sẽ phát lại nhạc menu.

@@ -10,7 +10,7 @@ Cập nhật **01/11/2026**. Tài liệu dành cho người mới vào làm game
 2. **Chơi mạng:** setup stack API/Mongo/GameServer và secret theo [Phase2, mục1](Phase2_Match_Guest_Zone.vi.md#1-khởi-chạy-backend-local). Chọn profile `phase2-local`, đăng ký/đăng nhập trên menu rồi tạo/vào phòng bằng mã và tên. Không dùng RoomCode để bỏ bước account. LAN/VPN/AWS cần API HTTPS; HTTP chỉ loopback Local.
 3. Server `main` cần6 người, lobby15s/loading30s. Profile `test` chỉ dành Local2 người/timer tăng tốc; không dùng public. Chỉ bắt đầu từ Boot khi kiểm full flow mạng.
 4. Click **Game View**, WASD/mũi tên để đi và chuột ngắm. Client gửi input; online nhận vị trí/HP/bo từ server. Offline dùng HeroController và OfflineMatchSession, không chạy cùng hai mô phỏng.
-5. Chuột trái attack, R reload, F nhặt món đang trỏ,1–4 chọn vũ khí,5–8 dùng đồ, Q (hoặc Backspace) bỏ vũ khí đang cầm. Scene dùng world/item/combat service đã ghép; trạng thái nghiệm thu từng bước và giới hạn đọc trong [báo cáo hiện hành](Reports/Phase2_Local/report.vi.md). Không dùng công cụ projectile foundation cũ để chứng minh PvP đã hoàn tất.
+5. Chuột trái attack, R reload, F nhặt món đang trỏ,1–4 chọn vũ khí,5–8 dùng đồ, Q bỏ vũ khí đang cầm. Scene dùng world/item/combat service đã ghép; trạng thái nghiệm thu từng bước và giới hạn đọc trong [báo cáo hiện hành](Reports/Phase2_Local/report.vi.md). Không dùng công cụ projectile foundation cũ để chứng minh PvP đã hoàn tất.
 6. F3 bật số đo; ESC mở menu và không dừng timer. Build Windows hiện giữ6000.3.15f1, có native quit BLOCKED; file evidence PASS chưa đủ nếu exit khác0.
 
 Nếu Editor không được focus mà game đứng hình, bật **Project Settings → Player → Run In Background**.

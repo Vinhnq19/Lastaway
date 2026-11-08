@@ -100,6 +100,15 @@ namespace JungleMaze.Infrastructure.Config
             return new SelectedMapData(layout, bounds, covers.AsReadOnly(), mapHash, rulesHash, matchVersion, playerSpeed, playerRadius);
         }
 
+        public static string ValidationMessage(Exception error)
+        {
+            if (error is InvalidDataException && error.Message == "Rules hash does not match the expected rules hash.")
+                return "Luật chơi client khác server; cập nhật cả hai cùng phiên bản rồi thử lại.";
+            if (error is InvalidDataException && error.Message == "Map hash does not match the expected map hash.")
+                return "Map tải về khác bản server chọn; thử tải map lại.";
+            return "Dữ liệu map không hợp lệ; thử tải lại hoặc cập nhật client.";
+        }
+
         static string ReadRuleFile(string directory, string file)
         {
             try { return File.ReadAllText(Path.Combine(directory, file)); }

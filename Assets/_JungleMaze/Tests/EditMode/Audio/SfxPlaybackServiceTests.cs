@@ -143,13 +143,15 @@ namespace JungleMaze.Tests.Audio
         }
 
         [Test]
-        public void MusicOffByDefault_ToggleSaved()
+        public void MusicEnabledForNewSettings_HonorsSavedOffToggle()
         {
-            Assert.IsFalse(_service.MusicEnabled);
-            Assert.IsFalse(_music.Enabled);
-            _service.MusicEnabled = true;
+            Assert.IsTrue(_service.MusicEnabled);
             Assert.IsTrue(_music.Enabled);
-            Assert.AreEqual(true, _settings.Music);
+            _service.MusicEnabled = false;
+            Assert.IsFalse(_music.Enabled);
+            Assert.AreEqual(false, _settings.Music);
+            var restored = new SfxPlaybackService(AudioSpec.Rules(), _output, _hud, _settings, new MusicPlan());
+            Assert.IsFalse(restored.MusicEnabled, "an existing off preference must be preserved");
         }
 
         [Test]
@@ -184,7 +186,7 @@ namespace JungleMaze.Tests.Audio
             Assert.AreEqual(1, _settings.Flushes);
             _service.Tick(2f);
             Assert.AreEqual(1, _settings.Flushes, "nothing pending, no write");
-            _service.MusicEnabled = true;
+            _service.MusicEnabled = !_service.MusicEnabled;
             _service.Tick(0.6f);
             Assert.AreEqual(2, _settings.Flushes);
             _service.SetVolume(AudioBus.Master, 0.3f);

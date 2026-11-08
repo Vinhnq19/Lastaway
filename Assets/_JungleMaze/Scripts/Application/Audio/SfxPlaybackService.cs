@@ -55,7 +55,7 @@ namespace JungleMaze.App.Audio
                 _volumes[bus] = AudioVolume.Clamp01(settings?.Load((AudioBus)bus, DefaultVolume) ?? DefaultVolume);
                 _output.SetBusDecibels((AudioBus)bus, AudioVolume.ToDecibels(_volumes[bus]));
             }
-            _musicEnabled = settings?.LoadMusicEnabled(false) ?? false;
+            _musicEnabled = settings?.LoadMusicEnabled(true) ?? true;
             _music?.SetEnabled(_musicEnabled);
             _output.SetMusicDuckDecibels(0f);
         }

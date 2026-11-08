@@ -235,7 +235,7 @@ namespace JungleMaze.Tests.PlayMode
         public IEnumerator ZoneBell_ThreeBellsOnAlert_DucksMusic_SfxUntouched()
         {
             _service.MusicEnabled = true;
-            _music.SetScreen(AppScreen.InMatch);
+            _music.SetScreen(AppScreen.MainMenu);
             for (var t = 0f; t < 1.2f; t += Time.unscaledDeltaTime) { Step(Time.unscaledDeltaTime); yield return null; }
             Assert.AreEqual(1, _manager.Music.PlayingSources);
             var sfxDb = MixerDb(AudioRuntimeSet.SfxVolumeParam);
@@ -283,7 +283,7 @@ namespace JungleMaze.Tests.PlayMode
         }
 
         [UnityTest]
-        public IEnumerator MusicOffByDefault_NoMusicSource()
+        public IEnumerator SavedMusicOff_NoMusicSource()
         {
             Assert.IsFalse(_service.MusicEnabled);
             foreach (AppScreen screen in System.Enum.GetValues(typeof(AppScreen)))
@@ -305,13 +305,20 @@ namespace JungleMaze.Tests.PlayMode
             Assert.Less(t, 1f);
             Assert.AreEqual(1, _manager.Music.PlayingSources);
             Assert.AreSame(_set.MusicFor(MusicTrack.WaitingRoom), PlayingMusicClip());
+            Assert.AreEqual("game_menu_looping", PlayingMusicClip().name);
+            for (var source = 0; source < 2; source++)
+                if (_manager.Music.Source(source).isPlaying) Assert.IsTrue(_manager.Music.Source(source).loop);
 
             for (var i = 0; i < 70; i++) { Step(); yield return null; }
             _music.SetScreen(AppScreen.InMatch);
             for (var i = 0; i < 30; i++) { Step(); yield return null; Assert.LessOrEqual(_manager.Music.PlayingSources, 2); }
             for (var i = 0; i < 40; i++) { Step(); yield return null; }
-            Assert.AreEqual(1, _manager.Music.PlayingSources, "one source after the crossfade");
-            Assert.AreSame(_set.MusicFor(MusicTrack.Match), PlayingMusicClip());
+            Assert.AreEqual(0, _manager.Music.PlayingSources, "gameplay has no background music");
+            _service.PlaySfx(SfxId.Reload);
+            Assert.GreaterOrEqual(VoiceOf(SfxId.Reload), 0, "gameplay SFX stay enabled");
+            _music.SetScreen(AppScreen.Results);
+            for (var i = 0; i < 70; i++) { Step(); yield return null; }
+            Assert.AreSame(_set.MusicFor(MusicTrack.WaitingRoom), PlayingMusicClip());
 
             _service.MusicEnabled = false;
             for (var i = 0; i < 36; i++) { Step(); yield return null; }

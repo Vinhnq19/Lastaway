@@ -484,8 +484,8 @@ namespace JungleMaze.Tests.Audio
             Assert.AreEqual(MusicTrack.WaitingRoom, MusicPlan.TrackFor(AppScreen.MainMenu));
             Assert.AreEqual(MusicTrack.WaitingRoom, MusicPlan.TrackFor(AppScreen.InRoom));
             Assert.AreEqual(MusicTrack.WaitingRoom, MusicPlan.TrackFor(AppScreen.Results));
-            Assert.AreEqual(MusicTrack.Loading, MusicPlan.TrackFor(AppScreen.Connecting));
-            Assert.AreEqual(MusicTrack.Match, MusicPlan.TrackFor(AppScreen.InMatch));
+            Assert.AreEqual(MusicTrack.None, MusicPlan.TrackFor(AppScreen.Connecting));
+            Assert.AreEqual(MusicTrack.None, MusicPlan.TrackFor(AppScreen.InMatch));
             Assert.AreEqual(MusicTrack.None, MusicPlan.TrackFor(AppScreen.Boot));
         }
 
@@ -501,7 +501,7 @@ namespace JungleMaze.Tests.Audio
         }
 
         [Test]
-        public void Crossfade1s_AtMostTwo()
+        public void EnterMatch_FadesMenuOut_ResultsRestoreMenu()
         {
             var plan = new MusicPlan();
             plan.SetEnabled(true);
@@ -516,9 +516,12 @@ namespace JungleMaze.Tests.Audio
                 t += 1f / 60f;
                 Assert.LessOrEqual(plan.AudibleSources, 2);
             }
-            Assert.AreEqual(1f, t, 0.1f);
-            Assert.AreEqual(MusicTrack.Match, plan.TrackA);
-            Assert.AreEqual(1f, plan.WeightA, 0.02f);
+            Assert.AreEqual(MusicPlan.DisableFadeSeconds, t, 0.05f);
+            Assert.AreEqual(MusicTrack.None, plan.TrackA);
+            Assert.AreEqual(0, plan.AudibleSources);
+            plan.SetScreen(AppScreen.Results);
+            plan.Tick(1f);
+            Assert.AreEqual(MusicTrack.WaitingRoom, plan.TrackA);
             Assert.AreEqual(1, plan.AudibleSources);
         }
 
@@ -538,7 +541,7 @@ namespace JungleMaze.Tests.Audio
             plan.Tick(0.3f);
             plan.SetScreen(AppScreen.Results);
             Assert.AreEqual(MusicTrack.WaitingRoom, plan.TrackA, "back to the fading track: swapped, not restarted");
-            Assert.AreEqual(0.7f, plan.WeightA, 0.02f);
+            Assert.AreEqual(0.25f, plan.WeightA, 0.02f);
         }
 
         [Test]
@@ -546,7 +549,7 @@ namespace JungleMaze.Tests.Audio
         {
             var plan = new MusicPlan();
             plan.SetEnabled(true);
-            plan.SetScreen(AppScreen.InMatch);
+            plan.SetScreen(AppScreen.MainMenu);
             for (var i = 0; i < 120; i++) plan.Tick(1f / 60f);
             plan.SetEnabled(false);
             var t = 0f;

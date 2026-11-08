@@ -81,7 +81,6 @@ namespace JungleMaze.App.Lobby
                 if (showKills) KillsText = "Hạ gục: " + self.Value.Kills;
                 SurvivalText = "Sống sót: " + ResultRow.Clock(self.Value.SurvivalSeconds);
             }
-            if (HasBots) Title += " · CÓ BOT";
             CauseText = string.IsNullOrEmpty(cause) ? null : cause;
         }
 

@@ -33,6 +33,24 @@ namespace JungleMaze.Tests.Protocol
             var directory = Path.Combine(_root,Sha(Encoding.UTF8.GetBytes(new Uri(api).AbsoluteUri.TrimEnd('/'))));
             Directory.CreateDirectory(directory); return Path.Combine(directory,hash+extension);
         }
+        [Test]
+        public void CurrentMapLoadsButWrongRulesAndWrongMapHashStayUnready()
+        {
+            var catalog = JObject.Parse(File.ReadAllText(Path.Combine(Source,"Maps/catalog.json")));
+            foreach (var entry in catalog["maps"])
+            {
+                var hash = (string)entry["mapHash"];
+                var json = File.ReadAllText(Path.Combine(Source,"Maps",(string)entry["id"],hash,"map.json"));
+                var runtime = new ClientRuntimeData(Application.streamingAssetsPath);
+                StringAssert.Contains("Luật chơi client khác server", runtime.ActivateSelectedMap(json,hash,new string('f',64)));
+                Assert.IsNull(runtime.SelectedLayout);
+                StringAssert.Contains("Map tải về khác", runtime.ActivateSelectedMap(json,new string('f',64),RulesHash()));
+                Assert.IsNull(runtime.SelectedLayout);
+                Assert.IsNull(runtime.ActivateSelectedMap(json,hash,RulesHash()));
+                Assert.IsNotNull(runtime.SelectedLayout);
+            }
+        }
+
         [UnityTest]
         public IEnumerator CorruptPreviewCannotPassHashVerification_AndRetryUsesRepairedCache()
         {

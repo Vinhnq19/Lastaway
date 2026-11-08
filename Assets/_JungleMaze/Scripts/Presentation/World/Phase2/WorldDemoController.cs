@@ -65,7 +65,7 @@ namespace JungleMaze.Presentation.World.Phase2
                 if(Input.GetKeyDown((KeyCode)((int)KeyCode.Alpha5+i)))_items.BeginUse(_id,0,++_request,i,_now);
             }
             if(Input.GetKeyDown(KeyCode.F))PickupAtCursor();
-            if(Input.GetKeyDown(KeyCode.Backspace)){var s=_items.GetSnapshot(0);if(s.ActiveWeapon>=0)_items.Drop(_id,0,++_request,s.ActiveWeapon);}
+            if(Input.GetKeyDown(KeyCode.Q)){var s=_items.GetSnapshot(0);if(s.ActiveWeapon>=0)_items.Drop(_id,0,++_request,s.ActiveWeapon);}
             if(Input.GetKeyDown(KeyCode.Space))ConfirmDemoHit();
             if(Input.GetKeyDown(KeyCode.H))RequestDamage(0,0,++_tick,30,true);
             UpdateCombat();

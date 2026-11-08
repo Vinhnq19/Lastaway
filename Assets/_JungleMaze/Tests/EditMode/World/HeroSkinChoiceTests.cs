@@ -118,6 +118,31 @@ namespace JungleMaze.Tests.World
             Assert.AreSame(idle[2], picker.Preview);
         }
 
+        [Test]
+        public void LobbyPickerSharesChoiceWithHomeWithoutInvokingLeave()
+        {
+            var (set, idle) = Set(3);
+            var prefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/_JungleMaze/Prefabs/UI/Lobby/LobbyUi.prefab");
+            var root = Own(Object.Instantiate(prefab)).GetComponent<LobbyUiRoot>();
+            var prefs = new FakeSkins { Selected = HeroSkinRules.Automatic };
+            var left = 0; root.Lobby.Leave.onClick.AddListener(() => left++);
+            var home = HeroSkinPicker.Attach(root.MainMenu, prefs, set);
+            var lobby = HeroSkinPicker.Attach(root.Lobby, prefs, set);
+            Assert.NotNull(lobby);
+            lobby.transform.Find("Next").GetComponent<Button>().onClick.Invoke();
+            Assert.AreEqual(0, prefs.Selected);
+            Assert.AreEqual("Skin 1/3", home.Label);
+            Assert.AreSame(idle[0], lobby.Preview);
+            Assert.AreEqual(0, left);
+            foreach (var icon in lobby.transform.Find("Next").GetComponentsInChildren<Image>(true))
+                if (icon.sprite != null && icon.sprite.name.StartsWith("kit_ico", System.StringComparison.Ordinal))
+                    Assert.IsFalse(icon.gameObject.activeSelf, "skin arrow must not retain Leave's red cross");
+            Assert.IsNotNull(lobby.transform.Find("PreviewClip").GetComponent<RectMask2D>());
+            var rect = (RectTransform)lobby.transform;
+            Assert.GreaterOrEqual(-rect.anchoredPosition.y, 532);
+            Assert.LessOrEqual(-rect.anchoredPosition.y + rect.sizeDelta.y, 600);
+        }
+
         private PlayerView View(HeroVisualSet set, IHeroSkinPreference prefs, JungleMaze.App.Match.MatchSession match, byte netId, out SpriteRenderer body, out PlayerModel model)
         {
             var root = Own(new GameObject("player " + netId));

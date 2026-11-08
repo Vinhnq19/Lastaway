@@ -140,7 +140,7 @@ namespace JungleMaze.Tests.PlayMode
             Assert.IsFalse(_root.Vitals.HelmetRow.Bar.gameObject.activeSelf, "helmet durability bar removed in B");
             AssertRect(Offset(HudLayoutB.AdrenalineBar, vitals), Measure(canvas, _root.Vitals.AdrenalineRow.Bar.transform), "AdrenalineRow bar");
             var quickbar = Measure(canvas, _root.Quickbar.transform);
-            Assert.IsFalse(_root.Quickbar.WeaponStrip.gameObject.activeInHierarchy, "r11: no weapon/ammo tab (Huy 07/11)");
+            Assert.IsTrue(_root.Quickbar.WeaponStrip.gameObject.activeInHierarchy, "held weapon and ammo are visible above quickbar");
             var minimap = Measure(canvas, _root.Minimap.transform);
             AssertRect(Offset(HudLayoutB.MapHole, minimap), Measure(canvas, _root.Minimap.transform.Find("MapArea")), "minimap map area = frame hole");
             Assert.That(_root.Minimap.SizePixels, Is.EqualTo(HudLayoutB.MapHole.width).Within(0.01f), "marker projection spans the hole");
@@ -177,18 +177,18 @@ namespace JungleMaze.Tests.PlayMode
         }
 
         [UnityTest]
-        public IEnumerator WeaponStrip_HiddenInR11_AmmoCodeStillRuns() // Huy 07/11: no weapon/ammo tab; code kept
+        public IEnumerator WeaponStrip_ShowsMagazineAndReserveForHeldGun()
         {
             yield return SpawnHud();
             _hud.SetHeldWeapon("CROSSBOW");
             _hud.SetAmmo(4, 30);
             Assert.IsTrue(_root.Quickbar.Ammo.activeSelf);
             Assert.IsTrue(_root.Quickbar.ReloadHint.activeSelf);
-            Assert.IsFalse(_root.Quickbar.WeaponStrip.gameObject.activeInHierarchy, "tab not drawn");
-            var area = _root.Quickbar.WeaponStrip.parent.gameObject; // TMP only parses active text: peek, then hide again
-            area.SetActive(true);
+            Assert.IsTrue(_root.Quickbar.WeaponStrip.gameObject.activeInHierarchy, "ammo must actually be drawn");
             Assert.AreEqual("4", Parsed(_root.Quickbar.WeaponStrip.Find("Ammo/Magazine").GetComponent<TMP_Text>()));
-            area.SetActive(false);
+            Assert.AreEqual("/ 30", Parsed(_root.Quickbar.WeaponStrip.Find("Ammo/Reserve").GetComponent<TMP_Text>()));
+            _hud.SetAmmo(0, 0);
+            Assert.AreEqual("0", Parsed(_root.Quickbar.WeaponStrip.Find("Ammo/Magazine").GetComponent<TMP_Text>()));
             _hud.SetHeldWeapon("HAND");
             Assert.IsFalse(_root.Quickbar.Ammo.activeSelf);
             Assert.IsFalse(_root.Quickbar.ReloadHint.activeSelf);
