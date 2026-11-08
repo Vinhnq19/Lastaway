@@ -209,6 +209,10 @@ namespace JungleMaze.Composition
             _registry.InitializeAll();
             ComposeWorld(tickRunner, match); // MAP-02 / ITM-01 authoritative world stream.
             ComposeVfx(tickRunner, match); // VFX-01, Bootstrap.Vfx.cs (after ComposeWorld: needs the throwable sessions)
+            // Bloom + colour grade + vignette in the Game scene (Docs/hvu/08_Post_Processing.vi.md). A missing asset leaves it off.
+            var postTuning = Resources.Load<JungleMaze.Presentation.Rendering.GameplayPostTuning>(JungleMaze.Presentation.Rendering.GameplayPostTuning.ResourcePath);
+            if (postTuning != null) Attach<JungleMaze.Presentation.Rendering.GameplayPostProcessing>().Configure(postTuning);
+            else _log.Warn("[Bootstrap] GameplayPostTuning missing; gameplay post-processing is off.");
 
             // View/vỏ MonoBehaviour sống cùng Bootstrap (DontDestroyOnLoad).
             Attach<NetworkManager>();

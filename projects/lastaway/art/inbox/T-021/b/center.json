@@ -1,0 +1,2662 @@
+[
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "primary",
+"trang_thai": "normal",
+"chu": "Vào phòng",
+"icon": "-",
+"lech_px": -0.36,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "primary",
+"trang_thai": "normal",
+"chu": "Vào phòng",
+"icon": "play",
+"lech_px": -0.36,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "primary",
+"trang_thai": "normal",
+"chu": "Hủy",
+"icon": "@cross_ink",
+"lech_px": -0.36,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "primary",
+"trang_thai": "normal",
+"chu": "Thoát trận",
+"icon": "@cross_red",
+"lech_px": -0.36,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "primary",
+"trang_thai": "normal",
+"chu": "Xóa phòng",
+"icon": "trash",
+"lech_px": -0.36,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "primary",
+"trang_thai": "normal",
+"chu": "Sẵn sàng",
+"icon": "check",
+"lech_px": -0.36,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "primary",
+"trang_thai": "normal",
+"chu": "Đăng nhập",
+"icon": "key",
+"lech_px": -0.36,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "primary",
+"trang_thai": "hover",
+"chu": "Vào phòng",
+"icon": "-",
+"lech_px": -0.36,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "primary",
+"trang_thai": "hover",
+"chu": "Vào phòng",
+"icon": "play",
+"lech_px": -0.36,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "primary",
+"trang_thai": "hover",
+"chu": "Hủy",
+"icon": "@cross_ink",
+"lech_px": -0.36,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "primary",
+"trang_thai": "hover",
+"chu": "Thoát trận",
+"icon": "@cross_red",
+"lech_px": -0.36,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "primary",
+"trang_thai": "hover",
+"chu": "Xóa phòng",
+"icon": "trash",
+"lech_px": -0.36,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "primary",
+"trang_thai": "hover",
+"chu": "Sẵn sàng",
+"icon": "check",
+"lech_px": -0.36,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "primary",
+"trang_thai": "hover",
+"chu": "Đăng nhập",
+"icon": "key",
+"lech_px": -0.36,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "primary",
+"trang_thai": "pressed",
+"chu": "Vào phòng",
+"icon": "-",
+"lech_px": 0.46,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "primary",
+"trang_thai": "pressed",
+"chu": "Vào phòng",
+"icon": "play",
+"lech_px": 0.46,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "primary",
+"trang_thai": "pressed",
+"chu": "Hủy",
+"icon": "@cross_ink",
+"lech_px": 0.46,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "primary",
+"trang_thai": "pressed",
+"chu": "Thoát trận",
+"icon": "@cross_red",
+"lech_px": 0.46,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "primary",
+"trang_thai": "pressed",
+"chu": "Xóa phòng",
+"icon": "trash",
+"lech_px": 0.46,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "primary",
+"trang_thai": "pressed",
+"chu": "Sẵn sàng",
+"icon": "check",
+"lech_px": 0.46,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "primary",
+"trang_thai": "pressed",
+"chu": "Đăng nhập",
+"icon": "key",
+"lech_px": 0.46,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "primary",
+"trang_thai": "disabled",
+"chu": "Vào phòng",
+"icon": "-",
+"lech_px": -0.5,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "primary",
+"trang_thai": "disabled",
+"chu": "Vào phòng",
+"icon": "play",
+"lech_px": -0.5,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "primary",
+"trang_thai": "disabled",
+"chu": "Hủy",
+"icon": "@cross_ink",
+"lech_px": -0.5,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "primary",
+"trang_thai": "disabled",
+"chu": "Thoát trận",
+"icon": "@cross_red",
+"lech_px": -0.5,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "primary",
+"trang_thai": "disabled",
+"chu": "Xóa phòng",
+"icon": "trash",
+"lech_px": -0.5,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "primary",
+"trang_thai": "disabled",
+"chu": "Sẵn sàng",
+"icon": "check",
+"lech_px": -0.5,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "primary",
+"trang_thai": "disabled",
+"chu": "Đăng nhập",
+"icon": "key",
+"lech_px": -0.5,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "secondary",
+"trang_thai": "normal",
+"chu": "Vào phòng",
+"icon": "-",
+"lech_px": -0.36,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "secondary",
+"trang_thai": "normal",
+"chu": "Vào phòng",
+"icon": "play",
+"lech_px": -0.36,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "secondary",
+"trang_thai": "normal",
+"chu": "Hủy",
+"icon": "@cross_ink",
+"lech_px": -0.36,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "secondary",
+"trang_thai": "normal",
+"chu": "Thoát trận",
+"icon": "@cross_red",
+"lech_px": -0.36,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "secondary",
+"trang_thai": "normal",
+"chu": "Xóa phòng",
+"icon": "trash",
+"lech_px": -0.36,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "secondary",
+"trang_thai": "normal",
+"chu": "Sẵn sàng",
+"icon": "check",
+"lech_px": -0.36,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "secondary",
+"trang_thai": "normal",
+"chu": "Đăng nhập",
+"icon": "key",
+"lech_px": -0.36,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "secondary",
+"trang_thai": "hover",
+"chu": "Vào phòng",
+"icon": "-",
+"lech_px": -0.36,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "secondary",
+"trang_thai": "hover",
+"chu": "Vào phòng",
+"icon": "play",
+"lech_px": -0.36,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "secondary",
+"trang_thai": "hover",
+"chu": "Hủy",
+"icon": "@cross_ink",
+"lech_px": -0.36,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "secondary",
+"trang_thai": "hover",
+"chu": "Thoát trận",
+"icon": "@cross_red",
+"lech_px": -0.36,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "secondary",
+"trang_thai": "hover",
+"chu": "Xóa phòng",
+"icon": "trash",
+"lech_px": -0.36,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "secondary",
+"trang_thai": "hover",
+"chu": "Sẵn sàng",
+"icon": "check",
+"lech_px": -0.36,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "secondary",
+"trang_thai": "hover",
+"chu": "Đăng nhập",
+"icon": "key",
+"lech_px": -0.36,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "secondary",
+"trang_thai": "pressed",
+"chu": "Vào phòng",
+"icon": "-",
+"lech_px": 0.46,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "secondary",
+"trang_thai": "pressed",
+"chu": "Vào phòng",
+"icon": "play",
+"lech_px": 0.46,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "secondary",
+"trang_thai": "pressed",
+"chu": "Hủy",
+"icon": "@cross_ink",
+"lech_px": 0.46,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "secondary",
+"trang_thai": "pressed",
+"chu": "Thoát trận",
+"icon": "@cross_red",
+"lech_px": 0.46,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "secondary",
+"trang_thai": "pressed",
+"chu": "Xóa phòng",
+"icon": "trash",
+"lech_px": 0.46,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "secondary",
+"trang_thai": "pressed",
+"chu": "Sẵn sàng",
+"icon": "check",
+"lech_px": 0.46,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "secondary",
+"trang_thai": "pressed",
+"chu": "Đăng nhập",
+"icon": "key",
+"lech_px": 0.46,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "secondary",
+"trang_thai": "disabled",
+"chu": "Vào phòng",
+"icon": "-",
+"lech_px": -0.5,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "secondary",
+"trang_thai": "disabled",
+"chu": "Vào phòng",
+"icon": "play",
+"lech_px": -0.5,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "secondary",
+"trang_thai": "disabled",
+"chu": "Hủy",
+"icon": "@cross_ink",
+"lech_px": -0.5,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "secondary",
+"trang_thai": "disabled",
+"chu": "Thoát trận",
+"icon": "@cross_red",
+"lech_px": -0.5,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "secondary",
+"trang_thai": "disabled",
+"chu": "Xóa phòng",
+"icon": "trash",
+"lech_px": -0.5,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "secondary",
+"trang_thai": "disabled",
+"chu": "Sẵn sàng",
+"icon": "check",
+"lech_px": -0.5,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "secondary",
+"trang_thai": "disabled",
+"chu": "Đăng nhập",
+"icon": "key",
+"lech_px": -0.5,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "danger",
+"trang_thai": "normal",
+"chu": "Vào phòng",
+"icon": "-",
+"lech_px": -0.36,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "danger",
+"trang_thai": "normal",
+"chu": "Vào phòng",
+"icon": "play",
+"lech_px": -0.36,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "danger",
+"trang_thai": "normal",
+"chu": "Hủy",
+"icon": "@cross_ink",
+"lech_px": -0.36,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "danger",
+"trang_thai": "normal",
+"chu": "Thoát trận",
+"icon": "@cross_red",
+"lech_px": -0.36,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "danger",
+"trang_thai": "normal",
+"chu": "Xóa phòng",
+"icon": "trash",
+"lech_px": -0.36,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "danger",
+"trang_thai": "normal",
+"chu": "Sẵn sàng",
+"icon": "check",
+"lech_px": -0.36,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "danger",
+"trang_thai": "normal",
+"chu": "Đăng nhập",
+"icon": "key",
+"lech_px": -0.36,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "danger",
+"trang_thai": "hover",
+"chu": "Vào phòng",
+"icon": "-",
+"lech_px": -0.36,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "danger",
+"trang_thai": "hover",
+"chu": "Vào phòng",
+"icon": "play",
+"lech_px": -0.36,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "danger",
+"trang_thai": "hover",
+"chu": "Hủy",
+"icon": "@cross_ink",
+"lech_px": -0.36,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "danger",
+"trang_thai": "hover",
+"chu": "Thoát trận",
+"icon": "@cross_red",
+"lech_px": -0.36,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "danger",
+"trang_thai": "hover",
+"chu": "Xóa phòng",
+"icon": "trash",
+"lech_px": -0.36,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "danger",
+"trang_thai": "hover",
+"chu": "Sẵn sàng",
+"icon": "check",
+"lech_px": -0.36,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "danger",
+"trang_thai": "hover",
+"chu": "Đăng nhập",
+"icon": "key",
+"lech_px": -0.36,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "danger",
+"trang_thai": "pressed",
+"chu": "Vào phòng",
+"icon": "-",
+"lech_px": -0.04,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "danger",
+"trang_thai": "pressed",
+"chu": "Vào phòng",
+"icon": "play",
+"lech_px": -0.04,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "danger",
+"trang_thai": "pressed",
+"chu": "Hủy",
+"icon": "@cross_ink",
+"lech_px": -0.04,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "danger",
+"trang_thai": "pressed",
+"chu": "Thoát trận",
+"icon": "@cross_red",
+"lech_px": -0.04,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "danger",
+"trang_thai": "pressed",
+"chu": "Xóa phòng",
+"icon": "trash",
+"lech_px": -0.04,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "danger",
+"trang_thai": "pressed",
+"chu": "Sẵn sàng",
+"icon": "check",
+"lech_px": -0.04,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "danger",
+"trang_thai": "pressed",
+"chu": "Đăng nhập",
+"icon": "key",
+"lech_px": -0.04,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "danger",
+"trang_thai": "disabled",
+"chu": "Vào phòng",
+"icon": "-",
+"lech_px": 0.0,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "danger",
+"trang_thai": "disabled",
+"chu": "Vào phòng",
+"icon": "play",
+"lech_px": 0.0,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "danger",
+"trang_thai": "disabled",
+"chu": "Hủy",
+"icon": "@cross_ink",
+"lech_px": 0.0,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "danger",
+"trang_thai": "disabled",
+"chu": "Thoát trận",
+"icon": "@cross_red",
+"lech_px": 0.0,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "danger",
+"trang_thai": "disabled",
+"chu": "Xóa phòng",
+"icon": "trash",
+"lech_px": 0.0,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "danger",
+"trang_thai": "disabled",
+"chu": "Sẵn sàng",
+"icon": "check",
+"lech_px": 0.0,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "S",
+"loai": "danger",
+"trang_thai": "disabled",
+"chu": "Đăng nhập",
+"icon": "key",
+"lech_px": 0.0,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "primary",
+"trang_thai": "normal",
+"chu": "Vào phòng",
+"icon": "-",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "primary",
+"trang_thai": "normal",
+"chu": "Vào phòng",
+"icon": "play",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "primary",
+"trang_thai": "normal",
+"chu": "Hủy",
+"icon": "@cross_ink",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "primary",
+"trang_thai": "normal",
+"chu": "Thoát trận",
+"icon": "@cross_red",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "primary",
+"trang_thai": "normal",
+"chu": "Xóa phòng",
+"icon": "trash",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "primary",
+"trang_thai": "normal",
+"chu": "Sẵn sàng",
+"icon": "check",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "primary",
+"trang_thai": "normal",
+"chu": "Đăng nhập",
+"icon": "key",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "primary",
+"trang_thai": "hover",
+"chu": "Vào phòng",
+"icon": "-",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "primary",
+"trang_thai": "hover",
+"chu": "Vào phòng",
+"icon": "play",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "primary",
+"trang_thai": "hover",
+"chu": "Hủy",
+"icon": "@cross_ink",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "primary",
+"trang_thai": "hover",
+"chu": "Thoát trận",
+"icon": "@cross_red",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "primary",
+"trang_thai": "hover",
+"chu": "Xóa phòng",
+"icon": "trash",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "primary",
+"trang_thai": "hover",
+"chu": "Sẵn sàng",
+"icon": "check",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "primary",
+"trang_thai": "hover",
+"chu": "Đăng nhập",
+"icon": "key",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "primary",
+"trang_thai": "pressed",
+"chu": "Vào phòng",
+"icon": "-",
+"lech_px": -0.22,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "primary",
+"trang_thai": "pressed",
+"chu": "Vào phòng",
+"icon": "play",
+"lech_px": -0.22,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "primary",
+"trang_thai": "pressed",
+"chu": "Hủy",
+"icon": "@cross_ink",
+"lech_px": -0.22,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "primary",
+"trang_thai": "pressed",
+"chu": "Thoát trận",
+"icon": "@cross_red",
+"lech_px": -0.22,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "primary",
+"trang_thai": "pressed",
+"chu": "Xóa phòng",
+"icon": "trash",
+"lech_px": -0.22,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "primary",
+"trang_thai": "pressed",
+"chu": "Sẵn sàng",
+"icon": "check",
+"lech_px": -0.22,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "primary",
+"trang_thai": "pressed",
+"chu": "Đăng nhập",
+"icon": "key",
+"lech_px": -0.22,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "primary",
+"trang_thai": "disabled",
+"chu": "Vào phòng",
+"icon": "-",
+"lech_px": 0.0,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "primary",
+"trang_thai": "disabled",
+"chu": "Vào phòng",
+"icon": "play",
+"lech_px": 0.0,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "primary",
+"trang_thai": "disabled",
+"chu": "Hủy",
+"icon": "@cross_ink",
+"lech_px": 0.0,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "primary",
+"trang_thai": "disabled",
+"chu": "Thoát trận",
+"icon": "@cross_red",
+"lech_px": 0.0,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "primary",
+"trang_thai": "disabled",
+"chu": "Xóa phòng",
+"icon": "trash",
+"lech_px": 0.0,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "primary",
+"trang_thai": "disabled",
+"chu": "Sẵn sàng",
+"icon": "check",
+"lech_px": 0.0,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "primary",
+"trang_thai": "disabled",
+"chu": "Đăng nhập",
+"icon": "key",
+"lech_px": 0.0,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "secondary",
+"trang_thai": "normal",
+"chu": "Vào phòng",
+"icon": "-",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "secondary",
+"trang_thai": "normal",
+"chu": "Vào phòng",
+"icon": "play",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "secondary",
+"trang_thai": "normal",
+"chu": "Hủy",
+"icon": "@cross_ink",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "secondary",
+"trang_thai": "normal",
+"chu": "Thoát trận",
+"icon": "@cross_red",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "secondary",
+"trang_thai": "normal",
+"chu": "Xóa phòng",
+"icon": "trash",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "secondary",
+"trang_thai": "normal",
+"chu": "Sẵn sàng",
+"icon": "check",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "secondary",
+"trang_thai": "normal",
+"chu": "Đăng nhập",
+"icon": "key",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "secondary",
+"trang_thai": "hover",
+"chu": "Vào phòng",
+"icon": "-",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "secondary",
+"trang_thai": "hover",
+"chu": "Vào phòng",
+"icon": "play",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "secondary",
+"trang_thai": "hover",
+"chu": "Hủy",
+"icon": "@cross_ink",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "secondary",
+"trang_thai": "hover",
+"chu": "Thoát trận",
+"icon": "@cross_red",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "secondary",
+"trang_thai": "hover",
+"chu": "Xóa phòng",
+"icon": "trash",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "secondary",
+"trang_thai": "hover",
+"chu": "Sẵn sàng",
+"icon": "check",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "secondary",
+"trang_thai": "hover",
+"chu": "Đăng nhập",
+"icon": "key",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "secondary",
+"trang_thai": "pressed",
+"chu": "Vào phòng",
+"icon": "-",
+"lech_px": -0.22,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "secondary",
+"trang_thai": "pressed",
+"chu": "Vào phòng",
+"icon": "play",
+"lech_px": -0.22,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "secondary",
+"trang_thai": "pressed",
+"chu": "Hủy",
+"icon": "@cross_ink",
+"lech_px": -0.22,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "secondary",
+"trang_thai": "pressed",
+"chu": "Thoát trận",
+"icon": "@cross_red",
+"lech_px": -0.22,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "secondary",
+"trang_thai": "pressed",
+"chu": "Xóa phòng",
+"icon": "trash",
+"lech_px": -0.22,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "secondary",
+"trang_thai": "pressed",
+"chu": "Sẵn sàng",
+"icon": "check",
+"lech_px": -0.22,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "secondary",
+"trang_thai": "pressed",
+"chu": "Đăng nhập",
+"icon": "key",
+"lech_px": -0.22,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "secondary",
+"trang_thai": "disabled",
+"chu": "Vào phòng",
+"icon": "-",
+"lech_px": 0.0,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "secondary",
+"trang_thai": "disabled",
+"chu": "Vào phòng",
+"icon": "play",
+"lech_px": 0.0,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "secondary",
+"trang_thai": "disabled",
+"chu": "Hủy",
+"icon": "@cross_ink",
+"lech_px": 0.0,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "secondary",
+"trang_thai": "disabled",
+"chu": "Thoát trận",
+"icon": "@cross_red",
+"lech_px": 0.0,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "secondary",
+"trang_thai": "disabled",
+"chu": "Xóa phòng",
+"icon": "trash",
+"lech_px": 0.0,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "secondary",
+"trang_thai": "disabled",
+"chu": "Sẵn sàng",
+"icon": "check",
+"lech_px": 0.0,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "secondary",
+"trang_thai": "disabled",
+"chu": "Đăng nhập",
+"icon": "key",
+"lech_px": 0.0,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "danger",
+"trang_thai": "normal",
+"chu": "Vào phòng",
+"icon": "-",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "danger",
+"trang_thai": "normal",
+"chu": "Vào phòng",
+"icon": "play",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "danger",
+"trang_thai": "normal",
+"chu": "Hủy",
+"icon": "@cross_ink",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "danger",
+"trang_thai": "normal",
+"chu": "Thoát trận",
+"icon": "@cross_red",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "danger",
+"trang_thai": "normal",
+"chu": "Xóa phòng",
+"icon": "trash",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "danger",
+"trang_thai": "normal",
+"chu": "Sẵn sàng",
+"icon": "check",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "danger",
+"trang_thai": "normal",
+"chu": "Đăng nhập",
+"icon": "key",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "danger",
+"trang_thai": "hover",
+"chu": "Vào phòng",
+"icon": "-",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "danger",
+"trang_thai": "hover",
+"chu": "Vào phòng",
+"icon": "play",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "danger",
+"trang_thai": "hover",
+"chu": "Hủy",
+"icon": "@cross_ink",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "danger",
+"trang_thai": "hover",
+"chu": "Thoát trận",
+"icon": "@cross_red",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "danger",
+"trang_thai": "hover",
+"chu": "Xóa phòng",
+"icon": "trash",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "danger",
+"trang_thai": "hover",
+"chu": "Sẵn sàng",
+"icon": "check",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "danger",
+"trang_thai": "hover",
+"chu": "Đăng nhập",
+"icon": "key",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "danger",
+"trang_thai": "pressed",
+"chu": "Vào phòng",
+"icon": "-",
+"lech_px": 0.28,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "danger",
+"trang_thai": "pressed",
+"chu": "Vào phòng",
+"icon": "play",
+"lech_px": 0.28,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "danger",
+"trang_thai": "pressed",
+"chu": "Hủy",
+"icon": "@cross_ink",
+"lech_px": 0.28,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "danger",
+"trang_thai": "pressed",
+"chu": "Thoát trận",
+"icon": "@cross_red",
+"lech_px": 0.28,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "danger",
+"trang_thai": "pressed",
+"chu": "Xóa phòng",
+"icon": "trash",
+"lech_px": 0.28,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "danger",
+"trang_thai": "pressed",
+"chu": "Sẵn sàng",
+"icon": "check",
+"lech_px": 0.28,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "danger",
+"trang_thai": "pressed",
+"chu": "Đăng nhập",
+"icon": "key",
+"lech_px": 0.28,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "danger",
+"trang_thai": "disabled",
+"chu": "Vào phòng",
+"icon": "-",
+"lech_px": -0.5,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "danger",
+"trang_thai": "disabled",
+"chu": "Vào phòng",
+"icon": "play",
+"lech_px": -0.5,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "danger",
+"trang_thai": "disabled",
+"chu": "Hủy",
+"icon": "@cross_ink",
+"lech_px": -0.5,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "danger",
+"trang_thai": "disabled",
+"chu": "Thoát trận",
+"icon": "@cross_red",
+"lech_px": -0.5,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "danger",
+"trang_thai": "disabled",
+"chu": "Xóa phòng",
+"icon": "trash",
+"lech_px": -0.5,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "danger",
+"trang_thai": "disabled",
+"chu": "Sẵn sàng",
+"icon": "check",
+"lech_px": -0.5,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "M",
+"loai": "danger",
+"trang_thai": "disabled",
+"chu": "Đăng nhập",
+"icon": "key",
+"lech_px": -0.5,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "primary",
+"trang_thai": "normal",
+"chu": "Vào phòng",
+"icon": "-",
+"lech_px": 0.4,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "primary",
+"trang_thai": "normal",
+"chu": "Vào phòng",
+"icon": "play",
+"lech_px": 0.4,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "primary",
+"trang_thai": "normal",
+"chu": "Hủy",
+"icon": "@cross_ink",
+"lech_px": 0.4,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "primary",
+"trang_thai": "normal",
+"chu": "Thoát trận",
+"icon": "@cross_red",
+"lech_px": 0.4,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "primary",
+"trang_thai": "normal",
+"chu": "Xóa phòng",
+"icon": "trash",
+"lech_px": 0.4,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "primary",
+"trang_thai": "normal",
+"chu": "Sẵn sàng",
+"icon": "check",
+"lech_px": 0.4,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "primary",
+"trang_thai": "normal",
+"chu": "Đăng nhập",
+"icon": "key",
+"lech_px": 0.4,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "primary",
+"trang_thai": "hover",
+"chu": "Vào phòng",
+"icon": "-",
+"lech_px": 0.4,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "primary",
+"trang_thai": "hover",
+"chu": "Vào phòng",
+"icon": "play",
+"lech_px": 0.4,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "primary",
+"trang_thai": "hover",
+"chu": "Hủy",
+"icon": "@cross_ink",
+"lech_px": 0.4,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "primary",
+"trang_thai": "hover",
+"chu": "Thoát trận",
+"icon": "@cross_red",
+"lech_px": 0.4,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "primary",
+"trang_thai": "hover",
+"chu": "Xóa phòng",
+"icon": "trash",
+"lech_px": 0.4,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "primary",
+"trang_thai": "hover",
+"chu": "Sẵn sàng",
+"icon": "check",
+"lech_px": 0.4,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "primary",
+"trang_thai": "hover",
+"chu": "Đăng nhập",
+"icon": "key",
+"lech_px": 0.4,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "primary",
+"trang_thai": "pressed",
+"chu": "Vào phòng",
+"icon": "-",
+"lech_px": 0.1,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "primary",
+"trang_thai": "pressed",
+"chu": "Vào phòng",
+"icon": "play",
+"lech_px": 0.1,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "primary",
+"trang_thai": "pressed",
+"chu": "Hủy",
+"icon": "@cross_ink",
+"lech_px": 0.1,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "primary",
+"trang_thai": "pressed",
+"chu": "Thoát trận",
+"icon": "@cross_red",
+"lech_px": 0.1,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "primary",
+"trang_thai": "pressed",
+"chu": "Xóa phòng",
+"icon": "trash",
+"lech_px": 0.1,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "primary",
+"trang_thai": "pressed",
+"chu": "Sẵn sàng",
+"icon": "check",
+"lech_px": 0.1,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "primary",
+"trang_thai": "pressed",
+"chu": "Đăng nhập",
+"icon": "key",
+"lech_px": 0.1,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "primary",
+"trang_thai": "disabled",
+"chu": "Vào phòng",
+"icon": "-",
+"lech_px": -0.5,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "primary",
+"trang_thai": "disabled",
+"chu": "Vào phòng",
+"icon": "play",
+"lech_px": 0.5,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "primary",
+"trang_thai": "disabled",
+"chu": "Hủy",
+"icon": "@cross_ink",
+"lech_px": 0.5,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "primary",
+"trang_thai": "disabled",
+"chu": "Thoát trận",
+"icon": "@cross_red",
+"lech_px": 0.5,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "primary",
+"trang_thai": "disabled",
+"chu": "Xóa phòng",
+"icon": "trash",
+"lech_px": 0.5,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "primary",
+"trang_thai": "disabled",
+"chu": "Sẵn sàng",
+"icon": "check",
+"lech_px": 0.5,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "primary",
+"trang_thai": "disabled",
+"chu": "Đăng nhập",
+"icon": "key",
+"lech_px": 0.5,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "secondary",
+"trang_thai": "normal",
+"chu": "Vào phòng",
+"icon": "-",
+"lech_px": 0.4,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "secondary",
+"trang_thai": "normal",
+"chu": "Vào phòng",
+"icon": "play",
+"lech_px": 0.4,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "secondary",
+"trang_thai": "normal",
+"chu": "Hủy",
+"icon": "@cross_ink",
+"lech_px": 0.4,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "secondary",
+"trang_thai": "normal",
+"chu": "Thoát trận",
+"icon": "@cross_red",
+"lech_px": 0.4,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "secondary",
+"trang_thai": "normal",
+"chu": "Xóa phòng",
+"icon": "trash",
+"lech_px": 0.4,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "secondary",
+"trang_thai": "normal",
+"chu": "Sẵn sàng",
+"icon": "check",
+"lech_px": 0.4,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "secondary",
+"trang_thai": "normal",
+"chu": "Đăng nhập",
+"icon": "key",
+"lech_px": 0.4,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "secondary",
+"trang_thai": "hover",
+"chu": "Vào phòng",
+"icon": "-",
+"lech_px": 0.4,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "secondary",
+"trang_thai": "hover",
+"chu": "Vào phòng",
+"icon": "play",
+"lech_px": 0.4,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "secondary",
+"trang_thai": "hover",
+"chu": "Hủy",
+"icon": "@cross_ink",
+"lech_px": 0.4,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "secondary",
+"trang_thai": "hover",
+"chu": "Thoát trận",
+"icon": "@cross_red",
+"lech_px": 0.4,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "secondary",
+"trang_thai": "hover",
+"chu": "Xóa phòng",
+"icon": "trash",
+"lech_px": 0.4,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "secondary",
+"trang_thai": "hover",
+"chu": "Sẵn sàng",
+"icon": "check",
+"lech_px": 0.4,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "secondary",
+"trang_thai": "hover",
+"chu": "Đăng nhập",
+"icon": "key",
+"lech_px": 0.4,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "secondary",
+"trang_thai": "pressed",
+"chu": "Vào phòng",
+"icon": "-",
+"lech_px": 0.1,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "secondary",
+"trang_thai": "pressed",
+"chu": "Vào phòng",
+"icon": "play",
+"lech_px": 0.1,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "secondary",
+"trang_thai": "pressed",
+"chu": "Hủy",
+"icon": "@cross_ink",
+"lech_px": 0.1,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "secondary",
+"trang_thai": "pressed",
+"chu": "Thoát trận",
+"icon": "@cross_red",
+"lech_px": 0.1,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "secondary",
+"trang_thai": "pressed",
+"chu": "Xóa phòng",
+"icon": "trash",
+"lech_px": 0.1,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "secondary",
+"trang_thai": "pressed",
+"chu": "Sẵn sàng",
+"icon": "check",
+"lech_px": 0.1,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "secondary",
+"trang_thai": "pressed",
+"chu": "Đăng nhập",
+"icon": "key",
+"lech_px": 0.1,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "secondary",
+"trang_thai": "disabled",
+"chu": "Vào phòng",
+"icon": "-",
+"lech_px": 0.0,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "secondary",
+"trang_thai": "disabled",
+"chu": "Vào phòng",
+"icon": "play",
+"lech_px": 0.0,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "secondary",
+"trang_thai": "disabled",
+"chu": "Hủy",
+"icon": "@cross_ink",
+"lech_px": 0.0,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "secondary",
+"trang_thai": "disabled",
+"chu": "Thoát trận",
+"icon": "@cross_red",
+"lech_px": 0.0,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "secondary",
+"trang_thai": "disabled",
+"chu": "Xóa phòng",
+"icon": "trash",
+"lech_px": 0.0,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "secondary",
+"trang_thai": "disabled",
+"chu": "Sẵn sàng",
+"icon": "check",
+"lech_px": 0.0,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "secondary",
+"trang_thai": "disabled",
+"chu": "Đăng nhập",
+"icon": "key",
+"lech_px": 0.0,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "danger",
+"trang_thai": "normal",
+"chu": "Vào phòng",
+"icon": "-",
+"lech_px": 0.4,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "danger",
+"trang_thai": "normal",
+"chu": "Vào phòng",
+"icon": "play",
+"lech_px": 0.4,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "danger",
+"trang_thai": "normal",
+"chu": "Hủy",
+"icon": "@cross_ink",
+"lech_px": 0.4,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "danger",
+"trang_thai": "normal",
+"chu": "Thoát trận",
+"icon": "@cross_red",
+"lech_px": 0.4,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "danger",
+"trang_thai": "normal",
+"chu": "Xóa phòng",
+"icon": "trash",
+"lech_px": 0.4,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "danger",
+"trang_thai": "normal",
+"chu": "Sẵn sàng",
+"icon": "check",
+"lech_px": 0.4,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "danger",
+"trang_thai": "normal",
+"chu": "Đăng nhập",
+"icon": "key",
+"lech_px": 0.4,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "danger",
+"trang_thai": "hover",
+"chu": "Vào phòng",
+"icon": "-",
+"lech_px": 0.4,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "danger",
+"trang_thai": "hover",
+"chu": "Vào phòng",
+"icon": "play",
+"lech_px": 0.4,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "danger",
+"trang_thai": "hover",
+"chu": "Hủy",
+"icon": "@cross_ink",
+"lech_px": 0.4,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "danger",
+"trang_thai": "hover",
+"chu": "Thoát trận",
+"icon": "@cross_red",
+"lech_px": 0.4,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "danger",
+"trang_thai": "hover",
+"chu": "Xóa phòng",
+"icon": "trash",
+"lech_px": 0.4,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "danger",
+"trang_thai": "hover",
+"chu": "Sẵn sàng",
+"icon": "check",
+"lech_px": 0.4,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "danger",
+"trang_thai": "hover",
+"chu": "Đăng nhập",
+"icon": "key",
+"lech_px": 0.4,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "danger",
+"trang_thai": "pressed",
+"chu": "Vào phòng",
+"icon": "-",
+"lech_px": 0.1,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "danger",
+"trang_thai": "pressed",
+"chu": "Vào phòng",
+"icon": "play",
+"lech_px": 0.1,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "danger",
+"trang_thai": "pressed",
+"chu": "Hủy",
+"icon": "@cross_ink",
+"lech_px": 0.1,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "danger",
+"trang_thai": "pressed",
+"chu": "Thoát trận",
+"icon": "@cross_red",
+"lech_px": 0.1,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "danger",
+"trang_thai": "pressed",
+"chu": "Xóa phòng",
+"icon": "trash",
+"lech_px": 0.1,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "danger",
+"trang_thai": "pressed",
+"chu": "Sẵn sàng",
+"icon": "check",
+"lech_px": 0.1,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "danger",
+"trang_thai": "pressed",
+"chu": "Đăng nhập",
+"icon": "key",
+"lech_px": 0.1,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "danger",
+"trang_thai": "disabled",
+"chu": "Vào phòng",
+"icon": "-",
+"lech_px": 0.0,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "danger",
+"trang_thai": "disabled",
+"chu": "Vào phòng",
+"icon": "play",
+"lech_px": 0.0,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "danger",
+"trang_thai": "disabled",
+"chu": "Hủy",
+"icon": "@cross_ink",
+"lech_px": 0.0,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "danger",
+"trang_thai": "disabled",
+"chu": "Thoát trận",
+"icon": "@cross_red",
+"lech_px": 0.0,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "danger",
+"trang_thai": "disabled",
+"chu": "Xóa phòng",
+"icon": "trash",
+"lech_px": 0.0,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "danger",
+"trang_thai": "disabled",
+"chu": "Sẵn sàng",
+"icon": "check",
+"lech_px": 0.0,
+"ok": true
+},
+{
+"nguon": "ho-nut",
+"cỡ": "L",
+"loai": "danger",
+"trang_thai": "disabled",
+"chu": "Đăng nhập",
+"icon": "key",
+"lech_px": 0.0,
+"ok": true
+},
+{
+"nguon": "mock b1-esc-cai-dat",
+"cỡ": "200x64",
+"loai": "secondary",
+"trang_thai": "normal",
+"chu": "Mặc định",
+"icon": "refresh",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "mock b1-esc-cai-dat",
+"cỡ": "240x64",
+"loai": "secondary",
+"trang_thai": "normal",
+"chu": "Thoát trận",
+"icon": "@cross_red",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "mock b1-esc-cai-dat",
+"cỡ": "220x64",
+"loai": "primary",
+"trang_thai": "normal",
+"chu": "Tiếp tục",
+"icon": "play",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "mock b1-esc-xac-nhan-thoat",
+"cỡ": "270x64",
+"loai": "secondary",
+"trang_thai": "normal",
+"chu": "Thoát trận",
+"icon": "@cross_red",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "mock b1-esc-xac-nhan-thoat",
+"cỡ": "270x64",
+"loai": "primary",
+"trang_thai": "normal",
+"chu": "Ở lại",
+"icon": "arrow_left",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "mock b2-bi-loai",
+"cỡ": "360x72",
+"loai": "secondary",
+"trang_thai": "normal",
+"chu": "Về sảnh",
+"icon": "home",
+"lech_px": -0.04,
+"ok": true
+},
+{
+"nguon": "mock b2-bi-loai",
+"cỡ": "360x72",
+"loai": "primary",
+"trang_thai": "normal",
+"chu": "Theo dõi",
+"icon": "eye",
+"lech_px": -0.04,
+"ok": true
+},
+{
+"nguon": "mock b2-bi-loai-het-nguoi",
+"cỡ": "360x72",
+"loai": "primary",
+"trang_thai": "disabled",
+"chu": "Theo dõi",
+"icon": "eye",
+"lech_px": -0.5,
+"ok": true
+},
+{
+"nguon": "mock b6-thang",
+"cỡ": "330x72",
+"loai": "secondary",
+"trang_thai": "normal",
+"chu": "Về sảnh",
+"icon": "home",
+"lech_px": -0.04,
+"ok": true
+},
+{
+"nguon": "mock b6-thang",
+"cỡ": "330x72",
+"loai": "primary",
+"trang_thai": "normal",
+"chu": "Chơi lại",
+"icon": "refresh",
+"lech_px": -0.04,
+"ok": true
+},
+{
+"nguon": "mock b8-mat-ket-noi",
+"cỡ": "300x64",
+"loai": "secondary",
+"trang_thai": "normal",
+"chu": "Về sảnh",
+"icon": "home",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "mock b8-mat-ket-noi",
+"cỡ": "300x64",
+"loai": "primary",
+"trang_thai": "normal",
+"chu": "Thử lại ngay",
+"icon": "refresh",
+"lech_px": 0.02,
+"ok": true
+},
+{
+"nguon": "mock b8-mat-ket-noi-that-bai",
+"cỡ": "300x64",
+"loai": "primary",
+"trang_thai": "normal",
+"chu": "Thử lại",
+"icon": "refresh",
+"lech_px": -0.48,
+"ok": true
+},
+{
+"nguon": "mock b8-mat-ket-noi-het-han",
+"cỡ": "320x64",
+"loai": "primary",
+"trang_thai": "normal",
+"chu": "Về sảnh",
+"icon": "home",
+"lech_px": -0.48,
+"ok": true
+}
+]

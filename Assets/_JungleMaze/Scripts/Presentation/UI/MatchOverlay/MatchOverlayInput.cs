@@ -1,12 +1,13 @@
 using System;
 using JungleMaze.App.MatchUi;
 using JungleMaze.Domain.MatchUi;
+using JungleMaze.Presentation.UI.Kit;
 using UnityEngine;
 
 namespace JungleMaze.Presentation.UI.MatchOverlay
 {
     /// <summary>
-    /// UI-03 keys (Q11): ESC for the menu in every match phase; while spectating ←/A and →/D change player and E jumps
+    /// UI-03 keys (Q11): ESC for the menu in every match phase (after closing the top <see cref="UiLayerStack"/> panel); while spectating ←/A and →/D change player and E jumps
     /// to the killer; during the killcam Space skips. These keys are read only in those phases, when the local player is
     /// out and no gameplay input is sent (T-8). Nothing but ESC works while the menu is open. The key source is
     /// injectable so tests press keys without the Input Manager.
@@ -26,7 +27,12 @@ namespace JungleMaze.Presentation.UI.MatchOverlay
 
         public void Poll()
         {
-            if (_keyDown(KeyCode.Escape)) { _menu.PressEscape(); return; }
+            if (_keyDown(KeyCode.Escape))
+            {
+                // CPO 07/11: an open bag or big map closes first; the menu, once open, keeps closing one layer per ESC.
+                if (_menu.IsOpen || !UiLayerStack.TryCloseTop()) _menu.PressEscape();
+                return;
+            }
             if (_flow == null || _menu.IsOpen) return;
             switch (_flow.Phase)
             {

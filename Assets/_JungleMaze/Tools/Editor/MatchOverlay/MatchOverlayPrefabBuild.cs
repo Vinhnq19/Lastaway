@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using JungleMaze.App.MatchUi;
 using JungleMaze.Presentation.UI.Hud;
 using JungleMaze.Presentation.UI.MatchOverlay;
 using TMPro;
@@ -12,10 +13,10 @@ using Object = UnityEngine.Object;
 namespace JungleMaze.EditorTools
 {
     /// <summary>
-    /// Repeatable assembly of MatchOverlay.prefab and MatchOverlaySet.asset (UI-03), run from the menu or Unity MCP.
-    /// Coordinates are Figma pixels on the 1280×720 reference canvas, y down from the top-left. Art follows
-    /// Docs/Art/Production_A/MatchOverlay/asset_mapping.json: the 19 overlay sprites plus the reused HUD and menu
-    /// sprites, tinted from the HUD palette; icons and overlays never change a rect (AC47).
+    /// Repeatable assembly of MatchOverlay.prefab, SpectatorRow.prefab and MatchOverlaySet.asset (UI-03), run from the
+    /// menu or Unity MCP. Skin A (T-023, docs/CONTRACT_UI_V1.md): the ESC menu, leave confirm, eliminated, spectator and
+    /// notice follow the T-021 mocks B1-B3 in 1080p px through <see cref="UiKit"/>. The killcam keeps its flat board
+    /// (no mock): only its text moves onto the T-027 scale. Field names on the views are unchanged.
     /// </summary>
     public static class MatchOverlayPrefabBuild
     {
@@ -28,6 +29,8 @@ namespace JungleMaze.EditorTools
         public const string OverlayArt = "Assets/_JungleMaze/Art/UI/MatchOverlay/";
         private const string HudArt = "Assets/_JungleMaze/Art/Hud/";
         private const string MenuArt = "Assets/_JungleMaze/Art/UI/Menu/";
+        /// <summary>Existing status icons the B2/B3 mocks use (man-hinh.md "Nguồn icon", not generated).</summary>
+        private const string StatusIcons = HudArt + "StatusIcons/";
 
         /// <summary>The 19 overlay sprites with their 9-slice border (px, all sides), from asset_mapping.json.</summary>
         public static readonly IReadOnlyDictionary<string, int> OverlaySprites = new Dictionary<string, int>
@@ -40,7 +43,12 @@ namespace JungleMaze.EditorTools
 
         /// <summary>Tiled across the killcam board, so it repeats instead of clamping.</summary>
         public const string TiledSprite = "KillcamGrid";
-        public const float IconSize = 28f, IconInset = 36f;
+
+        /// <summary>Cause icon per EliminationCause (Unknown, Player, Zone, LeftMatch, Disconnected).</summary>
+        public static readonly string[] CauseIcons = { "kit_icon_warn", "kit_ico_skull", "icon_zone_cause", "kit_ico_door", "kit_ico_wifi" };
+        /// <summary>Ink icons sit 40 px on the 60 px kaki plate; the colour Bo thu icon (T-028 b2-bi-loai-bo) is 60 px alone.</summary>
+        public static readonly bool[] CauseOnPlate = { true, true, false, true, true };
+        public const string WeaponCatalogPath = "Assets/_JungleMaze/Prefabs/UI/HudItemIconCatalog.asset";
 
         private const int TextSize = 15;
         private static readonly HudPalette P = HudPalette.Default;
@@ -148,78 +156,108 @@ namespace JungleMaze.EditorTools
             return r;
         }
 
-        // ---------- Eliminated (Figma v2 43:283, AC45) ----------
+        // ---------- B2 Eliminated (T-021 b2-bi-loai*, panel M 920×860 at (500,110)) ----------
 
         private static EliminatedView BuildEliminated(RectTransform parent)
         {
             var root = Screen("Eliminated", parent);
             var group = Group(root);
+            UiKit.Floor(root); // stone floor + wash (Integrator 07/11, man-hinh.md: HUD canvas is off after elimination)
             var view = root.gameObject.AddComponent<EliminatedView>();
-            var frame = Rect("Frame", root, 320, 141, 640, 417);
-            Panel(frame);
-            var title = Txt("Title", frame, 32, 28, 576, 40, "Bạn đã bị loại", 28, TextFont, TextAlignmentOptions.Center, P.Red);
-            title.fontStyle = FontStyles.Bold;
-            var rank = Txt("Rank", frame, 32, 84, 576, 64, "#4 / 10", 48, NumberFont, TextAlignmentOptions.Center, P.Amber);
-            // Icon + cause text in a centred Horizontal Layout Group (UX review), 8 px apart, sized by the text.
-            var line = Rect("CauseLine", frame, 32, 164, 576, 28);
-            var row = line.gameObject.AddComponent<HorizontalLayoutGroup>();
-            row.childAlignment = TextAnchor.MiddleCenter;
-            row.spacing = 8f;
-            row.childControlWidth = row.childControlHeight = true;
-            row.childForceExpandWidth = row.childForceExpandHeight = false;
-            var causeIcon = Icon(line, 0, 0, Overlay("CauseUnknown"));
-            var iconSize = causeIcon.gameObject.AddComponent<LayoutElement>();
-            iconSize.minWidth = iconSize.preferredWidth = iconSize.minHeight = iconSize.preferredHeight = IconSize;
-            var cause = Txt("Cause", line, 0, 0, 0, 28, "Không rõ nguyên nhân", 17, TextFont, TextAlignmentOptions.Center, P.Text);
-            var causeMax = cause.gameObject.AddComponent<LayoutElement>();
-            causeMax.flexibleWidth = 0f;
-            var kills = Txt("Kills", frame, 32, 204, 576, 24, "Hạ gục: 0", TextSize, TextFont, TextAlignmentOptions.Center, P.Muted);
-            var survival = Txt("Survival", frame, 32, 236, 576, 24, "Sống sót: 00:00", TextSize, TextFont, TextAlignmentOptions.Center, P.Muted);
-            var blocked = Txt("BlockedReason", frame, 32, 330, 576, 24, "Không còn người chơi nào để theo dõi", 13, TextFont, TextAlignmentOptions.Center, P.Muted);
-            // Absolute Figma positions: "Về menu" (461,508), "Theo dõi người khác" (599,508).
-            var home = Btn("Home", frame, 461 - 320, 508 - 141, 126, 50, "Về trang chủ", Secondary, P.Text);
-            var spectate = Btn("Spectate", frame, 599 - 320, 508 - 141, 220, 48, "Theo dõi người khác", Primary, P.Text);
+            var frame = UiKit.PlaceCentred(UiKit.Node(root, "Frame"), 500, 110, 920, 860);
+            UiKit.Panel(frame, UiKit.PanelKind.M);
+
+            // Red X + title, centred as one group.
+            var titleLine = HRow(frame, "TitleLine", 0, 60, 920, 40, 10);
+            Size(UiKit.Image(UiKit.Node(titleLine, "Icon"), "kit_icon_cross_red"), 30, 30);
+            var title = UiKit.Text(titleLine, "Title", UiKit.Tier.B1, EliminationText.Title, UiKit.Colors.Text, TextAlignmentOptions.Center);
+            // "#4" 96 + "/ 10" 40 muted, bottoms aligned, centred as one group (b2-bi-loai).
+            var rankLine = HRow(frame, "RankLine", 0, 135, 920, 110, 18);
+            rankLine.GetComponent<HorizontalLayoutGroup>().childAlignment = TextAnchor.LowerCenter;
+            var rank = UiKit.Text(rankLine, "Rank", UiKit.Tier.H1, "#4", UiKit.Colors.Text, TextAlignmentOptions.Center);
+            var rankTotal = UiKit.Text(rankLine, "RankTotal", UiKit.Tier.H2, "/ 10", UiKit.Colors.Muted, TextAlignmentOptions.Center);
+
+            // Cause card: icon in the card's left slot (kaki plate, ink icon), text to its right.
+            var causeCard = Kit(frame, "CauseCard", "kit_card_cause", 60, 280, 800, 150).rectTransform;
+            var causePlate = Kit(causeCard, "IconPlate", "kit_iconbtn_round_normal", 58, 45, 60, 60);
+            // Centre pivot, 2 px up on the plate face: the view scales it 1.5 (no plate) for the colour Bo thu icon.
+            var causeIcon = UiKit.Image(UiKit.Node(causePlate.rectTransform, "Icon"), "kit_ico_skull");
+            var ci = causeIcon.rectTransform;
+            ci.anchorMin = ci.anchorMax = ci.pivot = new Vector2(0.5f, 0.5f);
+            ci.anchoredPosition = new Vector2(0f, UiKit.Px(2));
+            ci.sizeDelta = Vector2.one * UiKit.Px(40);
+            var cause = Label(causeCard, "Cause", UiKit.Tier.B1, "Không rõ nguyên nhân", UiKit.Colors.Text, TextAlignmentOptions.MidlineLeft, 160, 0, 530, 150, true);
+            // Killer's weapon (mock: icon 68 after the name); fixed at the card's right end so a long cause line cannot push it out.
+            var causeWeapon = ArtIcon(causeCard, "WeaponIcon", null, 696, 41, 68, 68);
+            causeWeapon.gameObject.SetActive(false);
+
+            // Stat cards in a centred row: a card whose line has no data is switched off and the other recentres.
+            var stats = HRow(frame, "Stats", 0, 460, 920, 130, 20);
+            var killsCard = StatCard(stats, "KillsCard", StatusIcons + "icon_kill.png", "Kills", "0", out var kills);
+            var survivalCard = StatCard(stats, "SurvivalCard", StatusIcons + "icon_zone-timer.png", "Survival", "00:00", out var survival);
+
+            var home = KitButton(frame, "Home", UiKit.ButtonKind.Secondary, 60, 694, 360, "kit_ico_home", "Về sảnh");
+            var spectate = KitButton(frame, "Spectate", UiKit.ButtonKind.Primary, 500, 694, 360, "kit_ico_eye", "Theo dõi");
+            var blocked = Label(frame, "BlockedReason", UiKit.Tier.B2, "Không còn người chơi nào để theo dõi", UiKit.Colors.Muted, TextAlignmentOptions.Center, 60, 772, 800, 30);
+
             Set(view, "group", group);
             Set(view, "frame", frame);
             Set(view, "title", title);
             Set(view, "rank", rank);
+            Set(view, "rankTotal", rankTotal);
+            Set(view, "causePlate", causePlate);
+            Set(view, "causeWeaponIcon", causeWeapon);
+            Set(view, "weaponIcons", AssetDatabase.LoadAssetAtPath<HudItemIconCatalog>(WeaponCatalogPath));
+            SetBools(view, "causeOnPlate", CauseOnPlate);
             Set(view, "cause", cause);
             Set(view, "kills", kills);
             Set(view, "survival", survival);
+            Set(view, "killsCard", killsCard);
+            Set(view, "survivalCard", survivalCard);
             Set(view, "blockedReason", blocked);
             Set(view, "home", home);
             Set(view, "spectate", spectate);
             Set(view, "causeIcon", causeIcon);
-            // Index = EliminationCause: Unknown, Player, Zone, LeftMatch, Disconnected.
-            SetArray(view, "causeIcons", new Object[]
-                { Overlay("CauseUnknown"), Overlay("CausePlayer"), Overlay("CauseZone"), Overlay("CauseLeft"), Overlay("CauseDisconnect") });
+            var icons = new Object[CauseIcons.Length];
+            for (var i = 0; i < icons.Length; i++) icons[i] = UiKit.Sprite(CauseIcons[i]);
+            SetArray(view, "causeIcons", icons);
             return view;
         }
 
-        // ---------- Spectator (Figma v1 7:304, AC46; list G-12) ----------
+        private static GameObject StatCard(RectTransform row, string name, string iconPath, string textName, string value, out TMP_Text text)
+        {
+            var card = UiKit.Image(UiKit.Node(row, name), "kit_card_stat");
+            Size(card, 300, 130);
+            Layout(card.gameObject.AddComponent<HorizontalLayoutGroup>(), 14);
+            Size(ArtIcon(card.rectTransform, "Icon", iconPath), 56, 56);
+            text = UiKit.Text(card.rectTransform, textName, UiKit.Tier.H2, value, UiKit.Colors.Text); // value only, 40 (mock)
+            return card.gameObject;
+        }
+
+        // ---------- B3 Spectator (T-021 b3-spectator*; gameplay text floor 24) ----------
 
         private static void BuildRowPrefab()
         {
-            var row = Rect("SpectatorRow", null, 0, 0, 160, 32);
+            var go = new GameObject("SpectatorRow", typeof(RectTransform));
+            var row = (RectTransform)go.transform;
+            row.sizeDelta = new Vector2(UiKit.Px(300), UiKit.Px(48));
             try
             {
-                var bg = Img(row, P.Surface, true);
-                Skin(bg, Hud("HudRound6"), 2f); // 32 px tall row, 20 px border
-                Layer(row, "ArtEdge", Hud("AFrameEdgeSlot128"), P.Edge, 2f);
-                Layer(row, "ArtBevel", Hud("ABevelSlot128"), P.Line, 2f);
-                var outline = Layer(row, "Selected", Hud("HudRound6Stroke2"), P.Amber, 2f);
+                var bg = UiKit.Image(row, "kit_row_normal");
+                bg.raycastTarget = true;
+                var outline = UiKit.Image(UiKit.Stretch(UiKit.Node(row, "Selected")), "kit_row_selected");
                 outline.enabled = false;
-                var button = row.gameObject.AddComponent<Button>();
+                var button = go.AddComponent<Button>();
                 button.targetGraphic = bg;
-                var label = Txt("Label", row, 10, 0, 146, 32, "Người chơi", TextSize, TextFont, TextAlignmentOptions.MidlineLeft, P.Text);
-                var view = row.gameObject.AddComponent<SpectatorRowView>();
+                var label = Label(row, "Label", UiKit.Tier.B2, "Người chơi", UiKit.Colors.Text, TextAlignmentOptions.MidlineLeft, 20, 0, 270, 48, true);
+                var view = go.AddComponent<SpectatorRowView>();
                 Set(view, "button", button);
                 Set(view, "background", bg);
                 Set(view, "label", label);
                 Set(view, "selectedOutline", outline);
-                PrefabUtility.SaveAsPrefabAsset(row.gameObject, RowPrefabPath);
+                PrefabUtility.SaveAsPrefabAsset(go, RowPrefabPath);
             }
-            finally { Object.DestroyImmediate(row.gameObject); }
+            finally { Object.DestroyImmediate(go); }
         }
 
         private static SpectatorView BuildSpectator(RectTransform parent)
@@ -227,47 +265,54 @@ namespace JungleMaze.EditorTools
             var root = Screen("Spectator", parent);
             var group = Group(root);
             var view = root.gameObject.AddComponent<SpectatorView>();
+            // No UiKit.Floor here: the mock's floor stands in for the watched player's world, which must stay visible.
 
-            var block = Rect("Watching", root, 430, 24, 420, 71);
-            Skin(Img(block, P.Surface, true), Hud("HudRound10"), 1f);
-            Icon(block, 16, (71 - IconSize) / 2f, Overlay("IconSpectate"));
-            var caption = Txt("Caption", block, 16, 8, 200, 18, "Đang theo dõi", 13, TextFont, TextAlignmentOptions.MidlineLeft, P.Muted);
-            caption.margin = new Vector4(IconInset, 0, 0, 0);
-            var name = Txt("Name", block, 16, 28, 260, 34, "Người chơi", 22, TextFont, TextAlignmentOptions.MidlineLeft, P.Text);
-            name.margin = new Vector4(IconInset, 0, 0, 0);
-            name.fontStyle = FontStyles.Bold;
-            var alive = Txt("Alive", block, 270, 8, 134, 56, "Còn sống 9/10", TextSize, NumberFont, TextAlignmentOptions.MidlineRight, P.Amber);
+            // Target card at the top: eye, name (gold), alive icon + count.
+            var block = UiKit.PlaceCentred(UiKit.Node(root, "Watching"), 660, 20, 600, 120);
+            UiKit.Image(block, "kit_card_room_selected");
+            PlateIcon(block, "IconPlate", "kit_ico_eye", 100, 60, 30);
+            var name = Label(block, "Name", UiKit.Tier.B1, "Người chơi", UiKit.Colors.Gold, TextAlignmentOptions.MidlineLeft, 140, 0, 175, 120, true);
+            ArtIcon(block, "AliveIcon", StatusIcons + "icon_alive.png", 320, 42, 36, 36);
+            var alive = Label(block, "Alive", UiKit.Tier.B2, "Còn sống 9/10", UiKit.Colors.Text, TextAlignmentOptions.MidlineLeft, 366, 0, 210, 120);
 
-            var list = Rect("List", root, 24, 130, 160, 9 * 38 - 6);
+            // Alive list, at most 9 rows, 56 px apart; odd rows use the alternate row face.
+            var list = UiKit.Place(UiKit.Node(root, "List"), 30, 190, 300, 8 * 56 + 48);
             var rowPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(RowPrefabPath);
             var rows = new Object[9];
             for (var i = 0; i < rows.Length; i++)
             {
                 var go = (GameObject)PrefabUtility.InstantiatePrefab(rowPrefab, list);
-                var r = (RectTransform)go.transform;
-                r.anchorMin = r.anchorMax = r.pivot = new Vector2(0, 1);
-                r.anchoredPosition = new Vector2(0, -i * 38);
+                UiKit.Place((RectTransform)go.transform, 0, i * 56, 300, 48);
                 go.name = "Row" + (i + 1);
+                if (i % 2 == 1) go.GetComponent<Image>().sprite = UiKit.Sprite("kit_row_alt");
                 rows[i] = go.GetComponent<SpectatorRowView>();
             }
 
-            var card = Rect("TargetCard", root, 24, 560, 300, 90);
-            Panel(card);
-            var cardName = Txt("Name", card, 16, 10, 268, 24, "Người chơi", 17, TextFont, TextAlignmentOptions.MidlineLeft, P.Text);
-            var hp = Rect("Hp", card, 16, 40, 268, 18);
-            var track = Rect("Track", hp, 0, 4, 200, 10);
-            Skin(Img(track, P.Track), Hud("BarTrack"), 2f); // 10 px tall, 6 px border
-            var fill = Rect("Fill", track, 0, 0, 200, 10);
-            Stretch(fill);
-            Skin(Img(fill, P.Red), Hud("BarFill"), 2f);
-            var hpText = Txt("Value", hp, 208, 0, 60, 18, "100/100", 13, NumberFont, TextAlignmentOptions.MidlineRight, P.Text);
-            var weapon = Txt("Weapon", card, 16, 62, 268, 20, "Súng nước", 13, TextFont, TextAlignmentOptions.MidlineLeft, P.Muted);
+            var card = UiKit.Place(UiKit.Node(root, "TargetCard"), 30, 770, 460, 180);
+            UiKit.Image(card, "kit_card_stat");
+            var cardName = Label(card, "Name", UiKit.Tier.B1, "Người chơi", UiKit.Colors.Text, TextAlignmentOptions.MidlineLeft, 54, 20, 180, 40, true);
+            var weapon = Label(card, "Weapon", UiKit.Tier.B2, "Súng nước", UiKit.Colors.Muted, TextAlignmentOptions.MidlineRight, 240, 20, 140, 40, true);
+            var weaponIcon = ArtIcon(card, "WeaponIcon", null, 388, 18, 44, 44); // weapons-icons.md: 44 beside the name
+            weaponIcon.gameObject.SetActive(false);
+            var hp = UiKit.Place(UiKit.Node(card, "Hp"), 52, 84, 400, 36);
+            ArtIcon(hp, "Icon", StatusIcons + "icon_hp.png", 0, 0, 36, 36);
+            var track = Kit(hp, "Track", "kit_progress_track", 48, 6, 210, 24).rectTransform;
+            var fillArea = UiKit.Place(UiKit.Node(track, "FillArea"), 6, 4, 198, 16);
+            var fill = UiKit.Image(UiKit.Stretch(UiKit.Node(fillArea, "Fill")), "kit_progress_fill").rectTransform;
+            var hpText = Label(hp, "Value", UiKit.Tier.B2, "100/100", UiKit.Colors.Text, TextAlignmentOptions.MidlineLeft, 270, 0, 110, 36);
 
-            var keys = Rect("KeyBar", root, 440, 640, 400, 44);
-            Skin(Img(keys, P.Surface), Hud("HudRound6"), 1f);
-            Txt("Keys", keys, 12, 0, 376, 44, "Trái/A  Phải/D đổi người · E kẻ hạ bạn · ESC menu", 13, TextFont, TextAlignmentOptions.MidlineLeft, P.Text);
-            var killer = Btn("Killer", root, 852, 640, 250, 44, "Kẻ đã hạ bạn (E)", Secondary, P.Text);
-            var home = Btn("Home", root, 1114, 640, 100, 47, "Về sảnh", Primary, P.Text);
+            // Keys: A D = change player, E = the one who knocked you out (button), home = icon square.
+            var keys = UiKit.PlaceCentred(UiKit.Node(root, "KeyBar"), 540, 990, 184, 52);
+            Keycap(keys, "A", 0);
+            Keycap(keys, "D", 62);
+            PlateIcon(keys, "People", "kit_ico_people", 160, 26, 28);
+            var killerRect = UiKit.PlaceCentred(UiKit.Node(root, "Killer"), 780, 990, 124, 52);
+            var cap = Keycap(killerRect, "E", 0);
+            cap.raycastTarget = true;
+            var killer = Swap(killerRect.gameObject.AddComponent<Button>(), cap, "kit_keycap_normal", "kit_keycap_active", "kit_keycap_active", "kit_keycap_disabled");
+            PlateIcon(killerRect, "Skull", "kit_ico_skull", 100, 26, 28);
+            var home = IconButton(root, "Home", "kit_iconbtn_square", "kit_ico_home", 64);
+            UiKit.PlaceCentred((RectTransform)home.transform, 1620, 976, 64, 64);
 
             Set(view, "group", group);
             Set(view, "watchingBlock", block);
@@ -282,11 +327,20 @@ namespace JungleMaze.EditorTools
             Set(view, "cardHpFill", fill);
             Set(view, "cardHpText", hpText);
             Set(view, "cardWeapon", weapon);
+            Set(view, "cardWeaponIcon", weaponIcon);
+            Set(view, "weaponIcons", AssetDatabase.LoadAssetAtPath<HudItemIconCatalog>(WeaponCatalogPath));
             SetArray(view, "rows", rows);
             return view;
         }
 
-        // ---------- Killcam (T-5: own flat board, no world) ----------
+        private static Image Keycap(RectTransform parent, string key, float x)
+        {
+            var cap = Kit(parent, "Key" + key, "kit_keycap_normal", x, 0, 52, 52);
+            Label(cap.rectTransform, "Label", UiKit.Tier.B2, key, UiKit.Colors.Ink, TextAlignmentOptions.Center, 0, 0, 52, 46);
+            return cap;
+        }
+
+        // ---------- Killcam (T-5: own flat board, no world; no mock: text onto the scale only) ----------
 
         private static KillcamView BuildKillcam(RectTransform parent)
         {
@@ -330,6 +384,10 @@ namespace JungleMaze.EditorTools
             var title = Txt("Title", root, 340, 24, 600, 28, "Killcam · góc nhìn của kẻ hạ bạn", 17, TextFont, TextAlignmentOptions.Center, P.Text);
             var countdown = Txt("Countdown", root, 490, 56, 300, 40, "Killcam 5,0 s", 26, NumberFont, TextAlignmentOptions.Center, P.Amber);
             var skip = Btn("Skip", root, 540, 640, 200, 48, "Bỏ qua (Space)", Secondary, P.Text);
+            // T-027, gameplay floor 24: names 19.5 -> 24, title 25.5 -> 24, countdown 39 -> 40 (Chakra Petch), skip 22.5 -> 24;
+            // rects unchanged. A 24 px name (line ~32 px) is taller than its 18-unit rect: overflow, not ellipsis, so "#10" stays whole.
+            UiKit.SnapAll(root.gameObject, 24f);
+            foreach (var n in names) ((TMP_Text)n).overflowMode = TextOverflowModes.Overflow;
             Set(view, "group", group);
             Set(view, "board", board);
             Set(view, "zone", zone);
@@ -344,55 +402,53 @@ namespace JungleMaze.EditorTools
             return view;
         }
 
-        // ---------- notice line ----------
+        // ---------- notice toast (b3-spectator-chuyen: kit_toast under the target card) ----------
 
         private static OverlayNoticeView BuildNotice(RectTransform parent)
         {
-            var box = Rect("Notice", parent, 390, 136, 500, 36); // y 136: below the killcam countdown and the spectator block
+            // 640 wide, not the mock's 440: the same toast carries the long "Killcam không khả dụng: …" lines.
+            var box = UiKit.PlaceCentred(UiKit.Node(parent, "Notice"), 640, 170, 640, 70);
             var group = Group(box);
-            Skin(Img(box, P.Surface), Hud("ToastBg"), 2f); // 36 px tall, 20 px border
-            var text = Txt("Text", box, 12, 0, 476, 36, "", TextSize, TextFont, TextAlignmentOptions.Center, P.Text);
+            UiKit.Image(box, "kit_toast");
+            var text = Label(box, "Text", UiKit.Tier.B2, "", UiKit.Colors.Text, TextAlignmentOptions.Center, 24, 0, 592, 70, true);
             var view = box.gameObject.AddComponent<OverlayNoticeView>();
             Set(view, "group", group);
             Set(view, "text", text);
             return view;
         }
 
-        // ---------- ESC menu (G-10: 560 px wide, centred, ≤ 60 % of the height) ----------
-
-        private const float MenuWidth = 560f, MenuHeight = 388f, RowHeight = 48f;
+        // ---------- B1 ESC menu (b1-esc-cai-dat: popup 820×700 at (550,180), values apply at once, no Save) ----------
 
         private static MatchMenuView BuildMenu(RectTransform parent)
         {
-            var panel = Centered("MenuPanel", parent, MenuWidth, MenuHeight);
-            var group = Group(panel);
-            Panel(panel);
-            var view = panel.gameObject.AddComponent<MatchMenuView>();
-            Set(view, "group", group);
-            var title = Txt("Title", panel, 16, 16, 400, 32, "Cài đặt", 20, TextFont, TextAlignmentOptions.MidlineLeft, P.Text);
-            title.fontStyle = FontStyles.Bold;
+            var root = Screen("Menu", parent);
+            var group = Group(root);
+            UiKit.Dim(root);
+            var panel = UiKit.PlaceCentred(UiKit.Node(root, "Panel"), 550, 180, 820, 700);
+            UiKit.Panel(panel, UiKit.PanelKind.Popup);
+            var view = root.gameObject.AddComponent<MatchMenuView>();
+            Label(panel, "Title", UiKit.Tier.H2, "Cài đặt", UiKit.Colors.Gold, TextAlignmentOptions.Center, 0, 24, 820, 62);
+            var close = CloseButton(panel, 820);
 
-            var y = 56f;
-            var master = SliderRow(panel, "Master", "Âm lượng tổng", "IconVolume", y, 0f, 1f, false, out var masterValue);
-            var sfx = SliderRow(panel, "Sfx", "Hiệu ứng", "IconVolume", y += RowHeight, 0f, 1f, false, out var sfxValue);
-            var music = SliderRow(panel, "Music", "Nhạc", "IconMusic", y += RowHeight, 0f, 1f, false, out var musicValue);
-            var musicRow = music.transform.parent;
-            var musicToggle = Tgl("MusicEnabled", musicRow, 470, 12, 74, 24, "Bật");
-            var musicOff = Txt("MusicOff", musicRow, SliderX, 30, SliderWidth, 16, "Nhạc nền đang tắt", 13, TextFont, TextAlignmentOptions.MidlineLeft, P.Muted);
-            var sensitivity = SliderRow(panel, "Sensitivity", "Độ nhạy chuột", "IconMouse", y += RowHeight, 5f, 20f, true, out var sensitivityValue);
-            var shakeRow = Row(panel, "ShakeRow", y += RowHeight);
-            Icon(shakeRow, 16, (RowHeight - IconSize) / 2f, Overlay("IconShake"));
-            Txt("Label", shakeRow, LabelX, 0, 200, RowHeight, "Rung màn hình", TextSize, TextFont, TextAlignmentOptions.MidlineLeft, P.Text);
-            var shake = Tgl("ScreenShake", shakeRow, 470, 12, 74, 24, "Bật");
-
-            y += RowHeight + 12f;
-            var defaults = Btn("Defaults", panel, 16, y, 140, 48, "Mặc định", Secondary, P.Text);
-            var resume = Btn("Resume", panel, 168, y, 160, 48, "Tiếp tục", Primary, P.Text);
-            var leave = Btn("Leave", panel, 364, y, 180, 48, "Thoát trận", Danger, P.RedText);
-            ButtonIcon(leave, Overlay("IconExit"));
-            var retry = Txt("RetryNotice", panel, 16, y + 52, 528, 20, "Chưa thoát được, thử lại", 13, TextFont, TextAlignmentOptions.MidlineLeft, P.Yellow);
+            var master = SliderRow(panel, "Master", "Âm lượng", "kit_ico_sound", 142, 0f, 1f, false, out var masterValue);
+            var sfx = SliderRow(panel, "Sfx", "Hiệu ứng", "kit_ico_sound", 206, 0f, 1f, false, out var sfxValue);
+            var music = SliderRow(panel, "Music", "Nhạc nền", "kit_ico_music", 270, 0f, 1f, false, out var musicValue);
+            Kit(panel, "Divider", "kit_divider", 70, 334, 680, 14);
+            var musicRow = Row(panel, "MusicToggleRow", 348, "kit_ico_music", "Nhạc");
+            var musicToggle = KitToggle(musicRow, "MusicEnabled");
+            var musicOff = Label(musicRow, "MusicOff", UiKit.Tier.B2, MatchOverlayPresenter.MusicOffText, UiKit.Colors.Muted, TextAlignmentOptions.MidlineLeft, 290, 0, 270, 48);
+            var sensitivity = SliderRow(panel, "Sensitivity", "Chuột", null, 418, 5f, 20f, true, out var sensitivityValue);
+            var shakeRow = Row(panel, "ShakeRow", 482, "kit_ico_vibrate", "Rung");
+            var shake = KitToggle(shakeRow, "ScreenShake");
+            var retry = Label(panel, "RetryNotice", UiKit.Tier.B2, MatchOverlayPresenter.RetryText, UiKit.Colors.Gold, TextAlignmentOptions.Center, 70, 530, 680, 28);
             retry.gameObject.SetActive(false);
 
+            Kit(panel, "Footer", "kit_dialog_footer", 47, 557, 726, 96);
+            var defaults = KitButton(panel, "Defaults", UiKit.ButtonKind.Secondary, 60, 573, 200, "kit_ico_refresh", "Mặc định");
+            var leave = KitButton(panel, "Leave", UiKit.ButtonKind.Exit, 280, 573, 240, null, "Thoát trận");
+            var resume = KitButton(panel, "Resume", UiKit.ButtonKind.Primary, 540, 573, 220, "kit_ico_play", "Tiếp tục");
+
+            Set(view, "group", group);
             Set(view, "master", master);
             Set(view, "sfx", sfx);
             Set(view, "music", music);
@@ -408,52 +464,187 @@ namespace JungleMaze.EditorTools
             Set(view, "defaults", defaults);
             Set(view, "leave", leave);
             Set(view, "retryNotice", retry);
+            Set(view, "close", close);
             return view;
         }
 
-        // UX review: the label starts clear of the 28 px icon (x 54) and the slider moves right (258 / 342 at 1920).
-        private const float LabelX = 54f, SliderX = 172f, SliderWidth = 228f;
-
-        private static Slider SliderRow(RectTransform panel, string name, string label, string icon, float y, float min, float max, bool whole, out TMP_Text value)
+        /// <summary>One 48 px setting row of the popup: icon on a kaki plate (none for Chuột, as in the mock) + label.</summary>
+        private static RectTransform Row(RectTransform panel, string name, float top, string icon, string label)
         {
-            var row = Row(panel, name + "Row", y);
-            Icon(row, 16, (RowHeight - IconSize) / 2f, Overlay(icon));
-            var text = Txt("Label", row, LabelX, 0, SliderX - LabelX - 8f, RowHeight, label, TextSize, TextFont, TextAlignmentOptions.MidlineLeft, P.Text);
-            text.textWrappingMode = TextWrappingModes.Normal; // a long label takes two lines beside the icon, rect unchanged
-            var slider = Sld(name, row, SliderX, 10, SliderWidth, 20, min, max, whole);
-            value = Txt("Value", row, 410, 0, 54, RowHeight, whole ? "1,0" : "100%", TextSize, NumberFont, TextAlignmentOptions.MidlineRight, P.Text);
+            var row = UiKit.Place(UiKit.Node(panel, name), 70, top, 680, 48);
+            if (icon != null) PlateIcon(row, "IconPlate", icon, 14, 24, 24);
+            Label(row, "Label", UiKit.Tier.B2, label, UiKit.Colors.Text, TextAlignmentOptions.MidlineLeft, 44, 0, 250, 48);
+            return row;
+        }
+
+        private static Slider SliderRow(RectTransform panel, string name, string label, string icon, float top, float min, float max, bool whole, out TMP_Text value)
+        {
+            var row = Row(panel, name + "Row", top, icon, label);
+            var slider = KitSlider(row, name, min, max, whole);
+            value = Label(row, "Value", UiKit.Tier.B2, whole ? "1,0" : "100%", UiKit.Colors.Muted, TextAlignmentOptions.MidlineRight, 580, 0, 100, 48);
             return slider;
         }
 
-        private static RectTransform Row(RectTransform panel, string name, float y) => Rect(name, panel, 0, y, MenuWidth, RowHeight);
+        /// <summary>Track 270×16, fill 10 tall inside it, knob 31×32 centred on the value (mock slider()).</summary>
+        private static Slider KitSlider(RectTransform row, string name, float min, float max, bool whole)
+        {
+            var r = UiKit.Place(UiKit.Node(row, name), 300, 8, 270, 32);
+            Kit(r, "Background", "kit_slider_track", 0, 8, 270, 16).raycastTarget = true;
+            var fillArea = UiKit.Place(UiKit.Node(r, "FillArea"), 0, 11, 270, 10);
+            var fill = UiKit.Image(UiKit.Node(fillArea, "Fill"), "kit_slider_fill").rectTransform;
+            var handleArea = UiKit.Stretch(UiKit.Node(r, "HandleArea"));
+            var handle = UiKit.Image(UiKit.Node(handleArea, "Handle"), "kit_knob");
+            handle.raycastTarget = true;
+            var s = r.gameObject.AddComponent<Slider>();
+            fill.anchorMin = Vector2.zero; fill.anchorMax = new Vector2(0, 1); fill.pivot = new Vector2(0, 0.5f); fill.sizeDelta = Vector2.zero; fill.anchoredPosition = Vector2.zero;
+            var h = handle.rectTransform;
+            h.anchorMin = Vector2.zero; h.anchorMax = new Vector2(0, 1); h.pivot = new Vector2(0.5f, 0.5f); h.sizeDelta = new Vector2(UiKit.Px(31), 0); h.anchoredPosition = Vector2.zero;
+            s.fillRect = fill;
+            s.handleRect = h;
+            s.targetGraphic = handle;
+            s.direction = Slider.Direction.LeftToRight;
+            s.minValue = min;
+            s.maxValue = max;
+            s.wholeNumbers = whole;
+            s.value = max;
+            return s;
+        }
 
-        // ---------- leave confirm (Q7) ----------
+        /// <summary>kit_toggle_off is the target graphic; kit_toggle_on (same size) fades in over it when on.</summary>
+        private static Toggle KitToggle(RectTransform row, string name)
+        {
+            var off = Kit(row, name, "kit_toggle_off", 566, 0, 114, 48);
+            off.raycastTarget = true;
+            var on = Kit(off.rectTransform, "On", "kit_toggle_on", 0, 0, 114, 48);
+            var t = off.gameObject.AddComponent<Toggle>();
+            t.targetGraphic = off;
+            t.graphic = on;
+            t.isOn = true;
+            return t;
+        }
+
+        // ---------- B1 leave confirm (b1-esc-xac-nhan-thoat: popup 700×380 at (610,350)) ----------
 
         private static LeaveConfirmView BuildConfirm(RectTransform parent)
         {
-            var root = Rect("LeaveConfirm", parent, 0, 0, 1280, 720);
-            Stretch(root);
+            var root = Screen("LeaveConfirm", parent);
             var group = Group(root);
-            Img(root, P.Scrim, true);
-            var box = Centered("Box", root, 420, 190);
-            Panel(box);
-            box.GetComponent<Image>().color = new Color(P.Surface.r, P.Surface.g, P.Surface.b, 1f); // opaque: ESC text must not show through
+            UiKit.Dim(root);
+            var box = UiKit.PlaceCentred(UiKit.Node(root, "Box"), 610, 350, 700, 380);
+            UiKit.Panel(box, UiKit.PanelKind.Popup);
             var view = root.gameObject.AddComponent<LeaveConfirmView>();
-            var title = Txt("Title", box, 20, 18, 380, 30, "Thoát trận?", 20, TextFont, TextAlignmentOptions.MidlineLeft, P.Text);
-            title.fontStyle = FontStyles.Bold;
-            var message = Txt("Message", box, 20, 52, 380, 44, "Bạn sẽ bị loại khỏi trận.", TextSize, TextFont, TextAlignmentOptions.TopLeft, P.Muted);
+            Label(box, "Title", UiKit.Tier.H2, "Thoát trận?", UiKit.Colors.Gold, TextAlignmentOptions.Center, 0, 24, 700, 62);
+            var close = CloseButton(box, 700);
+            var message = Label(box, "Message", UiKit.Tier.B2, "Bạn sẽ bị loại khỏi trận.", UiKit.Colors.Text, TextAlignmentOptions.Center, 60, 150, 580, 50);
             message.textWrappingMode = TextWrappingModes.Normal;
-            var stay = Btn("Stay", box, 20, 122, 180, 48, "Ở lại", Primary, P.Text);
-            var confirm = Btn("Confirm", box, 220, 122, 180, 48, "Thoát", Danger, P.RedText);
-            ButtonIcon(confirm, Overlay("IconExit"));
+            Kit(box, "Footer", "kit_dialog_footer", 47, 237, 606, 96);
+            var confirm = KitButton(box, "Confirm", UiKit.ButtonKind.Exit, 60, 253, 270, null, "Thoát trận");
+            var stay = KitButton(box, "Stay", UiKit.ButtonKind.Primary, 370, 253, 270, "kit_ico_arrow_left", "Ở lại");
             Set(view, "group", group);
             Set(view, "message", message);
             Set(view, "confirm", confirm);
             Set(view, "stay", stay);
+            Set(view, "close", close);
             return view;
         }
 
-        // ---------- helpers (y down from the parent's top-left) ----------
+        // ---------- kit helpers (1080p px of the mock, y down from the parent's top-left) ----------
+
+        private static Image Kit(RectTransform parent, string name, string sprite, float x, float y, float w, float h) =>
+            UiKit.Image(UiKit.Place(UiKit.Node(parent, name), x, y, w, h), sprite);
+
+        /// <summary>An existing Art icon (not a kit sprite), Simple, aspect kept.</summary>
+        private static Image ArtIcon(RectTransform parent, string name, string path, float x = 0, float y = 0, float w = 0, float h = 0)
+        {
+            var img = UiKit.Place(UiKit.Node(parent, name), x, y, w, h).gameObject.AddComponent<Image>();
+            if (path != null) img.sprite = Load(path); // null: sprite set at runtime (weapon icons)
+            img.preserveAspect = true;
+            img.raycastTarget = false;
+            return img;
+        }
+
+        private static TextMeshProUGUI Label(RectTransform parent, string name, UiKit.Tier tier, string value, Color color,
+            TextAlignmentOptions align, float x, float y, float w, float h, bool ellipsis = false)
+        {
+            var t = UiKit.Text(parent, name, tier, value, color, align);
+            UiKit.Place(t.rectTransform, x, y, w, h);
+            if (ellipsis) t.overflowMode = TextOverflowModes.Ellipsis;
+            return t;
+        }
+
+        private static Button KitButton(RectTransform parent, string name, UiKit.ButtonKind kind, float x, float y, float w, string icon, string label)
+        {
+            var b = UiKit.Button(parent, name, kind, UiKit.ButtonSize.M, w, icon, label);
+            UiKit.Place((RectTransform)b.transform, x, y, w, (int)UiKit.ButtonSize.M);
+            return b;
+        }
+
+        /// <summary>Ink icon on a round kaki plate (s + 20), 2 px up on the plate face (mock ico()). Returns the icon.</summary>
+        private static Image PlateIcon(RectTransform parent, string name, string icon, float cx, float cy, float s)
+        {
+            var pw = s + 20f;
+            var plate = Kit(parent, name, "kit_iconbtn_round_normal", cx - pw / 2f, cy - pw / 2f, pw, pw);
+            return Kit(plate.rectTransform, "Icon", icon, 10, 8, s, s);
+        }
+
+        private static Button Swap(Button b, Image face, string normal, string hover, string pressed, string disabled)
+        {
+            b.targetGraphic = face;
+            b.transition = Selectable.Transition.SpriteSwap;
+            b.spriteState = new SpriteState
+            {
+                highlightedSprite = UiKit.Sprite(hover),
+                selectedSprite = UiKit.Sprite(normal),
+                pressedSprite = UiKit.Sprite(pressed),
+                disabledSprite = UiKit.Sprite(disabled),
+            };
+            return b;
+        }
+
+        /// <summary>Square or round icon button: kit_iconbtn_* in 4 states, ink icon 62 % of the side, 3 px up (mock iconsq()).</summary>
+        private static Button IconButton(RectTransform parent, string name, string family, string icon, float size)
+        {
+            var face = Kit(parent, name, family + "_normal", 0, 0, size, size);
+            face.raycastTarget = true;
+            var b = Swap(face.gameObject.AddComponent<Button>(), face, family + "_normal", family + "_hover", family + "_pressed", family + "_disabled");
+            var k = Mathf.Round(size * 0.62f);
+            Kit(face.rectTransform, "Icon", icon, (size - k) / 2f, (size - k) / 2f - 3f, k, k);
+            return b;
+        }
+
+        /// <summary>Close (kit_close 52, red X 26 on the face) at the popup's top right (mock close_btn()).</summary>
+        private static Button CloseButton(RectTransform popup, float popupWidth)
+        {
+            var face = Kit(popup, "Close", "kit_close_normal", popupWidth - 86f, 29, 52, 52);
+            face.raycastTarget = true;
+            var b = Swap(face.gameObject.AddComponent<Button>(), face, "kit_close_normal", "kit_close_hover", "kit_close_pressed", "kit_close_disabled");
+            Kit(face.rectTransform, "Icon", "kit_icon_cross_red", 13, 11, 26, 26);
+            return b;
+        }
+
+        private static RectTransform HRow(RectTransform parent, string name, float x, float y, float w, float h, float spacingPx)
+        {
+            var r = UiKit.Place(UiKit.Node(parent, name), x, y, w, h);
+            Layout(r.gameObject.AddComponent<HorizontalLayoutGroup>(), spacingPx);
+            return r;
+        }
+
+        private static void Layout(HorizontalLayoutGroup g, float spacingPx)
+        {
+            g.childAlignment = TextAnchor.MiddleCenter;
+            g.spacing = UiKit.Px(spacingPx);
+            g.childControlWidth = g.childControlHeight = true;
+            g.childForceExpandWidth = g.childForceExpandHeight = false;
+        }
+
+        private static void Size(Component c, float wPx, float hPx)
+        {
+            var le = c.gameObject.AddComponent<LayoutElement>();
+            le.minWidth = le.preferredWidth = UiKit.Px(wPx);
+            le.minHeight = le.preferredHeight = UiKit.Px(hPx);
+        }
+
+        // ---------- killcam helpers (canvas units, y down from the parent's top-left) ----------
 
         internal static RectTransform Rect(string name, Transform parent, float x, float y, float w, float h)
         {
@@ -528,54 +719,9 @@ namespace JungleMaze.EditorTools
             return b;
         }
 
-        internal static Slider Sld(string name, Transform parent, float x, float y, float w, float h, float min, float max, bool whole)
-        {
-            var r = Rect(name, parent, x, y, w, h);
-            var background = Rect("Background", r, 0, h * 0.35f, w, h * 0.3f);
-            Skin(Img(background, P.Track, true), Hud("BarTrack"), 2f); // 6 px tall, 6 px border
-            var fillArea = Rect("FillArea", r, 0, h * 0.35f, w, h * 0.3f);
-            var fill = Rect("Fill", fillArea, 0, 0, 0, h * 0.3f);
-            Skin(Img(fill, P.Amber), Hud("BarFill"), 2f);
-            var handleArea = Rect("HandleArea", r, 0, 0, w, h);
-            var handle = Rect("Handle", handleArea, 0, 0, h, h);
-            var handleImage = Img(handle, P.Text, true);
-            handleImage.sprite = Overlay("SliderHandle");
-            var s = r.gameObject.AddComponent<Slider>();
-            fill.anchorMin = Vector2.zero; fill.anchorMax = new Vector2(0, 1); fill.pivot = new Vector2(0, 0.5f); fill.sizeDelta = Vector2.zero; fill.anchoredPosition = Vector2.zero;
-            handle.anchorMin = Vector2.zero; handle.anchorMax = new Vector2(0, 1); handle.pivot = new Vector2(0.5f, 0.5f); handle.sizeDelta = new Vector2(h, 0); handle.anchoredPosition = Vector2.zero;
-            s.fillRect = fill;
-            s.handleRect = handle;
-            s.targetGraphic = handleImage;
-            s.direction = Slider.Direction.LeftToRight;
-            s.minValue = min;
-            s.maxValue = max;
-            s.wholeNumbers = whole;
-            s.value = max;
-            return s;
-        }
+        // ---------- killcam art (asset_mapping.json) ----------
 
-        internal static Toggle Tgl(string name, Transform parent, float x, float y, float w, float h, string label)
-        {
-            var r = Rect(name, parent, x, y, w, h);
-            var box = Rect("Background", r, 0, 0, h, h);
-            var bg = Img(box, P.Line, true);
-            Skin(bg, Overlay("ToggleBox"), 2f); // 24 px box, 12 px border
-            var check = Rect("Checkmark", box, 4, 4, h - 8, h - 8);
-            var checkImage = Img(check, P.Amber);
-            checkImage.sprite = Overlay("ToggleCheck");
-            Txt("Label", r, h + 8, 0, w - h - 8, h, label, TextSize, TextFont, TextAlignmentOptions.MidlineLeft, P.Text);
-            var t = r.gameObject.AddComponent<Toggle>();
-            t.targetGraphic = bg;
-            t.graphic = checkImage;
-            t.isOn = true;
-            return t;
-        }
-
-        // ---------- art (asset_mapping.json) ----------
-
-        private static Sprite Primary => Load(MenuArt + "ButtonPrimary.png");
         private static Sprite Secondary => Load(MenuArt + "ButtonSecondary.png");
-        private static Sprite Danger => Load(MenuArt + "ButtonDanger.png");
         private static Sprite Overlay(string name) => Load(OverlayArt + name + ".png");
         private static Sprite Hud(string name) => Load(HudArt + name + ".png");
 
@@ -596,7 +742,7 @@ namespace JungleMaze.EditorTools
             return image;
         }
 
-        /// <summary>A stretched, non-raycast overlay child over <paramref name="parent"/>'s own Image (edge, bevel, selection).</summary>
+        /// <summary>A stretched, non-raycast overlay child over <paramref name="parent"/>'s own Image (outline, mark).</summary>
         private static Image Layer(RectTransform parent, string name, Sprite sprite, Color color, float pixelsPerUnitMultiplier)
         {
             var r = Rect(name, parent, 0, 0, 0, 0);
@@ -604,35 +750,19 @@ namespace JungleMaze.EditorTools
             return Skin(Img(r, color), sprite, pixelsPerUnitMultiplier);
         }
 
-        /// <summary>HudRound10 base tinted Surface, then dark edge and light bevel (base → edge → bevel), behind the content.</summary>
-        private static void Panel(RectTransform block)
-        {
-            Skin(Img(block, P.Surface, true), Hud("HudRound10"), 1f);
-            Layer(block, "ArtEdge", Hud("AFrameEdge96"), P.Edge, 1f);
-            Layer(block, "ArtBevel", Hud("ABevel96"), P.Line, 1f);
-        }
-
-        /// <summary>A 28 px colored icon at (x, y) in <paramref name="parent"/>, untinted.</summary>
-        private static Image Icon(RectTransform parent, float x, float y, Sprite sprite)
-        {
-            var image = Img(Rect("Icon", parent, x, y, IconSize, IconSize), Color.white);
-            image.sprite = sprite;
-            image.preserveAspect = true;
-            return image;
-        }
-
-        /// <summary>Icon at the button's left edge; the label keeps centring in the space right of it.</summary>
-        private static void ButtonIcon(Button button, Sprite sprite)
-        {
-            var r = (RectTransform)button.transform;
-            Icon(r, 14, (r.sizeDelta.y - IconSize) / 2f, sprite);
-            button.GetComponentInChildren<TMP_Text>().margin = new Vector4(IconInset, 0, 0, 0);
-        }
-
         internal static void Set(Object target, string field, Object value)
         {
             var so = new SerializedObject(target);
             so.FindProperty(field).objectReferenceValue = value;
+            so.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        private static void SetBools(Object target, string field, bool[] values)
+        {
+            var so = new SerializedObject(target);
+            var array = so.FindProperty(field);
+            array.arraySize = values.Length;
+            for (var i = 0; i < values.Length; i++) array.GetArrayElementAtIndex(i).boolValue = values[i];
             so.ApplyModifiedPropertiesWithoutUndo();
         }
 

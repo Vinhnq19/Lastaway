@@ -1,0 +1,12 @@
+Image 1 is the current approved button sheet: smooth, clean, chunky raised buttons (a FACE, a thin bright top edge line, and a darker BASE below), 3 rows x 4 columns, 4 states per row. Keep the same smooth clean pixel style, hard 1 px dark outline, same chamfered silhouette, same grid layout, same state logic (NORMAL, HOVER, PRESSED shorter and sunk, DISABLED flat grey) and the same magenta background rules. Image 2 shows the pale ivory-tan stone rim of the game's UI panels at 5x: the new button color must be taken from THAT stone, soft and calm, NOT harsh or saturated.
+
+Draw ONE sprite sheet on a flat solid magenta background (#FF00FF, no gradient, never used inside a piece), at least 60 px of pure magenta between pieces and around the border. No text, no letters, no icons. 3 rows x 4 columns of wide buttons about 4:1 aspect, all same size and silhouette, empty.
+
+IMPORTANT: the button must be only SLIGHTLY raised: the BASE (the darker lower ledge) is thin, about 6 percent of the total button height. PRESSED: the face moves down by almost the full base so the base is almost gone (about 1/3 of normal), face slightly darker, top edge line gone, silhouette a little shorter, still clearly pressed. HOVER: face about 6 percent lighter, same base. DISABLED: flat desaturated grey #8A877D face, base a 1 px line.
+
+IVORY STONE palette (sampled from the UI stone rim): face upper #E3D9B8, face lower #D2C49C, top edge highlight line #F2EAD0, base #9C8C66, 1 px outline #1A1510. Very light speckle only, no cracks, no moss, no gradients: 2 to 3 hard tone steps.
+
+ROW 1 PRIMARY: muted desaturated gold face (upper #DDBE70, lower #C9A24F, top edge #EBD58E, base #8A6A28).
+ROW 2 SECONDARY: ivory stone as above.
+ROW 3 DESTRUCTIVE: muted desaturated red face (upper #CF8478, lower #BC6A5F, top edge #E0A096, base #7A3B34); calm, not bright.
+All three keep the same smooth style; light faces so dark text will be readable.

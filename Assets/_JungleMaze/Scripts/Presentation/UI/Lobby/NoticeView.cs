@@ -10,9 +10,18 @@ namespace JungleMaze.Presentation.UI.Lobby
         [SerializeField] private TMP_Text title;
         [SerializeField] private TMP_Text message;
         [SerializeField] private Button home;
+        [Tooltip("Skin A: cross for a load error (A7), disconnect icon for a lost match (B8).")]
+        [SerializeField] private GameObject loadErrorIcon;
+        [SerializeField] private GameObject disconnectIcon;
 
         public TMP_Text Title => title;
         public TMP_Text Message => message;
         public Button Home => home;
+
+        public void ShowKind(bool loadError)
+        {
+            if (loadErrorIcon != null) loadErrorIcon.SetActive(loadError);
+            if (disconnectIcon != null) disconnectIcon.SetActive(!loadError);
+        }
     }
 }

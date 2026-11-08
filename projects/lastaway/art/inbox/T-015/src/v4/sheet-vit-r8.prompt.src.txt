@@ -1,0 +1,9 @@
+Image 1 is our current sprite sheet; its top piece is the VITALS-FRAME (olive carved-stone rim with small corner ornaments, interior with three inset rows). Keep EXACTLY the same outer frame as that piece: rim thickness, olive stone texture with joint lines, dark outline, chamfered corners, small square Greek-key corner blocks, small moss tufts at the four corners, aspect ratio 2.05 : 1.
+
+Draw ONE piece on a flat solid magenta background (#FF00FF, no gradient, at least 80 px of magenta around it), drawn large and sharp, not cropped: the new VITALS-FRAME where the interior is NOT divided by any lines. REMOVE all the inset rounded-rectangle row borders, all carved separator lines and all raised ledges. The interior is a flat smooth slab split into THREE horizontal bands that differ ONLY by shade, with hard straight edges between bands and no line, no groove, no highlight, no shadow at the band edges:
+- top band (about 30 percent of the interior height): DARK warm brown-grey, #2a2720
+- middle band (about 37 percent of the interior height): clearly LIGHTER warm brown-grey, #4b4639
+- bottom band (about 33 percent of the interior height): DARK warm brown-grey, #2a2720
+The bands run edge to edge across the full inner width, right up to the thin dark groove inside the rim. Almost no grain or texture inside the bands, no cracks.
+
+NO text, NO numbers, NO icons, NO bars, NO slots. Empty frame only.

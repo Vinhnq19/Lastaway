@@ -1,0 +1,10 @@
+Use your image generation tool to create ONE image as described below, and copy the generated file AS-IS (no cropping, no resizing, no padding) to:
+D:\Lastaway\projects\lastaway\art\inbox\T-026\src\gen2\nut-v2cr2.png
+Do not write any other files and do not post-process the image. Use only the built-in image tool, never the OpenAI API, curl or python.
+
+Image 1 is the current button sheet. Keep EVERYTHING in image 1 exactly the same: the 3 x 4 layout, button shapes and sizes, silhouettes, base thickness, plates, rivets, runes, brick lines, cracks, moss specks, outlines, magenta background and state logic (normal, hover, pressed shorter, disabled flat grey). Images 2 and 3 are only style references (the game concept and its close crops). Change ONLY the following, to make white text readable on the faces:
+1. Row 2 brick stone becomes darker: upper #6F675D, lower #5F574E, base #3E372F, keep mortar lines and cracks.
+2. Row 1 wood face keeps its look but is a little darker (#6E4F30), brass brackets unchanged.
+3. HOVER faces are only about 8 percent lighter than NORMAL, NOT more.
+4. PRESSED faces slightly darker than NORMAL. Row 3 unchanged.
+Disabled buttons stay flat grey #6b6a63.

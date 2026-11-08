@@ -1,0 +1,6 @@
+Use your image generation tool to create ONE image as described below, and copy the generated file AS-IS (no cropping, no resizing, no padding) to:
+D:\Lastaway\projects\lastaway\art\inbox\T-028-unity-pack\src\gen\mapbg.png
+Do not write any other files and do not post-process the image. Use only the built-in image tool, never the OpenAI API, curl or python.
+
+Draw ONE square UI plate for a big-map screen in a pixel-art survival game: a dark ground fill (#1F1D18, almost flat, with very faint stone grain), framed by a thin khaki border (#5A5646 inner line plus a thin #B09A66 outer line, about 2 percent of the width), square corners with a tiny bevel. No vines, no text, no icons, no grid, flat center. Same material and style as the attached khaki stone UI kit sprites (ref-panel.png, ref-toast.png), but simpler and thinner.
+Draw it large and centered, filling about 90 percent of the canvas. Background: perfectly flat solid magenta #FF00FF, nothing else.

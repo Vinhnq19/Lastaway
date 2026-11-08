@@ -4,7 +4,7 @@ using JungleMaze.Domain.Balance;
 namespace JungleMaze.App.Combat
 {
     /// <summary>
-    /// Runtime view of one of the ten client weapons, built from its balance definition. Read-only for consumers;
+    /// Runtime view of a client weapon, built from its balance definition. Read-only for consumers;
     /// <see cref="WeaponController"/> changes magazine, reserve and cooldown.
     /// </summary>
     public sealed class CombatWeaponSlot
@@ -46,6 +46,7 @@ namespace JungleMaze.App.Combat
         public bool Available { get; }
         public WeaponCategory Category { get; }
         public bool IsRanged => Category == WeaponCategory.Ranged;
+        public bool SemiAutomatic => Definition != null && Definition.Stats.SemiAutomatic;
         public float Range { get; }
         public float ArcDegrees { get; }
         public float StunSeconds { get; }

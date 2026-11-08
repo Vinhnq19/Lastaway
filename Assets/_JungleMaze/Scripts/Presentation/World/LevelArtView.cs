@@ -33,6 +33,8 @@ namespace JungleMaze.Presentation.World
         [SerializeField] private MapGridView grid;
         [Tooltip("Material dùng shader JungleMaze/Sprite Hit Flash cho vật phá được.")]
         [SerializeField] private Material hitFlashMaterial;
+        [Tooltip("Trong trận vẽ map bằng sprite Lit (mặc định của Renderer 2D) để Point Light 2D trên map chiếu được; tắt để giữ Unlit như Level Editor.")]
+        [SerializeField] private bool litInGame = true;
 
         /// <summary>True khi art Level Editor đang hiện: cover đã có hình Cainos, không vẽ khối cover kiểu cũ.</summary>
         public static bool CoversDrawn { get; private set; }
@@ -250,6 +252,8 @@ namespace JungleMaze.Presentation.World
                 if (art != null && (p.Group == LevelItemGroup.WorldObject || p.BreaksInGame))
                     _worldObjects[Key(p.Bounds.MinX, p.Bounds.MinY)] = art;
             }
+            // Ánh nắng và đèn đặt theo map (Docs/hvu/08_Post_Processing.vi.md); cần map vẽ bằng sprite Lit.
+            if (litInGame) MapLights.Build(doc, _root, occupied, Resources.Load<GameplayPostTuning>(GameplayPostTuning.ResourcePath));
             _active = this;
             _built = true;
         }
@@ -306,10 +310,13 @@ namespace JungleMaze.Presentation.World
             return art;
         }
 
-        /// <summary>Cùng material Unlit với Level Editor để màu trong trận giống hệt lúc xếp map (không bị ánh sáng 2D nhuộm).</summary>
+        /// <summary>
+        /// Trong trận giữ material mặc định (Sprite-Lit của Renderer 2D) để Point Light 2D trên map chiếu lên map; khi
+        /// tắt <see cref="litInGame"/> thì dùng material Unlit của Level Editor (màu giống hệt lúc xếp map).
+        /// </summary>
         private void UseEditorMaterial(Renderer renderer)
         {
-            if (catalog.SpriteMaterial != null) renderer.sharedMaterial = catalog.SpriteMaterial;
+            if (!litInGame && catalog.SpriteMaterial != null) renderer.sharedMaterial = catalog.SpriteMaterial;
         }
 
         /// <summary>Cùng cách chọn mẫu hình theo seed và ô như Level Editor, để game và editor giống hệt nhau.</summary>

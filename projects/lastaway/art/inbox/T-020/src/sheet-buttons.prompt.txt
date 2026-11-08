@@ -1,0 +1,19 @@
+Use your image generation tool to create ONE image as described below, and copy the generated file AS-IS (no cropping, no resizing, no padding) to:
+D:\Lastaway\projects\lastaway\art\inbox\T-020\src\sheet-buttons.png
+Do not write any other files and do not post-process the image. Use only the built-in image tool, never the OpenAI API, curl or python.
+
+Image 1 is the approved pixel-art HUD style (carved olive-grey stone frames with dark outline, small square Greek-key corner blocks, small moss tufts, flat dark warm brown-grey stone interior, gold #FFDC6E accents). Image 2 is the sprite sheet of the empty frames in the same style. Draw a UI-kit sprite sheet of BUTTONS in exactly this style and pixel scale.
+
+Flat solid magenta background (#FF00FF, no gradient, no shadow, never inside a piece), at least 60 px of pure magenta between pieces and around the border. NO text, NO numbers, NO icons inside the buttons (empty label area). Every piece sharp, not cropped.
+
+TWELVE wide buttons in a grid of 3 columns by 4 rows, every button the SAME size, aspect ratio 3.75 : 1 (width : height), with a thin carved olive stone rim, dark outline, chamfered corners, and a tiny corner nub or tiny moss tuft only on 2 diagonal corners (keep it small and simple, buttons are small UI):
+Columns (type):
+1. PRIMARY: interior warm gold-tan stone (about #8a6a2c to #b08a3a), gold rim highlight. This is the main call-to-action.
+2. SECONDARY: interior dark warm brown-grey stone (#2b2821 to #3a352b), olive-tan rim, like the HUD panels.
+3. DANGER: interior deep muted red stone (#5a1f1f to #7a2a26), same olive rim with a slight red tint.
+Rows (state), top to bottom:
+1. NORMAL.
+2. HOVER: the same button but brighter fill (about 20 percent lighter) and a bright gold #FFDC6E thin glowing line just inside the rim.
+3. PRESSED: the same button but darker fill (about 20 percent darker), the rim bevel inverted so it looks pushed in, no gold line.
+4. DISABLED: the same button fully desaturated to grey-brown (#3a3834 interior, rim muted grey-olive), low contrast, no gold.
+The button shapes, rim thickness and corner nubs are identical across all twelve; only fill color and state treatment differ.

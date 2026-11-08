@@ -10,7 +10,7 @@ namespace JungleMaze.App.MatchUi
     /// </summary>
     public static class EliminationText
     {
-        public const string Title = "Bạn đã bị loại";
+        public const string Title = "BỊ LOẠI"; // mock B2 đã duyệt (CPO 07/11)
 
         public static string Rank(in EliminationInfo info) => info.HasRank ? "#" + info.Rank + " / " + info.StartCount : null;
 

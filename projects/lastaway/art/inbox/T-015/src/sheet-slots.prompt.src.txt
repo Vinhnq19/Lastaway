@@ -1,0 +1,10 @@
+The attached image is a concept screenshot of our pixel-art battle royale HUD in the 'Carved Stone' skin: mossy grey-brown stone slabs with incised glyph borders, small green moss tufts on the corners, thin gold accents, a dark outer edge and a light highlight bevel on the inner edge.
+
+TASK: draw a clean UI-kit sprite sheet of EMPTY pieces of exactly that skin (same stone, same moss, same gold, same crisp pixel-art look, same edge treatment), each piece isolated on a perfectly flat solid magenta background (#FF00FF, no gradient, no noise, no shadow, no glow, magenta must not appear inside any piece). Pieces are laid out in a grid with at least 80 px of pure magenta between them and around the sheet border. No text, no numbers, no icons, no characters, no game world. Interiors of the pieces must be a SOLID flat very dark stone color (about #23282a) with NO texture, NO pattern, NO dashed lines, so they can be stretched. Draw each piece large and sharp. Do not crop any piece.
+
+PIECES (left to right, top to bottom):
+1. SLOT-EMPTY: one empty square item slot, 1:1, a dark recessed square set into a thin carved stone rim, no dashed lines.
+2. SLOT-SELECTED: the same square slot but highlighted: a bright warm gold rim and a faint warm inner glow, still 1:1, still empty inside.
+3. BAR-TRACK: an empty horizontal bar groove, aspect about 10:1, dark recessed channel with a thin stone rim and rounded square ends, empty inside (dark).
+4. BAR-FILL-WHITE: a horizontal bar fill piece of the same aspect and the same inner size as the groove interior, pure flat white (#FFFFFF) with a very subtle 1px darker bottom edge, rounded square ends, so the game can tint it red or yellow.
+5. AMMO-PLATE: a small horizontal stone plaque, aspect about 5:1, with small notched ends, solid dark interior, gold hairline accent.

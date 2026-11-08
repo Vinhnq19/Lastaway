@@ -20,6 +20,15 @@ namespace JungleMaze.Presentation.UI.Lobby
             group.blocksRaycasts = visible;
         }
 
+        /// <summary>Skin A progress bar: the fill stretches to <paramref name="share"/> of its track; hidden when empty.</summary>
+        protected static void SetFill(RectTransform fill, float share)
+        {
+            if (fill == null) return;
+            share = Mathf.Clamp01(share);
+            fill.anchorMax = new Vector2(share, 1f);
+            fill.gameObject.SetActive(share > 0.01f);
+        }
+
         /// <summary>Visible but inert: Home under the join modal.</summary>
         public void ShowUnder()
         {

@@ -1,88 +1,652 @@
 using System;
-using JungleMaze.Domain.Hud;
 using JungleMaze.Presentation.UI.Hud;
 using JungleMaze.Presentation.UI.Hud.Feedback;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
-using Object=UnityEngine.Object;
+using Object = UnityEngine.Object;
+using Tier = JungleMaze.EditorTools.UiKit.Tier;
 
 namespace JungleMaze.EditorTools
 {
-    /// <summary>Repeatable prefab assembly for the approved feedback layout, invoked through Unity MCP.</summary>
+    /// <summary>
+    /// HUD feedback layer (B9, T-022 skin A): hit marker, damage arcs, offscreen danger arrows with seconds, effect chips
+    /// (max 6), pickup list, "Đang dùng" strip, bomb/trap banner and the low-HP vignette under the HUD. Geometry is 1080p
+    /// px from mock T-021/b/b9-phan-hoi-hud.png and the T-028 pack table (b9-phan-hoi-hud.md); UiKit.Px divides by 1.5.
+    /// Damage arc, danger arrow and vignette keep their own red (Huy 07/11). Run after "Apply layout B + skin A".
+    /// Idempotent: removes and rebuilds only the feedback nodes.
+    /// </summary>
     public static class HudFeedbackPrefabBuild
     {
-        private const string Ui="Assets/_JungleMaze/Prefabs/UI/";
-        private static TMP_FontAsset TextFont=>AssetDatabase.LoadAssetAtPath<TMP_FontAsset>("Assets/_JungleMaze/Art/Fonts/TMP/HudText SDF.asset");
-        private static TMP_FontAsset NumberFont=>AssetDatabase.LoadAssetAtPath<TMP_FontAsset>("Assets/_JungleMaze/Art/Fonts/TMP/HudNumber SDF.asset");
-        private static Sprite Sprite(string name)=>AssetDatabase.LoadAssetAtPath<Sprite>("Assets/_JungleMaze/Art/Hud/"+name+".png");
-        /// <summary>Raised after a rebuild so art bindings (UiArt editor tool) are re-applied to the regenerated prefabs.</summary>
+        private const string Ui = "Assets/_JungleMaze/Prefabs/UI/";
+        private const string HudPath = Ui + "Hud.prefab";
+        private const string ZoneIconPath = "Assets/_JungleMaze/Art/Hud/StatusIcons/icon_zone-timer.png";
+
+#pragma warning disable 67
+        /// <summary>
+        /// Kept so UiArtAssetBuild still compiles; no longer raised (T-022): its direction A pass (ToastBg, EffectFrame,
+        /// DangerBanner sprites, "QuickBar/WeaponStrip" frame) would overwrite the kit skin built here.
+        /// </summary>
         public static event Action AfterBuild;
+#pragma warning restore 67
+
+        /// <summary>
+        /// Stacked fx_vignette layers at low HP (art alpha 0.38 at the edge: 1 layer 0.38, 2 layers 1-(1-0.38)^2 = 0.62; the
+        /// centre stays clear either way). 2 = proposal after the Play check (22% HP faint on bright grass); set 1 to compare.
+        /// </summary>
+        public static int VignetteLayers = 2;
+
         [MenuItem("Jungle Maze/HUD/Build Feedback Layer")]
         public static void Build()
         {
-            BuildChildPrefabs();BuildCatalog();BuildSlot();
-            var go=PrefabUtility.LoadPrefabContents(Ui+"Hud.prefab");
-            try{
-                var core=go.GetComponent<HudRoot>();var old=go.GetComponent<HudFeedbackRoot>();if(old!=null)Object.DestroyImmediate(old);
-                foreach(var name in new[]{"EffectsRow","PickupFeed","DangerBanner","FeedbackOverlay"}){var child=go.transform.Find(name);if(child!=null)Object.DestroyImmediate(child.gameObject);}
-                var previousUse=core.Quickbar.transform.Find("UseActionStrip");if(previousUse!=null)Object.DestroyImmediate(previousUse.gameObject);
-                var feedback=go.AddComponent<HudFeedbackRoot>();var root=(RectTransform)go.transform;
-                var palette=new SerializedObject(core);palette.FindProperty("palette").FindPropertyRelative("Green").colorValue=HudPalette.Default.Green;palette.FindProperty("palette").FindPropertyRelative("HitMarker").colorValue=Color.white;palette.FindProperty("palette").FindPropertyRelative("DangerFill").colorValue=HudPalette.Default.DangerFill;palette.ApplyModifiedPropertiesWithoutUndo();
-                var stripGroup=core.Quickbar.WeaponStrip.GetComponent<CanvasGroup>();if(stripGroup==null)stripGroup=core.Quickbar.WeaponStrip.gameObject.AddComponent<CanvasGroup>();stripGroup.alpha=1;Set(core.Quickbar,"weaponStripGroup",stripGroup);
-                // The original slot prefab is nested in Hud; sync its new serialized overlay reference on each instance.
-                for(var i=0;i<core.Quickbar.SlotViewCount;i++){
-                    var slot=core.Quickbar.GetSlotView(i);var frame=slot.transform.Find("InUseFrame");
-                    if(frame==null){var rect=Rect("InUseFrame",slot.transform,Vector2.zero,Vector2.zero,Vector2.zero,new Vector2(64,64));frame=rect;var img=Image(rect,"HudRound6Stroke2");img.enabled=false;}
-                    Set(slot,"inUseFrame",frame.GetComponent<Image>());
+            BuildChipPrefab();
+            BuildToastPrefab();
+            BuildArcPrefab();
+            BuildArrowPrefab();
+            BuildCatalog();
+            BuildSlotPrefab();
+            KeyCapTypeScale();
+
+            var go = PrefabUtility.LoadPrefabContents(HudPath);
+            try
+            {
+                var core = go.GetComponent<HudRoot>();
+                var root = (RectTransform)go.transform;
+                var old = go.GetComponent<HudFeedbackRoot>();
+                if (old != null) Object.DestroyImmediate(old);
+                foreach (var name in new[] { "EffectsRow", "PickupFeed", "DangerBanner", "FeedbackOverlay", "HudKillFeed" }) Remove(root, name);
+                for (var child = root.Find("LowHpVignette"); child != null; child = root.Find("LowHpVignette")) Object.DestroyImmediate(child.gameObject);
+                Remove(core.Quickbar.transform, "UseActionStrip");
+
+                SetPalette(core);
+                WeaponStripGroup(core);
+                SlotInUseFrames(core);
+
+                var feedback = go.AddComponent<HudFeedbackRoot>();
+                Vignette(root, core);
+                Set(feedback, "effectRow", EffectRow(root));
+                Set(feedback, "pickupFeed", PickupFeed(root));
+                Set(feedback, "useAction", UseStrip(core));
+                Set(feedback, "dangerBanner", Banner(root));
+                Overlay(root, feedback);
+                KillFeed(root);
+                Set(feedback, "catalog", AssetDatabase.LoadAssetAtPath<HudEffectCatalog>(Ui + "HudEffectCatalog.asset"));
+
+                // Modal panels (HudPanelsBuild) stay above the feedback layer.
+                foreach (var name in new[] { "HudInventory", "HudBigMap" })
+                {
+                    var panel = root.Find(name);
+                    if (panel != null) panel.SetAsLastSibling();
                 }
-                var effects=Rect("EffectsRow",root,Vector2.zero,Vector2.zero,new Vector2(24,196),new Vector2(294,58));effects.gameObject.AddComponent<Canvas>();var row=effects.gameObject.AddComponent<EffectRowView>();var chips=new Object[6];
-                for(var i=0;i<6;i++){var child=Instantiate("HudEffectChip",effects);child.anchoredPosition=new Vector2(i*50,0);chips[i]=child.GetComponent<EffectChipView>();}SetArray(row,"chips",chips);
-                var pickup=Rect("PickupFeed",root,new Vector2(1,0),new Vector2(1,0),new Vector2(-24,24),new Vector2(141,132));var feed=pickup.gameObject.AddComponent<PickupFeedView>();var toasts=new Object[3];
-                for(var i=0;i<3;i++){var child=Instantiate("HudPickupToast",pickup);child.anchorMin=child.anchorMax=new Vector2(1,0);child.pivot=new Vector2(1,0);child.anchoredPosition=new Vector2(0,(2-i)*37);toasts[i]=child.GetComponent<PickupToastView>();}SetArray(feed,"rows",toasts);
-                var overflow=Rect("Overflow",pickup,new Vector2(1,1),new Vector2(1,1),Vector2.zero,new Vector2(92,21));var obg=Image(overflow,"HudRound6");var og=Group(overflow);var ol=Text("Label",overflow,4,2,84,17,"+2 món khác",TextFont);Set(feed,"overflowGroup",og);Set(feed,"overflowLabel",ol);Set(feed,"overflowBackground",obg);
-                var use=Rect("UseActionStrip",core.Quickbar.transform,new Vector2(0,1),new Vector2(0,1),new Vector2(53,-6),new Vector2(458,32));use.gameObject.AddComponent<Canvas>();var ubg=Image(use,"HudRound6");var ug=Group(use);var uv=use.gameObject.AddComponent<UseActionView>();
-                var ul=Text("Label",use,15,7,132,18,"Đang dùng",TextFont);ul.characterSpacing=-1;var us=Text("Seconds",use,306,7,34,18,"0.5s",NumberFont);var hint=Text("Hint",use,344,8,112,18,"Di chuyển để hủy",TextFont);var ufill=Bar(use,156,13,140,6);
-                Set(uv,"group",ug);Set(uv,"label",ul);Set(uv,"seconds",us);Set(uv,"hint",hint);Set(uv,"fill",ufill);Set(uv,"background",ubg);
-                var danger=Rect("DangerBanner",root,new Vector2(.5f,1),new Vector2(.5f,1),new Vector2(.5f,-24),new Vector2(301,40));var dbg=Image(danger,"HudRound6");var dg=Group(danger);var dv=danger.gameObject.AddComponent<DangerBannerView>();var border=Rect("Border",danger,Vector2.zero,Vector2.zero,Vector2.zero,new Vector2(301,40));var db=Image(border,"HudRound6Stroke1");
-                var dl=Text("Label",danger,12,8,110,24,"! Bom nổ sau",TextFont);var ds=Text("Seconds",danger,122,8,28,24,"2s",NumberFont);var suffix=Text("Direction",danger,152,9,137,22,"· hướng Tây Nam, 4 ô",TextFont);
-                Set(dv,"group",dg);Set(dv,"label",dl);Set(dv,"timer",ds);Set(dv,"suffix",suffix);Set(dv,"background",dbg);Set(dv,"border",db);
-                var overlay=Rect("FeedbackOverlay",root,new Vector2(.5f,.5f),new Vector2(.5f,.5f),Vector2.zero,new Vector2(1280,720));overlay.gameObject.AddComponent<Canvas>();
-                var hit=Rect("HitMarker",overlay,new Vector2(.5f,.5f),new Vector2(.5f,.5f),Vector2.zero,new Vector2(56,56));var hg=Group(hit);var hv=hit.gameObject.AddComponent<HitMarkerView>();var ticks=new Object[4];
-                for(var i=0;i<4;i++){var signX=i%2==0?-1:1;var signY=i<2?-1:1;var tick=Rect("Tick"+i,hit,new Vector2(.5f,.5f),new Vector2(.5f,.5f),new Vector2(signX*17,signY*17),new Vector2(14,3));tick.localEulerAngles=new Vector3(0,0,signX*signY*45);ticks[i]=Image(tick,null);}Set(hv,"group",hg);SetArray(hv,"ticks",ticks);
-                var arcs=new Object[4];for(var i=0;i<4;i++){var child=Instantiate("HudDamageArc",overlay);child.anchorMin=child.anchorMax=child.pivot=new Vector2(.5f,.5f);child.anchoredPosition=Vector2.zero;arcs[i]=child.GetComponent<DamageArcView>();}
-                var arrows=new Object[3];for(var i=0;i<3;i++){var child=Instantiate("HudDangerArrow",overlay);child.anchorMin=child.anchorMax=child.pivot=new Vector2(.5f,.5f);child.anchoredPosition=Vector2.zero;arrows[i]=child.GetComponent<DangerArrowView>();}
-                Set(feedback,"catalog",AssetDatabase.LoadAssetAtPath<HudEffectCatalog>(Ui+"HudEffectCatalog.asset"));Set(feedback,"useAction",uv);Set(feedback,"effectRow",row);Set(feedback,"pickupFeed",feed);Set(feedback,"hitMarker",hv);Set(feedback,"dangerBanner",dv);SetArray(feedback,"damageArcs",arcs);SetArray(feedback,"dangerArrows",arrows);
-                foreach(var graphic in go.GetComponentsInChildren<Graphic>(true))graphic.raycastTarget=false;
-                core.ApplyPalette();PrefabUtility.SaveAsPrefabAsset(go,Ui+"Hud.prefab");
-            }finally{PrefabUtility.UnloadPrefabContents(go);}
+                foreach (var graphic in go.GetComponentsInChildren<Graphic>(true)) graphic.raycastTarget = false;
+                core.ApplyPalette();
+                PrefabUtility.SaveAsPrefabAsset(go, HudPath);
+            }
+            finally
+            {
+                PrefabUtility.UnloadPrefabContents(go);
+            }
             AssetDatabase.SaveAssets();
-            AfterBuild?.Invoke();
         }
-        private static void BuildSlot()
+
+        // ---------- Hud.prefab parts ----------
+
+        private static void SetPalette(HudRoot core)
         {
-            var slot=PrefabUtility.LoadPrefabContents(Ui+"HudSlot.prefab");try{var frame=slot.transform.Find("InUseFrame");if(frame!=null)Object.DestroyImmediate(frame.gameObject);var r=Rect("InUseFrame",slot.transform,Vector2.zero,Vector2.zero,Vector2.zero,new Vector2(64,64));var img=Image(r,"HudRound6Stroke2");img.color=HudPalette.Default.Amber;img.enabled=false;Set(slot.GetComponent<QuickbarSlotView>(),"inUseFrame",img);PrefabUtility.SaveAsPrefabAsset(slot,Ui+"HudSlot.prefab");}finally{PrefabUtility.UnloadPrefabContents(slot);}
+            var palette = new SerializedObject(core).FindProperty("palette");
+            palette.FindPropertyRelative("Green").colorValue = HudPalette.Default.Green;
+            palette.FindPropertyRelative("HitMarker").colorValue = Color.white;
+            palette.FindPropertyRelative("DangerFill").colorValue = HudPalette.Default.DangerFill;
+            palette.serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
+
+        private static void WeaponStripGroup(HudRoot core)
+        {
+            var strip = core.Quickbar.WeaponStrip;
+            var group = strip.GetComponent<CanvasGroup>();
+            if (group == null) group = strip.gameObject.AddComponent<CanvasGroup>();
+            group.alpha = 1;
+            Set(core.Quickbar, "weaponStripGroup", group);
+        }
+
+        /// <summary>The slot prefab is nested in Hud; sync each instance's in-use overlay reference.</summary>
+        private static void SlotInUseFrames(HudRoot core)
+        {
+            for (var i = 0; i < core.Quickbar.SlotViewCount; i++)
+            {
+                var slot = core.Quickbar.GetSlotView(i);
+                var frame = slot.transform.Find("InUseFrame");
+                if (frame == null)
+                {
+                    var rect = Node(slot.transform, "InUseFrame");
+                    rect.anchorMin = rect.anchorMax = rect.pivot = Vector2.zero;
+                    rect.sizeDelta = new Vector2(64, 64);
+                    LegacyImage(rect, "HudRound6Stroke2").enabled = false;
+                    frame = rect;
+                }
+                Set(slot, "inUseFrame", frame.GetComponent<Image>());
+            }
+        }
+
+        /// <summary>
+        /// fx_vignette over the whole screen, <see cref="VignetteLayers"/> stacked, first children so they draw under every
+        /// HUD block; VitalsView turns them on at low HP.
+        /// </summary>
+        private static void Vignette(RectTransform root, HudRoot core)
+        {
+            var layers = new Image[Mathf.Max(1, VignetteLayers)];
+            for (var i = 0; i < layers.Length; i++)
+            {
+                var t = UiKit.Stretch(UiKit.Node(root, "LowHpVignette"));
+                t.SetSiblingIndex(i);
+                layers[i] = UiKit.Image(t, "fx_vignette");
+                layers[i].preserveAspect = false; // 1920x1080 art stretched to the screen like the mock
+                layers[i].enabled = false;
+            }
+            Set(core.Vitals, "lowHpVignette", layers[0]);
+            var extra = new Object[layers.Length - 1];
+            for (var i = 1; i < layers.Length; i++) extra[i - 1] = layers[i];
+            SetArray(core.Vitals, "lowHpVignetteExtra", extra);
+        }
+
+        /// <summary>
+        /// Kill feed top-left (mock: kit_killfeed_panel at (15, 34), rows killer 24 px + weapon icon 32 + victim, 44 px
+        /// apart, text from x 37). Not wired to data (no all-players kill source yet); hidden until <c>Push</c>.
+        /// </summary>
+        private static void KillFeed(RectTransform root)
+        {
+            var host = UiKit.Stretch(UiKit.Node(root, "HudKillFeed"));
+            host.SetSiblingIndex(Mathf.Max(1, VignetteLayers)); // above the vignette, under the other blocks
+            var view = host.gameObject.AddComponent<HudKillFeedView>();
+            var panel = UiKit.Place(UiKit.Node(host, "Panel"), 15, 34, 270, 154);
+            UiKit.Image(panel, "kit_killfeed_panel");
+            var so = new SerializedObject(view);
+            var rows = so.FindProperty("rows");
+            rows.arraySize = 3;
+            for (var i = 0; i < 3; i++)
+            {
+                var row = UiKit.Place(UiKit.Node(panel, "Row" + (i + 1)), 0, 11 + i * 44, 270, 44);
+                var killer = UiKit.Text(row, "Killer", Tier.B2, "Hào", UiKit.Colors.Text);
+                UiKit.Place(killer.rectTransform, 22, 0, 60, 44);
+                var weapon = UiKit.Place(UiKit.Node(row, "Weapon"), 94, 6, 32, 32).gameObject.AddComponent<Image>();
+                weapon.preserveAspect = true;
+                var victim = UiKit.Text(row, "Victim", Tier.B2, "Linh", UiKit.Colors.Text);
+                UiKit.Place(victim.rectTransform, 138, 0, 60, 44);
+                var e = rows.GetArrayElementAtIndex(i);
+                e.FindPropertyRelative("Root").objectReferenceValue = row;
+                e.FindPropertyRelative("Killer").objectReferenceValue = killer;
+                e.FindPropertyRelative("Weapon").objectReferenceValue = weapon;
+                e.FindPropertyRelative("Victim").objectReferenceValue = victim;
+                row.gameObject.SetActive(false);
+            }
+            so.FindProperty("panel").objectReferenceValue = panel;
+            foreach (var (field, px) in new[] { ("textLeft", 22f), ("iconGap", 12f), ("iconSize", 32f), ("rowHeight", 44f), ("padTop", 11f), ("minWidth", 270f), ("extraWidth", 70f) })
+                so.FindProperty(field).floatValue = UiKit.Px(px);
+            so.ApplyModifiedPropertiesWithoutUndo();
+            panel.gameObject.SetActive(false);
+        }
+
+        /// <summary>
+        /// Chips 116 px on a 124 px step, icon 76 + seconds tag 60×36 under it (mock: first chip centre x 90, icon y 730,
+        /// tag y 790). Three per line so six never reach the clear centre (x 480): chips 0-2 on the mock line, 3-5 above.
+        /// </summary>
+        private static EffectRowView EffectRow(RectTransform root)
+        {
+            var row = Anchored(UiKit.Node(root, "EffectsRow"), new Vector2(0, 0), 32, 1080 - 808, 3 * 124 - 8, 2 * 116 + 8);
+            row.gameObject.AddComponent<Canvas>();
+            var view = row.gameObject.AddComponent<EffectRowView>();
+            var chips = new Object[6];
+            for (var i = 0; i < chips.Length; i++)
+            {
+                var chip = InstantiatePrefab("HudEffectChip", row);
+                UiKit.Place(chip, i % 3 * 124, (1 - i / 3) * 124, 116, 116);
+                chips[i] = chip.GetComponent<EffectChipView>();
+            }
+            SetArray(view, "chips", chips);
+            return view;
+        }
+
+        /// <summary>
+        /// Pickup toasts, bottom-right (T-022 R3, T-028 b9 "toast nhặt": kit_toast 308×92, icon 72, name + ×n): step 98,
+        /// newest at the bottom, 46 px above the screen bottom and 20 px from the right; "+n món khác" tag above. The tag
+        /// is 180 wide, not the mock's 90: the logic text carries "món khác".
+        /// </summary>
+        private static PickupFeedView PickupFeed(RectTransform root)
+        {
+            var feed = Anchored(UiKit.Node(root, "PickupFeed"), new Vector2(1, 0), -20, 46, PickupW, PickupH);
+            var view = feed.gameObject.AddComponent<PickupFeedView>();
+            var rows = new Object[3];
+            for (var i = 0; i < rows.Length; i++)
+            {
+                var row = InstantiatePrefab("HudPickupToast", feed);
+                row.anchorMin = row.anchorMax = row.pivot = new Vector2(1, 0);
+                row.anchoredPosition = new Vector2(0, (2 - i) * UiKit.Px(ToastStep));
+                rows[i] = row.GetComponent<PickupToastView>();
+            }
+            SetArray(view, "rows", rows);
+            SetFloat(view, "rowStep", UiKit.Px(ToastStep));
+
+            var overflow = UiKit.Node(feed, "Overflow");
+            overflow.anchorMin = overflow.anchorMax = overflow.pivot = Vector2.one;
+            overflow.anchoredPosition = Vector2.zero;
+            overflow.sizeDelta = new Vector2(UiKit.Px(180), UiKit.Px(36));
+            var tag = UiKit.Image(overflow, "kit_tag_neutral");
+            var group = Group(overflow);
+            var label = UiKit.Text(overflow, "Label", Tier.B2, "+2 món khác", UiKit.Colors.Text, TextAlignmentOptions.Center);
+            UiKit.Stretch(label.rectTransform);
+            Set(view, "overflowGroup", group);
+            Set(view, "overflowLabel", label);
+            Set(view, "overflowBackground", tag);
+            return view;
+        }
+
+        /// <summary>
+        /// "Đang dùng" strip above the quick bar, centred on the screen (mock: toast 620×64 at y 850, icon 52, progress
+        /// 360×24, seconds Gold). Widened to 860: the UI-01 label and the "Di chuyển để hủy" hint stay readable (tests).
+        /// </summary>
+        private static UseActionView UseStrip(HudRoot core)
+        {
+            // Quick bar top-left is (668, 950); the strip's top-left (530, 850) relative to it.
+            var use = UiKit.Place(UiKit.Node((RectTransform)core.Quickbar.transform, "UseActionStrip"), 530 - 668, 850 - 950, 860, 64);
+            use.gameObject.AddComponent<Canvas>();
+            var background = UiKit.Image(use, "kit_toast");
+            var group = Group(use);
+            var view = use.gameObject.AddComponent<UseActionView>();
+            var icon = UiKit.Place(UiKit.Node(use, "Icon"), 14, 6, 52, 52).gameObject.AddComponent<Image>();
+            icon.preserveAspect = true;
+            icon.enabled = false;
+            var label = UiKit.Text(use, "Label", Tier.B2, "Đang dùng", UiKit.Colors.Text);
+            UiKit.Place(label.rectTransform, 78, 0, 340, 64); // R3: Vietnamese names ("Đang dùng Lá thần mộc" renders ~300 px in TMP)
+            label.overflowMode = TextOverflowModes.Ellipsis;
+            var track = UiKit.Place(UiKit.Node(use, "Track"), 428, 20, 120, 24);
+            UiKit.Image(track, "kit_progress_track");
+            var area = UiKit.Stretch(UiKit.Node(track, "FillArea"));
+            area.offsetMin = new Vector2(UiKit.Px(6), UiKit.Px(4));
+            area.offsetMax = new Vector2(-UiKit.Px(6), -UiKit.Px(4));
+            var fill = UiKit.Node(area, "Fill");
+            fill.anchorMin = Vector2.zero;
+            fill.anchorMax = Vector2.one;
+            fill.offsetMin = fill.offsetMax = Vector2.zero;
+            UiKit.Image(fill, "kit_progress_fill");
+            var seconds = UiKit.Text(use, "Seconds", Tier.B2, "0.5s", UiKit.Colors.Gold);
+            UiKit.Place(seconds.rectTransform, 556, 0, 70, 64); // "10.0s" ≈ 65 px
+            var hint = UiKit.Text(use, "Hint", Tier.B2, "Di chuyển để hủy", UiKit.Colors.Muted);
+            UiKit.Place(hint.rectTransform, 632, 0, 220, 64); // ≈ 204 px
+            Set(view, "group", group);
+            Set(view, "label", label);
+            Set(view, "seconds", seconds);
+            Set(view, "hint", hint);
+            Set(view, "fill", fill);
+            Set(view, "background", background);
+            Set(view, "icon", icon);
+            return view;
+        }
+
+        /// <summary>
+        /// Bomb/trap banner, top centre: kit_toast 620×60 at y 36 with kit_icon_warn (29×26) in place of "! ". The mock's
+        /// 340 px icon-only banner cannot hold the logic text ("Bom nổ sau 12s · hướng Đông Bắc, 12 ô +15" ≈ 514 px at 24).
+        /// </summary>
+        private static DangerBannerView Banner(RectTransform root)
+        {
+            var banner = UiKit.Node(root, "DangerBanner");
+            banner.anchorMin = banner.anchorMax = banner.pivot = new Vector2(0.5f, 1);
+            banner.anchoredPosition = new Vector2(0, -UiKit.Px(36));
+            banner.sizeDelta = new Vector2(UiKit.Px(620), UiKit.Px(60));
+            var background = UiKit.Image(banner, "kit_toast");
+            var group = Group(banner);
+            var view = banner.gameObject.AddComponent<DangerBannerView>();
+            var border = UiKit.Stretch(UiKit.Node(banner, "Border")).gameObject.AddComponent<Image>();
+            border.enabled = false; // red stays off the banner frame (colour rule); the view still sets its colour
+            UiKit.Image(UiKit.Place(UiKit.Node(banner, "Icon"), 14, 17, 29, 26), "kit_icon_warn");
+            TMP_Text Part(string name, string value)
+            {
+                var t = UiKit.Text(banner, name, Tier.B2, value, UiKit.Colors.Text);
+                UiKit.Place(t.rectTransform, 50, 12, 120, 36);
+                return t;
+            }
+            Set(view, "group", group);
+            Set(view, "label", Part("Label", "Bom nổ sau "));
+            Set(view, "timer", Part("Seconds", "8s"));
+            Set(view, "suffix", Part("Direction", " · hướng Tây, 4 ô"));
+            Set(view, "background", background);
+            Set(view, "border", border);
+            SetFloat(view, "textLeft", UiKit.Px(50));
+            SetFloat(view, "textTop", UiKit.Px(12));
+            SetFloat(view, "textWidth", UiKit.Px(620 - 50 - 14));
+            SetFloat(view, "textHeight", UiKit.Px(36));
+            return view;
+        }
+
+        /// <summary>Hit marker (fx_hitmarker 101×96 in a 96 px box at the aim point), 4 damage arcs, 3 danger arrows.</summary>
+        private static void Overlay(RectTransform root, HudFeedbackRoot feedback)
+        {
+            var overlay = UiKit.Node(root, "FeedbackOverlay");
+            overlay.anchorMin = overlay.anchorMax = overlay.pivot = new Vector2(0.5f, 0.5f);
+            overlay.sizeDelta = new Vector2(1280, 720);
+            overlay.gameObject.AddComponent<Canvas>();
+
+            var hit = Centred(UiKit.Node(overlay, "HitMarker"), 96, 96);
+            var hitGroup = Group(hit);
+            var hitView = hit.gameObject.AddComponent<HitMarkerView>();
+            var mark = UiKit.Image(UiKit.Stretch(UiKit.Node(hit, "Mark")), "fx_hitmarker");
+            Set(hitView, "group", hitGroup);
+            SetArray(hitView, "ticks", new Object[] { mark });
+
+            var arcs = new Object[4];
+            for (var i = 0; i < arcs.Length; i++) arcs[i] = Centred(InstantiatePrefab("HudDamageArc", overlay), 54, 180).GetComponent<DamageArcView>();
+            var arrows = new Object[3];
+            for (var i = 0; i < arrows.Length; i++) arrows[i] = Centred(InstantiatePrefab("HudDangerArrow", overlay), 45, 45).GetComponent<DangerArrowView>();
+            Set(feedback, "hitMarker", hitView);
+            SetArray(feedback, "damageArcs", arcs);
+            SetArray(feedback, "dangerArrows", arrows);
+        }
+
+        // ---------- Child prefabs ----------
+
+        /// <summary>Effect chip 116×116: icon 76 (catalog art) centred on top, seconds tag 60×36 (24 px) under it.</summary>
+        private static void BuildChipPrefab()
+        {
+            var chip = PrefabRoot("HudEffectChip", 116, 116);
+            try
+            {
+                var group = Group(chip);
+                var view = chip.gameObject.AddComponent<EffectChipView>();
+                var box = UiKit.Place(UiKit.Node(chip, "Box"), 0, 0, 116, 76);
+                var border = UiKit.Stretch(UiKit.Node(box, "Border")).gameObject.AddComponent<Image>();
+                border.enabled = false; // polarity colour kept for the view; green/amber only on the icon glyphs (colour rule)
+                var icon = UiKit.Place(UiKit.Node(box, "Icon"), 20, 0, 76, 76).gameObject.AddComponent<Image>();
+                icon.preserveAspect = true;
+                icon.enabled = false;
+                var label = UiKit.Text(box, "Label", Tier.B2, "Độc", UiKit.Colors.Text, TextAlignmentOptions.Center);
+                UiKit.Stretch(label.rectTransform);
+                label.overflowMode = TextOverflowModes.Ellipsis;
+                var tag = UiKit.Place(UiKit.Node(chip, "SecondsTag"), 28, 80, 60, 36);
+                var plate = UiKit.Image(tag, "kit_tag_neutral");
+                var seconds = UiKit.Text(tag, "Seconds", Tier.B2, "3s", UiKit.Colors.Text, TextAlignmentOptions.Center); // "12s" about 39 px; has "s", so gameplay floor 24
+                UiKit.Stretch(seconds.rectTransform);
+                // The view drives a fill ratio; mock B9 shows no bar, so the track stays hidden.
+                var track = UiKit.Place(UiKit.Node(chip, "Track"), 28, 112, 60, 4);
+                track.gameObject.SetActive(false);
+                var fill = UiKit.Stretch(UiKit.Node(track, "Fill"));
+                fill.gameObject.AddComponent<Image>();
+                Set(view, "group", group);
+                Set(view, "border", border);
+                Set(view, "icon", icon);
+                Set(view, "label", label);
+                Set(view, "seconds", seconds);
+                Set(view, "fill", fill);
+                Set(view, "secondsPlate", plate);
+                Save(chip, "HudEffectChip");
+            }
+            finally
+            {
+                Object.DestroyImmediate(chip.gameObject);
+            }
+        }
+
+        public const float ToastW = 308, ToastH = 92, ToastStep = 98, PickupW = ToastW, PickupH = 3 * ToastH + 2 * (ToastStep - ToastH) + 48;
+
+        /// <summary>Pickup toast 308×92 (kit_toast): "+" at 16, item icon 72 at 40, Vietnamese name (2 lines) at 122, ×n right.</summary>
+        private static void BuildToastPrefab()
+        {
+            var toast = PrefabRoot("HudPickupToast", ToastW, ToastH);
+            try
+            {
+                var background = UiKit.Image(toast, "kit_toast");
+                var group = Group(toast);
+                var view = toast.gameObject.AddComponent<PickupToastView>();
+                var plus = UiKit.Text(toast, "Plus", Tier.B2, "+", UiKit.Colors.Text);
+                UiKit.Place(plus.rectTransform, 16, 0, 20, ToastH);
+                // Placeholder until the ID resolves (ART-04); the view swaps in the item icon, Simple + preserveAspect.
+                var icon = UiKit.Image(UiKit.Place(UiKit.Node(toast, "Icon"), 40, 10, 72, 72), "kit_slot_item_empty");
+                var name = UiKit.Text(toast, "Name", Tier.B2, "Lá thần mộc", UiKit.Colors.Text);
+                UiKit.Place(name.rectTransform, 122, 6, 126, 80);
+                name.textWrappingMode = TextWrappingModes.Normal; // "Lông vũ phượng hoàng lửa" takes two lines
+                name.overflowMode = TextOverflowModes.Ellipsis;
+                name.lineSpacing = -20;
+                var count = UiKit.Text(toast, "Count", Tier.B2, "×2", UiKit.Colors.Muted, TextAlignmentOptions.MidlineRight);
+                UiKit.Place(count.rectTransform, 250, 0, 44, ToastH);
+                Set(view, "background", background);
+                Set(view, "group", group);
+                Set(view, "plus", plus);
+                Set(view, "icon", icon);
+                Set(view, "label", name);
+                Set(view, "count", count);
+                Save(toast, "HudPickupToast");
+            }
+            finally
+            {
+                Object.DestroyImmediate(toast.gameObject);
+            }
+        }
+
+        /// <summary>
+        /// Damage arc: fx_damage_arc in 54×180 px (mock 60×200; 10% smaller so it intrudes at most 8 u into the clear
+        /// centre from the 330×190 u ring, as before). The view mirrors it so it bulges away from the hero.
+        /// </summary>
+        private static void BuildArcPrefab()
+        {
+            var arc = Centred(PrefabRoot("HudDamageArc", 54, 180), 54, 180);
+            try
+            {
+                var image = UiKit.Image(UiKit.Stretch(UiKit.Node(arc, "Graphic")), "fx_damage_arc");
+                var group = Group(arc);
+                var view = arc.gameObject.AddComponent<DamageArcView>();
+                Set(view, "group", group);
+                Set(view, "image", image);
+                Save(arc, "HudDamageArc");
+            }
+            finally
+            {
+                Object.DestroyImmediate(arc.gameObject);
+            }
+        }
+
+        /// <summary>
+        /// Danger arrow: root 45 px at the ring point. The "Arrow" (fx_danger_arrow 45×63, mock 64×90 scaled so its side
+        /// stays within 8 u of the clear centre) has its pivot on the inner end and is mirrored, so the left-pointing art
+        /// points along the view's angle and sits outside the ring. Timer: zone icon 34 + tag 70×36 with the seconds to the
+        /// right (mock: icon +66, tag +130 px from the arrow), hidden for untimed traps.
+        /// </summary>
+        private static void BuildArrowPrefab()
+        {
+            var arrow = Centred(PrefabRoot("HudDangerArrow", 45, 45), 45, 45);
+            try
+            {
+                var group = Group(arrow);
+                var view = arrow.gameObject.AddComponent<DangerArrowView>();
+                var shape = UiKit.Node(arrow, "Arrow");
+                shape.anchorMin = shape.anchorMax = new Vector2(0.5f, 0.5f);
+                shape.pivot = new Vector2(1, 0.5f);
+                shape.anchoredPosition = Vector2.zero;
+                shape.sizeDelta = new Vector2(UiKit.Px(45), UiKit.Px(63));
+                shape.localScale = new Vector3(-1, 1, 1);
+                UiKit.Image(shape, "fx_danger_arrow");
+
+                var timer = UiKit.Node(arrow, "Timer");
+                timer.anchorMin = timer.anchorMax = new Vector2(0.5f, 0.5f);
+                timer.pivot = new Vector2(0, 0.5f);
+                timer.anchoredPosition = new Vector2(UiKit.Px(66 - 17), 0);
+                timer.sizeDelta = new Vector2(UiKit.Px(116), UiKit.Px(36));
+                var zone = UiKit.Place(UiKit.Node(timer, "ZoneIcon"), 0, 1, 34, 34).gameObject.AddComponent<Image>();
+                zone.sprite = Load<Sprite>(ZoneIconPath);
+                zone.preserveAspect = true;
+                var tag = UiKit.Place(UiKit.Node(timer, "Tag"), 46, 0, 70, 36);
+                UiKit.Image(tag, "kit_tag_neutral");
+                var seconds = UiKit.Text(tag, "Seconds", Tier.B2, "8s", UiKit.Colors.Text, TextAlignmentOptions.Center);
+                UiKit.Stretch(seconds.rectTransform);
+                Set(view, "group", group);
+                Set(view, "arrow", shape);
+                Set(view, "seconds", seconds);
+                Set(view, "timerGroup", timer.gameObject);
+                Save(arrow, "HudDangerArrow");
+            }
+            finally
+            {
+                Object.DestroyImmediate(arrow.gameObject);
+            }
+        }
+
+        /// <summary>Kind and label per effect (icons are bound by the UiArt catalog build and kept here).</summary>
         private static void BuildCatalog()
         {
-            var path=Ui+"HudEffectCatalog.asset";var catalog=AssetDatabase.LoadAssetAtPath<HudEffectCatalog>(path);if(catalog==null){catalog=ScriptableObject.CreateInstance<HudEffectCatalog>();AssetDatabase.CreateAsset(catalog,path);}
-            var so=new SerializedObject(catalog);var entries=so.FindProperty("entries");entries.arraySize=8;var labels=new[]{"Adrenaline","Độc","Chậm","Ẩn","Ngất","Trói","Đảo","Miễn"};for(var i=0;i<8;i++){var e=entries.GetArrayElementAtIndex(i);e.FindPropertyRelative("Kind").enumValueIndex=i+1;e.FindPropertyRelative("Label").stringValue=labels[i];}so.ApplyModifiedPropertiesWithoutUndo();
+            var path = Ui + "HudEffectCatalog.asset";
+            var catalog = AssetDatabase.LoadAssetAtPath<HudEffectCatalog>(path);
+            if (catalog == null)
+            {
+                catalog = ScriptableObject.CreateInstance<HudEffectCatalog>();
+                AssetDatabase.CreateAsset(catalog, path);
+            }
+            var so = new SerializedObject(catalog);
+            var entries = so.FindProperty("entries");
+            var labels = new[] { "Adrenaline", "Độc", "Chậm", "Ẩn", "Ngất", "Trói", "Đảo", "Miễn" };
+            entries.arraySize = labels.Length;
+            for (var i = 0; i < labels.Length; i++)
+            {
+                var e = entries.GetArrayElementAtIndex(i);
+                e.FindPropertyRelative("Kind").enumValueIndex = i + 1;
+                e.FindPropertyRelative("Label").stringValue = labels[i];
+            }
+            so.ApplyModifiedPropertiesWithoutUndo();
         }
-        private static void BuildChildPrefabs()
+
+        /// <summary>Amber in-use frame on the quick-bar slot prefab (off until an item is being used).</summary>
+        private static void BuildSlotPrefab()
         {
-            var chip=Rect("HudEffectChip",null,Vector2.zero,Vector2.zero,Vector2.zero,new Vector2(44,58));try{var g=Group(chip);var v=chip.gameObject.AddComponent<EffectChipView>();var box=Rect("Box",chip,new Vector2(0,1),new Vector2(0,1),Vector2.zero,new Vector2(44,40));var bg=Image(box,"HudRound6");var border=Rect("Border",box,Vector2.zero,Vector2.zero,Vector2.zero,new Vector2(44,40));var bi=Image(border,"HudRound6Stroke1");var icon=Rect("Icon",box,new Vector2(.5f,.5f),new Vector2(.5f,.5f),Vector2.zero,new Vector2(20,20));var ii=Image(icon,null);ii.enabled=false;var label=Text("Label",box,2,9,40,20,"Độc",TextFont);label.alignment=TextAlignmentOptions.Center;var seconds=Text("Seconds",chip,0,42,44,16,"3s",NumberFont);seconds.alignment=TextAlignmentOptions.Center;var fill=Bar(box,4,34,36,3);Set(v,"group",g);Set(v,"background",bg);Set(v,"border",bi);Set(v,"icon",ii);Set(v,"label",label);Set(v,"seconds",seconds);Set(v,"fill",fill);PrefabUtility.SaveAsPrefabAsset(chip.gameObject,Ui+"HudEffectChip.prefab");}finally{Object.DestroyImmediate(chip.gameObject);}
-            var toast=Rect("HudPickupToast",null,Vector2.zero,Vector2.zero,Vector2.zero,new Vector2(141,31));try{var bg=Image(toast,"HudRound6");var g=Group(toast);var v=toast.gameObject.AddComponent<PickupToastView>();var plus=Text("Plus",toast,6,6,14,19,"+",TextFont);var icon=Rect("Icon",toast,new Vector2(0,1),new Vector2(0,1),new Vector2(24,-6.5f),new Vector2(18,18));var ii=Image(icon,"HudRound6");var name=Text("Name",toast,48,.75f,64,29.5f,"God Leaf",TextFont);name.enableWordWrapping=true;name.lineSpacing=-30;var count=Text("Count",toast,115,7,24,17,"×2",NumberFont);Set(v,"background",bg);Set(v,"group",g);Set(v,"plus",plus);Set(v,"icon",ii);Set(v,"label",name);Set(v,"count",count);PrefabUtility.SaveAsPrefabAsset(toast.gameObject,Ui+"HudPickupToast.prefab");}finally{Object.DestroyImmediate(toast.gameObject);}
-            var arc=Rect("HudDamageArc",null,new Vector2(.5f,.5f),new Vector2(.5f,.5f),Vector2.zero,new Vector2(22,58));try{var graphic=Rect("Graphic",arc,new Vector2(.5f,.5f),new Vector2(.5f,.5f),Vector2.zero,new Vector2(16,54));var img=Image(graphic,"HudArcFilled");img.type=UnityEngine.UI.Image.Type.Simple;var g=Group(arc);var v=arc.gameObject.AddComponent<DamageArcView>();Set(v,"group",g);Set(v,"image",img);PrefabUtility.SaveAsPrefabAsset(arc.gameObject,Ui+"HudDamageArc.prefab");}finally{Object.DestroyImmediate(arc.gameObject);}
-            var arrow=Rect("HudDangerArrow",null,new Vector2(.5f,.5f),new Vector2(.5f,.5f),Vector2.zero,new Vector2(30,30));try{var g=Group(arrow);var v=arrow.gameObject.AddComponent<DangerArrowView>();var shape=Rect("Arrow",arrow,new Vector2(.5f,.5f),new Vector2(.5f,.5f),Vector2.zero,new Vector2(16,24));var img=Image(shape,"HudArrowOutline");img.type=UnityEngine.UI.Image.Type.Simple;var timer=Text("Seconds",arrow,32,7,30,16,"2s",NumberFont);Set(v,"group",g);Set(v,"arrow",shape);Set(v,"seconds",timer);PrefabUtility.SaveAsPrefabAsset(arrow.gameObject,Ui+"HudDangerArrow.prefab");}finally{Object.DestroyImmediate(arrow.gameObject);}
+            var slot = PrefabUtility.LoadPrefabContents(Ui + "HudSlot.prefab");
+            try
+            {
+                Remove(slot.transform, "InUseFrame");
+                var rect = Node(slot.transform, "InUseFrame");
+                rect.anchorMin = rect.anchorMax = rect.pivot = Vector2.zero;
+                rect.sizeDelta = new Vector2(64, 64);
+                var img = LegacyImage(rect, "HudRound6Stroke2");
+                img.color = HudPalette.Default.Amber;
+                img.enabled = false;
+                var view = slot.GetComponent<QuickbarSlotView>();
+                Set(view, "inUseFrame", img);
+                // T-027 gate reads the source prefab too: key and count numbers 20, the (hidden) name 24.
+                UiKit.ApplyTier(view.KeyLabel, Tier.C);
+                UiKit.ApplyTier(view.CountLabel, Tier.C);
+                UiKit.ApplyTier(view.NameLabel, Tier.B2);
+                PrefabUtility.SaveAsPrefabAsset(slot, Ui + "HudSlot.prefab");
+            }
+            finally
+            {
+                PrefabUtility.UnloadPrefabContents(slot);
+            }
         }
-        private static RectTransform Instantiate(string name,Transform parent){var go=(GameObject)PrefabUtility.InstantiatePrefab(AssetDatabase.LoadAssetAtPath<GameObject>(Ui+name+".prefab"),parent);return (RectTransform)go.transform;}
-        private static RectTransform Rect(string name,Transform parent,Vector2 anchor,Vector2 pivot,Vector2 pos,Vector2 size){var go=new GameObject(name,typeof(RectTransform));var r=(RectTransform)go.transform;r.SetParent(parent,false);r.anchorMin=r.anchorMax=anchor;r.pivot=pivot;r.anchoredPosition=pos;r.sizeDelta=size;return r;}
-        private static CanvasGroup Group(RectTransform r){var g=r.gameObject.AddComponent<CanvasGroup>();g.alpha=0;g.interactable=false;g.blocksRaycasts=false;return g;}
-        private static Image Image(RectTransform r,string sprite){var i=r.gameObject.AddComponent<Image>();i.raycastTarget=false;if(sprite!=null){i.sprite=Sprite(sprite);i.type=UnityEngine.UI.Image.Type.Sliced;}return i;}
-        private static TMP_Text Text(string name,Transform parent,float x,float y,float w,float h,string text,TMP_FontAsset font){var r=Rect(name,parent,new Vector2(0,1),new Vector2(0,1),new Vector2(x,-y),new Vector2(w,h));var t=r.gameObject.AddComponent<TextMeshProUGUI>();t.font=font;t.fontSize=13;t.enableAutoSizing=false;t.enableWordWrapping=false;t.overflowMode=TextOverflowModes.Ellipsis;t.raycastTarget=false;t.text=text;t.alignment=TextAlignmentOptions.MidlineLeft;return t;}
-        private static RectTransform Bar(Transform parent,float x,float y,float w,float h){var track=Rect("Track",parent,new Vector2(0,1),new Vector2(0,1),new Vector2(x,-y),new Vector2(w,h));var image=Image(track,null);image.color=HudPalette.Default.Track;var fill=Rect("Fill",track,Vector2.zero,Vector2.zero,Vector2.zero,Vector2.zero);fill.anchorMax=Vector2.one;fill.offsetMin=fill.offsetMax=Vector2.zero;Image(fill,null);return fill;}
-        private static void Set(Object target,string field,Object value){var so=new SerializedObject(target);so.FindProperty(field).objectReferenceValue=value;so.ApplyModifiedPropertiesWithoutUndo();}
-        private static void SetArray(Object target,string field,Object[] values){var so=new SerializedObject(target);var array=so.FindProperty(field);array.arraySize=values.Length;for(var i=0;i<values.Length;i++)array.GetArrayElementAtIndex(i).objectReferenceValue=values[i];so.ApplyModifiedPropertiesWithoutUndo();}
+
+        /// <summary>The reload key cap prefab ("R"): a key on a key cap, 20 px (T-027 gate on the source prefab).</summary>
+        private static void KeyCapTypeScale()
+        {
+            var cap = PrefabUtility.LoadPrefabContents(Ui + "HudKeyCap.prefab");
+            try
+            {
+                foreach (var text in cap.GetComponentsInChildren<TMP_Text>(true)) UiKit.ApplyTier(text, Tier.C);
+                PrefabUtility.SaveAsPrefabAsset(cap, Ui + "HudKeyCap.prefab");
+            }
+            finally
+            {
+                PrefabUtility.UnloadPrefabContents(cap);
+            }
+        }
+
+        // ---------- helpers ----------
+
+        private static RectTransform PrefabRoot(string name, float wPx, float hPx)
+        {
+            var go = new GameObject(name, typeof(RectTransform));
+            var t = (RectTransform)go.transform;
+            t.sizeDelta = new Vector2(UiKit.Px(wPx), UiKit.Px(hPx));
+            return t;
+        }
+
+        private static void Save(RectTransform root, string name) => PrefabUtility.SaveAsPrefabAsset(root.gameObject, Ui + name + ".prefab");
+
+        private static RectTransform InstantiatePrefab(string name, Transform parent) =>
+            (RectTransform)((GameObject)PrefabUtility.InstantiatePrefab(Load<GameObject>(Ui + name + ".prefab"), parent)).transform;
+
+        private static RectTransform Node(Transform parent, string name)
+        {
+            var go = new GameObject(name, typeof(RectTransform));
+            go.transform.SetParent(parent, false);
+            return (RectTransform)go.transform;
+        }
+
+        private static void Remove(Transform parent, string name)
+        {
+            var child = parent.Find(name);
+            if (child != null) Object.DestroyImmediate(child.gameObject);
+        }
+
+        /// <summary>Anchor and pivot at <paramref name="anchor"/>; offset and size in 1080p px.</summary>
+        private static RectTransform Anchored(RectTransform t, Vector2 anchor, float xPx, float yPx, float wPx, float hPx)
+        {
+            t.anchorMin = t.anchorMax = t.pivot = anchor;
+            t.anchoredPosition = new Vector2(UiKit.Px(xPx), UiKit.Px(yPx));
+            t.sizeDelta = new Vector2(UiKit.Px(wPx), UiKit.Px(hPx));
+            return t;
+        }
+
+        private static RectTransform Centred(RectTransform t, float wPx, float hPx)
+        {
+            t.anchorMin = t.anchorMax = t.pivot = new Vector2(0.5f, 0.5f);
+            t.anchoredPosition = Vector2.zero;
+            t.sizeDelta = new Vector2(UiKit.Px(wPx), UiKit.Px(hPx));
+            return t;
+        }
+
+        private static CanvasGroup Group(RectTransform t)
+        {
+            var g = t.gameObject.AddComponent<CanvasGroup>();
+            g.alpha = 0;
+            g.interactable = false;
+            g.blocksRaycasts = false;
+            return g;
+        }
+
+        /// <summary>Direction A sprite still used by the quick-bar in-use frame (not part of B9).</summary>
+        private static Image LegacyImage(RectTransform t, string sprite)
+        {
+            var img = t.gameObject.AddComponent<Image>();
+            img.raycastTarget = false;
+            img.sprite = Load<Sprite>("Assets/_JungleMaze/Art/Hud/" + sprite + ".png");
+            img.type = Image.Type.Sliced;
+            return img;
+        }
+
+        private static T Load<T>(string path) where T : Object
+        {
+            var asset = AssetDatabase.LoadAssetAtPath<T>(path);
+            if (asset == null) throw new InvalidOperationException("Asset missing: " + path);
+            return asset;
+        }
+
+        private static void Set(Object target, string field, Object value)
+        {
+            var so = new SerializedObject(target);
+            var p = so.FindProperty(field) ?? throw new InvalidOperationException(target.GetType().Name + " has no field " + field);
+            p.objectReferenceValue = value;
+            so.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        private static void SetFloat(Object target, string field, float value)
+        {
+            var so = new SerializedObject(target);
+            var p = so.FindProperty(field) ?? throw new InvalidOperationException(target.GetType().Name + " has no field " + field);
+            p.floatValue = value;
+            so.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        private static void SetArray(Object target, string field, Object[] values)
+        {
+            var so = new SerializedObject(target);
+            var array = so.FindProperty(field) ?? throw new InvalidOperationException(target.GetType().Name + " has no field " + field);
+            array.arraySize = values.Length;
+            for (var i = 0; i < values.Length; i++) array.GetArrayElementAtIndex(i).objectReferenceValue = values[i];
+            so.ApplyModifiedPropertiesWithoutUndo();
+        }
     }
 }

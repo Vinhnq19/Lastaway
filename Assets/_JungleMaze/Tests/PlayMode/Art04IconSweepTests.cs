@@ -138,6 +138,14 @@ namespace JungleMaze.Tests.PlayMode
                     foreach (var (what, label) in new[] { ("key", (Component)slot.KeyLabel), ("name", slot.NameLabel), ("×n", slot.CountLabel) })
                     {
                         if (what == "×n" && !slot.CountLabel.enabled) continue;
+                        if (what != "name")
+                        {
+                            // T-016 r11 (Huy 07/11): key and ×n sit in the 54 px slot's corners over the 40 px icon by
+                            // design; they stay readable through a dark outline instead of keeping clear of the art.
+                            var material = ((TMPro.TMP_Text)label).fontSharedMaterial;
+                            Assert.Greater(material.GetFloat("_OutlineWidth"), 0f, $"slot {i + 1} {what} outlined");
+                            continue;
+                        }
                         Check(problems, screen, i, what, visible, WorldRect(label));
                         Check(rectOverlaps, screen, i, what + " (RectTransform)", rect, WorldRect(label));
                     }

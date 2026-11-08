@@ -21,6 +21,8 @@ namespace JungleMaze.EditorTools
         public const string SparklePath = ArtFolder + "/loot_sparkle.png";
         public const string AmmoPath = ArtFolder + "/loot_ammo_box.png";
         public const string MaterialPath = ArtFolder + "/GroundLootLight.mat";
+        /// <summary>Brightness multiplier of the loot light material; the sprite colours stay LDR, this lifts them into bloom.</summary>
+        public const float LightHdrBoost = 1.8f;
         public const string TuningPath = "Assets/_JungleMaze/Art/World/Resources/" + GroundLootTuning.ResourceName + ".asset";
         private const string HeldArtPath = "Assets/_JungleMaze/Art/Characters/HeldWeaponCatalog.asset";
         private const string UnlitShader = "Universal Render Pipeline/2D/Sprite-Unlit-Default";
@@ -64,6 +66,9 @@ namespace JungleMaze.EditorTools
                 AssetDatabase.CreateAsset(material, MaterialPath);
             }
             else if (material.shader != shader) material.shader = shader;
+            // HDR tint (> 1) so the halo, beam and sparkles pass the gameplay bloom threshold (GameplayPostTuning).
+            material.SetColor("_Color", new Color(LightHdrBoost, LightHdrBoost, LightHdrBoost, 1f));
+            EditorUtility.SetDirty(material);
 
             var tuning = AssetDatabase.LoadAssetAtPath<GroundLootTuning>(TuningPath);
             if (tuning == null)

@@ -24,6 +24,8 @@ namespace JungleMaze.Presentation.UI.Hud
         [SerializeField] private Sprite defaultBorder;
         [SerializeField] private Sprite selectedBorder;
         [SerializeField] private Sprite emptyBorder;
+        [Tooltip("Skin A (T-016): border sprites carry their own colours, so they are drawn untinted.")]
+        [SerializeField] private bool skinSprites;
 
         private HudPalette _palette = HudPalette.Default;
         private Sprite _placeholderIcon;
@@ -49,7 +51,7 @@ namespace JungleMaze.Presentation.UI.Hud
             _palette = palette;
             if(inUseFrame!=null)inUseFrame.color=palette.Amber;
             if (frame != null) frame.ApplyPalette(palette);
-            if (keyLabel != null) keyLabel.color = palette.Faint;
+            if (keyLabel != null) keyLabel.color = skinSprites ? palette.Gold : palette.Faint;
             if (countLabel != null) countLabel.color = palette.Text;
             SetVisual(Visual);
         }
@@ -105,14 +107,15 @@ namespace JungleMaze.Presentation.UI.Hud
             if (border != null)
             {
                 border.sprite = visual == SlotVisual.Selected ? selectedBorder : empty ? emptyBorder : defaultBorder;
-                border.color = visual == SlotVisual.Selected ? _palette.Amber : _palette.Line;
+                border.color = skinSprites ? Color.white : visual == SlotVisual.Selected ? _palette.Amber : _palette.Line;
             }
             if (icon != null)
             {
                 CapturePlaceholder();
                 var placeholder = icon.sprite == _placeholderIcon;
                 var color = placeholder ? _palette.IconPlaceholder : Color.white;
-                if (noItem) color.a *= 0.35f;
+                // Skin A: an empty stone slot shows no placeholder square at all (qa T-013 N1).
+                if (noItem) color.a *= skinSprites && placeholder ? 0f : 0.35f;
                 icon.color = color;
             }
             if (nameLabel != null)

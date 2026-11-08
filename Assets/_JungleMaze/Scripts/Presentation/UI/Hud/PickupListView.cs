@@ -231,7 +231,8 @@ namespace JungleMaze.Presentation.UI.Hud
             if (!string.Equals(row.ItemId, data.ItemId, StringComparison.Ordinal) || row.Id != data.Id)
             {
                 row.Id = data.Id; row.ItemId = data.ItemId;
-                row.Name.text = _labels != null ? _labels.DisplayName(data.ItemId) : data.ItemId;
+                // Vietnamese name (T-022 HudItemNames, GDD ITEM LIST) like the action bar; balance name as fallback.
+                row.Name.text = HudItemNames.Get(data.ItemId, _labels != null ? _labels.DisplayName(data.ItemId) : data.ItemId);
                 var icon = _icons != null && !string.IsNullOrEmpty(data.ItemId) ? _icons.GetIcon(data.ItemId) : null;
                 row.Icon.sprite = icon != null ? icon : panelSprite;
                 row.Icon.type = icon != null ? Image.Type.Simple : Image.Type.Sliced;

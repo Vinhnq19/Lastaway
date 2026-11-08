@@ -296,7 +296,7 @@ public sealed partial class MatchRuntime
             for(byte slot=0;slot<inventory.Weapons.Length;slot++)
             {
                 var stack=inventory.Weapons[slot];if(stack.IsEmpty)continue;
-                for(var id=1;id<10;id++)
+                for(var id=1;id<=(int)CombatWeaponId.SniperRifle;id++)
                 {
                     var candidate=(CombatWeaponId)id;
                     if(stack.ItemId!=MatchWorldRuntime.WeaponItemId(candidate)||!CombatWeaponRules.Value.TryGet(candidate,out var rule))continue;
@@ -312,7 +312,7 @@ public sealed partial class MatchRuntime
         // Reuses the existing ItemId mapping; unknown ids yield no rule here.
         private static WeaponRule? RuleFor(string itemId)
         {
-            for(var id=1;id<10;id++)
+            for(var id=1;id<=(int)CombatWeaponId.SniperRifle;id++)
             {
                 var candidate=(CombatWeaponId)id;
                 if(itemId==MatchWorldRuntime.WeaponItemId(candidate)&&CombatWeaponRules.Value.TryGet(candidate,out var rule))return rule;

@@ -1,0 +1,25 @@
+<!doctype html><html lang="vi"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>T-014 So sánh skin UI</title>
+<style>:root{--bg:#0f1517;--fg:#edf2ee;--mut:#a6bbb7;--card:#1a2427;--line:#334448}body{margin:0;background:var(--bg);color:var(--fg);font-family:'Segoe UI',sans-serif;padding:16px}
+h1{font-size:20px;margin:0 0 4px}p.s{color:var(--mut);margin:0 0 16px;font-size:14px}
+.row{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:16px}
+.row h2{font-size:17px;margin:0}.row p{margin:2px 0 10px;color:var(--mut);font-size:14px}
+.g{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.g figure{margin:0}.g img{width:100%;display:block;border-radius:6px;border:1px solid var(--line)}
+figcaption{font-size:12px;color:var(--mut);margin-top:3px}
+table{border-collapse:collapse;font-size:13px;width:100%}td,th{border:1px solid var(--line);padding:4px 6px;text-align:left}th{color:var(--mut)}
+@media(max-width:700px){.g{grid-template-columns:1fr}}</style>
+<h1>T-014: 4 skin UI hợp gameplay hiện tại (GPT)</h1>
+<p class="s">World giữ nguyên như build (ảnh T-010), chỉ vẽ lại lớp HUD theo bố cục B. Concept để chọn, chưa vào Assets. Ảnh 1672x941. Mỗi hàng: tham chiếu (gốc T-010 hoặc mock B), cảnh đầu trận, cảnh bo thu.</p>
+<div class="row"><h2>Tham chiếu</h2><p>Ảnh gốc T-010 (đầu trận, bo thu) và mock bố cục B (art-ux, schematic).</p><div class="g"><figure><img src="ref/01-spawn-dau-tran.png"><figcaption>Gốc: đầu trận</figcaption></figure><figure><img src="ref/04-bo-thu-hep.png"><figcaption>Gốc: bo thu</figcaption></figure><figure><img src="ref/hud-B-mock.png"><figcaption>Mock bố cục B</figcaption></figure></div></div>
+<div class="row"><h2>A. Đá khắc</h2><p>Tấm đá rêu viền hoa văn khắc, icon khắc nhạt có nét vàng; hợp nhất với nền đá của world.</p><div class="g"><figure><img src="ref/hud-B-mock.png"><figcaption>Bố cục B (mock)</figcaption></figure><figure><img src="01-da-khac/spawn.png"><figcaption>A. Đá khắc: đầu trận</figcaption></figure><figure><img src="01-da-khac/bo-thu.png"><figcaption>A. Đá khắc: bo thu</figcaption></figure></div></div>
+<div class="row"><h2>B. Gỗ dây leo</h2><p>Ván gỗ cũ buộc dây thừng và đinh, dây leo cuốn góc; ấm, nổi trên nền đá xám.</p><div class="g"><figure><img src="ref/hud-B-mock.png"><figcaption>Bố cục B (mock)</figcaption></figure><figure><img src="02-go-day-leo/spawn.png"><figcaption>B. Gỗ dây leo: đầu trận</figcaption></figure><figure><img src="02-go-day-leo/bo-thu.png"><figcaption>B. Gỗ dây leo: bo thu</figcaption></figure></div></div>
+<div class="row"><h2>C. Kim loại cổ</h2><p>Đồng oxy hóa lớp gỉ xanh, đinh tán; icon dập kim loại vàng, gần kiểu di tích.</p><div class="g"><figure><img src="ref/hud-B-mock.png"><figcaption>Bố cục B (mock)</figcaption></figure><figure><img src="03-kim-loai-co/spawn.png"><figcaption>C. Kim loại cổ: đầu trận</figcaption></figure><figure><img src="03-kim-loai-co/bo-thu.png"><figcaption>C. Kim loại cổ: bo thu</figcaption></figure></div></div>
+<div class="row"><h2>D. Vải và da</h2><p>Da khâu có đường chỉ, nút xương, dây vải; tông nâu olive, mềm hơn các bản còn lại.</p><div class="g"><figure><img src="ref/hud-B-mock.png"><figcaption>Bố cục B (mock)</figcaption></figure><figure><img src="04-vai-da/spawn.png"><figcaption>D. Vải và da: đầu trận</figcaption></figure><figure><img src="04-vai-da/bo-thu.png"><figcaption>D. Vải và da: bo thu</figcaption></figure></div></div>
+<div class="row"><h2>Bảng kiểm (art-ux soi từng ảnh)</h2>
+<table><tr><th>Mục</th><th>Kết quả</th></tr>
+<tr><td>World giữ nguyên</td><td>Đạt cả 8 ảnh: soi mắt thấy tường, hòm, chum, cột, nhân vật, vòng bo, vùng đỏ đúng vị trí; đo độ lệch vùng giữa màn (trung bình sai khác màu theo ô, thang 0-255): 3,05 đến 3,72. Đối chiếu: vẽ lại world ở T-011 cho 28 đến 80.</td></tr>
+<tr><td>Đúng bố cục B</td><td>Vitals 3 hàng (máu: thanh + số; giáp, mũ: icon + số; Adrenaline: thanh + số), không tên món; Quick bar 8 ô bó sát; minimap có bản đồ; Match status icon + số; killfeed 3 dòng chữ. Đạt cả 8.</td></tr>
+<tr><td>Số liệu đọc được</td><td>Đạt: 100, 60, 25, 10, 70, 12/30, 7/10, 0:33, 1/1, 1:21 đọc rõ ở ảnh 1672x941. Chưa kiểm ở 1920x1080 thật.</td></tr>
+<tr><td>Lệch nhỏ (chấp nhận trong concept)</td><td>C bo thu hiện "+25" "+10" (thêm dấu +). Killfeed viết "Hao ha Linh" không dấu (GPT vẽ tiếng Việt kém; chữ thật do Unity render). Minimap do GPT tự vẽ bản đồ, không phải bản đồ thật. Hàng ammo strip lúc đầu trận rỗng/không số.</td></tr>
+<tr><td>Vẽ lại</td><td>B (cả 2 cảnh) và D đầu trận ra tỉ lệ 1717x916 lần đầu; đã vẽ lại thành 1672x941 và chấm lại.</td></tr>
+<tr><td>Chưa làm</td><td>Cảnh menu chính (không bắt buộc, chưa vẽ). Chưa kiểm tương phản bằng script. Chưa có qa chấm chéo.</td></tr></table></div>
+</html>

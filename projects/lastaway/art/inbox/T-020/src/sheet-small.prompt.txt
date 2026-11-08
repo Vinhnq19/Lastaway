@@ -1,0 +1,13 @@
+Use your image generation tool to create ONE image as described below, and copy the generated file AS-IS (no cropping, no resizing, no padding) to:
+D:\Lastaway\projects\lastaway\art\inbox\T-020\src\sheet-small.png
+Do not write any other files and do not post-process the image. Use only the built-in image tool, never the OpenAI API, curl or python.
+
+Image 1 is the approved pixel-art HUD style (carved olive-grey stone, dark outline, dark warm brown-grey interior, gold #FFDC6E accents, small moss tufts). Image 2 is the sprite sheet of empty frames in the same style. Draw a UI-kit sprite sheet of SMALL CONTROLS in exactly this style and pixel scale.
+
+Flat solid magenta background (#FF00FF, no gradient, no shadow, never inside a piece), at least 50 px of pure magenta between pieces and around the border. NO text, NO numbers. Every piece sharp, not cropped, in a clean grid, rows top to bottom:
+ROW 1: ICON BUTTON ROUND, 4 states left to right (normal, hover, pressed, disabled): a round stone button (circle) with olive rim and dark outline, dark brown-grey interior, empty center. Hover: brighter with a thin gold line inside the rim. Pressed: darker, bevel inverted. Disabled: desaturated grey-brown.
+ROW 2: ICON BUTTON SQUARE, same 4 states: a square stone button with chamfered corners, same treatment, empty center.
+ROW 3: TOGGLE, 2 pieces: OFF (a wide pill-shaped dark stone track, 2 : 1 aspect, with a light stone round knob at the left end) and ON (the same track filled with olive-gold #8a6a2c, the knob at the right end).
+ROW 4: CHECKBOX, 2 pieces: UNCHECKED (square stone box, dark interior, olive rim) and CHECKED (same box with a bright gold #FFDC6E check mark inside).
+ROW 5: RADIO-FREE items: BADGE (a small round red #b3342f stone-edged dot, empty center), SLIDER KNOB (a round light stone knob with dark outline and a small gold center), and a small ARROW-DOWN glyph (gold triangle pointing down, no frame, for dropdowns).
+All pieces use the same small olive rim, dark outline and gold accents; keep each simple and small-scale.

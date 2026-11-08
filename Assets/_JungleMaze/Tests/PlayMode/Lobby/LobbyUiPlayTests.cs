@@ -386,37 +386,47 @@ namespace JungleMaze.Tests.PlayMode.Lobby
     {
         private static RectTransform Block(Component panel, string name) => (RectTransform)panel.transform.Find(name);
 
-        private static void AssertRect(RectTransform r, float x, float y, float w, float h)
+        /// <summary>Skin A (T-024): a screen-level rect is the 1080p mock rect, anchored at the canvas centre (UiKit.PlaceCentred).</summary>
+        internal static void AssertMock(RectTransform r, float x, float y, float w, float h)
         {
-            Assert.AreEqual(x, r.anchoredPosition.x, 20f, r.name + " x");
-            Assert.AreEqual(y, -r.anchoredPosition.y, 20f, r.name + " y");
-            Assert.AreEqual(w, r.sizeDelta.x, 20f, r.name + " w");
-            Assert.AreEqual(h, r.sizeDelta.y, 20f, r.name + " h");
+            Assert.AreEqual(new Vector2(0.5f, 0.5f), r.anchorMin, r.name + " centred");
+            Assert.AreEqual((x + w / 2f - 960f) / 1.5f, r.anchoredPosition.x, 1f, r.name + " x");
+            Assert.AreEqual(-(y + h / 2f - 540f) / 1.5f, r.anchoredPosition.y, 1f, r.name + " y");
+            Assert.AreEqual(w / 1.5f, r.sizeDelta.x, 1f, r.name + " w");
+            Assert.AreEqual(h / 1.5f, r.sizeDelta.y, 1f, r.name + " h");
         }
 
-        /// <summary>AC49: Figma v2 blocks within 20 px; buttons ≥ 44 px; text ≥ 13 px; nothing outside 1280×720.</summary>
+        /// <summary>AC49 on skin A: mock blocks within 1 unit; buttons ≥ the kit's S height (48 px at 1080p); every text on
+        /// the 96/40/30/24/20 scale (floor 20); nothing outside the canvas.</summary>
         [UnityTest]
         public IEnumerator FigmaBlocks_ButtonsAndText_NoOverflow()
         {
             using var rig = new LobbyUiRig();
             yield return null;
-            AssertRect(Block(rig.Root.JoinForm, "Panel"), 360, 67, 560, 586);
-            AssertRect(Block(rig.Root.Results, "Table"), 760, 123, 440, 475);
-            AssertRect(Block(rig.Root.Lobby, "Slots"), 760, 123, 440, 475);
-            Assert.AreEqual(399f, -((RectTransform)rig.Root.Results.Replay.transform).anchoredPosition.y, 20f);
-            Assert.AreEqual(399f, -((RectTransform)rig.Root.Results.Home.transform).anchoredPosition.y, 20f);
+            AssertMock(Block(rig.Root.JoinForm, "Panel"), 560, 230, 800, 620);
+            AssertMock(Block(rig.Root.Results, "Table"), 1000, 120, 820, 820);
+            AssertMock(Block(rig.Root.Lobby, "Info"), 1030, 170, 830, 540);
+            AssertMock((RectTransform)rig.Root.Results.Replay.transform, 480, 834, 340, 64);
+            AssertMock((RectTransform)rig.Root.Results.Home.transform, 120, 834, 340, 64);
             foreach (var b in rig.Root.GetComponentsInChildren<Button>(true))
                 if (b.GetComponent<HistoryRowView>() == null)
-                    Assert.GreaterOrEqual(((RectTransform)b.transform).rect.height, 44f, b.name);
+                    Assert.GreaterOrEqual(((RectTransform)b.transform).rect.height, 48f / 1.5f - 0.01f, b.name);
+            var scale = new[] { 96f, 40f, 30f, 24f, 20f };
             foreach (var t in rig.Root.GetComponentsInChildren<TMP_Text>(true))
-                Assert.GreaterOrEqual(t.fontSize, 13f, t.name);
+                Assert.IsTrue(scale.Any(s => Mathf.Abs(t.fontSize * 1.5f - s) < 0.05f), t.name + " " + t.fontSize * 1.5f + " px off the scale");
             foreach (var panel in rig.Root.Panels)
-            foreach (RectTransform child in panel.transform)
             {
-                if (child.anchorMin != child.anchorMax) continue; // stretched backgrounds
-                Assert.GreaterOrEqual(child.anchoredPosition.x, 0f, child.name);
-                Assert.LessOrEqual(child.anchoredPosition.x + child.sizeDelta.x, 1280f, child.name);
-                Assert.LessOrEqual(-child.anchoredPosition.y + child.sizeDelta.y, 720f, child.name);
+                var p = ((RectTransform)panel.transform).rect;
+                foreach (RectTransform child in panel.transform)
+                {
+                    if (child.anchorMin != child.anchorMax) continue; // stretched backgrounds
+                    var left = child.anchorMin.x * p.width + child.anchoredPosition.x - child.pivot.x * child.sizeDelta.x;
+                    var bottom = child.anchorMin.y * p.height + child.anchoredPosition.y - child.pivot.y * child.sizeDelta.y;
+                    Assert.GreaterOrEqual(left, -0.5f, child.name);
+                    Assert.LessOrEqual(left + child.sizeDelta.x, p.width + 0.5f, child.name);
+                    Assert.GreaterOrEqual(bottom, -0.5f, child.name);
+                    Assert.LessOrEqual(bottom + child.sizeDelta.y, p.height + 0.5f, child.name);
+                }
             }
             var scaler = rig.Root.GetComponent<CanvasScaler>();
             Assert.AreEqual(new Vector2(1280, 720), scaler.referenceResolution);

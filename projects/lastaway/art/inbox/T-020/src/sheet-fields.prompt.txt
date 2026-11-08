@@ -1,0 +1,13 @@
+Use your image generation tool to create ONE image as described below, and copy the generated file AS-IS (no cropping, no resizing, no padding) to:
+D:\Lastaway\projects\lastaway\art\inbox\T-020\src\sheet-fields.png
+Do not write any other files and do not post-process the image. Use only the built-in image tool, never the OpenAI API, curl or python.
+
+Image 1 is the approved pixel-art HUD style (carved olive-grey stone, dark outline, dark warm brown-grey interior, gold #FFDC6E accents, small moss tufts). Image 2 is the sprite sheet of empty frames in the same style. Draw a UI-kit sprite sheet of FORM AND LIST PIECES in exactly this style and pixel scale.
+
+Flat solid magenta background (#FF00FF, no gradient, no shadow, never inside a piece), at least 50 px of pure magenta between pieces and around the border. NO text, NO numbers, NO icons. Every piece sharp, not cropped, in a clean grid, rows top to bottom, all pieces EMPTY:
+ROW 1: TEXT INPUT, 3 states left to right, aspect 6 : 1: NORMAL (dark recessed slab, thin olive-tan rim, dark outline), FOCUS (same but with a bright gold #FFDC6E line just inside the rim), ERROR (same but with a red #c0392b line just inside the rim).
+ROW 2: DROPDOWN, 2 states, aspect 6 : 1: CLOSED (like the text input, but the right end has a separate small square stone block with a dark slot, empty) and OPEN-HEADER (same with gold line inside the rim).
+ROW 3: TAB, 2 pieces, aspect 3 : 1: TAB-UNSELECTED (dark stone, rim only on top and sides, flat bottom edge open, slightly sunken) and TAB-SELECTED (lighter warm brown-grey #4a4538, gold #FFDC6E rim on top and sides, raised, flat bottom edge open).
+ROW 4: LIST ROW, 3 pieces, aspect 10 : 1, NO rim at all, plain flat strips: ROW-NORMAL (#2b2821), ROW-ALTERNATE (#38342b, a little lighter), ROW-SELECTED (#4a4538 with a thin gold #FFDC6E line along its left edge only). They differ only by shade, no lines between them.
+ROW 5: TOAST, aspect 6 : 1: a small dark stone plaque with thin olive rim and chamfered corners, empty. TOOLTIP, aspect 3 : 1: a small dark stone plaque with thin olive rim, a small triangular pointer at the bottom center, empty.
+Keep one rim style for all: thin olive stone rim, dark outline, no moss except at most one tiny tuft on the toast.

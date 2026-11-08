@@ -14,7 +14,7 @@ var passed = 0;
 void Check(bool value, string label) { if (!value) throw new Exception("FAIL " + label); passed++; Console.WriteLine("PASS " + label); }
 void Throws(Action action, string label) { var threw = false; try { action(); } catch (ArgumentException) { threw = true; } catch (InvalidOperationException) { threw = true; } Check(threw, label); }
 var baseline = ItemCatalog.CreateBaseline();
-Check(baseline.Items.Count == 35, "full catalog 18 weapons +16 equipment +ammo");
+Check(baseline.Items.Count == 38, "full catalog 21 weapons +16 equipment +ammo");
 Check(baseline.Get("HAND").Kind == ItemKind.Unarmed && baseline.Get("HAND").Sources == LootSource.None, "HAND outside inventory and loot");
 Check(baseline.Get("ELIXIR").UseWhileControlled && baseline.Get("ELIXIR").EffectAtStart, "Elixir immediate cleanse profile");
 Check(!baseline.Get("RUBBER_GUN").Enabled && baseline.Get("SHOTGUN").Enabled, "tentative gun enabled config");
@@ -47,9 +47,9 @@ Throws(() => new LootTable(baseline, new LootProfile { ChestGroupWeights = new i
 var custom = new LootTable(baseline, new LootProfile { ChestMin = 1, ChestMax = 1 });
 Check(custom.Roll(LootSource.Chest, 3).Length == 1, "loot counts data configurable");
 var docRoundtrip = JsonSerializer.Deserialize<ItemCatalogDocument>(JsonSerializer.Serialize(new ItemCatalogDocument { Version = baseline.Version, Items = baseline.Items.ToArray() }, jsonOptions), jsonOptions);
-Check(docRoundtrip.Build().Items.Count == 35, "JSON config roundtrip preserves catalog");
+Check(docRoundtrip.Build().Items.Count == 38, "JSON config roundtrip preserves catalog");
 var productionDocument = JsonSerializer.Deserialize<ItemCatalogDocument>(File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "GameData", "items_catalog.json")), jsonOptions);
-Check(productionDocument.Build().Items.Count == 35, "actual packaged JSON contains all 35 IDs");
+Check(productionDocument.Build().Items.Count == 38, "actual packaged JSON contains all 38 IDs");
 Check(new LootTable(productionDocument.Build(), productionDocument.Loot).Roll(LootSource.Chest, 4).Length >= 3, "actual packaged JSON profile validated and sampled");
 var leaked = baseline.Get("KNIFE"); leaked.Enabled = false;
 Check(baseline.Get("KNIFE").Enabled, "catalog returns defensive item copy");

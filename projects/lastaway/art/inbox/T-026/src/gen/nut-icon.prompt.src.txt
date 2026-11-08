@@ -1,0 +1,9 @@
+Image 1 is the approved raised-button style sheet: chunky buttons made of a FACE (top surface), a thin bright highlight line along the top edge, and a thick darker BASE visible below; 1 px dark pixel edge; no frames, no rims, no moss. Image 2 is only a pixel-grain reference for the game.
+
+Draw ONE sprite sheet on a flat solid magenta background (#FF00FF, no gradient, never inside a piece), at least 60 px of pure magenta between pieces and around the border. No text, no icons, no symbols on the pieces.
+
+2 rows x 4 columns of EMPTY icon-button blanks in exactly the same style, material and base thickness ratio as the SECONDARY (carved dark stone slab, face #4a4538 with subtle speckle, highlight #6b6452, base #26231c) buttons of image 1.
+ROW 1: ROUND buttons (a circle seen as a short raised cylinder: round face on top, base ledge below), about 110 x 120 px.
+ROW 2: SQUARE buttons (rounded square with chamfered corners, face on top, base ledge below), about 110 x 120 px.
+Columns, left to right: 1 NORMAL (raised, full base), 2 HOVER (face 15 percent lighter, same base), 3 PRESSED (face pushed DOWN by almost the full base thickness, base only 1/4 as thick, face slightly darker, no top highlight, silhouette clearly shorter), 4 DISABLED (flat desaturated grey #6b6a63, base reduced to a 2 px line, no highlight).
+Pieces in the same row must be identical in size except the pressed and disabled ones, which are shorter. Clean, symmetric, flat color with 2 to 3 tone shading, no glow.

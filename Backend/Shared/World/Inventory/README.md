@@ -2,7 +2,7 @@
 
 `ItemCatalogDocument` is the on-disk DTO for `Backend/Shared/GameData/items_catalog.json`.
 It contains `Version`, `Items[]` and `Loot` (counts, group weights, independent supply rolls).
-The shipped `gdd-v0.3-proposal` profile is **provisional**, including Shotgun-only gun enablement.
+The shipped `gdd-v0.3-proposal` profile is **provisional**, with all four ranged weapons enabled for chest and floor loot.
 `CreateBaseline()` is an explicit fixture/demo profile; a production adapter must not silently
 substitute it when loading a malformed or missing file.
 

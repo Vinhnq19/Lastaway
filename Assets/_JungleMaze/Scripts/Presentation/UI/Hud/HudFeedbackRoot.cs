@@ -26,7 +26,7 @@ namespace JungleMaze.Presentation.UI.Hud
         public PickupFeedView PickupFeed=>pickupFeed;public HitMarkerView HitMarker=>hitMarker;public DamageArcView[] DamageArcs=>damageArcs;public DangerBannerView DangerBanner=>dangerBanner;public DangerArrowView[] DangerArrows=>dangerArrows;public ReloadRingView ReloadRing=>reloadRing;
         [Inject] public void Construct(IHudState hud,IInventoryState inventory,IEffectState effects){_hud=hud;_inventory=inventory;_effects=effects;}
         /// <summary>Item icon provider for the pickup feed; separate from <see cref="Construct"/> so three-port helpers keep working (null keeps placeholders).</summary>
-        [Inject] public void ConstructIcons(IItemIconProvider icons){_icons=icons;if(pickupFeed!=null)pickupFeed.ConfigureIcons(icons);}
+        [Inject] public void ConstructIcons(IItemIconProvider icons){_icons=icons;if(pickupFeed!=null)pickupFeed.ConfigureIcons(icons);if(useAction!=null)useAction.ConfigureIcons(icons);}
         /// <summary>Local reload for the action bar and the ring above the hero; separate so three-port helpers keep working (null shows no reload).</summary>
         [Inject] public void ConstructReload(IReloadProgressSource reload)=>_reload=reload;
         private void Start()
@@ -34,7 +34,7 @@ namespace JungleMaze.Presentation.UI.Hud
             if(_hud==null||_inventory==null||_effects==null){Debug.LogWarning("[HUD] HudFeedbackRoot has no HUD state (no Bootstrap?); feedback disabled.");enabled=false;return;}
             var core=GetComponent<HudRoot>();
             if(core==null||useAction==null||effectRow==null||pickupFeed==null||hitMarker==null||dangerBanner==null){Debug.LogWarning("[HUD] HudFeedbackRoot is missing a view reference; feedback disabled.");enabled=false;return;}
-            var palette=core.Palette;useAction.ApplyPalette(palette);effectRow.Configure(palette,catalog);pickupFeed.ApplyPalette(palette);pickupFeed.ConfigureIcons(_icons);hitMarker.ApplyPalette(palette);dangerBanner.ApplyPalette(palette);
+            var palette=core.Palette;useAction.ApplyPalette(palette);effectRow.Configure(palette,catalog);pickupFeed.ApplyPalette(palette);pickupFeed.ConfigureIcons(_icons);useAction.ConfigureIcons(_icons);hitMarker.ApplyPalette(palette);dangerBanner.ApplyPalette(palette);
             foreach(var arc in damageArcs)if(arc!=null)arc.ApplyPalette(palette);foreach(var arrow in dangerArrows)if(arrow!=null)arrow.ApplyPalette(palette);
             // The ring above the hero is drawn by CombatWeaponPresenter's ReloadProgressView; this HUD only shows the action bar, so two rings never stack.
             if(reloadRing!=null)reloadRing.gameObject.SetActive(false);

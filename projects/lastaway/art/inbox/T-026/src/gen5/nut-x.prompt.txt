@@ -1,0 +1,5 @@
+Use your image generation tool to create ONE image as described below, and copy the generated file AS-IS (no cropping, no resizing, no padding) to:
+D:\Lastaway\projects\lastaway\art\inbox\T-026\src\gen5\nut-x.png
+Do not write any other files and do not post-process the image. Use only the built-in image tool, never the OpenAI API, curl or python.
+
+Image 1 is a pixel-art UI reference only for pixel grain. Draw ONE sprite sheet on a flat solid magenta (#FF00FF) background, never used inside a piece, at least 60 px of pure magenta around the piece and border. Draw a single bold chunky pixel-art X (cross) symbol, 100 x 100 px, made of two thick diagonal bars with chamfered ends, flat color #55140F (very dark red), with a 1 px lighter edge highlight #8A3A30 on the upper-left side of each bar, no outline, hard pixel edges, no gradient, no text. Draw it twice: left one at 100 x 100 px, right one at 64 x 64 px.

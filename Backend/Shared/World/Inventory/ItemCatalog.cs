@@ -105,9 +105,10 @@ namespace JungleMaze.World.Inventory
             all.Add(new ItemDefinition { Id = "HAND", Kind = ItemKind.Unarmed });
             foreach (var id in new[] { "TREE_BRANCH", "KNIFE", "BONE", "AXE", "MACE" })
                 all.Add(new ItemDefinition { Id = id, Kind = ItemKind.Weapon, Sources = id == "MACE" ? LootSource.Supply | LootSource.Death : id == "AXE" ? c : pc, Weight = 25 });
-            var guns = new[] { "RUBBER_GUN", "SCEPTER", "CROSSBOW", "SHOTGUN" };
-            var magazines = new[] { 12, 10, 6, 4 }; var reserve = new[] { 60, 50, 30, 20 };
-            for (var i = 0; i < guns.Length; i++) all.Add(new ItemDefinition { Id = guns[i], Kind = ItemKind.Weapon, Sources = i == 3 ? cs : c, Weight = i == 3 ? 8 : 25, Enabled = i == 3, MagazineSize = magazines[i], ReserveCapacity = reserve[i] });
+            var guns = new[] { "RUBBER_GUN", "SCEPTER", "CROSSBOW", "SHOTGUN", "PISTOL", "ASSAULT_RIFLE", "SNIPER_RIFLE" };
+            var magazines = new[] { 12, 10, 6, 4, 12, 24, 5 }; var reserve = new[] { 60, 50, 30, 20, 60, 96, 20 };
+            var gunWeights = new[] { 25, 25, 25, 8, 14, 8, 3 };
+            for (var i = 0; i < guns.Length; i++) all.Add(new ItemDefinition { Id = guns[i], Kind = ItemKind.Weapon, Sources = i >= 3 ? cs : c, Weight = gunWeights[i], Enabled = i >= 3, MagazineSize = magazines[i], ReserveCapacity = reserve[i] });
             var thrown = new[] { "BANANA", "SMOKE", "METEORITE_FRAGMENT", "CRYSTAL", "SEED", "ROPE", "BELL", "SAHUR_BAT" };
             var caps = new[] { 3, 2, 3, 2, 3, 1, 1, 1 }; var weights = new[] { 25, 20, 20, 15, 20, 12, 10, 12 };
             for (var i = 0; i < thrown.Length; i++) all.Add(new ItemDefinition { Id = thrown[i], Kind = ItemKind.Weapon, MaxStack = caps[i], Sources = i == 0 || i == 4 ? pc : c, Weight = weights[i] });
@@ -135,9 +136,9 @@ namespace JungleMaze.World.Inventory
             {
                 case "AXE": case "SMOKE": case "METEORITE_FRAGMENT": case "SPIKE_HELMET": case "ARMOR": case "MERMAID_TAIL": case "ADRENALINE": case "RUBBER_GUN":
                     return ItemRarity.Uncommon;
-                case "CRYSTAL": case "ROPE": case "SAHUR_BAT": case "PHOENIX_FEATHERS": case "MAGIC": case "CROSSBOW":
+                case "CRYSTAL": case "ROPE": case "SAHUR_BAT": case "PHOENIX_FEATHERS": case "MAGIC": case "CROSSBOW": case "ASSAULT_RIFLE":
                     return ItemRarity.Rare;
-                case "SHOTGUN": case "BELL": case "MAGIC_HELMET": case "MAGIC_ARMOR": case "ELIXIR": case "UNICORN_BLOOD": case "SCEPTER":
+                case "SHOTGUN": case "BELL": case "MAGIC_HELMET": case "MAGIC_ARMOR": case "ELIXIR": case "UNICORN_BLOOD": case "SCEPTER": case "SNIPER_RIFLE":
                     return ItemRarity.Epic;
                 case "MACE": case "ELIXIR_OF_LIFE": case "COMPASS":
                     return ItemRarity.Legendary;
@@ -174,6 +175,9 @@ namespace JungleMaze.World.Inventory
         public SupplyDropRule[] Supply = {
             new SupplyDropRule { ItemId="MACE" }, new SupplyDropRule { ItemId="COMPASS" },
             new SupplyDropRule { ItemId="SHOTGUN",ChancePercent=70,Ammo=20 },
+            new SupplyDropRule { ItemId="PISTOL",ChancePercent=40,Ammo=60 },
+            new SupplyDropRule { ItemId="ASSAULT_RIFLE",ChancePercent=25,Ammo=96 },
+            new SupplyDropRule { ItemId="SNIPER_RIFLE",ChancePercent=10,Ammo=20 },
             new SupplyDropRule { ItemId="MAGIC_ARMOR",ChancePercent=60 },
             new SupplyDropRule { ItemId="MAGIC_HELMET",ChancePercent=50 },
             new SupplyDropRule { ItemId="ELIXIR_OF_LIFE",ChancePercent=35 },
