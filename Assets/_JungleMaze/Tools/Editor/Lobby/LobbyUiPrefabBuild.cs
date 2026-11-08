@@ -112,7 +112,13 @@ namespace JungleMaze.EditorTools
                 shade.GetComponent<Image>().color = new Color(0f, 0f, 0f, .18f);
                 shade.GetComponent<Image>().raycastTarget = false;
                 Set(root, "splash", splash);
-                Set(root, "mainMenuBackground", AssetDatabase.LoadAssetAtPath<Sprite>("Assets/_JungleMaze/Art/UI/Splash/lastaway_menu.png"));
+                var menu = Object.Instantiate(splash, rt);
+                menu.name = "MainMenuSplash";
+                menu.GetComponent<Image>().sprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/_JungleMaze/Art/UI/Splash/lastaway_menu.png");
+                var menuSprite = menu.GetComponent<Image>().sprite;
+                if (menuSprite != null) menu.GetComponent<AspectRatioFitter>().aspectRatio = menuSprite.rect.width / menuSprite.rect.height;
+                menu.SetActive(false);
+                Set(root, "mainMenuSplash", menu);
         }
 
         private static MainMenuView BuildMainMenu(RectTransform rt)

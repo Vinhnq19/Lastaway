@@ -883,6 +883,16 @@
       "_origin": "semantic",
       "evidence_type": "document-derived",
       "description": "Architecture refers to this report for technical results and limitations; report contents were not read in this extraction."
+    },
+    {
+      "id": "docs_network_architecture_vi_client_quality",
+      "label": "Focused client frame-time capture",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§ Phase 2 / kiểm thử tái sử dụng",
+      "_origin": "semantic",
+      "evidence_type": "document-derived",
+      "description": "Opt-in QualityClient captures focused 720p/60FPS frame-time by match phase; network input/tick remain 30Hz, insufficient foreground/load-generator coverage is INVALID."
     }
   ],
   "edges": [
@@ -1938,6 +1948,17 @@
       "_origin": "semantic",
       "evidence_type": "document-derived",
       "description": "Per-room isolated runtime together with per-match airdrop state implies room-local dynamic reservations; documentation does not spell out storage implementation."
+    },
+    {
+      "source": "docs_network_architecture_vi_unity",
+      "target": "docs_network_architecture_vi_client_quality",
+      "relation": "supports opt-in quality capture",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "L150",
+      "weight": 1.0,
+      "_origin": "semantic"
     }
   ],
   "hyperedges": [],
@@ -1946,7 +1967,7 @@
   "coverage": {
     "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md": 178
   },
-  "source_sha256": "8f6f8d7551d261b663e4e8a9a59854097a35db47cbc7f66945d5ba6095df9463",
+  "source_sha256": "c95f3978cb719d5270c0e477d7e13079a4b4e8005b918ca4f4d4f49af2a508d4",
   "usage_note": "Host-agent semantic extraction; exact token usage unavailable, zero values do not claim zero session token use; no paid API called.",
   "extraction_note": "Only Network_Architecture.vi.md was read as source. Document-derived architectural claims are not runtime verification. Missing .graphify_semantic.json schema was replaced by matching architecture-semantic.json schema. No linked report contents or implementation files verified.",
   "scope": "replacement semantic fragment for this source document only"

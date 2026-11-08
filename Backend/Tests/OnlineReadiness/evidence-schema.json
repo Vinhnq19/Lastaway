@@ -96,6 +96,69 @@
           }
         }
       }
+    },
+    "qualityTargetFps": {
+      "enum": [
+        0,
+        60
+      ]
+    },
+    "screenWidth": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "screenHeight": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "backgroundFrames": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "qualitySampleCapReached": {
+      "type": "boolean"
+    },
+    "frameQuality": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "object",
+        "required": [
+          "phase",
+          "frames",
+          "fps",
+          "p95Ms",
+          "p99Ms",
+          "stalls100Ms"
+        ],
+        "properties": {
+          "phase": {
+            "type": "string"
+          },
+          "frames": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "fps": {
+            "type": "number",
+            "minimum": 0
+          },
+          "p95Ms": {
+            "type": "number",
+            "minimum": 0
+          },
+          "p99Ms": {
+            "type": "number",
+            "minimum": 0
+          },
+          "stalls100Ms": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
     }
   }
 }

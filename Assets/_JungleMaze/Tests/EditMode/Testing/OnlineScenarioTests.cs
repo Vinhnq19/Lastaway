@@ -6,6 +6,22 @@ namespace JungleMaze.Tests.Testing
 {
     public sealed class OnlineScenarioTests
     {
+        [Test] public void QualitySummaryCountsStallsAndNearestRankPercentiles()
+        {
+            System.Type type = null;
+            foreach (var assembly in System.AppDomain.CurrentDomain.GetAssemblies())
+                type = type ?? assembly.GetType("JungleMaze.Composition.OnlineScenarioRunner+FrameQuality");
+            Assert.NotNull(type);
+            var samples = new System.Collections.Generic.List<double>();
+            for (int i = 0; i < 98; i++) samples.Add(16);
+            samples.Add(120); samples.Add(200);
+            var summary = type.GetMethod("From").Invoke(null, new object[]{"InGame", samples});
+            Assert.AreEqual(16d, type.GetField("p95Ms").GetValue(summary));
+            Assert.AreEqual(120d, type.GetField("p99Ms").GetValue(summary));
+            Assert.AreEqual(2, type.GetField("stalls100Ms").GetValue(summary));
+            Assert.AreEqual(100000d / 1888d, (double)type.GetField("fps").GetValue(summary), .001);
+        }
+
         [Test] public void MainCanWaitForFullRoundWithoutAcceleratingServer()
         { var s = new OnlineScenario { id = "main6", expectedPlayers = 6, maxDurationSeconds = 600, minConnectedSeconds = 300, requireResult = true }; Assert.IsNull(s.Validate()); }
         [TestCase(0)] [TestCase(11)] public void RefusesImpossiblePlayerCount(int players)

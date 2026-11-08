@@ -25,11 +25,11 @@ namespace JungleMaze.Tests.PlayMode.Lobby
             yield return null;
             Assert.NotNull(rig.Root.Splash);
             var image = rig.Root.Splash.GetComponent<Image>();
-            Assert.AreEqual("lastaway_menu", image.sprite.name);
+            Assert.AreEqual("lastaway_menu", rig.Root.Splash.GetComponent<Image>().sprite.name);
             rig.Root.SetSplashForMenu(false);
-            Assert.AreEqual("lastaway_splash", image.sprite.name);
+            Assert.AreEqual("lastaway_splash", rig.Root.Splash.GetComponent<Image>().sprite.name);
             rig.Root.SetSplashForMenu(true);
-            Assert.AreEqual("lastaway_menu", image.sprite.name);
+            Assert.AreEqual("lastaway_menu", rig.Root.Splash.GetComponent<Image>().sprite.name);
             Assert.False(image.raycastTarget);
             var fitter = image.GetComponent<AspectRatioFitter>();
             Assert.AreEqual(AspectRatioFitter.AspectMode.EnvelopeParent, fitter.aspectMode);

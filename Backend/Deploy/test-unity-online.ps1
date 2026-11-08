@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Reusable multi-client online readiness test launcher for JungleMaze Unity Windows standalone builds.
 .DESCRIPTION
@@ -53,7 +53,8 @@ param(
 
     [Parameter(Mandatory=$false)]
     [int]$StaggerMs = 100,
-    [string[]]$ClientConfigs = @()
+    [string[]]$ClientConfigs = @(),
+    [ValidateRange(0,10)][int]$QualityClient = 0
 )
 
 Set-StrictMode -Version Latest
@@ -108,6 +109,8 @@ if ($clientCount -lt 1 -or $clientCount -gt 10) {
 }
 
 if ($ClientConfigs.Count -and $ClientConfigs.Count -ne $clientCount) { throw 'ClientConfigs must contain exactly one config per player.' }
+
+if ($QualityClient -gt $clientCount) { throw 'QualityClient must identify a launched client.' }
 
 # 5. Resolve Room Code (Strictly via NET_ROOM_CODE - never passed via argv/log)
 $effectiveRoomCode = if ($RoomCode) { $RoomCode.Trim() } elseif ($env:NET_ROOM_CODE) { $env:NET_ROOM_CODE.Trim() } else { "" }
@@ -179,6 +182,10 @@ namespace JungleMaze {
                    "-clientConfig `"$configPath`" " +
                    "-name `"$clientName`" " +
                    "-logfile `"$logFile`""
+
+        if ($QualityClient -eq $i) {
+            $argList = $argList.Replace('-screen-width 640 -screen-height 360', '-screen-width 1280 -screen-height 720') + ' -qualityCapture'
+        }
 
         $psi = [System.Diagnostics.ProcessStartInfo]::new()
         if ($playerExe.EndsWith(".cmd", [System.StringComparison]::OrdinalIgnoreCase) -or

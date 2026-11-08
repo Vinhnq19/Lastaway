@@ -148,3 +148,9 @@ Kết thúc xác nhận EC2 vẫn Running. Chi phí EC2/EBS vẫn phát sinh the
 Worker rollback có thể hoàn tất giữa hai lần PC đọc trạng thái. Công cụ đã được sửa để đọc lại kết quả cuối và chỉ chấp nhận `PASS` khi **transactionId và releaseId đều khớp**; trạng thái của lượt cũ không đủ bằng chứng. Kết quả rollback được giữ trong `remote-final.json`.
 
 Nếu dùng công cụ cũ và thấy lỗi “failed before readiness”, kiểm tra journal của đúng unit cùng `/opt/junglemaze/deploy-state/state.json` trước. Không chạy Rollback lặp lại ngay: sau một rollback thành công, `previous` đã đổi và lần bấm tiếp có thể đưa máy về bản vừa bỏ.
+
+## Đo chất lượng client 720p/60 FPS
+
+Runner `test-unity-remote.ps1` và `test-unity-online.ps1` nhận `-QualityClient 1` để chọn một client chạy 1280×720/60 FPS; các client còn lại giữ 640×360/30 FPS. Mặc định 0 không bật đo, giữ nguyên hành vi kiểm mạng. Chỉ bật trong lượt chất lượng; không đổi tick/input server.
+
+Bằng chứng client có `frameQuality` theo phase: số frame, FPS trung bình, frame-time p95/p99 và số stall ≥100 ms. Chỉ lấy frame lúc cửa sổ được focus; `backgroundFrames` và `qualitySampleCapReached` cho biết thiếu bao phủ. Thiếu frame InGame hoặc mất focus/Sleep thì đánh INVALID phần đo, không kết luận FPS game. Không dùng runner mạng bị ép 30 FPS để nghiệm thu 60 FPS.

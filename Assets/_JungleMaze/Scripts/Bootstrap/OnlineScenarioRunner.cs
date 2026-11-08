@@ -29,12 +29,35 @@ namespace JungleMaze.Composition
             public double inputHz, activeInputSeconds, snapshotHz, snapshotSeconds, rttP50Ms, rttP95Ms, rttP99Ms;
             public int pings, pongs, pongTimeouts;
         }
+        [Serializable] public sealed class FrameQuality
+        {
+            public string phase;
+            public int frames, stalls100Ms;
+            public double fps, p95Ms, p99Ms;
+            public static FrameQuality From(string phase, List<double> samples)
+            {
+                var a = samples.ToArray(); Array.Sort(a);
+                double sum = 0; int stalls = 0;
+                foreach (var ms in a) { sum += ms; if (ms >= 100) stalls++; }
+                return new FrameQuality { phase = phase, frames = a.Length, stalls100Ms = stalls,
+                    fps = sum > 0 ? a.Length * 1000.0 / sum : 0,
+                    p95Ms = a.Length > 0 ? a[Math.Max(0, (int)Math.Ceiling(a.Length * .95) - 1)] : 0,
+                    p99Ms = a.Length > 0 ? a[Math.Max(0, (int)Math.Ceiling(a.Length * .99) - 1)] : 0 };
+            }
+        }
+        private bool _qualityCapture;
+        private int _qualitySamples, _backgroundFrames;
+        private readonly Dictionary<MatchPhase, List<double>> _frameTimes = new Dictionary<MatchPhase, List<double>>();
+
         [Serializable] public sealed class Evidence
         {
             public int schemaVersion = 1, physicalDeviceCount = 1;
             public string scenarioId, status, reason, selectedTransport, fallbackReason, endpoint, matchId, disconnectCallSite;
             public Metrics metrics = new Metrics();
             public Assertion[] assertions;
+            public FrameQuality[] frameQuality;
+            public bool qualitySampleCapReached;
+            public int qualityTargetFps, backgroundFrames, screenWidth, screenHeight;
         }
         private MatchSession _match;
         private JungleMaze.App.Lobby.LobbyFlow _lobby;
@@ -95,8 +118,12 @@ namespace JungleMaze.Composition
             var bots = Environment.GetEnvironmentVariable("NET_TEST_BOT_COUNT");
             if (!string.IsNullOrEmpty(bots) && (!int.TryParse(bots, out _testBotCount) || _testBotCount < 0 || _testBotCount > 9)) throw new ArgumentException("NET_TEST_BOT_COUNT must be 0..9.");
             var args = Environment.GetCommandLineArgs(); string scenarioPath = null;
-            for (var i = 0; i + 1 < args.Length; i++)
-            { if (args[i] == "-onlineTest") scenarioPath = args[++i]; else if (args[i] == "-onlineEvidence") _output = args[++i]; }
+            for (var i = 0; i < args.Length; i++)
+            {
+                if (args[i] == "-qualityCapture") _qualityCapture = true;
+                else if (i + 1 < args.Length && args[i] == "-onlineTest") scenarioPath = args[++i];
+                else if (i + 1 < args.Length && args[i] == "-onlineEvidence") _output = args[++i];
+            }
             try
             {
                 if (string.IsNullOrWhiteSpace(_output)) throw new ArgumentException("-onlineEvidence path required");
@@ -110,7 +137,7 @@ namespace JungleMaze.Composition
                 }
                 if (_scenario.driver != "movement" && !OnlineTestExtensions.TryCreateDriver(_scenario.driver, out _driver))
                     throw new ArgumentException("Unknown test driver");
-                Application.runInBackground = true; Application.targetFrameRate = 30; QualitySettings.vSyncCount = 0;
+                Application.runInBackground = true; Application.targetFrameRate = _qualityCapture ? 60 : 30; QualitySettings.vSyncCount = 0;
                 _baseInputs = _match.InputsSent; _baseInputSeconds = _match.ActiveInputSeconds;
                 _view = GetComponent<MatchDemoView>(); _view.UseExternalIntent = true;
             }
@@ -131,6 +158,16 @@ namespace JungleMaze.Composition
         private void Update()
         {
             if (_finished || _scenario == null) return;
+            if (_qualityCapture)
+            {
+                if (!Application.isFocused) _backgroundFrames++;
+                else if (_qualitySamples < 36000 && Time.unscaledDeltaTime > 0)
+                {
+                    if (!_frameTimes.TryGetValue(_match.Phase, out var frames))
+                        _frameTimes[_match.Phase] = frames = new List<double>(4096);
+                    frames.Add(Time.unscaledDeltaTime * 1000.0); _qualitySamples++;
+                }
+            }
             var elapsed = Time.realtimeSinceStartup - _started;
             if (_failureStats.HasValue) { Finish("FAIL", "Unexpected disconnection: " + _failureReason); return; }
             if (_network.State == NetworkState.Joined)
@@ -304,6 +341,14 @@ namespace JungleMaze.Composition
                 assertions.Add(new Assertion { id = id, status = Seen(id) ? "PASS" : "NOT_OBSERVED", detail = id == "playersVisible" ? "Roster and network views confirmed; Follow Player viewport count is separate" : "Observed during this run" });
             foreach (var pair in _checkResults) assertions.Add(new Assertion { id = pair.Key, status = pair.Value.Status, detail = pair.Value.Detail });
             _evidence.assertions = assertions.ToArray();
+            if (_qualityCapture)
+            {
+                var quality = new List<FrameQuality>();
+                foreach (var pair in _frameTimes) quality.Add(FrameQuality.From(pair.Key.ToString(), pair.Value));
+                _evidence.frameQuality = quality.ToArray(); _evidence.qualityTargetFps = 60;
+                _evidence.backgroundFrames = _backgroundFrames; _evidence.qualitySampleCapReached = _qualitySamples >= 36000;
+                _evidence.screenWidth = Screen.width; _evidence.screenHeight = Screen.height;
+            }
             try
             {
                 if (!string.IsNullOrWhiteSpace(_output))
