@@ -291,6 +291,11 @@ try
         Pump(() => clients.Take(2).All(c => c.Attacks.Any(a => a.NetId == client.OwnNetId && a.RequestSeq == attackSeq && a.Outcome == CombatOutcome.Accepted)));
         Pump(() => client.Inventory!.Value.Slots[slot].Magazine == definition.MagazineSize - 1);
         Check(true, client.Transport + " " + itemId + " accepted shot broadcasts and authoritative ammo decrements");
+        // The shot now flies (up to its range at projectileSpeed) and may break a container that drops AMMO next to the
+        // shooter; walk-over pickup would then top the reserve back up after the reload. Let it land, clear spare AMMO.
+        WaitTicks(15);
+        foreach (var spare in world.Floor.Items.Where(f => f.Stack.ItemId == "AMMO").Select(f => f.Id).ToList()) world.Floor.Remove(spare);
+        typeof(GameServer.Simulation.MatchWorldRuntime).GetProperty("Revision")!.SetValue(world, world.Revision + 1);
         var reloadSeq = firearmSequence++;
         var reload = new ReloadRequestPacket { RequestSeq = reloadSeq, Weapon = weapon };
         client.Send(ref reload, true);
