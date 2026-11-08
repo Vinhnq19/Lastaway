@@ -1,0 +1,10 @@
+Pixelart Guns by Scrython
+https://scrython.itch.io/pixelart-guns
+
+Source: user-downloaded GunsAssetPack. Black_Outline Pistol, AssaultRifle2
+and SniperRifle, corresponding firing poses, Bullet, Shell and Shot.
+Firing frames extracted without resampling. Original pixel art preserved.
+
+The author's page permits use and modification in personal/commercial games,
+with credit appreciated, and prohibits resale/redistribution of the asset pack.
+Keep these source PNGs local until permission for the public repository is clear.

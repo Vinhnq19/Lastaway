@@ -16,7 +16,8 @@ namespace JungleMaze.Presentation.UI.Hud
             // Weapons › 1..18
             { "HAND", "Tay không" }, { "TREE_BRANCH", "Cành cây" }, { "KNIFE", "Dao" }, { "BONE", "Xương" },
             { "AXE", "Rìu" }, { "MACE", "Chuỳ gai" }, { "RUBBER_GUN", "Ná cao su" }, { "SCEPTER", "Quyền trượng" },
-            { "CROSSBOW", "Nỏ" }, { "SHOTGUN", "Shotgun" }, { "BANANA", "Chuối" }, { "SMOKE", "Bom khói" },
+            { "CROSSBOW", "Nỏ" }, { "SHOTGUN", "Shotgun" }, { "PISTOL", "Súng lục" },
+            { "ASSAULT_RIFLE", "Súng trường" }, { "SNIPER_RIFLE", "Súng ngắm" }, { "BANANA", "Chuối" }, { "SMOKE", "Bom khói" },
             { "METEORITE_FRAGMENT", "Mảnh thiên thạch" }, { "CRYSTAL", "Tinh thể" }, { "SEED", "Hạt" }, { "ROPE", "Dây thừng" },
             { "BELL", "Chuông" }, { "SAHUR_BAT", "Gậy đánh bóng" },
             // Weapons › Guns

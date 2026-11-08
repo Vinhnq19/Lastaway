@@ -66,7 +66,9 @@ namespace JungleMaze.Presentation.Combat
         public Vector3 MainHandPosition => mainHand != null ? mainHand.transform.position : transform.position;
         public bool HandsVisible => mainHand != null && mainHand.enabled;
         /// <summary>World position of the held weapon's tip (the barrel for guns), for muzzle flashes.</summary>
-        public Vector3 MuzzlePosition => transform.position + transform.right * _tipReach;
+        public Vector3 MuzzlePosition => _hasEntry && _entry.Muzzle != Vector2.zero && weaponRenderer != null
+            ? weaponRenderer.transform.TransformPoint(_entry.MuzzleLocal)
+            : transform.position + transform.right * _tipReach;
 
         /// <summary>True when this view draws <paramref name="itemId"/> itself (in hand), so no separate swing visual is needed.</summary>
         public bool Draws(string itemId) => catalog != null && catalog.TryGet(itemId, out _);
@@ -94,6 +96,7 @@ namespace JungleMaze.Presentation.Combat
         {
             if (itemId == ItemId && (_hasEntry || string.IsNullOrEmpty(itemId))) return;
             ItemId = itemId;
+            _kick = 0f;
             _hasEntry = catalog != null && catalog.TryGet(itemId, out _entry);
             if (weaponRenderer == null) return;
             weaponRenderer.sprite = _hasEntry ? _entry.Sprite : null;
@@ -125,7 +128,7 @@ namespace JungleMaze.Presentation.Combat
 
         /// <summary>
         /// Follows the server's held-weapon code for a remote player: 0 (older server) changes nothing, so the last
-        /// attack keeps driving the hand; 1..10 holds that combat weapon; 15 holds <paramref name="otherItemId"/> from the
+        /// attack keeps driving the hand; 1..13 holds that combat weapon; 15 holds <paramref name="otherItemId"/> from the
         /// server's held-items list (a throwable or special item), or hides the hand while that ID is not known yet.
         /// </summary>
         public void ShowServerCode(byte code, string otherItemId = null)
@@ -141,7 +144,7 @@ namespace JungleMaze.Presentation.Combat
         /// </summary>
         public void OnAttack(bool melee, float swingSeconds, float arcDegrees = 120f)
         {
-            if (!melee) { _kick = kickSeconds; return; }
+            if (!melee) { _kick = KickDuration; Apply(); return; }
             _swingTotal = Mathf.Max(.12f, swingSeconds);
             _swingLeft = _swingTotal;
             _swingArc = Mathf.Clamp(arcDegrees, 60f, 200f);
@@ -219,7 +222,7 @@ namespace JungleMaze.Presentation.Combat
             var punch = _swingLeft > 0f && !_hasEntry ? PunchExtend(progress) * punchReach : 0f;
             var angle = aim + swing;
             var direction = new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad), 0f);
-            var recoil = kickSeconds > 0f ? kickDistance * (_kick / kickSeconds) : 0f;
+            var recoil = KickDuration > 0f ? (_hasEntry && _entry.RecoilDistance > 0f ? _entry.RecoilDistance : kickDistance) * (_kick / KickDuration) : 0f;
             var dip = ReloadDip(_reloadLeft, _reloadTotal, reloadDrop);
             var orbit = new Vector3(direction.x * sideReach, direction.y * verticalReach, 0f);
             var grip = root.position + orbit + direction * (punch - recoil) + Vector3.down * (shoulderDrop + dip);
@@ -231,6 +234,8 @@ namespace JungleMaze.Presentation.Combat
             var behind = direction.y > BehindAbove || (bodyAnimator != null && bodyAnimator.Facing == HeroFacing.Back);
             if (weaponRenderer != null)
             {
+                if (_hasEntry) weaponRenderer.sprite = _entry.FireSprite != null &&
+                    _kick > Mathf.Max(0f, KickDuration - _entry.FireSeconds) ? _entry.FireSprite : _entry.Sprite;
                 weaponRenderer.enabled = _hasEntry && bodyVisible;
                 if (body != null)
                 {
@@ -268,6 +273,7 @@ namespace JungleMaze.Presentation.Combat
             }
         }
 
+        private float KickDuration => _hasEntry && _entry.RecoilSeconds > 0f ? _entry.RecoilSeconds : kickSeconds;
         private static float NonZero(float value) => Mathf.Abs(value) < 1e-5f ? 1f : value;
     }
 }

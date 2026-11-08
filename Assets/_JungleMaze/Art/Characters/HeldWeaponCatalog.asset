@@ -15,6 +15,11 @@ MonoBehaviour:
   Entries:
   - ItemId: TREE_BRANCH
     Sprite: {fileID: -306787472437928336, guid: c4cf1bbcd75468f41b642ceb9ee1577b, type: 3}
+    FireSprite: {fileID: 0}
+    FireSeconds: 0
+    RecoilDistance: 0
+    RecoilSeconds: 0
+    Muzzle: {x: 0, y: 0}
     AngleOffset: -50
     Grip: {x: 0.1, y: 0.05}
     Length: 0.7
@@ -23,6 +28,11 @@ MonoBehaviour:
     ContentSize: {x: 0.7083333, y: 0.8125}
   - ItemId: KNIFE
     Sprite: {fileID: 761100573506273824, guid: 62ca3882281b20c469cca1c8ef9135f3, type: 3}
+    FireSprite: {fileID: 0}
+    FireSeconds: 0
+    RecoilDistance: 0
+    RecoilSeconds: 0
+    Muzzle: {x: 0, y: 0}
     AngleOffset: 0
     Grip: {x: 0.12, y: 0.5}
     Length: 0.6
@@ -31,6 +41,11 @@ MonoBehaviour:
     ContentSize: {x: 1, y: 0.28125}
   - ItemId: BONE
     Sprite: {fileID: 7553835203902197830, guid: e53c951da4aba8c428c1334c188f2f6e, type: 3}
+    FireSprite: {fileID: 0}
+    FireSeconds: 0
+    RecoilDistance: 0
+    RecoilSeconds: 0
+    Muzzle: {x: 0, y: 0}
     AngleOffset: -45
     Grip: {x: 0.12, y: 0.12}
     Length: 0.6
@@ -39,6 +54,11 @@ MonoBehaviour:
     ContentSize: {x: 0.675, y: 0.6375}
   - ItemId: AXE
     Sprite: {fileID: 21300000, guid: 63dffe0a8ab6409a98703639560f9930, type: 3}
+    FireSprite: {fileID: 0}
+    FireSeconds: 0
+    RecoilDistance: 0
+    RecoilSeconds: 0
+    Muzzle: {x: 0, y: 0}
     AngleOffset: -45
     Grip: {x: 0.08, y: 0.08}
     Length: 0.65
@@ -47,6 +67,11 @@ MonoBehaviour:
     ContentSize: {x: 0.96875, y: 0.90625}
   - ItemId: MACE
     Sprite: {fileID: -4519581290376263607, guid: 9b4dc1947a0ff334d85bfaa868ecef02, type: 3}
+    FireSprite: {fileID: 0}
+    FireSeconds: 0
+    RecoilDistance: 0
+    RecoilSeconds: 0
+    Muzzle: {x: 0, y: 0}
     AngleOffset: -135
     Grip: {x: 0.9, y: 0.08}
     Length: 0.65
@@ -55,6 +80,11 @@ MonoBehaviour:
     ContentSize: {x: 0.71875, y: 0.734375}
   - ItemId: RUBBER_GUN
     Sprite: {fileID: 21300000, guid: bf622b94b31fccd459b9231d853b6579, type: 3}
+    FireSprite: {fileID: 0}
+    FireSeconds: 0
+    RecoilDistance: 0
+    RecoilSeconds: 0
+    Muzzle: {x: 0, y: 0}
     AngleOffset: -90
     Grip: {x: 0.5, y: 0.08}
     Length: 0.8
@@ -63,6 +93,11 @@ MonoBehaviour:
     ContentSize: {x: 0.6875, y: 1}
   - ItemId: SCEPTER
     Sprite: {fileID: -423338512348627971, guid: e776f5c68b811584eb5826982271622e, type: 3}
+    FireSprite: {fileID: 0}
+    FireSeconds: 0
+    RecoilDistance: 0
+    RecoilSeconds: 0
+    Muzzle: {x: 0, y: 0}
     AngleOffset: -90
     Grip: {x: 0.5, y: 0.05}
     Length: 0.85
@@ -71,6 +106,11 @@ MonoBehaviour:
     ContentSize: {x: 1.0625, y: 1.125}
   - ItemId: CROSSBOW
     Sprite: {fileID: -469738134670642733, guid: a2a73629c4d26b540a974120e6250e67, type: 3}
+    FireSprite: {fileID: 0}
+    FireSeconds: 0
+    RecoilDistance: 0
+    RecoilSeconds: 0
+    Muzzle: {x: 0, y: 0}
     AngleOffset: 0
     Grip: {x: 0.35, y: 0.5}
     Length: 0.85
@@ -79,6 +119,11 @@ MonoBehaviour:
     ContentSize: {x: 1.375, y: 1.25}
   - ItemId: SHOTGUN
     Sprite: {fileID: 21300000, guid: dd6e31d6c486ccb43934f90cb8c1deab, type: 3}
+    FireSprite: {fileID: 0}
+    FireSeconds: 0
+    RecoilDistance: 0
+    RecoilSeconds: 0
+    Muzzle: {x: 0, y: 0}
     AngleOffset: 0
     Grip: {x: 0.25, y: 0.45}
     Length: 1
@@ -87,6 +132,11 @@ MonoBehaviour:
     ContentSize: {x: 1.9375, y: 0.4375}
   - ItemId: BANANA
     Sprite: {fileID: 7381965769198725172, guid: a195559f4d686164da25ac986b0d24d1, type: 3}
+    FireSprite: {fileID: 0}
+    FireSeconds: 0
+    RecoilDistance: 0
+    RecoilSeconds: 0
+    Muzzle: {x: 0, y: 0}
     AngleOffset: 0
     Grip: {x: 0.5, y: 0.5}
     Length: 0.4
@@ -95,6 +145,11 @@ MonoBehaviour:
     ContentSize: {x: 0.6640625, y: 0.734375}
   - ItemId: SMOKE
     Sprite: {fileID: -6990950841956652341, guid: 7d123b4e7ffe9ff41b1f4d2edf6aebf6, type: 3}
+    FireSprite: {fileID: 0}
+    FireSeconds: 0
+    RecoilDistance: 0
+    RecoilSeconds: 0
+    Muzzle: {x: 0, y: 0}
     AngleOffset: 0
     Grip: {x: 0.5, y: 0.5}
     Length: 0.35
@@ -103,6 +158,11 @@ MonoBehaviour:
     ContentSize: {x: 0.703125, y: 0.921875}
   - ItemId: METEORITE_FRAGMENT
     Sprite: {fileID: 5945060823959902216, guid: 42ede309ed26acb4c985c02cf3bb749e, type: 3}
+    FireSprite: {fileID: 0}
+    FireSeconds: 0
+    RecoilDistance: 0
+    RecoilSeconds: 0
+    Muzzle: {x: 0, y: 0}
     AngleOffset: 0
     Grip: {x: 0.5, y: 0.5}
     Length: 0.35
@@ -111,6 +171,11 @@ MonoBehaviour:
     ContentSize: {x: 0.96875, y: 0.90625}
   - ItemId: CRYSTAL
     Sprite: {fileID: 7479642271789056252, guid: cee34d0b6e37e18449287f98e952a154, type: 3}
+    FireSprite: {fileID: 0}
+    FireSeconds: 0
+    RecoilDistance: 0
+    RecoilSeconds: 0
+    Muzzle: {x: 0, y: 0}
     AngleOffset: 0
     Grip: {x: 0.5, y: 0.5}
     Length: 0.4
@@ -119,6 +184,11 @@ MonoBehaviour:
     ContentSize: {x: 0.953125, y: 1.0703125}
   - ItemId: SEED
     Sprite: {fileID: 3124949146848436715, guid: 80bfde283bb7f284faa974c5f1a6fe86, type: 3}
+    FireSprite: {fileID: 0}
+    FireSeconds: 0
+    RecoilDistance: 0
+    RecoilSeconds: 0
+    Muzzle: {x: 0, y: 0}
     AngleOffset: 0
     Grip: {x: 0.5, y: 0.5}
     Length: 0.25
@@ -127,6 +197,11 @@ MonoBehaviour:
     ContentSize: {x: 0.9375, y: 0.9375}
   - ItemId: ROPE
     Sprite: {fileID: -8344690870260263076, guid: e278c2614ee2a1c4b9c2a4f9e258154b, type: 3}
+    FireSprite: {fileID: 0}
+    FireSeconds: 0
+    RecoilDistance: 0
+    RecoilSeconds: 0
+    Muzzle: {x: 0, y: 0}
     AngleOffset: 0
     Grip: {x: 0.1, y: 0.5}
     Length: 0.6
@@ -135,6 +210,11 @@ MonoBehaviour:
     ContentSize: {x: 5, y: 1}
   - ItemId: BELL
     Sprite: {fileID: 3616512531535755360, guid: 4ac131267c9fbfd4e881250419bf7693, type: 3}
+    FireSprite: {fileID: 0}
+    FireSeconds: 0
+    RecoilDistance: 0
+    RecoilSeconds: 0
+    Muzzle: {x: 0, y: 0}
     AngleOffset: 0
     Grip: {x: 0.5, y: 0.5}
     Length: 0.4
@@ -143,9 +223,53 @@ MonoBehaviour:
     ContentSize: {x: 0.63720703, y: 0.6020508}
   - ItemId: SAHUR_BAT
     Sprite: {fileID: -2414027456312203395, guid: f2f6ead158665ad45afd5c30860dc8a1, type: 3}
+    FireSprite: {fileID: 0}
+    FireSeconds: 0
+    RecoilDistance: 0
+    RecoilSeconds: 0
+    Muzzle: {x: 0, y: 0}
     AngleOffset: 120
     Grip: {x: 0.9, y: 0.92}
     Length: 0.72
     Support: 0
     ContentMin: {x: -0.7060371, y: -0.9529009}
     ContentSize: {x: 0.78125, y: 1.03125}
+  - ItemId: PISTOL
+    Sprite: {fileID: 21300000, guid: e41b9cc890d696346b53e8384e8bdebb, type: 3}
+    FireSprite: {fileID: 21300000, guid: fd934a34cf59bbe409cdc9511e9ebe61, type: 3}
+    FireSeconds: 0.065
+    RecoilDistance: 0.08
+    RecoilSeconds: 0.12
+    Muzzle: {x: 1, y: 0.8}
+    AngleOffset: 0
+    Grip: {x: 0.22, y: 0.2}
+    Length: 0.6
+    Support: 0
+    ContentMin: {x: -0.5, y: 0}
+    ContentSize: {x: 0.375, y: 0.25}
+  - ItemId: ASSAULT_RIFLE
+    Sprite: {fileID: 21300000, guid: 8d78dafa051023940b05362fefb1373a, type: 3}
+    FireSprite: {fileID: 21300000, guid: 07053c5d698d51846b4620ec8534314f, type: 3}
+    FireSeconds: 0.04
+    RecoilDistance: 0.055
+    RecoilSeconds: 0.085
+    Muzzle: {x: 1, y: 0.62}
+    AngleOffset: 0
+    Grip: {x: 0.4, y: 0.2}
+    Length: 1.05
+    Support: 0.3
+    ContentMin: {x: -0.5, y: 0}
+    ContentSize: {x: 0.875, y: 0.25}
+  - ItemId: SNIPER_RIFLE
+    Sprite: {fileID: 21300000, guid: 65878c77ff4a7f045ae6f49a3b3970d2, type: 3}
+    FireSprite: {fileID: 21300000, guid: 1e6a8b91ed3ae684ab4c8a6d9e2fb905, type: 3}
+    FireSeconds: 0.065
+    RecoilDistance: 0.18
+    RecoilSeconds: 0.24
+    Muzzle: {x: 1, y: 0.62}
+    AngleOffset: 0
+    Grip: {x: 0.4, y: 0.2}
+    Length: 1.35
+    Support: 0.3
+    ContentMin: {x: -0.5, y: -0.03125}
+    ContentSize: {x: 0.9375, y: 0.28125}

@@ -9,17 +9,18 @@ namespace JungleMaze.App.Combat
     /// </summary>
     public static class CombatWeaponIds
     {
-        public const int Count = 10;
+        public const int Count = (int)CombatWeaponId.SniperRifle + 1;
 
         private static readonly string[] JsonIds =
         {
-            "HAND", "TREE_BRANCH", "KNIFE", "BONE", "AXE", "MACE", "RUBBER_GUN", "SCEPTER", "CROSSBOW", "SHOTGUN"
+            "HAND", "TREE_BRANCH", "KNIFE", "BONE", "AXE", "MACE", "RUBBER_GUN", "SCEPTER", "CROSSBOW", "SHOTGUN",
+            "PISTOL", "ASSAULT_RIFLE", "SNIPER_RIFLE"
         };
 
         /// <summary>Returns the balance id for a valid wire id.</summary>
         public static string ToJsonId(CombatWeaponId weapon) => JsonIds[(int)weapon];
 
-        /// <summary>Returns false for ids outside the ten client weapons (thrown and special items are not handled here).</summary>
+        /// <summary>Returns false for unknown combat IDs (thrown and special items are not handled here).</summary>
         public static bool TryFromJsonId(string id, out CombatWeaponId weapon)
         {
             for (var i = 0; i < JsonIds.Length; i++)
@@ -34,7 +35,7 @@ namespace JungleMaze.App.Combat
             return false;
         }
 
-        /// <summary>True when the wire value is one of the ten known weapons.</summary>
+        /// <summary>True when the wire value is one of the known combat weapons.</summary>
         public static bool IsKnown(CombatWeaponId weapon) => (int)weapon < Count;
     }
 }
