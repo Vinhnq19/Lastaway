@@ -24,6 +24,18 @@ public sealed class CombatService
     private readonly IBreakableObstacles _breakables;
     private readonly Dictionary<byte, PlayerCombat> _players = new();
     private readonly ICombatLoadout? _loadout;
+    /// <summary>Ranged shots still in the air. They travel at the weapon's projectileSpeed and hit what they reach.</summary>
+    private readonly List<FlyingShot> _shots = new();
+    private readonly List<CombatHit> _shotHits = new();
+
+    private sealed class FlyingShot
+    {
+        public byte Attacker;
+        public required WeaponRule Rule;
+        public Vector2 Origin, Direction;
+        public float Traveled;
+        public uint LastTick;
+    }
 
     private sealed class PlayerCombat
     {
@@ -74,11 +86,19 @@ public sealed class CombatService
     public CombatWeaponId HeldWeapon(byte netId) => _players.TryGetValue(netId, out var player) ? player.Held : CombatWeaponId.Hand;
 
     /// <summary>Xóa toàn bộ đạn, cooldown và passive đã dùng khi vào trận mới.</summary>
-    public void Reset() => _players.Clear();
+    public void Reset()
+    {
+        _players.Clear();
+        _shots.Clear();
+    }
+
+    /// <summary>Shots fired but not yet landed (tests and diagnostics).</summary>
+    public int ShotsInFlight => _shots.Count;
 
     /// <summary>Hoàn tất các lần nạp đã đến hạn. Gọi mỗi tick trước khi xử lý request.</summary>
     public void Tick(uint tick)
     {
+        AdvanceShots(tick);
         foreach (var entry in _players)
         {
             var player = entry.Value;
@@ -269,17 +289,45 @@ public sealed class CombatService
         {
             var offset = pellets == 1 ? 0f : -halfSpread + rule.SpreadDegrees * i / (pellets - 1);
             var dir = RotateDegrees(aim, offset);
-            FireRay(attacker, rule, origin, dir, tick, hits);
+            if (rule.ProjectileSpeed > 0f)
+                _shots.Add(new FlyingShot { Attacker = attacker.NetId, Rule = rule, Origin = origin, Direction = dir, LastTick = tick });
+            else
+                FireRay(attacker.NetId, rule, origin, dir, rule.Range, tick, hits);
         }
     }
 
-    private void FireRay(IEntity attacker, WeaponRule rule, Vector2 origin, Vector2 dir, uint tick, List<CombatHit> hits)
+    /// <summary>
+    /// Moves every shot one tick at a time and resolves the first target or obstacle on the stretch it covered, so
+    /// damage lands when the projectile the clients draw arrives, not on the firing tick. Idempotent per tick.
+    /// </summary>
+    private void AdvanceShots(uint tick)
     {
+        for (var i = _shots.Count - 1; i >= 0; i--)
+        {
+            var shot = _shots[i];
+            var done = false;
+            while (!done && unchecked((int)(tick - shot.LastTick)) > 0)
+            {
+                shot.LastTick++;
+                var step = MathF.Min(shot.Rule.ProjectileSpeed / TicksPerSecond, shot.Rule.Range - shot.Traveled);
+                var start = shot.Origin + shot.Direction * shot.Traveled;
+                shot.Traveled += step;
+                _shotHits.Clear();
+                done = FireRay(shot.Attacker, shot.Rule, start, shot.Direction, step, shot.LastTick, _shotHits) || shot.Traveled >= shot.Rule.Range - 1e-4f;
+            }
+            if (done) _shots.RemoveAt(i);
+        }
+    }
+
+    /// <summary>Resolves one ray stretch of <paramref name="length"/>. True when it stopped on a target or an obstacle.</summary>
+    private bool FireRay(byte attackerNetId, WeaponRule rule, Vector2 origin, Vector2 dir, float length, uint tick, List<CombatHit> hits)
+    {
+        if (length <= 0f) return false;
         var obstacleDistance = float.MaxValue;
         AABB? nearestObstacle = null;
         foreach (var obstacle in _obstacles)
         {
-            if (CombatGeometry.RayHitsAabb(origin, dir, rule.Range, obstacle, out var d) && d < obstacleDistance)
+            if (CombatGeometry.RayHitsAabb(origin, dir, length, obstacle, out var d) && d < obstacleDistance)
             { obstacleDistance = d; nearestObstacle = obstacle; }
         }
 
@@ -287,10 +335,10 @@ public sealed class CombatService
         var targetDistance = float.MaxValue;
         foreach (var target in _registry.All)
         {
-            if (target.NetId == attacker.NetId || !target.IsAlive) continue;
+            if (target.NetId == attackerNetId || !target.IsAlive) continue;
 
             var center = new Vector2(target.X, target.Y);
-            if (CombatGeometry.RayHitsCircle(origin, dir, rule.Range, center, target.Radius, out var d) && d < targetDistance)
+            if (CombatGeometry.RayHitsCircle(origin, dir, length, center, target.Radius, out var d) && d < targetDistance)
             {
                 targetDistance = d;
                 nearestTarget = target;
@@ -298,9 +346,14 @@ public sealed class CombatService
         }
 
         if (nearestTarget != null && targetDistance <= obstacleDistance)
-            ApplyHit(attacker.NetId, nearestTarget, rule.Damage, rule, tick, hits);
-        else if (nearestObstacle.HasValue && _breakables.IsBreakable(nearestObstacle.Value))
-            _breakables.ApplyDamage(nearestObstacle.Value, rule.Damage, attacker.NetId);
+        {
+            ApplyHit(attackerNetId, nearestTarget, rule.Damage, rule, tick, hits);
+            return true;
+        }
+        if (!nearestObstacle.HasValue) return false;
+        if (_breakables.IsBreakable(nearestObstacle.Value))
+            _breakables.ApplyDamage(nearestObstacle.Value, rule.Damage, attackerNetId);
+        return true;
     }
 
     /// <summary>

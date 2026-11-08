@@ -17,6 +17,13 @@ namespace JungleMaze.World.Loot
         public static LootSource SourceOf(WorldObjectKind kind) =>
             kind == WorldObjectKind.Chest ? LootSource.Chest : kind == WorldObjectKind.Pot ? LootSource.Pot : LootSource.Supply;
 
+        /// <summary>
+        /// Loot table a broken object rolls. Only the dragon egg (an airdrop) rolls the supply table; a supply crate placed
+        /// on the map (the wooden box, "Thùng tiếp tế") rolls like a chest, so it tops out at Rare too (08/11).
+        /// </summary>
+        public static WorldObjectKind LootKind(WorldObjectKind kind, bool dragonEgg) =>
+            kind == WorldObjectKind.Supply && !dragonEgg ? WorldObjectKind.Chest : kind;
+
         /// <summary>True when this stack needs an AMMO companion (an enabled gun and AMMO is in the catalog).</summary>
         public static bool NeedsAmmo(LootTable table, ItemStack stack)
         {

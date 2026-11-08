@@ -7,6 +7,7 @@ using JungleMaze.Domain.Player;
 using JungleBackend.Protocol.Gameplay;
 using JungleMaze.Presentation.Combat;
 using JungleMaze.Presentation.Rendering;
+using JungleMaze.App.World;
 using UnityEngine;
 
 namespace JungleMaze.Presentation.Player
@@ -119,6 +120,13 @@ namespace JungleMaze.Presentation.Player
         private void SyncHeldWeapon()
         {
             if (heldWeapon == null || !_model.HasState) return;
+            // Your own character shows the consumable you hold in hand (client side; the server keeps the weapon).
+            if (LocalConsumableHold.Active && _match != null && _match.OwnNetId == _model.NetId)
+            {
+                heldWeapon.Show(LocalConsumableHold.ItemId);
+                _appliedHeldCode = -1;
+                return;
+            }
             var code = _model.Current.HeldCode;
             var item = code == PlayerStatePacket.HeldOther ? _model.HeldItemId : "";
             if (code == _appliedHeldCode && item == _appliedHeldItem) return;

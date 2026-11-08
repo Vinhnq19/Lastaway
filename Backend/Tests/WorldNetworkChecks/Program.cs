@@ -240,17 +240,33 @@ try
         var definition = firearmCatalog.Get(itemId);
         var actor = serverMatch.Entities.All.First(a => a.NetId == client.OwnNetId);
         var other = clients.Take(2).First(c => c != client);
-        uint lootSeed = 1;
-        while (!firearmLoot.Roll(JungleMaze.World.Inventory.LootSource.Chest,
-            JungleMaze.World.Loot.LootSeeds.Mix(lootSeed, world.LootSeed)).Any(s => s.ItemId == itemId))
-            if (++lootSeed > 10000) throw new Exception("No chest seed for " + itemId);
+        // Chests (and map supply crates) top out at Rare; an Epic firearm (sniper) only comes from the dragon egg, so it is
+        // placed straight on the floor with the full reserve a supply drop carries.
+        var fromChest = definition.Rarity <= firearmDocument.Loot.MaxContainerRarity;
+        var lootSource = fromChest ? "Chest" : "Floor";
         var previousFloorIds = world.Floor.Items.Select(f => f.Id).ToHashSet();
-        world.SpawnLoot(WorldObjectKind.Chest, 0, new WorldPoint(actor.X, actor.Y), lootSeed);
+        if (fromChest)
+        {
+            uint lootSeed = 1;
+            while (!firearmLoot.Roll(JungleMaze.World.Inventory.LootSource.Chest,
+                JungleMaze.World.Loot.LootSeeds.Mix(lootSeed, world.LootSeed)).Any(s => s.ItemId == itemId))
+                if (++lootSeed > 10000) throw new Exception("No chest seed for " + itemId);
+            world.SpawnLoot(WorldObjectKind.Chest, 0, new WorldPoint(actor.X, actor.Y), lootSeed);
+        }
+        else
+        {
+            // Leftover AMMO from the earlier chests would top the reserve back up right after the reload.
+            foreach (var spare in world.Floor.Items.Where(f => f.Stack.ItemId == "AMMO").Select(f => f.Id).ToList()) world.Floor.Remove(spare);
+            if (!world.Floor.TrySpawn(new JungleMaze.World.Inventory.ItemStack(itemId, 1, 0, definition.ReserveCapacity), actor.X + 1f, actor.Y, out _))
+                throw new Exception("Could not place " + itemId);
+            // Same as SpawnLoot: a floor change is a new world revision, or clients see one revision with two page sets.
+            typeof(GameServer.Simulation.MatchWorldRuntime).GetProperty("Revision")!.SetValue(world, world.Revision + 1);
+        }
         var firearmDrop = world.Floor.Items.First(f => !previousFloorIds.Contains(f.Id) && f.Stack.ItemId == itemId);
         var firearmId = firearmDrop.Id;
         actor.X = firearmDrop.X; actor.Y = firearmDrop.Y;
         world.SyncActors();
-        Check(true, client.Transport + " server chest loot spawns " + itemId);
+        Check(true, client.Transport + " server " + lootSource + " loot spawns " + itemId);
         WaitTicks(9);
         foreach (var peer in clients.Take(2)) Send(peer, firearmRequest++, WorldActionKind.Resync);
         Pump(() => clients.Take(2).All(c => c.WorldObjects.Any(o => o.Id == firearmId && o.ItemId == itemId)));
@@ -275,6 +291,11 @@ try
         Pump(() => clients.Take(2).All(c => c.Attacks.Any(a => a.NetId == client.OwnNetId && a.RequestSeq == attackSeq && a.Outcome == CombatOutcome.Accepted)));
         Pump(() => client.Inventory!.Value.Slots[slot].Magazine == definition.MagazineSize - 1);
         Check(true, client.Transport + " " + itemId + " accepted shot broadcasts and authoritative ammo decrements");
+        // The shot now flies (up to its range at projectileSpeed) and may break a container that drops AMMO next to the
+        // shooter; walk-over pickup would then top the reserve back up after the reload. Let it land, clear spare AMMO.
+        WaitTicks(15);
+        foreach (var spare in world.Floor.Items.Where(f => f.Stack.ItemId == "AMMO").Select(f => f.Id).ToList()) world.Floor.Remove(spare);
+        typeof(GameServer.Simulation.MatchWorldRuntime).GetProperty("Revision")!.SetValue(world, world.Revision + 1);
         var reloadSeq = firearmSequence++;
         var reload = new ReloadRequestPacket { RequestSeq = reloadSeq, Weapon = weapon };
         client.Send(ref reload, true);

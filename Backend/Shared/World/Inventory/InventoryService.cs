@@ -123,17 +123,20 @@ namespace JungleMaze.World.Inventory
         public ItemResult Pickup(Guid matchId, byte actor, uint requestId, ushort floorId)
         {
             var check = Check(matchId, actor, requestId, out var a); if (check != ItemResult.Ok) return check;
-            return PickupCore(actor, a, floorId);
+            return PickupCore(actor, a, floorId, false);
         }
-        /// <summary>Authoritative walk-over pickup, separate from the client request sequence.</summary>
+        /// <summary>
+        /// Authoritative walk-over pickup, separate from the client request sequence. It only fills an empty helmet or
+        /// armor slot: swapping gear is an explicit pickup, otherwise the piece just taken off would be picked back up.
+        /// </summary>
         public ItemResult AutoPickup(byte actor, ushort floorId)
         {
             if (!_actors.TryGetValue(actor, out var a) || !a.Alive) return ItemResult.Dead;
             if (!_world.TryGet(floorId, out var floor) || !_catalog.TryGet(floor.Stack.ItemId, out var item)) return ItemResult.Missing;
             if (item.Kind != ItemKind.Ammo && item.Kind != ItemKind.Helmet && item.Kind != ItemKind.Armor) return ItemResult.Invalid;
-            return PickupCore(actor, a, floorId);
+            return PickupCore(actor, a, floorId, true);
         }
-        private ItemResult PickupCore(byte actor, Actor a, ushort floorId)
+        private ItemResult PickupCore(byte actor, Actor a, ushort floorId, bool auto)
         {
             if (!_world.TryGet(floorId, out var floor)) return ItemResult.Missing;
             if (!Finite(floor.X) || !Finite(floor.Y) || !Finite(a.X) || !Finite(a.Y) ||
@@ -154,10 +157,12 @@ namespace JungleMaze.World.Inventory
             }
             if (item.Kind == ItemKind.Helmet || item.Kind == ItemKind.Armor)
             {
+                // Picking up gear takes the worn piece off (it drops at the feet) and puts the new one on (08/11).
                 var existing = item.Kind == ItemKind.Helmet ? a.Helmet : a.Armor;
-                if (!existing.IsEmpty && _catalog.Get(existing.ItemId).Reduction >= item.Reduction) return ItemResult.Rejected;
+                var durability = floor.Stack.Durability > 0 ? floor.Stack.Durability : item.Durability;
+                if (!existing.IsEmpty && (auto || existing.ItemId == item.Id && existing.Durability >= durability)) return ItemResult.Rejected;
                 if (!existing.IsEmpty && !_world.TrySpawn(existing, a.X, a.Y, out _)) return ItemResult.Full;
-                var worn = new ItemStack(item.Id, 1, floor.Stack.Durability > 0 ? floor.Stack.Durability : item.Durability);
+                var worn = new ItemStack(item.Id, 1, durability);
                 if (item.Kind == ItemKind.Helmet) a.Helmet = worn; else a.Armor = worn;
                 TakeFloor(floor, 1); Mark(a, actor); return ItemResult.Ok;
             }

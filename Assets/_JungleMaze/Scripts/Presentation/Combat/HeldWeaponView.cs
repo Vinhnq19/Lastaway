@@ -1,6 +1,7 @@
 using JungleBackend.Protocol.Gameplay;
 using JungleMaze.App.Combat;
 using JungleMaze.App.Hud.State;
+using JungleMaze.App.World;
 using JungleMaze.Core.DI;
 using JungleMaze.Domain.Hud;
 using JungleMaze.Presentation.Player;
@@ -15,7 +16,8 @@ namespace JungleMaze.Presentation.Combat
     /// hand sprite. A melee attack swings the held weapon through its arc (wind-up, strike, hold, return, as in the
     /// JSurviv player); bare hands punch along the aim instead. Ranged and thrown attacks kick the weapon back,
     /// reloads dip it. Everything hides while dead. Presentation only.
-    /// The local hero follows <see cref="IHudState.HeldWeapon"/>; remote players follow the server snapshot
+    /// The local hero follows <see cref="IHudState.HeldWeapon"/>, or the consumable in hand
+    /// (<see cref="LocalConsumableHold"/>), drawn from its item icon; remote players follow the server snapshot
     /// (<see cref="ShowServerCode"/>), falling back to what they last attacked with on servers that do not send it.
     /// </summary>
     [DisallowMultipleComponent]
@@ -73,23 +75,34 @@ namespace JungleMaze.Presentation.Combat
         /// <summary>True when this view draws <paramref name="itemId"/> itself (in hand), so no separate swing visual is needed.</summary>
         public bool Draws(string itemId) => catalog != null && catalog.TryGet(itemId, out _);
 
+        /// <summary>Item icon for IDs without in-hand art (consumables); set by the world view from the HUD icon table.</summary>
+        public static System.Func<string, Sprite> IconFallback;
+
+        /// <summary>World length of an item drawn from its icon (a potion, a leaf) in the hand.</summary>
+        public const float IconLength = .5f;
+
         [Inject]
         public void Construct(IHudState hud)
         {
             if (!followLocalHud) return;
             if (_hud != null) _hud.Changed -= OnHudChanged;
+            LocalConsumableHold.Changed -= OnHoldChanged;
             _hud = hud;
             if (_hud == null) return;
             _hud.Changed += OnHudChanged;
-            Show(_hud.HeldWeapon.ItemId);
+            LocalConsumableHold.Changed += OnHoldChanged;
+            ShowLocal();
         }
 
         private void OnDestroy()
         {
             if (_hud != null) _hud.Changed -= OnHudChanged;
+            LocalConsumableHold.Changed -= OnHoldChanged;
         }
 
-        private void OnHudChanged(HudStateChange change) => Show(_hud.HeldWeapon.ItemId);
+        private void OnHudChanged(HudStateChange change) => ShowLocal();
+        private void OnHoldChanged() => ShowLocal();
+        private void ShowLocal() => Show(LocalConsumableHold.Active ? LocalConsumableHold.ItemId : _hud.HeldWeapon.ItemId);
 
         /// <summary>Holds this item; unknown IDs and bare hands hide the weapon.</summary>
         public void Show(string itemId)
@@ -97,7 +110,7 @@ namespace JungleMaze.Presentation.Combat
             if (itemId == ItemId && (_hasEntry || string.IsNullOrEmpty(itemId))) return;
             ItemId = itemId;
             _kick = 0f;
-            _hasEntry = catalog != null && catalog.TryGet(itemId, out _entry);
+            _hasEntry = catalog != null && catalog.TryGet(itemId, out _entry) || TryIconEntry(itemId, out _entry);
             if (weaponRenderer == null) return;
             weaponRenderer.sprite = _hasEntry ? _entry.Sprite : null;
             if (!_hasEntry) return;
@@ -108,6 +121,21 @@ namespace JungleMaze.Presentation.Combat
             t.localPosition = -(Vector3)(t.localRotation * (Vector3)(_entry.GripLocal * scale));
             _tipReach = TipReach(_entry, t.localRotation, t.localPosition);
             Apply();
+        }
+
+        /// <summary>
+        /// The consumable held in hand, drawn as its upright item icon held at the bottom centre. Only that item: bare
+        /// hands ("HAND") and other IDs without weapon art keep an empty hand.
+        /// </summary>
+        private static bool TryIconEntry(string itemId, out HeldWeaponCatalog.Entry entry)
+        {
+            var held = !string.IsNullOrEmpty(itemId) && LocalConsumableHold.Active && itemId == LocalConsumableHold.ItemId;
+            var icon = held ? IconFallback?.Invoke(itemId) : null;
+            entry = icon == null ? default : new HeldWeaponCatalog.Entry
+            {
+                ItemId = itemId, Sprite = icon, Grip = new Vector2(.5f, .15f), Length = IconLength, AngleOffset = 0f
+            };
+            return icon != null;
         }
 
         /// <summary>Farthest point of the content box along the aim (+X), measured from the grip.</summary>

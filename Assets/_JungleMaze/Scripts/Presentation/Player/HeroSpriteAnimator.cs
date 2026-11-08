@@ -40,16 +40,23 @@ namespace JungleMaze.Presentation.Player
         /// <summary>
         /// Plays the attack swing once for the current facing (it follows facing changes mid-swing), then returns to
         /// idle/move. A new attack restarts the swing. Heroes without attack clips keep their loop.
+        /// <paramref name="seconds"/> &gt; 0 fits the whole clip into that time, so the body finishes with the weapon
+        /// swing or shot instead of trailing it (source clips run 0.5–1.2 s, a knife swing about 0.25 s).
         /// </summary>
-        public void PlayAttack()
+        public void PlayAttack(float seconds = 0f)
         {
             var clip = _hero?.GetAttack(Facing);
             if (clip == null) return;
-            _attackDuration = clip.Duration > 0f ? clip.Duration : .3f;
+            var clipSeconds = clip.Duration > 0f ? clip.Duration : .3f;
+            _attackDuration = seconds > 0f ? Mathf.Min(seconds, clipSeconds) : clipSeconds;
             _attackElapsed = 0f;
             Attacking = true;
             _frames = null;
         }
+
+        /// <summary>Clip time shown <paramref name="elapsed"/> seconds into an attack lasting <paramref name="duration"/>.</summary>
+        public static float AttackClipTime(float elapsed, float duration, float clipDuration) =>
+            duration > 0f && clipDuration > 0f ? Mathf.Min(elapsed, duration) * clipDuration / duration : elapsed;
 
         /// <summary>Chooses the look; the index wraps over the set.</summary>
         public void SetHero(int index)
@@ -108,7 +115,7 @@ namespace JungleMaze.Presentation.Player
             }
             var attack = Attacking ? _hero.GetAttack(Facing) : null;
             var next = attack ?? _hero.Get(Moving, Facing);
-            if (attack != null) { _frames = next; _elapsed = _attackElapsed; }
+            if (attack != null) { _frames = next; _elapsed = AttackClipTime(_attackElapsed, _attackDuration, attack.Duration); }
             else if (next != _frames) { _frames = next; _elapsed = 0f; }
             else _elapsed += Mathf.Max(0f, seconds);
             _renderer.flipX = Facing == HeroFacing.Side && Mathf.Abs(angle) > 90f;

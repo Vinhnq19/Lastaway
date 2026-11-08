@@ -140,13 +140,27 @@ namespace JungleMaze.Presentation.Combat
             _controller.Select(CombatWeaponId.Hand);
         }
 
+        /// <summary>
+        /// Set while a popup blocks actions and kept until the left button is released, so the click that closes a
+        /// popup (or a held trigger) never fires the moment it disappears.
+        /// </summary>
+        private bool _waitForRelease;
+
+        private bool ActionsBlocked()
+        {
+            if (_menu?.BlocksGameplayInput ?? false) { _waitForRelease = true; return true; }
+            if (_waitForRelease && !Input.GetMouseButton(0)) _waitForRelease = false;
+            return false;
+        }
+
         private void Update()
         {
             if (_online==null || _pool==null || _projectiles==null) return;
+            var blocked = ActionsBlocked();
             if (_match.Connected)
             {
                 if (HandleThrowable(true)) return;
-                if (!_online.CanAct || (_menu?.BlocksGameplayInput??false)) return;
+                if (!_online.CanAct || blocked) return;
                 if (Input.GetKeyDown(KeyCode.R)) _online.TryReload();
                 if (WantsFire(_online.Controller))
                 {
@@ -158,7 +172,7 @@ namespace JungleMaze.Presentation.Combat
             if (_flow != null && _flow.IsOffline && _offlineWorld != null)
             {
                 if (_offlineMatch != null && _offlineMatch.IsDead) return;
-                if (_menu?.BlocksGameplayInput ?? false) return;
+                if (blocked) return;
                 if (HandleThrowable(false)) return;
                 if (Input.GetKeyDown(KeyCode.R)) _offlineWorld.TryReload();
                 if (WantsFire(_offlineWorld.Combat?.Controller))
@@ -181,13 +195,13 @@ namespace JungleMaze.Presentation.Combat
                 _server.AdvanceTicks(1);
             }
 
-            for (var i = 0; i < SelectKeys.Length; i++)
+            for (var i = 0; i < SelectKeys.Length && !blocked; i++)
             {
                 if (Input.GetKeyDown(SelectKeys[i])) _controller.Select((CombatWeaponId)i);
             }
-            if (Input.GetKeyDown(KeyCode.R)) _controller.TryReload();
+            if (!blocked && Input.GetKeyDown(KeyCode.R)) _controller.TryReload();
 
-            if (WantsFire(_controller))
+            if (!blocked && WantsFire(_controller))
             {
                 if (HeroAim.TryGetTargetDegrees(Camera.main, hero.position, Input.mousePosition, out var degrees)) _aimDegrees = degrees;
                 _controller.TryAttack(_aimDegrees);
@@ -200,14 +214,16 @@ namespace JungleMaze.Presentation.Combat
         /// land at the cursor, clamped by the server). Returns true when a throwable is held, so the normal weapon
         /// path does not also fire.
         /// </summary>
-        private static bool WantsFire(WeaponController controller) => controller != null &&
+        private bool WantsFire(WeaponController controller) => controller != null && !_waitForRelease && !LocalConsumableHold.Active &&
             (controller.SelectedSlot.SemiAutomatic ? Input.GetMouseButtonDown(0) : Input.GetMouseButton(0));
 
         private bool HandleThrowable(bool online)
         {
+            // A consumable in hand replaces the weapon: left click does nothing, right click uses it (WorldSceneView).
+            if (LocalConsumableHold.Active) return false;
             var kind = ThrowableRules.KindOf(_heroWeapon != null ? _heroWeapon.ItemId : null);
             if (kind == ThrowableKind.None) return false;
-            if ((_menu?.BlocksGameplayInput ?? false) || !Input.GetMouseButtonDown(0)) return true;
+            if ((_menu?.BlocksGameplayInput ?? false) || _waitForRelease || !Input.GetMouseButtonDown(0)) return true;
             var camera = Camera.main;
             if (camera == null || !HeroAim.TryGetTargetDegrees(camera, hero.position, Input.mousePosition, out var aim)) return true;
             var cursor = camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -camera.transform.position.z));
@@ -313,13 +329,25 @@ namespace JungleMaze.Presentation.Combat
             _match.Connected ? _online.Controller : (_flow != null && _flow.IsOffline && _offlineWorld != null ? _offlineWorld.Combat?.Controller : _controller);
 
         /// <summary>Body attack swing plus in-hand weapon: remote hands switch to the weapon they attacked with.</summary>
-        private static void Animate(HeroSpriteAnimator body, HeldWeaponView held, CombatWeaponId weapon, float swingSeconds, float arcDegrees)
+        private void Animate(HeroSpriteAnimator body, HeldWeaponView held, CombatWeaponId weapon, float swingSeconds, float arcDegrees)
         {
             if (swingSeconds < 0f) return;
-            if (body != null) body.PlayAttack();
+            if (body != null) body.PlayAttack(BodyAttackSeconds(weapon, swingSeconds));
             if (held == null) return;
             held.Show(CombatWeaponIds.ToJsonId(weapon));
             held.OnAttack(swingSeconds > 0f, swingSeconds, arcDegrees);
+        }
+
+        /// <summary>
+        /// How long the body attack pose lasts: a melee swing matches the hand swing (same 0.12 s floor as
+        /// <see cref="HeldWeaponView.OnAttack"/>); a shot is a short release that never outlasts the weapon's cadence.
+        /// </summary>
+        private float BodyAttackSeconds(CombatWeaponId weapon, float swingSeconds)
+        {
+            if (swingSeconds > 0f) return Mathf.Max(.12f, swingSeconds);
+            var controller = ActiveController();
+            var cadence = controller != null ? controller.Slot(weapon).CadenceSeconds : .4f;
+            return Mathf.Clamp(cadence * .6f, .12f, .3f);
         }
 
         /// <summary>

@@ -192,6 +192,7 @@ Check(CombatGeometry.RayHitsCircle(Vector2.Zero, Vector2.UnitX, 5f, new Vector2(
     hits.Clear();
 
     var result = combat.TryAttack(0, Attack(1, CombatWeaponId.Shotgun), 100, hits);
+    combat.Tick(130);
     Check(result.Outcome == CombatOutcome.Accepted && target.Hp == 100 - 3 * 9 && result.Magazine == 3,
         "shotgun: 5 pellets over 25 degrees hit 3 pellets at 3 m and cost one shell");
 }
@@ -206,7 +207,8 @@ Check(CombatGeometry.RayHitsCircle(Vector2.Zero, Vector2.UnitX, 5f, new Vector2(
     hits.Clear();
 
     var result = combat.TryAttack(0, Attack(1, CombatWeaponId.Crossbow), 100, hits);
-    Check(result.Outcome == CombatOutcome.Accepted && target.Hp == 100 && hits.Count == 0,
+    combat.Tick(130);
+    Check(result.Outcome == CombatOutcome.Accepted && target.Hp == 100 && hits.Count == 0 && combat.ShotsInFlight == 0,
         "ranged: Hard Cover stops the bolt and the target takes no damage");
 }
 
@@ -244,6 +246,20 @@ Check(CombatGeometry.RayHitsCircle(Vector2.Zero, Vector2.UnitX, 5f, new Vector2(
 
     var full = combat.TryReload(0, new ReloadRequestPacket { RequestSeq = 1, Weapon = CombatWeaponId.Crossbow }, 100);
     Check(full.Outcome == CombatOutcome.MagazineFull, "reload: full magazine is rejected with MagazineFull");
+}
+
+{
+    // A target that steps off the line before the bolt arrives is not hit.
+    var registry = new FakeRegistry();
+    registry.Add(new FakeEntity(0, 0, 0));
+    var target = registry.Add(new FakeEntity(1, 6.0f, 0));
+    var combat = Build(registry, noMap, new FakePassive(false), new FakeEffects(), new FakeBreakables());
+    combat.SetHeldWeapon(0, CombatWeaponId.Crossbow);
+    combat.TryAttack(0, Attack(1, CombatWeaponId.Crossbow), 100, hits);
+    combat.Tick(102);
+    target.Y = 2f;
+    combat.Tick(140);
+    Check(target.Hp == 100 && combat.ShotsInFlight == 0, "ranged: a target that leaves the path before the bolt arrives is not hit");
 }
 
 // ---- Life save and lethal damage ----
@@ -311,8 +327,15 @@ foreach (var weapon in new[] { CombatWeaponId.Pistol, CombatWeaponId.AssaultRifl
     combat.SetHeldWeapon(0, weapon);
     hits.Clear();
     var shot = combat.TryAttack(0, Attack(1, weapon), 100, hits);
+    var beforeArrival = target.Hp == 100 && hits.Count == 0;
+    var travelTicks = (uint)MathF.Ceiling((rule.Range - 1f - target.Radius) / rule.ProjectileSpeed * CombatService.TicksPerSecond);
+    combat.Tick(100 + travelTicks - 1);
+    var stillFlying = target.Hp == 100;
+    combat.Tick(100 + travelTicks);
     Check(shot.Outcome == CombatOutcome.Accepted && target.Hp == 100 - rule.Damage && shot.Magazine == rule.MagazineSize - 1,
         $"{weapon}: authoritative shot applies configured damage and spends one round");
+    Check(rule.ProjectileSpeed > 0f && beforeArrival && stillFlying,
+        $"{weapon}: damage lands when the projectile arrives ({travelTicks} ticks), not on the firing tick");
     Check(combat.TryAttack(0, Attack(2, weapon), 101, hits).Outcome == CombatOutcome.Cooldown,
         $"{weapon}: server rejects early follow-up");
     var reload = combat.TryReload(0, new ReloadRequestPacket { RequestSeq = 3, Weapon = weapon }, 102);

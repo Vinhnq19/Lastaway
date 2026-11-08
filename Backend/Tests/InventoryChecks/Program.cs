@@ -51,6 +51,19 @@ Check(docRoundtrip.Build().Items.Count == 38, "JSON config roundtrip preserves c
 var productionDocument = JsonSerializer.Deserialize<ItemCatalogDocument>(File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "GameData", "items_catalog.json")), jsonOptions);
 Check(productionDocument.Build().Items.Count == 38, "actual packaged JSON contains all 38 IDs");
 Check(new LootTable(productionDocument.Build(), productionDocument.Loot).Roll(LootSource.Chest, 4).Length >= 3, "actual packaged JSON profile validated and sampled");
+{
+    var production = productionDocument.Build(); var productionLoot = new LootTable(production, productionDocument.Loot);
+    var containerTop = ItemRarity.Common; var supplyTop = ItemRarity.Common;
+    for (uint seed = 1; seed <= 2000; seed++)
+    {
+        foreach (var stack in productionLoot.Roll(LootSource.Chest, seed).Concat(productionLoot.Roll(LootSource.Pot, seed)))
+            if (production.Get(stack.ItemId).Rarity > containerTop) containerTop = production.Get(stack.ItemId).Rarity;
+        foreach (var stack in productionLoot.Roll(LootSource.Supply, seed))
+            if (production.Get(stack.ItemId).Rarity > supplyTop) supplyTop = production.Get(stack.ItemId).Rarity;
+    }
+    Check(containerTop == ItemRarity.Rare && supplyTop == ItemRarity.Legendary,
+        "chests and pots top out at Rare (blue); Epic and Legendary only from the dragon egg");
+}
 var leaked = baseline.Get("KNIFE"); leaked.Enabled = false;
 Check(baseline.Get("KNIFE").Enabled, "catalog returns defensive item copy");
 var mutableDefinition = new ItemDefinition { Id = "TEST", Kind = ItemKind.Weapon, Sources = LootSource.Chest };
@@ -88,8 +101,14 @@ Check(floor.Items.Any(x => x.Stack.ItemId == "BANANA" && x.Stack.Count == 2), "p
 Check(Pick("AMMO", 1) == ItemResult.Ok && service.GetSnapshot(0).Weapons[3].Ammo == 4, "ammo adds one magazine to first eligible gun");
 Check(Pick("AMMO", 99) == ItemResult.Ok && service.GetSnapshot(0).Weapons[3].Ammo == 20, "ammo reserve capped");
 Check(Pick("AMMO") == ItemResult.Full, "full reserves do not consume ammo");
-Check(Pick("WOODEN_ARMOR") == ItemResult.Ok && Pick("MAGIC_ARMOR") == ItemResult.Ok, "better armor auto equips and replaces");
-Check(Pick("WOODEN_ARMOR") == ItemResult.Rejected, "inferior armor not auto picked");
+Check(Pick("WOODEN_ARMOR") == ItemResult.Ok && Pick("MAGIC_ARMOR") == ItemResult.Ok, "better armor equips and replaces");
+var beforeArmorSwap = floor.Items.Count;
+Check(Pick("WOODEN_ARMOR") == ItemResult.Ok && service.GetSnapshot(0).Armor.ItemId == "WOODEN_ARMOR" &&
+      floor.Items.Count == beforeArmorSwap + 1 && floor.Items.Any(x => x.Stack.ItemId == "MAGIC_ARMOR"),
+    "picking up other armor takes the worn one off onto the floor and wears the new one");
+Check(service.AutoPickup(0, floor.Items.First(x => x.Stack.ItemId == "MAGIC_ARMOR").Id) == ItemResult.Rejected &&
+      service.GetSnapshot(0).Armor.ItemId == "WOODEN_ARMOR", "walk-over pickup never swaps worn armor back");
+Check(Pick("MAGIC_ARMOR") == ItemResult.Ok, "armor back to the better one for the rest of the checks");
 Check(Pick("GOD_LEAF", 6) == ItemResult.Ok && Pick("SPIRIT_TEAR") == ItemResult.Ok && Pick("MAGIC") == ItemResult.Ok && Pick("ELIXIR", 2) == ItemResult.Ok, "fill four consumable types");
 Check(Pick("COMPASS") == ItemResult.Full, "full consumables refuse different type");
 Check(service.BeginUse(match, 0, ++request, 0, 1) == ItemResult.Ok && service.IsMovementLocked(0), "use starts and locks movement");
