@@ -2,6 +2,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using JungleMaze.Presentation.UI.Hud;
 using UnityEditor;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -114,6 +115,7 @@ namespace JungleMaze.EditorTools
             Bar(vitals.AdrenalineRow.Bar, "hud_bar_track_thin", 5f / 1.5f);
 
             foreach (var slot in hud.Find("QuickBar").GetComponentsInChildren<QuickbarSlotView>(true)) Slot(slot);
+            WeaponStrip(hud.Find("QuickBar"));
             Minimap(hud.Find("Minimap"));
         }
 
@@ -148,6 +150,57 @@ namespace JungleMaze.EditorTools
             var skin = Child(block, "Skin", 0);
             Stretch(skin, 0, 0);
             Simple(skin, sprite);
+        }
+
+        /// <summary>Height of the held-weapon label above the quick bar (reference units).</summary>
+        public const float WeaponStripHeight = 34f;
+
+        /// <summary>
+        /// Held weapon name and ammo (08/11): a stone label in the match-panel art instead of the old flat dark bar,
+        /// centred above the quick bar and trimmed to its text (the content size fitter follows name, ammo and reload hint).
+        /// </summary>
+        public static void WeaponStrip(Transform bar)
+        {
+            var strip = (RectTransform)(bar.Find("StripArea/WeaponStrip") ?? bar.Find("WeaponStrip"));
+            if (strip == null) return;
+            strip.GetComponent<Image>().enabled = false; // palette still tints it; the stone skin carries the look
+            OldFrameOff(strip);
+            strip.anchorMin = strip.anchorMax = strip.pivot = new Vector2(.5f, .5f);
+            strip.anchoredPosition = Vector2.zero;
+            strip.sizeDelta = new Vector2(120f, WeaponStripHeight);
+            var fitter = strip.GetComponent<ContentSizeFitter>();
+            fitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+            fitter.verticalFit = ContentSizeFitter.FitMode.Unconstrained;
+            var layout = strip.GetComponent<HorizontalLayoutGroup>();
+            layout.padding = new RectOffset(34, 34, 0, 0); // clears the corner knots of the stone frame
+            layout.spacing = 10f;
+            layout.childAlignment = TextAnchor.MiddleCenter;
+            layout.childControlWidth = true;
+            layout.childForceExpandWidth = false;
+            var skin = Child(strip, "Skin", 0);
+            Stretch(skin, 0, 0);
+            var ignore = skin.GetComponent<LayoutElement>();
+            if (ignore == null) ignore = skin.gameObject.AddComponent<LayoutElement>();
+            ignore.ignoreLayout = true;
+            var image = skin.GetComponent<Image>();
+            image.sprite = Load("hud_panel_match");
+            image.type = Image.Type.Sliced;
+            image.fillCenter = true;
+            image.pixelsPerUnitMultiplier = FitMultiplier(image.sprite, float.MaxValue, WeaponStripHeight);
+            image.color = Color.white;
+            image.raycastTarget = false;
+            // Name, magazine and reserve share one midline: every group sizes its children and centres them vertically.
+            foreach (var group in strip.GetComponentsInChildren<HorizontalLayoutGroup>(true))
+            {
+                group.childControlWidth = group.childControlHeight = true;
+                group.childForceExpandWidth = false;
+                group.childForceExpandHeight = group.name != "ReloadHint"; // the key cap stays square
+            }
+            foreach (var text in new[] { "Name", "Ammo/Magazine", "Ammo/Reserve" })
+            {
+                var t = strip.Find(text);
+                if (t != null && t.TryGetComponent<TMP_Text>(out var label)) label.alignment = TextAlignmentOptions.Midline;
+            }
         }
 
         /// <summary>The bar rect is the fill area; the stone track sits around it, <paramref name="inset"/> u wider per side.</summary>
