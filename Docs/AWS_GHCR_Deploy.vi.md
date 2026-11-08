@@ -82,6 +82,26 @@ Output gồm thư mục release, `manifest.json`, `release.env` trỏ đủ hai 
 
 Manifest ghi commit, fingerprint, base pins, protocol/data version và thời gian/layer delta mỗi service. Layer bytes là kích thước compressed OCI, không phải đo traffic TLS/retry chính xác. Giữ ledger và bundle để reuse; mất ledger vẫn build/push được nhưng phải coi là phát hành Full đầu tiên.
 
+### Đối chiếu catalog trước nghiệm thu map
+
+Image GameServer chứa bản map đi kèm tại `/app/GameData/Maps`, còn catalog đang phát hành nằm ở volume `/app/data/maps` (host mặc định `/opt/junglemaze/data/maps`). Pull image mới **không tự ghi đè catalog đang chạy**. Sau login JWT, dùng `GET /api/maps` trong Swagger và đối chiếu ID/version/hash với catalog muốn phát hành. Không lấy `catalogGeneration` trong manifest image làm bằng chứng volume đã được cập nhật.
+
+Nếu muốn phát hành bản đi kèm image, trong cửa sổ quản trị được duyệt:
+
+```bash
+game=$(sudo docker ps --filter label=com.docker.compose.service=game-server -q)
+# Phải có đúng một container; kiểm tra trước khi chạy.
+sudo docker exec "$game" dotnet /app/GameServer.dll --maps validate /app/GameData/Maps
+# Thay backup path bằng tên riêng cho lượt này; giữ đến sau nghiệm thu.
+sudo docker exec "$game" dotnet /app/GameServer.dll --maps publish /app/data/maps /tmp/maps-before-release
+sudo docker exec "$game" dotnet /app/GameServer.dll --maps publish /app/GameData/Maps /app/data/maps
+sudo docker exec "$game" dotnet /app/GameServer.dll --maps reload
+```
+
+Publisher kiểm toàn bộ JSON/preview/hash, chuyển catalog nguyên tử, tăng generation và giữ payload/history cũ. Reload dùng secret sẵn trong environment container, không đưa secret vào argv/log hoặc mở control port. Không restart Mongo/GameServer chỉ để đổi map. Nếu cần rollback catalog, publish thư mục backup về `/app/data/maps` rồi reload; generation rollback vẫn tăng. Kiểm lại `GET /api/maps` và client sau mỗi lần đổi. Với gói map ngoài image, validate/publish từ thư mục gói đã kiểm checksum thay cho `/app/GameData/Maps`.
+
+Runner `test-unity-remote.ps1` kiểm `NET_TEST_MAP_ID` sau JWT trước khi chạy client; map không có sẽ fail-fast, không chờ watchdog rồi coi đó là lỗi mạng/FPS. Khi đo quality, dùng `-QualityClient 1` và giữ cửa sổ game foreground; không dùng AttachThreadInput/đổi trạng thái window trong phép đo.
+
 ## 4. Deploy: một cửa sổ bảo trì
 
 Dành riêng server, không có người chơi; bật EC2 thủ công nếu cần, đợi Running/SSM/DuckDNS/HTTPS sẵn sàng. Pipeline tự từ chối máy Stopped, sai instance SSH, DNS/TLS lỗi hoặc hết dung lượng; không tự Start/Stop. Đồng hồ AWS chỉ bắt đầu sau phần chuẩn bị/publish nếu dùng một lệnh gộp.

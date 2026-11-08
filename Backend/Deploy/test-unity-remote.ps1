@@ -73,6 +73,12 @@ try {
     $env:NET_ACCESS_TOKEN=$taskToken
     $env:NET_USERNAME=$Fixture.username
     $env:NET_PASSWORD=$Fixture.password
+    # A requested test map must exist before launching; otherwise the client can wait in lobby until the watchdog.
+    if ($env:NET_TEST_MAP_ID) {
+        $catalog=Api GET '/api/maps' $null $taskToken
+        Check 'Authenticated map catalog available' ($catalog.status -eq 200)
+        Check 'Requested test map is published' (@($catalog.json.maps | Where-Object { $_.id -ceq $env:NET_TEST_MAP_ID }).Count -eq 1)
+    }
     $created=Api POST '/api/rooms' @{name='Unity online acceptance';maxPlayers=10} $taskToken
     Check 'JWT creates room' ($created.status -eq 201)
     $taskRoom=$created.json; Check 'Six character join code' ($taskRoom.roomCode -match '^[A-Z0-9]{6}$')

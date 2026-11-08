@@ -1,447 +1,472 @@
 # Graph Report - Lastaway  (2026-11-09)
 
 ## Corpus Check
-- 1577 files · ~1,863,828 words
+- 1577 files · ~1,873,465 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 23124 nodes · 88214 edges · 492 communities (382 shown, 110 thin omitted)
+- 23123 nodes · 88213 edges · 529 communities (384 shown, 145 thin omitted)
 - Extraction: 89% EXTRACTED · 11% INFERRED · 0% AMBIGUOUS · INFERRED: 9749 edges (avg confidence: 0.83)
 - Extraction-agent self-reported tokens (not metered billing; supervision excluded): 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `906de3cd`
+- Built from commit: `85b9768b`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `Tools/update_project_map.py` with the configured graphify Python after code/config changes; unchanged hashes skip rebuilding.
 
 ## Community Hubs (Navigation)
 - Imported Plugins/UniTask
 - Imported Plugins/UniTask
+- Backend/GameServer/Networking
 - Imported Plugins/UniTask
-- Imported Plugins/UniTask
-- Imported Plugins/UniTask
-- Imported Plugins/UniTask
-- Backend/Shared/Protocol
 - projects/lastaway/art
-- Domain/Hud
-- Imported Plugins/UniTask
+- Assets/_JungleMaze/Tests
 - Backend/Shared/World
+- Backend/Shared/Protocol
 - Imported Plugins/UniTask
 - Application/Hud
-- Assets/_JungleMaze/Tests
-- Assets/_JungleMaze/Tests
-- Assets/_JungleMaze/Tests
-- Imported Scripts/[Concrete]
 - Imported Plugins/UniTask
-- Imported Scripts/[Codebase]
-- Imported Plugins/Demigiant
-- Presentation/UI
-- projects/lastaway/art
-- Imported Plugins/UniTask
-- Backend/Shared/World
-- Imported Plugins/GameDevWare.Serialization
-- Presentation/UI
-- Presentation/UI
-- Packages/manifest.json
-- Imported Plugins/UniTask
-- Backend/GameServer/Simulation
-- Assets/_JungleMaze/Tests
-- Assets/_JungleMaze/Tests
-- Imported Plugins/UniTask
-- Presentation/UI
-- Assets/_JungleMaze/Tests
-- Assets/_JungleMaze/Tests
-- Backend/Shared/World
 - Infrastructure/Network
 - Imported Plugins/UniTask
-- Imported Plugins/UniTask
-- Imported Plugins/UniTask
-- LevelEditor/LevelEditorController.cs
-- Application/Hud
-- Imported Scripts/[Codebase]
-- Presentation/Player
 - Backend/GameServer/Simulation
-- Application/Lobby
-- Backend/Shared/World
-- Assets/_JungleMaze/Tests
+- Imported Scripts/[Codebase]
+- Imported Scripts/[Concrete]
 - Imported Plugins/UniTask
 - Imported Plugins/UniTask
 - Imported Plugins/UniTask
 - Presentation/UI
-- Backend/GameServer/Configuration
+- Presentation/UI
+- Imported Plugins/UniTask
+- Backend/Shared/World
+- projects/lastaway/art
+- Imported Plugins/UniTask
+- Imported Plugins/UniTask
+- Imported Plugins/UniTask
+- Imported Plugins/GameDevWare.Serialization
+- Imported Plugins/UniTask
+- Backend/Shared/World
+- Backend/Shared/World
+- Backend/GameServer/Rooms
+- Assets/_JungleMaze/Tests
+- Backend/NetSmokeClient/Networking
+- Packages/manifest.json
+- Application/Player
+- Imported Scripts/[Codebase]
+- Assets/_JungleMaze/Tests
+- Backend/Shared/Protocol
+- LevelEditor/LevelEditorController.cs
+- Imported Plugins/UniTask
+- Application/Hud
+- Assets/_JungleMaze/Tests
+- Imported Plugins/UniTask
+- Domain/Hud
+- Imported Plugins/UniTask
+- Imported Plugins/UniTask
+- Imported Epic Toon FX/Demo
+- Assets/_JungleMaze/Tests
+- Presentation/UI
+- Presentation/UI
 - Application/Flow
-- Infrastructure/Pooling
+- Assets/_JungleMaze/Tests
+- Presentation/World
+- Application/Vfx
+- Application/Hud
+- Tools/Art/native32_pipeline.py
+- Presentation/Player
+- Application/Lobby
+- projects/lastaway/art
+- Imported Plugins/UniTask
+- Presentation/UI
+- Assets/_JungleMaze/Tests
+- Presentation/UI
+- Backend/Tests/MatchResultChecks
+- Application/Match
+- Backend/GameServer/Simulation
+- Application/MatchUi
+- Core/Events
+- Presentation/World
+- Infrastructure/Config
+- Application/MatchUi
+- Tools/Telemetry/test_telemetry.py
+- Imported Scripts/Screen
+- Presentation/Combat
+- Backend/GameServer/Simulation
+- projects/lastaway/art
+- Imported Plugins/GameDevWare.Serialization
+- Assets/_JungleMaze/Tests
+- Presentation/Audio
+- Assets/_JungleMaze/Tests
+- Backend/Deploy/registry_release.py
+- Presentation/Vfx
+- Imported Plugins/UniTask
+- Presentation/UI
 - Imported Plugins/UniTask
 - Application/Lobby
 - Application/World
-- Backend/GameServer/Networking
-- Imported Scripts/Screen
-- Imported Plugins/UniTask
-- Assets/_JungleMaze/Tests
-- projects/lastaway/art
-- Backend/Tools/room_benchmark.py
-- Backend/GameServer/Maps
-- Imported Scripts/[Codebase]
-- Imported Plugins/UniTask
-- Backend/GameServer/Simulation
-- Backend/Tests/OnlineReadiness
-- Tools/Telemetry/test_telemetry.py
-- Application/Player
-- Imported Plugins/UniTask
-- Backend/NetSmokeClient/Networking
-- Docs/Network_Architecture.vi.md
-- Presentation/World
-- Tools/Art/normalize_item_icons.py
-- Application/Match
-- Assets/_JungleMaze/Tests
-- Imported Plugins/GameDevWare.Serialization
-- Tools/Art/native32_pipeline.py
-- Application/Config
-- Assets/_JungleMaze/Tests
-- Imported Plugins/UniTask
-- Presentation/UI
-- Application/MatchUi
-- Backend/Deploy/registry_release.py
-- Imported Plugins/UniTask
-- Application/Ports
-- Imported Plugins/GameDevWare.Serialization
-- Imported Scripts/Obstacles
-- projects/lastaway/art
-- Presentation/Audio
-- Assets/_JungleMaze/Tests
 - Backend/Telemetry/MatchTelemetryAssembler.cs
-- Application/Lobby
-- Backend/Deploy/Aws
+- Presentation/Combat
+- Assets/_JungleMaze/Tools
+- Assets/_JungleMaze/Tools
+- Backend/Tools/room_benchmark.py
+- Tools/Audio/build_manifest.py
+- Domain/Hud
 - Packages/packages-lock.json
-- Assets/_JungleMaze/Tools
-- Backend/Api/Repositories
-- Backend/GameServer/Simulation
-- Tools/Telemetry/tel_schema.py
-- Imported Plugins/GameDevWare.Serialization
-- Backend/Tests/MatchResultChecks
-- Application/Lobby
-- Assets/_JungleMaze/Tests
-- Tools/Telemetry/tel_fake.py
-- Imported Plugins/UniTask
 - Imported Scripts/[Codebase]
-- Backend/GameServer/Simulation
-- Backend/Telemetry/TelemetryEvent.cs
-- projects/lastaway/art
-- Imported Scripts/Game
-- Application/Hud
-- Application/Lobby
-- Presentation/UI
-- Assets/_JungleMaze/Tests
-- Presentation/World
-- Assets/_JungleMaze/Tools
-- Imported Plugins/GameDevWare.Serialization
-- Imported Plugins/UniTask
-- Presentation/UI
-- LevelEditor/LevelDocument.cs
-- Backend/compose.yaml
-- Backend/GameServer/Rooms
-- projects/lastaway/art
-- Imported Plugins/GameDevWare.Serialization
 - Imported Scripts/Screen
-- Application/Vfx
-- Application/MatchUi
-- Imported Plugins/UniTask
-- Imported Plugins/GameDevWare.Serialization
-- Bootstrap/Bootstrap.cs
-- Presentation/Vfx
-- Imported Plugins/GameDevWare.Serialization
-- Application/Audio
 - Backend/Tests/TelemetryChecks
-- Docs/Art/directions
 - Imported Plugins/GameDevWare.Serialization
-- Imported Plugins/UniTask
-- Imported Scripts/[Codebase]
-- Presentation/UI
-- Backend/Shared/Protocol
-- Imported Plugins/UniTask
-- Presentation/UI
-- Backend/Tests/test_registry_deploy.py
-- Backend/Tests/WorldNetworkChecks
-- Imported Plugins/GameDevWare.Serialization
-- Presentation/Player
 - Assets/_JungleMaze/Tests
-- Assets/_JungleMaze/Tools
-- Backend/GameServer/Simulation
-- Backend/Telemetry/JsonlTelemetryWriter.cs
-- Imported Plugins/GameDevWare.Serialization
-- Backend/Api/Controllers
-- Imported Plugins/UniTask
-- Assets/_JungleMaze/Tests
-- Assets/_JungleMaze/Tests
-- Application/Hud
-- Core/DI
-- Presentation/Combat
-- Presentation/Combat
-- Assets/_JungleMaze/Tools
-- Imported Scripts/[Codebase]
-- Application/Combat
-- Presentation/UI
-- Backend/Tests/OnlineReadiness
-- Application/Combat
 - Application/Lobby
-- Presentation/UI
+- Tools/Telemetry/tel_schema.py
 - Imported Plugins/UniTask
+- Imported Scripts/Obstacles
+- Tools/Telemetry/tel_fake.py
+- Backend/Telemetry/TelemetryEvent.cs
+- Imported Plugins/Demigiant
+- Imported Scripts/Game
+- Assets/_JungleMaze/Tests
+- Imported Plugins/GameDevWare.Serialization
 - Imported Plugins/UniTask
+- Imported Scripts/Screen
 - Assets/_JungleMaze/Tests
-- Application/Ports
-- Backend/NetSmokeClient/Networking
-- Assets/_JungleMaze/Tests
+- Application/Lobby
+- Application/Player
+- Domain/Vfx
+- Assets/_JungleMaze/Tools
+- Backend/compose.yaml
+- Backend/Tests/TelemetryChecks
+- Backend/Tests/OnlineReadiness
+- Imported Plugins/GameDevWare.Serialization
+- Imported Plugins/UniTask
+- Bootstrap/OnlineScenarioRunner.cs
 - Imported Plugins/GameDevWare.Serialization
 - Imported Plugins/UniTask
 - Application/Audio
-- Domain/MatchUi
-- Presentation/UI
-- Backend/Api/DTOs
+- Domain/Lobby
+- Docs/Art/directions
+- projects/lastaway/art
+- Imported Plugins/GameDevWare.Serialization
+- Imported Scripts/[Codebase]
+- Application/Vfx
 - Tools/Level/survival_map_150.py
 - Imported Plugins/GameDevWare.Serialization
-- Imported Scripts/[Concrete]
+- Backend/GameServer/Simulation
+- Backend/Shared/World
+- Imported Plugins/GameDevWare.Serialization
+- Imported Plugins/GameDevWare.Serialization
+- Assets/_JungleMaze/Tests
+- Backend/Tests/test_registry_deploy.py
+- Assets/_JungleMaze/Tests
+- Assets/_JungleMaze/Tests
+- Assets/_JungleMaze/Tools
+- Backend/Api/Controllers
+- Imported Plugins/GameDevWare.Serialization
 - Application/Audio
-- Application/Match
 - Assets/_JungleMaze/Tests
-- Backend/Tests/GameplayNetworkChecks
+- Application/MatchUi
 - Imported Plugins/UniTask
+- Core/DI
+- Domain/Vfx
 - Assets/_JungleMaze/Tests
-- Presentation/Player
+- Application/Audio
+- Application/Vfx
+- Presentation/Combat
+- Backend/GameServer/Simulation
+- Imported Plugins/UniTask
+- Domain/MatchUi
 - Presentation/UI
+- Assets/_JungleMaze/Tools
+- Backend/Tests/OnlineReadiness
 - Assets/_JungleMaze/Tests
 - Imported Plugins/GameDevWare.Serialization
-- Imported Scripts/Screen
-- Assets/_JungleMaze/Tools
-- Domain/Audio
-- Presentation/Rendering
-- Assets/_JungleMaze/Tests
-- Assets/_JungleMaze/Tests
-- Assets/_JungleMaze/Tools
-- Assets/_JungleMaze/Tests
-- Application/MatchUi
-- Presentation/Vfx
-- Infrastructure/Api
-- Assets/_JungleMaze/Tests
-- Backend/Telemetry/MatchTelemetryObserver.cs
 - Imported Plugins/UniTask
-- Application/World
-- Presentation/Vfx
-- Presentation/Audio
-- Packages/packages-lock.json
-- Tools/Audio/make_placeholder_sfx.py
-- Imported Plugins/UniTask
+- Presentation/UI
+- Backend/Telemetry/JsonlTelemetryWriter.cs
 - Assets/_JungleMaze/Tests
 - Presentation/UI
-- Backend/Api/Services
+- Application/MatchUi
+- Imported Plugins/GameDevWare.Serialization
+- Imported Plugins/UniTask
+- Imported Plugins/UniTask
+- Application/Lobby
+- Application/Lobby
+- Application/Lobby
+- Assets/_JungleMaze/Tests
+- projects/lastaway/art
+- Application/Combat
+- Assets/_JungleMaze/Tests
+- Assets/_JungleMaze/Tests
+- Presentation/Player
+- Assets/_JungleMaze/Tests
+- Core/Pooling
+- Imported Scripts/[Concrete]
 - Imported Plugins/UniTask
 - Imported Scripts/[Codebase]
-- Domain/Vfx
-- Core/Pooling
-- Backend/compose.host.yaml
-- Backend/Tests/CombatChecks
-- Packages/packages-lock.json
-- Backend/Shared/World
-- Backend/Shared/Protocol
-- Application/MatchUi
-- Application/MatchUi
-- Application/Vfx
-- Application/Vfx
-- Domain/Balance
-- Imported Plugins/UniTask
-- Infrastructure/Config
-- Presentation/Rendering
-- Imported Plugins/UniTask
-- Presentation/UI
 - Assets/_JungleMaze/Tools
-- Backend/Shared/RoomContracts.cs
-- Backend/Tests/TelemetryChecks
-- Packages/packages-lock.json
-- projects/lastaway/art
-- Bootstrap/OnlineScenarioRunner.cs
+- Imported Plugins/GameDevWare.Serialization
+- Imported Scripts/Screen
+- Domain/Audio
+- Application/Combat
+- Presentation/World
+- Presentation/UI
+- Imported Plugins/UniTask
+- Application/World
+- Infrastructure/Pooling
+- Imported Scripts/[Concrete]
+- Assets/_JungleMaze/Tools
+- Backend/Api/Models
+- Presentation/UI
+- Infrastructure/Api
+- Imported Plugins/UniTask
 - Imported Scripts/Map
 - Assets/_JungleMaze/Tests
-- Application/World
+- Imported Scripts/Screen
+- Presentation/Player
+- Packages/packages-lock.json
+- Tools/Audio/make_placeholder_sfx.py
+- Application/MatchUi
+- Backend/Api/Repositories
+- Backend/Tests/CombatChecks
+- Imported Plugins/Demigiant
+- Presentation/UI
 - Assets/_JungleMaze/Tests
+- Presentation/UI
+- Presentation/UI
+- Backend/compose.host.yaml
+- Packages/packages-lock.json
+- Presentation/World
+- Application/Vfx
+- Domain/Balance
 - Assets/_JungleMaze/Tests
-- Presentation/World
-- Presentation/World
+- Imported Plugins/UniTask
+- Imported Plugins/UniTask
+- Application/MatchUi
+- Backend/Telemetry/ITelemetrySink.cs
+- Imported Plugins/UniTask
+- Imported Plugins/UniTask
+- Imported Plugins/UniTask
+- Imported Plugins/UniTask
+- Imported Plugins/UniTask
+- Imported Scripts/Screen
+- Presentation/Rendering
+- Presentation/UI
+- Packages/packages-lock.json
+- Assets/_JungleMaze/Tests
+- Backend/Shared/RoomContracts.cs
+- Backend/Tests/WorldNetworkChecks
+- projects/lastaway/art
+- Imported Plugins/Demigiant
+- Domain/Balance
+- Backend/Api/Controllers
+- Backend/GameServer/Simulation
 - Packages/packages-lock.json
 - Tools/Telemetry/tel_metrics.py
 - Imported Plugins/GameDevWare.Serialization
-- Imported Plugins/UniTask
-- Imported Plugins/UniTask
-- Imported Plugins/UniTask
-- Imported Plugins/UniTask
-- Imported Scripts/Screen
-- Presentation/Combat
-- Domain/Network
-- Backend/Shared/Protocol
-- Imported Scripts/[Concrete]
 - Imported Plugins/GameDevWare.Serialization
-- Imported Plugins/UniTask
-- Imported Scripts/[Codebase]
+- Imported Scripts/Screen
+- Application/Hud
+- Application/Match
 - Assets/_JungleMaze/Tests
-- Application/Combat
+- Assets/_JungleMaze/Tests
+- Assets/_JungleMaze/Tests
+- Presentation/World
+- Backend/Tests/auth_smoke.py
+- Docs/Network_Architecture.vi.md
+- Imported Plugins/UniTask
 - Domain/MatchUi
-- Presentation/World
-- Presentation/World
-- Backend/GameServer/Diagnostics
-- Presentation/UI
+- Assets/_JungleMaze/Tools
+- Backend/Shared/Protocol
+- projects/lastaway/art
 - Imported Plugins/UniTask
 - Application/Audio
+- Application/Hud
+- Presentation/World
 - Backend/Api/Properties
+- Backend/GameServer/Diagnostics
+- Backend/Tests/GameplayNetworkChecks
 - Packages/packages-lock.json
+- Imported Plugins/UniTask
 - Application/Audio
 - Domain/Lobby
-- Assets/_JungleMaze/Tests
-- Domain/Vfx
 - Assets/_JungleMaze/Tools
+- Imported Plugins/UniTask
+- Application/Hud
+- Imported Plugins/UniTask
 - Imported Scripts/[Codebase]
-- Application/Lobby
 - Application/MatchUi
+- Presentation/UI
+- Backend/Api/DTOs
 - Backend/compose.aws.yaml
+- Backend/GameServer/GameServer.csproj
 - Backend/Shared/GameData
-- Tools/Art/build_simple_demo.py
 - Packages/packages-lock.json
-- Presentation/Vfx
-- Assets/_JungleMaze/Tools
-- Backend/Api/Models
+- Imported Plugins/Demigiant
+- Imported Plugins/UniTask
+- Imported Plugins/UniTask
+- Assets/_JungleMaze/Tests
 - Tools/Telemetry/tel_perflog.py
 - Packages/packages-lock.json
 - projects/lastaway/art
-- Imported Plugins/UniTask
-- Domain/Balance
+- Imported Scripts/Utils
+- Assets/_JungleMaze/Tools
 - Presentation/UI
-- Backend/GameServer/Diagnostics
-- Backend/GameServer/Simulation
-- Backend/Tests/FloorLootChecks
-- Backend/Tests/TelemetryChecks
+- Backend/Telemetry/MatchTelemetryObserver.cs
 - Packages/packages-lock.json
+- Imported Plugins/Demigiant
 - Imported Plugins/UniTask
-- Imported Plugins/UniTask
+- Application/Combat
+- Assets/_JungleMaze/Tests
+- Infrastructure/Auth
 - Assets/_JungleMaze/Tools
-- Assets/_JungleMaze/Tools
+- Backend/GameServer/Simulation
 - Backend/Telemetry/TelemetryJson.cs
 - Packages/packages-lock.json
 - Imported Plugins/UniTask
 - Imported Plugins/UniTask
-- Imported Plugins/UniTask
-- Application/Visibility
-- Domain/Vfx
-- Domain/World
-- Backend/GameServer/GameServer.csproj
-- Backend/NetSmokeClient/NetSmokeClient.csproj
-- Backend/Telemetry/TelemetryHost.cs
-- Packages/packages-lock.json
-- Imported Plugins/UniTask
-- Imported Scripts/Screen
 - Application/MatchUi
-- Domain/Vfx
+- Assets/_JungleMaze/Tests
+- Domain/World
+- Backend/GameServer/Simulation
+- Packages/packages-lock.json
+- Imported Plugins/GameDevWare.Serialization
+- Imported Plugins/UniTask
+- Imported Plugins/UniTask
+- Application/Lobby
 - Infrastructure/Network
 - Presentation/UI
-- Assets/_JungleMaze/Tests
+- Backend/Api/Repositories
 - Tools/Telemetry/tel_report.py
 - Imported Plugins/UniTask
 - Imported Plugins/UniTask
-- Imported Plugins/UniTask
+- Imported Scripts/Screen
 - Application/Combat
 - Presentation/UI
-- Assets/_JungleMaze/Tools
 - Backend/GameServer/Simulation
+- Backend/Telemetry/TelemetryHost.cs
 - projects/lastaway/art
 - Imported Plugins/UniTask
 - Imported Scripts/[Codebase]
-- Domain/Balance
+- Infrastructure/Config
+- Backend/Tests/OnlineReadiness
 - Imported Plugins/Demigiant
 - Imported Plugins/UniTask
-- Imported Plugins/UniTask
+- Assets/_JungleMaze/Tools
 - Tools/Telemetry/fixtures
 - ProjectSettings/Packages/com.unity.probuilder
 - Packages/packages-lock.json
-- projects/lastaway/art
-- Imported Epic Toon FX/Demo
-- Assets/_JungleMaze/Tests
-- Presentation/Combat
+- Imported Plugins/UniTask
+- Application/Player
 - Presentation/UI
 - Assets/_JungleMaze/Tests
+- Assets/_JungleMaze/Tests
 - Backend/compose.aws.yaml
+- Backend/Shared/GameData
+- Presentation/UI
 - Tools/Telemetry/telemetry.py
 - Imported Epic Toon FX/Demo
 - Imported Plugins/UniTask
 - Imported Plugins/UniTask
-- Imported Plugins/UniTask
+- Application/MatchUi
+- Domain/Balance
+- Infrastructure/Config
 - Packages/packages-lock.json
 - Assets/_JungleMaze/Tests
+- Presentation/UI
+- Assets/_JungleMaze/Tests
 - Docs/Art/directions
+- Docs/Network_Architecture.vi.md
 - Assets/Editor/JSurvivIntegration.cs
-- Imported Plugins/UniTask
 - Imported Plugins/UniTask
 - Assets/_JungleMaze/Tests
 - LevelEditor/LevelHistory.cs
 - Backend/compose.aws.yaml
+- Backend/Tests/BotChecks
+- Docs/Network_Architecture.vi.md
 - Tools/Telemetry/tel_merge.py
-- Imported Epic Toon FX/Demo
+- Imported Plugins/UniTask
+- Imported Plugins/UniTask
+- Imported Plugins/UniTask
 - Imported Plugins/UniTask
 - Imported Scripts/Screen
-- Application/Vfx
 - Backend/compose.host.yaml
+- Backend/Deploy/Aws
 - Imported Plugins/UniTask
 - Imported Plugins/UniTask
 - Imported Plugins/UniTask
+- Imported Plugins/UniTask
+- Presentation/UI
+- Backend/Api/Swagger
 - Backend/compose.host.yaml
 - Packages/packages-lock.json
+- Imported Plugins/UniTask
+- Imported Plugins/UniTask
+- Imported Plugins/UniTask
+- Imported Plugins/UniTask
+- Imported Plugins/UniTask
+- Imported Plugins/UniTask
+- Imported Plugins/UniTask
+- Imported Plugins/UniTask
+- Imported Plugins/UniTask
+- Imported Plugins/UniTask
+- Imported Plugins/UniTask
+- Imported Plugins/UniTask
+- Imported Plugins/UniTask
+- Imported Plugins/UniTask
+- Imported Plugins/UniTask
+- Imported Plugins/UniTask
 - Imported Plugins/UniTask
 - Imported Plugins/UniTask
 - Imported Plugins/UniTask
 - Imported Plugins/UniTask
 - Imported Plugins/UniTask
 - Assets/_JungleMaze/Tests
+- Assets/_JungleMaze/Tools
 - Backend/compose.aws.yaml
 - Backend/compose.host.yaml
 - Packages/packages-lock.json
-- Imported Plugins/UniTask
-- Imported Plugins/UniTask
-- Imported Plugins/UniTask
-- Imported Plugins/UniTask
-- Imported Plugins/UniTask
-- Imported Plugins/UniTask
-- Imported Plugins/UniTask
-- Imported Plugins/UniTask
-- Imported Plugins/UniTask
-- Imported Plugins/UniTask
-- Imported Plugins/UniTask
 - Imported Scripts/Screen
 - Assets/StreamingAssets/JungleMaze
 - Backend/Api/Api.csproj
 - Backend/compose.host.yaml
-- Imported Epic Toon FX/Demo
 - Imported Scripts/Screen
+- Assets/_JungleMaze/Tests
 - Assets/_JungleMaze/Tools
 - Tools/Telemetry/test_telemetry.py
-- Imported Epic Toon FX/Scripts
-- Imported Scripts/Screen
-- Presentation/UI
-- Backend/compose.aws.yaml
-- Backend/compose.host.yaml
-- Imported Scripts/Screen
-- Imported Scripts/Screen
-- Imported Scripts/Screen
-- Imported Scripts/Screen
-- Imported Scripts/Screen
-- Imported Scripts/Screen
-- Backend/compose.aws.yaml
-- Backend/compose.host.yaml
-- Backend/Tests/aws_mongo_guard.py
+- Imported Scripts/[Concrete]
 - Imported Scripts/Screen
 - Application/Combat
 - Backend/compose.aws.yaml
 - Backend/compose.host.yaml
-- Backend/Shared/World
-- Imported Epic Toon FX/Demo
+- Backend/Deploy/test-aws-rooms.ps1
+- Imported Scripts/Screen
+- Imported Scripts/Screen
+- Imported Scripts/Screen
+- Imported Scripts/Screen
+- Imported Scripts/Screen
+- Assets/_JungleMaze/Tests
+- Backend/Api/Services
+- Backend/compose.aws.yaml
+- Backend/compose.host.yaml
+- Imported Scripts/Screen
+- Application/Combat
+- Backend/compose.aws.yaml
+- Backend/compose.host.yaml
+- Backend/Deploy/Aws
 - Backend/compose.aws.yaml
 - Backend/compose.host.yaml
 - Backend/Tests/MapScaleChecks
-- Imported Plugins/UniTask
+- Backend/Tests/FloorLootChecks
+- Backend/Tests/NetworkChecks
+- Backend/Deploy/Aws
+- Backend/Deploy/Aws
+- Backend/Deploy/open-aws-session.ps1
+- Backend/Deploy/Aws
+- Backend/Deploy/Aws
+- Backend/Deploy/Aws
+- Backend/Deploy/Aws
+- Backend/Deploy/Aws
+- Backend/Deploy/Aws
+- Backend/Deploy/Aws
 
 ## God Nodes (most connected - your core abstractions)
 1. `UniTask` - 1617 edges
@@ -470,1540 +495,1548 @@
 ## Import Cycles
 - None detected.
 
-## Communities (492 total, 110 thin omitted)
+## Communities (529 total, 145 thin omitted)
 
 ### Community 0 - "Imported Plugins/UniTask"
 Cohesion: 0.03
-Nodes (15): StateExtensions, IUniTaskAsyncEnumerable, UniTaskAsyncEnumerable, All, Any, Count, First, Last (+7 more)
+Nodes (11): IUniTaskAsyncEnumerable, UniTaskAsyncEnumerable, All, Any, Count, SelectMany, SelectManyAwait, SelectManyAwaitWithCancellation (+3 more)
 
 ### Community 1 - "Imported Plugins/UniTask"
-Cohesion: 0.02
-Nodes (40): AsyncUnit, AsyncAnimatorMoveTrigger, AsyncApplicationQuitTrigger, AsyncBeforeTransformParentChangedTrigger, AsyncDisableTrigger, AsyncFixedUpdateTrigger, AsyncGUITrigger, AsyncMouseEnterTrigger (+32 more)
+Cohesion: 0.04
+Nodes (11): StateExtensions, Aggregate, Average, First, ForEach, Last, LongCount, Max (+3 more)
 
-### Community 2 - "Imported Plugins/UniTask"
-Cohesion: 0.05
-Nodes (6): Aggregate, Average, ForEach, Max, Min, Sum
+### Community 2 - "Backend/GameServer/Networking"
+Cohesion: 0.03
+Nodes (81): JwtSettings, Audience, Issuer, SigningKey, RoomOptions, ControlEnabled, ServerOptions, Mode (+73 more)
 
 ### Community 3 - "Imported Plugins/UniTask"
 Cohesion: 0.03
-Nodes (14): WhenAllPromise, WhenAllPromise, WhenAllPromise, WhenAllPromise, WhenAllPromise, WhenAllPromise, WhenAllPromise, WhenAllPromise (+6 more)
+Nodes (15): WhenAllPromise, WhenAllPromise, WhenAllPromise, WhenAllPromise, WhenAllPromise, WhenAllPromise, WhenAllPromise, WhenAllPromise (+7 more)
 
-### Community 4 - "Imported Plugins/UniTask"
+### Community 4 - "projects/lastaway/art"
+Cohesion: 0.02
+Nodes (75): measure(), run(), build(), src_rim(), draw_slot(), rr(), emit(), sharpen() (+67 more)
+
+### Community 5 - "Assets/_JungleMaze/Tests"
 Cohesion: 0.03
-Nodes (22): AsyncLazy, _TakeUntil, TakeUntil, Current, UniTask, YieldAwaitable, CanceledResultSource, CanceledResultSource (+14 more)
+Nodes (76): MatchHudBinding, SessionLobbyCommands, MatchSession, ActiveInputSeconds, CanResume, CanSendGameplayInput, Connected, CountdownSeconds (+68 more)
 
-### Community 5 - "Imported Plugins/UniTask"
+### Community 6 - "Backend/Shared/World"
+Cohesion: 0.03
+Nodes (77): Airdrops, Combat, Destructibles, ElapsedSeconds, EquipmentGeneration, Floor, FloorReserve, Hazards (+69 more)
+
+### Community 7 - "Backend/Shared/Protocol"
+Cohesion: 0.03
+Nodes (69): WorldClientSession, Enabled, EquipmentGeneration, Error, Inventory, IsReady, Layout, Objects (+61 more)
+
+### Community 8 - "Imported Plugins/UniTask"
 Cohesion: 0.03
 Nodes (14): WhenAnyPromise, WhenAnyPromise, WhenAnyPromise, WhenAnyPromise, WhenAnyPromise, WhenAnyPromise, WhenAnyPromise, WhenAnyPromise (+6 more)
 
-### Community 6 - "Backend/Shared/Protocol"
-Cohesion: 0.03
-Nodes (70): WorldClientSession, Enabled, EquipmentGeneration, Error, Inventory, IsReady, Layout, Objects (+62 more)
-
-### Community 7 - "projects/lastaway/art"
-Cohesion: 0.02
-Nodes (72): measure(), run(), build(), src_rim(), draw_slot(), rr(), emit(), sharpen() (+64 more)
-
-### Community 8 - "Domain/Hud"
-Cohesion: 0.03
-Nodes (74): HudStateStore, Ammo, Armor, DangerCount, HasPose, HeldWeapon, Helmet, Hp (+66 more)
-
-### Community 9 - "Imported Plugins/UniTask"
-Cohesion: 0.03
-Nodes (33): UniTaskStatus, ITaskPoolNode, NextNode, TaskPool, TaskPool, Size, Awaiter, IsCompleted (+25 more)
-
-### Community 10 - "Backend/Shared/World"
-Cohesion: 0.03
-Nodes (63): LevelHouseTests, Sink, AirdropController, EggHp, EggSize, ReservedEggsRemaining, ReservedLootRemaining, Runtime (+55 more)
-
-### Community 11 - "Imported Plugins/UniTask"
-Cohesion: 0.03
-Nodes (55): CancellationTokenEqualityComparer, _Cast, Cast, Contains, ElementAt, _Empty, Empty, Current (+47 more)
-
-### Community 12 - "Application/Hud"
+### Community 9 - "Application/Hud"
 Cohesion: 0.04
-Nodes (64): DamageArcFeedback, Count, DamageArcOutput, DangerArrowOutput, DangerBannerOutput, DangerFeedback, ArrowCount, Banner (+56 more)
+Nodes (50): DamageArcFeedback, Count, DamageArcOutput, EffectChipFeedback, Count, EffectChipOutput, Entry, HitMarkerFeedback (+42 more)
 
-### Community 13 - "Assets/_JungleMaze/Tests"
-Cohesion: 0.03
-Nodes (60): DangerList, Count, DangerChange, DangerChangeType, Added, Expired, Refreshed, Removed (+52 more)
-
-### Community 14 - "Assets/_JungleMaze/Tests"
-Cohesion: 0.03
-Nodes (68): AdrenalineGauge, Fill, IsActive, RemainingSeconds, TotalSeconds, DamageTrail, HoldSeconds, IsActive (+60 more)
-
-### Community 15 - "Assets/_JungleMaze/Tests"
-Cohesion: 0.05
-Nodes (24): StatusEvent, DepthSortingPlayTests, HudAcceptanceTests, LobbySkinATests, LobbyFlowPlayTests, LobbyLayoutTests, LobbyOverlayIntegrationTests, LobbyUiRig (+16 more)
-
-### Community 16 - "Imported Scripts/[Concrete]"
+### Community 10 - "Imported Plugins/UniTask"
 Cohesion: 0.04
-Nodes (49): ClockBasedEffect, Time, EffectInfoAttribute, Id, IsBuff, AffectableExtensions, IAffectable, Effects (+41 more)
+Nodes (17): TextMeshProAsyncExtensions, UnityAsyncExtensions, AsyncUnityEventHandler, AsyncUnityEventHandler, IAsyncClickEventHandler, IAsyncDeselectEventHandler, IAsyncEndEditEventHandler, IAsyncEndTextSelectionEventHandler (+9 more)
+
+### Community 11 - "Infrastructure/Network"
+Cohesion: 0.04
+Nodes (51): ConnectRequest, DisconnectReason, AuthenticationRequired, AuthModeMismatch, AuthTimeout, ConnectionLost, ConnectTimeout, DuplicateSession (+43 more)
+
+### Community 12 - "Imported Plugins/UniTask"
+Cohesion: 0.03
+Nodes (42): AsyncOperationHandleConfiguredSource, IPlayerLoopItem, ITaskPoolNode, TaskPool, DelayFramePromise, DelayPromise, DelayRealtimePromise, NextFramePromise (+34 more)
+
+### Community 13 - "Backend/GameServer/Simulation"
+Cohesion: 0.04
+Nodes (64): MatchParticipant, MatchResult, BotBrain, HasPendingPath, Id, SessionId, State, MatchRuntime (+56 more)
+
+### Community 14 - "Imported Scripts/[Codebase]"
+Cohesion: 0.03
+Nodes (56): ICommand, MeleeCommand, MoveCommand, PickUpCommand, PlayerCommand, RevokeCommand, ShootCommand, SpecialCommand (+48 more)
+
+### Community 15 - "Imported Scripts/[Concrete]"
+Cohesion: 0.04
+Nodes (46): ClockBasedEffect, Time, EffectInfoAttribute, Id, IsBuff, AffectableExtensions, IAffectable, Effects (+38 more)
+
+### Community 16 - "Imported Plugins/UniTask"
+Cohesion: 0.03
+Nodes (50): _Cast, Cast, Contains, ElementAt, _Empty, Empty, Current, _Except (+42 more)
 
 ### Community 17 - "Imported Plugins/UniTask"
 Cohesion: 0.03
-Nodes (28): AddressablesAsyncExtensions, AsyncOperationHandleAwaiter, IsCompleted, AsyncOperationHandleConfiguredSource, AsyncOperationHandleConfiguredSource, NextNode, NextNode, IPlayerLoopItem (+20 more)
+Nodes (28): AsyncAudioFilterReadTrigger, AsyncBecameVisibleTrigger, AsyncDrawGizmosSelectedTrigger, AsyncFixedUpdateTrigger, AsyncLateUpdateTrigger, AsyncMouseDownTrigger, AsyncMouseDragTrigger, AsyncMouseExitTrigger (+20 more)
 
-### Community 18 - "Imported Scripts/[Codebase]"
+### Community 18 - "Imported Plugins/UniTask"
 Cohesion: 0.04
-Nodes (54): ICommand, MeleeCommand, MoveCommand, PickUpCommand, PlayerCommand, RevokeCommand, ShootCommand, SpecialCommand (+46 more)
+Nodes (29): CancellationTokenSourceExtensions, ValueStopwatch, Elapsed, ElapsedTicks, IsInvalid, IUniTaskSource, PlayerLoopTiming, DeltaTimePlayerLoopTimer (+21 more)
 
-### Community 19 - "Imported Plugins/Demigiant"
-Cohesion: 0.05
-Nodes (8): DOTweenModuleEPOOutline, DOTweenModulePhysics2D, DOTweenModulePhysics, DOTweenModuleSprite, DOTweenModuleUI, Utils, DOTweenModuleUtils, Physics
+### Community 19 - "Presentation/UI"
+Cohesion: 0.03
+Nodes (105): Row, ConnectingView, Cancel, Rtt, Step, HistoryRowView, Line, Open (+97 more)
 
 ### Community 20 - "Presentation/UI"
 Cohesion: 0.03
-Nodes (101): ScreenGameId, ConnectingView, Cancel, Rtt, Step, HistoryRowView, Line, Open (+93 more)
+Nodes (72): HudBarView, FillImage, FillValue, TrackImage, TrailImage, TrailValue, HudGaugeRowView, Bar (+64 more)
 
-### Community 21 - "projects/lastaway/art"
+### Community 21 - "Imported Plugins/UniTask"
+Cohesion: 0.04
+Nodes (29): CancellationTokenEqualityComparer, EnumerableAsyncExtensions, _GroupBy, GroupBy, GroupBy, Current, _GroupByAwait, GroupByAwait (+21 more)
+
+### Community 22 - "Backend/Shared/World"
+Cohesion: 0.04
+Nodes (68): MatchWorldSetup, Catalog, Loot, RulesHash, WorldSettings, FloorLootProfile, FloorSampler, ItemCatalog (+60 more)
+
+### Community 23 - "projects/lastaway/art"
 Cohesion: 0.06
-Nodes (123): avatar(), bg(), button(), close_btn(), codebox(), cratio(), err(), face_center() (+115 more)
+Nodes (119): avatar(), bg(), button(), close_btn(), codebox(), cratio(), err(), face_center() (+111 more)
 
-### Community 22 - "Imported Plugins/UniTask"
+### Community 24 - "Imported Plugins/UniTask"
 Cohesion: 0.04
-Nodes (28): EnumerableAsyncExtensions, _GroupBy, GroupBy, GroupBy, Current, _GroupByAwait, GroupByAwait, GroupByAwait (+20 more)
+Nodes (41): AsyncUniTask, MoveNext, NextNode, Task, AsyncUniTask, MoveNext, NextNode, Task (+33 more)
 
-### Community 23 - "Backend/Shared/World"
-Cohesion: 0.04
-Nodes (61): ThrowableRulesJson, ThrowableRulesLoader, Default, ThrowableKind, Banana, Bat, Bell, Crystal (+53 more)
-
-### Community 24 - "Imported Plugins/GameDevWare.Serialization"
+### Community 25 - "Imported Plugins/UniTask"
 Cohesion: 0.03
-Nodes (55): ReflectionExtensions, SerializationContext, ArraySerializerFactory, DateTimeFormats, DictionarySerializerFactory, Encoding, EnumSerializerFactory, ExtensionTypeHandler (+47 more)
+Nodes (22): _Do, Do, Current, CancellationTokenDisposable, Token, Subscribe, _TakeUntil, TakeUntil (+14 more)
 
-### Community 25 - "Presentation/UI"
+### Community 26 - "Imported Plugins/UniTask"
 Cohesion: 0.03
-Nodes (61): CameraWorldViewport, HudArtFrameView, Bevel, Edge, HudBarView, FillImage, FillValue, TrackImage (+53 more)
+Nodes (36): AsyncMethodBuilderAttribute, BuilderType, AsyncUniTaskMethodBuilder, AsyncUniTaskMethodBuilder, ObjectIdForDebugger, Task, ObjectIdForDebugger, Task (+28 more)
 
-### Community 26 - "Presentation/UI"
+### Community 27 - "Imported Plugins/GameDevWare.Serialization"
 Cohesion: 0.04
-Nodes (67): Row, DamageArcView, Group, Image, DamageArcViewGroup, DangerArrowView, Arrow, Group (+59 more)
+Nodes (56): SerializationContext, ArraySerializerFactory, DateTimeFormats, DictionarySerializerFactory, Encoding, EnumSerializerFactory, ExtensionTypeHandler, Format (+48 more)
 
-### Community 27 - "Packages/manifest.json"
+### Community 28 - "Imported Plugins/UniTask"
+Cohesion: 0.03
+Nodes (24): AsyncTriggerHandler, AsyncBeginDragTrigger, AsyncDragTrigger, AsyncDropTrigger, AsyncEndDragTrigger, AsyncInitializePotentialDragTrigger, AsyncPointerClickTrigger, AsyncPointerDownTrigger (+16 more)
+
+### Community 29 - "Backend/Shared/World"
+Cohesion: 0.05
+Nodes (49): WorldDemoCombatSession, Controller, Port, Rig, WorldDemoCombatTests, Actor, FloorItem, IItemGameplayPort (+41 more)
+
+### Community 30 - "Backend/Shared/World"
+Cohesion: 0.04
+Nodes (59): ThrowableKind, Banana, Bat, Bell, Crystal, Meteorite, None, Rope (+51 more)
+
+### Community 31 - "Backend/GameServer/Rooms"
+Cohesion: 0.04
+Nodes (58): MapCatalogEntry, Description, Id, MapHash, Name, PreviewHash, Version, MapCatalogManifest (+50 more)
+
+### Community 32 - "Assets/_JungleMaze/Tests"
+Cohesion: 0.07
+Nodes (15): RoomMapCacheTests, Source, HudAcceptanceTests, LobbySkinATests, LobbyFlowPlayTests, LobbyLayoutTests, LobbyOverlayIntegrationTests, LobbyUiRig (+7 more)
+
+### Community 33 - "Backend/NetSmokeClient/Networking"
+Cohesion: 0.04
+Nodes (46): ClientOptions, ApiBaseUrl, AuthMode, ConnectTimeoutMs, GameServerHost, GameServerPort, JoinMode, Mode (+38 more)
+
+### Community 34 - "Packages/manifest.json"
 Cohesion: 0.03
 Nodes (123): dependencies, com.coplaydev.unity-mcp@https://github.com/CoplayDev/unity-mc..., com.itisnajim.socketiounity@https://github.com/itisnajim/SocketIO..., com.junglemaze.protocol@file:../Backend/Shared/Protocol, com.junglemaze.world@file:../Backend/Shared/World, com.unity.2d.animation@13.0.4, com.unity.2d.aseprite@3.0.1, com.unity.2d.psdimporter@12.0.1 (+115 more)
 
-### Community 28 - "Imported Plugins/UniTask"
+### Community 35 - "Application/Player"
 Cohesion: 0.04
-Nodes (40): AsyncMethodBuilderAttribute, BuilderType, AsyncUniTaskMethodBuilder, AsyncUniTaskMethodBuilder, ObjectIdForDebugger, Task, ObjectIdForDebugger, Task (+32 more)
+Nodes (44): MovementTelemetry, IntervalSeconds, LastLine, PlayerInputService, Enabled, LastInputSeq, LocalTick, SentPackets (+36 more)
 
-### Community 29 - "Backend/GameServer/Simulation"
+### Community 36 - "Imported Scripts/[Codebase]"
 Cohesion: 0.04
-Nodes (56): MatchRuntime, BotCount, BotsSupported, BotStates, NavigationBudget, PendingBotPaths, Entity, DisconnectedAtSecond (+48 more)
+Nodes (44): IDamageable, IHasRarity, Rarity, BulletEntity, ProjectileEntity, Destination, Position, Velocity (+36 more)
 
-### Community 30 - "Assets/_JungleMaze/Tests"
-Cohesion: 0.04
-Nodes (56): IHudState, Ammo, Armor, DangerCount, HasPose, HeldWeapon, Helmet, Hp (+48 more)
-
-### Community 31 - "Assets/_JungleMaze/Tests"
-Cohesion: 0.04
-Nodes (52): MatchSession, ActiveInputSeconds, CanResume, CanSendGameplayInput, Connected, CountdownSeconds, DeferHello, GameplayReady (+44 more)
-
-### Community 32 - "Imported Plugins/UniTask"
-Cohesion: 0.03
-Nodes (20): AsyncAudioFilterReadTrigger, AsyncBeginDragTrigger, AsyncDragTrigger, AsyncDropTrigger, AsyncEndDragTrigger, AsyncInitializePotentialDragTrigger, AsyncPointerClickTrigger, AsyncPointerDownTrigger (+12 more)
-
-### Community 33 - "Presentation/UI"
-Cohesion: 0.05
-Nodes (37): HudBigMapView, DistanceValue, IsOpen, Map, PhaseValue, Player, SafeRing, ZoneOverlay (+29 more)
-
-### Community 34 - "Assets/_JungleMaze/Tests"
+### Community 37 - "Assets/_JungleMaze/Tests"
 Cohesion: 0.05
 Nodes (39): ITelemetrySink, Dropped, Enabled, TelemetryContext, BalHash, Build, Wid, PerfClientRecorder (+31 more)
 
-### Community 35 - "Assets/_JungleMaze/Tests"
+### Community 38 - "Backend/Shared/Protocol"
 Cohesion: 0.05
-Nodes (19): Entry, HudItemIconCatalog, Count, Entries, UiArtSet, ItemIcons, MenuArt, UiArtCatalogTests (+11 more)
+Nodes (46): HeldWeaponSnapshotTests, PacketRegistryTests, EventPacket, IsValid, GameEventType, ItemPickedUp, MatchEnded, MatchStarted (+38 more)
 
-### Community 36 - "Backend/Shared/World"
-Cohesion: 0.06
-Nodes (40): Port, Rig, WorldDemoCombatTests, Actor, FloorItem, IItemGameplayPort, IItemPassive, IItemWorldPort (+32 more)
-
-### Community 37 - "Infrastructure/Network"
-Cohesion: 0.06
-Nodes (20): ConnectRequest, DnsResolution, NetworkClient, AttemptId, Endpoint, LastReason, LastRequest, LocalPort (+12 more)
-
-### Community 38 - "Imported Plugins/UniTask"
-Cohesion: 0.05
-Nodes (44): IUniTaskAsyncEnumerator, _CombineLatest, CombineLatest, CombineLatest, CombineLatest, CombineLatest, CombineLatest, CombineLatest (+36 more)
-
-### Community 39 - "Imported Plugins/UniTask"
-Cohesion: 0.04
-Nodes (8): AsyncAwakeTrigger, AsyncTriggerExtensions, AsyncDestroyTrigger, CancellationToken, AwakeMonitor, AsyncStartTrigger, UniTaskCancellationExtensions, Cysharp.Threading.Tasks.Triggers
-
-### Community 40 - "Imported Plugins/UniTask"
-Cohesion: 0.03
-Nodes (24): AsyncTriggerHandler, AsyncAnimatorIKTrigger, AsyncApplicationPauseTrigger, AsyncBecameInvisibleTrigger, AsyncEnableTrigger, AsyncLateUpdateTrigger, AsyncMouseDownTrigger, AsyncRectTransformDimensionsChangeTrigger (+16 more)
-
-### Community 41 - "LevelEditor/LevelEditorController.cs"
+### Community 39 - "LevelEditor/LevelEditorController.cs"
 Cohesion: 0.07
 Nodes (12): LevelEditorController, GameMapPath, IsTyping, LevelsDirectory, Alt, Ctrl, Document, Tool (+4 more)
 
-### Community 42 - "Application/Hud"
+### Community 40 - "Imported Plugins/UniTask"
+Cohesion: 0.05
+Nodes (41): IUniTaskAsyncEnumerator, _CombineLatest, CombineLatest, CombineLatest, CombineLatest, CombineLatest, CombineLatest, CombineLatest (+33 more)
+
+### Community 41 - "Application/Hud"
 Cohesion: 0.06
-Nodes (29): HudFeedbackScenarios, Running, HudMockScenarios, Effects, Hud, Inventory, MockEffectState, MockHudState (+21 more)
+Nodes (28): HudFeedbackScenarios, Running, HudMockScenarios, Effects, Hud, Inventory, MockEffectState, MockHudState (+20 more)
 
-### Community 43 - "Imported Scripts/[Codebase]"
+### Community 42 - "Assets/_JungleMaze/Tests"
+Cohesion: 0.05
+Nodes (39): EffectStateStore, Count, IEffectState, Count, IEffectStateWriter, EffectList, Count, ActiveEffect (+31 more)
+
+### Community 43 - "Imported Plugins/UniTask"
 Cohesion: 0.04
-Nodes (42): IDamageable, IHasRarity, Rarity, BulletEntity, ProjectileEntity, Destination, Position, Velocity (+34 more)
+Nodes (7): SingleConsumerUnboundedChannelReader, UniTaskStatus, WhenAllPromise, WhenAllPromise, WhenAnyLRPromise, WhenAnyPromise, WhenAnyPromise
 
-### Community 44 - "Presentation/Player"
-Cohesion: 0.04
-Nodes (37): IClientRuntimeData, Bounds, Covers, PlayerRadius, PlayerSpeed, ZoneSchedule, RuntimeDataFiles, RuntimeMapBounds (+29 more)
+### Community 44 - "Domain/Hud"
+Cohesion: 0.06
+Nodes (47): HudStateStore, Ammo, Armor, DangerCount, HasPose, HeldWeapon, Helmet, Hp (+39 more)
 
-### Community 45 - "Backend/GameServer/Simulation"
-Cohesion: 0.05
-Nodes (36): CombatHit, IBreakableObstacles, ICombatLoadout, IEffectService, IItemPassive, CombatDefaults, Breakables, Effects (+28 more)
-
-### Community 46 - "Application/Lobby"
-Cohesion: 0.05
-Nodes (49): JoinController, Attempts, Busy, CanSubmit, CodeError, CodeErrorText, DisplayName, FocusCode (+41 more)
-
-### Community 47 - "Backend/Shared/World"
-Cohesion: 0.05
-Nodes (63): FloorLootProfile, FloorSampler, ItemCatalog, Items, Version, ItemCatalogDocument, ItemDefinition, ItemEffect (+55 more)
-
-### Community 48 - "Assets/_JungleMaze/Tests"
-Cohesion: 0.08
-Nodes (25): ToggleVisibilityPolicy, AttackReconcileTests, FuseWarningTests, HitFeedbackTests, StatusCcImmuneGuardTests, StatusLifetimeTests, VfxBudgetTests, VfxDedupeTests (+17 more)
-
-### Community 49 - "Imported Plugins/UniTask"
+### Community 45 - "Imported Plugins/UniTask"
 Cohesion: 0.04
 Nodes (37): AsyncEnumeratorAwaitSelectorBase, Current, SourceCurrent, AsyncEnumeratorBase, Current, SourceCurrent, _Distinct, Distinct (+29 more)
 
-### Community 50 - "Imported Plugins/UniTask"
-Cohesion: 0.05
-Nodes (31): AsyncReactiveProperty, Value, Enumerator, Current, Next, Prev, IAsyncReactiveProperty, Value (+23 more)
+### Community 46 - "Imported Plugins/UniTask"
+Cohesion: 0.04
+Nodes (12): Awaiter, IsCompleted, CancellationTokenAwaitable, CancellationTokenExtensions, AnonymousProgress, NullProgress, OnlyValueChangedProgress, Progress (+4 more)
 
-### Community 51 - "Imported Plugins/UniTask"
+### Community 47 - "Imported Epic Toon FX/Demo"
+Cohesion: 0.04
+Nodes (24): ParticleEffectsLibrary, ButtonTypes, Next, NotDefined, Previous, PEButtonScript, PEDestoryTimed, UICanvasManager (+16 more)
+
+### Community 48 - "Assets/_JungleMaze/Tests"
+Cohesion: 0.08
+Nodes (21): IVisibilityPolicy, VisibilityQuery, AlwaysVisiblePolicy, DeferredVisibilityPolicy, IsResolved, ToggleVisibilityPolicy, AttackReconcileTests, DeferredVisibilityPolicyTests (+13 more)
+
+### Community 49 - "Presentation/UI"
+Cohesion: 0.05
+Nodes (37): MinimapMapCapture, MapImage, Resolution, RingImage, RingTexture, Texture, MinimapView, Area (+29 more)
+
+### Community 50 - "Presentation/UI"
+Cohesion: 0.05
+Nodes (52): DamageArcView, Group, Image, DamageArcViewGroup, DangerArrowView, Arrow, Group, Seconds (+44 more)
+
+### Community 51 - "Application/Flow"
+Cohesion: 0.05
+Nodes (38): AppScreen, Boot, Connecting, InMatch, InRoom, MainMenu, Results, GameFlowSettings (+30 more)
+
+### Community 52 - "Assets/_JungleMaze/Tests"
+Cohesion: 0.05
+Nodes (29): SfxRule, HasClips, Is2D, SfxRuleTable, AudioRuntimeSet, AlertGroup, Catalog, Mixer (+21 more)
+
+### Community 53 - "Presentation/World"
+Cohesion: 0.05
+Nodes (18): MeleeSwingVisual, ShotFlashVisual, Duration, AirdropVisual, AirdropVisualSet, WorldDemoController, DemoCombat, Destructibles (+10 more)
+
+### Community 54 - "Application/Vfx"
 Cohesion: 0.06
-Nodes (10): UnityAsyncExtensions, AsyncUnityEventHandler, AsyncUnityEventHandler, IAsyncClickEventHandler, IAsyncEndEditEventHandler, IAsyncValueChangedEventHandler, UnityEventHandlerAsyncEnumerable, UnityEventHandlerAsyncEnumerable (+2 more)
+Nodes (36): FlashEntry, Fuse, Live, VfxDirector, AuraCount, BudgetCapacity, BudgetRefused, FuseCount (+28 more)
 
-### Community 52 - "Presentation/UI"
-Cohesion: 0.05
-Nodes (31): MinimapTuning, Default, MinimapZoom, Blending, Cells, Level, MinX, MinY (+23 more)
-
-### Community 53 - "Backend/GameServer/Configuration"
-Cohesion: 0.05
-Nodes (37): JwtSettings, Audience, Issuer, SigningKey, RoomOptions, ControlEnabled, ServerOptions, Mode (+29 more)
-
-### Community 54 - "Application/Flow"
-Cohesion: 0.05
-Nodes (48): AppScreen, Boot, Connecting, InMatch, InRoom, MainMenu, Results, GameFlowSettings (+40 more)
-
-### Community 55 - "Infrastructure/Pooling"
-Cohesion: 0.05
-Nodes (26): HudItemLabels, ConfiguredShot, MovementTelemetry, IntervalSeconds, LastLine, ILog, NullLog, ITickable (+18 more)
-
-### Community 56 - "Imported Plugins/UniTask"
+### Community 55 - "Application/Hud"
 Cohesion: 0.06
-Nodes (13): MetadataReflection, Awaiter, IsCompleted, CancellationTokenAwaitable, CancellationTokenExtensions, _Do, Do, Current (+5 more)
+Nodes (29): AdrenalineGauge, Fill, IsActive, RemainingSeconds, TotalSeconds, DamageTrail, HoldSeconds, IsActive (+21 more)
 
-### Community 57 - "Application/Lobby"
-Cohesion: 0.07
-Nodes (41): MockConnectionStateSource, CanResume, LastReason, RttMs, State, Step, MockLobbyApi, Configured (+33 more)
-
-### Community 58 - "Application/World"
+### Community 56 - "Tools/Art/native32_pipeline.py"
 Cohesion: 0.05
-Nodes (34): Airdrops, Combat, Destructibles, ElapsedSeconds, EquipmentGeneration, Floor, FloorReserve, Hazards (+26 more)
+Nodes (44): contact(), draw_icon(), box(), ellipse(), line(), poly(), draw_masks(), canvas() (+36 more)
 
-### Community 59 - "Backend/GameServer/Networking"
-Cohesion: 0.06
-Nodes (27): HandshakeValidator, IGamePeer, IsOpen, Transport, SessionHub, Attempt, RegisteredTicket, Session (+19 more)
-
-### Community 60 - "Imported Scripts/Screen"
+### Community 57 - "Presentation/Player"
 Cohesion: 0.05
-Nodes (35): BaseScreen, ReloadButtonController, Slot, IsHasPlayer, Player, TextLoading, CountDownScreen, GameScreen (+27 more)
+Nodes (21): IMatchConnection, AttemptId, LastRequest, HeroAim, HeroCameraFollow, FollowOverride, Target, HeroController (+13 more)
 
-### Community 61 - "Imported Plugins/UniTask"
+### Community 58 - "Application/Lobby"
 Cohesion: 0.07
-Nodes (16): IUniTaskSource, Timer, _Timer, Current, TimerFrame, _TimerFrame, Current, PlayerLoopTiming (+8 more)
+Nodes (39): MockConnectionStateSource, CanResume, LastReason, RttMs, State, Step, MockLobbyApi, Configured (+31 more)
 
-### Community 62 - "Assets/_JungleMaze/Tests"
-Cohesion: 0.07
-Nodes (22): MatchHudBinding, MatchSessionEliminationSource, Current, IsLocalEliminated, MatchSessionSpectatorSource, AliveCount, LocalNetId, MatchEnded (+14 more)
-
-### Community 63 - "projects/lastaway/art"
+### Community 59 - "projects/lastaway/art"
 Cohesion: 0.05
 Nodes (42): backup(), buttons(), canvas_state(), family(), mk(), mkc(), mkt(), ink() (+34 more)
 
-### Community 64 - "Backend/Tools/room_benchmark.py"
-Cohesion: 0.06
-Nodes (67): check(), command(), decode(), encode(), main(), client_start(), request(), run_client() (+59 more)
-
-### Community 65 - "Backend/GameServer/Maps"
-Cohesion: 0.06
-Nodes (41): WorldConfigData, MapCatalogEntry, Description, Id, MapHash, Name, PreviewHash, Version (+33 more)
-
-### Community 66 - "Imported Scripts/[Codebase]"
+### Community 60 - "Imported Plugins/UniTask"
 Cohesion: 0.05
-Nodes (34): EnemyConfig, EnemyId, ANACONDA, GHOST, GOLEM, LEOPARD, NATIVE, RHINO (+26 more)
+Nodes (29): ExceptionExtensions, ArrayPool, ArrayPoolUtil, RentArray, MinimumQueue, Count, RuntimeHelpersAbstraction, WellKnownNoReferenceContainsType (+21 more)
 
-### Community 67 - "Imported Plugins/UniTask"
+### Community 61 - "Presentation/UI"
 Cohesion: 0.06
-Nodes (37): DOTweenCYInstruction, DOTweenModuleUnityVersion, WaitForCompletion, keepWaiting, WaitForElapsedLoops, keepWaiting, WaitForKill, keepWaiting (+29 more)
+Nodes (38): IConfigProvider, CommandLineDisplayName, CommandLineRoomCode, Current, Profiles, ConnectionMenuPresenter, AccountToken, AdvancedExpanded (+30 more)
 
-### Community 68 - "Backend/GameServer/Simulation"
+### Community 62 - "Assets/_JungleMaze/Tests"
 Cohesion: 0.05
-Nodes (44): HealthService, DamageInterceptor, IEntity, DisconnectedAtTick, DisplayName, Flags, Hp, IsAlive (+36 more)
+Nodes (42): OfflineMatchSession, CurrentTick, DamageInterceptor, DisplayName, ElapsedSeconds, HasResult, IsActive, IsDead (+34 more)
 
-### Community 69 - "Backend/Tests/OnlineReadiness"
+### Community 63 - "Presentation/UI"
+Cohesion: 0.07
+Nodes (29): HudBigMapView, DistanceValue, IsOpen, Map, PhaseValue, Player, SafeRing, ZoneOverlay (+21 more)
+
+### Community 64 - "Backend/Tests/MatchResultChecks"
+Cohesion: 0.06
+Nodes (32): MatchOutbox, IsEnabled, MatchOutboxOptions, ApiUrl, InitialBackoffSeconds, MaxBackoffSeconds, MaxBytes, MaxFiles (+24 more)
+
+### Community 65 - "Application/Match"
+Cohesion: 0.07
+Nodes (38): IRoomMapFiles, PublishedMaps, RoomMapSession, BotCommandPending, Busy, CanManageBots, CanStart, Catalog (+30 more)
+
+### Community 66 - "Backend/GameServer/Simulation"
 Cohesion: 0.05
-Nodes (80): items, type, minimum, type, type, type, type, minimum (+72 more)
+Nodes (46): HealthService, DamageInterceptor, IEntity, DisconnectedAtTick, DisplayName, Flags, Hp, IsAlive (+38 more)
 
-### Community 70 - "Tools/Telemetry/test_telemetry.py"
+### Community 67 - "Application/MatchUi"
+Cohesion: 0.07
+Nodes (29): UnavailableKillcamReplaySource, KillcamSession, Clip, Elapsed, EndedAt, Frame, LastRequest, Options (+21 more)
+
+### Community 68 - "Core/Events"
+Cohesion: 0.06
+Nodes (24): HudItemLabels, PlayerPoseSource, IBalanceConfigProvider, Equipments, LastError, Match, Weapons, IPacketReceiver (+16 more)
+
+### Community 69 - "Presentation/World"
+Cohesion: 0.06
+Nodes (35): GroundLootLook, GroundLootShape, Ammo, Held, Icon, Throwable, GroundLootMotion, GroundLootPose (+27 more)
+
+### Community 70 - "Infrastructure/Config"
+Cohesion: 0.07
+Nodes (30): ClientConfig, ApiBaseUrl, AuthMode, ConnectTimeoutMs, Endpoint, GameServerHost, GameServerPort, Mode (+22 more)
+
+### Community 71 - "Application/MatchUi"
+Cohesion: 0.07
+Nodes (20): MockSpectatorSource, AliveCount, LocalNetId, MatchEnded, StartCount, ISpectatorSource, AliveCount, LocalNetId (+12 more)
+
+### Community 72 - "Tools/Telemetry/test_telemetry.py"
 Cohesion: 0.07
 Nodes (24): expand_inputs(), build_report(), copy_lines(), CrossLanguageTests, csv_rows(), fake_run(), FakeGeneratorTests, raws() (+16 more)
 
-### Community 71 - "Application/Player"
-Cohesion: 0.07
-Nodes (27): PlayerPoseSource, InterpolationStats, RemotePlayerInterpolator, ClockStarted, DelaySeconds, MaxExtrapolationSeconds, RenderTick, Stats (+19 more)
-
-### Community 72 - "Imported Plugins/UniTask"
-Cohesion: 0.08
-Nodes (20): AutoResetUniTaskCompletionSource, AutoResetUniTaskCompletionSource, NextNode, Task, NextNode, Task, ExceptionHolder, ICancelPromise (+12 more)
-
-### Community 73 - "Backend/NetSmokeClient/Networking"
+### Community 73 - "Imported Scripts/Screen"
 Cohesion: 0.05
-Nodes (34): ClientOptions, ApiBaseUrl, AuthMode, ConnectTimeoutMs, GameServerHost, GameServerPort, JoinMode, Mode (+26 more)
+Nodes (29): EnemyConfig, EnemyId, ANACONDA, GHOST, GOLEM, LEOPARD, NATIVE, RHINO (+21 more)
 
-### Community 74 - "Docs/Network_Architecture.vi.md"
-Cohesion: 0.03
-Nodes (63): IsExternalInit, description, displayName, name, unity, version, Account play ticket handshake v4, DragonRoar / EggLand / EggBreak audio ownership (+55 more)
-
-### Community 75 - "Presentation/World"
+### Community 74 - "Presentation/Combat"
 Cohesion: 0.07
-Nodes (33): GroundLootLook, GroundLootShape, Ammo, Held, Icon, Throwable, GroundLootMotion, GroundLootPose (+25 more)
+Nodes (27): Entry, Content, GripLocal, MuzzleLocal, Scale, HeldWeaponCatalog, Clip, IsSet (+19 more)
 
-### Community 76 - "Tools/Art/normalize_item_icons.py"
+### Community 75 - "Backend/GameServer/Simulation"
 Cohesion: 0.06
-Nodes (37): main(), build(), docker_json(), put(), raw_layer(), restore(), safe(), sha() (+29 more)
+Nodes (20): MatchWorldRuntime, ConfirmedObstacleHits, Airdrops, Destructibles, EnvironmentDamageInProgress, Floor, FloorReserve, Hazards (+12 more)
 
-### Community 77 - "Application/Match"
-Cohesion: 0.07
-Nodes (36): IRoomMapFiles, PublishedMaps, RoomMapSession, BotCommandPending, Busy, CanManageBots, CanStart, Catalog (+28 more)
-
-### Community 78 - "Assets/_JungleMaze/Tests"
+### Community 76 - "projects/lastaway/art"
 Cohesion: 0.06
-Nodes (30): ConnectForm, ConnectToServerUseCase, IsLoggingIn, IAuthApi, LoginResult, INetworkClient, Endpoint, LastReason (+22 more)
+Nodes (35): db(), md5(), measure(), dilate(), erode(), glyph(), moss(), panel() (+27 more)
 
-### Community 79 - "Imported Plugins/GameDevWare.Serialization"
+### Community 77 - "Imported Plugins/GameDevWare.Serialization"
 Cohesion: 0.06
 Nodes (38): Buffer, Capacity, CharactersReaded, ColumnNumber, Count, IsReadOnly, LineNumber, Offset (+30 more)
 
-### Community 80 - "Tools/Art/native32_pipeline.py"
-Cohesion: 0.06
-Nodes (35): contact(), draw_icon(), box(), ellipse(), line(), poly(), draw_masks(), canvas() (+27 more)
+### Community 78 - "Assets/_JungleMaze/Tests"
+Cohesion: 0.09
+Nodes (21): LevelDocument, LevelItemGroup, Cover, Decoration, Spawn, WorldObject, LevelItemShape, LevelPlacement (+13 more)
 
-### Community 81 - "Application/Config"
-Cohesion: 0.07
-Nodes (28): ClientConfig, ApiBaseUrl, AuthMode, ConnectTimeoutMs, Endpoint, GameServerHost, GameServerPort, Mode (+20 more)
+### Community 79 - "Presentation/Audio"
+Cohesion: 0.08
+Nodes (10): AudioManager, IsConfigured, Music, OwnsListener, RuntimeSet, VoiceCount, MusicDirector, PlayingSources (+2 more)
 
-### Community 82 - "Assets/_JungleMaze/Tests"
+### Community 80 - "Assets/_JungleMaze/Tests"
+Cohesion: 0.11
+Nodes (5): JoinControllerTests, ApiModelsTests, LobbyFlowTests, LoginFirstFlowTests, LobbyRig
+
+### Community 81 - "Backend/Deploy/registry_release.py"
 Cohesion: 0.10
-Nodes (10): JoinControllerTests, ApiModelsTests, LobbyFlowTests, LoginFirstFlowTests, FakeHistory, IsReady, Rows, Status (+2 more)
+Nodes (53): main(), cached_image(), compose(), configured_services(), health(), inspect(), link(), main() (+45 more)
+
+### Community 82 - "Presentation/Vfx"
+Cohesion: 0.08
+Nodes (21): VfxAnchorRegistry, Count, VfxBodyAnchor, Body, HasIdentity, IsFlashing, IsShowing, LocalHero (+13 more)
 
 ### Community 83 - "Imported Plugins/UniTask"
 Cohesion: 0.05
 Nodes (69): InjectPlayerLoopTimings, All, EarlyUpdate, FixedUpdate, Initialization, LastEarlyUpdate, LastFixedUpdate, LastInitialization (+61 more)
 
 ### Community 84 - "Presentation/UI"
-Cohesion: 0.08
-Nodes (26): LobbyScreenRules, LobbyScreen, Connecting, Disconnected, History, InGame, JoinForm, Leaderboard (+18 more)
+Cohesion: 0.06
+Nodes (40): IHudState, Ammo, Armor, DangerCount, HasPose, HeldWeapon, Helmet, Hp (+32 more)
 
-### Community 85 - "Application/MatchUi"
-Cohesion: 0.08
-Nodes (27): KillcamSession, Clip, Elapsed, EndedAt, Frame, LastRequest, Options, PlayStartedAt (+19 more)
-
-### Community 86 - "Backend/Deploy/registry_release.py"
-Cohesion: 0.10
-Nodes (53): main(), cached_image(), compose(), configured_services(), health(), inspect(), link(), main() (+45 more)
-
-### Community 87 - "Imported Plugins/UniTask"
+### Community 85 - "Imported Plugins/UniTask"
 Cohesion: 0.08
 Nodes (17): Enumerator, Current, IUniTaskAsyncDisposable, Current, IUniTaskOrderedAsyncEnumerable, UniTaskAsyncEnumerableExtensions, UniTaskCancelableAsyncEnumerable, AsyncEnumerableSorter (+9 more)
 
-### Community 88 - "Application/Ports"
-Cohesion: 0.06
-Nodes (18): WorldSyncService, IgnoredPackets, Players, PooledPrefabFactory, Prefab, IPoolService, SpawnPose, IFactory (+10 more)
-
-### Community 89 - "Imported Plugins/GameDevWare.Serialization"
-Cohesion: 0.05
-Nodes (24): BigEndianBitConverter, Endianness, Endianness, BigEndian, LittleEndian, LittleEndianBitConverter, Endianness, MessagePackExtensionType (+16 more)
-
-### Community 90 - "Imported Scripts/Obstacles"
-Cohesion: 0.06
-Nodes (27): Bush, BasicObstacle, CompoundObstacle, BananaPeelProjectile, peelDamage, StunTime, IPlayerEnter, IPlayerExit (+19 more)
-
-### Community 91 - "projects/lastaway/art"
+### Community 86 - "Application/Lobby"
 Cohesion: 0.07
-Nodes (32): dilate(), erode(), glyph(), moss(), panel(), poly_mask(), rect_pts(), vgrad() (+24 more)
+Nodes (36): LobbyFlow, Account, Api, AutoStartText, Connection, CountdownSeconds, HasCountdown, History (+28 more)
 
-### Community 92 - "Presentation/Audio"
-Cohesion: 0.08
-Nodes (9): AudioManager, IsConfigured, Music, OwnsListener, RuntimeSet, VoiceCount, MusicDirector, PlayingSources (+1 more)
+### Community 87 - "Application/World"
+Cohesion: 0.09
+Nodes (29): Break, GroundLootArrival, GroundLootArrivals, CompanionRadius, Count, Radius, Stagger, Window (+21 more)
 
-### Community 93 - "Assets/_JungleMaze/Tests"
+### Community 88 - "Backend/Telemetry/MatchTelemetryAssembler.cs"
 Cohesion: 0.10
-Nodes (19): LocalPrediction, HasWorld, IsActive, MovementMultiplier, PredictedX, PredictedY, Reversed, Stats (+11 more)
+Nodes (15): Cause, Disconnect, Hazard, None, Other, Weapon, Zone, LastDamage (+7 more)
 
-### Community 94 - "Backend/Telemetry/MatchTelemetryAssembler.cs"
-Cohesion: 0.11
-Nodes (14): Cause, Disconnect, Hazard, None, Other, Weapon, Zone, LastDamage (+6 more)
+### Community 89 - "Presentation/Combat"
+Cohesion: 0.07
+Nodes (15): IHudStateWriter, ConfiguredShot, PooledPrefabFactory, Prefab, IPoolService, SpawnPose, IFactory, IFactory (+7 more)
 
-### Community 95 - "Application/Lobby"
+### Community 90 - "Assets/_JungleMaze/Tools"
+Cohesion: 0.08
+Nodes (13): DamageNumberVfx, Label, Shown, FuseWarningVfx, Frame, Size, IVfxSpawnListener, VfxParticleEffect (+5 more)
+
+### Community 92 - "Backend/Tools/room_benchmark.py"
+Cohesion: 0.08
+Nodes (54): check(), main(), compose(), request(), port(), run(), main(), compose() (+46 more)
+
+### Community 93 - "Tools/Audio/build_manifest.py"
 Cohesion: 0.06
-Nodes (46): LobbyCase, Disconnect, DisconnectRejected, DisconnectTimeout, HappyPath, JwtExpired, LoadError, Replay (+38 more)
+Nodes (35): main(), build(), docker_json(), put(), raw_layer(), restore(), safe(), sha() (+27 more)
 
-### Community 96 - "Backend/Deploy/Aws"
-Cohesion: 0.03
-Nodes (27): backup.sh script, DEBIAN_FRONTEND, bootstrap.sh script, check-mongo-volume.sh script, compose(), load_release(), common.sh script, configure.sh script (+19 more)
+### Community 94 - "Domain/Hud"
+Cohesion: 0.07
+Nodes (29): DangerArrowOutput, DangerBannerOutput, DangerFeedback, ArrowCount, Banner, Entry, DangerList, Count (+21 more)
 
-### Community 97 - "Packages/packages-lock.json"
+### Community 95 - "Packages/packages-lock.json"
 Cohesion: 0.05
 Nodes (69): dependencies, depth, hash, source, version, dependencies, depth, source (+61 more)
 
-### Community 99 - "Backend/Api/Repositories"
-Cohesion: 0.05
-Nodes (23): MongoDbContext, Database, Guests, Matches, Users, GuestProfile, CreatedAtUtc, CredentialHash (+15 more)
+### Community 96 - "Imported Scripts/[Codebase]"
+Cohesion: 0.06
+Nodes (43): BaseWeaponEntity, Buffs, Capacity, Cooldown, CurrentAmount, Damage, FinalDamage, HitPoint (+35 more)
 
-### Community 100 - "Backend/GameServer/Simulation"
-Cohesion: 0.07
-Nodes (18): MatchWorldRuntime, ConfirmedObstacleHits, Airdrops, Destructibles, EnvironmentDamageInProgress, Floor, FloorReserve, Hazards (+10 more)
+### Community 97 - "Imported Scripts/Screen"
+Cohesion: 0.06
+Nodes (28): BaseScreen, CountDownScreen, ForceAspectRatio, GameScreen, BorderTime, GameScreenRankingRowPrefab, Instance, RankingContainer (+20 more)
 
-### Community 101 - "Tools/Telemetry/tel_schema.py"
-Cohesion: 0.07
-Nodes (23): canonical(), _check_field(), _check_rules(), _check_value(), _compile_type(), _err(), _fast_ok(), _gen_rule() (+15 more)
+### Community 98 - "Backend/Tests/TelemetryChecks"
+Cohesion: 0.08
+Nodes (34): MatchProfile, AcceleratedZone, ConfigHash, Current, DisconnectGraceSeconds, EndingDurationSeconds, InputStaleMs, LoadingTimeoutSeconds (+26 more)
 
-### Community 102 - "Imported Plugins/GameDevWare.Serialization"
+### Community 99 - "Imported Plugins/GameDevWare.Serialization"
 Cohesion: 0.10
 Nodes (3): IJsonWriter, Context, JsonWriterExtentions
 
-### Community 103 - "Backend/Tests/MatchResultChecks"
+### Community 100 - "Assets/_JungleMaze/Tests"
 Cohesion: 0.08
-Nodes (23): MatchParticipant, MatchResult, GameTicketRequest, GameTicketResponse, MatchCanonicalHasher, MatchLeaderboardResponse, MatchParticipantSubmission, MatchResultSubmission (+15 more)
+Nodes (18): InventoryStateStore, ActiveSlot, ConsumableSlotCount, Use, WeaponSlotCount, InventoryChange, ActiveSlot, All (+10 more)
 
-### Community 104 - "Application/Lobby"
+### Community 101 - "Application/Lobby"
+Cohesion: 0.06
+Nodes (46): LobbyCase, Disconnect, DisconnectRejected, DisconnectTimeout, HappyPath, JwtExpired, LoadError, Replay (+38 more)
+
+### Community 102 - "Tools/Telemetry/tel_schema.py"
 Cohesion: 0.07
-Nodes (39): ApiMessages, ApiOp, CreateRoom, DeleteRoom, Health, History, Leaderboard, ListRooms (+31 more)
+Nodes (23): canonical(), _check_field(), _check_rules(), _check_value(), _compile_type(), _err(), _fast_ok(), _gen_rule() (+15 more)
 
-### Community 105 - "Assets/_JungleMaze/Tests"
+### Community 103 - "Imported Plugins/UniTask"
 Cohesion: 0.08
-Nodes (23): PlayerSettingsService, HasPendingSave, MouseSensitivity, ScreenShakeEnabled, IPlayerSettings, MouseSensitivity, ScreenShakeEnabled, IPlayerSettingsStore (+15 more)
+Nodes (20): FirstValueToUniTaskObserver, AsyncSubject, HasObservers, IsCompleted, Value, DisposedObserver, EmptyDisposable, EmptyObserver (+12 more)
 
-### Community 106 - "Tools/Telemetry/tel_fake.py"
+### Community 104 - "Imported Scripts/Obstacles"
+Cohesion: 0.06
+Nodes (26): BasicObstacle, CompoundObstacle, BananaPeelProjectile, peelDamage, StunTime, IPlayerEnter, IPlayerExit, IPlayerStay (+18 more)
+
+### Community 105 - "Tools/Telemetry/tel_fake.py"
 Cohesion: 0.09
 Nodes (14): bal_hash_for(), cfg_hash_for(), cfg_offset_ms(), generate(), _hex8(), _inject_reconnect(), _inject_semantic(), _load_balance() (+6 more)
 
-### Community 107 - "Imported Plugins/UniTask"
-Cohesion: 0.09
-Nodes (20): FirstValueToUniTaskObserver, AsyncSubject, HasObservers, IsCompleted, Value, DisposedObserver, EmptyDisposable, EmptyObserver (+12 more)
-
-### Community 108 - "Imported Scripts/[Codebase]"
-Cohesion: 0.06
-Nodes (42): BaseWeaponEntity, Buffs, Capacity, Cooldown, CurrentAmount, Damage, FinalDamage, HitPoint (+34 more)
-
-### Community 109 - "Backend/GameServer/Simulation"
-Cohesion: 0.08
-Nodes (35): BotSettings, AimErrorDegrees, BlacklistSeconds, BushRevealRadius, DetectRadius, FailedPathLimit, GlobalPathMillisecondsPerTick, GlobalPathNodesPerTick (+27 more)
-
-### Community 110 - "Backend/Telemetry/TelemetryEvent.cs"
+### Community 106 - "Backend/Telemetry/TelemetryEvent.cs"
 Cohesion: 0.06
 Nodes (58): TelemetryAttackKind, Melee, Shot, Special, Throw, TelemetryCcEnd, Cleansed, Death (+50 more)
 
-### Community 111 - "projects/lastaway/art"
-Cohesion: 0.07
-Nodes (44): draw_slot(), text(), text(), btn(), kit_sheet(), ic_(), label(), put() (+36 more)
-
-### Community 112 - "Imported Scripts/Game"
+### Community 108 - "Imported Scripts/Game"
 Cohesion: 0.07
 Nodes (19): GameEndState, GameLoadingState, GameLobbyState, GamePlayingState, GameWaitingState, SubState, CountDownToStart, GamePlaying (+11 more)
 
-### Community 113 - "Application/Hud"
-Cohesion: 0.09
-Nodes (17): EffectStateStore, Count, HudStateDefaults, IEffectState, Count, IEffectStateWriter, LocalEffectStatusSource, EffectList (+9 more)
-
-### Community 114 - "Application/Lobby"
-Cohesion: 0.06
-Nodes (39): SessionLobbyCommands, MockLobbyCommands, IConnectionStateSource, CanResume, LastReason, RttMs, State, Step (+31 more)
-
-### Community 115 - "Presentation/UI"
+### Community 109 - "Assets/_JungleMaze/Tests"
 Cohesion: 0.07
-Nodes (40): PublishedMap, ForwardClick, Target, LobbySlotView, Background, Badge, NetId, PlayerName (+32 more)
+Nodes (23): IAudioOutput, VoiceCount, IAudioSettingsStore, AudioBus, Alert, Master, Music, Sfx (+15 more)
 
-### Community 116 - "Assets/_JungleMaze/Tests"
-Cohesion: 0.08
-Nodes (15): ArtAudioCatalogTests, ArtAudioLevelTests, ArtAudioManifestTests, ArtAudioMusicTests, ArtAudioSpec, Row, Footstep, MaxLevel (+7 more)
-
-### Community 117 - "Presentation/World"
-Cohesion: 0.08
-Nodes (14): MeleeSwingVisual, AirdropVisual, AirdropVisualSet, WorldDemoController, DemoCombat, Destructibles, Floor, Hp (+6 more)
-
-### Community 119 - "Imported Plugins/GameDevWare.Serialization"
+### Community 110 - "Imported Plugins/GameDevWare.Serialization"
 Cohesion: 0.12
 Nodes (15): Json, DefaultDateTimeFormats, DefaultEncoding, DefaultFormat, DefaultSerializers, MsgPack, DefaultDateTimeFormats, DefaultEncoding (+7 more)
 
-### Community 120 - "Imported Plugins/UniTask"
-Cohesion: 0.05
-Nodes (19): AsyncLazy, Task, Task, ExceptionExtensions, UniTaskScheduler, AsyncGPUReadbackRequestAwaiterConfiguredSource, NextNode, UnityAwaitableExtensions (+11 more)
+### Community 111 - "Imported Plugins/UniTask"
+Cohesion: 0.07
+Nodes (12): _SelectMany, Current, _SelectManyAwait, Current, _SelectManyAwaitWithCancellation, Current, _SkipUntilCanceled, SkipUntilCanceled (+4 more)
 
-### Community 121 - "Presentation/UI"
-Cohesion: 0.08
-Nodes (20): IMatchMenuState, BlocksGameplayInput, IsOpen, PlayerInputService, Enabled, LastInputSeq, LocalTick, SentPackets (+12 more)
+### Community 112 - "Imported Scripts/Screen"
+Cohesion: 0.07
+Nodes (18): ItemManager, Armors, I, Items, ItemsPrefab, MapManager, Buildings, Destructibles (+10 more)
 
-### Community 122 - "LevelEditor/LevelDocument.cs"
-Cohesion: 0.11
-Nodes (17): LevelDocument, LevelItemGroup, Cover, Decoration, Spawn, WorldObject, LevelPlacement, Bounds (+9 more)
+### Community 113 - "Assets/_JungleMaze/Tests"
+Cohesion: 0.09
+Nodes (18): MatchMenuController, BlocksGameplayInput, FromMainMenu, InMatch, IsConfirmOpen, IsLeaveLocked, IsOpen, LeaveRequests (+10 more)
 
-### Community 123 - "Backend/compose.yaml"
+### Community 114 - "Application/Lobby"
+Cohesion: 0.06
+Nodes (39): JoinController, Attempts, Busy, CanSubmit, CodeError, CodeErrorText, DisplayName, FocusCode (+31 more)
+
+### Community 115 - "Application/Player"
+Cohesion: 0.10
+Nodes (20): InterpolationStats, RemotePlayerInterpolator, ClockStarted, DelaySeconds, MaxExtrapolationSeconds, RenderTick, Stats, SnapshotBuffer (+12 more)
+
+### Community 116 - "Domain/Vfx"
+Cohesion: 0.07
+Nodes (36): VfxCue, AttackPuff, AuraAdrenaline, AuraCcImmune, AuraInvisible, AuraInvulnerable, AuraPoison, AuraReverse (+28 more)
+
+### Community 118 - "Backend/compose.yaml"
 Cohesion: 0.07
 Nodes (61): build, depends_on, env_file, environment, ports, profiles, context, dockerfile (+53 more)
 
-### Community 124 - "Backend/GameServer/Rooms"
-Cohesion: 0.08
-Nodes (24): RoomManager, Room, BotRequests, Code, EmptySince, Id, IsDefault, MapReady (+16 more)
+### Community 119 - "Backend/Tests/TelemetryChecks"
+Cohesion: 0.09
+Nodes (23): Checker, Failed, Passed, SchemaKeys, Aux, Envelope, Types, BlockingStream (+15 more)
 
-### Community 125 - "projects/lastaway/art"
+### Community 120 - "Backend/Tests/OnlineReadiness"
 Cohesion: 0.06
-Nodes (36): draw(), ink_mask(), main(), measure(), baked_rec(), btn_font(), build(), button() (+28 more)
+Nodes (61): items, type, minimum, type, type, type, minimum, type (+53 more)
 
-### Community 126 - "Imported Plugins/GameDevWare.Serialization"
+### Community 121 - "Imported Plugins/GameDevWare.Serialization"
 Cohesion: 0.08
 Nodes (16): Enumerator, Current, Entry, Key, Value, IndexedDictionary, Count, IsFixedSize (+8 more)
 
-### Community 127 - "Imported Scripts/Screen"
+### Community 122 - "Imported Plugins/UniTask"
+Cohesion: 0.05
+Nodes (10): AsyncCancelTrigger, AsyncDeselectTrigger, AsyncSelectTrigger, AsyncSubmitTrigger, AsyncUpdateSelectedTrigger, IAsyncOnCancelHandler, IAsyncOnDeselectHandler, IAsyncOnSelectHandler (+2 more)
+
+### Community 123 - "Bootstrap/OnlineScenarioRunner.cs"
 Cohesion: 0.08
-Nodes (18): ItemManager, Armors, I, Items, ItemsPrefab, MapManager, Buildings, Destructibles (+10 more)
+Nodes (21): WorldSyncService, IgnoredPackets, Players, INetworkClient, Endpoint, LastReason, PlayerId, State (+13 more)
 
-### Community 128 - "Application/Vfx"
-Cohesion: 0.09
-Nodes (21): SfxDeduper, Capacity, FlashEntry, Fuse, Live, VfxDirector, AuraCount, BudgetCapacity (+13 more)
-
-### Community 129 - "Application/MatchUi"
-Cohesion: 0.09
-Nodes (17): MatchMenuController, BlocksGameplayInput, FromMainMenu, InMatch, IsConfirmOpen, IsLeaveLocked, IsOpen, LeaveRequests (+9 more)
-
-### Community 130 - "Imported Plugins/UniTask"
-Cohesion: 0.06
-Nodes (13): ParticleEffectsLibrary, PEDestoryTimed, EnumeratorAsyncExtensions, EnumeratorPromise, NextNode, Indestructible, Positions, HandVisualizer (+5 more)
-
-### Community 131 - "Imported Plugins/GameDevWare.Serialization"
+### Community 124 - "Imported Plugins/GameDevWare.Serialization"
 Cohesion: 0.10
 Nodes (11): JsonUtils, JsonWriter, CharactersWritten, Context, InitialPadding, Structure, IsArray, IsContainer (+3 more)
 
-### Community 132 - "Bootstrap/Bootstrap.cs"
-Cohesion: 0.09
-Nodes (24): IBalanceConfigProvider, Equipments, LastError, Match, Weapons, IPacketReceiver, IPacketSender, IPlayerPoseSource (+16 more)
+### Community 125 - "Imported Plugins/UniTask"
+Cohesion: 0.08
+Nodes (11): AsyncAwakeTrigger, AsyncTriggerExtensions, AsyncDestroyTrigger, CancellationToken, AwakeMonitor, AsyncStartTrigger, UniTaskCancellationExtensions, AsyncParticleCollisionTrigger (+3 more)
 
-### Community 133 - "Presentation/Vfx"
-Cohesion: 0.10
-Nodes (15): IVfxOutput, ActiveCount, VfxSpawn, CueBinding, Slot, VfxStage, ActiveCount, Catalog (+7 more)
-
-### Community 134 - "Imported Plugins/GameDevWare.Serialization"
-Cohesion: 0.09
-Nodes (9): DefaultMessagePackExtensionTypeHandler, ExtensionTypes, EndianBitConverter, Big, Endianness, Little, Int32SingleUnion, AsInt32 (+1 more)
-
-### Community 135 - "Application/Audio"
-Cohesion: 0.10
+### Community 126 - "Application/Audio"
+Cohesion: 0.11
 Nodes (12): AudioCue, IAudioEventSource, HudKind, Damage, Hit, Pickup, SfxRouter, IsSettling (+4 more)
 
-### Community 136 - "Backend/Tests/TelemetryChecks"
-Cohesion: 0.11
-Nodes (21): Checker, Failed, Passed, SchemaKeys, Aux, Envelope, Types, CoreChecks (+13 more)
+### Community 127 - "Domain/Lobby"
+Cohesion: 0.07
+Nodes (39): LobbyScreenRules, MatchResultView, ResultModel, CauseText, HasBots, HasData, Headline, IsOffline (+31 more)
 
-### Community 137 - "Docs/Art/directions"
-Cohesion: 0.08
+### Community 128 - "Docs/Art/directions"
+Cohesion: 0.09
 Nodes (42): e(), emblem(), end(), g(), icon(), leaf(), p(), panel() (+34 more)
 
-### Community 138 - "Imported Plugins/GameDevWare.Serialization"
-Cohesion: 0.06
-Nodes (17): ArrayExtensions, GenerateTypeSerializerAttribute, JsonMember, Length, JsonStreamReader, JsonStreamWriter, Stream, JsonStringBuilderWriter (+9 more)
+### Community 129 - "projects/lastaway/art"
+Cohesion: 0.08
+Nodes (41): draw_slot(), text(), text(), text(), btn(), kit_sheet(), ic_(), label() (+33 more)
 
-### Community 139 - "Imported Plugins/UniTask"
-Cohesion: 0.09
-Nodes (14): CancellationTokenSourceExtensions, ValueStopwatch, Elapsed, ElapsedTicks, IsInvalid, DeltaTimePlayerLoopTimer, IgnoreTimeScalePlayerLoopTimer, PlayerLoopTimer (+6 more)
+### Community 130 - "Imported Plugins/GameDevWare.Serialization"
+Cohesion: 0.07
+Nodes (27): DataMemberDescription, CanGet, CanSet, DefaultValue, ValueType, FieldDescription, CanGet, CanSet (+19 more)
 
-### Community 140 - "Imported Scripts/[Codebase]"
+### Community 131 - "Imported Scripts/[Codebase]"
 Cohesion: 0.07
 Nodes (24): BaseItemEntity, Id, IsOwned, IsUsing, MountedPlayer, Position, Rarity, SpriteRenderer (+16 more)
 
-### Community 141 - "Presentation/UI"
-Cohesion: 0.09
-Nodes (19): Waypoint, Has, X, Y, WaypointTuning, Default, WaypointEdge, WaypointView (+11 more)
-
-### Community 142 - "Backend/Shared/Protocol"
-Cohesion: 0.09
-Nodes (25): PacketRegistryTests, EventPacket, IsValid, GameEventType, ItemPickedUp, MatchEnded, MatchStarted, MeleeImpact (+17 more)
-
-### Community 143 - "Imported Plugins/UniTask"
-Cohesion: 0.06
-Nodes (10): AsyncCancelTrigger, AsyncDeselectTrigger, AsyncSelectTrigger, AsyncSubmitTrigger, AsyncUpdateSelectedTrigger, IAsyncOnCancelHandler, IAsyncOnDeselectHandler, IAsyncOnSelectHandler (+2 more)
-
-### Community 144 - "Presentation/UI"
+### Community 132 - "Application/Vfx"
 Cohesion: 0.07
-Nodes (35): MatchOverlayTuning, Default, MatchOverlayRoot, Canvas, Confirm, Eliminated, EventSystemObject, Input (+27 more)
+Nodes (27): IVfxMatchFeed, InGame, Online, OwnNetId, SessionKey, LocalEffectStatusSource, MockVfxMatch, Active (+19 more)
 
-### Community 145 - "Backend/Tests/test_registry_deploy.py"
+### Community 133 - "Tools/Level/survival_map_150.py"
+Cohesion: 0.10
+Nodes (13): db(), main(), measure(), read_mono(), build(), loot_value(), Map, f() (+5 more)
+
+### Community 134 - "Imported Plugins/GameDevWare.Serialization"
+Cohesion: 0.06
+Nodes (21): ArrayExtensions, GenerateTypeSerializerAttribute, JsonStreamReader, JsonStringBuilderReader, JsonStringBuilderWriter, Builder, JsonStringReader, JsonTextReader (+13 more)
+
+### Community 135 - "Backend/GameServer/Simulation"
+Cohesion: 0.10
+Nodes (10): CombatHit, IBreakableObstacles, ICombatLoadout, CombatGeometry, CombatService, ShotsInFlight, FlyingShot, PlayerCombat (+2 more)
+
+### Community 136 - "Backend/Shared/World"
+Cohesion: 0.07
+Nodes (24): WorldConfigData, AirdropPhase, Broken, Cancelled, Falling, Flying, Landed, Scheduled (+16 more)
+
+### Community 137 - "Imported Plugins/GameDevWare.Serialization"
+Cohesion: 0.08
+Nodes (29): ErrorCode, CantCreateInstanceOfType, DiscriminatorNotFirstMemberOfObject, EmptyMemberName, MemberNameIsNotSpecified, SerializationException, SerializationFramesCorruption, SerializationGraphIsTooBig (+21 more)
+
+### Community 138 - "Imported Plugins/GameDevWare.Serialization"
+Cohesion: 0.10
+Nodes (7): EndianBitConverter, Big, Endianness, Little, Int32SingleUnion, AsInt32, AsSingle
+
+### Community 139 - "Assets/_JungleMaze/Tests"
+Cohesion: 0.11
+Nodes (17): WorldObjectView, VisualState, WorldId, WorldVisualState, Activated, Broken, Damaged, Normal (+9 more)
+
+### Community 140 - "Backend/Tests/test_registry_deploy.py"
 Cohesion: 0.08
 Nodes (12): FakeRaw, frame(), bundle(), manifest(), ReleaseTests, aws(), ssh(), compose() (+4 more)
 
-### Community 146 - "Backend/Tests/WorldNetworkChecks"
+### Community 141 - "Assets/_JungleMaze/Tests"
 Cohesion: 0.07
-Nodes (34): NetworkHost, ActivePeers, Commands, Hub, PendingPeers, ReservedPeers, Rooms, UdpPeer (+26 more)
-
-### Community 147 - "Imported Plugins/GameDevWare.Serialization"
-Cohesion: 0.08
-Nodes (40): JsonToken, BeginArray, BeginObject, Boolean, DateTime, EndOfArray, EndOfObject, EndOfStream (+32 more)
-
-### Community 148 - "Presentation/Player"
-Cohesion: 0.09
-Nodes (14): ShotFlashVisual, Duration, HeroSpriteAnimator, Attacking, Facing, Hand, HasVisuals, Moving (+6 more)
-
-### Community 149 - "Assets/_JungleMaze/Tests"
-Cohesion: 0.12
-Nodes (17): WorldObjectView, VisualState, WorldId, WorldVisualState, Activated, Broken, Damaged, Normal (+9 more)
-
-### Community 150 - "Assets/_JungleMaze/Tools"
-Cohesion: 0.13
-Nodes (7): HudLayoutBBuild, IconSource, HudSkinABuild, SpriteSource, ZoneRingStyle, Main, Sprite
-
-### Community 151 - "Backend/GameServer/Simulation"
-Cohesion: 0.08
-Nodes (40): AABB, MaxX, MaxY, MinX, MinY, Name, MapData, MaxX (+32 more)
-
-### Community 152 - "Backend/Telemetry/JsonlTelemetryWriter.cs"
-Cohesion: 0.10
-Nodes (26): ITelemetryPump, JsonlTelemetryWriter, Build, Enabled, TotalBytes, Wid, TelemetryFile, Cfg (+18 more)
-
-### Community 153 - "Imported Plugins/GameDevWare.Serialization"
-Cohesion: 0.07
-Nodes (26): DataMemberDescription, CanGet, CanSet, DefaultValue, ValueType, FieldDescription, CanGet, CanSet (+18 more)
-
-### Community 154 - "Backend/Api/Controllers"
-Cohesion: 0.11
-Nodes (11): AuthController, GameTicketsController, GuestsController, MapsController, MatchesController, MeController, RoomsController, GuestService (+3 more)
-
-### Community 155 - "Imported Plugins/UniTask"
-Cohesion: 0.09
-Nodes (15): BoundsEqualityComparer, BoundsIntEqualityComparer, Cache, Color32EqualityComparer, ColorEqualityComparer, QuaternionEqualityComparer, RangeIntEqualityComparer, RectEqualityComparer (+7 more)
-
-### Community 156 - "Assets/_JungleMaze/Tests"
-Cohesion: 0.08
 Nodes (23): IAudioService, ActiveVoices, MaxVoices, MusicEnabled, NullAudioService, ActiveVoices, MaxVoices, MusicEnabled (+15 more)
 
-### Community 157 - "Assets/_JungleMaze/Tests"
-Cohesion: 0.09
-Nodes (20): IThrowableEventSource, OnlineThrowableSession, CanUse, Reversed, OnlineWorldIntegrationTests, Rig, Runtime, Bounds (+12 more)
-
-### Community 158 - "Application/Hud"
-Cohesion: 0.09
-Nodes (19): IInventoryState, ActiveSlot, ConsumableSlotCount, Use, WeaponSlotCount, IInventoryStateWriter, InventoryHudBinding, LocalConsumableHold (+11 more)
-
-### Community 159 - "Core/DI"
-Cohesion: 0.11
-Nodes (12): Injector, IInitializable, IServiceResolver, ReferenceEqualityComparer, ServiceRegistry, GuestHistoryCoordinator, Consumer, IBar (+4 more)
-
-### Community 161 - "Presentation/Combat"
-Cohesion: 0.11
-Nodes (10): HeldWeaponView, Catalog, HandsVisible, ItemId, KickDuration, MainHandPosition, MuzzlePosition, Swinging (+2 more)
-
-### Community 162 - "Presentation/Combat"
-Cohesion: 0.10
-Nodes (18): Clip, IsSet, Entry, ThrowableArtCatalog, Fx, FxKind, Bell, Blast (+10 more)
-
-### Community 163 - "Assets/_JungleMaze/Tools"
-Cohesion: 0.15
-Nodes (4): MatchOverlayPrefabBuild, NumberFont, Secondary, TextFont
-
-### Community 164 - "Imported Scripts/[Codebase]"
-Cohesion: 0.08
-Nodes (20): CommandManager, I, ICommandResolver, BaseMovableEntity, IsMoving, Position, Visual, EnemyEntity (+12 more)
-
-### Community 165 - "Application/Combat"
-Cohesion: 0.10
-Nodes (29): CombatEvent, AimDegrees, Kind, NetId, Outcome, RequestSeq, Weapon, CombatEventKind (+21 more)
-
-### Community 166 - "Presentation/UI"
-Cohesion: 0.10
-Nodes (30): EliminationText, EliminationCause, Disconnected, Environment, LeftMatch, Player, Unknown, Zone (+22 more)
-
-### Community 167 - "Backend/Tests/OnlineReadiness"
-Cohesion: 0.07
-Nodes (50): additionalProperties, type, type, maximum, minimum, type, items, type (+42 more)
-
-### Community 168 - "Application/Combat"
-Cohesion: 0.11
-Nodes (14): ICombatRequestSink, ICombatResultSource, FakeCombatBackend, AttackOverride, Pending, Tick, FakeCombatPeer, NetId (+6 more)
-
-### Community 169 - "Application/Lobby"
-Cohesion: 0.07
-Nodes (42): ConnectionError, MatchSessionLobbySource, HasPhase, LoadError, MatchId, MaxPlayers, MinPlayers, OwnNetId (+34 more)
-
-### Community 170 - "Presentation/UI"
-Cohesion: 0.10
-Nodes (18): ConnectionMenuView, Art, BackdropActive, InGameBarHeight, PrimaryStyle, ShowsBackdrop, UiMenuArtCatalog, AssignedCount (+10 more)
-
-### Community 171 - "Imported Plugins/UniTask"
-Cohesion: 0.09
-Nodes (18): Channel, Channel, Channel, Reader, Writer, ChannelClosedException, ChannelReader, Completion (+10 more)
-
-### Community 173 - "Assets/_JungleMaze/Tests"
-Cohesion: 0.12
-Nodes (9): AudioVolume, SfxPlaybackService, ActiveVoices, AlertActive, MaxVoices, MusicEnabled, Now, SfxPlaybackServiceTests (+1 more)
-
-### Community 174 - "Application/Ports"
-Cohesion: 0.09
-Nodes (23): IMatchConnection, AttemptId, LastRequest, IPlayerHistory, IsReady, Rows, Status, PlayerMatchHistory (+15 more)
-
-### Community 175 - "Backend/NetSmokeClient/Networking"
-Cohesion: 0.11
-Nodes (15): CatalogMap, RoomGameplaySmoke, AirdropBreaks, AirdropFlights, AirdropLandings, MapHash, MapId, MapVerified (+7 more)
-
-### Community 176 - "Assets/_JungleMaze/Tests"
-Cohesion: 0.12
-Nodes (5): BalanceConfigJson, BalanceConfigJsonTests, BalanceConsumerTests, WeaponCombatConfigTests, JungleMaze.Tests.Config
-
-### Community 177 - "Imported Plugins/GameDevWare.Serialization"
-Cohesion: 0.09
-Nodes (27): ErrorCode, CantCreateInstanceOfType, DiscriminatorNotFirstMemberOfObject, EmptyMemberName, MemberNameIsNotSpecified, SerializationException, SerializationFramesCorruption, SerializationGraphIsTooBig (+19 more)
-
-### Community 178 - "Imported Plugins/UniTask"
-Cohesion: 0.08
-Nodes (13): SplitterGUILayout, UniTaskTrackerTreeView, UniTaskTrackerViewItem, Elapsed, Position, PositionFirstLine, Status, TaskType (+5 more)
-
-### Community 179 - "Application/Audio"
-Cohesion: 0.10
-Nodes (14): ClipPicker, SfxDistance, SfxGate, VoiceAllocator, ActiveCount, VoiceCount, AudioVolumeTests, ClipPickerTests (+6 more)
-
-### Community 180 - "Domain/MatchUi"
-Cohesion: 0.09
-Nodes (27): UnavailableKillcamReplaySource, KillcamClip, DurationSeconds, FrameCapacity, KillcamSample, KillcamUnavailableReason, Disabled, MatchEnded (+19 more)
-
-### Community 181 - "Presentation/UI"
-Cohesion: 0.10
-Nodes (22): IConfigProvider, CommandLineDisplayName, CommandLineRoomCode, Current, Profiles, Evidence, Phase2DemoProbe, ConnectionMenuPresenter (+14 more)
-
-### Community 182 - "Backend/Api/DTOs"
-Cohesion: 0.09
-Nodes (21): LoginRequest, Password, Username, LoginResponse, RegisterRequest, Password, Username, UserResponse (+13 more)
-
-### Community 183 - "Tools/Level/survival_map_150.py"
-Cohesion: 0.13
-Nodes (9): build(), loot_value(), Map, f(), nearest(), polar(), report(), within() (+1 more)
-
-### Community 184 - "Imported Plugins/GameDevWare.Serialization"
-Cohesion: 0.18
-Nodes (6): IJsonReader, Context, RawValue, Token, Value, JsonReaderExtentions
-
-### Community 185 - "Imported Scripts/[Concrete]"
-Cohesion: 0.08
-Nodes (13): BuildingEntity, Id, Position, DestructibleEntity, Positions, PublicHealth, PublicPosition, Chest (+5 more)
-
-### Community 186 - "Application/Audio"
-Cohesion: 0.10
-Nodes (10): IMatchAudioFeed, OwnNetId, MatchAudioEventSource, MatchSessionAudioFeed, OwnNetId, PlayerPose, FakeMatchFeed, OwnNetId (+2 more)
-
-### Community 187 - "Application/Match"
-Cohesion: 0.10
-Nodes (32): ZoneInterval, EndRadius, EndSecond, Index, StartRadius, StartSecond, ZoneSchedule, DamagePerSecond (+24 more)
-
-### Community 188 - "Assets/_JungleMaze/Tests"
-Cohesion: 0.13
-Nodes (8): MockSpectatorSource, AliveCount, LocalNetId, MatchEnded, StartCount, SpectatorEntry, MatchOverlayFlowTests, MatchOverlayPhaseViewTests
-
-### Community 189 - "Backend/Tests/GameplayNetworkChecks"
-Cohesion: 0.09
-Nodes (23): JoinAuthMode, Jwt, RoomCode, NetworkProtocol, ExternalChecks, MatchNetworkClient, AttemptId, AutoReady (+15 more)
-
-### Community 190 - "Imported Plugins/UniTask"
-Cohesion: 0.07
-Nodes (9): ETFXProjectileScript, AsyncCollisionEnterTrigger, AsyncCollisionExitTrigger, AsyncCollisionStayTrigger, AsyncParticleCollisionTrigger, IAsyncOnCollisionEnterHandler, IAsyncOnCollisionExitHandler, IAsyncOnCollisionStayHandler (+1 more)
-
-### Community 191 - "Assets/_JungleMaze/Tests"
-Cohesion: 0.12
-Nodes (14): MovementNetcodeTests, Result, FakeAuthoritativeServer, Tick, Item, LinkProfile, Peer, SimulatedLink (+6 more)
-
-### Community 192 - "Presentation/Player"
-Cohesion: 0.11
-Nodes (12): HeroSkinRules, IHeroSkinPreference, Selected, PlayerPrefsHeroSkinPreference, Selected, HeroSkinPicker, Label, Preview (+4 more)
-
-### Community 193 - "Presentation/UI"
-Cohesion: 0.12
-Nodes (11): ConfirmFade, MenuFade, MatchOverlayPresenter, EliminatedFade, KillcamFade, NoticeFade, SpectatorFade, OverlayFade (+3 more)
-
-### Community 194 - "Assets/_JungleMaze/Tests"
-Cohesion: 0.10
-Nodes (11): EventLog, RecordingHud, RecordingSink, Rig, SentAttacks, StaticBalance, Equipments, LastError (+3 more)
-
-### Community 196 - "Imported Plugins/GameDevWare.Serialization"
-Cohesion: 0.09
-Nodes (43): MsgPackType, Array16, Array32, Bin16, Bin32, Bin8, Ext16, Ext32 (+35 more)
-
-### Community 197 - "Imported Scripts/Screen"
-Cohesion: 0.08
-Nodes (42): BuildingSchema, Attributes, Id, X, Y, DirectionEnum, EffectSchema, Duration (+34 more)
-
-### Community 198 - "Assets/_JungleMaze/Tools"
-Cohesion: 0.09
-Nodes (24): ButtonKind, Danger, Exit, Primary, Secondary, ButtonSize, L, M (+16 more)
-
-### Community 200 - "Domain/Audio"
-Cohesion: 0.09
-Nodes (39): SfxId, ArmorAbsorb, BombFuse, BushEnter, DragonRoar, EggBreak, EggLand, Eliminated (+31 more)
-
-### Community 201 - "Presentation/Rendering"
+### Community 142 - "Assets/_JungleMaze/Tests"
 Cohesion: 0.11
 Nodes (13): DepthSortable, IsQueued, SortingGroup, SortingOrder, SortPoint, SortPosition, DepthSortingSystem, DirtyCount (+5 more)
 
-### Community 202 - "Assets/_JungleMaze/Tests"
+### Community 143 - "Assets/_JungleMaze/Tools"
+Cohesion: 0.13
+Nodes (7): HudLayoutBBuild, IconSource, HudSkinABuild, SpriteSource, ZoneRingStyle, Main, Sprite
+
+### Community 144 - "Backend/Api/Controllers"
 Cohesion: 0.10
-Nodes (13): IAudioSettingsStore, SfxScheduler, PendingCount, AudioBus, Alert, Master, Music, Sfx (+5 more)
+Nodes (11): AuthController, GameTicketsController, GuestsController, MapsController, MatchesController, MeController, RoomsController, Owner (+3 more)
 
-### Community 203 - "Assets/_JungleMaze/Tests"
-Cohesion: 0.14
-Nodes (6): ThrowableVfxSource, Capture, ThrowableVfxSourceTests, VfxArchitectureTests, JungleMaze.Tests.Vfx, JungleMaze.Domain.CombatFeedback
+### Community 145 - "Imported Plugins/GameDevWare.Serialization"
+Cohesion: 0.07
+Nodes (40): JsonToken, BeginArray, BeginObject, Boolean, DateTime, EndOfArray, EndOfObject, EndOfStream (+32 more)
 
-### Community 204 - "Assets/_JungleMaze/Tools"
-Cohesion: 0.13
-Nodes (15): LevelCatalog, LevelItemType, BaseSize, Shape, LevelVisualPart, LevelVisualVariant, LevelWalls, WallSide (+7 more)
+### Community 146 - "Application/Audio"
+Cohesion: 0.08
+Nodes (19): ClipPicker, SfxDistance, SfxScheduler, PendingCount, VoiceAllocator, ActiveCount, VoiceCount, SfxPriority (+11 more)
 
-### Community 205 - "Assets/_JungleMaze/Tests"
-Cohesion: 0.13
-Nodes (6): MatchOverlayArtTests, MatchOverlayFrameFlowTests, MatchOverlayTimingTests, OverlayRig, Ticker, JungleMaze.Tests.PlayMode.MatchUi
+### Community 147 - "Assets/_JungleMaze/Tests"
+Cohesion: 0.08
+Nodes (19): IThrowableEventSource, OnlineThrowableSession, CanUse, Reversed, OnlineWorldIntegrationTests, Rig, Runtime, Bounds (+11 more)
 
-### Community 206 - "Application/MatchUi"
-Cohesion: 0.14
-Nodes (14): MatchOverlayScenarios, Elimination, KillcamEnabled, MatchId, Replay, Spectator, UsingMocks, MockEliminationSource (+6 more)
-
-### Community 207 - "Presentation/Vfx"
+### Community 148 - "Application/MatchUi"
 Cohesion: 0.11
-Nodes (16): IVfxMatchFeed, InGame, Online, OwnNetId, SessionKey, DamageNumberVfx, Label, Shown (+8 more)
+Nodes (17): MatchSessionEliminationSource, Current, IsLocalEliminated, MatchSessionSpectatorSource, AliveCount, LocalNetId, MatchEnded, StartCount (+9 more)
 
-### Community 208 - "Infrastructure/Api"
+### Community 149 - "Imported Plugins/UniTask"
+Cohesion: 0.09
+Nodes (15): BoundsEqualityComparer, BoundsIntEqualityComparer, Cache, Color32EqualityComparer, ColorEqualityComparer, QuaternionEqualityComparer, RangeIntEqualityComparer, RectEqualityComparer (+7 more)
+
+### Community 150 - "Core/DI"
+Cohesion: 0.11
+Nodes (11): Injector, IInitializable, IServiceResolver, ReferenceEqualityComparer, ServiceRegistry, Consumer, IBar, IFoo (+3 more)
+
+### Community 151 - "Domain/Vfx"
+Cohesion: 0.10
+Nodes (21): AttackVfxLedger, AttackVfxState, Confirmed, None, Predicted, Rejected, Entry, ScreenShakeModel (+13 more)
+
+### Community 152 - "Assets/_JungleMaze/Tests"
+Cohesion: 0.12
+Nodes (8): ArrowRecorder, BannerRecorder, HudFeedbackAcceptanceTests, HudFigmaV2, HudFigmaV2Feedback, HudLayoutB, SlotRow, JungleMaze.Tests.PlayMode
+
+### Community 154 - "Application/Audio"
+Cohesion: 0.09
+Nodes (11): IMatchAudioFeed, OwnNetId, MatchAudioEventSource, MatchSessionAudioFeed, OwnNetId, SfxDeduper, Capacity, SfxDeduperTests (+3 more)
+
+### Community 155 - "Application/Vfx"
+Cohesion: 0.13
+Nodes (10): FakeThrowableEventSource, Candidates, PendingCount, Rules, Pending, ThrowableVfxSource, Capture, ThrowableVfxSourceTests (+2 more)
+
+### Community 156 - "Presentation/Combat"
+Cohesion: 0.11
+Nodes (10): HeldWeaponView, Catalog, HandsVisible, ItemId, KickDuration, MainHandPosition, MuzzlePosition, Swinging (+2 more)
+
+### Community 157 - "Backend/GameServer/Simulation"
+Cohesion: 0.09
+Nodes (39): AABB, MaxX, MaxY, MinX, MinY, Name, MapData, MaxX (+31 more)
+
+### Community 158 - "Imported Plugins/UniTask"
+Cohesion: 0.09
+Nodes (23): CallbackType, Complete, Kill, Pause, Play, Rewind, StepComplete, DOTweenAsyncExtensions (+15 more)
+
+### Community 159 - "Domain/MatchUi"
+Cohesion: 0.13
+Nodes (19): NetworkKillcamReplaySource, KillcamRequest, KillcamClip, DurationSeconds, FrameCapacity, KillcamSample, KillcamUnavailableReason, Disabled (+11 more)
+
+### Community 160 - "Presentation/UI"
+Cohesion: 0.10
+Nodes (30): EliminationText, EliminationCause, Disconnected, Environment, LeftMatch, Player, Unknown, Zone (+22 more)
+
+### Community 161 - "Assets/_JungleMaze/Tools"
+Cohesion: 0.16
+Nodes (4): MatchOverlayPrefabBuild, NumberFont, Secondary, TextFont
+
+### Community 162 - "Backend/Tests/OnlineReadiness"
+Cohesion: 0.07
+Nodes (50): additionalProperties, type, type, maximum, minimum, type, items, type (+42 more)
+
+### Community 163 - "Assets/_JungleMaze/Tests"
+Cohesion: 0.12
+Nodes (9): AudioVolume, SfxPlaybackService, ActiveVoices, AlertActive, MaxVoices, MusicEnabled, Now, SfxPlaybackServiceTests (+1 more)
+
+### Community 164 - "Imported Plugins/GameDevWare.Serialization"
+Cohesion: 0.07
+Nodes (20): BigEndianBitConverter, Endianness, DefaultMessagePackExtensionTypeHandler, ExtensionTypes, Endianness, BigEndian, LittleEndian, LittleEndianBitConverter (+12 more)
+
+### Community 165 - "Imported Plugins/UniTask"
+Cohesion: 0.10
+Nodes (14): ITriggerHandler, Next, Prev, TriggerEvent, AsyncTriggerBase, AsyncTriggerEnumerator, Current, Next (+6 more)
+
+### Community 166 - "Presentation/UI"
+Cohesion: 0.11
+Nodes (17): Waypoint, Has, X, Y, WaypointTuning, Default, WaypointEdge, WaypointView (+9 more)
+
+### Community 167 - "Backend/Telemetry/JsonlTelemetryWriter.cs"
+Cohesion: 0.10
+Nodes (25): ITelemetryPump, JsonlTelemetryWriter, Build, Enabled, TotalBytes, Wid, TelemetryFile, Cfg (+17 more)
+
+### Community 168 - "Assets/_JungleMaze/Tests"
+Cohesion: 0.13
+Nodes (5): BalanceConfigJson, BalanceConfigJsonTests, BalanceConsumerTests, WeaponCombatConfigTests, JungleMaze.Tests.Config
+
+### Community 169 - "Presentation/UI"
+Cohesion: 0.10
+Nodes (27): PublishedMap, ForwardClick, Target, LobbySlotView, Background, Badge, NetId, PlayerName (+19 more)
+
+### Community 170 - "Application/MatchUi"
+Cohesion: 0.10
+Nodes (18): PlayerSettingsService, HasPendingSave, MouseSensitivity, ScreenShakeEnabled, IPlayerSettings, MouseSensitivity, ScreenShakeEnabled, IPlayerSettingsStore (+10 more)
+
+### Community 171 - "Imported Plugins/GameDevWare.Serialization"
+Cohesion: 0.18
+Nodes (6): IJsonReader, Context, RawValue, Token, Value, JsonReaderExtentions
+
+### Community 172 - "Imported Plugins/UniTask"
+Cohesion: 0.10
+Nodes (17): AsyncReactiveProperty, Value, Enumerator, Current, Next, Prev, IAsyncReactiveProperty, Value (+9 more)
+
+### Community 173 - "Imported Plugins/UniTask"
+Cohesion: 0.09
+Nodes (17): Channel, Channel, Channel, Reader, Writer, ChannelClosedException, ChannelReader, Completion (+9 more)
+
+### Community 174 - "Application/Lobby"
+Cohesion: 0.08
+Nodes (42): ConnectionError, MatchSessionLobbySource, HasPhase, LoadError, MatchId, MaxPlayers, MinPlayers, OwnNetId (+34 more)
+
+### Community 175 - "Application/Lobby"
+Cohesion: 0.10
+Nodes (25): ApiMessages, ApiOp, CreateRoom, DeleteRoom, Health, History, Leaderboard, ListRooms (+17 more)
+
+### Community 176 - "Application/Lobby"
+Cohesion: 0.09
+Nodes (33): ApiStatusModel, Checking, Ready, Text, HistoryModel, IdentityLabel, Message, Rows (+25 more)
+
+### Community 177 - "Assets/_JungleMaze/Tests"
+Cohesion: 0.10
+Nodes (12): EventLog, RecordingHud, RecordingSink, Rig, SentAttacks, StaticBalance, Equipments, LastError (+4 more)
+
+### Community 178 - "projects/lastaway/art"
+Cohesion: 0.08
+Nodes (32): baked_rec(), btn_font(), build(), button(), crops(), erase(), hue(), ladder() (+24 more)
+
+### Community 179 - "Application/Combat"
+Cohesion: 0.11
+Nodes (29): CombatEvent, AimDegrees, Kind, NetId, Outcome, RequestSeq, Weapon, CombatEventKind (+21 more)
+
+### Community 180 - "Assets/_JungleMaze/Tests"
+Cohesion: 0.12
+Nodes (11): AccountSession, Busy, IsValid, Message, Token, IAccountApi, FakeAccountApi, AccountSessionTests (+3 more)
+
+### Community 181 - "Assets/_JungleMaze/Tests"
+Cohesion: 0.12
+Nodes (14): MovementNetcodeTests, Result, FakeAuthoritativeServer, Tick, Item, LinkProfile, Peer, SimulatedLink (+6 more)
+
+### Community 182 - "Presentation/Player"
+Cohesion: 0.11
+Nodes (12): HeroSkinRules, IHeroSkinPreference, Selected, PlayerPrefsHeroSkinPreference, Selected, HeroSkinPicker, Label, Preview (+4 more)
+
+### Community 183 - "Assets/_JungleMaze/Tests"
+Cohesion: 0.12
+Nodes (14): StatusEvent, VfxBodyAnchorBindingPlayTests, VfxFrameDriver, VfxFrameGcPlayTests, CountingLog, PlayFeed, InGame, Online (+6 more)
+
+### Community 184 - "Core/Pooling"
+Cohesion: 0.11
+Nodes (17): IObjectPool, CountActive, CountInactive, IPoolable, ObjectPool, CountActive, CountInactive, PlayerModel (+9 more)
+
+### Community 185 - "Imported Scripts/[Concrete]"
+Cohesion: 0.09
+Nodes (14): EnumerableExtensions, KnockBackEffect, Direction, KnockbackPower, StunOnBlockedDuration, SilkEffect, DamageSource, Interval (+6 more)
+
+### Community 186 - "Imported Plugins/UniTask"
+Cohesion: 0.09
+Nodes (13): SplitterGUILayout, UniTaskTrackerTreeView, UniTaskTrackerViewItem, Elapsed, Position, PositionFirstLine, Status, TaskType (+5 more)
+
+### Community 187 - "Imported Scripts/[Codebase]"
+Cohesion: 0.10
+Nodes (17): CommandManager, I, ICommandResolver, BaseMovableEntity, IsMoving, Position, Visual, EnemyEntity (+9 more)
+
+### Community 188 - "Assets/_JungleMaze/Tools"
+Cohesion: 0.09
+Nodes (25): ButtonKind, Danger, Exit, Primary, Secondary, ButtonSize, L, M (+17 more)
+
+### Community 190 - "Imported Plugins/GameDevWare.Serialization"
+Cohesion: 0.09
+Nodes (43): MsgPackType, Array16, Array32, Bin16, Bin32, Bin8, Ext16, Ext32 (+35 more)
+
+### Community 191 - "Imported Scripts/Screen"
+Cohesion: 0.08
+Nodes (42): BuildingSchema, Attributes, Id, X, Y, DirectionEnum, EffectSchema, Duration (+34 more)
+
+### Community 192 - "Domain/Audio"
+Cohesion: 0.10
+Nodes (34): SfxGate, SfxId, ArmorAbsorb, BombFuse, BushEnter, DragonRoar, EggBreak, EggLand (+26 more)
+
+### Community 193 - "Application/Combat"
+Cohesion: 0.12
+Nodes (11): ICombatRequestSink, ICombatResultSource, FakeCombatBackend, AttackOverride, Pending, Tick, FakeCombatPeer, NetId (+3 more)
+
+### Community 194 - "Presentation/World"
+Cohesion: 0.08
+Nodes (16): IClientRuntimeData, Bounds, Covers, PlayerRadius, PlayerSpeed, ZoneSchedule, RuntimeDataFiles, RuntimeMapBounds (+8 more)
+
+### Community 195 - "Presentation/UI"
+Cohesion: 0.11
+Nodes (12): ConfirmFade, MenuFade, MatchOverlayPresenter, EliminatedFade, KillcamFade, NoticeFade, SpectatorFade, OverlayFade (+4 more)
+
+### Community 196 - "Imported Plugins/UniTask"
+Cohesion: 0.09
+Nodes (13): EveryUpdate, _EveryUpdate, Current, _EveryValueChanged, Current, EveryValueChangedStandardObject, EveryValueChangedUnityObject, Timer (+5 more)
+
+### Community 197 - "Application/World"
+Cohesion: 0.12
+Nodes (12): IInventoryStateWriter, InventoryHudBinding, LocalConsumableHold, Active, ItemId, Slot, LocalConsumableHoldTests, WorldHudBindingTests (+4 more)
+
+### Community 198 - "Infrastructure/Pooling"
+Cohesion: 0.13
+Nodes (10): PooledObject, DelayedDespawn, Pool, PoolService, Bullet, PoolServiceTests, SelfRemovingTickable, JungleMaze.Tests.Pooling (+2 more)
+
+### Community 199 - "Imported Scripts/[Concrete]"
+Cohesion: 0.09
+Nodes (13): BuildingEntity, Id, Position, DestructibleEntity, Positions, PublicHealth, PublicPosition, Chest (+5 more)
+
+### Community 200 - "Assets/_JungleMaze/Tools"
+Cohesion: 0.13
+Nodes (14): LevelCatalog, LevelItemType, BaseSize, Shape, LevelVisualPart, LevelVisualVariant, LevelWalls, WallSide (+6 more)
+
+### Community 201 - "Backend/Api/Models"
+Cohesion: 0.10
+Nodes (30): MatchParticipantRecord, DisplayName, IsBot, Kills, PlayerSessionId, ProfileKey, Rank, SurvivalSeconds (+22 more)
+
+### Community 202 - "Presentation/UI"
+Cohesion: 0.16
+Nodes (3): LobbyUiPresenter, CopyCount, Shown
+
+### Community 203 - "Infrastructure/Api"
 Cohesion: 0.16
 Nodes (3): BoundedDownloadHandler, Exceeded, RoomMapFiles
 
-### Community 209 - "Assets/_JungleMaze/Tests"
-Cohesion: 0.19
-Nodes (5): ArrowRecorder, BannerRecorder, HudFeedbackAcceptanceTests, HudLayoutB, SlotRow
-
-### Community 210 - "Backend/Telemetry/MatchTelemetryObserver.cs"
-Cohesion: 0.10
-Nodes (22): MatchTelemetryObserver, ConfigHash, ConfigVersion, DisconnectGraceSeconds, Dropped, Enabled, HasDisconnectHook, HasLeftHook (+14 more)
-
-### Community 211 - "Imported Plugins/UniTask"
+### Community 204 - "Imported Plugins/UniTask"
 Cohesion: 0.10
 Nodes (12): SUPPORT_VALUETASK, Canceled, Faulted, Pending, Succeeded, GetResult(), GetStatus(), OnCompleted() (+4 more)
 
-### Community 212 - "Application/World"
-Cohesion: 0.16
-Nodes (16): NearbyLootPicker, Count, HeroX, HeroY, HiddenCount, InReachCount, Linger, ManualSelection (+8 more)
-
-### Community 213 - "Presentation/Vfx"
+### Community 205 - "Imported Scripts/Map"
 Cohesion: 0.11
-Nodes (16): ETFXLightFade, VfxTuningValues, Default, CueEntry, StatusEntry, VfxCatalog, Cues, Palette (+8 more)
+Nodes (14): BorderSystem, DarkAreaDamage, IsBorderActivated, IsShrinking, TimeToDamagePlayers, DarkArea, Map, MapTag (+6 more)
 
-### Community 214 - "Presentation/Audio"
-Cohesion: 0.12
-Nodes (16): SfxRule, HasClips, Is2D, SfxRuleTable, AudioRuntimeSet, AlertGroup, Catalog, Mixer (+8 more)
+### Community 206 - "Assets/_JungleMaze/Tests"
+Cohesion: 0.14
+Nodes (5): MatchOverlayArtTests, MatchOverlayFrameFlowTests, MatchOverlayTimingTests, OverlayRig, JungleMaze.Tests.PlayMode.MatchUi
 
-### Community 215 - "Packages/packages-lock.json"
+### Community 207 - "Imported Scripts/Screen"
+Cohesion: 0.09
+Nodes (13): CameraController, I, Ortho, PlayerCamUI, PlayerInfo, Selected, Slot, IsHasPlayer (+5 more)
+
+### Community 208 - "Presentation/Player"
+Cohesion: 0.14
+Nodes (12): HeroSpriteAnimator, Attacking, Facing, Hand, HasVisuals, Moving, Hero, HeroFacing (+4 more)
+
+### Community 209 - "Packages/packages-lock.json"
 Cohesion: 0.06
 Nodes (39): dependencies, depth, source, url, version, dependencies, depth, source (+31 more)
 
-### Community 216 - "Tools/Audio/make_placeholder_sfx.py"
+### Community 210 - "Tools/Audio/make_placeholder_sfx.py"
 Cohesion: 0.18
 Nodes (28): armor_absorb(), bandpass(), bush_enter(), dragon_roar(), eliminated(), empty_click(), env_decay(), env_swell() (+20 more)
 
-### Community 217 - "Imported Plugins/UniTask"
-Cohesion: 0.13
-Nodes (7): _SelectMany, Current, _SelectManyAwait, SelectManyAwait, Current, _SelectManyAwaitWithCancellation, Current
-
-### Community 218 - "Assets/_JungleMaze/Tests"
-Cohesion: 0.15
-Nodes (8): AccountSession, Busy, IsValid, Message, Token, AccountSessionTests, DeferredAccountApi, RoomListModelTests
-
-### Community 219 - "Presentation/UI"
-Cohesion: 0.13
-Nodes (13): UiLayerStack, BlocksActions, Count, MatchInputGate, ActionsBlocked, BlocksGameplayInput, Current, IsOpen (+5 more)
-
-### Community 220 - "Backend/Api/Services"
+### Community 211 - "Application/MatchUi"
 Cohesion: 0.14
-Nodes (11): JsonStringBuilderReader, Owner, JwtOptions, Audience, ExpiryMinutes, Issuer, SigningKey, JungleBackend.Shared (+3 more)
+Nodes (13): MatchOverlayScenarios, Elimination, KillcamEnabled, MatchId, Replay, Spectator, UsingMocks, MockEliminationSource (+5 more)
 
-### Community 221 - "Imported Plugins/UniTask"
-Cohesion: 0.12
-Nodes (10): Awaiter, IsCompleted, ReturnToMainThread, ReturnToSynchronizationContext, SwitchToMainThreadAwaitable, SwitchToSynchronizationContextAwaitable, SwitchToTaskPoolAwaitable, SwitchToThreadPoolAwaitable (+2 more)
+### Community 212 - "Backend/Api/Repositories"
+Cohesion: 0.09
+Nodes (15): MongoDbContext, Database, Guests, Matches, Users, GuestProfile, CreatedAtUtc, CredentialHash (+7 more)
 
-### Community 222 - "Imported Scripts/[Codebase]"
-Cohesion: 0.11
-Nodes (18): IEntity, Stats, Stat, StatEnum, Armor, AttackSpeed, BonusSpeed, Damage (+10 more)
-
-### Community 223 - "Domain/Vfx"
-Cohesion: 0.13
-Nodes (16): StatusKind, Adrenaline, CcImmune, Invisible, Invulnerable, None, Poison, Reverse (+8 more)
-
-### Community 224 - "Core/Pooling"
-Cohesion: 0.14
-Nodes (12): IObjectPool, CountActive, CountInactive, IPoolable, ObjectPool, CountActive, CountInactive, PlayerView (+4 more)
-
-### Community 225 - "Backend/compose.host.yaml"
-Cohesion: 0.11
-Nodes (36): environment, ALLOW_LOCAL_HTTP, ASPNETCORE_ENVIRONMENT, ASPNETCORE_URLS, AUTH_MODE, GAME_BIND_ADDRESS, GAME_PORT, Jwt__Audience (+28 more)
-
-### Community 226 - "Backend/Tests/CombatChecks"
+### Community 213 - "Backend/Tests/CombatChecks"
 Cohesion: 0.10
 Nodes (29): FakeBreakables, Damages, FakeEffects, Stuns, FakeEntity, DisconnectedAtTick, DisplayName, Flags (+21 more)
 
-### Community 227 - "Packages/packages-lock.json"
+### Community 215 - "Presentation/UI"
+Cohesion: 0.11
+Nodes (9): CameraDummyDrag, KitButtonFace, Base, Content, Pressed, PressOffset, State, KitButtonLabel (+1 more)
+
+### Community 216 - "Assets/_JungleMaze/Tests"
+Cohesion: 0.14
+Nodes (12): ConnectForm, ConnectToServerUseCase, IsLoggingIn, IAuthApi, LoginResult, AuthApiClient, FakeAuth, ConnectUseCaseTests (+4 more)
+
+### Community 217 - "Presentation/UI"
+Cohesion: 0.13
+Nodes (13): UiLayerStack, BlocksActions, Count, MatchInputGate, ActionsBlocked, BlocksGameplayInput, Current, IsOpen (+5 more)
+
+### Community 218 - "Presentation/UI"
+Cohesion: 0.11
+Nodes (12): MatchOverlayRoot, Canvas, Confirm, Eliminated, EventSystemObject, Input, Killcam, Menu (+4 more)
+
+### Community 219 - "Backend/compose.host.yaml"
+Cohesion: 0.11
+Nodes (36): environment, ALLOW_LOCAL_HTTP, ASPNETCORE_ENVIRONMENT, ASPNETCORE_URLS, AUTH_MODE, GAME_BIND_ADDRESS, GAME_PORT, Jwt__Audience (+28 more)
+
+### Community 220 - "Packages/packages-lock.json"
 Cohesion: 0.06
 Nodes (37): dependencies, depth, source, url, version, dependencies, depth, source (+29 more)
 
-### Community 228 - "Backend/Shared/World"
-Cohesion: 0.14
-Nodes (16): AirdropPhase, Broken, Cancelled, Falling, Flying, Landed, Scheduled, AirdropRuntime (+8 more)
+### Community 221 - "Presentation/World"
+Cohesion: 0.16
+Nodes (5): IMatchMenuState, BlocksGameplayInput, IsOpen, WorldSceneView, WorldObjectWire
 
-### Community 229 - "Backend/Shared/Protocol"
-Cohesion: 0.15
-Nodes (14): HeldWeaponSnapshotTests, HeldItemsPacket, HeldItemWire, PlayerStateFlags, Attacking, Dashing, Dead, Invulnerable (+6 more)
-
-### Community 230 - "Application/MatchUi"
-Cohesion: 0.14
-Nodes (16): MatchOverlayFlow, Camera, CanSpectate, Elimination, Info, Killcam, Notice, NoticeUntil (+8 more)
-
-### Community 231 - "Application/MatchUi"
-Cohesion: 0.13
-Nodes (12): ISpectatorSource, AliveCount, LocalNetId, MatchEnded, StartCount, SpectatorTargets, CanJumpToKiller, Current (+4 more)
-
-### Community 232 - "Application/Vfx"
-Cohesion: 0.17
+### Community 222 - "Application/Vfx"
+Cohesion: 0.16
 Nodes (11): IVfxTargetLocator, Pending, VfxScenarios, Director, LoadRunning, Mock, PendingCount, Throwables (+3 more)
 
-### Community 233 - "Application/Vfx"
-Cohesion: 0.15
-Nodes (15): FakeThrowableEventSource, Candidates, PendingCount, Rules, Pending, MockVfxMatch, Active, InGame (+7 more)
-
-### Community 234 - "Domain/Balance"
+### Community 223 - "Domain/Balance"
 Cohesion: 0.11
 Nodes (34): MatchConfigData, AimLerpTimeSeconds, AirdropCount, AirdropEdgeMarginCells, ArmorCapPct, BushCount, CellSizePixels, ChestCount (+26 more)
 
-### Community 236 - "Imported Plugins/UniTask"
-Cohesion: 0.12
-Nodes (9): AsyncUnitSource, Awaiter, IsCompleted, AwaiterActions, IsCanceledSource, MemoizeSource, UniTask, Status (+1 more)
+### Community 224 - "Assets/_JungleMaze/Tests"
+Cohesion: 0.18
+Nodes (6): Entry, HudItemIconCatalog, Count, Entries, Art04IconSweepTests, Itm01StandIn
 
-### Community 237 - "Infrastructure/Config"
-Cohesion: 0.12
-Nodes (12): SelectedMapData, Bounds, Covers, Layout, MapHash, MatchVersion, PlayerRadius, PlayerSpeed (+4 more)
+### Community 227 - "Imported Plugins/UniTask"
+Cohesion: 0.11
+Nodes (6): AddressablesAsyncExtensions, AsyncOperationHandleAwaiter, IsCompleted, AsyncOperationHandleConfiguredSource, NextNode, NextNode
 
-### Community 238 - "Presentation/Rendering"
+### Community 228 - "Imported Plugins/UniTask"
 Cohesion: 0.13
-Nodes (6): GameplayPostProcessing, Active, GameplayPostTuning, MapLights, SortingLayers, JungleMaze.Presentation.Rendering
+Nodes (10): Awaiter, IsCompleted, ReturnToMainThread, ReturnToSynchronizationContext, SwitchToMainThreadAwaitable, SwitchToSynchronizationContextAwaitable, SwitchToTaskPoolAwaitable, SwitchToThreadPoolAwaitable (+2 more)
 
-### Community 239 - "Imported Plugins/UniTask"
+### Community 229 - "Application/MatchUi"
+Cohesion: 0.15
+Nodes (14): MatchOverlayFlow, Camera, CanSpectate, Elimination, Info, Killcam, Notice, NoticeUntil (+6 more)
+
+### Community 230 - "Backend/Telemetry/ITelemetrySink.cs"
+Cohesion: 0.11
+Nodes (20): ITelemetryAware, Telemetry, ITelemetrySink, Dropped, Enabled, NullTelemetrySink, Dropped, Enabled (+12 more)
+
+### Community 231 - "Imported Plugins/UniTask"
 Cohesion: 0.15
 Nodes (9): _Join, Join, Current, _JoinAwait, JoinAwait, Current, _JoinAwaitWithCancellation, JoinAwaitWithCancellation (+1 more)
 
-### Community 240 - "Presentation/UI"
+### Community 232 - "Imported Plugins/UniTask"
+Cohesion: 0.09
+Nodes (6): AsyncCollisionEnter2DTrigger, AsyncCollisionExit2DTrigger, AsyncCollisionStay2DTrigger, IAsyncOnCollisionEnter2DHandler, IAsyncOnCollisionExit2DHandler, IAsyncOnCollisionStay2DHandler
+
+### Community 233 - "Imported Plugins/UniTask"
+Cohesion: 0.09
+Nodes (6): AsyncCollisionEnterTrigger, AsyncCollisionExitTrigger, AsyncCollisionStayTrigger, IAsyncOnCollisionEnterHandler, IAsyncOnCollisionExitHandler, IAsyncOnCollisionStayHandler
+
+### Community 234 - "Imported Plugins/UniTask"
+Cohesion: 0.09
+Nodes (6): AsyncTriggerEnter2DTrigger, AsyncTriggerExit2DTrigger, AsyncTriggerStay2DTrigger, IAsyncOnTriggerEnter2DHandler, IAsyncOnTriggerExit2DHandler, IAsyncOnTriggerStay2DHandler
+
+### Community 235 - "Imported Plugins/UniTask"
+Cohesion: 0.09
+Nodes (6): AsyncTriggerEnterTrigger, AsyncTriggerExitTrigger, AsyncTriggerStayTrigger, IAsyncOnTriggerEnterHandler, IAsyncOnTriggerExitHandler, IAsyncOnTriggerStayHandler
+
+### Community 236 - "Imported Scripts/Screen"
+Cohesion: 0.11
+Nodes (18): ScreenGameId, TextLoading, RankingScreen, PlayNewGameBtn, LoginView, Advanced, ApiStatus, DevSkip (+10 more)
+
+### Community 237 - "Presentation/Rendering"
+Cohesion: 0.13
+Nodes (6): GameplayPostProcessing, Active, GameplayPostTuning, MapLights, JungleMaze.Presentation.Rendering, JungleMaze.LevelEditor
+
+### Community 238 - "Presentation/UI"
 Cohesion: 0.15
 Nodes (13): PickupListLayout, Default, PickupListView, Alpha, Panel, RowsShown, RowView, LeaveConfirmView (+5 more)
 
-### Community 242 - "Backend/Shared/RoomContracts.cs"
-Cohesion: 0.11
-Nodes (32): CreateRoomCommand, MaxPlayers, Name, OwnerId, MapCatalogView, DefaultMapId, Generation, Maps (+24 more)
-
-### Community 243 - "Backend/Tests/TelemetryChecks"
-Cohesion: 0.13
-Nodes (15): ITelemetryAware, Telemetry, ITelemetrySink, Dropped, Enabled, NullTelemetrySink, Dropped, Enabled (+7 more)
-
-### Community 244 - "Packages/packages-lock.json"
+### Community 239 - "Packages/packages-lock.json"
 Cohesion: 0.06
 Nodes (34): dependencies, depth, source, version, dependencies, depth, source, version (+26 more)
 
-### Community 245 - "projects/lastaway/art"
+### Community 240 - "Assets/_JungleMaze/Tests"
+Cohesion: 0.12
+Nodes (14): IVfxOutput, ActiveCount, FakeLocator, FakeLog, FakeMatchFeed, InGame, Online, OwnNetId (+6 more)
+
+### Community 241 - "Backend/Shared/RoomContracts.cs"
+Cohesion: 0.11
+Nodes (32): CreateRoomCommand, MaxPlayers, Name, OwnerId, MapCatalogView, DefaultMapId, Generation, Maps (+24 more)
+
+### Community 242 - "Backend/Tests/WorldNetworkChecks"
+Cohesion: 0.13
+Nodes (23): WorldNetworkClient, AttemptId, AutoReady, CompletedRevision, DuplicateSnapshots, HeldItems, InvalidFrames, Inventory (+15 more)
+
+### Community 243 - "projects/lastaway/art"
 Cohesion: 0.13
 Nodes (25): avatar(), button(), close_btn(), codebox(), cratio(), err(), face_center(), footer() (+17 more)
 
-### Community 246 - "Bootstrap/OnlineScenarioRunner.cs"
+### Community 244 - "Imported Plugins/Demigiant"
+Cohesion: 0.19
+Nodes (14): DOTweenCYInstruction, DOTweenModuleUnityVersion, WaitForCompletion, keepWaiting, WaitForElapsedLoops, keepWaiting, WaitForKill, keepWaiting (+6 more)
+
+### Community 245 - "Domain/Balance"
+Cohesion: 0.13
+Nodes (18): WeaponStripRules, WeaponCategory, Melee, Ranged, Special, Thrown, WeaponDefinition, Category (+10 more)
+
+### Community 246 - "Backend/Api/Controllers"
 Cohesion: 0.16
-Nodes (9): IOnlineTestDriver, OnlineCheckResult, OnlineTestContext, OnlineTestExtensions, Assertion, Evidence, FrameQuality, Metrics (+1 more)
+Nodes (5): JungleBackend.Shared, Api.Models, Api.Services, Api.DTOs, Api.Controllers
 
-### Community 247 - "Imported Scripts/Map"
-Cohesion: 0.14
-Nodes (8): BorderSystem, DarkAreaDamage, IsBorderActivated, IsShrinking, TimeToDamagePlayers, DarkArea, MapContainer, Map
+### Community 247 - "Backend/GameServer/Simulation"
+Cohesion: 0.12
+Nodes (30): BotSettings, AimErrorDegrees, BlacklistSeconds, BushRevealRadius, DetectRadius, FailedPathLimit, GlobalPathMillisecondsPerTick, GlobalPathNodesPerTick (+22 more)
 
-### Community 248 - "Assets/_JungleMaze/Tests"
-Cohesion: 0.25
-Nodes (6): NetworkKillcamReplaySource, KillcamRequest, NetworkKillcamReplaySourceTests, KillcamReplayResult, KillcamDataChunkPacket, KillcamFramePayload
-
-### Community 249 - "Application/World"
-Cohesion: 0.20
-Nodes (13): Break, GroundLootArrival, GroundLootArrivals, CompanionRadius, Count, Radius, Stagger, Window (+5 more)
-
-### Community 250 - "Assets/_JungleMaze/Tests"
-Cohesion: 0.17
-Nodes (4): BorderCell, LevelGround, LevelGroundTests, JungleMaze.Tests.LevelEditor
-
-### Community 251 - "Assets/_JungleMaze/Tests"
-Cohesion: 0.14
-Nodes (9): HudPanelMath, SlotLook, Empty, Normal, Selected, HudPanelMathTests, RoomMapCacheTests, Source (+1 more)
-
-### Community 252 - "Presentation/World"
-Cohesion: 0.17
-Nodes (8): CoverProbeProjectile, Damage, HitEffect, LastHit, RemainingRange, Speed, Frames, ProjectileArtTests
-
-### Community 255 - "Packages/packages-lock.json"
+### Community 248 - "Packages/packages-lock.json"
 Cohesion: 0.07
 Nodes (32): dependencies, depth, source, url, version, dependencies, depth, source (+24 more)
 
-### Community 256 - "Tools/Telemetry/tel_metrics.py"
+### Community 249 - "Tools/Telemetry/tel_metrics.py"
 Cohesion: 0.17
 Nodes (17): cc(), compute(), coverage(), Dataset, death_causes(), _equipped_state(), hide(), item_use() (+9 more)
 
-### Community 257 - "Imported Plugins/GameDevWare.Serialization"
+### Community 250 - "Imported Plugins/GameDevWare.Serialization"
+Cohesion: 0.13
+Nodes (6): JsonMember, Length, MessagePackExtensionType, Length, Type, MessagePackTimestamp
+
+### Community 251 - "Imported Plugins/GameDevWare.Serialization"
 Cohesion: 0.20
 Nodes (3): MsgPackWriter, CharactersWritten, Context
 
-### Community 258 - "Imported Plugins/UniTask"
-Cohesion: 0.13
-Nodes (12): _ToUniTaskAsyncEnumerable, ToUniTaskAsyncEnumerable, Current, _ToUniTaskAsyncEnumerableObservable, ToUniTaskAsyncEnumerableObservable, Current, _ToUniTaskAsyncEnumerableTask, ToUniTaskAsyncEnumerableTask (+4 more)
-
-### Community 259 - "Imported Plugins/UniTask"
-Cohesion: 0.10
-Nodes (6): AsyncCollisionEnter2DTrigger, AsyncCollisionExit2DTrigger, AsyncCollisionStay2DTrigger, IAsyncOnCollisionEnter2DHandler, IAsyncOnCollisionExit2DHandler, IAsyncOnCollisionStay2DHandler
-
-### Community 260 - "Imported Plugins/UniTask"
-Cohesion: 0.10
-Nodes (6): AsyncTriggerEnter2DTrigger, AsyncTriggerExit2DTrigger, AsyncTriggerStay2DTrigger, IAsyncOnTriggerEnter2DHandler, IAsyncOnTriggerExit2DHandler, IAsyncOnTriggerStay2DHandler
-
-### Community 261 - "Imported Plugins/UniTask"
-Cohesion: 0.10
-Nodes (6): AsyncTriggerEnterTrigger, AsyncTriggerExitTrigger, AsyncTriggerStayTrigger, IAsyncOnTriggerEnterHandler, IAsyncOnTriggerExitHandler, IAsyncOnTriggerStayHandler
-
-### Community 262 - "Imported Scripts/Screen"
+### Community 252 - "Imported Scripts/Screen"
 Cohesion: 0.14
 Nodes (4): NetworkManager, AutoConnectLegacy, I, IsConnected
 
-### Community 264 - "Domain/Network"
-Cohesion: 0.13
-Nodes (27): DisconnectReason, AuthenticationRequired, AuthModeMismatch, AuthTimeout, ConnectionLost, ConnectTimeout, DuplicateSession, InvalidConfig (+19 more)
+### Community 253 - "Application/Hud"
+Cohesion: 0.15
+Nodes (18): IReloadProgressSource, Current, ReloadSample, Active, RemainingSeconds, TotalSeconds, ReloadProgressFeedback, Fill (+10 more)
 
-### Community 265 - "Backend/Shared/Protocol"
-Cohesion: 0.12
-Nodes (26): CombatOutcome, Accepted, Cooldown, Dead, Duplicate, InvalidWeapon, MagazineFull, NoAmmo (+18 more)
-
-### Community 266 - "Imported Scripts/[Concrete]"
-Cohesion: 0.13
-Nodes (8): KnockBackEffect, Direction, KnockbackPower, StunOnBlockedDuration, OHunt_Trap, EventManager, I, StoneDoor
-
-### Community 267 - "Imported Plugins/GameDevWare.Serialization"
-Cohesion: 0.13
-Nodes (25): IValueInfo, AsBoolean, AsByte, AsDateTime, AsDecimal, AsDouble, AsInt16, AsInt32 (+17 more)
-
-### Community 268 - "Imported Plugins/UniTask"
+### Community 254 - "Application/Match"
 Cohesion: 0.14
-Nodes (14): _Concat, Concat, Current, IteratingState, Complete, IteratingFirst, IteratingSecond, _DefaultIfEmpty (+6 more)
+Nodes (24): ZoneInterval, EndRadius, EndSecond, Index, StartRadius, StartSecond, ZoneSchedule, DamagePerSecond (+16 more)
 
-### Community 269 - "Imported Scripts/[Codebase]"
+### Community 255 - "Assets/_JungleMaze/Tests"
+Cohesion: 0.17
+Nodes (7): MovementSimulation, Radius, Speed, RuntimeCover, MovementSimulationTests, MovementTestMap, JungleMaze.Tests.Movement
+
+### Community 256 - "Assets/_JungleMaze/Tests"
+Cohesion: 0.18
+Nodes (3): BorderCell, LevelGround, LevelGroundTests
+
+### Community 257 - "Assets/_JungleMaze/Tests"
 Cohesion: 0.12
-Nodes (10): CameraController, I, Ortho, PlayerCamUI, PlayerInfo, Selected, CameraManager, I (+2 more)
+Nodes (8): HudItemNames, Count, HeroAimTests, Art04IconInventoryTests, HudItemNamesTests, HudPanelMathTests, JungleMaze.Tests.Art04, JungleMaze.Tests.EditMode.Hud
 
-### Community 270 - "Assets/_JungleMaze/Tests"
-Cohesion: 0.14
-Nodes (10): IAudioOutput, VoiceCount, FakeAudioOutput, PlayingCount, VoiceCount, FakeAudioService, ActiveVoices, MaxVoices (+2 more)
+### Community 258 - "Presentation/World"
+Cohesion: 0.18
+Nodes (7): CoverProbeProjectile, Damage, HitEffect, LastHit, RemainingRange, Speed, ProjectileArtTests
 
-### Community 271 - "Application/Combat"
-Cohesion: 0.13
-Nodes (7): CombatWeaponIds, LocalReloadSource, Current, OnlineCombatSession, CanAct, Controller, AttackResultPacket
+### Community 259 - "Backend/Tests/auth_smoke.py"
+Cohesion: 0.11
+Nodes (20): check(), command(), decode(), encode(), main(), client_start(), request(), run_client() (+12 more)
 
-### Community 272 - "Domain/MatchUi"
+### Community 260 - "Docs/Network_Architecture.vi.md"
+Cohesion: 0.09
+Nodes (29): DragonRoar / EggLand / EggBreak audio ownership, Airdrop resync baseline, Match-local dynamic Supply / loot reservation, Airdrop lifecycle, Reliable AirdropStatePacket over UDP / WS, AirdropRuntime / AirdropController, airdrop_schedule.json, AirdropVisualSet / prefab (+21 more)
+
+### Community 261 - "Imported Plugins/UniTask"
+Cohesion: 0.11
+Nodes (4): ToCoroutineEnumerator, ToCoroutineEnumerator, Current, Current
+
+### Community 262 - "Domain/MatchUi"
 Cohesion: 0.14
 Nodes (12): MatchOverlayPhase, Eliminated, HandedOff, Inactive, Killcam, Playing, Spectating, PlayerSettingsRules (+4 more)
 
-### Community 273 - "Presentation/World"
+### Community 263 - "Assets/_JungleMaze/Tools"
+Cohesion: 0.17
+Nodes (5): ReloadProgressView, UiArtSet, ItemIcons, MenuArt, UiArtAssetBuild
+
+### Community 264 - "Backend/Shared/Protocol"
+Cohesion: 0.13
+Nodes (26): CombatOutcome, Accepted, Cooldown, Dead, Duplicate, InvalidWeapon, MagazineFull, NoAmmo (+18 more)
+
+### Community 266 - "projects/lastaway/art"
+Cohesion: 0.15
+Nodes (24): draw(), ink_mask(), main(), measure(), btn_size(), stroke(), tier(), text() (+16 more)
+
+### Community 267 - "Imported Plugins/UniTask"
+Cohesion: 0.14
+Nodes (14): _Concat, Concat, Current, IteratingState, Complete, IteratingFirst, IteratingSecond, _DefaultIfEmpty (+6 more)
+
+### Community 268 - "Application/Audio"
+Cohesion: 0.18
+Nodes (6): MockAudioEventSource, BurstRunning, Raised, AudioDebugPanel, Visible, JungleMaze.App.Audio.Mocks
+
+### Community 269 - "Application/Hud"
+Cohesion: 0.18
+Nodes (11): UseActionFeedback, Fill, Hint, SlotInUse, Status, Visible, ItemUseStatus, ItemUseTracker (+3 more)
+
+### Community 270 - "Presentation/World"
 Cohesion: 0.19
 Nodes (3): LevelArtView, CoversDrawn, ObjectArt
 
-### Community 274 - "Presentation/World"
-Cohesion: 0.11
-Nodes (9): CoverQuery, HardCoverTag, Type, MapCoverColliders, AirdropSceneView, AirdropVisualTests, JungleMaze.Presentation.World, JungleMaze.Presentation.World.Phase2 (+1 more)
-
-### Community 275 - "Backend/GameServer/Diagnostics"
-Cohesion: 0.14
-Nodes (15): ServerMetrics, StageTiming, TickWorkStage, BotDecision, BotPath, Bots, Lifecycle, Movement (+7 more)
-
-### Community 277 - "Presentation/UI"
-Cohesion: 0.17
-Nodes (12): HudKillFeedView, Log, Panel, Rows, Row, Entry, KillFeedLog, Capacity (+4 more)
-
-### Community 278 - "Imported Plugins/UniTask"
-Cohesion: 0.16
-Nodes (9): _Zip, Zip, Current, _ZipAwait, ZipAwait, Current, _ZipAwaitWithCancellation, ZipAwaitWithCancellation (+1 more)
-
-### Community 279 - "Application/Audio"
-Cohesion: 0.18
-Nodes (5): MockAudioEventSource, BurstRunning, Raised, AudioDebugPanel, Visible
-
-### Community 280 - "Backend/Api/Properties"
+### Community 271 - "Backend/Api/Properties"
 Cohesion: 0.14
 Nodes (28): ASPNETCORE_ENVIRONMENT, applicationUrl, commandName, dotnetRunMessages, environmentVariables, launchBrowser, launchUrl, applicationUrl (+20 more)
 
-### Community 282 - "Packages/packages-lock.json"
+### Community 272 - "Backend/GameServer/Diagnostics"
+Cohesion: 0.15
+Nodes (15): ServerMetrics, StageTiming, TickWorkStage, BotDecision, BotPath, Bots, Lifecycle, Movement (+7 more)
+
+### Community 273 - "Backend/Tests/GameplayNetworkChecks"
+Cohesion: 0.16
+Nodes (17): MatchNetworkClient, AttemptId, AutoReady, DuplicateSnapshots, InvalidFrames, MatchId, OwnNetId, Phase (+9 more)
+
+### Community 276 - "Packages/packages-lock.json"
 Cohesion: 0.09
 Nodes (29): depth, source, version, dependencies, depth, source, version, dependencies (+21 more)
 
-### Community 283 - "Application/Audio"
+### Community 277 - "Imported Plugins/UniTask"
+Cohesion: 0.16
+Nodes (12): _Where, Where, Current, _WhereAwait, WhereAwait, Current, _WhereAwaitWithCancellation, WhereAwaitWithCancellation (+4 more)
+
+### Community 278 - "Application/Audio"
 Cohesion: 0.18
 Nodes (15): MusicPlan, AudibleSources, DuckDb, Enabled, Screen, TrackA, TrackB, WeightA (+7 more)
 
-### Community 284 - "Domain/Lobby"
+### Community 279 - "Domain/Lobby"
 Cohesion: 0.16
 Nodes (9): JoinFieldError, BadChar, Empty, None, TooLong, TooShort, LobbyLimits, RoomCodeRules (+1 more)
 
-### Community 286 - "Assets/_JungleMaze/Tests"
-Cohesion: 0.21
-Nodes (6): EventBus, HandlerList, Count, CaptureLog, EventBusTests, Ping
+### Community 280 - "Assets/_JungleMaze/Tools"
+Cohesion: 0.19
+Nodes (8): ExportHistory, IsReady, Rows, Status, Session, Screens, SpriteCount, UiFigmaExport
 
-### Community 287 - "Domain/Vfx"
-Cohesion: 0.17
-Nodes (21): VfxCue, AttackPuff, AuraAdrenaline, AuraCcImmune, AuraInvisible, AuraInvulnerable, AuraPoison, AuraReverse (+13 more)
+### Community 281 - "Imported Plugins/UniTask"
+Cohesion: 0.09
+Nodes (5): AsyncUnit, AsyncAnimatorMoveTrigger, AsyncResetTrigger, IAsyncOnAnimatorMoveHandler, IAsyncResetHandler
 
-### Community 288 - "Assets/_JungleMaze/Tools"
+### Community 282 - "Application/Hud"
+Cohesion: 0.20
+Nodes (9): MinimapTuning, Default, MinimapZoom, Blending, Cells, Level, MinX, MinY (+1 more)
+
+### Community 283 - "Imported Plugins/UniTask"
 Cohesion: 0.18
-Nodes (8): Entry, Content, GripLocal, MuzzleLocal, Scale, HeldWeaponCatalog, HeroVisualBuild, ThrowableArtBuild
+Nodes (9): _Zip, Zip, Current, _ZipAwait, ZipAwait, Current, _ZipAwaitWithCancellation, ZipAwaitWithCancellation (+1 more)
 
-### Community 291 - "Imported Scripts/[Codebase]"
+### Community 285 - "Imported Scripts/[Codebase]"
 Cohesion: 0.14
 Nodes (17): ArmorEntity, DamageReduction, Durability, Id, IsPickup, MountedPlayer, OnGroundSprite, OnPlayerSprite (+9 more)
 
-### Community 292 - "Application/Lobby"
-Cohesion: 0.18
-Nodes (16): MatchResultView, ResultModel, CauseText, HasBots, HasData, Headline, IsOffline, KillsText (+8 more)
-
-### Community 293 - "Application/MatchUi"
+### Community 286 - "Application/MatchUi"
 Cohesion: 0.18
 Nodes (10): SpectatorCameraFollow, HasPosition, SwitchSeconds, X, Y, SpectatorCameraMath, MatchOverlayCameraDriver, LastCenter (+2 more)
 
-### Community 294 - "Backend/compose.aws.yaml"
+### Community 287 - "Presentation/UI"
+Cohesion: 0.14
+Nodes (19): SpectatorRowView, Button, Label, NetId, Selected, SpectatorView, AliveCount, Card (+11 more)
+
+### Community 288 - "Backend/Api/DTOs"
+Cohesion: 0.14
+Nodes (13): LoginRequest, Password, Username, LoginResponse, RegisterRequest, Password, Username, UserResponse (+5 more)
+
+### Community 289 - "Backend/compose.aws.yaml"
 Cohesion: 0.15
 Nodes (25): AUTH_MODE, GAME_BIND_ADDRESS, GAME_PORT, MAP_DATA_PATH, MATCH_OUTBOX_PATH, MATCH_PROFILE, MATCH_RESULT_TOKEN, MATCH_RESULTS_API_URL (+17 more)
 
-### Community 295 - "Backend/Shared/GameData"
+### Community 290 - "Backend/GameServer/GameServer.csproj"
+Cohesion: 0.08
+Nodes (16): net8.0, LiteNetLib (2.1.4), Microsoft.NET.Sdk, net8.0, Microsoft.NET.Sdk, net8.0, Microsoft.NET.Sdk, net8.0 (+8 more)
+
+### Community 291 - "Backend/Shared/GameData"
 Cohesion: 0.08
 Nodes (5): Published authored maps: Di tích cổ and Bãi đá, Backend/Shared/GameData/Maps, MapId + MapHash, MapPublisher, Session host authority
 
-### Community 296 - "Tools/Art/build_simple_demo.py"
-Cohesion: 0.14
-Nodes (14): normalized(), walk(), load(), repair(), tag(), text(), column_index(), load_sheets() (+6 more)
-
-### Community 299 - "Packages/packages-lock.json"
+### Community 294 - "Packages/packages-lock.json"
 Cohesion: 0.08
 Nodes (26): dependencies, dependencies, depth, source, url, version, dependencies, depth (+18 more)
 
-### Community 300 - "Presentation/Vfx"
+### Community 296 - "Imported Plugins/UniTask"
+Cohesion: 0.20
+Nodes (9): Entry, WeakDictionary, Entry, FlightScale, HasCasing, HasFlight, HasMuzzle, MuzzleScale (+1 more)
+
+### Community 297 - "Imported Plugins/UniTask"
+Cohesion: 0.17
+Nodes (10): _DistinctUntilChanged, DistinctUntilChanged, DistinctUntilChanged, Current, _DistinctUntilChangedAwait, DistinctUntilChangedAwait, Current, _DistinctUntilChangedAwaitWithCancellation (+2 more)
+
+### Community 298 - "Assets/_JungleMaze/Tests"
 Cohesion: 0.19
-Nodes (10): VfxAnchorRegistry, Count, VfxBodyAnchor, Body, HasIdentity, IsFlashing, IsShowing, LocalHero (+2 more)
+Nodes (11): DummyPacketSender, DummyRuntimeData, Bounds, Covers, PlayerRadius, PlayerSpeed, ZoneSchedule, DummyScenes (+3 more)
 
-### Community 301 - "Assets/_JungleMaze/Tools"
-Cohesion: 0.22
-Nodes (8): ExportHistory, IsReady, Rows, Status, Session, Screens, SpriteCount, UiFigmaExport
-
-### Community 302 - "Backend/Api/Models"
-Cohesion: 0.16
-Nodes (24): MatchParticipantRecord, DisplayName, IsBot, Kills, PlayerSessionId, ProfileKey, Rank, SurvivalSeconds (+16 more)
-
-### Community 303 - "Tools/Telemetry/tel_perflog.py"
+### Community 299 - "Tools/Telemetry/tel_perflog.py"
 Cohesion: 0.12
 Nodes (5): convert(), parse_metrics_line(), parse_utc_ms(), write(), PerflogTests
 
-### Community 305 - "Packages/packages-lock.json"
+### Community 301 - "Packages/packages-lock.json"
 Cohesion: 0.08
 Nodes (25): dependencies, depth, source, version, dependencies, depth, source, version (+17 more)
 
-### Community 306 - "projects/lastaway/art"
+### Community 302 - "projects/lastaway/art"
 Cohesion: 0.15
 Nodes (21): bg(), bigmap(), close_btn(), code(), dim(), files_for(), header(), hudbg() (+13 more)
 
-### Community 307 - "Imported Plugins/UniTask"
-Cohesion: 0.19
-Nodes (7): StatePool, StatePool, StatePool, StateTuple, StateTuple, StateTuple, StateTuple
-
-### Community 308 - "Domain/Balance"
-Cohesion: 0.17
-Nodes (14): WeaponStripRules, WeaponCategory, Melee, Ranged, Special, Thrown, WeaponDefinition, Category (+6 more)
-
-### Community 309 - "Presentation/UI"
-Cohesion: 0.19
-Nodes (7): KitButtonFace, Base, Content, Pressed, PressOffset, State, KitButtonLabel
-
-### Community 310 - "Backend/GameServer/Diagnostics"
-Cohesion: 0.18
-Nodes (11): MatchOutbox, IsEnabled, MatchOutboxOptions, ApiUrl, InitialBackoffSeconds, MaxBackoffSeconds, MaxBytes, MaxFiles (+3 more)
-
-### Community 311 - "Backend/GameServer/Simulation"
-Cohesion: 0.18
-Nodes (19): MatchProfile, AcceleratedZone, ConfigHash, Current, DisconnectGraceSeconds, EndingDurationSeconds, InputStaleMs, LoadingTimeoutSeconds (+11 more)
-
-### Community 312 - "Backend/Tests/FloorLootChecks"
-Cohesion: 0.08
-Nodes (10): net8.0, Microsoft.NET.Sdk, net8.0, Microsoft.NET.Sdk, net8.0, Microsoft.NET.Sdk, net8.0, Microsoft.NET.Sdk (+2 more)
-
-### Community 313 - "Backend/Tests/TelemetryChecks"
+### Community 303 - "Imported Scripts/Utils"
 Cohesion: 0.16
-Nodes (12): BlockingStream, CanRead, CanSeek, CanWrite, Length, Position, FailingStream, CanRead (+4 more)
+Nodes (13): IEntity, Stats, Stat, StatEnum, Armor, AttackSpeed, BonusSpeed, Damage (+5 more)
 
-### Community 317 - "Packages/packages-lock.json"
+### Community 305 - "Presentation/UI"
+Cohesion: 0.18
+Nodes (14): HudArtFrameView, Bevel, Edge, QuickbarSlotView, Background, Border, CountLabel, Frame (+6 more)
+
+### Community 306 - "Backend/Telemetry/MatchTelemetryObserver.cs"
+Cohesion: 0.18
+Nodes (13): MatchTelemetryObserver, ConfigHash, ConfigVersion, DisconnectGraceSeconds, Dropped, Enabled, HasDisconnectHook, HasLeftHook (+5 more)
+
+### Community 309 - "Packages/packages-lock.json"
 Cohesion: 0.09
 Nodes (24): dependencies, depth, source, version, dependencies, depth, source, version (+16 more)
 
-### Community 319 - "Imported Plugins/UniTask"
+### Community 310 - "Imported Plugins/Demigiant"
+Cohesion: 0.14
+Nodes (3): DOTweenModuleSprite, DOTweenModuleUtils, Physics
+
+### Community 311 - "Imported Plugins/UniTask"
 Cohesion: 0.20
 Nodes (5): AsyncWriter, _Create, Create, Current, IAsyncWriter
 
-### Community 320 - "Imported Plugins/UniTask"
-Cohesion: 0.18
-Nodes (10): _DistinctUntilChanged, DistinctUntilChanged, DistinctUntilChanged, Current, _DistinctUntilChangedAwait, DistinctUntilChangedAwait, Current, _DistinctUntilChangedAwaitWithCancellation (+2 more)
+### Community 312 - "Application/Combat"
+Cohesion: 0.17
+Nodes (5): CombatWeaponIds, OnlineCombatSession, CanAct, Controller, AttackResultPacket
 
-### Community 322 - "Assets/_JungleMaze/Tools"
+### Community 314 - "Infrastructure/Auth"
+Cohesion: 0.21
+Nodes (6): GuestHistoryClient, HistoryJson, IsReady, Rows, Status, HistoryPage
+
+### Community 315 - "Assets/_JungleMaze/Tools"
 Cohesion: 0.19
 Nodes (6): RegistryBuildInfo, RuntimeDataBuild, callbackOrder, Source, Target, VersionInfo
 
-### Community 327 - "Packages/packages-lock.json"
+### Community 316 - "Backend/GameServer/Simulation"
+Cohesion: 0.19
+Nodes (17): WeaponRule, ArcDegrees, CooldownSeconds, Damage, Id, IsBreakableAxe, IsRanged, MagazineSize (+9 more)
+
+### Community 319 - "Packages/packages-lock.json"
 Cohesion: 0.09
 Nodes (23): dependencies, depth, hash, source, version, dependencies, depth, source (+15 more)
 
-### Community 330 - "Imported Plugins/UniTask"
-Cohesion: 0.19
-Nodes (7): EveryUpdate, _EveryUpdate, Current, _EveryValueChanged, Current, EveryValueChangedStandardObject, EveryValueChangedUnityObject
+### Community 322 - "Application/MatchUi"
+Cohesion: 0.18
+Nodes (16): Case, Drift, Full, None, Short, Slow, WrongMatch, WrongPlayer (+8 more)
 
-### Community 331 - "Application/Visibility"
-Cohesion: 0.19
-Nodes (8): IVisibilityPolicy, VisibilityQuery, AlwaysVisiblePolicy, DeferredVisibilityPolicy, IsResolved, DeferredVisibilityPolicyTests, HideAll, JungleMaze.App.Visibility
+### Community 323 - "Assets/_JungleMaze/Tests"
+Cohesion: 0.20
+Nodes (6): OnlineScenario, OnlineScenarioJson, OnlineScenarioTests, JungleMaze.Infrastructure.Testing, JungleMaze.App.Testing, JungleMaze.Tests.Testing
 
-### Community 332 - "Domain/Vfx"
-Cohesion: 0.23
-Nodes (9): AttackVfxLedger, AttackVfxState, Confirmed, None, Predicted, Rejected, Entry, VfxModelTests (+1 more)
-
-### Community 333 - "Domain/World"
+### Community 324 - "Domain/World"
 Cohesion: 0.17
 Nodes (10): GridBounds, HardCoverSize, HardCoverType, AncientPillar, AncientStatue, BoulderRock, CityWall, GridBoundsTests (+2 more)
 
-### Community 334 - "Backend/GameServer/GameServer.csproj"
-Cohesion: 0.09
-Nodes (14): net8.0, LiteNetLib (2.1.4), Microsoft.NET.Sdk, net8.0, Microsoft.NET.Sdk, net8.0, Microsoft.NET.Sdk, net8.0 (+6 more)
+### Community 325 - "Backend/GameServer/Simulation"
+Cohesion: 0.17
+Nodes (9): IEffectService, IItemPassive, CombatDefaults, Breakables, Effects, Passive, NoBreakables, NoEffects (+1 more)
 
-### Community 335 - "Backend/NetSmokeClient/NetSmokeClient.csproj"
-Cohesion: 0.10
-Nodes (11): net8.0, LiteNetLib (2.1.4), Microsoft.NET.Sdk, net8.0, Microsoft.NET.Sdk, net8.0, Microsoft.NET.Sdk, net8.0 (+3 more)
-
-### Community 336 - "Backend/Telemetry/TelemetryHost.cs"
-Cohesion: 0.24
-Nodes (12): RoomStaleProbe, TelemetryHost, Enabled, Options, StaleRoomAfter, Writer, TelemetryOptions, Build (+4 more)
-
-### Community 339 - "Packages/packages-lock.json"
+### Community 328 - "Packages/packages-lock.json"
 Cohesion: 0.09
 Nodes (22): dependencies, depth, source, url, version, dependencies, depth, source (+14 more)
 
-### Community 340 - "Imported Plugins/UniTask"
+### Community 329 - "Imported Plugins/GameDevWare.Serialization"
+Cohesion: 0.19
+Nodes (20): IValueInfo, AsBoolean, AsByte, AsDateTime, AsDecimal, AsDouble, AsInt16, AsInt32 (+12 more)
+
+### Community 330 - "Imported Plugins/UniTask"
 Cohesion: 0.24
 Nodes (6): _Buffer, Buffer, Current, _BufferSkip, BufferSkip, Current
 
-### Community 341 - "Imported Scripts/Screen"
-Cohesion: 0.17
-Nodes (15): BaseResponse, Message, Success, IEmission, EventName, GameStatusFinish, Request, EventName (+7 more)
+### Community 331 - "Imported Plugins/UniTask"
+Cohesion: 0.11
+Nodes (4): AsyncJointBreakTrigger, AsyncMouseUpTrigger, IAsyncOnJointBreakHandler, IAsyncOnMouseUpHandler
 
-### Community 342 - "Application/MatchUi"
-Cohesion: 0.19
-Nodes (16): Case, Drift, Full, None, Short, Slow, WrongMatch, WrongPlayer (+8 more)
+### Community 332 - "Application/Lobby"
+Cohesion: 0.18
+Nodes (16): ReconnectController, ResumeRequests, SecondsLeft, State, ReconnectState, Failed, Idle, Succeeded (+8 more)
 
-### Community 343 - "Domain/Vfx"
-Cohesion: 0.15
-Nodes (4): VfxBudget, Capacity, Count, Refused
-
-### Community 344 - "Infrastructure/Network"
+### Community 333 - "Infrastructure/Network"
 Cohesion: 0.26
 Nodes (8): RttTracker, AverageMs, LastMs, Lost, Outstanding, Received, Sent, RttTrackerTests
 
-### Community 345 - "Presentation/UI"
+### Community 334 - "Presentation/UI"
 Cohesion: 0.18
 Nodes (19): RoomManagerView, Back, ConfirmGroup, ConfirmNo, ConfirmText, ConfirmYes, Create, NewCapacity (+11 more)
 
-### Community 346 - "Assets/_JungleMaze/Tests"
-Cohesion: 0.24
-Nodes (5): BodyAccountApi, LobbyApiClientParseTests, LobbyMockGuardTests, LobbyScenarioScriptTests, MatchSessionLobbySourceTests
+### Community 335 - "Backend/Api/Repositories"
+Cohesion: 0.21
+Nodes (8): User, CreatedAtUtc, Id, NormalizedUsername, PasswordHash, Username, IUserRepository, UserRepository
 
-### Community 349 - "Tools/Telemetry/tel_report.py"
+### Community 339 - "Tools/Telemetry/tel_report.py"
 Cohesion: 0.18
 Nodes (13): c(), comparable_keys(), compare_rows(), add(), _csv(), f(), integrity_line(), render() (+5 more)
 
-### Community 350 - "Imported Plugins/UniTask"
+### Community 340 - "Imported Plugins/UniTask"
 Cohesion: 0.21
 Nodes (7): IConnectableUniTaskAsyncEnumerable, ConnectDisposable, _Publish, Publish, Current, Next, Prev
 
-### Community 351 - "Imported Plugins/UniTask"
+### Community 341 - "Imported Plugins/UniTask"
 Cohesion: 0.21
 Nodes (7): _Merge, Merge, Current, MergeSourceState, Completed, Pending, Running
 
-### Community 352 - "Imported Plugins/UniTask"
+### Community 343 - "Imported Scripts/Screen"
 Cohesion: 0.18
-Nodes (3): WhenAnyLRPromise, WhenAnyPromise, WhenAnyPromise
+Nodes (15): BaseResponse, Message, Success, IEmission, EventName, GamePlayerKick, Request, EventName (+7 more)
 
-### Community 353 - "Application/Combat"
+### Community 344 - "Application/Combat"
 Cohesion: 0.19
 Nodes (19): CombatWeaponSlot, ArcDegrees, Available, CadenceSeconds, Category, CooldownRemaining, Definition, Identity (+11 more)
 
-### Community 354 - "Presentation/UI"
+### Community 345 - "Presentation/UI"
 Cohesion: 0.19
 Nodes (18): MatchMenuView, Close, Defaults, Group, Leave, Master, MasterValue, Music (+10 more)
 
-### Community 356 - "Backend/GameServer/Simulation"
+### Community 346 - "Backend/GameServer/Simulation"
 Cohesion: 0.23
 Nodes (11): BotNavigationBudget, CanWork, Remaining, Used, BotNavigationGrid, Width, BotPathSearch, Expanded (+3 more)
 
-### Community 360 - "projects/lastaway/art"
+### Community 347 - "Backend/Telemetry/TelemetryHost.cs"
+Cohesion: 0.26
+Nodes (11): TelemetryHost, Enabled, Options, StaleRoomAfter, Writer, TelemetryOptions, Build, MaxFileMiB (+3 more)
+
+### Community 350 - "projects/lastaway/art"
 Cohesion: 0.21
 Nodes (15): avatar(), button(), codebox(), err(), icon(), input_(), label(), note() (+7 more)
 
-### Community 361 - "Imported Plugins/UniTask"
+### Community 351 - "Imported Plugins/UniTask"
 Cohesion: 0.12
 Nodes (12): author, name, url, category, dependencies, description, displayName, keywords (+4 more)
 
-### Community 362 - "Imported Scripts/[Codebase]"
+### Community 352 - "Imported Scripts/[Codebase]"
 Cohesion: 0.19
 Nodes (5): RarityExtensions, ReflectionExtensions, UnityExtensions, PartialTransform, _Codebase_.Utils
 
-### Community 363 - "Domain/Balance"
-Cohesion: 0.20
-Nodes (13): EquipmentDefinition, DisplayName, EffectDescription, Id, Stats, Type, EquipmentStats, EquipmentType (+5 more)
+### Community 353 - "Infrastructure/Config"
+Cohesion: 0.25
+Nodes (9): SelectedMapData, Bounds, Covers, Layout, MapHash, MatchVersion, PlayerRadius, PlayerSpeed (+1 more)
 
-### Community 367 - "Imported Plugins/UniTask"
+### Community 354 - "Backend/Tests/OnlineReadiness"
+Cohesion: 0.11
+Nodes (19): type, type, properties, type, type, type, connectedSeconds, inputHz (+11 more)
+
+### Community 361 - "Imported Plugins/UniTask"
 Cohesion: 0.20
 Nodes (6): PlayerLoopHelper, ApplicationDataPath, IsEditorApplicationQuitting, IsMainThread, MainThreadId, UnitySynchronizationContext
 
-### Community 368 - "Imported Plugins/UniTask"
-Cohesion: 0.11
-Nodes (5): IAsyncDeselectEventHandler, IAsyncEndTextSelectionEventHandler, IAsyncSelectEventHandler, IAsyncSubmitEventHandler, IAsyncTextSelectionEventHandler
-
-### Community 369 - "Tools/Telemetry/fixtures"
+### Community 363 - "Tools/Telemetry/fixtures"
 Cohesion: 0.21
 Nodes (13): build_invalid(), build_valid(), envelope(), main(), record(), write(), _envelope(), _header() (+5 more)
 
-### Community 372 - "Packages/packages-lock.json"
+### Community 366 - "Packages/packages-lock.json"
 Cohesion: 0.12
 Nodes (18): dependencies, depth, dependencies, depth, source, url, version, source (+10 more)
 
-### Community 373 - "projects/lastaway/art"
-Cohesion: 0.31
-Nodes (16): clamp_edge(), clean_big(), dashed_ring(), dist_plate(), line(), m1(), m2(), P() (+8 more)
+### Community 367 - "Imported Plugins/UniTask"
+Cohesion: 0.24
+Nodes (4): AsyncLazy, AsyncLazy, Task, Task
 
-### Community 375 - "Assets/_JungleMaze/Tests"
-Cohesion: 0.28
-Nodes (3): OnlineScenario, OnlineScenarioTests, JungleMaze.Tests.Testing
+### Community 368 - "Application/Player"
+Cohesion: 0.23
+Nodes (11): LocalPrediction, HasWorld, IsActive, MovementMultiplier, PredictedX, PredictedY, Reversed, Stats (+3 more)
 
-### Community 376 - "Presentation/Combat"
-Cohesion: 0.25
-Nodes (8): Entry, FlightScale, HasCasing, HasFlight, HasMuzzle, MuzzleScale, ProjectileArtCatalog, ProjectileArtBuild
-
-### Community 377 - "Presentation/UI"
+### Community 369 - "Presentation/UI"
 Cohesion: 0.23
 Nodes (14): MainMenuView, AccountName, AccountStatus, ApiReadyIcon, ApiStatus, History, Join, Leaderboard (+6 more)
 
-### Community 379 - "Backend/compose.aws.yaml"
+### Community 370 - "Assets/_JungleMaze/Tests"
+Cohesion: 0.31
+Nodes (3): LobbyApiClientParseTests, LobbyMockGuardTests, LobbyScenarioScriptTests
+
+### Community 372 - "Backend/compose.aws.yaml"
 Cohesion: 0.15
 Nodes (17): logging, logging, image, logging, mem_limit, ports, restart, volumes (+9 more)
 
-### Community 383 - "Tools/Telemetry/telemetry.py"
+### Community 373 - "Backend/Shared/GameData"
+Cohesion: 0.12
+Nodes (7): Public-marker bot airdrop goal, Server-authoritative bot FSM, Resumable A-star shared path budget, Backend/Shared/GameData/bot_settings.json, DestructibleService, Supply loot and shared pickup, WithBots result metadata
+
+### Community 379 - "Presentation/UI"
+Cohesion: 0.32
+Nodes (6): Entry, KillFeedLog, Capacity, Count, Seconds, KillFeedLogTests
+
+### Community 380 - "Tools/Telemetry/telemetry.py"
 Cohesion: 0.29
 Nodes (12): _add_gate_flags(), build_parser(), cmd_compare(), cmd_fake(), cmd_merge(), cmd_perflog(), cmd_report(), cmd_validate() (+4 more)
 
-### Community 386 - "Imported Plugins/UniTask"
+### Community 382 - "Imported Plugins/UniTask"
 Cohesion: 0.24
 Nodes (8): _AppendPrepend, AppendPrepend, Current, State, Completed, None, RequireAppend, RequirePrepend
+
+### Community 384 - "Application/MatchUi"
+Cohesion: 0.17
+Nodes (8): MatchOverlayTuning, Default, IEliminationSource, Current, IsLocalEliminated, MatchOverlaySet, KillcamEnabled, OverlayPrefab
+
+### Community 385 - "Domain/Balance"
+Cohesion: 0.24
+Nodes (13): EquipmentDefinition, DisplayName, EffectDescription, Id, Stats, Type, EquipmentStats, EquipmentType (+5 more)
+
+### Community 386 - "Infrastructure/Config"
+Cohesion: 0.31
+Nodes (8): ClientRuntimeData, Bounds, Covers, PlayerRadius, PlayerSpeed, SelectedLayout, SelectedMapHash, ZoneSchedule
 
 ### Community 388 - "Packages/packages-lock.json"
 Cohesion: 0.12
 Nodes (16): dependencies, depth, source, version, dependencies, depth, source, version (+8 more)
 
-### Community 390 - "Docs/Art/directions"
-Cohesion: 0.46
-Nodes (14): antique(), e(), emblem(), end(), g(), icon(), leaf(), p() (+6 more)
+### Community 390 - "Presentation/UI"
+Cohesion: 0.26
+Nodes (10): KillcamView, Board, Countdown, Dots, Group, HpFills, KillerMarks, PixelsPerCell (+2 more)
 
-### Community 396 - "Assets/Editor/JSurvivIntegration.cs"
+### Community 391 - "Assets/_JungleMaze/Tests"
+Cohesion: 0.27
+Nodes (3): UiArtCatalogTests, Items, JungleMaze.Tests.UiArt
+
+### Community 392 - "Docs/Art/directions"
+Cohesion: 0.43
+Nodes (14): background(), card(), e(), emblem(), end(), g(), icon(), leaf() (+6 more)
+
+### Community 393 - "Docs/Network_Architecture.vi.md"
+Cohesion: 0.14
+Nodes (15): Account play ticket handshake v4, ASP.NET Core API, Auto UDP to WSS fallback, Caddy, Focused client frame-time capture, Legacy Guest history, Account JWT, MongoDB (+7 more)
+
+### Community 399 - "Assets/Editor/JSurvivIntegration.cs"
 Cohesion: 0.36
 Nodes (3): JSurvivIntegration, Report, SceneResult
 
-### Community 397 - "Imported Plugins/UniTask"
-Cohesion: 0.34
-Nodes (3): ArrayPool, ArrayPoolUtil, RentArray
+### Community 401 - "Assets/_JungleMaze/Tests"
+Cohesion: 0.33
+Nodes (3): PlayerPrefsPlayerSettingsStore, Keys, PlayerPrefsPlayerSettingsStoreTests
 
-### Community 399 - "Assets/_JungleMaze/Tests"
-Cohesion: 0.49
-Nodes (3): LevelItemShape, LevelDestructibleTests, LootSpy
-
-### Community 400 - "LevelEditor/LevelHistory.cs"
+### Community 402 - "LevelEditor/LevelHistory.cs"
 Cohesion: 0.24
 Nodes (3): LevelHistory, CanRedo, CanUndo
 
-### Community 401 - "Backend/compose.aws.yaml"
+### Community 403 - "Backend/compose.aws.yaml"
 Cohesion: 0.14
 Nodes (14): condition, depends_on, environment, image, mem_limit, ports, restart, volumes (+6 more)
 
-### Community 408 - "Tools/Telemetry/tel_merge.py"
+### Community 404 - "Backend/Tests/BotChecks"
+Cohesion: 0.14
+Nodes (6): net8.0, Microsoft.NET.Sdk, net8.0, Microsoft.NET.Sdk, net8.0, Microsoft.NET.Sdk
+
+### Community 405 - "Docs/Network_Architecture.vi.md"
+Cohesion: 0.13
+Nodes (11): net8.0, LiteNetLib (2.1.4), Microsoft.NET.Sdk, net8.0, Microsoft.NET.Sdk, Private deployment-status app-queue snapshot, GHCR private, KeepInstanceRunning policy (+3 more)
+
+### Community 412 - "Tools/Telemetry/tel_merge.py"
 Cohesion: 0.23
 Nodes (6): _group(), merge(), _ranges(), sort_key(), _write_jsonl(), write_outputs()
 
-### Community 409 - "Imported Epic Toon FX/Demo"
-Cohesion: 0.26
-Nodes (5): ButtonTypes, Next, NotDefined, Previous, PEButtonScript
+### Community 414 - "Imported Plugins/UniTask"
+Cohesion: 0.35
+Nodes (3): _SkipUntil, SkipUntil, Current
 
-### Community 411 - "Imported Scripts/Screen"
+### Community 417 - "Imported Scripts/Screen"
 Cohesion: 0.40
 Nodes (3): RECT, SmoothAspectRatio, WndProcDelegate
 
-### Community 412 - "Application/Vfx"
-Cohesion: 0.29
-Nodes (8): VfxMatchFeed, InGame, Online, OwnNetId, SessionKey, UseMock, UseOffline, VfxMatchFeedTests
-
-### Community 413 - "Backend/compose.host.yaml"
+### Community 418 - "Backend/compose.host.yaml"
 Cohesion: 0.17
 Nodes (13): environment, image, mem_limit, ports, profiles, restart, volumes, environment (+5 more)
 
-### Community 417 - "Imported Plugins/UniTask"
-Cohesion: 0.38
-Nodes (3): _SkipUntil, SkipUntil, Current
+### Community 419 - "Backend/Deploy/Aws"
+Cohesion: 0.15
+Nodes (5): backup.sh script, check-mongo-volume.sh script, enable-match-results.sh script, restore.sh script, stop.sh script
 
-### Community 419 - "Backend/compose.host.yaml"
+### Community 427 - "Presentation/UI"
+Cohesion: 0.39
+Nodes (5): HudKillFeedView, Log, Panel, Rows, Row
+
+### Community 429 - "Backend/compose.host.yaml"
 Cohesion: 0.24
 Nodes (12): logging, logging, logging, logging, driver, options, logging, max-file (+4 more)
 
-### Community 423 - "Packages/packages-lock.json"
+### Community 432 - "Packages/packages-lock.json"
 Cohesion: 0.17
 Nodes (12): dependencies, depth, source, url, version, dependencies, depth, source (+4 more)
 
-### Community 424 - "Imported Plugins/UniTask"
-Cohesion: 0.40
-Nodes (3): _SkipUntilCanceled, SkipUntilCanceled, Current
-
-### Community 430 - "Backend/compose.aws.yaml"
+### Community 456 - "Backend/compose.aws.yaml"
 Cohesion: 0.18
 Nodes (11): environment, ASPNETCORE_ENVIRONMENT, ASPNETCORE_URLS, Jwt__Audience, Jwt__Issuer, Jwt__SigningKey, Mongo__ConnectionString, Mongo__Database (+3 more)
 
-### Community 431 - "Backend/compose.host.yaml"
+### Community 457 - "Backend/compose.host.yaml"
 Cohesion: 0.18
 Nodes (11): condition, depends_on, depends_on, image, mem_limit, ports, profiles, restart (+3 more)
 
-### Community 435 - "Packages/packages-lock.json"
+### Community 462 - "Packages/packages-lock.json"
 Cohesion: 0.18
 Nodes (11): dependencies, depth, source, version, dependencies, depth, source, version (+3 more)
 
-### Community 447 - "Imported Scripts/Screen"
+### Community 463 - "Imported Scripts/Screen"
 Cohesion: 0.31
 Nodes (7): GamePlayerJoined, Response, playerId, playerName, GamePlayerLeft, Response, playerId
 
-### Community 448 - "Assets/StreamingAssets/JungleMaze"
+### Community 464 - "Assets/StreamingAssets/JungleMaze"
 Cohesion: 0.36
 Nodes (9): files, airdrop_schedule.json, items_catalog.json, map_demo.json, match_settings.json, weapons.json, world_settings.json, zone_schedule.json (+1 more)
 
-### Community 449 - "Backend/Api/Api.csproj"
+### Community 465 - "Backend/Api/Api.csproj"
 Cohesion: 0.20
 Nodes (7): net8.0, net8.0, Microsoft.NET.Sdk, Microsoft.AspNetCore.Authentication.JwtBearer (8.0.31), MongoDB.Driver (3.12.0), Swashbuckle.AspNetCore (10.3.0), Microsoft.NET.Sdk.Web
 
-### Community 450 - "Backend/compose.host.yaml"
+### Community 466 - "Backend/compose.host.yaml"
 Cohesion: 0.22
 Nodes (10): build, context, dockerfile, build, image, mem_limit, ports, restart (+2 more)
 
-### Community 451 - "Imported Epic Toon FX/Demo"
-Cohesion: 0.39
-Nodes (3): ETFXLoopScript, ETFXPitchRandomizer, EpicToonFX
-
-### Community 452 - "Imported Scripts/Screen"
+### Community 468 - "Imported Scripts/Screen"
 Cohesion: 0.42
 Nodes (8): GameStateUpdate, Request, entities, EventName, isAccentWallOpened, players, safeZoneRadius, Response
 
-### Community 459 - "Imported Epic Toon FX/Scripts"
-Cohesion: 0.43
-Nodes (4): ETFXRotation, spaceEnum, Local, World
+### Community 479 - "Imported Scripts/[Concrete]"
+Cohesion: 0.54
+Nodes (4): PullEffect, Direction, Range, StunDuration
 
-### Community 460 - "Imported Scripts/Screen"
+### Community 480 - "Imported Scripts/Screen"
 Cohesion: 0.46
 Nodes (7): GamePlayerInventoryClear, Request, EventName, id, playerId, type, Response
 
-### Community 461 - "Presentation/UI"
-Cohesion: 0.46
-Nodes (5): SpectatorRowView, Button, Label, NetId, Selected
-
-### Community 462 - "Backend/compose.aws.yaml"
+### Community 482 - "Backend/compose.aws.yaml"
 Cohesion: 0.25
 Nodes (8): depends_on, image, mem_limit, restart, mongo, condition, services, api
 
-### Community 463 - "Backend/compose.host.yaml"
+### Community 483 - "Backend/compose.host.yaml"
 Cohesion: 0.25
 Nodes (8): depends_on, image, mem_limit, restart, mongo, condition, services, api
 
-### Community 465 - "Imported Scripts/Screen"
+### Community 484 - "Backend/Deploy/test-aws-rooms.ps1"
+Cohesion: 0.43
+Nodes (6): Aws(), Bounded(), Event(), Probe-PublicHttps(), Restart-Guarded(), State()
+
+### Community 486 - "Imported Scripts/Screen"
 Cohesion: 0.52
 Nodes (6): GamePlayerEffectsApply, Request, effect, EventName, playerId, Response
 
-### Community 466 - "Imported Scripts/Screen"
+### Community 487 - "Imported Scripts/Screen"
 Cohesion: 0.52
 Nodes (6): GamePlayerEffectsClear, Request, effect, EventName, playerId, Response
 
-### Community 467 - "Imported Scripts/Screen"
+### Community 488 - "Imported Scripts/Screen"
 Cohesion: 0.52
 Nodes (6): GamePlayerInventoryAdd, Request, EventName, item, playerId, Response
 
-### Community 468 - "Imported Scripts/Screen"
+### Community 489 - "Imported Scripts/Screen"
 Cohesion: 0.52
 Nodes (6): GameSessionCreate, Request, EventName, joinCode, Response, sessionId
 
-### Community 469 - "Imported Scripts/Screen"
+### Community 490 - "Imported Scripts/Screen"
 Cohesion: 0.52
 Nodes (6): GameStateInit, Request, EventName, mapSize, obstacles, Response
 
-### Community 470 - "Imported Scripts/Screen"
+### Community 492 - "Backend/Api/Services"
 Cohesion: 0.52
-Nodes (6): GamePlayerAction, Response, action, attributes, playerId, sessionId
+Nodes (5): JwtOptions, Audience, ExpiryMinutes, Issuer, SigningKey
 
-### Community 471 - "Backend/compose.aws.yaml"
+### Community 493 - "Backend/compose.aws.yaml"
 Cohesion: 0.48
 Nodes (7): healthcheck, interval, retries, start_period, test, timeout, healthcheck
 
-### Community 472 - "Backend/compose.host.yaml"
+### Community 494 - "Backend/compose.host.yaml"
 Cohesion: 0.48
 Nodes (7): healthcheck, interval, retries, start_period, test, timeout, healthcheck
 
-### Community 473 - "Backend/Tests/aws_mongo_guard.py"
-Cohesion: 0.62
-Nodes (5): main(), check(), guard(), read_marker(), run()
-
-### Community 479 - "Imported Scripts/Screen"
+### Community 501 - "Imported Scripts/Screen"
 Cohesion: 0.60
-Nodes (5): GamePlayerKick, Request, EventName, playerId, Response
+Nodes (5): GameStatusStart, Request, EventName, Response, startTime
 
-### Community 481 - "Backend/compose.aws.yaml"
+### Community 503 - "Backend/compose.aws.yaml"
 Cohesion: 0.33
 Nodes (6): command, image, mem_limit, restart, volumes, mongo
 
-### Community 482 - "Backend/compose.host.yaml"
+### Community 504 - "Backend/compose.host.yaml"
 Cohesion: 0.33
 Nodes (6): command, image, mem_limit, restart, volumes, mongo
 
-### Community 483 - "Backend/Shared/World"
-Cohesion: 0.33
-Nodes (5): description, displayName, name, unity, version
+### Community 505 - "Backend/Deploy/Aws"
+Cohesion: 0.40
+Nodes (3): compose(), load_release(), common.sh script
 
-### Community 487 - "Backend/compose.aws.yaml"
+### Community 509 - "Backend/compose.aws.yaml"
 Cohesion: 0.40
 Nodes (5): volumes, caddy-config, caddy-data, game-outbox, mongo-data
 
-### Community 488 - "Backend/compose.host.yaml"
+### Community 510 - "Backend/compose.host.yaml"
 Cohesion: 0.40
 Nodes (5): volumes, caddy-host-config, caddy-host-data, game-host-outbox, mongo-host-data
 
 ## Knowledge Gaps
 - **129 isolated node(s):** `name`, `displayName`, `version`, `unity`, `description` (+124 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 1477 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **110 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 1476 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **145 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
@@ -2013,15 +2046,15 @@ _Questions this graph is uniquely positioned to answer:_
 - **What connects `name`, `displayName`, `version` to the rest of the system?**
   _129 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Imported Plugins/UniTask` be split into smaller, more focused modules?**
-  _Cohesion score 0.025609685117280716 - nodes in this community are weakly interconnected._
-- **Why does `PlayerEntity` connect `Imported Scripts/[Codebase]` to `Imported Plugins/UniTask`, `Imported Scripts/[Concrete]`, `Imported Scripts/[Codebase]`, `Imported Scripts/[Concrete]`, `Imported Plugins/Demigiant`, `Presentation/UI`, `Assets/_JungleMaze/Tools`, `Imported Scripts/[Codebase]`, `Imported Scripts/[Codebase]`, `Imported Scripts/[Codebase]`, `Presentation/Player`, `Imported Plugins/UniTask`, `Imported Plugins/UniTask`, `Imported Scripts/[Codebase]`, `Imported Plugins/UniTask`, `Imported Scripts/Obstacles`, `Presentation/UI`, `Imported Scripts/[Codebase]`, `Imported Scripts/[Codebase]`, `Assets/_JungleMaze/Tools`, `Presentation/World`, `Imported Scripts/Screen`?**
+  _Cohesion score 0.026803110929185428 - nodes in this community are weakly interconnected._
+- **Why does `PlayerEntity` connect `Imported Scripts/[Codebase]` to `Imported Plugins/UniTask`, `Imported Scripts/[Codebase]`, `Imported Scripts/[Concrete]`, `Assets/_JungleMaze/Tools`, `Presentation/UI`, `Imported Scripts/[Codebase]`, `Assets/_JungleMaze/Tools`, `Imported Scripts/[Codebase]`, `Assets/_JungleMaze/Tests`, `Imported Plugins/UniTask`, `Imported Plugins/UniTask`, `Imported Scripts/Utils`, `Presentation/World`, `Imported Scripts/[Concrete]`, `Presentation/Player`, `Imported Scripts/[Codebase]`, `Imported Scripts/Screen`, `Imported Scripts/Screen`, `Imported Plugins/Demigiant`, `Presentation/UI`, `Assets/_JungleMaze/Tools`, `Imported Scripts/[Codebase]`, `Imported Scripts/Obstacles`, `Imported Plugins/Demigiant`, `Imported Scripts/Screen`, `Imported Plugins/Demigiant`?**
   _High betweenness centrality (0.003) - this node is a cross-community bridge._
 - **Should `Imported Plugins/UniTask` be split into smaller, more focused modules?**
-  _Cohesion score 0.020696517412935322 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.043079467709194796 - nodes in this community are weakly interconnected._
+- **Should `Backend/GameServer/Networking` be split into smaller, more focused modules?**
+  _Cohesion score 0.025451460429038904 - nodes in this community are weakly interconnected._
 - **Should `Imported Plugins/UniTask` be split into smaller, more focused modules?**
-  _Cohesion score 0.0528643216080402 - nodes in this community are weakly interconnected._
-- **Should `Imported Plugins/UniTask` be split into smaller, more focused modules?**
-  _Cohesion score 0.02868436515143422 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.03169681309216193 - nodes in this community are weakly interconnected._
 
 ## Scope and limits
 All indexed source/config files; assets grouped by directory. Architecture document relations are documented claims; name bridges are INFERRED, not proof of runtime behavior. AST parser warnings do not imply C# compile errors. No gameplay testing performed.
@@ -2030,18 +2063,18 @@ All indexed source/config files; assets grouped by directory. Architecture docum
 input: <in-memory>
 input_stage: provided JSON (normal graph.json is post-build)
 effective_directed: <direct-call>
-nodes: 24282
+nodes: 24281
 unverified_code_nodes: 0
-raw_edges: 96747
-valid_candidate_edges: 93023
+raw_edges: 96746
+valid_candidate_edges: 93022
 missing_endpoint_edges: 0
 dangling_endpoint_edges: 3724
 external_reference_edges: 0
 self_loop_edges: 102
 exact_duplicate_edges: 37
-directed_unique_endpoint_pairs: 87734
+directed_unique_endpoint_pairs: 87733
 directed_same_endpoint_collapsed_edges: 5289
-undirected_unique_endpoint_pairs: 87404
+undirected_unique_endpoint_pairs: 87403
 undirected_same_endpoint_collapsed_edges: 5619
 same_endpoint_group_count: 3220
 relation_variant_groups: 813
@@ -2049,7 +2082,7 @@ source_file_variant_groups: 19
 source_location_variant_groups: 1765
 context_variant_groups: 1052
 post_build_graph_type: DiGraph
-post_build_edges: 88214
+post_build_edges: 88213
 producer_suppression_sites: 12
 producer_suppression_examples:
   - L1829 seen_ids arity=unknown

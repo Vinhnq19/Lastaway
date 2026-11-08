@@ -1,98 +1,55 @@
-# Phát hành AWS và kiểm tra chất lượng — 08/11/2026
+# Phát hành Windows/AWS — tiếp tục ngày 09/11/2026
 
-**Kết luận: BLOCKED tại Local. Chưa publish GHCR, chưa deploy hoặc dùng hai cửa sổ AWS.** Bản Windows mới build được và hoàn tất các assertion của lượt WSS 300 giây, nhưng crash native lúc thoát. Không chuyển `PASS` trong JSON gameplay thành PASS phát hành khi exit code của process là lỗi.
+**Trạng thái: PARTIAL. Build Windows Unity21 và deploy backend AWS Full đã PASS. AWS còn catalog map cũ; gói Tháp cổ/Thị trấn đã sẵn sàng Local, chờ cửa sổ AWS bổ sung để publish và nghiệm thu.**
 
 ## 1. Phạm vi và phiên bản
 
-- Nguồn ban đầu: `main` tại `6ff902e8`; sửa riêng trên `codex/aws-quality-release`, commit code `1396d4f0eb9cafe5d6e14dbac8ae27b93f58b85e`. Không merge main hoặc push Git.
-- Unity giữ **6000.3.15f1**, Mono Windows x64, development build. Không nâng Editor, thay renderer hoặc sửa gameplay để làm bài kiểm dễ hơn.
-- Bản mới: `D:/Unity/Lastaway/Builds/AWS-Quality-6000.3.15f1/Lastaway.exe`, cùng `_Data`, DLL và runtime trong chính thư mục đó. Đây là **build ứng viên đang FAIL cổng thoát bình thường**, chưa phải bản phát hành đạt nghiệm thu. Không đóng ZIP game.
-- Build job `build-efca7d1f18`: **PASS**, 318,80 giây, dung lượng Unity báo 218,23 MiB, 0 error, 2 warning. Receipt `registry-build.json` đã được cổng Local đối chiếu với source và fingerprint player.
-- SourceHash: `ffb7cb0ee7f097f31380da3b6986a759f22f4cb84b3c86275cbe38d1a657cfb0`.
-- PlayerFingerprint: `e50025ce18577df414d8be356be39239ef6b5cb2eb3b86d96c213b31fea04fae`.
-- Catalog nguồn generation 5: Tháp cổ và Thị trấn, cùng version 1.2.0. Không thay luật 10 nhân vật/phòng, 5 phòng, 50 slot, tài khoản bắt buộc và account-ticket v4.
+Source `85b9768b632775736974883870c17d9956c6f98a`, nhánh `codex/aws-quality-release`; không merge main hoặc push Git. Riêng máy Vinh/build này dùng Unity6000.3.21f1; Git vẫn pin6000.3.15f1 và giữ package lock của team. Hai file override dùng skip-worktree tại checkout này.
 
-## 2. Công việc đã thực hiện
+Bản Windows đầy đủ: `D:/Unity/Lastaway/Builds/AWS-Quality-6000.3.21f1/` (giữ EXE, _Data, MonoBleedingEdge, DLL; không đóng ZIP game). Build Release Mono: 354,95s, Unity báo152,06MiB, 0 error/5 warning. Log có cảnh báo shader Terrain3D bị strip trong pipeline2D và legacy/imported code; không đổi renderer để né cảnh báo. Receipt/source/player fingerprint đã đối chiếu sau khi khôi phục ba field iOS Unity tự thêm.
 
-1. Kiểm compile/runtime data trong Editor, dùng công cụ build chuyên dụng. Truy vấn MCP có timeout trong lúc build; log và kết quả job sau đó xác nhận build thành công, không coi timeout đó là lỗi build.
-2. Chạy các nhóm EditMode/PlayMode liên quan, phát hiện một lỗi kiến trúc của splash menu mới: runtime đổi `Image.sprite` trái quy tắc art nằm trong prefab. Sửa thành hai GameObject nền có art gắn sẵn; cập nhật builder, prefab và test. Giữ chức năng Login/Menu và không thêm màn trung gian.
-3. Thêm tùy chọn `-QualityClient 1` vào runner online/remote hiện có. Client được chọn dùng 1280×720, mục tiêu 60 FPS; các client khác giữ chế độ nhẹ. Thu frame-time p95/p99, stall ≥100 ms và FPS theo phase khi cửa sổ có focus, tối đa 36.000 mẫu; không đổi tick/input 30 Hz. Phần tính thống kê có test, nhưng **chưa đo runtime 60 FPS đạt nghiệm thu**.
-4. Chạy backend regression. Fixture bot cũ giả định RUBBER_GUN bị tắt, trong khi catalog hiện bật món đó. Sửa fixture tắt riêng món kiểm, khôi phục trong `finally`, dừng chờ ngay sau lượt nhặt dao để không lẫn loot phát sinh sau đó. Không tắt món trong game thật.
-5. Giữ các lượt thất bại: Local r1 dừng ở fixture cũ; r2 dừng ở BotChecks, wrapper không lưu stdout lỗi nên không kết luận chính xác assertion của r2. Một lượt chạy riêng thất bại kiểm thoát bo khi có tác vụ song song; sau đó ba lượt độc lập PASS. Chưa chứng minh tuyệt đối nguyên nhân nhạy wall-clock, không xóa dấu vết này.
-6. Chạy Local r3 độc lập sau bước index/build: toàn bộ backend PASS, dựng Docker theo base image đã khóa, giới hạn thật GameServer 256 MiB, chạy Windows mới qua WSS 1 người +9 bot ít nhất 300 giây.
-7. Kiểm Windows Event Log sau khi runner báo lỗi thoát, giữ nguyên chính sách fail theo exit code; dừng phát hành, thu bằng chứng, khôi phục Docker dev và dọn client/phòng do tác vụ tạo.
+## 2. Công việc và sửa lỗi
 
-## 3. Kết quả Local và hồi quy
+- Giữ pin/lock21 chỉ cục bộ, không ép dev khác nâng Editor; gate đọc pin thực và từ chối receipt sai Editor.
+- Hoàn thiện logo LAST AWAY/prefab/builder. PlayMode phát hiện transparent rect của logo đăng nhập vượt mép khoảng3px; đã dịch xuống10 design pixels.
+- Chuẩn hóa HUD PISTOL/ASSAULT_RIFLE/SNIPER_RIFLE theo lưới32→64, palette/outline/padding chung; cập nhật catalog và inventory từ34→37. Không sửa art vũ khí cầm trên tay. Fixture audio đổi từ46 sang47 clip vì đã có menu loop thứ tư.
+- Engine15 từng crash native khi đóng. Build21 đã qua probe UI Automation + đóng menu bình thường và nhiều lượt gameplay/Auto exit0; không dùng kill hoặc bỏ kiểm exit để nhận PASS.
+- Bổ sung preflight trong runner chung: map yêu cầu phải tồn tại trong catalog JWT trước khi tạo phòng/chạy client. Guard từ chối map không có ngay; đường map hợp lệ PASS Local.
 
-| Hạng mục | Trạng thái | Bằng chứng |
-|---|---|---|
-| Backend regression | PASS module | 2.539 kiểm tra: Network 149, DualTransport 53, MapCatalog 81, Bot 206, MatchResult 85, Combat 39, Inventory 1.619, World 174, Match 133 |
-| Pipeline registry | PASS module | Chạy lại 26/26 test; parser hai runner PowerShell PASS |
-| Unity EditMode liên quan | PASS module | 490/490; job `202ee3cc20544b6fb0c654b3bd244f8d` |
-| Unity PlayMode lượt rộng | 129 PASS / 1 FAIL ban đầu | 130 test; lỗi ArtSwapNeedsPrefabOnly được phát hiện và sửa |
-| Unity PlayMode phòng chờ sau sửa | PASS module | 28/28; job `637aba67b1214f12a1d4cc3afa7a7dfe`; không ghi thành một lượt full-suite mới |
-| Windows build | PASS build | Build mới có receipt hợp lệ; không tái sử dụng EXE cũ |
-| Màn đăng nhập 1280×720 | PASS hiển thị / FAIL thoát | Quan sát splash và form đúng; Windows ghi crash khi đóng process menu |
-| WSS 1 người +9 bot | PASS assertion module | 300,027 giây kết nối, 10 roster/view, movement, zone, HP, result, history, replay đều được runner quan sát |
-| Toàn bộ Local Full | **FAIL** | Process thoát `-1073741819` / `0xC0000005`, dù evidence gameplay ghi PASS |
-| Auto hai client / Quick UDP của Local Full | NOT_TESTED | Pipeline dừng ở bước WSS lỗi exit, chưa chạy các bước sau |
-| Hai map, đầy đủ combat/loot/DRG qua Windows mới | NOT_TESTED ở mức flow đầy đủ | Regression có kiểm module; không thay bằng bằng chứng tranh loot/PvP hoặc quan sát đủ mốc thật |
-| 720p/60 FPS, đủ các tỉ lệ màn hình và đánh giá nghe | NOT_TESTED | Không dùng lượt mạng 30 FPS hoặc unit test để nhận PASS chất lượng render/audio |
+## 3. Kiểm thử Local
 
-Các test module bao phủ logic damage, inventory, bo, trứng/loot, protocol và idempotency; chúng không tự chứng minh mọi hành vi đã được quan sát trong client thật của release này. Lượt Windows thực trong r3 dùng map mặc định Tháp cổ; chưa chạy trận Thị trấn của bản mới.
+| Nhóm | Kết quả |
+|---|---|
+| EditMode | 1.183/1.183 PASS; lượt đầu có4 lỗi art/audio, đã sửa |
+| PlayMode | 207/207 PASS; lượt đầu206/207 do logo overflow |
+| Backend regression | 2.539 check PASS theo chín nhóm hiện có |
+| Pipeline / icon native32 | 28/28 và44/44 PASS |
+| Local Full r1 | FAIL hiệu năng:2 dropped tick, loop gap211,904ms; không phải native crash |
+| Local Full r2 cô lập | PASS: WSS300s, Auto hai client, UDP, result/history/replay; mọi process exit0 |
+| R2 server | 92 mẫu tick,93 mẫu RAM; mean29,912Hz, CPUmax37,19% một core, RAMpeak27,54%/256MiB;0 dropped/OOM/restart |
 
-## 4. Số đo thực và lỗi chặn
+Không khẳng định tuyệt đối nguyên nhân loop gap r1: simulation/poll nhỏ, CPUmax24%, nhưng có một khoảng gián đoạn giữa vòng lặp. R2 dùng cache đã warm và Editor được thu nhỏ; giữ nguyên ngưỡng. Các lượt ngắn quality Local ghi được720p/frame-time khoảng58FPS trong InGame, nhưng chỉ15s kết nối, không thay bằng bài300s.
 
-| Chỉ số Local WSS | Giá trị |
-|---|---:|
-| Thời gian kết nối | 300,027 s |
-| Tốc độ input khi được phép gửi | 29,941 Hz |
-| Snapshot | 30,001 Hz |
-| RTT p50 / p95 / p99 | 33,35 / 33,79 / 55,72 ms |
-| Ping / pong / pong timeout | 301 / 300 / 0 |
-| Match hoàn tất được quan sát | 1 |
-| Client catch-up drop | 1; tách biệt với dropped tick server |
-| Server mean tick | 29,786 Hz, 65 mẫu |
-| CPU cao nhất, quy về một core | 48,38% |
-| RAM cao nhất theo Docker | 26,52% giới hạn 256 MiB, 65 mẫu, không lỗi sampler |
-| Dropped tick server trong log | 0 |
+## 4. AWS — deploy và chất lượng
 
-Input chỉ tính khoảng client còn sống/được phép gửi, không phải input liên tục 300 giây. Có một ping còn outstanding khi kết thúc, không coi đó là timeout. Các số đo server là số quan sát trong lượt kiểm; không ký PASS toàn bộ release, không suy ra sức chứa gameplay tối đa.
+Release `ghcr-20261108-184421-85b9768b`; API/GameServer được cập nhật theo digest, Mongo/volume/secret và release trước được giữ. Window1 PASS Full trong686,30s. WSS PC→EC2 kết nối405,82s, input29,71Hz, snapshot30Hz, RTTp50/p95/p99≈233,35/233,62/235,08ms,0 pong timeout,exit0; Auto hai client PASS. UDP public7777 và WSS smoke đều requested=connected=joined=1,failed=0.
 
-Máy Local: Ryzen 7 4800H, 8 core/16 logical processor, RAM khoảng 16 GiB, Windows 11; có Radeon tích hợp và GTX 1650. Lượt này không xác định GPU thực dùng bằng profiler và chưa đo FPS chất lượng. Chi tiết trong evidence.
+Server AWS:121 mẫu, mean29,9997Hz, CPUmax21,8% một core;118 mẫu RAM,peak25,47%/256MiB;0 dropped/OOM/restart. CPUCreditBalance lúc đầu576; instanceStandard. Đây là đo backend từ PC thật, không phải generator trong EC2; không áp ngưỡng RTT Local cho Sydney.
 
-**Hai crash cùng dấu vết:** menu PID 33624 lúc 19:58:21 và WSS player PID 47096 lúc 20:20:23 (UTC+7), đều `UnityPlayer.dll`, exception `0xC0000005`, offset `0xC29819`. Log gameplay đã đi đến cleanup, nhưng Windows Event 1000 và exit code vẫn xác nhận crash.
+**Window2 INVALID:** client quality không xuất evidence, bị watchdog dừng; không có mẫu FPS AWS300s hợp lệ. Ảnh lobby đã thu trong window1 xác nhận AWS đang phát hành **Di tích cổ/Bãi đá v1.0.0**, không phải hai map dự kiến. Mình đã bỏ sót đối chiếu catalog trước window2. Runtime map nằm ở volume ngoài image nên cập nhật image không tự thay catalog. Bài yêu cầu `thap-co` không hợp lệ trên catalog này; không quy lượt thiếu telemetry thành server yếu hoặc FPS PASS. Thị trấn online chưa nghiệm thu.
 
-Dấu vết module/offset trùng lỗi native lịch sử liên quan cleanup Accessibility. Unity mô tả lỗi Windows player crash khi thoát sau tương tác UI Automation trong [release notes 6000.3.21f1, UUM-146676](https://unity.com/releases/editor/whats-new/6000.3.21f1). Đây là **suy luận đối chiếu**, chưa có dump được symbol hóa mới để khẳng định call stack chính xác hoặc chỉ ra UI Automation client nào đã kích hoạt lần này. Giữ 6000.3.15f1 theo yêu cầu; không vá DLL, tắt accessibility, ép kill process hoặc bỏ kiểm exit để nhận PASS.
+## 5. Gói map và phần còn lại
 
-## 5. AWS, chi phí và phần chưa nghiệm thu
+Gói Local111.334bytes, source catalog generation5: **Tháp cổ/Thị trấn v1.2.0**. Validator và publisher nguyên tử Local PASS; checksum trong JSON/evidence. Cần dùng CLI --maps publish/reload nội bộ để cập nhật volume, giữ payload/history cũ để rollback; không cần rebuild image hoặc restart Mongo/EC2. Generation thực sẽ tăng theo catalog đang chạy.
 
-- **AWS: NOT_TESTED/BLOCKED bởi cổng Local.** Không gọi AWS CLI/SSM, publish GHCR, pull/deploy, reload map, Start/Stop, nâng máy hoặc tạo hạ tầng. Hai cửa sổ 20 phút **chưa sử dụng**.
-- Không có release/digest AWS mới, thời gian và byte push/pull/deploy chưa đo; không dùng số cũ thay thế. Chưa đối chiếu catalog/DNS/TLS/readiness/participant thực trên EC2.
-- Không xác nhận được trạng thái EC2 cuối lượt vì đã dừng trước cổng AWS; không tự ghi Running. Tác vụ không thay đổi lifecycle. Nếu máy đang Running từ trước thì vẫn có thể tiếp tục tiêu credits; chưa đo balance hoặc chế độ Standard/Unlimited của máy ở lượt này.
-- UDP public, WSS public, fallback public, hiệu năng AWS, CPU credits, stop/start: NOT_TESTED. Không mở lượt AWS hoặc bỏ guard chỉ để hoàn tất báo cáo.
-- Hai PC vật lý và buổi 6–10 người thật: **NOT_TESTED**. Hai tiến trình Local sẽ không thay bằng chứng hai máy.
+Cần cửa sổ bổ sung tối đa20 phút: publish gói đã validate, xác minh GET/api/maps sau JWT, đo hai map720p/60FPS tối thiểu300s và dọn test. Hai window trước đã dùng; theo kế hoạch “không tự mở lượt thứ ba”, đang chờ phê duyệt. Hai PC vật lý,6–10 người thật, nghe audio/cảm giác PvP và correction/snapshot-gap tail đầy đủ vẫn NOT_TESTED/NOT_MEASURED. Module test không thay nghiệm thu flow hai map mới trên AWS.
 
-## 6. Bằng chứng và trạng thái bàn giao
+## 6. Vận hành và chi phí
 
-- Một bộ báo cáo: `report.vi.md`, `report.json`, `measurements.csv`, `evidence.zip`, `SHA256SUMS` trong thư mục này. ZIP chỉ chứa bằng chứng, **không phải game Windows**.
-- Archive gồm summary Unity, log pipeline/backend, kết quả/lịch sử kiểm Local, log server/player, ảnh gameplay/kết quả, receipt build, cấu hình phần cứng và Windows crash event. Không đưa `.env`, password, token, client config, WER memory dump hoặc credential vào gói.
-- JSON có checksum từng entry; archive được đọc kiểm CRC trước bàn giao. Checksum ngoài gói trong `SHA256SUMS`.
-- Client do tác vụ mở đã đóng, phòng test dọn không báo lỗi. Docker GameServer đã khôi phục `HostConfig.Memory=0` theo cấu hình dev trước đó; giữ API/Mongo và volume. Không prune image hoặc xóa DB.
-- Camera Follow Player được giữ; screenshot gameplay xác nhận viewport theo nhân vật, spectator được giữ. Editor vẫn mở Boot; không force kill Editor khi MCP query cuối không trả dữ liệu.
-- Hướng dẫn GHCR và Network Architecture đã cập nhật chế độ đo chất lượng; Graphify được cập nhật. Warning extractor về 4 file UniTask và 25 file không có symbol không được coi là lỗi C# Unity.
+Endpoint game `junglemaze.duckdns.org`, API HTTPS443, UDP7777, WSS`/game`. Account bắt buộc; chọn Online AWS rồi đăng nhập, tạo/vào phòng. Hiện chưa khẳng định catalog mới đã lên AWS. Giữ Follow Player và spectator theo trạng thái thật.
 
-## 7. Cách tiếp tục và checklist chơi thật
+EC2 được xác nhận **Running**,t3.small,x86_64,Standard; tác vụ không Start/Stop/nâng máy hoặc bật Unlimited. Running tiếp tục phát sinh chi phí/credits AWS. Không đổi Mongo, secret, security group hoặc tạo hạ tầng. Window2 tool/sampler được dọn trong1.067,25s; không chạy thêm bài tải sau cửa sổ. OCI layer delta là số nén theo manifest, không phải đo wire bytes thực.
 
-Bước tiếp theo là xử lý/đối chiếu crash shutdown trên **6000.3.15f1**, xác nhận player exit bình thường, rồi chạy lại Local Full với output mới. Chưa phát hành build ứng viên này làm bản đã nghiệm thu.
+## 7. Bằng chứng và bàn giao
 
-Sau khi cổng Local thực sự PASS, dùng `Backend/Deploy/deploy-aws.ps1` theo hướng dẫn GHCR: publish từ working tree sạch, chọn đúng player/LocalEvidence, preflight máy trống, deploy theo digest và hoàn thành Full trong chính cửa sổ thứ nhất. Thiếu thời gian hoặc có lỗi thì rollback có xác nhận, không giữ release chỉ smoke PASS. Lượt thứ hai mới đo hai map/720p hoặc sửa-xác minh lại nếu lượt đầu lỗi; không tự mở lượt thứ ba. Kết thúc giữ EC2 Running và phải đọc xác nhận trạng thái thật.
-
-Checklist buổi 6–10 người sau khi release đạt:
-
-1. Mỗi người lấy **cả thư mục Windows build**, chọn Online AWS, đăng nhập tài khoản riêng. Admin kiểm DNS/TLS và thời hạn buổi chơi.
-2. Tạo/vào cùng phòng, chọn skin, lần lượt thử Tháp cổ và Thị trấn; xác nhận số người, chủ phòng, map readiness và Bắt đầu.
-3. Kiểm movement, F nhặt đồ, tranh loot, đổi súng, đạn/reload ring, hit/HP/armor, bo kế tiếp trên minimap, ba lượt rồng nếu trận kéo dài đủ; nghe SFX và đánh giá cảm giác điều khiển.
-4. Kiểm loại/spectator, bảng kết quả/history, chơi lại, đổi map và menu. Có ít nhất hai PC thật; thử cả tuyến UDP thực và WSS/Auto từ mạng chặn UDP.
-5. Thu FPS/RTT/correction/snapshot gap và server metrics. Mất mạng/Sleep hoặc máy phát không đạt tốc độ phải đánh INVALID, không quy lỗi ngay cho server. Không ghi PASS cho mốc bo/rồng chưa quan sát.
-6. Đóng client, dọn phòng, giữ Follow Player và spectator đúng chức năng; admin kiểm lại EC2 Running và chủ động quản lý thời gian chạy/credits sau buổi chơi.
+report.json/measurements.csv/evidence.zip/SHA256SUMS cùng thư mục. Giữ cả các lượt FAIL/INVALID, probe UIA/exit0, báo cáo test mới, manifest/digest, server metrics và gói map/checksum. Không đưa .env, credential/token, dump bộ nhớ hoặc ảnh lobby chứa RoomCode vào gói bằng chứng. Ảnh gameplay được phân biệt rõ map/catalog đang chạy. Báo cáo15f1 trước đây nằm trong phần history của evidence; số cũ không được dùng làm PASS release21.
