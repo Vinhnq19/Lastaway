@@ -1,0 +1,17 @@
+﻿scope,metric,value,status
+build,durationSeconds,318.7997076,PASS
+backend,regressionChecks,2539,PASS
+localWss,connectedSeconds,300.02716064453125,PASS_MODULE
+localWss,inputHz,29.941398484350156,PASS_MODULE
+localWss,snapshotHz,30.000562719138873,PASS_MODULE
+localWss,rttP50Ms,33.3488,OBSERVED
+localWss,rttP95Ms,33.7864,OBSERVED
+localWss,rttP99Ms,55.7239,OBSERVED
+localWss,pongTimeouts,0,PASS_MODULE
+localServer,meanTickHz,29.785692307692308,OBSERVED
+localServer,maxCpuOneCorePercent,48.38,OBSERVED
+localServer,peakMemoryPercent,26.52,OBSERVED
+localServer,droppedTicks,0,OBSERVED
+localPlayer,exitCode,-1073741819,FAIL
+aws,windowsUsed,0,NOT_TESTED
+client720p,fps,,NOT_TESTED

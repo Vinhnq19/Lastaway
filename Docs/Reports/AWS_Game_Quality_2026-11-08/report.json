@@ -1,0 +1,212 @@
+{
+  "schemaVersion": 1,
+  "status": "BLOCKED",
+  "branch": "codex/aws-quality-release",
+  "sourceCommit": "1396d4f0eb9cafe5d6e14dbac8ae27b93f58b85e",
+  "baseCommit": "6ff902e8",
+  "unityVersion": "6000.3.15f1",
+  "player": "D:\\Unity\\Lastaway\\Builds\\AWS-Quality-6000.3.15f1\\Lastaway.exe",
+  "provenance": {
+    "schemaVersion": 1,
+    "sourceHash": "ffb7cb0ee7f097f31380da3b6986a759f22f4cb84b3c86275cbe38d1a657cfb0",
+    "playerFingerprint": "e50025ce18577df414d8be356be39239ef6b5cb2eb3b86d96c213b31fea04fae",
+    "unityVersion": "6000.3.15f1"
+  },
+  "build": {
+    "status": "PASS",
+    "job": "build-efca7d1f18",
+    "durationSeconds": 318.7997076,
+    "sizeMiB": 218.23,
+    "errors": 0,
+    "warnings": 2
+  },
+  "backendChecks": {
+    "status": "PASS",
+    "network": 149,
+    "dualTransport": 53,
+    "mapCatalog": 81,
+    "bots": 206,
+    "matchResults": 85,
+    "combat": 39,
+    "inventory": 1619,
+    "world": 174,
+    "match": 133,
+    "total": 2539
+  },
+  "localFull": {
+    "status": "FAIL",
+    "gate": "Windows player normal exit",
+    "selectedTransport": "Wss",
+    "applicationAssertions": "PASS_MODULE",
+    "metrics": {
+      "elapsedSeconds": 301.5207214355469,
+      "connectedSeconds": 300.02716064453125,
+      "snapshots": 8660,
+      "inputs": 4244,
+      "ignoredPackets": 0,
+      "catchupDrops": 1,
+      "maxPlayers": 10,
+      "maxRosterPlayers": 10,
+      "maxOnScreenPlayers": 1,
+      "completedMatches": 1,
+      "inputHz": 29.941398484350156,
+      "activeInputSeconds": 141.74354622140527,
+      "snapshotHz": 30.000562719138873,
+      "snapshotSeconds": 288.6612521596253,
+      "rttP50Ms": 33.3488,
+      "rttP95Ms": 33.7864,
+      "rttP99Ms": 55.7239,
+      "pings": 301,
+      "pongs": 300,
+      "pongTimeouts": 0
+    },
+    "exitCode": -1073741819,
+    "exception": "0xc0000005",
+    "module": "UnityPlayer.dll",
+    "offset": "0xc29819",
+    "attempts": [
+      "r1: outdated disabled-item fixture",
+      "r2: bot regression failed; failed subprocess output unavailable",
+      "r3: gameplay assertions pass, native shutdown crashes"
+    ]
+  },
+  "observedServerMetrics": {
+    "metricSamples": 65,
+    "meanTickHz": 29.785692307692308,
+    "maxCpuOneCorePercent": 48.38,
+    "maxDroppedTicks": 0,
+    "peakMemoryPercent": 26.52,
+    "memorySamples": 65,
+    "memorySampleErrors": [],
+    "limitBytes": 268435456
+  },
+  "unityTests": [
+    {
+      "id": "202ee3cc20544b6fb0c654b3bd244f8d",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "progress": 490,
+      "total": 490,
+      "failures": []
+    },
+    {
+      "id": "f3811daf5a11475ebac09586a43f06c8",
+      "status": "failed",
+      "mode": "PlayMode",
+      "progress": 130,
+      "total": 130,
+      "failures": [
+        "JungleMaze.Tests.PlayMode.Lobby.LobbyLayoutTests.ArtSwapNeedsPrefabOnly"
+      ]
+    },
+    {
+      "id": "637aba67b1214f12a1d4cc3afa7a7dfe",
+      "status": "succeeded",
+      "mode": "PlayMode",
+      "progress": 28,
+      "total": 28,
+      "failures": [],
+      "summary": {
+        "total": 28,
+        "passed": 28,
+        "failed": 0,
+        "skipped": 0,
+        "durationSeconds": 29.3359683,
+        "resultState": "Passed"
+      }
+    }
+  ],
+  "quality720p": {
+    "status": "NOT_TESTED",
+    "captureModuleUnitTest": "PASS",
+    "runnerParser": "PASS",
+    "runtimeMeasurement": "NOT_TESTED"
+  },
+  "aws": {
+    "status": "NOT_TESTED",
+    "windowsUsed": 0,
+    "deploy": false,
+    "publish": false,
+    "lifecycleChanged": false,
+    "finalInstanceState": "NOT_VERIFIED",
+    "reason": "Local Full did not pass; no AWS API/SSM/deploy called"
+  },
+  "physicalTwoPc": "NOT_TESTED",
+  "sixToTenRealPlayers": "NOT_TESTED",
+  "cleanup": {
+    "testPlayersRemaining": 0,
+    "testRoomCleanupErrors": [],
+    "dockerGameServerMemoryLimitBytes": 0,
+    "mongoVolumesPreserved": true,
+    "camera": "Follow Player unchanged; spectator retained"
+  },
+  "evidence": {
+    "file": "evidence.zip",
+    "sha256": "75489fda29d32c3ba83046717600ccad51adefaa3fc40f9f48379e96bfb592d9",
+    "files": 48,
+    "entryChecksums": {
+      "bot-diagnostics/bot-diagnostic-1.log": "350434b72b18e9addb51f3d67794c054d9b1d7d366677690e3cbeb3a5debc2b6",
+      "bot-diagnostics/bot-diagnostic-2.log": "350434b72b18e9addb51f3d67794c054d9b1d7d366677690e3cbeb3a5debc2b6",
+      "bot-diagnostics/bot-diagnostic-3.log": "350434b72b18e9addb51f3d67794c054d9b1d7d366677690e3cbeb3a5debc2b6",
+      "bot-diagnostics/bot-stability-1.log": "d9edec1924052d4653600babbf45f1df2177fe4ba562eadfa90867ee3016cde9",
+      "bot-diagnostics/botcheck-rerun-r2.log": "fe06fb5c29af7d0dc89a075c1372691011fa6463e5388a379365d6330dd92774",
+      "bot-diagnostics/botcheck-rerun-r3.log": "bc1fb833b3ef7932ad46faa92bdf660ae8fe4d847b51ad6f7eb9f8f298a6ae11",
+      "bot-diagnostics/botcheck-rerun-r4.log": "350434b72b18e9addb51f3d67794c054d9b1d7d366677690e3cbeb3a5debc2b6",
+      "bot-diagnostics/botcheck-rerun.log": "985b62c320a7cb99f382291979f80199a806bacde0d78c3d1c64127600f499b7",
+      "local-full-r1/DualTransportChecks.log": "19d9f5bd2796dd24af12dc7bf59dcf6ab3239850111954fdd43caf1a1dd6830a",
+      "local-full-r1/MapCatalogChecks.log": "a951ee2a6033d0d582d08a6ee28aaa418569388c6ed890046ca4b7822a59a2bc",
+      "local-full-r1/NetworkChecks.log": "5a636086455f0fd9ec448900a3449977b218cd37c84f19ee4ab447ef398e1338",
+      "local-full-r1/failure.json": "3f241040395cd7a0bf64d670c4f91ce2b3dad92dbfc17010a7de4abb7bb4e6d1",
+      "local-full-r2/DualTransportChecks.log": "29e607bdd143bdf75fd9044bdd9eaf275cc53375e64d876593d8d2a67a77a5fd",
+      "local-full-r2/MapCatalogChecks.log": "27a13093cae722a51c0bf260aab89eb62399ac58022d190252e5fa1418658e18",
+      "local-full-r2/NetworkChecks.log": "35fc676ed44ca9261a2cb24dc28a1b28e438f3f65e7cf1ede474ab783b73936e",
+      "local-full-r2/failure.json": "3f241040395cd7a0bf64d670c4f91ce2b3dad92dbfc17010a7de4abb7bb4e6d1",
+      "local-full-r3/BotChecks.log": "350434b72b18e9addb51f3d67794c054d9b1d7d366677690e3cbeb3a5debc2b6",
+      "local-full-r3/CombatChecks.log": "772a2c7c956dba55c76807a40ad5819495cf01f1a7145a84d703faa5a32d1a0d",
+      "local-full-r3/DualTransportChecks.log": "bd3132c509e9ea800157e112285081df1ad4d93901aa4eb4b25f7b818a9cf822",
+      "local-full-r3/InventoryChecks.log": "d61b26848ef46424b05ed9638efca2be1189af78e2e692da32c6e86557494efe",
+      "local-full-r3/MapCatalogChecks.log": "303b17b1e1afc5f5767b7a48a158a3f9f86662f0b6770cf847b225bebf8ebe02",
+      "local-full-r3/MatchChecks.log": "a59f5ca4b110e08e8ccd9f297f69d17a7970b61d50f0329ab8eebd9828f71ba5",
+      "local-full-r3/MatchResultChecks.log": "9fb8fac20b79e932d1aecc3198378bb1964945381430b6c3a468865d99ab97fb",
+      "local-full-r3/NetworkChecks.log": "eb662a8250fe50b26747a4f567efdbfe0543e53f691c426bd4fa87ccd89dd79b",
+      "local-full-r3/WorldChecks.log": "8251bf048ac7b43c2dea0e6912b5b323bd22873d6f83a11e4d8a7a41770b4092",
+      "local-full-r3/failure.json": "e3eb6111d5d5150220ee9c5a29b08422ec36679985b8a46bdd2b5844fe62fb43",
+      "local-full-r3/server-memory.json": "9969c815883231e5374a2bcffc27a87ab0e6af97dbd52b8c2dd605a62b86a4be",
+      "local-full-r3/server-metrics.log": "06c3fc9b7c0d59ea292fede4faa6bb3fcc9f047d143ba8413aa054090088bcd9",
+      "local-full-r3/wss-10/players/evidence-client-1.json": "30847d64f0eb2ad9989c029b7e8909f7fe96456ce5a8ece2aecc39c6878e45f8",
+      "local-full-r3/wss-10/players/evidence-client-1.json.lobby.png": "ba30e579a7e56ae4bc3150df6b2444417417f38897f76dd14ce9e749b45ce7fd",
+      "local-full-r3/wss-10/players/evidence-client-1.json.png": "bafe8d009d042453657e411d06c9f42825b89c6570b9be5bb45f8d8f833e3ae4",
+      "local-full-r3/wss-10/players/evidence-client-1.json.result.png": "0b40b6b6916697674ff122ac0ef8be0e9acb646f206f47002ad4a25909772a51",
+      "local-full-r3/wss-10/players/report.json": "382d19e9484392a5bb3bbc3fbd5ccf5b1e3e1009ab8315be3dcff2fbab3d33c9",
+      "local-full-r3/wss-10/players/unity-client-1.log": "98329bebf1f70f6d285c499e672da029b8580892316f9b9e43678533425b2257",
+      "local-full-r3/wss-10/players/unity-client-1.log.startup.log": "2157d3a496a39e613fc51cdff0756d69b3b70dfb31f4de46aee546b601383944",
+      "local-full-r3/wss-10/players/unity-client-1.log.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "local-full-r3/wss-10/report.json": "f4e40a3dc0975a96d4292c964cedba5cc8670dab7e4f288530850c8b5899e814",
+      "machine.json": "3d3f2c7361fd8a2167edaf351f8f14b00b9a6f7110ae9e1bfbc2894c11fa3100",
+      "measurements.csv": "fa7b8d291c0ecb109e680ed48d5c8f477031aa6af9607bf16d468a724423ce2b",
+      "observed-local-metrics.json": "3ae6b3a1fe8722497d4548144cc374c770533c42a637b1a804d1b79cd432af1e",
+      "pipeline-tests.log": "ec6f59d20934658aa36d4c4c79afd61a8908db6c5707bc0c7bf60c21a5c49b21",
+      "player-crash-event.json": "7fc0e116f3baffabf691085dc11ea9213237efe9e451dc33375717a26843e9a5",
+      "player-crashes.json": "50e5c2d67caadeda855405fa13825708a212041986f9f1590c3fc4b4ef73305f",
+      "registry-build.json": "bd5bab246d97e4776f69affe92ab00adc860d02b4828bde036f4f92953f20f8c",
+      "unity-tests.json": "e6210bd693ec6d6d613815b213af7022136565119408bb19a694c5234d3a3a7d",
+      "local-full-r1.log": "3870802b35c0f0cf64c037ff4eaf3dc7bb412eb2b822a48b1e2bff4136a0c11d",
+      "local-full-r2.log": "3870802b35c0f0cf64c037ff4eaf3dc7bb412eb2b822a48b1e2bff4136a0c11d",
+      "local-full-r3.log": "3b3bae6162722d99bde8295fee63929eb3780ea50d7de1a4e373c419801bb5e8"
+    }
+  },
+  "knownNativeIssue": {
+    "inference": true,
+    "id": "UUM-146676",
+    "source": "https://unity.com/releases/editor/whats-new/6000.3.21f1",
+    "note": "New Windows event matches historic module/offset; no new symbolized dump proving exact native call stack. Editor version remains pinned."
+  },
+  "menuSmoke": {
+    "status": "FAIL",
+    "screenOpened": true,
+    "nativeCrashOnClose": true,
+    "pid": 33624,
+    "exception": "0xc0000005",
+    "offset": "0xc29819"
+  }
+}
