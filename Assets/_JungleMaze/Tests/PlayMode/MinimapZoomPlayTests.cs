@@ -132,6 +132,26 @@ namespace JungleMaze.Tests.PlayMode
             Assert.IsFalse(UiLayerStack.BlocksActions);
         }
 
+        /// <summary>Main 809a59b7 danger fill (HudZoneRings, after the first shrink) is cropped to the zoom window like the terrain.</summary>
+        [UnityTest]
+        public IEnumerator DangerFill_FollowsTheZoomWindow()
+        {
+            yield return Spawn(25f, 25f);
+            var rings = _minimap.GetComponentInChildren<HudZoneRings>(true);
+            Assert.NotNull(rings, "minimap zone rings");
+            rings.SetZone(1, 25f, 25f, 20f, 30f, 28f, 8f);
+            rings.Apply(50);
+            var fill = _minimap.Area.Find("Map danger fill").GetComponent<RawImage>();
+            var full = fill.uvRect;
+            Assert.That(full.width, Is.GreaterThan(0.95f), "level 1: whole map");
+            _minimap.Zoom.SetLevel(MinimapZoom.Near);
+            yield return Settle();
+            rings.Apply(50);
+            var uv = fill.uvRect;
+            Assert.That(uv.width, Is.EqualTo(full.width * 30f / 50f).Within(1e-4f), "30-cell window");
+            Assert.That(uv.x, Is.EqualTo(10f / 50f + full.x * 30f / 50f).Within(1e-4f), "window 10-40, frame inset kept");
+        }
+
         /// <summary>Huy 08/11 "Zoom trên mini map dùng cuộn chuột": the wheel zooms only with the pointer over the map hole.</summary>
         [UnityTest]
         public IEnumerator PointerOver_IsTheMapHoleOnly()

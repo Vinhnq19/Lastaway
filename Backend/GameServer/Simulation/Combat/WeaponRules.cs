@@ -44,7 +44,10 @@ public sealed class WeaponRules
         ["RUBBER_GUN"] = CombatWeaponId.RubberGun,
         ["SCEPTER"] = CombatWeaponId.Scepter,
         ["CROSSBOW"] = CombatWeaponId.Crossbow,
-        ["SHOTGUN"] = CombatWeaponId.Shotgun
+        ["SHOTGUN"] = CombatWeaponId.Shotgun,
+        ["PISTOL"] = CombatWeaponId.Pistol,
+        ["ASSAULT_RIFLE"] = CombatWeaponId.AssaultRifle,
+        ["SNIPER_RIFLE"] = CombatWeaponId.SniperRifle
     };
 
     private readonly Dictionary<CombatWeaponId, WeaponRule> _rules;

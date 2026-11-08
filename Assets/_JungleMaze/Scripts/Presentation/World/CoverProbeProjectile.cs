@@ -37,11 +37,11 @@ namespace JungleMaze.Presentation.World
         [Inject]
         public void Construct(IPoolService pool) => _pool = pool;
 
-        public void Launch(in ConfiguredShot shot, Vector2 direction)
+        public void Launch(in ConfiguredShot shot, Vector2 direction, float originOffset = 0f)
         {
             _direction = direction.normalized;
             _speed = shot.Speed;
-            _remaining = shot.Range;
+            _remaining = Mathf.Max(0f, shot.Range - originOffset);
             Damage = shot.Damage;
             _flying = true;
             _lookElapsed = 0f;

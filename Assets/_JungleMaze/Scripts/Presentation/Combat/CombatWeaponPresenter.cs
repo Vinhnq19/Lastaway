@@ -148,7 +148,7 @@ namespace JungleMaze.Presentation.Combat
                 if (HandleThrowable(true)) return;
                 if (!_online.CanAct || (_menu?.BlocksGameplayInput??false)) return;
                 if (Input.GetKeyDown(KeyCode.R)) _online.TryReload();
-                if (Input.GetMouseButton(0))
+                if (WantsFire(_online.Controller))
                 {
                     if (HeroAim.TryGetTargetDegrees(Camera.main, hero.position, Input.mousePosition, out var onlineAim)) _aimDegrees=onlineAim;
                     _online.TryAttack(_aimDegrees);
@@ -161,7 +161,7 @@ namespace JungleMaze.Presentation.Combat
                 if (_menu?.BlocksGameplayInput ?? false) return;
                 if (HandleThrowable(false)) return;
                 if (Input.GetKeyDown(KeyCode.R)) _offlineWorld.TryReload();
-                if (Input.GetMouseButton(0))
+                if (WantsFire(_offlineWorld.Combat?.Controller))
                 {
                     if (HeroAim.TryGetTargetDegrees(Camera.main, hero.position, Input.mousePosition, out var offlineAim)) _aimDegrees = offlineAim;
                     _offlineWorld.TryAttack(_aimDegrees);
@@ -187,7 +187,7 @@ namespace JungleMaze.Presentation.Combat
             }
             if (Input.GetKeyDown(KeyCode.R)) _controller.TryReload();
 
-            if (Input.GetMouseButton(0))
+            if (WantsFire(_controller))
             {
                 if (HeroAim.TryGetTargetDegrees(Camera.main, hero.position, Input.mousePosition, out var degrees)) _aimDegrees = degrees;
                 _controller.TryAttack(_aimDegrees);
@@ -200,6 +200,9 @@ namespace JungleMaze.Presentation.Combat
         /// land at the cursor, clamped by the server). Returns true when a throwable is held, so the normal weapon
         /// path does not also fire.
         /// </summary>
+        private static bool WantsFire(WeaponController controller) => controller != null &&
+            (controller.SelectedSlot.SemiAutomatic ? Input.GetMouseButtonDown(0) : Input.GetMouseButton(0));
+
         private bool HandleThrowable(bool online)
         {
             var kind = ThrowableRules.KindOf(_heroWeapon != null ? _heroWeapon.ItemId : null);
@@ -335,7 +338,15 @@ namespace JungleMaze.Presentation.Combat
                 var itemId = CombatWeaponIds.ToJsonId(weapon);
                 var shot = new ConfiguredShot(_balance, itemId);
                 var count = CombatShotMath.PelletAngles(aimDegrees, slot.Pellets, slot.SpreadDegrees, _pelletAngles);
-                var pose = new SpawnPose(origin, Quaternion.identity);
+                var visualOrigin = origin;
+                if (weapon >= CombatWeaponId.Pistol && wielder != null && wielder.Visible)
+                {
+                    var muzzle = wielder.MuzzlePosition;
+                    var offset = (Vector2)(muzzle - origin);
+                    var wall = CoverQuery.Sweep(origin, offset.normalized, offset.magnitude, .1f);
+                    visualOrigin = wall.collider != null ? (Vector3)wall.centroid : muzzle;
+                }
+                var pose = new SpawnPose(visualOrigin, Quaternion.identity);
                 var art = default(ProjectileArtCatalog.Entry);
                 var hasArt = projectileArt != null && projectileArt.TryGet(itemId, out art);
                 for (var i = 0; i < count; i++)
@@ -344,7 +355,7 @@ namespace JungleMaze.Presentation.Combat
                     var direction = new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
                     var projectile = _projectiles.Create(in pose);
                     if (hasArt) projectile.SetLook(art.HasFlight ? art.Flight : null, art.FlightScale, art.AngleOffset, art.Spin, art.TracerColor);
-                    projectile.Launch(in shot, direction);
+                    projectile.Launch(in shot, direction, Vector3.Distance(origin, visualOrigin));
                 }
                 if (hasArt && art.HasMuzzle && _flashes != null)
                 {
@@ -353,6 +364,12 @@ namespace JungleMaze.Presentation.Combat
                     var muzzle = wielder != null && wielder.Visible ? wielder.MuzzlePosition : origin + new Vector3(Mathf.Cos(aim), Mathf.Sin(aim), 0f) * MuzzleReach;
                     flash.Play(art.Muzzle, muzzle, aimDegrees, art.MuzzleScale);
                     _pool.Despawn(flash, flash.Duration + .05f);
+                }
+                if (hasArt && art.HasCasing && _flashes != null)
+                {
+                    var casing = _flashes.Create(SpawnPose.At(visualOrigin));
+                    casing.Eject(art.Casing, wielder != null ? wielder.MainHandPosition : origin, aimDegrees, art.CasingScale);
+                    _pool.Despawn(casing, casing.Duration + .05f);
                 }
                 return 0f;
             }

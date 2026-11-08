@@ -449,14 +449,18 @@ namespace JungleMaze.Tests.PlayMode
         {
             var grid = Track(new GameObject("Map grid")).AddComponent<JungleMaze.Presentation.World.MapGridView>();
             grid.Build(50, 8);
-            var zone = Track(GameObject.CreatePrimitive(PrimitiveType.Quad));
-            zone.name = MinimapMapCapture.WorldZoneOverlayName;
-            zone.transform.position = new Vector3(25, 25, 0);
-            zone.transform.localScale = new Vector3(80, 80, 1);
-            var material = Track(new Material(Shader.Find("Sprites/Default")) { color = Color.magenta });
-            var renderer = zone.GetComponent<Renderer>();
-            renderer.sharedMaterial = material;
             yield return Spawn();
+            // The world fill is the map team's ZoneOverlayView layer (main 809a59b7 hides it through WorldRenderer); it
+            // is created by Show (packet built by reflection, see BigMap_ZoneOverlay_MatchesMainMinimapLayer_SameData).
+            var main = Track(new GameObject("Main zone overlay")).AddComponent<JungleMaze.Presentation.UI.ZoneOverlayView>();
+            var show = typeof(JungleMaze.Presentation.UI.ZoneOverlayView).GetMethod("Show");
+            var packetType = show.GetParameters()[0].ParameterType;
+            var packet = System.Activator.CreateInstance(packetType);
+            packetType.GetField("CurrentRadius").SetValue(packet, 20f);
+            show.Invoke(main, new object[] { packet, 0u, TestBounds });
+            var renderer = main.WorldRenderer;
+            Assert.NotNull(renderer, "world fill created");
+            renderer.sharedMaterial = Track(new Material(Shader.Find("Sprites/Default")) { color = Color.magenta });
             yield return null;
             yield return null;
             var capture = _core.Minimap.GetComponent<MinimapMapCapture>();

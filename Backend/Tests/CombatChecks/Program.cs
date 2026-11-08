@@ -24,7 +24,7 @@ void Check(bool condition, string testName)
 }
 
 var rules = WeaponRules.Load(GameDataLoader.ReadGameDataFile("weapons.json"));
-Check(rules.Count == 10, "weapons.json: 10 WPN-02 weapons loaded (thrown/special skipped)");
+Check(rules.Count == 13, "weapons.json: 13 combat weapons loaded (thrown/special skipped)");
 Check(rules.TryGet(CombatWeaponId.Shotgun, out var shotgun) && shotgun.Pellets == 5 && shotgun.SpreadDegrees == 25f,
     "weapons.json: Shotgun has 5 pellets over 25 degrees");
 Check(rules.TryGet(CombatWeaponId.Axe, out var axe) && axe.IsBreakableAxe && axe.Damage == 42,
@@ -298,6 +298,31 @@ Check(CombatGeometry.RayHitsCircle(Vector2.Zero, Vector2.UnitX, 5f, new Vector2(
     combat.TryAttack(0, Attack(1, CombatWeaponId.Axe), 100, hits);
     Check(breakables.Damages.Count == 1 && breakables.Damages[0].Name == "Crate_01" && breakables.Damages[0].Damage == 63,
         "axe: breakable crate takes 42 * 1.5 = 63 damage, non-breakable wall is not forwarded");
+}
+
+// Firearms share server validation but retain different damage, reach, cadence and magazines.
+foreach (var weapon in new[] { CombatWeaponId.Pistol, CombatWeaponId.AssaultRifle, CombatWeaponId.SniperRifle })
+{
+    rules.TryGet(weapon, out var rule);
+    var registry = new FakeRegistry();
+    registry.Add(new FakeEntity(0, 0, 0));
+    var target = registry.Add(new FakeEntity(1, rule.Range - 1f, 0));
+    var combat = Build(registry, noMap, new FakePassive(false), new FakeEffects(), new FakeBreakables());
+    combat.SetHeldWeapon(0, weapon);
+    hits.Clear();
+    var shot = combat.TryAttack(0, Attack(1, weapon), 100, hits);
+    Check(shot.Outcome == CombatOutcome.Accepted && target.Hp == 100 - rule.Damage && shot.Magazine == rule.MagazineSize - 1,
+        $"{weapon}: authoritative shot applies configured damage and spends one round");
+    Check(combat.TryAttack(0, Attack(2, weapon), 101, hits).Outcome == CombatOutcome.Cooldown,
+        $"{weapon}: server rejects early follow-up");
+    var reload = combat.TryReload(0, new ReloadRequestPacket { RequestSeq = 3, Weapon = weapon }, 102);
+    var expectedReloadEnd = weapon == CombatWeaponId.Pistol ? 150u : weapon == CombatWeaponId.AssaultRifle ? 174u : 192u;
+    Check(reload.Outcome == CombatOutcome.Accepted && reload.ReloadEndTick == expectedReloadEnd,
+        $"{weapon}: reload uses configured duration");
+    var packet = new PlayerStatePacket { Flags = PlayerStateFlags.Dead };
+    packet.SetHeldWeapon(weapon);
+    Check(packet.TryGetHeldWeapon(out var decoded) && decoded == weapon && packet.IsDead,
+        $"{weapon}: remote held-weapon code preserves state flags");
 }
 
 Console.WriteLine($"=== CombatChecks: {passed} passed, {failed} failed ===");

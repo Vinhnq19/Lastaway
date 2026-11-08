@@ -27,7 +27,7 @@ namespace JungleMaze.Tests.Protocol
         [Test]
         public void EveryCombatWeaponHasItsOwnCode_HandIncluded()
         {
-            for (var i = 0; i <= (int)CombatWeaponId.Shotgun; i++)
+            for (var i = 0; i <= (int)CombatWeaponId.SniperRifle; i++)
             {
                 var packet = new PlayerStatePacket();
                 packet.SetHeldWeapon((CombatWeaponId)i);

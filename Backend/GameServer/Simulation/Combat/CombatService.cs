@@ -13,7 +13,7 @@ public sealed class CombatService
     public const int LifeSaveHp = 50;
     public const double LifeSaveInvulnerabilitySeconds = 2.0;
 
-    private const int WeaponCount = 10;
+    private const int WeaponCount = (int)CombatWeaponId.SniperRifle + 1;
 
     private readonly IEntityRegistry _registry;
     private readonly IHealthService _health;

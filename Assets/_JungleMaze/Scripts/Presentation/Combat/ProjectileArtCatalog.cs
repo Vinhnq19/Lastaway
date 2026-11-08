@@ -32,9 +32,12 @@ namespace JungleMaze.Presentation.Combat
             public WorldVisualSet.Frames Muzzle;
             public float MuzzleLength;
             public float MuzzleContent;
+            public WorldVisualSet.Frames Casing;
+            public float CasingScale;
 
             public bool HasFlight => Flight != null && Flight.Sprites != null && Flight.Sprites.Length > 0;
             public bool HasMuzzle => Muzzle != null && Muzzle.Sprites != null && Muzzle.Sprites.Length > 0;
+            public bool HasCasing => Casing != null && Casing.Sprites != null && Casing.Sprites.Length > 0;
             public float FlightScale => FlightContent > 0f ? Length / FlightContent : 1f;
             public float MuzzleScale => MuzzleContent > 0f ? MuzzleLength / MuzzleContent : 1f;
         }

@@ -37,6 +37,8 @@ namespace JungleMaze.Domain.Balance
         public float? ReloadSeconds;
         /// <summary>Total cone angle in degrees for multi-pellet weapons (e.g. Shotgun). The loader fills the default when Pellets is set.</summary>
         public float? SpreadDegrees;
+        /// <summary>Requires a fresh trigger press for each shot; false preserves held-trigger fire.</summary>
+        public bool SemiAutomatic;
     }
 
     /// <summary>
