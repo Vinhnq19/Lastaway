@@ -214,11 +214,13 @@ namespace JungleMaze.Presentation.Combat
         /// land at the cursor, clamped by the server). Returns true when a throwable is held, so the normal weapon
         /// path does not also fire.
         /// </summary>
-        private bool WantsFire(WeaponController controller) => controller != null && !_waitForRelease &&
+        private bool WantsFire(WeaponController controller) => controller != null && !_waitForRelease && !LocalConsumableHold.Active &&
             (controller.SelectedSlot.SemiAutomatic ? Input.GetMouseButtonDown(0) : Input.GetMouseButton(0));
 
         private bool HandleThrowable(bool online)
         {
+            // A consumable in hand replaces the weapon: left click does nothing, right click uses it (WorldSceneView).
+            if (LocalConsumableHold.Active) return false;
             var kind = ThrowableRules.KindOf(_heroWeapon != null ? _heroWeapon.ItemId : null);
             if (kind == ThrowableKind.None) return false;
             if ((_menu?.BlocksGameplayInput ?? false) || _waitForRelease || !Input.GetMouseButtonDown(0)) return true;

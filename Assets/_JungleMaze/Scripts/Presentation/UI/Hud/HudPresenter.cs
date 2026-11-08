@@ -1,6 +1,7 @@
 using System;
 using JungleMaze.App.Hud;
 using JungleMaze.App.Hud.State;
+using JungleMaze.App.World;
 using JungleMaze.Domain.Hud;
 
 namespace JungleMaze.Presentation.UI.Hud
@@ -128,6 +129,8 @@ namespace JungleMaze.Presentation.UI.Hud
                 var countLength = !slot.IsEmpty && i >= weaponSlots ? HudFormat.Count(_countText, slot.Count) : 0;
                 _quickbar.SetSlot(i, slot.ItemId, slot.DisplayName ?? "", _countText, countLength, visual);
             }
+            // The highlighted slot follows the consumable in hand; the strip names what is held.
+            if ((changes & InventoryChange.ActiveSlot) != 0) ApplyWeaponStrip();
         }
 
         private void OnEffectChanged(EffectChange change)
@@ -232,6 +235,16 @@ namespace JungleMaze.Presentation.UI.Hud
 
         private void ApplyWeaponStrip()
         {
+            // A consumable in hand (LocalConsumableHold) names itself and hides the weapon's ammo.
+            if (LocalConsumableHold.Active)
+            {
+                var item = _inventory.GetSlot(_inventory.WeaponSlotCount + LocalConsumableHold.Slot);
+                var id = item.ItemId ?? LocalConsumableHold.ItemId;
+                _quickbar.SetWeaponName(HudItemNames.Get(id, item.DisplayName ?? id ?? ""));
+                _quickbar.SetAmmo(false, _magazineText, 0, _reserveText, 0);
+                _quickbar.SetReloadHint(false);
+                return;
+            }
             var held = _hud.HeldWeapon;
             _quickbar.SetWeaponName(held.DisplayName ?? held.ItemId ?? "");
             var weapon = held.Definition;
