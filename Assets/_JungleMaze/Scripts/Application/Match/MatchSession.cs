@@ -204,7 +204,14 @@ namespace JungleMaze.App.Match
                     RotationDegrees = state.RotationDegrees, Hp = state.Hp, IsDead = state.IsDead,
                     LastProcessedInputSeq = state.LastProcessedInputSeq, HeldCode = state.HeldCode };
                 if (state.NetId == OwnNetId) Prediction.Reconcile(model);
-                if (_players.GetOrAdd(state.NetId).Apply(model)) _bus.Publish(new PlayerStateUpdated(state.NetId));
+                var player = _players.GetOrAdd(state.NetId);
+                var lost = player.HasState ? player.Current.Hp - state.Hp : 0;
+                if (player.Apply(model))
+                {
+                    _bus.Publish(new PlayerStateUpdated(state.NetId));
+                    if (Phase == MatchPhase.InGame && lost > 0)
+                        _bus.Publish(new JungleMaze.Domain.CombatFeedback.PlayerHealthLost(MatchId, state.NetId, lost, packet.ServerTick));
+                }
             }
             for (var i = _players.ActiveIds.Count - 1; i >= 0; i--)
             { var id = _players.ActiveIds[i]; if ((seen & (1 << id)) == 0) RemovePlayer(id); }

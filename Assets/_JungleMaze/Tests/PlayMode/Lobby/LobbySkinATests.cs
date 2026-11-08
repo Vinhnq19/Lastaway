@@ -19,6 +19,27 @@ namespace JungleMaze.Tests.PlayMode.Lobby
     public sealed class LobbySkinATests
     {
         [UnityTest]
+        public IEnumerator SplashIsNonInteractiveAndScopedToMenu()
+        {
+            using var rig = new LobbyUiRig();
+            yield return null;
+            Assert.NotNull(rig.Root.Splash);
+            var image = rig.Root.Splash.GetComponent<Image>();
+            Assert.AreEqual("lastaway_menu", image.sprite.name);
+            rig.Root.SetSplashForMenu(false);
+            Assert.AreEqual("lastaway_splash", image.sprite.name);
+            rig.Root.SetSplashForMenu(true);
+            Assert.AreEqual("lastaway_menu", image.sprite.name);
+            Assert.False(image.raycastTarget);
+            var fitter = image.GetComponent<AspectRatioFitter>();
+            Assert.AreEqual(AspectRatioFitter.AspectMode.EnvelopeParent, fitter.aspectMode);
+            Assert.That(fitter.aspectRatio, Is.EqualTo(16f / 9f).Within(.02f));
+            Assert.True(rig.Root.Splash.activeSelf);
+            rig.Flow.OpenJoin(); yield return null;
+            Assert.False(rig.Root.Splash.activeSelf);
+        }
+
+        [UnityTest]
         public IEnumerator DropdownAndLobbyTextFitTheirFrames()
         {
             using var rig = new LobbyUiRig();

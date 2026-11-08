@@ -27,6 +27,7 @@ namespace JungleMaze.App.Match
 
         private float _tickFraction;
         private uint _lastDamageTick;
+        private uint _damageEventSeq;
 
         private float? _overrideX;
         private float? _overrideY;
@@ -69,6 +70,7 @@ namespace JungleMaze.App.Match
             CurrentTick = 0;
             _tickFraction = 0f;
             _lastDamageTick = 0;
+            _damageEventSeq = 0;
             PlayerHp = (byte)Math.Min(255, Math.Max(1, _hudState?.MaxHp ?? 100));
             IsDead = false;
             HasResult = false;
@@ -120,7 +122,9 @@ namespace JungleMaze.App.Match
         public void ApplyDamage(byte damage)
         {
             if (!IsActive || damage == 0 || IsDead || (DamageInterceptor != null && DamageInterceptor(damage))) return;
+            var previousHp = PlayerHp;
             PlayerHp = (byte)Math.Max(0, PlayerHp - damage);
+            _bus.Publish(new JungleMaze.Domain.CombatFeedback.PlayerHealthLost(MatchId, 0, previousHp - PlayerHp, ++_damageEventSeq));
             _hudWriter.SetHp(PlayerHp);
             _hudWriter.NotifyDamageTaken(false, 0f);
 

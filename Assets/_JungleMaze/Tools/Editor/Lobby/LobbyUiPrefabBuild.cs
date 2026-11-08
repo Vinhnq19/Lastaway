@@ -58,6 +58,7 @@ namespace JungleMaze.EditorTools
                 backdrop.name = "Backdrop";
                 Set(root, "canvas", canvas);
                 Set(root, "backdrop", backdrop.gameObject);
+                BuildSplash(rt, root);
                 Set(root, "mainMenu", BuildMainMenu(rt));
                 Set(root, "joinForm", BuildJoin(rt));
                 Set(root, "connecting", BuildConnecting(rt));
@@ -91,6 +92,29 @@ namespace JungleMaze.EditorTools
         // ---------- screens ----------
 
         /// <summary>A2 Sảnh chính: logo, six L buttons (420×80, step 100), API line with check, version, account chip (kit_toast, 96 tall).</summary>
+        public static void BuildSplash(RectTransform rt, LobbyUiRoot root)
+        {
+                var splash = new GameObject("Splash", typeof(RectTransform), typeof(Image), typeof(AspectRatioFitter));
+                splash.transform.SetParent(rt, false);
+                var sr = (RectTransform)splash.transform;
+                sr.anchorMin = sr.anchorMax = sr.pivot = new Vector2(.5f, .5f);
+                var splashImage = splash.GetComponent<Image>();
+                splashImage.sprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/_JungleMaze/Art/UI/Splash/lastaway_splash.png");
+                splashImage.raycastTarget = false;
+                var fitter = splash.GetComponent<AspectRatioFitter>();
+                fitter.aspectMode = AspectRatioFitter.AspectMode.EnvelopeParent;
+                fitter.aspectRatio = splashImage.sprite != null ? splashImage.sprite.rect.width / splashImage.sprite.rect.height : 16f / 9f;
+                var shade = new GameObject("Shade", typeof(RectTransform), typeof(Image));
+                shade.transform.SetParent(sr, false);
+                var shadeRect = (RectTransform)shade.transform;
+                shadeRect.anchorMin = Vector2.zero; shadeRect.anchorMax = Vector2.one;
+                shadeRect.offsetMin = shadeRect.offsetMax = Vector2.zero;
+                shade.GetComponent<Image>().color = new Color(0f, 0f, 0f, .18f);
+                shade.GetComponent<Image>().raycastTarget = false;
+                Set(root, "splash", splash);
+                Set(root, "mainMenuBackground", AssetDatabase.LoadAssetAtPath<Sprite>("Assets/_JungleMaze/Art/UI/Splash/lastaway_menu.png"));
+        }
+
         private static MainMenuView BuildMainMenu(RectTransform rt)
         {
             var v = Screen<MainMenuView>(rt, "MainMenu");

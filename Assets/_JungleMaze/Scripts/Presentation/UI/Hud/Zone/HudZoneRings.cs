@@ -82,10 +82,11 @@ namespace JungleMaze.Presentation.UI.Hud
         public void Apply(int mapSizeCells)
         {
             Read();
+            if (_minimap == null && area != null) _minimap = area.GetComponentInParent<MinimapView>();
             var projection = new MinimapProjection(mapSizeCells, area != null ? area.rect.width : 0f);
             ApplyDanger(mapSizeCells);
             Place(zoneRing, projection, ZoneCentre, Phase > 0 ? ZoneRadius : 0f);
-            Place(safeRing, projection, SafeCentre, SafeRadius);
+            Place(safeRing, projection, SafeCentre, SafeRadius > 0f ? SafeRadius : ZoneRadius > 0f ? .001f : 0f, true);
         }
 
         private void ApplyDanger(int mapSizeCells)
@@ -149,16 +150,23 @@ namespace JungleMaze.Presentation.UI.Hud
         }
 
         /// <summary>Rect = the ring's centre-line diameter; the stroke stays <see cref="RingGraphic.Thickness"/>.</summary>
-        private void Place(RingGraphic ring, MinimapProjection projection, Vector2 centre, float radius)
+        private void Place(RingGraphic ring, MinimapProjection projection, Vector2 centre, float radius, bool next = false)
         {
             if (ring == null) return;
-            var visible = draw && HasZone && radius > 0f;
+            var visible = (next || draw) && HasZone && radius > 0f;
             if (ring.gameObject.activeSelf != visible) ring.gameObject.SetActive(visible);
             if (!visible) return;
             projection.Project(centre.x, centre.y, out var px, out var py);
             var t = ring.rectTransform;
             var diameter = 2f * radius * projection.PixelsPerCell;
             var position = new Vector2(px, py);
+            if (_minimap != null && _minimap.Zoom.Cells > 0f)
+            {
+                position = new Vector2((centre.x - _minimap.Zoom.MinX) / _minimap.Zoom.Cells * area.rect.width,
+                    (centre.y - _minimap.Zoom.MinY) / _minimap.Zoom.Cells * area.rect.height);
+                diameter = 2f * radius * area.rect.width / _minimap.Zoom.Cells;
+            }
+            if (next && radius <= .001f) diameter = 4f;
             if (t.anchoredPosition != position) t.anchoredPosition = position;
             if (!Mathf.Approximately(t.sizeDelta.x, diameter)) t.sizeDelta = new Vector2(diameter, diameter);
         }

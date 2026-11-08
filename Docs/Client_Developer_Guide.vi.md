@@ -236,3 +236,11 @@ Unity Windows/Editor đã có WSS/Auto. Prediction/reconciliation (MOV-02) và i
 The map owner can export optional `worldObjects` in the same map document using `WorldObjectDefinition` (`kind`, `bounds.minX/minY/maxX/maxY`, and `pairId` for portals). World runtime assigns instance IDs and validates placements without moving them. This export is separate from the renderer/prefabs; do not modify scene cover geometry in an item or environment adapter.
 
 Procedural layouts remain available in the explicit WorldDemo and backend fixtures. Backend fixtures set `WORLD_LAYOUT_MODE=Prototype`; normal team matches must not set this override. The existing map JSON and Game scene are not rewritten by world initialization.
+
+### Hiển thị bo và phản hồi HP
+
+Viền trắng trên minimap/bản đồ lớn là vị trí bo kế tiếp, hiện liên tục khi đã có dữ liệu, không chỉ trong thời gian cảnh báo. Đích co cuối cùng r0 dùng chấm trắng; hết lịch bo thì ẩn. Zoom minimap giữ cùng tọa độ với bản đồ.
+
+Nhân vật nhận damage nháy đỏ và hiện số HP thực mất đã xác nhận; giáp chặn hết hoặc hồi máu không tạo số damage. Offline và online dùng cùng VFX; không dự đoán mất HP.
+
+Nền đăng nhập/đăng ký và menu chính dùng `Assets/_JungleMaze/Art/UI/Splash/lastaway_splash.png` (ảnh tạo bằng imagegen cho dự án). Nền giữ tỉ lệ và crop theo màn hình; các màn phòng chờ/loading/kết quả giữ nền đá. Khi dựng lại UI, dùng builder hiện có để giữ cấu hình này.

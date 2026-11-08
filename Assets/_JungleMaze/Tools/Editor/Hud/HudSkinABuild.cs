@@ -304,9 +304,8 @@ namespace JungleMaze.EditorTools
             Simple(frame, "hud_minimap_frame");
         }
 
-        /// <summary>How the zone shows on the minimap and big map. Main (Huy 07/11, replaces orange + white): only the
-        /// ZoneOverlay layer of the map team (pink outside the zone, white dashed next ring); the sprite rings are built
-        /// but not drawn, <see cref="HudZoneRings"/> still computes phase, centre and radius. Sprite = the T-022 R3 rings.</summary>
+        /// <summary>How the zone shows on the minimap and big map. Main (Huy 07/11, replaces orange + white): the
+        /// ZoneOverlay layer of the map team plus the always-visible white next ring; the current sprite ring is hidden, <see cref="HudZoneRings"/> still computes phase, centre and radius. Sprite = the T-022 R3 rings.</summary>
         public enum ZoneRingStyle { Main, Sprite }
 
         public static ZoneRingStyle RingStyle = ZoneRingStyle.Main;
@@ -326,6 +325,7 @@ namespace JungleMaze.EditorTools
         /// </summary>
         public static HudZoneRings ZoneRings(RectTransform area, float strokePx)
         {
+            if (area.GetComponent<RectMask2D>() == null && area.GetComponent<Mask>() == null) area.gameObject.AddComponent<RectMask2D>();
             var rings = area.GetComponent<HudZoneRings>();
             if (rings == null) rings = area.gameObject.AddComponent<HudZoneRings>();
             var so = new SerializedObject(rings);

@@ -35,6 +35,28 @@ namespace JungleMaze.Tests.Protocol
             match.Tick(.1f); Assert.AreEqual(2, network.Sent, "Hello is announced once.");
         }
         [Test]
+        public void HealthLoss_IgnoresBaselineHealingRepeatedAndRetiredSnapshots()
+        {
+            var bus = new EventBus(); var network = new FakeNetwork(bus);
+            var losses = new System.Collections.Generic.List<int>();
+            bus.Subscribe<JungleMaze.Domain.CombatFeedback.PlayerHealthLost>(e => losses.Add(e.Amount));
+            using var match = new MatchSession(network, network, network, bus, new PlayerRegistry());
+            match.Initialize(); network.SetState(NetworkState.Joined, DisconnectReason.None);
+            var id = Guid.NewGuid();
+            network.Push(new MatchPhasePacket { MatchId = id, Phase = MatchPhase.InGame });
+            void State(uint tick, byte hp)
+            {
+                var p = new WorldSnapshotPacket { MatchId = id, ServerTick = tick, PlayerCount = 1 };
+                p.SetPlayer(0, new PlayerStatePacket { NetId = 0, Hp = hp }); network.Push(p);
+            }
+            State(1, 80); State(2, 73); State(2, 73); State(3, 90); State(4, 85);
+            CollectionAssert.AreEqual(new[]{7,5}, losses);
+            network.Push(new MatchPhasePacket { MatchId = Guid.NewGuid(), Phase = MatchPhase.InGame });
+            State(5, 1);
+            Assert.AreEqual(2, losses.Count);
+        }
+
+        [Test]
         public void SnapshotBacklogAcknowledgesNewestOnly_AndDoesNotAckRetiredMatch()
         {
             var bus = new EventBus(); var network = new FakeNetwork(bus);

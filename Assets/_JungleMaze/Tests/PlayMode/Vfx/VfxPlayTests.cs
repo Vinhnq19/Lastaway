@@ -154,6 +154,22 @@ namespace JungleMaze.Tests.PlayMode.Vfx
         [TearDown] public void TearDown() => _rig.Dispose();
 
         [UnityTest]
+        public IEnumerator ActualHpLoss_FlashesBodyAndShowsOnlyOneActualNumber()
+        {
+            _rig.Director.UseAuthoritativeHealth = true;
+            _rig.Bus.Publish(new HitConfirmedEvent(99, 0, 3, 90, 0, 0));
+            _rig.Bus.Publish(new PlayerHealthLost(_rig.Feed.SessionKey, 3, 7, 10));
+            _rig.Bus.Publish(new PlayerHealthLost(_rig.Feed.SessionKey, 3, 7, 10));
+            yield return null;
+            Assert.IsTrue(_rig.Bodies[3].IsFlashing);
+            Assert.Less(_rig.Bodies[3].Body.color.g, _rig.Bodies[3].Body.color.r);
+            Assert.AreEqual(1, _rig.Active(VfxCue.DamageNumber));
+            Assert.AreEqual(7, _rig.Stage.Root.GetComponentInChildren<DamageNumberVfx>().Shown);
+            _rig.Steps(1f); yield return null;
+            Assert.IsFalse(_rig.Bodies[3].IsFlashing);
+        }
+
+        [UnityTest]
         public IEnumerator Hit_FlashNumberSpark_ThenBackWithinOneSecond()
         {
             _rig.Bus.Publish(new HitConfirmedEvent(1, 0, 3, 27, 0f, 0f));

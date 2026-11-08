@@ -1,0 +1,31 @@
+{
+  "unity": "6000.3.15f1",
+  "editMode": {
+    "vfx": {
+      "passed": 115,
+      "job": "0e80588e9e1f42098864d7a244ecb8a0"
+    },
+    "protocol": {
+      "passed": 14,
+      "job": "fe23e40557814b45910e3f0a0af874bb"
+    }
+  },
+  "playMode": {
+    "passed": 61,
+    "job": "edec55b7793e4d2285f014320ad91637"
+  },
+  "previewAspects": [
+    "16:9",
+    "16:10",
+    "4:3"
+  ],
+  "windowsBuild": "BLOCKED: Unity hung importing Settings/UniversalRP.asset; Editor restarted into Boot, MCP not reconnected. No new executable produced.",
+  "twoUnityClientsUdpWs": "NOT_TESTED",
+  "physicalTwoPc": "NOT_TESTED",
+  "aws": "NOT_TESTED; no deploy",
+  "notes": [
+    "First PlayMode run caught inherited map card prefab/builder layout mismatch; corrected selectively.",
+    "An interrupted test run was not counted; final rerun passed 61/61.",
+    "Temporary render preview scenes were closed; no camera source modifications."
+  ]
+}

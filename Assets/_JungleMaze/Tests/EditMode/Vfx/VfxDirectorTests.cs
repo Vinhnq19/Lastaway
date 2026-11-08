@@ -15,6 +15,25 @@ namespace JungleMaze.Tests.Vfx
     public sealed class VfxDedupeTests
     {
         [Test]
+        public void AuthoritativeHpLoss_ReplacesRawHit_RejectsDuplicatesAndWrongMatch()
+        {
+            var rig = new VfxRig();
+            rig.Director.UseAuthoritativeHealth = true;
+            rig.Hit(123, 0, 50);
+            Assert.AreEqual(0, rig.Output.Spawns.Count);
+            var hit = new PlayerHealthLost(rig.Feed.SessionKey, 0, 7, 30);
+            rig.Bus.Publish(hit); rig.Bus.Publish(hit);
+            Assert.AreEqual(2, rig.Output.Spawns.Count, "one spark and one HP number");
+            Assert.AreEqual(7, rig.Output.Spawns[1].Spawn.Number);
+            Assert.AreEqual(1, rig.Output.Flashes.Count);
+            rig.Bus.Publish(new PlayerHealthLost(System.Guid.NewGuid(), 0, 7, 31));
+            rig.Bus.Publish(new PlayerHealthLost(rig.Feed.SessionKey, 0, 0, 32));
+            Assert.AreEqual(2, rig.Output.Spawns.Count);
+            rig.Bus.Publish(new PlayerHealthLost(rig.Feed.SessionKey, 0, 5, 33));
+            Assert.AreEqual(4, rig.Output.Spawns.Count);
+        }
+
+        [Test]
         public void Hit_TwiceAndAgainAfterOneSecond_OneEffect()
         {
             var rig = new VfxRig();

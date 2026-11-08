@@ -1,5 +1,16 @@
 namespace JungleMaze.Domain.CombatFeedback
 {
+    /// <summary>Confirmed HP loss, independent of weapon/raw damage events.</summary>
+    public readonly struct PlayerHealthLost
+    {
+        public readonly System.Guid MatchId;
+        public readonly byte NetId;
+        public readonly int Amount;
+        public readonly uint Tick;
+        public PlayerHealthLost(System.Guid matchId, byte netId, int amount, uint tick)
+        { MatchId = matchId; NetId = netId; Amount = amount; Tick = tick; }
+    }
+
     /// <summary>Two steps of a thrown/area weapon: the burning fuse, then the blast.</summary>
     public enum ExplosionPhase : byte
     {

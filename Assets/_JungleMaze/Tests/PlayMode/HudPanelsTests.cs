@@ -292,7 +292,7 @@ namespace JungleMaze.Tests.PlayMode
         }
 
         [UnityTest]
-        public IEnumerator ZoneRings_MainStyle_SpriteRingsHidden_DataKept()
+        public IEnumerator ZoneRings_MainStyle_NextRingVisible_DataKept()
         {
             // Huy 07/11 "kiểu main": the maps show the map team's ZoneOverlay; the T-022 sprite rings are built (switch
             // back with HudSkinABuild.RingStyle) but never drawn, while HudZoneRings still knows phase, centre and radius.
@@ -303,7 +303,7 @@ namespace JungleMaze.Tests.PlayMode
             _map.Refresh();
             Assert.False(_map.ZoneRings.Draw);
             Assert.False(_map.ZoneRing.gameObject.activeSelf, "big map: no sprite ring");
-            Assert.False(_map.SafeRing.gameObject.activeSelf);
+            Assert.True(_map.SafeRing.gameObject.activeSelf, "next zone stays visible independently of main ring style");
             Assert.True(_map.ZoneRings.HasZone);
             Assert.AreEqual(3, _map.ZoneRings.Phase);
             Assert.That(_map.ZoneRings.SafeRadius, Is.EqualTo(cells / 8f).Within(0.001f));
@@ -316,7 +316,11 @@ namespace JungleMaze.Tests.PlayMode
             mini.SetZone(1, cells / 2f, cells / 2f, cells / 4f, cells / 2f, cells / 2f, cells / 8f);
             mini.Apply(cells);
             Assert.False(mini.ZoneRing.gameObject.activeSelf, "minimap: no sprite ring");
-            Assert.False(mini.SafeRing.gameObject.activeSelf);
+            Assert.True(mini.SafeRing.gameObject.activeSelf);
+            mini.SetZone(5, 25, 25, 3, 24, 24, 0); mini.Apply(cells);
+            Assert.True(mini.SafeRing.gameObject.activeSelf, "final target is a white point");
+            mini.SetZone(5, 24, 24, 0, 24, 24, 0); mini.Apply(cells);
+            Assert.False(mini.SafeRing.gameObject.activeSelf, "no next zone after schedule ends");
             Assert.True(mini.HasZone);
 
             SpriteIs(_map.transform.Find("Content/Panel/MapArea").GetComponent<Image>(), "kit_map_bg");
