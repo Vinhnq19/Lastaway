@@ -172,6 +172,8 @@ namespace JungleMaze.World.Inventory
         public string[] GuaranteedSupplyItems = { "MACE", "COMPASS" };
         public int[] ChestGroupWeights = { 15, 20, 25, 15, 15, 10 };
         public int[] PotGroupWeights = { 25, 8, 30, 12, 20, 5 };
+        /// <summary>Highest rarity a chest or pot can roll (Rare = blue). Epic and Legendary come from the dragon egg (Supply).</summary>
+        public ItemRarity MaxContainerRarity = ItemRarity.Rare;
         public SupplyDropRule[] Supply = {
             new SupplyDropRule { ItemId="MACE" }, new SupplyDropRule { ItemId="COMPASS" },
             new SupplyDropRule { ItemId="SHOTGUN",ChancePercent=70,Ammo=20 },
@@ -278,7 +280,7 @@ namespace JungleMaze.World.Inventory
                 ChestGroupWeights = source.ChestGroupWeights == null ? null : (int[])source.ChestGroupWeights.Clone(),
                 PotGroupWeights = source.PotGroupWeights == null ? null : (int[])source.PotGroupWeights.Clone(),
                 Supply = source.Supply == null ? null : new SupplyDropRule[source.Supply.Length],
-                Floor = source.Floor == null ? new FloorLootProfile() : source.Floor.Copy() };
+                Floor = source.Floor == null ? new FloorLootProfile() : source.Floor.Copy(), MaxContainerRarity = source.MaxContainerRarity };
             if (source.Supply != null) for (var i = 0; i < source.Supply.Length; i++)
             {
                 var rule = source.Supply[i];
@@ -292,6 +294,7 @@ namespace JungleMaze.World.Inventory
                 if (weights == null || weights.Length != 6) throw new ArgumentException("Loot profile needs six group weights.");
                 foreach (var weight in weights) if (weight < 0 || weight > 100000) throw new ArgumentException("Invalid loot group weight.");
             }
+            if (!Enum.IsDefined(typeof(ItemRarity), _profile.MaxContainerRarity)) throw new ArgumentException("Invalid container rarity cap.");
             if (_profile.Supply == null || _profile.Supply.Length > 64) throw new ArgumentException("Invalid supply table.");
             foreach (var rule in _profile.Supply)
                 if (rule == null || !_catalog.TryGet(rule.ItemId, out _) || rule.ChancePercent < 0 || rule.ChancePercent > 100 || rule.MinCount < 1 || rule.MaxCount < rule.MinCount || rule.MaxCount > 999 || rule.Ammo < 0)
@@ -330,7 +333,8 @@ namespace JungleMaze.World.Inventory
             for (var group = 0; group < 6; group++)
             {
                 var options = new List<ItemDefinition>();
-                foreach (var item in _catalog.Items) if (item.Enabled && item.Weight > 0 && (item.Sources & source) != 0 && Group(item) == group) options.Add(item);
+                foreach (var item in _catalog.Items)
+                    if (item.Enabled && item.Weight > 0 && (item.Sources & source) != 0 && item.Rarity <= _profile.MaxContainerRarity && Group(item) == group) options.Add(item);
                 options.Sort((a, b) => string.CompareOrdinal(a.Id, b.Id));
                 if (options.Count > 0 && weights[group] > 0) { groups.Add(options); groupWeights.Add(weights[group]); }
             }

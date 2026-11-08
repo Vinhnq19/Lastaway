@@ -51,6 +51,19 @@ Check(docRoundtrip.Build().Items.Count == 38, "JSON config roundtrip preserves c
 var productionDocument = JsonSerializer.Deserialize<ItemCatalogDocument>(File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "GameData", "items_catalog.json")), jsonOptions);
 Check(productionDocument.Build().Items.Count == 38, "actual packaged JSON contains all 38 IDs");
 Check(new LootTable(productionDocument.Build(), productionDocument.Loot).Roll(LootSource.Chest, 4).Length >= 3, "actual packaged JSON profile validated and sampled");
+{
+    var production = productionDocument.Build(); var productionLoot = new LootTable(production, productionDocument.Loot);
+    var containerTop = ItemRarity.Common; var supplyTop = ItemRarity.Common;
+    for (uint seed = 1; seed <= 2000; seed++)
+    {
+        foreach (var stack in productionLoot.Roll(LootSource.Chest, seed).Concat(productionLoot.Roll(LootSource.Pot, seed)))
+            if (production.Get(stack.ItemId).Rarity > containerTop) containerTop = production.Get(stack.ItemId).Rarity;
+        foreach (var stack in productionLoot.Roll(LootSource.Supply, seed))
+            if (production.Get(stack.ItemId).Rarity > supplyTop) supplyTop = production.Get(stack.ItemId).Rarity;
+    }
+    Check(containerTop == ItemRarity.Rare && supplyTop == ItemRarity.Legendary,
+        "chests and pots top out at Rare (blue); Epic and Legendary only from the dragon egg");
+}
 var leaked = baseline.Get("KNIFE"); leaked.Enabled = false;
 Check(baseline.Get("KNIFE").Enabled, "catalog returns defensive item copy");
 var mutableDefinition = new ItemDefinition { Id = "TEST", Kind = ItemKind.Weapon, Sources = LootSource.Chest };

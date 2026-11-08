@@ -486,7 +486,7 @@ namespace JungleMaze.App.World
         public bool CanSpawnLoot(WorldObjectKind source, ushort worldId, uint seed)
         {
             // Counts gun ammo companions too, so the preflight matches what SpawnLoot creates (same as the server).
-            var count = LootDrops.CountForContainer(_lootTable, source, LootSeeds.Mix(seed, _lootSeed));
+            var count = LootDrops.CountForContainer(_lootTable, LootDrops.LootKind(source, Airdrops?.Owns(worldId) == true), LootSeeds.Mix(seed, _lootSeed));
             var reserve = Math.Max(0, (Airdrops?.ReservedLootRemaining ?? 0) -
                 (source == WorldObjectKind.Supply && Airdrops?.Owns(worldId) == true ? 8 : 0));
             return _floor != null && _floor.Items.Count + count <= FloorLootPlanner.MaxFloorItems - reserve && _nextFloorId + count <= ushort.MaxValue && _map.Objects.Count + _floor.Items.Count + count <= WorldWire.MaxObjects - reserve - (Airdrops?.ReservedEggsRemaining??0);
@@ -496,7 +496,7 @@ namespace JungleMaze.App.World
         {
             if (_lootTable == null || _floor == null || _lootSurface == null) return;
             // Drops fan out 0.9-1.4 cells around the broken container and guns bring an AMMO box (shared LootDrops).
-            var placements = LootDrops.ForContainer(_lootTable, source, position, LootSeeds.Mix(seed, _lootSeed), _lootSurface);
+            var placements = LootDrops.ForContainer(_lootTable, LootDrops.LootKind(source, Airdrops?.Owns(worldId) == true), position, LootSeeds.Mix(seed, _lootSeed), _lootSurface);
             _usingSupplyReserve = source == WorldObjectKind.Supply && Airdrops?.Owns(worldId) == true;
             try
             {

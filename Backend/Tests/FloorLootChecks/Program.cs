@@ -30,7 +30,12 @@ var chestWeaponsSeen = new HashSet<string>();
 for (uint seed = 1; seed <= 2000; seed++)
     foreach (var item in table.Roll(LootSource.Chest, seed))
         chestWeaponsSeen.Add(item.ItemId);
-Check(rangedIds.All(chestWeaponsSeen.Contains), "all seven ranged weapons can drop from chests");
+Check(LootDrops.LootKind(WorldObjectKind.Supply, false) == WorldObjectKind.Chest && LootDrops.LootKind(WorldObjectKind.Supply, true) == WorldObjectKind.Supply &&
+      LootDrops.LootKind(WorldObjectKind.Pot, false) == WorldObjectKind.Pot, "a wooden supply crate on the map rolls the chest table; only the dragon egg rolls the supply table");
+// Chests top out at Rare (blue): Epic guns come from the dragon egg or the floor, never a chest.
+var chestRanged = rangedIds.Where(id => catalog.Get(id).Rarity <= document.Loot.MaxContainerRarity).ToArray();
+Check(chestRanged.Length > 0 && chestRanged.All(chestWeaponsSeen.Contains) && !rangedIds.Except(chestRanged).Any(chestWeaponsSeen.Contains),
+    "chests drop every ranged weapon up to Rare and none above it");
 
 var firearms = new[] { "PISTOL", "ASSAULT_RIFLE", "SNIPER_RIFLE" };
 var supplyCounts = firearms.ToDictionary(id => id, _ => 0);
@@ -66,8 +71,8 @@ foreach (var id in firearms)
 }
 Check(supplyCounts["PISTOL"] > supplyCounts["ASSAULT_RIFLE"] && supplyCounts["ASSAULT_RIFLE"] > supplyCounts["SNIPER_RIFLE"],
     "weighted supply firearm frequencies retain pistol > rifle > sniper ordering");
-Check(chestCounts["PISTOL"] > chestCounts["ASSAULT_RIFLE"] && chestCounts["ASSAULT_RIFLE"] > chestCounts["SNIPER_RIFLE"],
-    "chest firearm frequencies retain pistol > rifle > sniper ordering");
+Check(chestCounts["PISTOL"] > chestCounts["ASSAULT_RIFLE"] && chestCounts["SNIPER_RIFLE"] == 0,
+    "chest firearm frequencies keep pistol > rifle; the Epic sniper never comes from a chest");
 
 // ---- Catalog: rarity and the Floor block ----
 var baseline = ItemCatalog.CreateBaseline();
@@ -275,10 +280,12 @@ foreach (var chest in map1.Objects.Where(o => o.Kind == WorldObjectKind.Chest ||
     Check(w1.Destructibles.DamageConfirmed(chest.Id, hp, 0, 1), "server breaks container " + chest.Id);
     var added = w1.Floor.Items.Where(f => !before.Contains(f.Id)).ToList();
     var center = chest.Bounds.Center;
-    var expected = LootDrops.CountForContainer(table, chest.Kind, LootSeeds.Mix(map1.Seed ^ ((uint)chest.Id * 2654435761u), w1.LootSeed));
+    // A supply crate placed on the map (wooden box) rolls the chest table; only the dragon egg rolls the supply table.
+    var lootKind = LootDrops.LootKind(chest.Kind, false);
+    var expected = LootDrops.CountForContainer(table, lootKind, LootSeeds.Mix(map1.Seed ^ ((uint)chest.Id * 2654435761u), w1.LootSeed));
     var gunsHere = added.Where(f => catalog.Get(f.Stack.ItemId).MagazineSize > 0).ToList();
     if (gunsHere.Count > 0) gunBreaks++;
-    Check(added.Count == expected && (chest.Kind == WorldObjectKind.Supply ? added.All(f=>f.Stack.ItemId!="AMMO") : added.Count(f => f.Stack.ItemId == "AMMO" && f.Stack.Count == floor.AmmoBoxes) >= gunsHere.Count),
+    Check(added.Count == expected && (lootKind == WorldObjectKind.Supply ? added.All(f=>f.Stack.ItemId!="AMMO") : added.Count(f => f.Stack.ItemId == "AMMO" && f.Stack.Count == floor.AmmoBoxes) >= gunsHere.Count),
         "container " + chest.Id + " spawns exactly the CanSpawnLoot count, with an AMMO stack per gun");
     bool OnRing(FloorItem f) { var d = MathF.Sqrt(new WorldPoint(f.X, f.Y).DistanceSquared(center)); return d >= floor.ScatterMinRadius - 1e-3f && d <= floor.ScatterMaxRadius + 1e-3f; }
     bool NextToGun(FloorItem f) => gunsHere.Any(g => { var d = MathF.Sqrt(new WorldPoint(f.X, f.Y).DistanceSquared(new WorldPoint(g.X, g.Y))); return d >= floor.AmmoMinDistance - 1e-3f && d <= floor.AmmoMaxDistance + 1e-3f; });
