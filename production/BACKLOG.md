@@ -4,7 +4,7 @@ Nguồn sự thật duy nhất về việc cần làm. CPO sở hữu cấu trú
 
 Trạng thái: `todo` · `doing` · `review` · `done` · `blocked` (thêm `loại`, `gộp vào T-###`). Ước lượng: S (một lượt ngắn) · M (một lượt đầy) · L (phải chia nhỏ).
 
-Mã task lớn nhất đã cấp: **T-029**. Task mới lấy số tiếp theo.
+Mã task lớn nhất đã cấp: **T-030**. Task mới lấy số tiếp theo.
 
 Kiểm cấu trúc sau mỗi lần sửa: `node scripts/backlog-check.mjs`.
 
@@ -41,6 +41,7 @@ Kiểm cấu trúc sau mỗi lần sửa: `node scripts/backlog-check.mjs`.
 | T-027 | lastaway: thang cỡ chữ (type scale) và cặp font chính/phụ cho toàn game: nghiên cứu có nguồn, đo hiện trạng, đề xuất, demo trước/sau; áp vào kit và mock đợt A; cổng máy cỡ chữ | art-ux | T-020 | M | done | Huy duyệt 07/11: font chính Chakra Petch Bold (Huy chọn, thay Denk One), font phụ Be Vietnam Pro Bold. Chốt 07/11 (CPO được Huy giao duyệt): 5 bậc 96/40/30/24/20, sàn gameplay 24; thêm font chính. Bảng đo hiện trạng (mọi cỡ chữ đang dùng, cỡ nào dưới ngưỡng đọc được); nguồn mở được; thang 5-7 bậc có px ở 1080p, đậm nhạt, dùng cho gì; trang demo trước/sau trên 4 màn tiêu biểu xem ở cỡ thật; Huy duyệt trước khi áp vào kit và mock |
 | T-028 | lastaway: gói asset cho Unity đợt T-022..T-025: cắt từng thành phần kit và FX dùng trong mock T-021 thành PNG kèm border 9-slice, cỡ ở 1080p, bảng ánh xạ phần tử mock -> file; gen bù bằng GPT (song song) chỗ unity báo thiếu | art-ux | T-021 | M | done | CPO duyệt 07/11: 3 đợt gen GPT, unity đã nhập. Mỗi màn T-021 có bảng ánh xạ; mọi file có border và cỡ; asset gen mới qua cổng duyệt cùng nét skin A; unity nhập được không phải đo lại |
 | T-029 | lastaway: asset và mock minimap phương án M: icon cờ waypoint, mũi tên mép màn kèm khoảng cách, chấm địch, dấu thấy lần cuối, chỉ báo mức zoom; mock minimap 2 mức và bản đồ lớn có waypoint, gen qua art-bridge, cùng nét skin A; cập nhật `ux/hud-B-spec.md` mục 5 | art-ux | T-017 | S | done | Màu cờ không trùng đỏ địch, trắng vòng bo kế, Amber bản thân; đọc được ở minimap mức gần và bản đồ lớn 1080p; qua cổng 9-slice, tương phản; unity nhập được không phải đo lại |
+| T-030 | lastaway: icon UI 64 cho 3 súng mới của main (PISTOL, ASSAULT_RIFLE, SNIPER_RIFLE) gen qua art-bridge cùng nét skin A, đặt Art/UI/Icons/Weapons/<ID>.png, thêm dòng CSV kiểm kê; hiện ô quickbar dùng sprite world 12x8 | art-ux | - | S | todo | 3 test đỏ UiArtCatalog.ItemIcons_Import64Point, Art04IconInventory.Csv, UiArtCatalog.ItemCatalog_Covers37 xanh; icon đọc được ở ô quickbar 1080p |
 
 ## Icebox
 

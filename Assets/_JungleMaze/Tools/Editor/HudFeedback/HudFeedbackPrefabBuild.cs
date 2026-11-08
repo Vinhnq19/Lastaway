@@ -461,7 +461,7 @@ namespace JungleMaze.EditorTools
                 var plus = UiKit.Text(toast, "Plus", Tier.B2, "+", UiKit.Colors.Text);
                 UiKit.Place(plus.rectTransform, 16, 0, 20, ToastH);
                 // Placeholder until the ID resolves (ART-04); the view swaps in the item icon, Simple + preserveAspect.
-                var icon = UiKit.Image(UiKit.Place(UiKit.Node(toast, "Icon"), 40, 10, 72, 72), "kit_slot_item_empty");
+                var icon = UiKit.Image(UiKit.CentrePivot(UiKit.Place(UiKit.Node(toast, "Icon"), 40, 10, 72, 72)), "kit_slot_item_empty");
                 var name = UiKit.Text(toast, "Name", Tier.B2, "Lá thần mộc", UiKit.Colors.Text);
                 UiKit.Place(name.rectTransform, 122, 6, 126, 80);
                 name.textWrappingMode = TextWrappingModes.Normal; // "Lông vũ phượng hoàng lửa" takes two lines

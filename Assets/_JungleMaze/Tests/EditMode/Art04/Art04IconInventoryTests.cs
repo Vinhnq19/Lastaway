@@ -160,7 +160,7 @@ namespace JungleMaze.Tests.Art04
             var roster = new Dictionary<string, string>(StringComparer.Ordinal);
             foreach (var w in balance.Weapons) roster.Add(w.Id, "Weapon");
             foreach (var e in balance.Equipments) roster.Add(e.Id, "Equipment");
-            Assert.AreEqual(34, roster.Count, "18 weapons + 16 equipments");
+            Assert.AreEqual(37, roster.Count, "21 weapons + 16 equipments (main 809a59b7 adds 3 guns)");
             return roster;
         }
 

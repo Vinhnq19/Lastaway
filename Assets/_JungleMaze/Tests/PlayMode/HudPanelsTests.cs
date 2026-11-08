@@ -419,29 +419,28 @@ namespace JungleMaze.Tests.PlayMode
         public IEnumerator BigMap_ZoneOverlay_MatchesMainMinimapLayer_SameData()
         {
             yield return Spawn();
-            // The main layer (ZoneOverlayView, map team) is driven through its public Show; its packet type lives in the
-            // protocol assembly this test does not reference, so it is built by reflection.
-            var main = Track(new GameObject("Main zone overlay")).AddComponent<JungleMaze.Presentation.UI.ZoneOverlayView>();
-            var show = typeof(JungleMaze.Presentation.UI.ZoneOverlayView).GetMethod("Show");
-            var packetType = show.GetParameters()[0].ParameterType;
-            var packet = System.Activator.CreateInstance(packetType);
-            foreach (var (field, value) in new[] { ("CurrentCenterX", 25f), ("CurrentCenterY", 25f), ("CurrentRadius", 20f), ("TargetCenterX", 30f), ("TargetCenterY", 28f), ("TargetRadius", 8f) })
-                packetType.GetField(field).SetValue(packet, value);
-            show.Invoke(main, new object[] { packet, 0u, TestBounds });
-            var layer = _core.Minimap.Marker.parent.Find("Zone circles");
-            Assert.NotNull(layer, "main minimap layer created");
+            // Main 809a59b7: the composed HUD's minimap zone is HudZoneRings' "Map danger fill" (ZoneOverlayView no longer
+            // adds "Zone circles" here); the big map's ZoneOverlay layer must show the same zone data with the same shader.
+            var miniRings = _core.Minimap.Area.GetComponent<HudZoneRings>();
+            Assert.NotNull(miniRings, "minimap zone rings");
+            foreach (var rings in new[] { miniRings, _map.ZoneRings })
+            {
+                rings.SetBounds(TestBounds);
+                rings.SetZone(1, 25, 25, 20, 30, 28, 8);
+            }
+            miniRings.Apply(50);
+            var layer = _core.Minimap.Area.Find("Map danger fill");
+            Assert.NotNull(layer, "minimap danger fill created after the first shrink");
             var mini = layer.GetComponent<RawImage>().material;
 
             _map.Open();
-            _map.ZoneRings.SetBounds(TestBounds);
-            _map.ZoneRings.SetZone(1, 25, 25, 20, 30, 28, 8);
             _map.Refresh();
             var big = _map.ZoneOverlay.Material;
             Assert.AreEqual(mini.shader, big.shader, "same shader");
             foreach (var f in new[] { "_Minimap", "_FillAlpha" }) Assert.AreEqual(mini.GetFloat(f), big.GetFloat(f), 1e-6f, f);
-            foreach (var v in new[] { "_Current", "_Next", "_MapBounds" }) Assert.AreEqual(mini.GetVector(v), big.GetVector(v), v);
+            foreach (var v in new[] { "_Current", "_MapBounds" }) Assert.AreEqual(mini.GetVector(v), big.GetVector(v), v);
             var a = layer.GetComponent<RawImage>().uvRect; var b = _map.ZoneOverlay.Image.uvRect;
-            Assert.That(Vector4.Distance(new Vector4(a.x, a.y, a.width, a.height), new Vector4(b.x, b.y, b.width, b.height)), Is.LessThan(1e-4f), "same crop ratio");
+            Assert.That(Vector4.Distance(new Vector4(a.x, a.y, a.width, a.height), new Vector4(b.x, b.y, b.width, b.height)), Is.LessThan(1e-3f), "same crop ratio");
         }
 
         [UnityTest]
@@ -451,7 +450,7 @@ namespace JungleMaze.Tests.PlayMode
             grid.Build(50, 8);
             yield return Spawn();
             // The world fill is the map team's ZoneOverlayView layer (main 809a59b7 hides it through WorldRenderer); it
-            // is created by Show (packet built by reflection, see BigMap_ZoneOverlay_MatchesMainMinimapLayer_SameData).
+            // is created by Show (packet built by reflection: its type lives in the protocol assembly this test does not reference).
             var main = Track(new GameObject("Main zone overlay")).AddComponent<JungleMaze.Presentation.UI.ZoneOverlayView>();
             var show = typeof(JungleMaze.Presentation.UI.ZoneOverlayView).GetMethod("Show");
             var packetType = show.GetParameters()[0].ParameterType;

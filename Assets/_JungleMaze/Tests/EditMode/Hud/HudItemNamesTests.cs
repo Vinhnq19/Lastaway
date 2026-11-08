@@ -31,7 +31,7 @@ namespace JungleMaze.Tests.EditMode.Hud
             foreach (var e in balance.Equipments) if (!HudItemNames.Has(e.Id)) missing.Add(e.Id);
             Assert.IsEmpty(missing, string.Join(", ", missing));
             Assert.AreEqual("Đạn", HudItemNames.Get("AMMO"));
-            Assert.AreEqual(35, HudItemNames.Count, "35 rows of ITEM LIST");
+            Assert.AreEqual(38, HudItemNames.Count, "38 rows of ITEM LIST (main 809a59b7 adds 3 guns)");
         }
 
         [Test]

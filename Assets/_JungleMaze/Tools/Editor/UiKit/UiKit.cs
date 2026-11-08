@@ -249,6 +249,15 @@ namespace JungleMaze.EditorTools
             return t;
         }
 
+        /// <summary>Same rect, pivot moved to its centre (Quang Huy, main 809a59b7: item icons scale and fit around their centre).</summary>
+        public static RectTransform CentrePivot(RectTransform t)
+        {
+            var centre = new Vector2(0.5f, 0.5f);
+            t.anchoredPosition += Vector2.Scale(centre - t.pivot, t.sizeDelta);
+            t.pivot = centre;
+            return t;
+        }
+
         /// <summary>Absolute 1920×1080 mock rect, anchored at the parent's centre so it stays centred on any aspect.</summary>
         public static RectTransform PlaceCentred(RectTransform t, float x, float y, float w, float h)
         {
