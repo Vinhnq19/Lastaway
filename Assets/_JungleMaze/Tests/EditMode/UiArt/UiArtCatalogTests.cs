@@ -43,13 +43,13 @@ namespace JungleMaze.Tests.UiArt
         }
 
         [Test]
-        public void ItemCatalog_Covers34RosterIds_EachWithItsOwnSprite()
+        public void ItemCatalog_Covers37RosterIds_EachWithItsOwnSprite()
         {
             var catalog = Items;
             Assert.NotNull(catalog);
             var ids = RosterIds(out var folders);
-            Assert.AreEqual(34, ids.Count, "18 weapons + 16 equipments in the balance JSON");
-            Assert.AreEqual(34, catalog.Count);
+            Assert.AreEqual(37, ids.Count, "21 weapons + 16 equipments in the balance JSON (main 809a59b7 adds 3 guns)");
+            Assert.AreEqual(37, catalog.Count);
             var problems = new List<string>();
             Assert.True(catalog.Validate(problems), string.Join("; ", problems));
             var sprites = new HashSet<Sprite>();

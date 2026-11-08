@@ -1,0 +1,2 @@
+Draw ONE tiny, ultra-simplified map icon, readable at 14 pixels: a waypoint flag, only 3 flat colours: sky blue (#5BB8E8) triangular-rectangular pennant, a dark pole (#3A302A), dark outline (#0A0C0C). Very bold, almost a silhouette, thick pole, pennant big relative to the pole, no small details, no highlight, no base.
+Style: pixel art on a 16x16 grid enlarged, hard pixel edges, no anti-aliasing. Draw it large and centered, filling about 85 percent of a square canvas. Background: perfectly flat solid magenta #FF00FF, nothing else.

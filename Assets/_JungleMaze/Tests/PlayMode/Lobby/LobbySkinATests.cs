@@ -91,7 +91,7 @@ namespace JungleMaze.Tests.PlayMode.Lobby
             {
                 Assert.IsFalse(slot.RemoveBot.gameObject.activeSelf, slot.name);
                 Assert.AreEqual("kit_iconbtn_square_normal", SpriteOf(slot.RemoveBot));
-                Assert.AreEqual("kit_ico_trash", SpriteOf(slot.RemoveBot.transform.Find("Icon")));
+                Assert.AreEqual("kit_ico_trash", SpriteOf(slot.RemoveBot.transform.Find("Face/Icon")));
             }
         }
 
@@ -231,6 +231,65 @@ namespace JungleMaze.Tests.PlayMode.Lobby
             Assert.AreEqual(ReconnectController.LostText, rig.Flow.Notice, "flow string unchanged");
             Assert.AreEqual("", n.Message.text, "the body does not repeat the title");
             Assert.IsTrue(n.transform.Find("Panel/DisconnectIcon").gameObject.activeSelf);
+        }
+
+        /// <summary>Huy 07/11 (Cài đặt máy chủ): every field has a 20 px caption; the dropdown is the kit one with its arrow and kit list.</summary>
+        [UnityTest]
+        public IEnumerator ServerSettings_FieldLabels_KitDropdownWithArrow()
+        {
+            using var rig = new LobbyUiRig();
+            yield return null;
+            var s = rig.Root.ServerSettings;
+            var fields = new (Component field, string label)[] { (s.Profile, "Kết nối"), (s.Host, "Máy chủ"), (s.Port, "Cổng"), (s.Api, "URL API") };
+            foreach (var (field, expected) in fields)
+            {
+                var caption = field.transform.Find("FieldLabel").GetComponent<TMP_Text>();
+                Assert.AreEqual(expected, caption.text, field.name);
+                Assert.AreEqual(20f, caption.fontSize * 1.5f, 0.05f, field.name);
+                Assert.AreEqual(56f / 1.5f, ((RectTransform)field.transform).sizeDelta.y, 0.01f, field.name + " is 56 px");
+            }
+            foreach (var input in new[] { s.Host, s.Port, s.Api })
+            {
+                Assert.AreEqual("kit_input_normal", SpriteOf(input), input.name);
+                Assert.AreEqual("kit_input_focus", input.spriteState.selectedSprite.name, input.name);
+            }
+            Assert.AreEqual("kit_dropdown_closed", SpriteOf(s.Profile));
+            Assert.AreEqual(Image.Type.Sliced, s.Profile.image.type);
+            Assert.AreEqual("kit_dropdown_open", s.Profile.spriteState.selectedSprite.name, "open list: header swaps to the open sprite");
+            var arrow = (RectTransform)s.Profile.transform.Find("Arrow");
+            Assert.IsTrue(arrow.gameObject.activeSelf);
+            Assert.AreEqual("kit_arrow_down", SpriteOf(arrow));
+            Assert.AreEqual(Image.Type.Simple, arrow.GetComponent<Image>().type);
+            Assert.AreEqual(new Vector2(16f, 10f) / 1.5f, arrow.sizeDelta);
+            Assert.AreEqual(-34f / 1.5f, arrow.anchoredPosition.x - arrow.sizeDelta.x / 2f, 0.01f, "centred in the right 68 px box");
+            var label = (RectTransform)s.Profile.transform.Find("Label");
+            Assert.LessOrEqual(label.offsetMax.x, -68f / 1.5f, "value text stays left of the arrow box");
+            var template = s.Profile.transform.Find("Template");
+            Assert.AreEqual("kit_row_alt", SpriteOf(template));
+            Assert.AreEqual("kit_row_normal", SpriteOf(template.Find("Viewport/Content/Item/Item Background")));
+            Assert.AreEqual("kit_row_selected", SpriteOf(template.Find("Viewport/Content/Item/Item Checkmark")));
+            Assert.AreEqual("kit_scroll_track", SpriteOf(template.Find("Scrollbar")));
+            Assert.AreEqual("kit_scroll_thumb", SpriteOf(template.Find("Scrollbar/Sliding Area/Handle")));
+        }
+
+        /// <summary>No overlapping 9-slice anywhere in LobbyUi: every Sliced image is at least as large as its borders.</summary>
+        [UnityTest]
+        public IEnumerator SlicedImages_NeverSmallerThanTheirBorders()
+        {
+            using var rig = new LobbyUiRig();
+            yield return null;
+            yield return null;
+            foreach (var img in rig.Root.GetComponentsInChildren<Image>(true))
+            {
+                if (img.sprite == null || img.type != Image.Type.Sliced) continue;
+                var rect = ((RectTransform)img.transform).rect;
+                if (rect.width <= 0f || rect.height <= 0f) continue; // empty (hidden) bar fill, or a scroll handle laid out at run time
+                var b = img.sprite.border / (img.pixelsPerUnit * img.pixelsPerUnitMultiplier); // left, bottom, right, top in canvas units
+                var path = img.name;
+                for (var t = img.transform.parent; t != null && t != rig.Root.transform; t = t.parent) path = t.name + "/" + path;
+                Assert.GreaterOrEqual(rect.width + 0.5f, b.x + b.z, path + " (" + img.sprite.name + ") narrower than left + right border");
+                Assert.GreaterOrEqual(rect.height + 0.5f, b.y + b.w, path + " (" + img.sprite.name + ") lower than top + bottom border");
+            }
         }
 
         /// <summary>B8: the bar shows the grace left (full when the overlay opens).</summary>

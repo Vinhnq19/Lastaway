@@ -130,5 +130,14 @@
   "border_LRTB": null,
   "slice": false,
   "nguon": "gen GPT qua codex-img.sh, prompt `src/gen/zonecause.prompt.src.txt`; icon màu nguyên nhân chết Bo thu v2 (khói bo đỏ lấn vào nền đá, nhân vật nhỏ ở ngoài vòng; lấp khoảng 90% ô)"
+ },
+ "legend_ring_next_dashed": {
+  "size": [
+   32,
+   32
+  ],
+  "border_LRTB": null,
+  "slice": false,
+  "nguon": "gen GPT qua codex-img.sh, prompt `src/gen/legend-ring.prompt.src.txt`; chú giải vòng bo kế tiếp: vòng trắng nét đứt 12 đoạn, nét ~2 px ở 32 px"
  }
 }

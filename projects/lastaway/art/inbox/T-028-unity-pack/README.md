@@ -31,7 +31,8 @@ Bảng ánh xạ từng phần tử mock T-021 sang file PNG, cho vai unity. Ch�
 | `files/new/kit_map_bg.png` (+ @2x) | nền khung bản đồ lớn | 256x256, border [24,24,24,24], vẽ 840x840 |
 | `files/new/map_grid.png` (+ @2x) | lưới 10x10 trên bản đồ (v2: gen 1 ô, script lát 10x10 ô 83 px, lề 5 px khớp vùng trong `kit_map_bg`) | 840x840, nền trong suốt |
 | `files/new/map_ring_zone.png` (+ @2x) | vòng bo hiện tại (vàng cam; v2 nét ~4 px ở cỡ vẽ 680) | 512x512, vẽ 680x680 |
-| `files/new/map_ring_safe.png` (+ @2x) | vòng bo tiếp theo (trắng) và chú giải | 256x256, vẽ 180x180 và 32x32 |
+| `files/new/map_ring_safe.png` (+ @2x) | vòng bo tiếp theo (trắng) | 256x256, vẽ 180x180 |
+| `files/new/legend_ring_next_dashed.png` (+ @2x) | chú giải vòng bo kế tiếp (vòng trắng nét đứt 12 đoạn, nền trong suốt) | 32x32 |
 Trang duyệt đợt 2: `files/new/duyet-dot2.png` (asset mới đặt trong mock ở cỡ 100%).
 
 ### Đợt 3 (unity báo thiếu icon, mục "Cần art-ux" của `docs/COORDINATION.md`)

@@ -221,6 +221,7 @@ namespace JungleMaze.EditorTools
             var size = Px(54);
             Place(slot, x, 0, size, size);
             Place(slot.Find("Icon"), Px(7), Px(7), Px(40), Px(40));
+            UiKit.CentrePivot((RectTransform)slot.Find("Icon"));
             Place(slot.Find("Key"), Px(KeyBadge.x), Px(KeyBadge.y), Px(KeyBadge.width), Px(KeyBadge.height));
             Tier(slot.Find("Key").GetComponent<TMP_Text>(), UiKit.Tier.C, TextAlignmentOptions.Center);
             // A 20 px line is ~18 u tall; the 28 px box keeps TMP's ellipsis mode from dropping it.
@@ -278,6 +279,7 @@ namespace JungleMaze.EditorTools
             if (capture == null) capture = minimap.gameObject.AddComponent<MinimapMapCapture>();
             var captureSo = new SerializedObject(capture);
             captureSo.FindProperty("mapImage").objectReferenceValue = raw;
+            captureSo.FindProperty("resolution").intValue = 1024; // T-018: shared with the big map (840 px / 50 cells)
             captureSo.ApplyModifiedPropertiesWithoutUndo();
         }
 

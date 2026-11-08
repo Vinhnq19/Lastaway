@@ -167,7 +167,20 @@ namespace JungleMaze.EditorTools
                 extra++;
             }
             Copy(Path.Combine(pack, "bg", "nen-gach-tile.png"), KitFolder + "/" + FloorTile + ".png", 100f, Vector4.zero, true);
-            return names.Count + fx.Length + extra + 1;
+            return names.Count + fx.Length + extra + 1 + ImportWaypoint();
+        }
+
+        /// <summary>T-029 waypoint icons (CPO duyệt 08/11, commit 00146c98): @2x, no border. Enemy dot and last-seen ring are not used.</summary>
+        public static readonly string[] WaypointSprites = { "wp_flag", "wp_flag_mini", "wp_arrow_edge" };
+
+        [MenuItem("Jungle Maze/UI Kit/Import Waypoint Icons (T-029)")]
+        public static int ImportWaypoint()
+        {
+            var dir = Path.Combine(ArtInbox, "T-029", "files");
+            foreach (var n in WaypointSprites) // check first, as ImportKit
+                if (!File.Exists(Path.Combine(dir, n + "@2x.png"))) throw new FileNotFoundException("waypoint icon missing, nothing imported", n);
+            foreach (var n in WaypointSprites) Copy(Path.Combine(dir, n + "@2x.png"), KitFolder + "/" + n + ".png", 300f, Vector4.zero);
+            return WaypointSprites.Length;
         }
 
         /// <summary>@2x border [L, R, T, B] from T-020 meta.json ("border_LRTB" is @1x).</summary>
@@ -233,6 +246,15 @@ namespace JungleMaze.EditorTools
             t.anchorMin = t.anchorMax = t.pivot = new Vector2(0f, 1f);
             t.anchoredPosition = new Vector2(Px(x), -Px(y));
             t.sizeDelta = new Vector2(Px(w), Px(h));
+            return t;
+        }
+
+        /// <summary>Same rect, pivot moved to its centre (Quang Huy, main 809a59b7: item icons scale and fit around their centre).</summary>
+        public static RectTransform CentrePivot(RectTransform t)
+        {
+            var centre = new Vector2(0.5f, 0.5f);
+            t.anchoredPosition += Vector2.Scale(centre - t.pivot, t.sizeDelta);
+            t.pivot = centre;
             return t;
         }
 
@@ -307,6 +329,36 @@ namespace JungleMaze.EditorTools
             wash.preserveAspect = false;
             img.raycastTarget = true; // a full-screen backdrop also stops clicks reaching the world
             return t;
+        }
+
+        /// <summary>
+        /// Gives every kit button under <paramref name="root"/> (target sprite kit_btn_*, kit_close_*, kit_iconbtn_*) the
+        /// pressed-face behaviour of <see cref="KitButtonFace"/>: its children are moved into a stretched "Face" node that
+        /// sinks by the base while pressed. Buttons from <see cref="Button"/> already have one. Builders call this last,
+        /// before saving the prefab. Icon-only buttons keep their hand-placed rest position (no extra padding).
+        /// </summary>
+        public static int FaceAll(GameObject root)
+        {
+            var added = 0;
+            foreach (var b in root.GetComponentsInChildren<UnityEngine.UI.Button>(true))
+            {
+                if (b.GetComponent<KitButtonFace>() != null) continue;
+                var img = b.targetGraphic as UnityEngine.UI.Image;
+                var sprite = img != null && img.sprite != null ? img.sprite.name : "";
+                if (!(sprite.StartsWith("kit_btn_") || sprite.StartsWith("kit_close_") || sprite.StartsWith("kit_iconbtn_"))) continue;
+                var t = (RectTransform)b.transform;
+                var face = Stretch(Node(t, "Face"));
+                for (var i = t.childCount - 1; i >= 0; i--)
+                {
+                    var child = t.GetChild(i);
+                    if (child == face) continue;
+                    child.SetParent(face, false); // Face has the button's rect, so local layout is unchanged
+                    child.SetSiblingIndex(0);
+                }
+                b.gameObject.AddComponent<KitButtonFace>().Bind(b, face, centreOnFace: false);
+                added++;
+            }
+            return added;
         }
 
         // ---------- K2 buttons (T-026; ui-kit.md mục 9, 11) ----------

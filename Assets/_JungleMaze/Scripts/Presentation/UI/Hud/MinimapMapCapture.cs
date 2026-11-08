@@ -10,15 +10,16 @@ namespace JungleMaze.Presentation.UI.Hud
     /// HUD B (T-013): draws the real map under the minimap. A disabled orthographic camera renders the whole map
     /// (level art, walls, objects, zone rings) into a small RenderTexture about once a second. Players are hidden for
     /// that render so the minimap never shows anyone, and zone lines are widened so they survive the downscale.
-    /// Display only; no zoom, ping or other minimap features.
+    /// Display only; zoom is a crop of this texture (<see cref="MinimapView"/>, T-018).
     /// Skin A (T-016): with <see cref="ringImage"/> set, zone rings render into a second, transparent texture so the
     /// HUD can put a dark overlay between terrain and rings.
     /// </summary>
     public sealed class MinimapMapCapture : MonoBehaviour
     {
+        public int Resolution => resolution;
         [SerializeField] private RawImage mapImage;
         [SerializeField] private RawImage ringImage;
-        [SerializeField] private int resolution = 256;
+        [SerializeField] private int resolution = 1024; // T-018: big map 840 px / 50 cells needs >= 17 texels a cell
         [SerializeField] private float refreshSeconds = 1f;
         [SerializeField] private float lineWidthTexels = 2.5f;
         [SerializeField] private Color emptyColor = new Color(0.05f, 0.08f, 0.09f, 1f);
@@ -68,7 +69,8 @@ namespace JungleMaze.Presentation.UI.Hud
                 _camera.backgroundColor = emptyColor;
                 var ui = LayerMask.NameToLayer("UI");
                 _worldMask = (ui >= 0 ? ~(1 << ui) : ~0) & ~(1 << RingLayer);
-                _texture = new RenderTexture(resolution, resolution, 16) { name = "Minimap map", filterMode = FilterMode.Bilinear };
+                // Mips: the whole-map minimap shows 1024 texels in about 270 px; without them the downscale shimmers.
+                _texture = new RenderTexture(resolution, resolution, 16) { name = "Minimap map", filterMode = FilterMode.Trilinear, useMipMap = true, autoGenerateMips = true };
                 _camera.targetTexture = _texture;
                 mapImage.texture = _texture;
                 if (ringImage != null)
@@ -108,7 +110,7 @@ namespace JungleMaze.Presentation.UI.Hud
             var split = _ringTexture != null;
             try
             {
-                if (split) foreach (var line in lines) line.forceRenderingOff = true;
+                foreach (var line in lines) line.forceRenderingOff = true; // world zone lines never go into the terrain
                 _camera.targetTexture = _texture;
                 _camera.cullingMask = _worldMask;
                 _camera.backgroundColor = emptyColor;

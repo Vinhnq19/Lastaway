@@ -75,8 +75,9 @@ namespace JungleMaze.Tests.Hud.Feedback
                 Assert.False(v.StripVisible,"weapon strip and its R Nạp hint hide while reloading");
                 Assert.True(ring.Visible);Assert.AreEqual(.25f,ring.Fill,1e-5f);Assert.AreEqual(10,ring.X);Assert.AreEqual(20,ring.Y);
                 i.RaiseUse(new ItemUseStatus(ItemUsePhase.Using,"GOD_LEAF","God Leaf",4,1f,1f,true));p.Tick(.016f,0,0);
-                Assert.AreEqual("Đang dùng God Leaf",Label(v),"item use is shown first");Assert.True(ring.Visible);
-                i.RaiseUse(default);p.Tick(.016f,0,0);Assert.AreEqual("Đang nạp đạn",Label(v));
+                Assert.AreEqual("Đang dùng Lá thần mộc",Label(v),"item use is shown first");Assert.True(ring.Visible); // T-022 R3: Vietnamese name from HudItemNames (GDD ITEM LIST)
+                Assert.AreEqual("GOD_LEAF",v.IconItem,"item icon while using");
+                i.RaiseUse(default);p.Tick(.016f,0,0);Assert.AreEqual("Đang nạp đạn",Label(v));Assert.IsNull(v.IconItem,"no item icon while reloading");
                 src.End(true);p.Tick(0,0,0);Assert.AreEqual("Xong",Label(v));Assert.AreEqual(1f,v.Fill);
                 p.Tick(HudFeedbackTuning.Default.UseCompletedLinger+.01f,0,0);Assert.False(v.UseVisible);Assert.True(v.StripVisible);Assert.False(ring.Visible);
             }

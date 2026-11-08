@@ -10,10 +10,12 @@ namespace JungleMaze.Presentation.UI.Hud
 {
     /// <summary>
     /// B5 big map (T-022, mock T-021/b/b5-ban-do-lon.png): the minimap's own map texture (<see cref="MinimapMapCapture"/>)
-    /// drawn large under map_grid, the zone rings (<see cref="HudZoneRings"/>, same look as the minimap), the hero pin at
+    /// drawn large under map_grid, the main ZoneOverlay layer (<see cref="HudZoneOverlay"/>, same look as the minimap; zone
+    /// data from <see cref="HudZoneRings"/>, whose sprite rings are off in the main style), the hero pin at
     /// its pose and heading, and the header: zone phase, zone countdown, distance to the next safe zone (world cells,
     /// 0 inside it). Mock source of the header: "Pha 3 · Bo thu sau 01:24", "cách bo tiếp theo 420". Display only
     /// (no mark, zoom or pan yet). M toggles; ESC closes it first through <see cref="UiLayerStack"/>.
+    /// T-018 M1: while open it blocks attack, reload and item use (movement stays); it does not open over the ESC menu.
     /// </summary>
     public sealed class HudBigMapView : MonoBehaviour
     {
@@ -22,6 +24,7 @@ namespace JungleMaze.Presentation.UI.Hud
         [SerializeField] private RawImage map;
         [SerializeField] private MinimapMapCapture capture;
         [SerializeField] private HudZoneRings zoneRings;
+        [SerializeField] private HudZoneOverlay zoneOverlay;
         [SerializeField] private RectTransform player;
         [SerializeField] private TMP_Text zoneValue, phaseValue, distanceValue;
         [SerializeField] private KeyCode toggleKey = KeyCode.M;
@@ -36,6 +39,7 @@ namespace JungleMaze.Presentation.UI.Hud
         public TMP_Text PhaseValue => phaseValue;
         public TMP_Text DistanceValue => distanceValue;
         public HudZoneRings ZoneRings => zoneRings;
+        public HudZoneOverlay ZoneOverlay => zoneOverlay;
         public RectTransform ZoneRing => zoneRings != null && zoneRings.ZoneRing != null ? zoneRings.ZoneRing.rectTransform : null;
         public RectTransform SafeRing => zoneRings != null && zoneRings.SafeRing != null ? zoneRings.SafeRing.rectTransform : null;
 
@@ -50,9 +54,9 @@ namespace JungleMaze.Presentation.UI.Hud
 
         public void Open()
         {
-            if (content == null) return;
+            if (content == null || JungleMaze.Presentation.UI.MatchOverlay.MatchInputGate.MenuOpen) return;
             content.SetActive(true);
-            UiLayerStack.Push(this, Close); // ESC closes the top panel before the match menu (CPO 07/11)
+            UiLayerStack.Push(this, Close, blocksActions: true); // ESC closes the top panel before the match menu (CPO 07/11)
             Refresh();
         }
 
@@ -86,6 +90,7 @@ namespace JungleMaze.Presentation.UI.Hud
                 map.enabled = map.texture != null;
             }
             if (zoneRings != null) zoneRings.Apply(cells);
+            if (zoneOverlay != null) zoneOverlay.Apply(zoneRings); // main-style zone layer, as on the minimap
             var projection = new MinimapProjection(cells, mapArea.rect.width);
             var known = _hud != null && _hud.HasPose;
             if (player != null)

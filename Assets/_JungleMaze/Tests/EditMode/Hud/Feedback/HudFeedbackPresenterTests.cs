@@ -10,10 +10,11 @@ using Is=UnityEngine.TestTools.Constraints.Is;
 namespace JungleMaze.Tests.Hud.Feedback
 {
     /// <summary>Non-allocating fake view shared by presenter tests.</summary>
-    public sealed class FeedbackViewRecorder:IQuickbarFeedbackHooks,IUseActionView,IEffectRowView,IPickupFeedView,IHitMarkerView,IDamageArcView,IDangerBannerView,IDangerArrowView,IWorldViewport
+    public sealed class FeedbackViewRecorder:IQuickbarFeedbackHooks,IUseActionView,IUseActionIconView,IEffectRowView,IPickupFeedView,IHitMarkerView,IDamageArcView,IDangerBannerView,IDangerArrowView,IWorldViewport
     {
         public int Writes,LastSlot=-1,PickupCount,ArcCount,ArrowCount;public bool StripVisible,UseVisible,Hint,InUse;public float Fill,HitAlpha,AimX,AimY;public string PickupId;
         public readonly char[] Text=new char[128];public int TextLength;
+        public string IconItem;public void SetItem(string itemId)=>IconItem=itemId;
         public bool Contains(float x,float y)=>false;
         public void SetWeaponStripVisible(bool visible){Writes++;StripVisible=visible;}
         public void SetSlotInUse(int index,bool value){Writes++;LastSlot=index;InUse=value;}

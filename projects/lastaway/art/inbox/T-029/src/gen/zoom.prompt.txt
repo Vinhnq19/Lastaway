@@ -1,0 +1,6 @@
+Use your image generation tool to create ONE image as described below, and copy the generated file AS-IS (no cropping, no resizing, no padding) to:
+D:\Lastaway\projects\lastaway\art\inbox\T-029\src\gen\zoom.png
+Do not write any other files and do not post-process the image. Use only the built-in image tool, never the OpenAI API, curl or python.
+
+Draw ONE small UI icon: a magnifying glass (round lens up-left, short handle down-right) with a small plus sign inside the lens. All strokes dark ink (#1F1A10) with the lens interior a light cream (#F1E7C8) and a tiny light highlight; no other colours. It must read well at 24 pixels.
+Style: chunky pixel art on a 48x48 grid like the attached kit icon sprites (ref-ico.png), hard pixel edges, no anti-aliasing. Draw it large and centered, filling about 85 percent of a square canvas. Background: perfectly flat solid magenta #FF00FF, nothing else.

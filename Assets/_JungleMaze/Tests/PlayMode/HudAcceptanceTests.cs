@@ -413,6 +413,10 @@ namespace JungleMaze.Tests.PlayMode
             Assert.IsFalse(capture.RingImage.gameObject.activeSelf, "captured red/yellow lines hidden");
             Assert.AreEqual("map_ring_zone", area.Find("ZoneRing").GetComponent<RingGraphic>().Sprite.name);
             Assert.AreEqual("map_ring_safe", area.Find("SafeRing").GetComponent<RingGraphic>().Sprite.name);
+            // Huy 07/11 main style: the zone shows through the map team's ZoneOverlay layer; the sprite rings stay off.
+            Assert.IsFalse(area.GetComponent<HudZoneRings>().Draw, "sprite rings not drawn (HudSkinABuild.RingStyle = Main)");
+            Assert.IsFalse(area.Find("ZoneRing").gameObject.activeSelf);
+            Assert.IsFalse(area.Find("SafeRing").gameObject.activeSelf);
             Assert.AreSame(capture.RingTexture, capture.RingImage.texture);
             Assert.AreEqual(ringLayer, ring.gameObject.layer, "ring layer restored after the capture");
             Assert.IsFalse(ring.forceRenderingOff, "ring visible again after the capture");

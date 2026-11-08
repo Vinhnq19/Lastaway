@@ -119,7 +119,7 @@ namespace JungleMaze.Tests.Config
             Assert.IsTrue(BalanceConfigJson.TryParseMatch(File.ReadAllText(Path.Combine(directory, "match.json")), "match.json", out _, out var matchError), matchError);
             Assert.IsTrue(BalanceConfigJson.TryParseWeapons(File.ReadAllText(Path.Combine(directory, "weapons.json")), "weapons.json", out var weapons, out var weaponsError), weaponsError);
             Assert.IsTrue(BalanceConfigJson.TryParseEquipments(File.ReadAllText(Path.Combine(directory, "equipments.json")), "equipments.json", out var equipments, out var equipmentsError), equipmentsError);
-            Assert.AreEqual(18, weapons.Count);
+            Assert.AreEqual(21, weapons.Count); // main 809a59b7 adds PISTOL, ASSAULT_RIFLE, SNIPER_RIFLE
             Assert.AreEqual(16, equipments.Count);
         }
     }

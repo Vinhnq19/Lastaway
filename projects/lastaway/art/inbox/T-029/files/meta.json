@@ -1,0 +1,65 @@
+{
+ "wp_flag": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false,
+  "nguon": "gen GPT qua codex-img.sh, prompt `src/gen/flag.prompt.src.txt`; cờ waypoint (xanh trời #5BB8E8): bản đồ lớn vẽ 24 px, trên world vẽ 40 px"
+ },
+ "wp_flag_mini": {
+  "size": [
+   16,
+   16
+  ],
+  "border_LRTB": null,
+  "slice": false,
+  "nguon": "gen GPT qua codex-img.sh, prompt `src/gen/flagmini.prompt.src.txt`; cờ waypoint đơn giản hóa cho minimap, vẽ 14 px"
+ },
+ "wp_arrow_edge": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false,
+  "nguon": "gen GPT qua codex-img.sh, prompt `src/gen/arrow.prompt.src.txt`; mũi tên mép màn hướng lên, xoay theo hướng tới cờ, vẽ 40 px; số khoảng cách đặt trên `kit_badge_key` kéo giãn"
+ },
+ "map_enemy_dot": {
+  "size": [
+   16,
+   16
+  ],
+  "border_LRTB": null,
+  "slice": false,
+  "nguon": "gen GPT qua codex-img.sh, prompt `src/gen/enemydot.prompt.src.txt`; chấm địch đỏ #E5484D viền tối: vẽ 12 px (minimap) và 16 px (bản đồ lớn)"
+ },
+ "map_lastseen_ring": {
+  "size": [
+   16,
+   16
+  ],
+  "border_LRTB": null,
+  "slice": false,
+  "nguon": "gen GPT qua codex-img.sh, prompt `src/gen/lastseen.prompt.src.txt`; dấu thấy lần cuối (vòng rỗng đỏ), cỡ như chấm địch; alpha 0,6 giảm về 0 trong 2,0 s do code"
+ },
+ "kit_ico_zoom": {
+  "size": [
+   48,
+   48
+  ],
+  "border_LRTB": null,
+  "slice": false,
+  "nguon": "gen GPT qua codex-img.sh, prompt `src/gen/zoom.prompt.src.txt`; kính lúp có dấu cộng, icon mục tối: chỉ báo mức zoom minimap, vẽ 24 px"
+ },
+ "map_self_marker": {
+  "size": [
+   32,
+   32
+  ],
+  "border_LRTB": null,
+  "slice": false,
+  "nguon": "gen GPT qua codex-img.sh, prompt `src/gen/self.prompt.src.txt`; marker bản thân Amber #C6AE78 (thay marker đỏ cũ), mũi nhọn trên chỉ hướng Hero, vẽ 26 px"
+ }
+}

@@ -226,7 +226,8 @@ namespace JungleMaze.Composition
             Attach<HudFeedbackDebugPanel>();
 #endif
             var demoView = Attach<MatchDemoView>();
-            _registry.TryResolve<IMatchMenuState>(out var menuState);
+            // The menu itself, not MatchInputGate: the demo disables the offline hero (movement) only for the ESC menu.
+            _registry.TryResolve<JungleMaze.App.MatchUi.MatchMenuController>(out var menuState);
             _registry.TryResolve<MatchOverlayFlow>(out var overlayFlow);
             if (menuState != null || overlayFlow != null) demoView.BindOverlay(menuState, overlayFlow);
 

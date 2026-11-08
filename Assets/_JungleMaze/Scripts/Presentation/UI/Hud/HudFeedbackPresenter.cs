@@ -70,8 +70,8 @@ namespace JungleMaze.Presentation.UI.Hud
                     _useView?.Show(Use.Visible,_text,HudFeedbackFormat.UseLabel(_text,named),_seconds,HudFeedbackFormat.Tenths(_seconds,s.RemainingSeconds),Use.Fill,Use.Hint,s.Phase==ItemUsePhase.Cancelled);
                 }
                 if(_first||visible!=_lastUseVisible)_quickbar?.SetWeaponStripVisible(!visible);
-                // T-022: image assignment only; the reload bar clears the item icon, the next use sets it again.
-                var iconItem=reload?"":s.ItemId;if(_useView is IUseActionIconView icon&&(_first||iconItem!=_lastIconItem)){icon.SetItem(iconItem);_lastIconItem=iconItem;}
+                // T-022: image assignment only; the reload bar clears the item icon (null, as ReloadProgressFeedbackTests asserts), the next use sets it again.
+                var iconItem=reload?null:s.ItemId;if(_useView is IUseActionIconView icon&&(_first||iconItem!=_lastIconItem)){icon.SetItem(iconItem);_lastIconItem=iconItem;}
                 _lastUse=s;_lastUseVisible=visible;_lastUseFill=fill;_lastTenths=tenths;_lastBarReload=reload;_lastReloadPhase=reload?Reload.Phase:ItemUsePhase.Idle;
             }
             var slot=Use.SlotInUse;if(_first||slot!=_lastSlot){if(_lastSlot>=0)_quickbar?.SetSlotInUse(_lastSlot,false);if(slot>=0)_quickbar?.SetSlotInUse(slot,true);_lastSlot=slot;}

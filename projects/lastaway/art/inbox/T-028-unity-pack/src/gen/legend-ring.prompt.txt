@@ -1,0 +1,6 @@
+Use your image generation tool to create ONE image as described below, and copy the generated file AS-IS (no cropping, no resizing, no padding) to:
+D:\Lastaway\projects\lastaway\art\inbox\T-028-unity-pack\src\gen\legend-ring.png
+Do not write any other files and do not post-process the image. Use only the built-in image tool, never the OpenAI API, curl or python.
+
+Draw ONE simple map legend symbol: a perfect circle outline made of 12 evenly spaced short dashes (dash length about equal to the gap), pure white (#FFFFFF), flat, no glow, no shadow, no gradient. The ring is drawn with a thick stroke: the stroke width is about 10 percent of the ring diameter, dashes have square ends (pixel-art style, hard edges, no anti-aliased soft blur). Nothing inside the ring, no fill, no other symbol, no text. Centered, the ring fills about 94 percent of a square canvas.
+Background: perfectly flat solid magenta #FF00FF, nothing else.

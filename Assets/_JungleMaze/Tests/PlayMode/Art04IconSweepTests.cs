@@ -22,7 +22,7 @@ namespace JungleMaze.Tests.PlayMode
     /// <summary>
     /// ART-04 R2-b: every roster ID through the real HUD prefab with the real item icon catalog. Covers what
     /// UiArtIntegrationTests (ADHOC) leaves out: the default HAND slot, the full 28-ID slot sweep, visible icon/label overlap at
-    /// two resolutions, all 34 IDs through the pickup toast, a second writer, and a 34-ID rotation for GC.
+    /// two resolutions, all 37 IDs through the pickup toast, a second writer, and a 37-ID rotation for GC.
     /// </summary>
     public sealed class Art04IconSweepTests
     {
@@ -86,10 +86,10 @@ namespace JungleMaze.Tests.PlayMode
         // ---------- AC7 ----------
 
         [UnityTest]
-        public IEnumerator Sweep_18WeaponsThroughSlots1To4_10ConsumablesThroughSlots5To8()
+        public IEnumerator Sweep_21WeaponsThroughSlots1To4_10ConsumablesThroughSlots5To8()
         {
             yield return Spawn();
-            Assert.AreEqual(18, _mock.WeaponIds.Count);
+            Assert.AreEqual(21, _mock.WeaponIds.Count); // main 809a59b7 adds 3 guns
             Assert.AreEqual(10, _mock.ConsumableIds.Count);
             for (var slot = 0; slot < 8; slot++)
             {
@@ -196,11 +196,11 @@ namespace JungleMaze.Tests.PlayMode
         // ---------- AC13 ----------
 
         [UnityTest]
-        public IEnumerator PickupToast_ShowsTheRightIconForAll34Ids()
+        public IEnumerator PickupToast_ShowsTheRightIconForAll37Ids()
         {
             yield return Spawn();
             var ids = RosterIds();
-            Assert.AreEqual(34, ids.Count);
+            Assert.AreEqual(37, ids.Count);
             foreach (var id in ids)
             {
                 Tick(10f); // expire every row so only this pickup is on screen
@@ -256,7 +256,7 @@ namespace JungleMaze.Tests.PlayMode
             var before = GC.GetAllocatedBytesForCurrentThread();
             for (var i = 0; i < 600; i++) Rotate(i, ids, names, count, quickbar, row);
             var allocated = GC.GetAllocatedBytesForCurrentThread() - before;
-            Assert.AreEqual(0, allocated, "34 IDs rotated through 8 slots and a toast row allocate nothing once warm");
+            Assert.AreEqual(0, allocated, "37 IDs rotated through 8 slots and a toast row allocate nothing once warm");
         }
 
         private void Rotate(int step, string[] ids, string[] names, char[] count, QuickbarView quickbar, PickupToastView row)

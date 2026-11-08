@@ -2,6 +2,7 @@ using JungleBackend.Protocol.Gameplay;
 using JungleMaze.App.Hud;
 using JungleMaze.App.Hud.State;
 using JungleMaze.App.Match;
+using JungleMaze.App.Ports;
 using JungleMaze.Core.DI;
 using UnityEngine;
 
@@ -17,12 +18,15 @@ namespace JungleMaze.Presentation.UI.Hud
     {
         [SerializeField] private RectTransform area;
         [SerializeField] private RingGraphic zoneRing, safeRing;
+        [Tooltip("Draw the sprite rings. Off = main style (Huy 07/11): the map shows Quang Huy's ZoneOverlay layer; data still computed.")]
+        [SerializeField] private bool draw = true;
 
         private IHudState _hud;
         private MatchSession _online;
         private OfflineMatchSession _offline;
         private UnityEngine.UI.RawImage _danger;
         private Material _dangerMaterial;
+        private MinimapView _minimap;
 
         public bool HasZone { get; private set; }
         public int Phase { get; private set; }
@@ -32,6 +36,10 @@ namespace JungleMaze.Presentation.UI.Hud
         public float SafeRadius { get; private set; }
         public RingGraphic ZoneRing => zoneRing;
         public RingGraphic SafeRing => safeRing;
+        public bool Draw => draw;
+        /// <summary>Map rect in world cells (runtime map data), for the big map's ZoneOverlay layer (_MapBounds).</summary>
+        public bool HasBounds { get; private set; }
+        public RuntimeMapBounds Bounds { get; private set; }
 
         [Inject]
         public void Construct(IHudState hud, MatchSession online, OfflineMatchSession offline)
@@ -39,6 +47,19 @@ namespace JungleMaze.Presentation.UI.Hud
             _hud = hud;
             _online = online;
             _offline = offline;
+        }
+
+        /// <summary>Same source as the main ZoneOverlay (<c>MatchDemoView</c> passes <c>IClientRuntimeData.Bounds</c>).</summary>
+        [Inject]
+        public void BindMapData(IClientRuntimeData data)
+        {
+            if (data != null) SetBounds(data.Bounds);
+        }
+
+        public void SetBounds(RuntimeMapBounds bounds)
+        {
+            Bounds = bounds;
+            HasBounds = bounds.MaxX > bounds.MinX && bounds.MaxY > bounds.MinY;
         }
 
         /// <summary>World cells (same space as the hero pose). Radius 0 hides that ring.</summary>
@@ -96,8 +117,13 @@ namespace JungleMaze.Presentation.UI.Hud
             rect.anchorMax = Vector2.one;
             rect.offsetMin = Vector2.one * inset;
             rect.offsetMax = -Vector2.one * inset;
-            _danger.uvRect = new Rect(inset / Mathf.Max(size.x, 1f), inset / Mathf.Max(size.y, 1f),
-                1f - 2f * inset / Mathf.Max(size.x, 1f), 1f - 2f * inset / Mathf.Max(size.y, 1f));
+            // T-018: on the minimap the crop sits inside the zoom window (whole map at level 1, identical to before).
+            if (_minimap == null) _minimap = area.GetComponentInParent<MinimapView>();
+            var zoom = _minimap != null ? _minimap.Zoom : null;
+            float u = 0f, v = 0f, w = 1f;
+            if (zoom != null && zoom.Cells > 0f) { u = zoom.MinX / mapSizeCells; v = zoom.MinY / mapSizeCells; w = zoom.Cells / mapSizeCells; }
+            _danger.uvRect = new Rect(u + w * inset / Mathf.Max(size.x, 1f), v + w * inset / Mathf.Max(size.y, 1f),
+                w * (1f - 2f * inset / Mathf.Max(size.x, 1f)), w * (1f - 2f * inset / Mathf.Max(size.y, 1f)));
             _dangerMaterial.SetVector("_Current", new Vector4(ZoneCentre.x, ZoneCentre.y, ZoneRadius, 0f));
             _dangerMaterial.SetVector("_MapBounds", new Vector4(0f, 0f, mapSizeCells, mapSizeCells));
         }
@@ -126,7 +152,7 @@ namespace JungleMaze.Presentation.UI.Hud
         private void Place(RingGraphic ring, MinimapProjection projection, Vector2 centre, float radius)
         {
             if (ring == null) return;
-            var visible = HasZone && radius > 0f;
+            var visible = draw && HasZone && radius > 0f;
             if (ring.gameObject.activeSelf != visible) ring.gameObject.SetActive(visible);
             if (!visible) return;
             projection.Project(centre.x, centre.y, out var px, out var py);

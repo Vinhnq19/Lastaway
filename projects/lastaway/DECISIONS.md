@@ -225,3 +225,26 @@ Khoảng trống chặn QA-01 theo PIC người (MAP-02, Game-10, DRG-01, ZON-01
 - **Vignette máu thấp 07/11 (CPO):** dùng 2 lớp. Ảnh so sánh ở `qa/T-022/so-sanh-vignette.png`; ở 22% máu trên nền cỏ thấy rõ mà không che nhân vật.
 - **Màu vòng bo 07/11 (CPO):** vòng bo hiện tại màu cam, vòng an toàn kế tiếp màu trắng, giống nhau ở minimap và bản đồ lớn, dùng sprite `map_ring_zone` và `map_ring_safe` của T-028. Đường bo vẽ trên world giữ nguyên quy ước cũ: vàng khi ở trong bo, đỏ khi ở ngoài.
 - **R3 đợt UI Unity 07/11 (CPO):** tiêu đề màn bị loại là "BỊ LOẠI", theo mock. `Application.version` giữ 1.0; "v0.2" trong mock chỉ là chỗ giữ chỗ, không sửa ProjectSettings. Tên vật phẩm lấy theo GDD ITEM LIST ("Lá thần mộc", "Nước tăng lực"), thay chữ mock.
+- **Vòng bo minimap và bản đồ lớn 07/11 (Huy, bằng lời "Kiểu main"):** dùng kiểu của main (vùng Quang Huy): tô vùng ngoài bo, vòng kế tiếp trắng nét đứt. Bỏ vòng sprite `map_ring_zone`/`map_ring_safe` của T-022 trên minimap và bản đồ lớn để không chồng hai lớp. Thay quyết định "cam + trắng" ở trên. Chú giải bản đồ lớn đổi theo kiểu mới.
+- **Bản đồ lớn theo kiểu main 07/11 (CPO):** `ZoneOverlayView` của Quang Huy chỉ gắn được vào minimap, nên phía UI vẽ lớp vòng bo của bản đồ lớn bằng chính shader `Resources/ZoneOverlay`, cấu hình giống lớp minimap. Không sửa file của Quang Huy. Rủi ro: Quang Huy đổi tham số minimap thì bản đồ lớn lệch; đã có test so màu giữa hai bên. Nên báo Quang Huy: nếu có API gắn `ZoneOverlayView` vào một RectTransform bất kỳ thì UI chuyển sang dùng API đó.
+
+## 2026-11-07 - Mở lại nghiên cứu minimap
+- **Quyết định:** Mở lại T-017 (thay "chưa làm vội" cùng ngày). Phạm vi thêm: phóng to thu nhỏ bằng phím M, đánh dấu các thứ trên bản đồ như PUBG. Nghiên cứu kỹ trước, chỉ ra đề xuất; T-018 (dựng) vẫn chờ Huy chốt.
+- **Người quyết:** Huy (07/11, "Nghiên cứu thêm tính năng cho Minimap như phóng to thu nhỏ bằng phím M, thêm các tính năng đánh dấu các thứ như trong PUBG, cái này cần nghiên cứu kĩ").
+- **Ghi chú CPO:** phím M hiện đang mở bản đồ lớn (`HudBigMapView.cs:29`); đề xuất phải xử lý chỗ trùng này. Game đấu đơn 10 người, phần đánh dấu kiểu PUBG (vốn cho đội) cần lọc lại cho đấu đơn.
+
+## 2026-11-08 - Chốt minimap phương án M
+- **Quyết định:** Làm phương án M của `de-xuat/minimap-chuc-nang.md`: phím K1 (M mở bản đồ lớn như cũ, N và cuộn chuột trên minimap đổi mức), 1 waypoint cá nhân, dấu địch thấy lần cuối tự động, bỏ ping kiểu PUBG, bỏ "hiện đồng đội" khỏi đợt này (mục 8 giữ làm hồ sơ chế độ đội). Số trong `so-hien-hanh.md`.
+- **Người quyết:** Huy (08/11, "Chốt gói M"), chốt cả 3 câu hỏi theo phương án nghiêng về của designer.
+- **Hệ quả:** T-017 done. T-018 dựng theo 2 chặng có cổng Huy chơi giữa. T-029 (art-ux) làm icon và mock song song chặng 1. Chặn tấn công khi mở bản đồ lớn không được sửa file input của Hào; không làm được từ phía UI thì báo CPO để hỏi Hào. Lớp địch dùng adapter tạm có công tắc tới khi FOW-01 (Quang Huy) có interface; CPO soạn tin cho Quang Huy.
+
+## 2026-11-08 - Minimap giữ 2 mức zoom
+- **Quyết định:** Giữ 2 mức zoom minimap (Toàn map, Gần 30 cell), không thêm mức giữa.
+- **Người quyết:** Huy (08/11, "Giữ 2 mức"), sau báo cáo T-018 chặng 1.
+- **Bối cảnh:** map thật 150 cell (đề xuất giả định 50). Ở 1080p: mức Toàn 1,8 px/cell, mức Gần 8,97 px/cell, bản đồ lớn 5,8 px/cell (đề xuất >= 17, không đạt nếu không zoom bản đồ lớn; chấp nhận, texture 1024 không bị phóng nên vẫn nét).
+
+## 2026-11-08 - CPO tự duyệt, thu gọn minimap
+- **Quyết định của Huy:** "Bạn tự duyệt hết đi đừng vẽ ra quá nhiều tính năng và cx ko động tới tính năng của người khác." CPO duyệt asset và mock T-029 thay Huy.
+- **CPO áp dụng cho T-018:** (1) Chặng 2 chỉ còn waypoint cá nhân. (2) Lớp địch và dấu thấy lần cuối hoãn: luật tầm nhìn là FOW-01 của Quang Huy, không dựng adapter tạm. (3) Bỏ cuộn chuột đổi mức trên minimap, chỉ dùng phím N: cuộn đang là của danh sách nhặt (Vũ), không xin sửa file của Vũ. (4) Không chặn Dash khi mở bản đồ lớn, không thêm tính năng ngoài đề xuất.
+- **Hệ quả:** icon `map_enemy_dot`, `map_lastseen_ring` của T-029 nằm chờ, chưa nhập Unity. Không cần tin cho Vũ về WorldSceneView.
+- **Sửa cùng ngày:** Huy 08/11 "Zoom trên mini map dùng cuộn chuột." Thay mục (3): giữ cuộn chuột trên minimap để đổi mức (giữ cả phím N). Không sửa file của Vũ, nên khi danh sách nhặt đang hiện, cuộn trên minimap cũng đổi dòng nhặt; muốn tách phải có Vũ sửa 1 dòng `WorldSceneView.cs:248`.

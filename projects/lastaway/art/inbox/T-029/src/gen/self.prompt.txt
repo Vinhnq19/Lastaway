@@ -1,0 +1,6 @@
+Use your image generation tool to create ONE image as described below, and copy the generated file AS-IS (no cropping, no resizing, no padding) to:
+D:\Lastaway\projects\lastaway\art\inbox\T-029\src\gen\self.png
+Do not write any other files and do not post-process the image. Use only the built-in image tool, never the OpenAI API, curl or python.
+
+Draw ONE minimap marker for the local player (the attached ref-self.png shows the OLD red version: round body with a small triangular pointer on top showing facing direction). Make the new version in AMBER colour: body amber (#C6AE78) with a darker amber shade on the lower-right (#8F7C4F) and a light highlight (#E8D9A8) top-left, the small triangular pointer on top in the same amber, thick light-cream outline (#F1E7C8) 1 pixel on the outside plus a thin dark outline (#0A0C0C) outside that. Same overall silhouette and proportions as the reference (round body, pointer on top), perfectly symmetric about the vertical axis. No inner dot, no text.
+Style: chunky pixel art on a 64x64 grid, hard pixel edges, no anti-aliasing. Draw it large and centered, filling about 85 percent of a square canvas. Background: perfectly flat solid magenta #FF00FF, nothing else.
