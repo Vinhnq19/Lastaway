@@ -125,7 +125,7 @@ namespace JungleMaze.EditorTools
         {
             var v = Screen<MainMenuView>(rt, "MainMenu");
             var r = Rt(v);
-            Logo(r, 960, 80, 760);
+            Logo(r, 960, 60, 760);
             Set(v, "join", Btn(r, "Join", Kind.Primary, Size.L, 750, 340, 420, "kit_ico_play", "Vào phòng", true));
             Set(v, "rooms", Btn(r, "Rooms", Kind.Secondary, Size.L, 750, 440, 420, "kit_ico_plus", "Tạo phòng", true));
             Set(v, "history", Btn(r, "History", Kind.Secondary, Size.L, 750, 540, 420, "kit_ico_clock", "Lịch sử", true));
@@ -283,7 +283,7 @@ namespace JungleMaze.EditorTools
         {
             var v = Screen<LoginView>(rt, "Login");
             var r = Rt(v);
-            Logo(r, 960, 70, 700);
+            Logo(r, 960, 55, 700);
             var p = Box(r, "Panel", "kit_panel_m", 610, 220, 700, 650, true);
             Set(v, "title", Txt(p, "Title", Tier.H2, "Đăng nhập", C.Gold, 60, 74, 580));
             Set(v, "loginTab", Tab(p, "LoginTab", "Đăng nhập", 60, 100, out var loginOn));
@@ -834,11 +834,11 @@ namespace JungleMaze.EditorTools
             return b;
         }
 
-        /// <summary>Logo.png placed so its letters (crop 76,68 to 952,184, as the mocks) are <paramref name="w"/> wide from y.</summary>
+        /// <summary>Place the visible title at (cx, y); account for the generated PNG's transparent padding.</summary>
         private static void Logo(RectTransform parent, float cx, float y, float w)
         {
-            var k = w / 876f;
-            var img = Abs(parent, "Logo", cx - w / 2f - 76f * k, y - 68f * k, 1024f * k, 256f * k).gameObject.AddComponent<Image>();
+            var k = w / 2124f;
+            var img = Abs(parent, "Logo", cx - w / 2f - 31f * k, y - 148f * k, 2172f * k, 724f * k).gameObject.AddComponent<Image>();
             img.sprite = Menu("Logo");
             img.preserveAspect = true;
             img.raycastTarget = false;

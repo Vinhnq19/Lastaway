@@ -261,8 +261,8 @@ def run(args):
     from normalize_item_icons import ROSTER, sprite_rect, contact_sheet
     data, rgb = palette()
     rows = list(csv.DictReader(ROSTER.open(encoding='utf-8-sig')))
-    if len(rows)!=34 or len({r['id'] for r in rows})!=34:
-        raise ValueError('Expected exactly 34 distinct item IDs')
+    if len(rows)!=37 or len({r['id'] for r in rows})!=37:
+        raise ValueError('Expected exactly 37 distinct item IDs')
     for kind,file in [('Weapon','weapons'),('Equipment','equipments')]:
         roster = json.loads((ROOT/f'Assets/StreamingAssets/JungleMaze/balance/{file}.json').read_text(encoding='utf-8'))
         if {r['id'] for r in rows if r['loai']==kind} != {r['id'] for r in roster}:
@@ -305,6 +305,12 @@ def run(args):
             provenance = {'source':relative(source_path),'source_kind':'JSurviv nearest + shared palette',
                           'slice':frame,'slice_rect_png':list(rect),'source_sha256':digest(source_path)}
             allow_resize = max(im.size)>32
+            if item_id in {'PISTOL','ASSAULT_RIFLE','SNIPER_RIFLE'}:
+                # Small authored gun sprites need to fill the same HUD footprint as legacy weapons.
+                im = im.crop(im.getbbox())
+                scale = 26 / max(im.size)
+                im = im.resize(tuple(max(1,round(v*scale)) for v in im.size), Image.Resampling.NEAREST)
+                provenance['source_kind']='Authored gun icon + shared palette'
             # Preserve the identifiable long blade/barrel with broad 32px planes.
             if item_id in {'KNIFE','SHOTGUN'}:
                 im = im.crop(im.getbbox())
@@ -358,7 +364,7 @@ def run(args):
     effects = [record for _,_,record in batch if record['kind']=='Effect']
     output = {'canvas':[64,64],'native_size':32,'scale':2,'method':'nearest',
               'palette':relative(PALETTE_PATH),'palette_sha256':digest(PALETTE_PATH),'palette_color_count':len(rgb),
-              'produced':len(items),'expected':34,'missing':[], 'effects_produced':len(effects),
+              'produced':len(items),'expected':37,'missing':[], 'effects_produced':len(effects),
               'runtime_rgba_bytes_without_mips':len(items)*64*64*4,
               'unity_import_and_binding':'Not run in this asset-only session; existing bindings retained by filename and unchanged .meta',
               'icons':items,'effects':effects}
@@ -376,4 +382,4 @@ def run(args):
     effects_sheet(effects)
     native_sheet(effects,'Effects_32px_grid.png')
     (REPORT/'HudMenu_ReadOnly_Audit.json').write_text(json.dumps(audit_ui(rgb),ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
-    print('PASS 34 items + 7 effects; no Unity/HUD/menu writes')
+    print('PASS 37 items + 7 effects; no Unity/HUD/menu writes')

@@ -82,8 +82,8 @@ MonoBehaviour:
   - Id: COMPASS
     Icon: {fileID: 21300000, guid: af3c73ab478f37d4fbac152396cad70f, type: 3}
   - Id: PISTOL
-    Icon: {fileID: 21300000, guid: 161b96ea31f50a844b34b13775c14d5f, type: 3}
+    Icon: {fileID: 21300000, guid: 0711f92f7f7f43b6893491040bc29e4d, type: 3}
   - Id: ASSAULT_RIFLE
-    Icon: {fileID: 21300000, guid: bd19e5a7bd4ff3f42a612b6814028779, type: 3}
+    Icon: {fileID: 21300000, guid: d1acc141cd084bd5b6955a3874d7a362, type: 3}
   - Id: SNIPER_RIFLE
-    Icon: {fileID: 21300000, guid: 2075a1358d61a2a479d75ad6c177424e, type: 3}
+    Icon: {fileID: 21300000, guid: a59bc6a05c3d4c3aa8b182efc5d10101, type: 3}

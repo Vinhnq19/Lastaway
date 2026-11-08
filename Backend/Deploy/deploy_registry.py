@@ -20,7 +20,7 @@ import threading
 import urllib.parse
 import urllib.request
 import urllib.error
-from registry_release import (PACKAGES, RELEASE_ID, SOURCE, build_hash, client_source_hash, fingerprint,
+from registry_release import (PACKAGES, RELEASE_ID, SOURCE, build_hash, client_source_hash, editor_version, fingerprint,
     read_json, required_tier, run, seal, sha, tree_hash, validate_manifest, validate_metrics, verify, write_json)
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -118,8 +118,8 @@ def verify_local(args, output):
     print('Local: verify Windows source/build provenance', flush=True)
     source_before = client_source_hash(ROOT)
     provenance = read_json(Path(args.player).resolve().parent / 'registry-build.json')
-    if provenance.get('schemaVersion') != 1 or provenance.get('sourceHash') != source_before or provenance.get('playerFingerprint') != build_hash(Path(args.player).resolve()) or provenance.get('unityVersion') != '6000.3.15f1':
-        raise RuntimeError('Windows build is stale or lacks Unity build provenance; rebuild using 6000.3.15f1')
+    if provenance.get('schemaVersion') != 1 or provenance.get('sourceHash') != source_before or provenance.get('playerFingerprint') != build_hash(Path(args.player).resolve()) or provenance.get('unityVersion') != editor_version(ROOT):
+        raise RuntimeError('Windows build is stale or lacks Unity build provenance; rebuild using ' + editor_version(ROOT))
     backend_checks(output)
     print('Local: resolve pinned base images and build Docker', flush=True)
     pinned = bases()
@@ -173,7 +173,7 @@ def verify_local(args, output):
         # Restore even when startup/readiness fails; never restart/delete Mongo or its volume.
         run(['docker', 'compose', 'up', '-d', '--no-build', '--no-deps', 'game-server'], cwd=BACKEND, timeout=120)
     if source_before != client_source_hash(ROOT): raise RuntimeError('Source/data changed during rehearsal')
-    value = {'schemaVersion': 1, 'status': 'PASS', 'sourceHash': source_before,
+    value = {'schemaVersion': 1, 'status': 'PASS', 'unityVersion': provenance['unityVersion'], 'sourceHash': source_before,
         'playerFingerprint': build_hash(Path(args.player).resolve()), 'bases': pinned,
         'services': {s: fingerprint(ROOT, s, pinned) for s in PACKAGES},
         'connectionConfigHash': connection_hash(), 'physicalTwoPc': 'NOT_TESTED', 'serverMetrics': metric_result,
@@ -188,7 +188,7 @@ def local_gate(args, manifest, check_workspace=True):
     if value.get('status') != 'PASS': raise RuntimeError('Local evidence did not pass')
     if check_workspace and value.get('sourceHash') != client_source_hash(ROOT): raise RuntimeError('Local evidence source hash is stale')
     provenance = read_json(Path(args.player).resolve().parent / 'registry-build.json')
-    if provenance.get('sourceHash') != value.get('sourceHash') or provenance.get('unityVersion') != '6000.3.15f1': raise RuntimeError('Windows build provenance does not match Local evidence')
+    if provenance.get('sourceHash') != value.get('sourceHash') or provenance.get('unityVersion') != editor_version(ROOT): raise RuntimeError('Windows build provenance does not match Local evidence')
     if manifest.get('localEvidence', {}).get('sourceHash', value.get('sourceHash')) != value.get('sourceHash'): raise RuntimeError('Release expects a different client source build')
     if value.get('playerFingerprint') != build_hash(Path(args.player).resolve()): raise RuntimeError('Windows player fingerprint mismatch')
     if value.get('services') != {s: m['fingerprint'] for s, m in manifest['services'].items()}: raise RuntimeError('Local backend/base-image fingerprints mismatch')

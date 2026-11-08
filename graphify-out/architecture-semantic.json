@@ -5,14 +5,14 @@
       "label": "Unity client",
       "file_type": "concept",
       "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
-      "source_location": "§1–3",
+      "source_location": "sections 1-3; L138 (checkout-local Editor override)",
       "source_url": null,
       "captured_at": null,
       "author": null,
       "contributor": null,
       "_origin": "semantic",
       "evidence_type": "document-derived",
-      "description": "Renders received match state and sends input through composition-root services."
+      "description": "Renders received match state and sends input through composition-root services. Shared Git Editor pin remains 6000.3.15f1; Vinh-only checkout uses 6000.3.21f1 and a local resolved package lock protected by per-checkout skip-worktree. New Editor builds still require validation before AWS deployment."
     },
     {
       "id": "docs_network_architecture_vi_gameserver",
@@ -1967,8 +1967,8 @@
   "coverage": {
     "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md": 178
   },
-  "source_sha256": "c95f3978cb719d5270c0e477d7e13079a4b4e8005b918ca4f4d4f49af2a508d4",
+  "source_sha256": "5781040f253f8d00d174a8e77f4ce03e186b1cd09fa725c83457b8dc34409d46",
   "usage_note": "Host-agent semantic extraction; exact token usage unavailable, zero values do not claim zero session token use; no paid API called.",
-  "extraction_note": "Only Network_Architecture.vi.md was read as source. Document-derived architectural claims are not runtime verification. Missing .graphify_semantic.json schema was replaced by matching architecture-semantic.json schema. No linked report contents or implementation files verified.",
+  "extraction_note": "Only Network_Architecture.vi.md was read as source. Document-derived architectural claims are not runtime verification. Missing .graphify_semantic.json schema was replaced by matching architecture-semantic.json schema. No linked report contents or implementation files verified. 2026-11-08: refreshed the Unity client concept after reviewing the changed Editor-policy paragraph; no runtime validation inferred from documentation.",
   "scope": "replacement semantic fragment for this source document only"
 }

@@ -6,7 +6,13 @@ Pipeline mới nằm ở `Backend/Deploy/deploy-aws.ps1`. Đây là deploy có g
 
 ## 1. Điều kiện và setup một lần
 
-PC: Docker Desktop Linux containers + credential store, Docker Buildx, Python 3.12+, .NET SDK chạy được net8, Windows PowerShell, AWS CLI profile `junglemaze-admin`, SSH alias `junglemaze` qua SSM đã hoạt động. Unity vẫn là **6000.3.15f1**. EC2 hiện có phải là x86_64/t3.small, đã cài Docker Compose, Python 3.12 và systemd; script không tạo hoặc nâng máy.
+PC: Docker Desktop Linux containers + credential store, Docker Buildx, Python 3.12+, .NET SDK chạy được net8, Windows PowerShell, AWS CLI profile `junglemaze-admin`, SSH alias `junglemaze` qua SSM đã hoạt động. Phiên bản Unity chung của team trong Git vẫn là **6000.3.15f1**. Riêng máy Vinh dùng **6000.3.21f1** để kiểm tra bản vá shutdown; không nâng Editor của các dev khác. Gate đọc phiên bản thực từ `ProjectSettings/ProjectVersion.txt` và từ chối receipt của Editor khác. EC2 hiện có phải là x86_64/t3.small, đã cài Docker Compose, Python 3.12 và systemd; script không tạo hoặc nâng máy.
+
+### Editor riêng trên máy Vinh
+
+Checkout này giữ `ProjectSettings/ProjectVersion.txt` và `Packages/packages-lock.json` ở chế độ Git `skip-worktree`: index/Git vẫn là bản chung 15f1, còn file trên máy dùng 21f1 và các dependency Unity đã resolve. Cấu hình riêng nằm tại `UserSettings/LocalEditorVersion.json` (không commit). Mở project bằng Editor 21f1 đã cài; dev khác tiếp tục dùng 15f1 từ Git. Các ví dụ đường dẫn build 21f1 bên dưới dành cho máy Vinh.
+
+`skip-worktree` chỉ áp dụng checkout này. Nếu Git báo xung đột hai file khi đổi nhánh/merge, sao lưu bản cục bộ rồi chạy `git update-index --no-skip-worktree ProjectSettings/ProjectVersion.txt Packages/packages-lock.json` để xử lý; không force-add bản 21f1 vào commit chung. Chưa coi bản build 21f1 là đã nghiệm thu hoặc được phép deploy chỉ vì đã đổi Editor.
 
 ### 1.1. Token và package
 
@@ -51,7 +57,7 @@ Mở Docker Desktop. Kiểm `Backend/.env` có các secret Local và account-tic
 
 ```powershell
 & .\Backend\Deploy\deploy-aws.ps1 -Mode PrepareOnly -VerifyLocal `
-  -Player 'D:\Unity\Lastaway\Builds\Windows-GHCR-6000.3.15f1\Lastaway.exe' `
+  -Player 'D:\Unity\Lastaway\Builds\AWS-Quality-6000.3.21f1\Lastaway.exe' `
   -OutputDirectory 'D:\Unity\Lastaway\Backend\out\registry-local'
 ```
 
@@ -65,7 +71,7 @@ Sau khi commit sạch và Local đạt:
 
 ```powershell
 & .\Backend\Deploy\deploy-aws.ps1 -Mode PrepareOnly `
-  -Player 'D:\Unity\Lastaway\Builds\Windows-GHCR-6000.3.15f1\Lastaway.exe' `
+  -Player 'D:\Unity\Lastaway\Builds\AWS-Quality-6000.3.21f1\Lastaway.exe' `
   -LocalEvidence 'D:\Unity\Lastaway\Backend\out\registry-local\local-evidence.json' `
   -OutputDirectory 'D:\Unity\Lastaway\Backend\out\registry-release'
 ```
@@ -83,7 +89,7 @@ Dành riêng server, không có người chơi; bật EC2 thủ công nếu cầ
 ```powershell
 & .\Backend\Deploy\deploy-aws.ps1 -Mode Deploy `
   -Release 'D:\Unity\Lastaway\Backend\out\registry-release\<release-id>' `
-  -Player 'D:\Unity\Lastaway\Builds\Windows-GHCR-6000.3.15f1\Lastaway.exe' `
+  -Player 'D:\Unity\Lastaway\Builds\AWS-Quality-6000.3.21f1\Lastaway.exe' `
   -LocalEvidence 'D:\Unity\Lastaway\Backend\out\registry-local\local-evidence.json' `
   -BudgetMinutes 20
 ```

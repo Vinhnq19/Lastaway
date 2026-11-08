@@ -30,10 +30,10 @@ namespace JungleMaze.Tests.Art04
         // ---------- AC1: the CSV itself ----------
 
         [Test]
-        public void Csv_34Rows_MatchRosterOneToOne_WithValidStatusAndRealSource()
+        public void Csv_37Rows_MatchRosterOneToOne_WithValidStatusAndRealSource()
         {
             var rows = ReadCsv();
-            Assert.AreEqual(34, rows.Count, "one row per roster ID");
+            Assert.AreEqual(37, rows.Count, "one row per roster ID");
             var roster = Roster();
             var seen = new HashSet<string>(StringComparer.Ordinal);
             var problems = new List<string>();
@@ -56,7 +56,7 @@ namespace JungleMaze.Tests.Art04
         {
             var catalog = AssetDatabase.LoadAssetAtPath<HudItemIconCatalog>(Ui + "HudItemIconCatalog.asset");
             var rows = ReadCsv();
-            Assert.AreEqual(34, rows.Count, "one row per roster ID");
+            Assert.AreEqual(37, rows.Count, "one row per roster ID");
             foreach (var row in rows)
                 Assert.AreEqual(row["dich_chuan_hoa"], AssetDatabase.GetAssetPath(catalog.GetIcon(row["id"])), row["id"]);
         }
@@ -68,7 +68,7 @@ namespace JungleMaze.Tests.Art04
         {
             var problems = new List<string>();
             var rows = ReadCsv();
-            Assert.AreEqual(34, rows.Count, "one row per roster ID");
+            Assert.AreEqual(37, rows.Count, "one row per roster ID");
             var texture = new Texture2D(2, 2, TextureFormat.RGBA32, false);
             try
             {

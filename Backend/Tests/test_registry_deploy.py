@@ -42,6 +42,32 @@ class ReleaseTests(unittest.TestCase):
         self.tmp = tempfile.TemporaryDirectory(); self.root = Path(self.tmp.name)
     def tearDown(self): self.tmp.cleanup()
 
+    def test_editor_version_requires_an_exact_project_pin(self):
+        settings = self.root / 'ProjectSettings'; settings.mkdir()
+        pin = settings / 'ProjectVersion.txt'
+        pin.write_text('m_EditorVersion: 6000.3.21f1\n')
+        self.assertEqual(release.editor_version(self.root), '6000.3.21f1')
+        pin.write_text('m_EditorVersion: 6000.3.21f1-unverified\n')
+        with self.assertRaises(ValueError): release.editor_version(self.root)
+
+    def test_local_gate_rejects_old_editor_even_when_other_evidence_matches(self):
+        settings = self.root / 'ProjectSettings'; settings.mkdir()
+        (settings / 'ProjectVersion.txt').write_text('m_EditorVersion: 6000.3.21f1\n')
+        player = self.root / 'Lastaway.exe'; player.write_bytes(b'test fixture')
+        local = {'status': 'PASS', 'sourceHash': 'a' * 64, 'playerFingerprint': 'b' * 64,
+                 'services': {s: 'd' * 64 for s in release.PACKAGES}, 'connectionConfigHash': 'c' * 64,
+                 'serverMetrics': {'status': 'PASS'},
+                 'checks': {'wss300': 'PASS', 'auto2ResultHistoryReplay': 'PASS', 'udp': 'PASS'}}
+        evidence = self.root / 'local.json'; release.write_json(evidence, local)
+        receipt = self.root / 'registry-build.json'
+        args = types.SimpleNamespace(player=str(player), local_evidence=str(evidence))
+        with patch.object(pc, 'ROOT', self.root), patch.object(pc, 'build_hash', return_value='b' * 64):
+            release.write_json(receipt, {'sourceHash': 'a' * 64, 'unityVersion': '6000.3.15f1'})
+            with self.assertRaisesRegex(RuntimeError, 'provenance'):
+                pc.local_gate(args, manifest(), check_workspace=False)
+            release.write_json(receipt, {'sourceHash': 'a' * 64, 'unityVersion': '6000.3.21f1'})
+            self.assertEqual(pc.local_gate(args, manifest(), check_workspace=False), local)
+
     def test_checksum_tamper_and_extra_file(self):
         bundle(self.root)
         self.assertEqual(release.verify(self.root)['releaseId'], 'test-1')

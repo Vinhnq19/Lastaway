@@ -1,4 +1,4 @@
-"""Create 34 standalone UI icon copies without modifying Imported/JSurviv.
+"""Create 37 standalone UI icon copies without modifying Imported/JSurviv.
 
 Use --native32 for the current shared-palette, binary-alpha 32px pipeline.
 The legacy mode accepts independent HAND/ROPE sources for historical replay.
@@ -215,7 +215,7 @@ def main() -> None:
     rows = list(csv.DictReader(ROSTER.open(encoding="utf-8-sig")))
     weapon_ids = {r["id"] for r in json.loads((ROOT / "Assets/StreamingAssets/JungleMaze/balance/weapons.json").read_text())}
     equipment_ids = {r["id"] for r in json.loads((ROOT / "Assets/StreamingAssets/JungleMaze/balance/equipments.json").read_text())}
-    assert len(rows) == 34 and len({r["id"] for r in rows}) == 34
+    assert len(rows) == len(weapon_ids | equipment_ids) and len({r["id"] for r in rows}) == len(rows)
     assert {r["id"] for r in rows if r["loai"] == "Weapon"} == weapon_ids
     assert {r["id"] for r in rows if r["loai"] == "Equipment"} == equipment_ids
     produced, missing = {}, []
