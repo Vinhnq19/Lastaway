@@ -14,7 +14,7 @@ var passed = 0;
 void Check(bool value, string label) { if (!value) throw new Exception("FAIL " + label); passed++; Console.WriteLine("PASS " + label); }
 void Throws(Action action, string label) { var threw = false; try { action(); } catch (ArgumentException) { threw = true; } catch (InvalidOperationException) { threw = true; } Check(threw, label); }
 var baseline = ItemCatalog.CreateBaseline();
-Check(baseline.Items.Count == 35, "full catalog 18 weapons +16 equipment +ammo");
+Check(baseline.Items.Count == 38, "full catalog 21 weapons +16 equipment +ammo");
 Check(baseline.Get("HAND").Kind == ItemKind.Unarmed && baseline.Get("HAND").Sources == LootSource.None, "HAND outside inventory and loot");
 Check(baseline.Get("ELIXIR").UseWhileControlled && baseline.Get("ELIXIR").EffectAtStart, "Elixir immediate cleanse profile");
 Check(!baseline.Get("RUBBER_GUN").Enabled && baseline.Get("SHOTGUN").Enabled, "tentative gun enabled config");
@@ -32,15 +32,24 @@ for (uint seed = 1; seed <= 100; seed++)
     if (pot.Length < 1 || pot.Length > 2 || pot.Any(x => baseline.Get(x.ItemId).MagazineSize > 0)) throw new Exception("invalid pot loot");
 }
 Check(true, "100 seeds deterministic count/source/disabled rules");
+for (uint seed = 1; seed <= 512; seed++)
+{
+    var rolled = loot.Roll(LootSource.Supply, seed);
+    Check(rolled.Length >= 6 && rolled.Length <= 8 && rolled.Select(x => x.ItemId).Distinct().Count() == rolled.Length,
+        "supply count and distinct IDs seed " + seed);
+    Check(rolled.Any(x => x.ItemId == "MACE") && rolled.Any(x => x.ItemId == "COMPASS"), "supply guarantees seed " + seed);
+    Check(rolled.Select(x => x.ItemId).SequenceEqual(loot.Roll(LootSource.Supply, seed).Select(x => x.ItemId)),
+        "supply deterministic seed " + seed);
+}
 var supply = loot.Roll(LootSource.Supply, 42);
 Check(supply.Any(x => x.ItemId == "MACE") && supply.Any(x => x.ItemId == "COMPASS"), "supply guaranteed rare items");
 Throws(() => new LootTable(baseline, new LootProfile { ChestGroupWeights = new int[6] }), "infeasible zero-weight source rejected");
 var custom = new LootTable(baseline, new LootProfile { ChestMin = 1, ChestMax = 1 });
 Check(custom.Roll(LootSource.Chest, 3).Length == 1, "loot counts data configurable");
 var docRoundtrip = JsonSerializer.Deserialize<ItemCatalogDocument>(JsonSerializer.Serialize(new ItemCatalogDocument { Version = baseline.Version, Items = baseline.Items.ToArray() }, jsonOptions), jsonOptions);
-Check(docRoundtrip.Build().Items.Count == 35, "JSON config roundtrip preserves catalog");
+Check(docRoundtrip.Build().Items.Count == 38, "JSON config roundtrip preserves catalog");
 var productionDocument = JsonSerializer.Deserialize<ItemCatalogDocument>(File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "GameData", "items_catalog.json")), jsonOptions);
-Check(productionDocument.Build().Items.Count == 35, "actual packaged JSON contains all 35 IDs");
+Check(productionDocument.Build().Items.Count == 38, "actual packaged JSON contains all 38 IDs");
 Check(new LootTable(productionDocument.Build(), productionDocument.Loot).Roll(LootSource.Chest, 4).Length >= 3, "actual packaged JSON profile validated and sampled");
 var leaked = baseline.Get("KNIFE"); leaked.Enabled = false;
 Check(baseline.Get("KNIFE").Enabled, "catalog returns defensive item copy");

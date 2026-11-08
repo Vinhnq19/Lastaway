@@ -1,0 +1,735 @@
+{
+  "schemaVersion": 1,
+  "task": "DRG-01",
+  "date": "2026-11-07",
+  "workspace": "D:\\Unity\\Lastaway",
+  "branch": "vinhnq",
+  "headCommit": "af1470dac5588393f14ede9c31dd037faf07cdd5",
+  "workingTree": "uncommitted; source/build fingerprint recorded separately",
+  "status": "PASS_LOCAL_WITH_LIMITATIONS",
+  "scope": [
+    "offline",
+    "Docker Local",
+    "self-host compatible code"
+  ],
+  "gameplayProtocol": 4,
+  "accountHandshake": 4,
+  "aws": "NOT_TESTED; no AWS actions/deploy",
+  "physicalTwoPc": "NOT_TESTED",
+  "subjectiveListening": "NOT_TESTED",
+  "build": {
+    "success": true,
+    "message": "Build Succeeded.",
+    "data": {
+      "job_id": "build-62b007ced3",
+      "result": "succeeded",
+      "platform": "StandaloneWindows64",
+      "output_path": "Builds/Windows-DRG01-6000.3.15f1/Lastaway.exe",
+      "started_at": "2026-11-07T14:49:29.4009435Z",
+      "duration_seconds": 222.1638625,
+      "completed_at": "2026-11-07T14:53:11.564806Z",
+      "total_size_mb": 130.92,
+      "errors": 0,
+      "warnings": 42
+    }
+  },
+  "fingerprint": {
+    "sourceMatches": true,
+    "computedSourceHash": "b14ed4d13dd3338a3d81d3f28d45116757df9086184afac0480965be64f2c59b",
+    "buildSourceHash": "b14ed4d13dd3338a3d81d3f28d45116757df9086184afac0480965be64f2c59b",
+    "playerMatches": true,
+    "playerFingerprint": "7feff79b4a02818847e474921621b413e1bc2f6490e8f1a512b371f3ddf4d746",
+    "sourceFiles": 18782,
+    "playerFiles": 223
+  },
+  "checks": {
+    "airdrop": {
+      "passed": 215,
+      "failed": 0
+    },
+    "authSmoke": {
+      "passed": 68,
+      "failed": 0
+    },
+    "editMode": {
+      "total": 1136,
+      "passed": 1136,
+      "failed": 0,
+      "skipped": 0,
+      "durationSeconds": 57.7865644,
+      "resultState": "Passed"
+    },
+    "editModeFailures": [],
+    "playMode": {
+      "total": 150,
+      "passed": 150,
+      "failed": 0,
+      "skipped": 0,
+      "durationSeconds": 80.9430816,
+      "resultState": "Passed"
+    },
+    "finalAirdropPlayMode": {
+      "passed": 2,
+      "failed": 0
+    },
+    "editModeBeforeRepair": {
+      "total": 1134,
+      "passed": 1129,
+      "failed": 5,
+      "skipped": 0,
+      "durationSeconds": 38.1967808,
+      "resultState": "Failed(Child)"
+    },
+    "editModeFailuresBeforeRepair": [
+      "JungleMaze.Tests.Art04.Art04IconInventoryTests.HudPrefabsAndCatalog_DependOnNoImageUnderImported",
+      "JungleMaze.Tests.LevelEditor.LevelDocumentTests.DecorationsAreSavedButIgnoredByTheGame",
+      "JungleMaze.Tests.LevelEditor.LevelDocumentTests.OpeningAndSavingGameMapKeepsTheSameGameHash",
+      "JungleMaze.Tests.LevelEditor.LevelDocumentTests.PlainGameMapWithoutEditorFieldsInfersScaleFromCatalogSize",
+      "JungleMaze.Tests.LevelEditor.LevelDocumentTests.ValidationUsesGameRules"
+    ]
+  },
+  "windowsRuns": {
+    "windows-final-thap-co": {
+      "status": "PASS",
+      "scenarioId": "drg01-accelerated",
+      "clients": [
+        {
+          "id": "Player1",
+          "status": "PASS",
+          "exitCode": 0,
+          "transport": "Wss",
+          "endpoint": "ws://127.0.0.1:7781/game",
+          "fallbackReason": "",
+          "metrics": {
+            "elapsedSeconds": 17.491201400756836,
+            "connectedSeconds": 16.022581100463867,
+            "snapshots": 439,
+            "inputs": 415,
+            "ignoredPackets": 0,
+            "catchupDrops": 1,
+            "maxPlayers": 2,
+            "maxRosterPlayers": 2,
+            "maxOnScreenPlayers": 1,
+            "completedMatches": 1,
+            "inputHz": 29.47571852061118,
+            "activeInputSeconds": 14.079385366290808,
+            "snapshotHz": 30.04099040501778,
+            "snapshotSeconds": 14.613366406410933,
+            "rttP50Ms": 33.3311,
+            "rttP95Ms": 76.7828,
+            "rttP99Ms": 76.7828,
+            "pings": 16,
+            "pongs": 16,
+            "pongTimeouts": 0
+          },
+          "assertions": [
+            {
+              "id": "joined",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "playersVisible",
+              "status": "PASS",
+              "detail": "Roster and network views confirmed; Follow Player viewport count is separate"
+            },
+            {
+              "id": "movement",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "zone",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "hpDamage",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "result",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "replay",
+              "status": "NOT_OBSERVED",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "history",
+              "status": "NOT_OBSERVED",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "drg01.three-drops",
+              "status": "PASS",
+              "detail": "Three authoritative eggs landed in one match; gameplay v4."
+            }
+          ]
+        },
+        {
+          "id": "Player2",
+          "status": "PASS",
+          "exitCode": 0,
+          "transport": "Udp",
+          "endpoint": "127.0.0.1:7777",
+          "fallbackReason": "",
+          "metrics": {
+            "elapsedSeconds": 17.419931411743164,
+            "connectedSeconds": 16.011995315551758,
+            "snapshots": 437,
+            "inputs": 415,
+            "ignoredPackets": 0,
+            "catchupDrops": 1,
+            "maxPlayers": 2,
+            "maxRosterPlayers": 2,
+            "maxOnScreenPlayers": 1,
+            "completedMatches": 0,
+            "inputHz": 29.489077767091636,
+            "activeInputSeconds": 14.073007073253393,
+            "snapshotHz": 29.93507107690513,
+            "snapshotSeconds": 14.598261646926403,
+            "rttP50Ms": 33.3109,
+            "rttP95Ms": 64.327,
+            "rttP99Ms": 64.327,
+            "pings": 16,
+            "pongs": 16,
+            "pongTimeouts": 0
+          },
+          "assertions": [
+            {
+              "id": "joined",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "playersVisible",
+              "status": "PASS",
+              "detail": "Roster and network views confirmed; Follow Player viewport count is separate"
+            },
+            {
+              "id": "movement",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "zone",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "hpDamage",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "result",
+              "status": "NOT_OBSERVED",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "replay",
+              "status": "NOT_OBSERVED",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "history",
+              "status": "NOT_OBSERVED",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "drg01.three-drops",
+              "status": "PASS",
+              "detail": "Three authoritative eggs landed in one match; gameplay v4."
+            }
+          ]
+        }
+      ],
+      "physicalDeviceCount": 1
+    },
+    "windows-final-thi-tran": {
+      "status": "PASS",
+      "scenarioId": "drg01-accelerated",
+      "clients": [
+        {
+          "id": "Player1",
+          "status": "PASS",
+          "exitCode": 0,
+          "transport": "Wss",
+          "endpoint": "ws://127.0.0.1:7781/game",
+          "fallbackReason": "",
+          "metrics": {
+            "elapsedSeconds": 17.406835556030273,
+            "connectedSeconds": 16.015295028686523,
+            "snapshots": 435,
+            "inputs": 431,
+            "ignoredPackets": 0,
+            "catchupDrops": 1,
+            "maxPlayers": 2,
+            "maxRosterPlayers": 2,
+            "maxOnScreenPlayers": 1,
+            "completedMatches": 0,
+            "inputHz": 29.69756022551318,
+            "activeInputSeconds": 14.512976713478565,
+            "snapshotHz": 29.904501711031635,
+            "snapshotSeconds": 14.546304907649755,
+            "rttP50Ms": 33.3345,
+            "rttP95Ms": 34.9091,
+            "rttP99Ms": 34.9091,
+            "pings": 16,
+            "pongs": 16,
+            "pongTimeouts": 0
+          },
+          "assertions": [
+            {
+              "id": "joined",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "playersVisible",
+              "status": "PASS",
+              "detail": "Roster and network views confirmed; Follow Player viewport count is separate"
+            },
+            {
+              "id": "movement",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "zone",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "hpDamage",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "result",
+              "status": "NOT_OBSERVED",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "replay",
+              "status": "NOT_OBSERVED",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "history",
+              "status": "NOT_OBSERVED",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "drg01.three-drops",
+              "status": "PASS",
+              "detail": "Three authoritative eggs landed in one match; gameplay v4."
+            }
+          ]
+        },
+        {
+          "id": "Player2",
+          "status": "PASS",
+          "exitCode": 0,
+          "transport": "Udp",
+          "endpoint": "127.0.0.1:7777",
+          "fallbackReason": "",
+          "metrics": {
+            "elapsedSeconds": 17.43012809753418,
+            "connectedSeconds": 16.031373977661133,
+            "snapshots": 437,
+            "inputs": 432,
+            "ignoredPackets": 0,
+            "catchupDrops": 1,
+            "maxPlayers": 2,
+            "maxRosterPlayers": 2,
+            "maxOnScreenPlayers": 1,
+            "completedMatches": 1,
+            "inputHz": 29.74092042159674,
+            "activeInputSeconds": 14.525441508740187,
+            "snapshotHz": 30.016267430209787,
+            "snapshotSeconds": 14.558772206306458,
+            "rttP50Ms": 33.3609,
+            "rttP95Ms": 40.543,
+            "rttP99Ms": 40.543,
+            "pings": 16,
+            "pongs": 16,
+            "pongTimeouts": 0
+          },
+          "assertions": [
+            {
+              "id": "joined",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "playersVisible",
+              "status": "PASS",
+              "detail": "Roster and network views confirmed; Follow Player viewport count is separate"
+            },
+            {
+              "id": "movement",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "zone",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "hpDamage",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "result",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "replay",
+              "status": "NOT_OBSERVED",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "history",
+              "status": "NOT_OBSERVED",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "drg01.three-drops",
+              "status": "PASS",
+              "detail": "Three authoritative eggs landed in one match; gameplay v4."
+            }
+          ]
+        }
+      ],
+      "physicalDeviceCount": 1
+    },
+    "windows-full-flow": {
+      "status": "PASS",
+      "scenarioId": "local2-accelerated",
+      "clients": [
+        {
+          "id": "Player1",
+          "status": "PASS",
+          "exitCode": 0,
+          "transport": "Wss",
+          "endpoint": "ws://127.0.0.1:7781/game",
+          "fallbackReason": "",
+          "metrics": {
+            "elapsedSeconds": 30.53211212158203,
+            "connectedSeconds": 29.138689041137695,
+            "snapshots": 810,
+            "inputs": 804,
+            "ignoredPackets": 0,
+            "catchupDrops": 1,
+            "maxPlayers": 2,
+            "maxRosterPlayers": 2,
+            "maxOnScreenPlayers": 1,
+            "completedMatches": 1,
+            "inputHz": 29.834419838814366,
+            "activeInputSeconds": 26.94873921945691,
+            "snapshotHz": 29.982887637070608,
+            "snapshotSeconds": 27.015409916639328,
+            "rttP50Ms": 33.3498,
+            "rttP95Ms": 34.0353,
+            "rttP99Ms": 34.2588,
+            "pings": 30,
+            "pongs": 30,
+            "pongTimeouts": 0
+          },
+          "assertions": [
+            {
+              "id": "joined",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "playersVisible",
+              "status": "PASS",
+              "detail": "Roster and network views confirmed; Follow Player viewport count is separate"
+            },
+            {
+              "id": "movement",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "zone",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "hpDamage",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "result",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "replay",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "history",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            }
+          ]
+        },
+        {
+          "id": "Player2",
+          "status": "PASS",
+          "exitCode": 0,
+          "transport": "Udp",
+          "endpoint": "127.0.0.1:7777",
+          "fallbackReason": "",
+          "metrics": {
+            "elapsedSeconds": 30.331300735473633,
+            "connectedSeconds": 28.9666805267334,
+            "snapshots": 810,
+            "inputs": 805,
+            "ignoredPackets": 0,
+            "catchupDrops": 1,
+            "maxPlayers": 2,
+            "maxRosterPlayers": 2,
+            "maxOnScreenPlayers": 1,
+            "completedMatches": 1,
+            "inputHz": 29.847547638354907,
+            "activeInputSeconds": 26.970389988273382,
+            "snapshotHz": 29.958875238926034,
+            "snapshotSeconds": 27.037063091993332,
+            "rttP50Ms": 33.3802,
+            "rttP95Ms": 66.3206,
+            "rttP99Ms": 66.6836,
+            "pings": 29,
+            "pongs": 29,
+            "pongTimeouts": 0
+          },
+          "assertions": [
+            {
+              "id": "joined",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "playersVisible",
+              "status": "PASS",
+              "detail": "Roster and network views confirmed; Follow Player viewport count is separate"
+            },
+            {
+              "id": "movement",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "zone",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "hpDamage",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "result",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "replay",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "history",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            }
+          ]
+        }
+      ],
+      "physicalDeviceCount": 1
+    },
+    "windows-nine-bots-auto": {
+      "status": "PASS",
+      "scenarioId": "drg01-nine-bots-auto",
+      "clients": [
+        {
+          "id": "Player1",
+          "status": "PASS",
+          "exitCode": 0,
+          "transport": "Wss",
+          "endpoint": "ws://127.0.0.1:7781/game",
+          "fallbackReason": "ConnectTimeout",
+          "metrics": {
+            "elapsedSeconds": 22.479700088500977,
+            "connectedSeconds": 16.020668029785156,
+            "snapshots": 436,
+            "inputs": 418,
+            "ignoredPackets": 0,
+            "catchupDrops": 1,
+            "maxPlayers": 10,
+            "maxRosterPlayers": 10,
+            "maxOnScreenPlayers": 1,
+            "completedMatches": 0,
+            "inputHz": 29.49107446129995,
+            "activeInputSeconds": 14.17377995327115,
+            "snapshotHz": 29.944916478958106,
+            "snapshotSeconds": 14.56006732583046,
+            "rttP50Ms": 33.3695,
+            "rttP95Ms": 104.5869,
+            "rttP99Ms": 104.5869,
+            "pings": 16,
+            "pongs": 16,
+            "pongTimeouts": 0
+          },
+          "assertions": [
+            {
+              "id": "joined",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "playersVisible",
+              "status": "PASS",
+              "detail": "Roster and network views confirmed; Follow Player viewport count is separate"
+            },
+            {
+              "id": "movement",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "zone",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "hpDamage",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "result",
+              "status": "NOT_OBSERVED",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "replay",
+              "status": "NOT_OBSERVED",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "history",
+              "status": "NOT_OBSERVED",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "drg01.three-drops",
+              "status": "PASS",
+              "detail": "Three authoritative eggs landed in one match; gameplay v4."
+            }
+          ]
+        }
+      ],
+      "physicalDeviceCount": 1
+    }
+  },
+  "runtimePerformance": {
+    "five-rooms-fifty-participants-60s": {
+      "samples": 11,
+      "tickHzMin": 29.8,
+      "tickHzMean": 29.977272727272727,
+      "tickHzMax": 30.14,
+      "cpuOneCoreMaxPercent": 17.81,
+      "workingSetMaxMiB": 67.27,
+      "droppedTicksMax": 0.0,
+      "pathNodesMax": 23.0,
+      "containerMemoryLimit": "not applied; runtime process measurement"
+    },
+    "one-human-nine-bots-300s": {
+      "samples": 297,
+      "tickHzMin": 29.41,
+      "tickHzMean": 29.996835016835018,
+      "tickHzMax": 30.9,
+      "cpuOneCoreMaxPercent": 42.89,
+      "workingSetMaxMiB": 65.31,
+      "droppedTicksMax": 0.0,
+      "pathNodesMax": 30.0,
+      "containerMemoryLimit": "not applied; runtime process measurement"
+    }
+  },
+  "offlineCombat": {
+    "broken": true,
+    "accepted": 19,
+    "seconds": 9.714172,
+    "loot": [
+      "MACE",
+      "COMPASS",
+      "UNICORN_BLOOD",
+      "ELIXIR_OF_LIFE",
+      "MAGIC_ARMOR",
+      "SHOTGUN",
+      "ELIXIR"
+    ]
+  },
+  "limitations": [
+    "Local transport enum Wss used ws:// loopback; no public TLS/WSS claim.",
+    "Socket damage/resync fixtures are not proof of real two-human loot combat.",
+    "Runtime benchmark uses fake human input and cycling matches; no EC2 256MiB limit validated.",
+    "Audio playback/encoding tested; final subjective listening and unverified asset licenses remain open.",
+    "Public LAN/VPN, physical second PC and AWS remain NOT_TESTED.",
+    "Windows build fingerprint belongs to source before the EditMode repair; rebuild before distribution/deployment of this revision."
+  ],
+  "handoff": {
+    "camera": "Follow Player; spectator preserved",
+    "editor": "Boot, stopped",
+    "docker": "main profile restored; backend-game-server-1, backend-api-1 and backend-mongo-1 stopped exit0; all volumes retained",
+    "preservedUserFiles": [
+      "Assets/_JungleMaze/Art/Characters/axe_held.png.meta",
+      "Assets/Imported/JSurviv/Prefabs/Map/Map100x100.prefab"
+    ],
+    "console": "One expected negative-test pool log; stack DoubleDespawn_LogsError_DoesNotDuplicate with LogAssert.Expect. No new compile error observed."
+  },
+  "postDrgEditModeRepair": {
+    "date": "2026-11-07",
+    "status": "PASS",
+    "editMode": {
+      "total": 1136,
+      "passed": 1136,
+      "failed": 0,
+      "skipped": 0,
+      "durationSeconds": 57.7865644,
+      "resultState": "Passed"
+    },
+    "playMode": {
+      "total": 150,
+      "passed": 150,
+      "failed": 0,
+      "skipped": 0,
+      "durationSeconds": 80.9430816,
+      "resultState": "Passed"
+    },
+    "changes": [
+      "Use actual LevelCatalog for current map fixture; isolated Swamp and deliberate overlap; relative decoration count; destructible cover count.",
+      "Preserve imported door HP0 and legacy destructible art.",
+      "Use authoritative bounds on import, full precision editor transform metadata on export.",
+      "Remove redundant serialized GroundLootTuning reference from HUD; existing Resources fallback preserves rarity colours, normalized icons remain unchanged."
+    ],
+    "initialPlayModeAttempt": "MCP initialization timeout; recovered by stop, Boot, rerun; final actual test summary150/150.",
+    "windowsBuild": "NOT_REBUILT after this repair; previous Windows evidence is historical",
+    "aws": "not touched"
+  }
+}

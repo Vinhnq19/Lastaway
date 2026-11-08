@@ -143,7 +143,11 @@ namespace JungleMaze.Composition
             root.Bind(new LobbyUiPresenter(root, flow, menu, null, null, settingsOpen, roomMaps));
             root.Lobby.gameObject.AddComponent<RoomMapPanel>().Bind(roomMaps, match, root.Lobby);
             if (_registry.TryResolve<IHeroSkinPreference>(out var skins))
-                HeroSkinPicker.Attach(root.MainMenu, skins, Resources.Load<HeroVisualSet>("HeroVisualSet"));
+            {
+                var heroes = Resources.Load<HeroVisualSet>("HeroVisualSet");
+                HeroSkinPicker.Attach(root.MainMenu, skins, heroes);
+                HeroSkinPicker.Attach(root.Lobby, skins, heroes);
+            }
             gameObject.AddComponent<LegacyImguiToggle>().Construct(GetComponent<ConnectionMenuView>);
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
             gameObject.AddComponent<LobbyDebugPanel>().Construct(scenarios, flow);

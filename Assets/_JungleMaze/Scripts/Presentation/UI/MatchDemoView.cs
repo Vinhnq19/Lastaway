@@ -314,7 +314,7 @@ namespace JungleMaze.Presentation.UI
             if (!DetailsVisible)
             {
                 // Normal play uses the composed Lobby/HUD/results UI; only critical load errors stay visible.
-                if (_dataError != null || worldStatus != null)
+                if (_session.Phase == MatchPhase.InGame && (_dataError != null || worldStatus != null))
                     GUI.Box(new Rect(10, 52, 370, 62), _dataError ?? worldStatus, _label);
                 return;
             }

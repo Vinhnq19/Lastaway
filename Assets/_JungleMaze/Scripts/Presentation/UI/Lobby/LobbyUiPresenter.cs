@@ -113,7 +113,10 @@ namespace JungleMaze.Presentation.UI.Lobby
             foreach (var panel in _root.Panels) panel.Show(panel == target);
             if (screen == LobbyScreen.JoinForm) _root.MainMenu.ShowUnder(); // modal over Home, behind its scrim
             if (_root.Canvas != null) _root.Canvas.enabled = screen != LobbyScreen.InGame;
-            if (_root.Backdrop != null) _root.Backdrop.SetActive(HasFloor(screen)); // skin A: floor behind A6, A7, B6, B7 too
+            var splash = screen == LobbyScreen.Login || screen == LobbyScreen.MainMenu;
+            _root.SetSplashForMenu(screen == LobbyScreen.MainMenu);
+            if (_root.Splash != null) _root.Splash.SetActive(splash);
+            if (_root.Backdrop != null) _root.Backdrop.SetActive(HasFloor(screen) && !splash); // skin A: floor behind A6, A7, B6, B7 too
             _shown = screen;
             _drawnKey = int.MinValue;
             OnEnter(screen);

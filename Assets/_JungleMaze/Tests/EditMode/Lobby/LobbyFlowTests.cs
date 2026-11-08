@@ -467,6 +467,17 @@ namespace JungleMaze.Tests.Lobby
         }
 
         [Test]
+        public void WithBotsKeepsMetadataButDoesNotAppendLabelToRankTitle()
+        {
+            var result = Result(MatchEndReason.LastAlive, 1);
+            result.Participants[0].IsBot = true;
+            var model = new ResultModel();
+            model.Show(result, null, false);
+            Assert.IsTrue(model.HasBots);
+            Assert.AreEqual("HẠNG #2", model.Title);
+        }
+
+        [Test]
         public void OwnBlock_RankOfN_Survival_HidesMissing()
         {
             var model = new ResultModel();

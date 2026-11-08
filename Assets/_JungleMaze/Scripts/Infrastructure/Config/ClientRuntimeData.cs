@@ -29,7 +29,7 @@ namespace JungleMaze.Infrastructure.Config
                 _selected = prepared;
                 return null;
             }
-            catch (Exception e) when (!(e is OutOfMemoryException)) { return "Map hoặc luật không hợp lệ/khác server; cập nhật client rồi thử lại."; }
+            catch (Exception e) when (!(e is OutOfMemoryException)) { return SelectedMapData.ValidationMessage(e); }
         }
         public IReadOnlyList<RuntimeCover> Covers { get; private set; } = Array.Empty<RuntimeCover>();
         public RuntimeMapBounds Bounds { get; private set; }

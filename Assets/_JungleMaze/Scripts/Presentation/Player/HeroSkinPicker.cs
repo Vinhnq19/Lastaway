@@ -34,12 +34,37 @@ namespace JungleMaze.Presentation.Player
             var template = menu.OfflinePractice;
             if (template == null || !(template.transform.parent is RectTransform parent)) return null;
 
+            return Create(parent, template, menu.ApiStatus, skins, set);
+        }
+
+        public static HeroSkinPicker Attach(LobbyView lobby, IHeroSkinPreference skins, HeroVisualSet set)
+        {
+            if (lobby == null || skins == null || set == null || set.Heroes == null || set.Heroes.Length == 0) return null;
+            var picker = Create((RectTransform)lobby.transform, lobby.Leave, lobby.Rule, skins, set);
+            var root = (RectTransform)picker.transform;
+            Place(root, 40, 536, 584, 56);
+            Place((RectTransform)root.Find("Title"), 0, 14, 110, 28);
+            var clip = Rect("PreviewClip", root, 120, 0, 52, 52);
+            clip.gameObject.AddComponent<RectMask2D>();
+            var preview = picker._preview.rectTransform;
+            preview.SetParent(clip, false);
+            preview.anchorMin = preview.anchorMax = preview.pivot = new Vector2(.5f, .5f);
+            preview.anchoredPosition = Vector2.zero;
+            preview.sizeDelta = new Vector2(156, 156); // Hero frames have about 2/3 transparent padding.
+            Place((RectTransform)root.Find("Name"), 180, 8, 200, 36);
+            Place((RectTransform)root.Find("Previous"), 388, 4, 70, 44);
+            Place((RectTransform)root.Find("Next"), 470, 4, 70, 44);
+            return picker;
+        }
+
+        private static HeroSkinPicker Create(RectTransform parent, Button template, TMP_Text textTemplate, IHeroSkinPreference skins, HeroVisualSet set)
+        {
             var root = Rect("HeroSkinPicker", parent, X, Y, Width, 300f);
             var picker = root.gameObject.AddComponent<HeroSkinPicker>();
             picker._skins = skins;
             picker._set = set;
 
-            var title = Text(menu.ApiStatus, root, "Title", 0f, 0f, Width, 28f);
+            var title = Text(textTemplate, root, "Title", 0f, 0f, Width, 28f);
             if (title != null) title.text = "Nhân vật";
 
             var frame = Rect("Preview", root, (Width - PreviewSize) * .5f, 32f, PreviewSize, PreviewSize);
@@ -47,7 +72,7 @@ namespace JungleMaze.Presentation.Player
             picker._preview.preserveAspect = true;
             picker._preview.raycastTarget = false;
 
-            picker._label = Text(menu.ApiStatus, root, "Name", 0f, 190f, Width, 28f);
+            picker._label = Text(textTemplate, root, "Name", 0f, 190f, Width, 28f);
             picker._previous = Arrow(template, root, "Previous", "<", 0f, 230f);
             picker._next = Arrow(template, root, "Next", ">", Width - ButtonWidth, 230f);
             picker._previous.onClick.AddListener(() => picker.Step(-1));
@@ -111,12 +136,18 @@ namespace JungleMaze.Presentation.Player
             return text;
         }
 
+        private static void Place(RectTransform rect, float x, float y, float width, float height)
+        { rect.anchoredPosition = new Vector2(x, -y); rect.sizeDelta = new Vector2(width, height); }
+
         /// <summary>Copies a menu button (look and hover states, no click listeners) and relabels it.</summary>
         private static Button Arrow(Button template, RectTransform parent, string name, string label, float x, float y)
         {
             var button = Instantiate(template, parent);
             button.name = name;
-            button.onClick.RemoveAllListeners();
+            button.onClick = new Button.ButtonClickedEvent();
+            foreach (var icon in button.GetComponentsInChildren<Image>(true))
+                if (icon.sprite != null && icon.sprite.name.StartsWith("kit_ico", System.StringComparison.Ordinal))
+                    icon.gameObject.SetActive(false);
             var r = (RectTransform)button.transform;
             r.anchorMin = r.anchorMax = new Vector2(0f, 1f);
             r.pivot = new Vector2(0f, 1f);

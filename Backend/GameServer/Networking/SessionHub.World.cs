@@ -64,6 +64,9 @@ public sealed partial class SessionHub
     {
         var match=session.Room.Match;var world=match.World;
         if(world==null||session.PlayerId==null||!match.Entities.TryGetBySession(session.PlayerId,out var actor)||actor==null)return;
+        if(force&&world.Airdrops!=null)
+            foreach(var state in world.Airdrops.Runtime.States)
+            {var drop=match.AirdropPacket(state,true);SendWorldPacket(session,ref drop);}
         var inventory=world.SnapshotInventory(actor.NetId);
         SendWorldPacket(session,ref inventory);
         if(force||((session.LastWorldRevision!=world.Revision||session.LastWorldMatch!=match.MatchId)&&match.CurrentTick-session.LastWorldSyncTick>=15))

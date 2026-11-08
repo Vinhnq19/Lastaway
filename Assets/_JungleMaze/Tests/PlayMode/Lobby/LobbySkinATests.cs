@@ -18,6 +18,44 @@ namespace JungleMaze.Tests.PlayMode.Lobby
     /// </summary>
     public sealed class LobbySkinATests
     {
+        [UnityTest]
+        public IEnumerator SplashIsNonInteractiveAndScopedToMenu()
+        {
+            using var rig = new LobbyUiRig();
+            yield return null;
+            Assert.NotNull(rig.Root.Splash);
+            var image = rig.Root.Splash.GetComponent<Image>();
+            Assert.AreEqual("lastaway_menu", image.sprite.name);
+            rig.Root.SetSplashForMenu(false);
+            Assert.AreEqual("lastaway_splash", image.sprite.name);
+            rig.Root.SetSplashForMenu(true);
+            Assert.AreEqual("lastaway_menu", image.sprite.name);
+            Assert.False(image.raycastTarget);
+            var fitter = image.GetComponent<AspectRatioFitter>();
+            Assert.AreEqual(AspectRatioFitter.AspectMode.EnvelopeParent, fitter.aspectMode);
+            Assert.That(fitter.aspectRatio, Is.EqualTo(16f / 9f).Within(.02f));
+            Assert.True(rig.Root.Splash.activeSelf);
+            rig.Flow.OpenJoin(); yield return null;
+            Assert.False(rig.Root.Splash.activeSelf);
+        }
+
+        [UnityTest]
+        public IEnumerator DropdownAndLobbyTextFitTheirFrames()
+        {
+            using var rig = new LobbyUiRig();
+            yield return null;
+            var dropdown = rig.Root.ServerSettings.Profile;
+            var sprite = dropdown.GetComponent<Image>().sprite;
+            Assert.Less(sprite.border.y + sprite.border.w, sprite.rect.height, "vertical borders must not exceed texture height");
+            Assert.Greater(sprite.border.z, sprite.border.w, "arrow cap belongs on the right");
+            var title = rig.Root.Lobby.MapCardTemplate.transform.Find("Title").GetComponent<TMP_Text>();
+            title.text = "Thị trấn · v1.1.0"; title.ForceMeshUpdate(true);
+            Assert.Greater(title.rectTransform.rect.width, 180);
+            var notice = rig.Root.Lobby.Notice.rectTransform;
+            var rule = rig.Root.Lobby.Rule.rectTransform;
+            Assert.LessOrEqual(-notice.anchoredPosition.y + notice.rect.height, -rule.anchoredPosition.y);
+        }
+
         private static string SpriteOf(Component c) => c.GetComponent<Image>().sprite.name;
 
         [Test]

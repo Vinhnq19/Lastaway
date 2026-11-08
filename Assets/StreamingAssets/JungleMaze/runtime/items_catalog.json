@@ -783,6 +783,9 @@
       20,
       5
     ],
+    "SupplyMin": 6,
+    "SupplyMax": 8,
+    "GuaranteedSupplyItems": ["MACE", "COMPASS"],
     "Supply": [
       {
         "ItemId": "MACE",

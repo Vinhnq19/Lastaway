@@ -121,7 +121,7 @@ namespace JungleMaze.Presentation.UI.Lobby
                 card.button.interactable = _maps.IsHost && _match.Phase == MatchPhase.Waiting;
                 if (card.selected != null) card.selected.SetActive(selected); // skin A: kit_card_room_selected overlay
                 else card.button.GetComponent<Image>().color = selected ? new Color(.15f, .38f, .27f) : new Color(.12f, .18f, .2f);
-                card.title.text = (selected ? "[Chọn] " : "") + card.map.Name + "\nv" + card.map.Version;
+                card.title.text = card.map.Name + " · v" + card.map.Version;
             }
         }
 

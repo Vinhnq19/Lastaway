@@ -69,6 +69,10 @@ public sealed class RoomGameplaySmoke : IDisposable
     public string? Phase => _phase?.ToString();
     public int Snapshots { get; private set; }
     public int Results { get; private set; }
+    private readonly HashSet<(Guid,ushort,uint)> _airdropRevisions=new();
+    public int AirdropFlights {get;private set;}
+    public int AirdropLandings {get;private set;}
+    public int AirdropBreaks {get;private set;}
     public int Starts { get; private set; }
     public bool MapVerified => _verified;
 
@@ -95,6 +99,11 @@ public sealed class RoomGameplaySmoke : IDisposable
         _registry.Subscribe<WorldSnapshotPacket>(OnSnapshot);
         _registry.Subscribe<MatchResultPacket>(OnResult);
         _registry.Subscribe<RoomMapCommandResultPacket>(OnRoomMapResult);
+        _registry.Subscribe<AirdropStatePacket>(p=>
+        {
+            if(p.MatchId!=_matchId||!_airdropRevisions.Add((p.MatchId,p.DropId,p.Revision))||p.Baseline)return;
+            if(p.Phase==1)AirdropFlights++;else if(p.Phase==3)AirdropLandings++;else if(p.Phase==4)AirdropBreaks++;
+        });
         RegisterIgnoredPackets();
     }
 
@@ -135,6 +144,7 @@ public sealed class RoomGameplaySmoke : IDisposable
     public object Report => new
     {
         mapId = MapId, mapHash = MapHash, phase = Phase, snapshots = Snapshots, results = Results,
+        airdropFlights=AirdropFlights,airdropLandings=AirdropLandings,airdropBreaks=AirdropBreaks,
         botCount = _botCount, starts = Starts, mapVerified = MapVerified, canStart = _canStart,
         selectionRevision = _selectionRevision, ownNetId = _ownNetId >= 0 ? (int?)_ownNetId : null,
         lastMapError = _lastMapError, rulesValidation = RulesValidation,
@@ -477,7 +487,7 @@ public sealed class RoomGameplaySmoke : IDisposable
         var known = new HashSet<Type>
         {
             typeof(RoomBotCommandResultPacket), typeof(RoomMapStatePacket), typeof(MatchPhasePacket), typeof(ResumeTokenPacket),
-            typeof(WorldSnapshotPacket), typeof(MatchResultPacket), typeof(RoomMapCommandResultPacket)
+            typeof(AirdropStatePacket), typeof(WorldSnapshotPacket), typeof(MatchResultPacket), typeof(RoomMapCommandResultPacket)
         };
         var register = typeof(RoomGameplaySmoke).GetMethod(nameof(RegisterIgnore),
             BindingFlags.Instance | BindingFlags.NonPublic)!;

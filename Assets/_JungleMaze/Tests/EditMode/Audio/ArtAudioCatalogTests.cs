@@ -71,7 +71,7 @@ namespace JungleMaze.Tests.Audio
                     Assert.AreEqual(asset, AssetDatabase.GUIDToAssetPath(guid), asset + " shares its GUID with another asset");
                     files++;
                 }
-            Assert.AreEqual(44, files, "41 SFX + 3 music");
+            Assert.AreEqual(46, files, "43 SFX + 3 music");
         }
 
         // AC13

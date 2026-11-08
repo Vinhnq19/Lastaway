@@ -297,7 +297,56 @@ Bản bot hiện hành AWS là **bots-20261105-r2**, Windows build **6000.3.15f1
 ### Test nhanh bản bot
 
 - **Local:** mở Docker Desktop; tại `Backend` chạy `docker compose --profile account up -d --build`. Mở `Builds/Windows-Bots-6000.3.15f1/Lastaway.exe` (hoặc scene Boot trong Editor), chọn Local, đăng ký/đăng nhập tài khoản Local, tạo phòng và chọn map. Bấm **Điền đủ 6** để có 1 người +5 bot, đợi tải map xong rồi **Bắt đầu**. Muốn 1+9 thì bấm thêm bot tới tổng10. Không chọn Luyện tập offline để test bot.
-- **Hai người:** chạy hai player/two PC, cùng backend và mã phòng; trưởng phòng thêm4 bot để đủ6. Hai PC cần tài khoản riêng, endpoint LAN/VPN/AWS phù hợp và cùng bản client gameplay v3. So sánh di chuyển/loot/HP/bo/kết quả và chơi lại theo checklist hai PC; nhiều cửa sổ trên một PC chỉ kiểm flow đồng bộ.
+- **Hai người:** chạy hai player/two PC, cùng backend và mã phòng; trưởng phòng thêm4 bot để đủ6. Hai PC cần tài khoản riêng, endpoint LAN/VPN/AWS phù hợp và cùng bản client gameplay v4 khi dùng source DRG-01 (bản bot AWS cũ vẫn v3). So sánh di chuyển/loot/HP/bo/kết quả và chơi lại theo checklist hai PC; nhiều cửa sổ trên một PC chỉ kiểm flow đồng bộ.
 - **AWS:** dùng profile Online với HTTPS/WSS hợp lệ và tài khoản AWS backend. Xem release hiện hành trong báo cáo bot trước khi dùng client mới; client gameplay v2 cũ bị từ chối rõ ràng. Không gửi mật khẩu/JWT trong mã phòng hoặc commandline. EC2 được giữ Running trong đợt này; admin tự Stop khi hết buổi để tiết kiệm credits.
 
 Dev smoke có thể đặt NET_SMOKE_BOTS=5 với NetSmokeClient --gameplay để chủ phòng yêu cầu thêm bot; đây là smoke backend, không tạo AI bên client. Unity acceptance runner nhận NET_TEST_BOT_COUNT=5 và NET_TEST_MAP_ID theo catalog. Luôn xem exitcode và report thực, không chỉ dòng PASS trong log player. Không dùng UI Automation lúc nghiệm thu thoát player15f1 vì lỗi engine đã ghi ở báo cáo cũ; không tắt accessibility để đổi kết quả thành PASS.
+
+
+## Kiểm thử DRG-01 — Rồng và thính trứng
+
+Dùng client/server gameplay **v4** cùng source; handshake tài khoản vẫn v4. Bản AWS cũ chưa có thay đổi này: không dùng bản build DRG-01 để suy rằng AWS đã được cập nhật.
+
+1. Unity **6000.3.15f1**: chọn **Jungle Maze → Phase 2 → Sync Runtime Data**. Khi đổi art, chạy **Jungle Maze → Dragon → Build Airdrop Assets**. Mở Boot, Play rồi chọn **Luyện tập offline**; không cần Docker/API.
+2. Lịch chính: rồng bay 1:50/3:50/5:20, trứng đáp 2:00/4:00/5:30. Xem marker minimap từ lúc bay; sau đáp đánh/bắn trứng, HP 150. Không có F trên trứng. Khi vỡ, F nhặt loot: 6–8 stack khác loại, luôn có MACE/COMPASS.
+3. Local/tự host: dùng hướng dẫn kết nối đang có; API + GameServer phải cùng source mới, có account hợp lệ. Vào cùng phòng, chọn Tháp cổ hoặc Thị trấn, thêm bot để đủ 6 rồi chủ phòng Bắt đầu. Bot có thể thắng hoặc lấy thính trước bạn.
+4. Kiểm nhanh backend từ thư mục Backend: `dotnet run --project Tests/AirdropChecks` và `dotnet run --project Tests/BotChecks`. AirdropChecks dùng lịch riêng trong thư mục tạm, socket UDP/WS thật; không đổi lịch chính. Có fixture damage/clock riêng, không coi đó là chơi PvP bằng tay.
+5. Kiểm Windows hai process bằng lệnh dưới, chạy tại thư mục dự án. `-ApiBaseUrl` loopback là bắt buộc để bài Local không dùng endpoint AWS mặc định của runner. Profile `test` tăng tốc bo/lịch cho kiểm tự động; không thay JSON lịch chính. Assertion `drg01.three-drops` đợi đủ ba lượt đáp trong cùng trận. Muốn kiểm kết quả/history/replay, đổi scenario thành `local2-accelerated.json`.
+
+```powershell
+Set-Location 'D:\Unity\Lastaway'
+$env:MATCH_PROFILE = 'test'
+Push-Location Backend
+docker compose --profile account up -d --build api game-server
+Pop-Location
+Remove-Item Env:MATCH_PROFILE
+$env:NET_TEST_MAP_ID = 'thap-co' # Lượt thứ hai đổi thành thi-tran
+.\Backend\Deploy\test-unity-remote.ps1 `
+  -Player "$PWD\Builds\Windows-DRG01-6000.3.15f1\Lastaway.exe" `
+  -Scenario "$PWD\Backend\Tests\OnlineReadiness\scenarios\drg01-accelerated.json" `
+  -OutputDirectory "$PWD\Backend\out\drg01-local-thap-co" `
+  -ApiBaseUrl 'http://127.0.0.1:5000' -Clients 2 -Local
+Remove-Item Env:NET_TEST_MAP_ID
+```
+
+Chỉ chạy tự động khi backend Local dành riêng, không có người đang chơi. Với bài 1 người +9 bot, dùng scenario riêng có `expectedPlayers=10`, đặt `NET_TEST_BOT_COUNT=9`, `-Clients 1`; thêm `-ForceAutoFallback` để ép UDP thất bại rồi kiểm WS loopback. Đừng sửa scenario hai người gốc để báo PASS nhầm.
+
+Sau kiểm, tại `Backend` chạy `$env:MATCH_PROFILE='main'; docker compose --profile account up -d api game-server; Remove-Item Env:MATCH_PROFILE` để trả server về lịch chính. Khi hết buổi Local dùng `docker compose --profile account stop`; giữ volume Mongo. Lịch chính cần sống tới sau 5:30 để quan sát đủ ba lượt.
+6. Đo backend 1 người +9 bot: `dotnet run --project Tests/BotChecks -- --stress --stress-rooms 1 --stress-seconds 300`. Kiểm 5 phòng/50 participant: đổi `--stress-rooms 5`; mặc định stress 60 giây. Đây là runtime fixture, không thay phép đo input/RTT từ Unity.
+
+Sửa lịch, HP hoặc kích thước tại `Backend/Shared/GameData/airdrop_schedule.json`; sửa các loại/trọng số Supply tại `items_catalog.json`, rồi sync và build lại cả client/server. Map dùng chung lịch; vị trí dựa trên geometry/bo của từng trận. Supply không tự thêm AMMO; shotgun giữ đạn cấu hình trong stack.
+
+Âm thanh: `Assets/_JungleMaze/Art/Audio/Sfx/egg_land.wav`, `egg_break.wav`, catalog `SfxCatalog.asset`, và recipe `Tools/Audio/art05_recipe.csv`. Không sửa file nguồn trong Sources. DragonRoar hiện có vẫn giữ trạng thái nguồn chưa kiểm chứng; không coi PASS playback là đã xác minh quyền phát hành hoặc đã nghe duyệt.
+
+**Hai PC thật:** PC host publish UDP/WS và API theo profile LAN/VPN đang có; PC thứ hai đăng nhập, vào cùng RoomCode, xác minh map rồi chơi cùng. So sánh đường bay, marker, HP, tranh loot, disconnect/resume và chơi lại trên cả hai màn hình; kiểm riêng UDP và WS/Auto. Hai process trên một PC chỉ là kiểm tích hợp, không thay nghiệm thu LAN/VPN hai thiết bị. Bàn giao luôn ở camera Follow Player.
+
+Bằng chứng và các tiêu chí chưa kiểm: [DRG-01](Reports/DRG01/report.vi.md).
+
+
+### Khi phòng chờ báo map/luật khác server sau merge
+
+Client xác minh cả MapHash và RulesHash; không tắt kiểm hash để vào trận. Khi source có thay đổi vũ khí, loot, bo hoặc lịch rồng, phải cập nhật cả hai phía: Unity chạy **Jungle Maze → Phase 2 → Sync Runtime Data**, build client mới; tại `Backend` chạy `docker compose --profile account up -d --build api game-server`. Mongo không cần xóa hay reset. Để chơi thường giữ profile `main`; profile `test` chỉ dành cho kiểm thử riêng.
+
+Local dùng tài khoản API Local và chọn **Local** trong Cài đặt máy chủ. AWS chỉ dùng được khi release server và client cùng phiên bản dữ liệu; Sync Runtime Data trên PC không cập nhật EC2. Xóa cache không sửa được RulesHash lệch. Skin ở phòng chờ được lưu cùng lựa chọn nhân vật trên menu của thiết bị; giữ cơ chế hiển thị skin hiện có, không đổi sang xác thực hay đồng bộ skin mới.
+
+Nhạc nền menu dùng `Assets/_JungleMaze/Art/Audio/Music/game_menu_looping.ogg`, chạy lặp ở đăng nhập/menu, danh sách phòng, phòng chờ và kết quả. Cài đặt mới bật nhạc mặc định; nếu máy đã lưu tùy chọn tắt nhạc, bật lại tại **Cài đặt → Âm thanh → Nhạc**. Khi kết nối/tải và trong trận, nhạc nền tắt; SFX gameplay vẫn hoạt động. Trở về menu/phòng chờ/kết quả sẽ phát lại nhạc menu.

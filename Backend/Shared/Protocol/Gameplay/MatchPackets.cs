@@ -4,7 +4,7 @@ using LiteNetLib.Utils;
 
 namespace JungleBackend.Protocol.Gameplay
 {
-    public static class MatchProtocol { public const ushort Version = 3; public const int MaxPlayers = 10; }
+    public static class MatchProtocol { public const ushort Version = 4; public const int MaxPlayers = 10; }
     public enum MatchPhase : byte { Waiting, Lobby, Loading, InGame, Ending, Cleanup }
     public enum MatchEndReason : byte { None, LastAlive, Tie, Timeout, Cancelled, NoHumans }
     public enum MatchEntityEvent : byte { Spawn, Despawn, Eliminated }

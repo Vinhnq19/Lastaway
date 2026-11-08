@@ -1,5 +1,5 @@
 {
-  "semantic_input_tokens": 6370,
-  "semantic_output_tokens": 3260,
+  "semantic_input_tokens": 0,
+  "semantic_output_tokens": 0,
   "note": "Agent-reported token counts; Codex supervision unmetered here. AST uses no model API. Not a billing or savings claim."
 }

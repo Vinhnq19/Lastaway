@@ -58,6 +58,7 @@ namespace JungleMaze.EditorTools
                 backdrop.name = "Backdrop";
                 Set(root, "canvas", canvas);
                 Set(root, "backdrop", backdrop.gameObject);
+                BuildSplash(rt, root);
                 Set(root, "mainMenu", BuildMainMenu(rt));
                 Set(root, "joinForm", BuildJoin(rt));
                 Set(root, "connecting", BuildConnecting(rt));
@@ -91,6 +92,29 @@ namespace JungleMaze.EditorTools
         // ---------- screens ----------
 
         /// <summary>A2 Sảnh chính: logo, six L buttons (420×80, step 100), API line with check, version, account chip (kit_toast, 96 tall).</summary>
+        public static void BuildSplash(RectTransform rt, LobbyUiRoot root)
+        {
+                var splash = new GameObject("Splash", typeof(RectTransform), typeof(Image), typeof(AspectRatioFitter));
+                splash.transform.SetParent(rt, false);
+                var sr = (RectTransform)splash.transform;
+                sr.anchorMin = sr.anchorMax = sr.pivot = new Vector2(.5f, .5f);
+                var splashImage = splash.GetComponent<Image>();
+                splashImage.sprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/_JungleMaze/Art/UI/Splash/lastaway_splash.png");
+                splashImage.raycastTarget = false;
+                var fitter = splash.GetComponent<AspectRatioFitter>();
+                fitter.aspectMode = AspectRatioFitter.AspectMode.EnvelopeParent;
+                fitter.aspectRatio = splashImage.sprite != null ? splashImage.sprite.rect.width / splashImage.sprite.rect.height : 16f / 9f;
+                var shade = new GameObject("Shade", typeof(RectTransform), typeof(Image));
+                shade.transform.SetParent(sr, false);
+                var shadeRect = (RectTransform)shade.transform;
+                shadeRect.anchorMin = Vector2.zero; shadeRect.anchorMax = Vector2.one;
+                shadeRect.offsetMin = shadeRect.offsetMax = Vector2.zero;
+                shade.GetComponent<Image>().color = new Color(0f, 0f, 0f, .18f);
+                shade.GetComponent<Image>().raycastTarget = false;
+                Set(root, "splash", splash);
+                Set(root, "mainMenuBackground", AssetDatabase.LoadAssetAtPath<Sprite>("Assets/_JungleMaze/Art/UI/Splash/lastaway_menu.png"));
+        }
+
         private static MainMenuView BuildMainMenu(RectTransform rt)
         {
             var v = Screen<MainMenuView>(rt, "MainMenu");
@@ -410,8 +434,8 @@ namespace JungleMaze.EditorTools
             Set(v, "status", Txt(info, "Status", Tier.H2, "", C.Gold, 60, 86, 710));
             PlateIcon(info, "PlayerIcon", "kit_ico_person", 76, 150, 26);
             Set(v, "count", Txt(info, "Count", Tier.B2, "", C.Text, 118, 150, 652));
-            Set(v, "notice", Txt(info, "Notice", Tier.B2, "", C.Gold, 60, 200, 710));
-            Set(v, "rule", Para(info, "Rule", Tier.B2, "", C.Muted, 60, 222, 710, 66));
+            Set(v, "notice", Para(info, "Notice", Tier.B2, "", C.Gold, 60, 188, 710, 54));
+            Set(v, "rule", Para(info, "Rule", Tier.B2, "", C.Muted, 60, 250, 710, 40));
             var cards = MapCards(info, 60, 300, 710, 180, out var template);
             Set(v, "mapCards", cards);
             Set(v, "mapCardTemplate", template);
@@ -464,9 +488,9 @@ namespace JungleMaze.EditorTools
             template = card.gameObject.AddComponent<Button>();
             template.targetGraphic = image;
             Box(card, "Selected", "kit_card_room_selected", 0, 0, 340, h).gameObject.SetActive(false);
-            Rel(card, "Preview", 16, 20, 140, 140).gameObject.AddComponent<RawImage>().raycastTarget = false;
-            Para(card, "Title", Tier.B2, "", C.Text, 170, 16, 156, 70);
-            Para(card, "Description", Tier.C, "", C.Muted, 170, 90, 156, 76);
+            Rel(card, "Preview", 16, 12, 308, 84).gameObject.AddComponent<RawImage>().raycastTarget = false;
+            Para(card, "Title", Tier.B2, "", C.Text, 16, 100, 308, 38);
+            Para(card, "Description", Tier.C, "", C.Muted, 16, 138, 308, 36);
             card.gameObject.SetActive(false);
             return scroll;
         }
@@ -910,8 +934,12 @@ namespace JungleMaze.EditorTools
             var handle = (RectTransform)area.Find("Handle");
             handle.offsetMin = handle.offsetMax = Vector2.zero;
             UiKit.Image(handle, "kit_scroll_thumb").raycastTarget = true;
+            drop.captionText.alignment = TextAlignmentOptions.MidlineLeft;
+            drop.captionText.textWrappingMode = TextWrappingModes.NoWrap;
+            drop.captionText.overflowMode = TextOverflowModes.Ellipsis;
             drop.ClearOptions();
             return drop;
+
         }
 
         // ---------- serialized refs ----------

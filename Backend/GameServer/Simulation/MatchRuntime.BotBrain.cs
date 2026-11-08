@@ -226,7 +226,22 @@ public sealed partial class MatchRuntime
                 else Goal(new Vector2(floor.X,floor.Y),now,settings);
                 return;
             }
-            WorldObjectDefinition? container=null;best=float.MaxValue;
+            WorldObjectDefinition? preferredSupply=null;
+            var carried=world.Inventory.GetSnapshot(actor.NetId);
+            var wantsSupply=!carried.Weapons.Any(s=>s.ItemId=="MACE")||!carried.Consumables.Any(s=>s.ItemId=="COMPASS");
+            if(wantsSupply&&world.Airdrops!=null)
+                foreach(var drop in world.Airdrops.Runtime.States)
+                {
+                    if(drop.Phase!=JungleMaze.World.Airdrops.AirdropPhase.Flying&&drop.Phase!=JungleMaze.World.Airdrops.AirdropPhase.Falling&&drop.Phase!=JungleMaze.World.Airdrops.AirdropPhase.Landed)continue;
+                    var target=new Vector2(drop.Position.X,drop.Position.Y);
+                    if(match.Zone?.IsOutside(target.X,target.Y)==true||Dangerous(world,target))continue;
+                    var edge=Approach(new WorldBounds(target.X,target.Y,world.Airdrops.EggSize,world.Airdrops.EggSize),position,actor.Radius+.2f);
+                    if(!Walkable(match,edge,actor.Radius))continue;
+                    if(drop.Phase==JungleMaze.World.Airdrops.AirdropPhase.Landed&&Vector2.DistanceSquared(position,target)<=settings.DetectRadius*settings.DetectRadius&&Visible(match,position,edge))
+                    {preferredSupply=world.Layout.Objects.First(o=>o.Id==drop.WorldId);break;}
+                    State=BotState.Roam;Goal(edge,now,settings);return;
+                }
+            WorldObjectDefinition? container=preferredSupply;best=container==null?float.MaxValue:0;
             foreach(var item in world.Layout.Objects)
             {
                 if(!item.IsDestructible||world.Destructibles.IsBroken(item.Id))continue;

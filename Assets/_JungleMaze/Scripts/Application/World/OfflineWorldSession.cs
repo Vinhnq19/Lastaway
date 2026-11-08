@@ -9,6 +9,7 @@ using JungleMaze.App.Ports;
 using JungleMaze.Core.Ticking;
 using JungleMaze.Domain.Hud;
 using JungleMaze.World;
+using JungleMaze.World.Airdrops;
 using JungleMaze.World.Inventory;
 using JungleMaze.World.Loot;
 
@@ -23,7 +24,13 @@ namespace JungleMaze.App.World
         ITransactionalDestructibleLootSink, IEnvironmentDamageSink, IEnvironmentEffectSink, IEnvironmentMovementSink, IItemGameplayPort
     {
         private readonly OfflineMatchSession _match;
-        private readonly MapLayout _map;
+        private MapLayout _map;
+        private readonly MapLayout _templateMap;
+        private readonly AirdropSettings _airdropSettings;
+        private bool _usingSupplyReserve;
+        public AirdropController Airdrops { get; private set; }
+        public event Action<AirdropState> AirdropChanged;
+        private int FloorReserve => Math.Max(0, (Airdrops?.ReservedLootRemaining ?? 0) - (_usingSupplyReserve ? 8 : 0));
         private readonly DestructibleConfig _destructibleConfig;
         private readonly HazardConfig _hazardConfig;
         private readonly ItemCatalog _catalog;
@@ -80,6 +87,8 @@ namespace JungleMaze.App.World
         public InventoryService Items => _items;
         /// <summary>Loot seed of the current practice round (from its fresh MatchId): floor items and container drops change every round.</summary>
         public uint LootSeed => _lootSeed;
+        public float ElapsedSeconds => (float)_now;
+        public Guid MatchId => _matchId;
         /// <summary>Floor loot spread when the current round started (Docs/hvu/07_Floor_Loot.vi.md section 2-3).</summary>
         public FloorLootPlan InitialLoot { get; private set; }
 
@@ -97,7 +106,7 @@ namespace JungleMaze.App.World
             IInventoryStateWriter inventoryHud,
             IEffectStateWriter effectHud,
             GameFlow flow,
-            InventoryHudBinding binding = null)
+            InventoryHudBinding binding = null, AirdropSettings airdrops = null)
         {
             _match = match;
             _catalog = catalog ?? ItemCatalog.CreateBaseline();
@@ -111,7 +120,9 @@ namespace JungleMaze.App.World
 
             _destructibleConfig = destructibles ?? new DestructibleConfig();
             _hazardConfig = hazards ?? new HazardConfig();
+            _templateMap = map;
             _map = map;
+            _airdropSettings = airdrops;
             if (_map != null)
             {
                 // Same shared helpers as MatchWorldRuntime: a broken container stops blocking drops; spots depend only on
@@ -133,6 +144,8 @@ namespace JungleMaze.App.World
         {
             if (_match != null && _match.IsActive && _map == null)
                 throw new InvalidOperationException("Offline authored world data is missing; sync runtime data.");
+            _map = _templateMap == null ? null : AirdropController.CopyLayout(_templateMap);
+            Airdrops = null;
             _deathDropped = false; _dirty = true; _lastFloorCount = -1;
             _matchId = _match != null && _match.MatchId != Guid.Empty ? _match.MatchId : Guid.NewGuid();
             _nextFloorId = 10000;
@@ -151,7 +164,7 @@ namespace JungleMaze.App.World
 
             if (_map != null)
             {
-                _floor = new MemoryItemWorld(() => _nextFloorId >= ushort.MaxValue || _floor.Items.Count >= FloorLootPlanner.MaxFloorItems ? (ushort)0 : (ushort)++_nextFloorId);
+                _floor = new MemoryItemWorld(() => _nextFloorId >= ushort.MaxValue || _floor.Items.Count >= Math.Min(FloorLootPlanner.MaxFloorItems - FloorReserve,WorldWire.MaxObjects-_map.Objects.Count-FloorReserve-(Airdrops?.ReservedEggsRemaining??0)) ? (ushort)0 : (ushort)++_nextFloorId);
                 _items = new InventoryService(_matchId, _catalog, this, _floor);
                 _items.Register(0);
                 _items.Changed += _ => _dirty = true;
@@ -181,6 +194,26 @@ namespace JungleMaze.App.World
 
                 _playerPose = _map.Spawns != null && _map.Spawns.Count > 0 ? _map.Spawns[0] : new WorldPoint(25f, 25f);
                 _items.SetActorState(0, _playerPose.X, _playerPose.Y, true);
+                if (_airdropSettings?.Enabled == true && _match?.Zone != null)
+                {
+                    _lootTable.ValidateSupply();
+                    if(_map.Objects.Count+_airdropSettings.ReservedEggs+_airdropSettings.ReservedLootStacks>WorldWire.MaxObjects)
+                        throw new InvalidOperationException("Map cannot reserve scheduled eggs and their loot.");
+                    var forecast = new ZoneSimulation(_match.Zone.Schedule, _matchId.GetHashCode(), 2f,
+                        new RuntimeMapBounds { MinX=0,MinY=0,MaxX=_map.Size,MaxY=_map.Size });
+                    AirdropZone PredictZone(float seconds)
+                    {
+                        forecast.Update(seconds,(uint)(seconds*30),30);
+                        return new AirdropZone(forecast.CurrentCenter.X,forecast.CurrentCenter.Y,forecast.CurrentRadius);
+                    }
+                    var candidates = _floorSpots.ReachablePositions;
+                    Airdrops = new AirdropController(_airdropSettings,LootSeeds.FromGuid(_matchId),_map,_destructibles,
+                        candidates,PredictZone,() => _nextFloorId >= ushort.MaxValue ? (ushort)0 : (ushort)++_nextFloorId,
+                        () => { _lootSurface = new LootSurface(_map,_lootTable.Floor.DropClearance,_destructibles.IsBroken); _dirty=true; },
+                        (point,size) => new WorldBounds(point.X,point.Y,size,size).IntersectsCircle(_playerPose,_hazardConfig.HeroRadius));
+                    Airdrops.Changed += state => AirdropChanged?.Invoke(state);
+                }
+                _lootSurface = new LootSurface(_map,_lootTable.Floor.DropClearance,_destructibles.IsBroken);
                 SpawnFloorLoot();
                 // Hero trong scene đứng sẵn ở tâm map: đưa về spawn đầu của map (cùng đường dịch chuyển như portal).
                 _pendingPortalDestination = _playerPose;
@@ -238,6 +271,7 @@ namespace JungleMaze.App.World
             }
 
             TickThrowables();
+            Airdrops?.Tick((float)_now);
 
             if (_poisonUntil > _now && _poisonDue <= _now)
             {
@@ -453,7 +487,9 @@ namespace JungleMaze.App.World
         {
             // Counts gun ammo companions too, so the preflight matches what SpawnLoot creates (same as the server).
             var count = LootDrops.CountForContainer(_lootTable, source, LootSeeds.Mix(seed, _lootSeed));
-            return _floor != null && _floor.Items.Count + count <= FloorLootPlanner.MaxFloorItems && _nextFloorId + count <= ushort.MaxValue && _map.Objects.Count + _floor.Items.Count + count <= WorldWire.MaxObjects;
+            var reserve = Math.Max(0, (Airdrops?.ReservedLootRemaining ?? 0) -
+                (source == WorldObjectKind.Supply && Airdrops?.Owns(worldId) == true ? 8 : 0));
+            return _floor != null && _floor.Items.Count + count <= FloorLootPlanner.MaxFloorItems - reserve && _nextFloorId + count <= ushort.MaxValue && _map.Objects.Count + _floor.Items.Count + count <= WorldWire.MaxObjects - reserve - (Airdrops?.ReservedEggsRemaining??0);
         }
 
         public void SpawnLoot(WorldObjectKind source, ushort worldId, WorldPoint position, uint seed)
@@ -461,6 +497,9 @@ namespace JungleMaze.App.World
             if (_lootTable == null || _floor == null || _lootSurface == null) return;
             // Drops fan out 0.9-1.4 cells around the broken container and guns bring an AMMO box (shared LootDrops).
             var placements = LootDrops.ForContainer(_lootTable, source, position, LootSeeds.Mix(seed, _lootSeed), _lootSurface);
+            _usingSupplyReserve = source == WorldObjectKind.Supply && Airdrops?.Owns(worldId) == true;
+            try
+            {
             var spawned = new List<ushort>(placements.Count);
             foreach (var placed in placements)
             {
@@ -469,6 +508,8 @@ namespace JungleMaze.App.World
                 foreach (var old in spawned) _floor.Remove(old);
                 break;
             }
+            }
+            finally { _usingSupplyReserve = false; }
             RebuildWireObjects();
             Changed?.Invoke();
         }

@@ -77,6 +77,8 @@ namespace JungleMaze.Presentation.World.Phase2
 
         private void Start()
         {
+            var airdrops=gameObject.AddComponent<AirdropSceneView>();
+            airdrops.Construct(_world,_match,_offlineWorld,_flow);
             if (_world != null)
             {
                 _world.Changed += Refresh;
@@ -160,8 +162,8 @@ namespace JungleMaze.Presentation.World.Phase2
                 if (_world.Inventory != null && _world.Inventory.IsUsing) _world.Send(WorldActionKind.CancelUse);
         }
 
-        /// <summary>Q (hoặc Backspace như cũ) bỏ vũ khí đang cầm xuống sàn.</summary>
-        private static bool DropPressed() => Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.Backspace);
+        /// <summary>Q bỏ vũ khí đang cầm xuống sàn.</summary>
+        private static bool DropPressed() => Input.GetKeyDown(KeyCode.Q);
 
         private void UpdateOffline()
         {

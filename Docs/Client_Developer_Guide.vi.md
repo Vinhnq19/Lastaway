@@ -10,7 +10,7 @@ Cập nhật **01/11/2026**. Tài liệu dành cho người mới vào làm game
 2. **Chơi mạng:** setup stack API/Mongo/GameServer và secret theo [Phase2, mục1](Phase2_Match_Guest_Zone.vi.md#1-khởi-chạy-backend-local). Chọn profile `phase2-local`, đăng ký/đăng nhập trên menu rồi tạo/vào phòng bằng mã và tên. Không dùng RoomCode để bỏ bước account. LAN/VPN/AWS cần API HTTPS; HTTP chỉ loopback Local.
 3. Server `main` cần6 người, lobby15s/loading30s. Profile `test` chỉ dành Local2 người/timer tăng tốc; không dùng public. Chỉ bắt đầu từ Boot khi kiểm full flow mạng.
 4. Click **Game View**, WASD/mũi tên để đi và chuột ngắm. Client gửi input; online nhận vị trí/HP/bo từ server. Offline dùng HeroController và OfflineMatchSession, không chạy cùng hai mô phỏng.
-5. Chuột trái attack, R reload, F nhặt món đang trỏ,1–4 chọn vũ khí,5–8 dùng đồ, Q (hoặc Backspace) bỏ vũ khí đang cầm. Scene dùng world/item/combat service đã ghép; trạng thái nghiệm thu từng bước và giới hạn đọc trong [báo cáo hiện hành](Reports/Phase2_Local/report.vi.md). Không dùng công cụ projectile foundation cũ để chứng minh PvP đã hoàn tất.
+5. Chuột trái attack, R reload, F nhặt món đang trỏ,1–4 chọn vũ khí,5–8 dùng đồ, Q bỏ vũ khí đang cầm. Scene dùng world/item/combat service đã ghép; trạng thái nghiệm thu từng bước và giới hạn đọc trong [báo cáo hiện hành](Reports/Phase2_Local/report.vi.md). Không dùng công cụ projectile foundation cũ để chứng minh PvP đã hoàn tất.
 6. F3 bật số đo; ESC mở menu và không dừng timer. Build Windows hiện giữ6000.3.15f1, có native quit BLOCKED; file evidence PASS chưa đủ nếu exit khác0.
 
 Nếu Editor không được focus mà game đứng hình, bật **Project Settings → Player → Run In Background**.
@@ -236,3 +236,11 @@ Unity Windows/Editor đã có WSS/Auto. Prediction/reconciliation (MOV-02) và i
 The map owner can export optional `worldObjects` in the same map document using `WorldObjectDefinition` (`kind`, `bounds.minX/minY/maxX/maxY`, and `pairId` for portals). World runtime assigns instance IDs and validates placements without moving them. This export is separate from the renderer/prefabs; do not modify scene cover geometry in an item or environment adapter.
 
 Procedural layouts remain available in the explicit WorldDemo and backend fixtures. Backend fixtures set `WORLD_LAYOUT_MODE=Prototype`; normal team matches must not set this override. The existing map JSON and Game scene are not rewritten by world initialization.
+
+### Hiển thị bo và phản hồi HP
+
+Viền trắng trên minimap/bản đồ lớn là vị trí bo kế tiếp, hiện liên tục khi đã có dữ liệu, không chỉ trong thời gian cảnh báo. Đích co cuối cùng r0 dùng chấm trắng; hết lịch bo thì ẩn. Zoom minimap giữ cùng tọa độ với bản đồ.
+
+Nhân vật nhận damage nháy đỏ và hiện số HP thực mất đã xác nhận; giáp chặn hết hoặc hồi máu không tạo số damage. Offline và online dùng cùng VFX; không dự đoán mất HP.
+
+Nền đăng nhập/đăng ký và menu chính dùng `Assets/_JungleMaze/Art/UI/Splash/lastaway_splash.png` (ảnh tạo bằng imagegen cho dự án). Nền giữ tỉ lệ và crop theo màn hình; các màn phòng chờ/loading/kết quả giữ nền đá. Khi dựng lại UI, dùng builder hiện có để giữ cấu hình này.

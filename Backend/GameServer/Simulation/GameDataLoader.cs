@@ -3,7 +3,7 @@ namespace GameServer.Simulation;
 public static class GameDataLoader
 {
     // Map geometry is versioned independently; changing one map must not invalidate all other maps.
-    public static readonly string[] RuleFiles = { "match_settings.json", "zone_schedule.json", "world_settings.json", "items_catalog.json", "weapons.json" };
+    public static readonly string[] RuleFiles = { "match_settings.json", "zone_schedule.json", "world_settings.json", "items_catalog.json", "weapons.json", "airdrop_schedule.json" };
     public static string RulesHash
     {
         get

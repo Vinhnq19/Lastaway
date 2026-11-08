@@ -49,6 +49,7 @@ public sealed class WorldNetworkClient : IAsyncDisposable
     public readonly List<WorldActionResultPacket> Results = new();
     public readonly List<AttackResultPacket> Attacks = new();
     public readonly List<ReloadResultPacket> Reloads = new();
+    public readonly List<AirdropStatePacket> AirdropEvents=new();
     public readonly List<ThrowableEventPacket> ThrowableEvents = new();
     public uint CompletedRevision { get; private set; }
     public WorldObjectWire[] WorldObjects { get; private set; } = Array.Empty<WorldObjectWire>();
@@ -83,6 +84,7 @@ public sealed class WorldNetworkClient : IAsyncDisposable
         _registry.Subscribe<KillcamDataChunkPacket>(p => { if (p.MatchId == MatchId && KillcamChunks.Count < 2) KillcamChunks.Add(p); });
         _registry.Subscribe<EventPacket>(_ => { });
         _registry.Subscribe<AttackResultPacket>(p=>Attacks.Add(p));
+        _registry.Subscribe<AirdropStatePacket>(p=>AirdropEvents.Add(p));
         _registry.Subscribe<ThrowableEventPacket>(p => { WorldPacketsSeen++; ThrowableEvents.Add(p); });
         _registry.Subscribe<ReloadResultPacket>(p=>Reloads.Add(p));
         _registry.Subscribe<WorldManifestPacket>(p => { WorldPacketsSeen++; if (p.MatchId == MatchId) Manifest = p; });

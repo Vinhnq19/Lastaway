@@ -55,7 +55,7 @@ namespace JungleMaze.Composition
             var flow = _registry.Resolve<JungleMaze.App.Flow.GameFlow>();
             var effectWriter = _registry.Resolve<IEffectStateWriter>();
             var balance = _registry.Resolve<IBalanceConfigProvider>();
-            var offlineWorld = new OfflineWorldSession(offlineSession, data?.Layout, data?.Destructibles, data?.Hazards, catalog, lootTable, balance, hudWriter, inventoryWriter, effectWriter, flow, binding);
+            var offlineWorld = new OfflineWorldSession(offlineSession, data?.Layout, data?.Destructibles, data?.Hazards, catalog, lootTable, balance, hudWriter, inventoryWriter, effectWriter, flow, binding, data?.Airdrops);
             try { offlineWorld.ThrowableRules = ThrowableRulesJson.Load(Application.streamingAssetsPath); }
             catch (System.Exception e) { _log.Warn("[Throwables] " + e.Message); }
             _registry.Register(offlineWorld);
@@ -67,6 +67,22 @@ namespace JungleMaze.Composition
             if (_registry.TryResolve<JungleMaze.App.Audio.MatchAudioEventSource>(out var audio))
                 audio.BindCombat(combat, offlineWorld, world, _registry.Resolve<IHudState>(), throwables);
             // The Game scene owns its world views and colliders; services survive scene changes.
+        }
+        private void ConfigureAirdropCheck()
+        {
+            var world=_registry.Resolve<WorldClientSession>();
+            var match=_registry.Resolve<MatchSession>();
+            var sawThreeDrops=false;
+            JungleMaze.App.Testing.OnlineTestExtensions.RegisterCheck("drg01.three-drops",context=>
+            {
+                if(!sawThreeDrops&&world.IsReady&&world.Airdrops.Count==3)
+                {
+                    var landed=0;foreach(var state in world.Airdrops.Values)
+                        if(state.MatchId==match.MatchId&&(state.Phase==3||state.Phase==4))landed++;
+                    sawThreeDrops=landed==3;
+                }
+                return new JungleMaze.App.Testing.OnlineCheckResult(sawThreeDrops?"PASS":"WAIT","Three authoritative eggs landed in one match; gameplay v4.");
+            });
         }
     }
 }

@@ -21,18 +21,25 @@ public sealed class MatchWorldSetup
     public static MatchWorldSetup Load()
     {
         var settings = WorldSettings.Load(GameDataLoader.ReadGameDataFile("world_settings.json"));
+        settings.Airdrops = JsonSerializer.Deserialize<JungleMaze.World.Airdrops.AirdropSettings>(
+            GameDataLoader.ReadGameDataFile("airdrop_schedule.json"),
+            new JsonSerializerOptions { IncludeFields = true, PropertyNameCaseInsensitive = true })
+            ?? throw new InvalidDataException("Missing airdrop settings.");
+        settings.Airdrops.Validate();
         var options = new JsonSerializerOptions { IncludeFields = true, PropertyNameCaseInsensitive = true };
         options.Converters.Add(new JsonStringEnumConverter());
         var items = JsonSerializer.Deserialize<ItemCatalogDocument>(GameDataLoader.ReadGameDataFile("items_catalog.json"), options)
             ?? throw new InvalidDataException("Missing item catalog.");
-        return new(settings, items.Build(), items.Loot, GameDataLoader.RulesHash);
+        var result=new MatchWorldSetup(settings, items.Build(), items.Loot, GameDataLoader.RulesHash);
+        if(settings.Airdrops.Enabled)result._floorTable.ValidateSupply();
+        return result;
     }
 
     internal WorldSettings ForMap(MapDefinition definition) => new()
     {
         Version = _template.Version, Seed = _template.Seed, LayoutMode = "Authored", Layout = definition.Layout,
         Map = _template.Map, Destructibles = _template.Destructibles, Hazards = _template.Hazards,
-        FloorSpots = FloorSpotsFor(definition.Layout)
+        FloorSpots = FloorSpotsFor(definition.Layout), Airdrops = _template.Airdrops
     };
 
     // Spots depend only on map geometry and the loot profile: plan once per map hash, off the tick thread where possible.
@@ -40,6 +47,8 @@ public sealed class MatchWorldSetup
     private readonly LootTable _floorTable;
     internal FloorLootSpots FloorSpotsFor(MapLayout layout)
     {
+        if(_template.Airdrops?.Enabled==true&&layout.Objects.Count+_template.Airdrops.ReservedEggs+_template.Airdrops.ReservedLootStacks>JungleBackend.Protocol.Gameplay.WorldWire.MaxObjects)
+            throw new InvalidDataException("Map cannot reserve scheduled eggs and supply loot.");
         if (_floorSpots.TryGetValue(layout.Hash, out var cached) && ReferenceEquals(cached.Layout, layout)) return cached;
         var planned = FloorLootPlanner.PlanSpots(layout, _floorTable, 0, _template.Map.HeroRadius);
         _floorSpots[layout.Hash] = planned;

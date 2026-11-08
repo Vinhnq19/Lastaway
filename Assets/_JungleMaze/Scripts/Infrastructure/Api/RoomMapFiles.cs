@@ -119,7 +119,7 @@ namespace JungleMaze.Infrastructure.Api
         {
             try { return _runtime.ActivateSelectedMap(json, mapHash, rulesHash); }
             catch (Exception e) when (!(e is OutOfMemoryException))
-            { return "Map hoặc luật không hợp lệ/khác server; cập nhật client rồi thử lại."; }
+            { return SelectedMapData.ValidationMessage(e); }
         }
 
         public void Clear()
@@ -320,7 +320,7 @@ namespace JungleMaze.Infrastructure.Api
             token.ThrowIfCancellationRequested();
             try { SelectedMapData.Prepare(json, hash, rulesHash, _rulesDirectory); }
             catch (Exception e) when (!(e is OutOfMemoryException))
-            { throw Fail("Map hoặc luật không hợp lệ/khác server; cập nhật client rồi thử lại."); }
+            { throw Fail(SelectedMapData.ValidationMessage(e)); }
         }
 
         private static byte[] ReadPreviewCache(string path, string hash, CancellationToken token)

@@ -10,12 +10,11 @@ using UnityEngine;
 
 namespace JungleMaze.Tests.Audio
 {
-    /// <summary>ART-05 music: three compressed tracks under Art/Audio/Music, streamed, wired in AudioRuntimeSet (AC16, AC29, AC31).</summary>
+    /// <summary>Streamed music under Art/Audio/Music, including the user-provided menu loop, wired in AudioRuntimeSet.</summary>
     public sealed class ArtAudioMusicTests
     {
         private const string RuntimeSetPath = "Assets/_JungleMaze/Art/Audio/Resources/AudioRuntimeSet.asset";
 
-        [TestCase(MusicTrack.WaitingRoom, "waiting_room.ogg", 145.53f)]
         [TestCase(MusicTrack.Loading, "loading.ogg", 43.65f)]
         [TestCase(MusicTrack.Match, "match.ogg", 123.48f)]
         public void Track_Compressed_Streamed_Wired(MusicTrack track, string file, float sourceSeconds)
@@ -49,6 +48,21 @@ namespace JungleMaze.Tests.Audio
             var size = typeof(AudioImporter).GetProperty("compSize", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
             if (size == null) Assert.Ignore("AudioImporter.compSize not found in this Unity version");
             Assert.LessOrEqual(System.Convert.ToInt64(size.GetValue(importer)), 3_000_000L, file + " imported size");
+        }
+
+        [Test]
+        public void MenuLobbyAndResultsUseTheUserLoopWithStreamingImport()
+        {
+            const string path = ArtAudioSpec.MusicFolder + "game_menu_looping.ogg";
+            var clip = AssetDatabase.LoadAssetAtPath<AudioClip>(path);
+            var set = AssetDatabase.LoadAssetAtPath<AudioRuntimeSet>(RuntimeSetPath);
+            Assert.IsNotNull(clip);
+            foreach (var screen in new[] { JungleMaze.App.Flow.AppScreen.MainMenu,
+                         JungleMaze.App.Flow.AppScreen.InRoom, JungleMaze.App.Flow.AppScreen.Results })
+                Assert.AreSame(clip, set.MusicFor(MusicPlan.TrackFor(screen)), screen.ToString());
+            var importer = (AudioImporter)AssetImporter.GetAtPath(path);
+            Assert.AreEqual(AudioClipLoadType.Streaming, importer.defaultSampleSettings.loadType);
+            Assert.IsTrue(importer.loadInBackground);
         }
 
         [Test]

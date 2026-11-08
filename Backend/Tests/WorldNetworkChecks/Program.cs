@@ -93,6 +93,15 @@ try
     if(!world.Layout.IsWalkable(approach,.4f,world.Destructibles.IsBroken,world.Hazards.IsDoorClosed))throw new Exception("Fixture chest approach blocked");
     var floorAtStart=world.Floor.Items.Select(f=>f.Id).ToHashSet();
     attacker.X=approach.X;attacker.Y=approach.Y;
+    void BackAwayFromBrokenChest(DestructibleState state)
+    {
+        if(state.Id!=chest.Id||!state.Broken)return;
+        // Fixture backoff keeps auto-pickup from consuming the batch before this test counts it.
+        var safe=world.Layout.Spawns.First(p=>p.DistanceSquared(chest.Bounds.Center)>25);
+        foreach(var actor in serverMatch.Entities.All){actor.X=safe.X;actor.Y=safe.Y;}
+        world.SyncActors();
+    }
+    world.Destructibles.Changed+=BackAwayFromBrokenChest;
     for(ushort seq=1;seq<=4;seq++)
     {
         var attack=new AttackRequestPacket{RequestSeq=seq,Weapon=CombatWeaponId.Hand,Aim=0};
@@ -101,6 +110,7 @@ try
         Check(clients[0].Attacks.Last().Outcome==CombatOutcome.Accepted,"real network bare-hand attack accepted "+seq);
         if(seq<4)WaitTicks(16);
     }
+    world.Destructibles.Changed-=BackAwayFromBrokenChest;
     Check(world.Destructibles.IsBroken(chest.Id),"four real weapon requests break chest through combat adapter");
     var retry=new AttackRequestPacket{RequestSeq=4,Weapon=CombatWeaponId.Hand,Aim=0};var beforeRetry=world.Floor.Items.Count;
     clients[0].Send(ref retry,true);WaitTicks(2);

@@ -14,7 +14,7 @@ namespace JungleMaze.Infrastructure.Config
     public sealed class SelectedMapData
     {
         const int MaxBytes = 2 * 1024 * 1024, RequiredSpawns = 10;
-        static readonly string[] RuleFiles = { "match_settings.json", "zone_schedule.json", "world_settings.json", "items_catalog.json", "weapons.json" };
+        static readonly string[] RuleFiles = { "match_settings.json", "zone_schedule.json", "world_settings.json", "items_catalog.json", "weapons.json", "airdrop_schedule.json" };
 
         public MapLayout Layout { get; }
         public RuntimeMapBounds Bounds { get; }
@@ -98,6 +98,15 @@ namespace JungleMaze.Infrastructure.Config
             var bounds = new RuntimeMapBounds { MinX = mapBounds.MinX, MinY = mapBounds.MinY, MaxX = mapBounds.MaxX, MaxY = mapBounds.MaxY };
 
             return new SelectedMapData(layout, bounds, covers.AsReadOnly(), mapHash, rulesHash, matchVersion, playerSpeed, playerRadius);
+        }
+
+        public static string ValidationMessage(Exception error)
+        {
+            if (error is InvalidDataException && error.Message == "Rules hash does not match the expected rules hash.")
+                return "Luật chơi client khác server; cập nhật cả hai cùng phiên bản rồi thử lại.";
+            if (error is InvalidDataException && error.Message == "Map hash does not match the expected map hash.")
+                return "Map tải về khác bản server chọn; thử tải map lại.";
+            return "Dữ liệu map không hợp lệ; thử tải lại hoặc cập nhật client.";
         }
 
         static string ReadRuleFile(string directory, string file)

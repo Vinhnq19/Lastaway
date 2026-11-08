@@ -167,7 +167,7 @@ try
     room.Match.ProcessLeave("p3", room.Match.MatchId); rooms.Tick(1d/30);
     var firstMap = store.Current.Find(store.Current.DefaultMapId)!;
     var secondMap = store.Current.Maps.Values.First(map => map.Entry.Id != firstMap.Entry.Id);
-    var boundaryProfile = new MatchProfile { Version = profile.Version, MinPlayers = 2, LobbyDurationSeconds = 1d / 30 };
+    var boundaryProfile = new MatchProfile { Version = ZoneSchedule.Load(GameDataLoader.ReadGameDataFile("zone_schedule.json")).Version, MinPlayers = 2, LobbyDurationSeconds = 1d / 30 };
     var boundaryMap = store.Current.Find(store.Current.DefaultMapId)!;
     var boundaryZone = ZoneSchedule.Load(GameDataLoader.ReadGameDataFile("zone_schedule.json"));
     var boundaryMatch = new MatchRuntime("boundary", boundaryMap.Data, boundaryZone, boundaryProfile, selectedMap: boundaryMap);
@@ -178,7 +178,9 @@ try
     boundaryMatch.Tick(1d/30);
     Check(boundaryMatch.Phase==JungleBackend.Protocol.Gameplay.MatchPhase.Waiting,"disconnect on final countdown tick cannot advance to Loading");
 
-    var legacyMatch = new MatchRuntime("legacy-boundary", boundaryMap.Data, boundaryZone, boundaryProfile);
+    var legacyMap=new MapData{Version=boundaryProfile.Version,MinX=boundaryMap.Data.MinX,MaxX=boundaryMap.Data.MaxX,MinY=boundaryMap.Data.MinY,MaxY=boundaryMap.Data.MaxY};
+    legacyMap.SpawnPoints.AddRange(boundaryMap.Data.SpawnPoints);legacyMap.Obstacles.AddRange(boundaryMap.Data.Obstacles);
+    var legacyMatch = new MatchRuntime("legacy-boundary", legacyMap, boundaryZone, boundaryProfile);
     for (var i=0;i<3;i++) { legacyMatch.TryRegisterPlayer("legacy-"+i,"Legacy",out _); legacyMatch.SetPlayerReady("legacy-"+i); }
     legacyMatch.MarkDisconnected("legacy-2");
     Check(legacyMatch.Phase==JungleBackend.Protocol.Gameplay.MatchPhase.Lobby,"legacy fixture retains count-based lobby behavior");

@@ -3,7 +3,7 @@ using JungleMaze.App.Flow;
 
 namespace JungleMaze.App.Audio
 {
-    /// <summary>Background music tracks. WaitingRoom uses the Loading clip until ART-05 compresses its own file (T-5).</summary>
+    /// <summary>Background music tracks. WaitingRoom is shared by menu, lobby and results screens.</summary>
     public enum MusicTrack : byte
     {
         None = 0,
@@ -15,7 +15,7 @@ namespace JungleMaze.App.Audio
     /// <summary>
     /// Pure music decisions (G-4, G-9, G-10): which track per screen, a 1 s crossfade between two slots, a 0.4 s
     /// fade-out when music is turned off, and ducking −9 dB within 0.2 s while an alert plays, released within 1 s.
-    /// Slot A is the current track; slot B is the previous one fading out. Off by default.
+    /// Slot A is the current track; slot B is the previous one fading out. Playback settings control enablement.
     /// </summary>
     public sealed class MusicPlan
     {
@@ -48,8 +48,8 @@ namespace JungleMaze.App.Audio
                 case AppScreen.MainMenu:
                 case AppScreen.InRoom:
                 case AppScreen.Results: return MusicTrack.WaitingRoom;
-                case AppScreen.Connecting: return MusicTrack.Loading;
-                case AppScreen.InMatch: return MusicTrack.Match;
+                case AppScreen.Connecting:
+                case AppScreen.InMatch: return MusicTrack.None;
                 default: return MusicTrack.None;
             }
         }

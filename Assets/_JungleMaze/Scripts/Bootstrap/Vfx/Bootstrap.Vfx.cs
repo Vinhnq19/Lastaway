@@ -66,6 +66,7 @@ namespace JungleMaze.Composition
             _registry.Register(stage);
             _registry.TryResolve<IPlayerSettings>(out var settings);
             var director = new VfxDirector(bus, feed, anchors, visibility, stage, set.Catalog.BuildRules(), tuning, settings, _log, balance);
+            director.UseAuthoritativeHealth = true;
             director.BindCombat(_registry.Resolve<OnlineCombatSession>(), offlineWorld);
             stage.SceneChanged += director.ResetAll;
             _registry.Register(director);

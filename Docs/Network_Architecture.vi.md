@@ -6,7 +6,7 @@ Nguồn map phát hành là catalog `Backend/Shared/GameData/Maps/`; production 
 
 Mỗi room giữ MapDefinition riêng. Bộ luật dùng RulesHash độc lập với MapHash. Trận được chốt bằng **MapId + MapHash + RulesHash** và ghi bộ khóa này vào kết quả/outbox/Mongo/lịch sử. Hai map khởi đầu cùng luật, khác bố cục: Di tích cổ và Bãi đá. World, movement/collision, spawn, loot/portal đều nhận map của room. Trận đang chạy không đổi dữ liệu khi reload; phòng chờ chuyển bản mới hoặc map mặc định còn được phát hành.
 
-Gameplay protocol **3** giữ RoomMapState/SelectRoomMap/RoomMapReady/StartRoomMatch của v2 và thêm quản lý bot, loại participant/metadata kết quả; client cũ nhận `GameplayVersionMismatch`. Handshake account-ticket vẫn **v4**, không gửi JWT qua UDP. Trưởng phòng phiên tách khỏi account owner quản lý/xóa room. Phòng tạo thêm chờ chủ account vào làm trưởng phòng đầu tiên; phòng mặc định lấy người vào đầu; khi trưởng phòng rời phòng chờ, quyền chuyển cho người còn kết nối sớm nhất.
+Gameplay protocol **4** giữ RoomMapState/SelectRoomMap/RoomMapReady/StartRoomMatch của v2 và thêm quản lý bot, loại participant/metadata kết quả; v4 bổ sung trạng thái thính authoritative (DropId, revision, đường bay, tick, HP/size và baseline khi resync); client cũ nhận `GameplayVersionMismatch`. Handshake account-ticket vẫn **v4**, không gửi JWT qua UDP. Trưởng phòng phiên tách khỏi account owner quản lý/xóa room. Phòng tạo thêm chờ chủ account vào làm trưởng phòng đầu tiên; phòng mặc định lấy người vào đầu; khi trưởng phòng rời phòng chờ, quyền chuyển cho người còn kết nối sớm nhất.
 
 Client lấy catalog, JSON và preview qua `/api/maps` yêu cầu JWT. JSON tối đa 2 MiB, PNG tối đa 512 KiB; remote HTTPS, HTTP chỉ loopback. Cache tách origin/hash, payload kiểm hash/schema trước khi nhận; tải bằng file tạm, lỗi không dùng map khác. Generation/revision và cancellation chặn callback cũ. Offline vẫn dùng bundle, không gọi API. Trưởng phòng chỉ Bắt đầu sau khi đủ người và mọi client đã xác minh; vào/rời countdown hủy lượt bắt đầu. Sau kết quả giữ kết nối về phòng chờ để chọn map/lượt mới.
 
@@ -38,7 +38,7 @@ Replay có packet riêng version1, giữ nguyên layout packet cũ. SessionHub x
 
 Game dùng **server authoritative**: client gửi input; GameServer quyết định vị trí, va chạm, HP, bo, vòng đời và kết quả trận. Mỗi phòng có runtime riêng. Hạn mức cấu hình: **10 người/phòng, 5 phòng gồm mặc định, tổng 50 slot active/pending/grace/bot**, mỗi account tạo tối đa 2 phòng bổ sung. Đây là hạn mức, không phải cam kết hiệu năng gameplay cho 50 người.
 
-Phase 2 gồm SRV-03, NET-02, ZON-01 và demo Unity UDP/WebSocket/Auto. Prediction/reconciliation/interpolation đầy đủ thuộc MOV-02/03. Các module vũ khí, inventory, world và HUD được ghép qua các service đang có. Audio dùng MatchAudioEventSource nhận combat online/offline và pose/địa hình thật; không phát lặp shot dự đoán khi nhận confirmation. Bảng chẩn đoán chỉ bật bằng F3, tách khỏi Lobby/HUD/kết quả chính. UI-03 dùng replay server theo quyền phiên. DRG-01, ART-06, Game-10 tạm ngoài phạm vi; không dùng sự kiện rồng giả để nghiệm thu audio.
+Phase 2 gồm SRV-03, NET-02, ZON-01 và demo Unity UDP/WebSocket/Auto. Prediction/reconciliation/interpolation đầy đủ thuộc MOV-02/03. Các module vũ khí, inventory, world và HUD được ghép qua các service đang có. Audio dùng MatchAudioEventSource nhận combat online/offline và pose/địa hình thật; không phát lặp shot dự đoán khi nhận confirmation. Bảng chẩn đoán chỉ bật bằng F3, tách khỏi Lobby/HUD/kết quả chính. UI-03 dùng replay server theo quyền phiên. ART-06 và Game-10 tạm ngoài phạm vi; không dùng sự kiện rồng giả để nghiệm thu audio.
 
 Bản Phase 2 Local và lần mở rộng online được ghi riêng trong báo cáo Phase 2. Chỉ deploy EC2 trong cửa sổ đã được chủ máy dành riêng. Lượt account-flow này dùng `-UseRunningInstance -KeepInstanceRunning`: không Stop/Start, không cài timer tắt máy; deadline chỉ đóng công cụ/client. EC2 tiếp tục tiêu credits sau test. Những lượt cũ dùng chính sách Stop phải được ghi riêng. Các kết quả AWS cũ chỉ chứng minh phiên bản ghi tại lượt đo đó. Hai PC vật lý phải được kiểm tra riêng.
 
@@ -161,3 +161,18 @@ Control endpoint `/internal/deployment-status` dùng secret control hiện có, 
 Auto dùng Quick cho API-only; thay server/protocol/rules/shared contract hoặc deploy connection config buộc Full và bằng chứng Local/build client tương ứng. Full đo PC thật WSS một người +9 bot đủ 300s, Auto hai client, kết quả/history/replay và UDP thật; không ghi Quick thành PASS gameplay. Giữ ngưỡng tick/input/timeout/CPU/RAM hiện hành. Cửa sổ AWS 20 phút dành thời gian rollback, deadline không tắt instance. Hai PC vật lý vẫn NOT_TESTED khi chưa có thiết bị.
 
 [Hướng dẫn và giới hạn triển khai](AWS_GHCR_Deploy.vi.md) phân biệt code pipeline với bằng chứng GHCR/AWS thực. Chuẩn bị được khi EC2 tắt; chỉ deploy khi người quản trị đã dành riêng cửa sổ trống. Giữ current/previous và ảnh còn tham chiếu; không prune toàn hệ thống, không xóa volume. Archive image cũ chỉ dùng phục hồi chủ động. Camera client bàn giao giữ Follow Player, spectator giữ hành vi riêng.
+
+
+## DRG-01 — Rồng thả trứng
+
+`airdrop_schedule.json` là luật có version, thuộc RulesHash, được Sync Runtime Data sang Unity. Giữ handshake account-ticket v4; gameplay v4 yêu cầu client và server cập nhật cùng đợt. AWS chưa deploy tính năng này trong đợt nghiệm thu Local.
+
+AirdropRuntime/AirdropController C# thuần chạy tại GameServer khi chơi mạng và OfflineWorldSession khi luyện tập. Mỗi trận có state/seed/ID riêng: Scheduled → Flying → Falling → Landed → Broken (hoặc Cancelled). Chọn điểm từ ô reachable đã cache, lọc bo dự báo ở lúc đáp trước khi thử tối đa 64 footprint. Retry mỗi giây tối đa 5 giây; không đặt chồng để ép đủ lượt. Trứng chỉ đăng ký Supply/collision/HP sau khi đáp. Map/hash nguồn không đổi.
+
+Server gửi reliable AirdropStatePacket qua UDP/WS: MatchId, DropId, revision, đường bay, mốc tick, size/HP và world ID. Baseline resync khôi phục visual mà không phát tiếng cũ; world pages đồng bộ HP, vỡ và loot. Client bỏ revision cũ, packet sai trận và dọn view/marker khi rời hoặc chơi lại. Hình ảnh không tự random vị trí hay gây damage.
+
+Dành trước 3 slot trứng và 24 stack loot. DestructibleService xác nhận hit và preflight sức chứa trước đòn kết liễu. Supply sinh 6–8 loại khác nhau, luôn có MACE/COMPASS; súng giữ đạn trong stack, không thêm AMMO làm vượt 8 stack. Hết sức chứa thì giữ trứng để thử lại, không phá mà mất loot. F dùng nhặt đồ đã rơi, không dùng mở trứng.
+
+Bot dùng marker công khai để tới tranh thính; danger/bo/retreat/combat vẫn ưu tiên hơn. Bot phá/nhặt bằng combat và inventory chung, không có quyền tạo loot. Path budget vẫn 1.500 node/tick toàn server.
+
+AirdropVisualSet/prefab dùng art rồng/trứng hiện có; WorldSceneView gắn renderer rồng, bóng, trứng rơi/vỡ, HP và marker minimap. DragonRoar toàn cục; EggLand/EggBreak theo vị trí. Manifest giữ rõ nguồn và trạng thái nghe/kiểm chứng. Kết quả kỹ thuật và giới hạn: [báo cáo DRG-01](Reports/DRG01/report.vi.md).

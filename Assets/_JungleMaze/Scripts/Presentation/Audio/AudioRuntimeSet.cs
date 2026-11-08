@@ -27,7 +27,7 @@ namespace JungleMaze.Presentation.Audio
         [Tooltip("Music plays into this child of Music so ducking and the user's music volume stack.")]
         [SerializeField] private AudioMixerGroup musicTrackGroup;
         [SerializeField] private SfxCatalog catalog;
-        [Tooltip("Until ART-05 compresses Waiting Room Music.wav, this uses the Loading clip (T-5).")]
+        [Tooltip("Loop shared by menu, waiting room and results screens.")]
         [SerializeField] private AudioClip waitingRoomMusic;
         [SerializeField] private AudioClip loadingMusic;
         [SerializeField] private AudioClip matchMusic;

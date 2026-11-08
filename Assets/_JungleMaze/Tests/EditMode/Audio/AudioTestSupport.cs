@@ -64,6 +64,8 @@ namespace JungleMaze.Tests.Audio
             new Row(SfxId.DragonRoar, C, A, 0, 1, 5f),
             new Row(SfxId.MatchEnd, C, S, 0, 1, 5f),
             new Row(SfxId.Victory, C, S, 0, 1, 5f),
+            new Row(SfxId.EggLand, H, S, 18, 3, .1f),
+            new Row(SfxId.EggBreak, H, S, 18, 3, .1f),
         };
 
         /// <summary>Rule table built from <see cref="Table"/> (one clip per id unless overridden, bell repeats 3 × 0.8 s).</summary>

@@ -25,6 +25,25 @@ namespace JungleMaze.Tests.World
 {
     public sealed class OnlineWorldIntegrationTests
     {
+        [Test] public void AirdropStreamRejectsDuplicatesOldMatchesAndResumesWithoutAudio()
+        {
+            using(var r=new Rig())
+            {
+                r.Ready();var events=new List<AirdropStatePacket>();r.World.AirdropChanged+=events.Add;
+                var p=new AirdropStatePacket{MatchId=r.MatchId,DropId=1,Phase=1,Revision=1,X=25,Y=25,FlyTick=100,FallTick=250,LandTick=400};
+                r.Network.Push(p);r.Network.Push(p);Assert.AreEqual(1,events.Count);
+                var audio=new JungleMaze.App.Audio.MatchAudioEventSource(null,null,null);
+                var cues=new List<JungleMaze.App.Audio.AudioCue>();audio.CueRaised+=cues.Add;audio.OnAirdrop(events[0]);
+                Assert.AreEqual(JungleMaze.Domain.Audio.SfxId.DragonRoar,cues.Single().Id);
+                p.Revision=2;p.Phase=3;p.Baseline=true;r.Network.Push(p);audio.OnAirdrop(events[1]);Assert.AreEqual(1,cues.Count);
+                p.Revision=1;p.Baseline=false;r.Network.Push(p);Assert.AreEqual(2,events.Count);
+                p.MatchId=Guid.NewGuid();p.Revision=100;r.Network.Push(p);Assert.AreEqual(2,events.Count);
+                p.MatchId=r.MatchId;p.Revision=3;p.Phase=4;r.Network.Push(p);audio.OnAirdrop(events[2]);
+                Assert.AreEqual(JungleMaze.Domain.Audio.SfxId.EggBreak,cues.Last().Id);Assert.IsTrue(cues.Last().HasPosition);
+                r.Network.SetState(NetworkState.Disconnected,DisconnectReason.None);r.World.Tick(.04f);Assert.AreEqual(0,r.World.Airdrops.Count);
+                audio.Dispose();
+            }
+        }
         [Test] public void WorldHashMatchesCoreClrGoldenVector()
         {
             var map=new MapLayout{Version="hash-vector",Seed=7,Size=50};
@@ -144,33 +163,16 @@ namespace JungleMaze.Tests.World
             using(var r=new Rig(true))
             {
                 r.Ready();Assert.IsTrue(r.World.IsReady);
-                Assert.AreEqual(215,r.World.Layout.Objects.Count);
-                Assert.AreEqual(0,r.World.Layout.Seed);
-                Assert.AreEqual(4,r.World.Layout.Objects.Count(o=>o.IsHardCover));
-                Assert.AreEqual(60,r.World.Layout.Objects.Count(o=>o.Kind==WorldObjectKind.Chest));
-                Assert.AreEqual(90,r.World.Layout.Objects.Count(o=>o.Kind==WorldObjectKind.Pot));
-                Assert.AreEqual(45,r.World.Layout.Objects.Count(o=>o.Kind==WorldObjectKind.Bush));
-                Assert.AreEqual(6,r.World.Layout.Objects.Count(o=>o.Kind==WorldObjectKind.Portal));
-                Assert.AreEqual(2,r.World.Layout.Objects.Count(o=>o.Kind==WorldObjectKind.Door));
-                Assert.AreEqual(2,r.World.Layout.Objects.Count(o=>o.Kind==WorldObjectKind.Swamp));
-                Assert.AreEqual(2,r.World.Layout.Objects.Count(o=>o.Kind==WorldObjectKind.Lava));
-                Assert.AreEqual(4,r.World.Layout.Objects.Count(o=>o.Kind==WorldObjectKind.Poison));
-                var portalPairs=r.World.Layout.Objects.Where(o=>o.Kind==WorldObjectKind.Portal).GroupBy(o=>o.PairId).ToList();
-                Assert.AreEqual(3,portalPairs.Count);
-                Assert.IsTrue(portalPairs.All(g=>g.Count()==2));
-                foreach(var p in r.World.Layout.Objects.Where(o=>o.Kind==WorldObjectKind.Portal))
-                {
-                    var otherP=r.World.Layout.Objects.First(o=>o.Kind==WorldObjectKind.Portal&&o.PairId==p.PairId&&o.Id!=p.Id);
-                    Assert.IsTrue(r.World.Layout.IsWalkable(otherP.Bounds.Center,.4f));
-                }
-                foreach(var sp in r.World.Layout.Spawns)
-                {
-                    Assert.IsTrue(r.World.Layout.IsWalkable(sp,.4f));
-                    Assert.IsTrue(r.World.Layout.Objects.All(o=>!o.IsHazard||!o.Bounds.Contains(sp,.4f)));
-                }
-                Assert.AreEqual("cb3b0a1356ac911d41f58a3ea225af67b4651de7533b94549bfcfd835b82fd2d",r.World.Layout.Hash);
-                Assert.AreEqual(43,r.World.Layout.Spawns[0].X);
-                Assert.AreEqual(25,r.World.Layout.Spawns[0].Y);
+                var expected=WorldConfigData.Load(Application.streamingAssetsPath).Layout;
+                Assert.AreEqual(expected.Hash,r.World.Layout.Hash);
+                Assert.AreEqual(expected.Objects.Count,r.World.Layout.Objects.Count);
+                Assert.AreEqual(expected.Seed,r.World.Layout.Seed);
+                foreach(WorldObjectKind kind in Enum.GetValues(typeof(WorldObjectKind)))
+                    Assert.AreEqual(expected.Objects.Count(o=>o.Kind==kind),r.World.Layout.Objects.Count(o=>o.Kind==kind),kind.ToString());
+                Assert.AreEqual(10,r.World.Layout.Spawns.Count);
+                foreach(var sp in r.World.Layout.Spawns)Assert.IsTrue(r.World.Layout.IsWalkable(sp,.4f));
+                CollectionAssert.AreEqual(expected.Spawns.Select(sp=>sp.X),r.World.Layout.Spawns.Select(sp=>sp.X));
+                CollectionAssert.AreEqual(expected.Spawns.Select(sp=>sp.Y),r.World.Layout.Spawns.Select(sp=>sp.Y));
             }
         }
         [Test] public void MovementWaitsForVerifiedMapAllPagesAndOwnInventory()

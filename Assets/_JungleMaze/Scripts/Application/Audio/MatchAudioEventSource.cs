@@ -104,6 +104,8 @@ namespace JungleMaze.App.Audio
         {
             if (_combat != null) _combat.Changed -= OnOnlineCombat;
             if (_offlineWorld != null) _offlineWorld.CombatChanged -= OnOfflineCombat;
+            if (_offlineWorld != null) _offlineWorld.AirdropChanged -= OnOfflineAirdrop;
+            if (_world != null) _world.AirdropChanged -= OnAirdrop;
             if (_throwables != null) _throwables.ThrowableRaised -= OnOnlineThrow;
             if (_offlineWorld != null) _offlineWorld.ThrowableRaised -= OnOfflineThrow;
             _throwables = throwables;
@@ -113,8 +115,24 @@ namespace JungleMaze.App.Audio
             if (_offlineWorld != null) _offlineWorld.ThrowableRaised += OnOfflineThrow;
             if (_combat != null) _combat.Changed += OnOnlineCombat;
             if (_offlineWorld != null) _offlineWorld.CombatChanged += OnOfflineCombat;
+            if (_offlineWorld != null) _offlineWorld.AirdropChanged += OnOfflineAirdrop;
+            if (_world != null) _world.AirdropChanged += OnAirdrop;
         }
 
+        private void OnOfflineAirdrop(JungleMaze.World.Airdrops.AirdropState value)
+        {
+            if(_offlineWorld?.IsActive!=true)return;
+            OnAirdrop(new AirdropStatePacket{MatchId=_offlineWorld.MatchId,DropId=(ushort)value.DropId,Phase=(byte)value.Phase,
+                Revision=value.Revision,X=value.Position.X,Y=value.Position.Y});
+        }
+        public void OnAirdrop(AirdropStatePacket value)
+        {
+            if(value.Baseline)return;
+            var key=SfxDeduper.Key(8,value.DropId,value.Revision,unchecked((uint)value.MatchId.GetHashCode()));
+            if(value.Phase==1)CueRaised?.Invoke(AudioCue.Global(SfxId.DragonRoar,value.DropId,key));
+            else if(value.Phase==3||value.Phase==4)
+                CueRaised?.Invoke(AudioCue.At(value.Phase==3?SfxId.EggLand:SfxId.EggBreak,value.X,value.Y,value.DropId,key));
+        }
         private void OnOnlineThrow(ThrowableEvent value)
         { if (_offlineWorld?.IsActive != true) OnThrowable(value); }
         private void OnOfflineThrow(ThrowableEvent value)

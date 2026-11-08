@@ -76,6 +76,8 @@ namespace JungleMaze.App.Vfx
         private int _flashCount;
         private readonly bool[] _warnedStatus = new bool[256];
         private readonly Action<HitConfirmedEvent> _onHit;
+        private readonly Action<PlayerHealthLost> _onHealthLost;
+        public bool UseAuthoritativeHealth { get; set; }
         private readonly Action<ExplosionEvent> _onExplosion;
         private readonly Action<StatusEvent> _onStatus;
 
@@ -106,6 +108,7 @@ namespace JungleMaze.App.Vfx
             _auras = new StatusAuraTable(budget);
             Shake = new ScreenShakeModel(tuning.ShakeMaxCells, tuning.ShakeSeconds);
             _onHit = OnHit;
+            _onHealthLost = OnHealthLost;
             _onExplosion = OnExplosion;
             _onStatus = OnStatus;
         }
@@ -123,6 +126,7 @@ namespace JungleMaze.App.Vfx
         {
             if (_subscribed || _bus == null) return;
             _bus.Subscribe(_onHit);
+            _bus.Subscribe(_onHealthLost);
             _bus.Subscribe(_onExplosion);
             _bus.Subscribe(_onStatus);
             _subscribed = true;
@@ -134,6 +138,7 @@ namespace JungleMaze.App.Vfx
             if (_subscribed)
             {
                 _bus.Unsubscribe(_onHit);
+                _bus.Unsubscribe(_onHealthLost);
                 _bus.Unsubscribe(_onExplosion);
                 _bus.Unsubscribe(_onStatus);
             }
@@ -185,11 +190,24 @@ namespace JungleMaze.App.Vfx
             }
         }
 
+        private void OnHealthLost(PlayerHealthLost e)
+        {
+            if (!UseAuthoritativeHealth || e.MatchId != _feed.SessionKey || e.Amount <= 0) return;
+            if (!EnsureSession() || _dedupe.IsDuplicate(SfxDeduper.Key(14, e.Tick, e.NetId), _time)) return;
+            ShowHit(new HitConfirmedEvent(0, 255, e.NetId, e.Amount, 0f, 0f));
+        }
+
         private void OnHit(HitConfirmedEvent e)
+        {
+            if (UseAuthoritativeHealth) return;
+            ShowHit(e);
+        }
+
+        private void ShowHit(HitConfirmedEvent e)
         {
             // No damage (immortal target, smoke): no number and no flash (AC12).
             if (e.Damage <= 0 || !EnsureSession()) return;
-            if (_dedupe.IsDuplicate(SfxDeduper.Key(KeyHit, (uint)e.EventKey, (uint)(e.EventKey >> 32)), _time)) return;
+            if (e.EventKey != 0 && _dedupe.IsDuplicate(SfxDeduper.Key(KeyHit, (uint)e.EventKey, (uint)(e.EventKey >> 32)), _time)) return;
             var target = e.TargetNetId;
             // Dead or despawned target: nothing to draw on (AC12).
             if (_targets == null || !_targets.TryGetPosition(target, out var x, out var y)) return;
