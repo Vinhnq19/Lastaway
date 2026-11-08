@@ -277,6 +277,7 @@ namespace JungleMaze.EditorTools
             if (capture == null) capture = minimap.gameObject.AddComponent<MinimapMapCapture>();
             var captureSo = new SerializedObject(capture);
             captureSo.FindProperty("mapImage").objectReferenceValue = raw;
+            captureSo.FindProperty("resolution").intValue = 1024; // T-018: shared with the big map (840 px / 50 cells)
             captureSo.ApplyModifiedPropertiesWithoutUndo();
         }
 

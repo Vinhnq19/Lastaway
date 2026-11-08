@@ -15,6 +15,7 @@ namespace JungleMaze.Presentation.UI.Hud
     /// its pose and heading, and the header: zone phase, zone countdown, distance to the next safe zone (world cells,
     /// 0 inside it). Mock source of the header: "Pha 3 · Bo thu sau 01:24", "cách bo tiếp theo 420". Display only
     /// (no mark, zoom or pan yet). M toggles; ESC closes it first through <see cref="UiLayerStack"/>.
+    /// T-018 M1: while open it blocks attack, reload and item use (movement stays); it does not open over the ESC menu.
     /// </summary>
     public sealed class HudBigMapView : MonoBehaviour
     {
@@ -53,9 +54,9 @@ namespace JungleMaze.Presentation.UI.Hud
 
         public void Open()
         {
-            if (content == null) return;
+            if (content == null || JungleMaze.Presentation.UI.MatchOverlay.MatchInputGate.MenuOpen) return;
             content.SetActive(true);
-            UiLayerStack.Push(this, Close); // ESC closes the top panel before the match menu (CPO 07/11)
+            UiLayerStack.Push(this, Close, blocksActions: true); // ESC closes the top panel before the match menu (CPO 07/11)
             Refresh();
         }
 

@@ -54,6 +54,7 @@ namespace JungleMaze.EditorTools
                 var map = root.Find(BigMapName).GetComponent<HudBigMapView>();
                 Set(map, "capture", hud.GetComponent<HudRoot>().Minimap.GetComponent<MinimapMapCapture>());
                 Set(map.ZoneOverlay, "minimap", hud.GetComponent<HudRoot>().Minimap); // crop ratio of the main minimap layer
+                Waypoint(hud, map);
                 foreach (var graphic in hud.GetComponentsInChildren<Graphic>(true)) graphic.raycastTarget = false; // HUD never catches clicks
                 UiKit.FaceAll(hud); // pressed K2 face sinks icon + label (Huy 07/11)
                 PrefabUtility.SaveAsPrefabAsset(hud, HudPath);
@@ -63,6 +64,85 @@ namespace JungleMaze.EditorTools
                 PrefabUtility.UnloadPrefabContents(hud);
             }
             AssetDatabase.SaveAssets();
+        }
+
+        // ---------- T-018 D1 waypoint ----------
+
+        /// <summary>
+        /// <see cref="WaypointView"/> on the HUD root: big-map flag and line (built in the big map), minimap flag (18 px,
+        /// ux/hud-B-spec.md 5) and line (alpha 0.6), and a full-screen layer under the panels for the ground flag (40 px)
+        /// and the edge arrow (40 px) with its distance badge (kit_badge_key 64x36, 24 px number). Sizes are set at run
+        /// time from WaypointTuning; everything starts hidden.
+        /// </summary>
+        private static void Waypoint(GameObject hud, HudBigMapView map)
+        {
+            var root = (RectTransform)hud.transform;
+            var core = hud.GetComponent<HudRoot>();
+            var view = hud.GetComponent<WaypointView>() ?? hud.AddComponent<WaypointView>();
+            RectTransform marks = null;
+            foreach (var t in map.GetComponentsInChildren<RectTransform>(true)) if (t.name == "Marks") marks = t;
+
+            var area = core.Minimap.Area;
+            foreach (var n in new[] { "WaypointLine", "WaypointFlag" }) { var old = area.Find(n); if (old != null) Object.DestroyImmediate(old.gameObject); }
+            var miniLine = WaypointLine(area, new Color32(0xBD, 0xE6, 0xF8, 153));
+            var miniFlag = MapMark(area, "WaypointFlag", "wp_flag_mini", 18, 18);
+            var marker = core.Minimap.Marker.GetSiblingIndex(); // the hero marker stays on top
+            miniLine.SetSiblingIndex(marker);
+            miniFlag.SetSiblingIndex(marker + 1);
+
+            var oldEdge = root.Find("Waypoint");
+            if (oldEdge != null) Object.DestroyImmediate(oldEdge.gameObject);
+            var edge = UiKit.Stretch(UiKit.Node(root, "Waypoint"));
+            edge.SetSiblingIndex(root.Find(InventoryName).GetSiblingIndex()); // under bag and big map
+            var ground = Centre(edge, "GroundFlag", "wp_flag", 40, 40);
+            ground.pivot = new Vector2(0.5f, 0f); // stands on its world point
+            var arrow = Centre(edge, "Arrow", "wp_arrow_edge", 40, 40);
+            var badge = Centre(edge, "Badge", "kit_badge_key", 64, 36);
+            var text = UiKit.Text(badge, "Distance", Tier.B2, "33", new Color32(0xF1, 0xE7, 0xC8, 255), TextAlignmentOptions.Center);
+            UiKit.Stretch(text.rectTransform);
+            foreach (var t in new[] { ground, arrow, badge }) t.gameObject.SetActive(false);
+
+            Set(view, "bigMap", map);
+            Set(view, "bigArea", marks);
+            Set(view, "bigFlag", marks.Find("WaypointFlag"));
+            Set(view, "bigLine", marks.Find("WaypointLine"));
+            Set(view, "minimap", core.Minimap);
+            Set(view, "miniFlag", miniFlag);
+            Set(view, "miniLine", miniLine);
+            Set(view, "edge", edge);
+            Set(view, "groundFlag", ground);
+            Set(view, "arrow", arrow);
+            Set(view, "badge", badge);
+            Set(view, "distance", text);
+            var so = new SerializedObject(view);
+            var list = so.FindProperty("panels");
+            var names = new[] { "Minimap", "MatchStatus", "Vitals", "QuickBar" };
+            list.arraySize = names.Length;
+            for (var i = 0; i < names.Length; i++) list.GetArrayElementAtIndex(i).objectReferenceValue = root.Find(names[i]);
+            so.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        /// <summary>Plain 1 px line image anchored at the map's bottom-left, pivot at its left end, hidden.</summary>
+        private static RectTransform WaypointLine(RectTransform parent, Color color)
+        {
+            var t = UiKit.Node(parent, "WaypointLine");
+            t.anchorMin = t.anchorMax = Vector2.zero;
+            t.pivot = new Vector2(0f, 0.5f);
+            var image = t.gameObject.AddComponent<Image>();
+            image.color = color;
+            image.raycastTarget = false;
+            t.gameObject.SetActive(false);
+            return t;
+        }
+
+        /// <summary>Kit sprite anchored at the parent's centre (the view moves it in that space), size in 1080p px.</summary>
+        private static RectTransform Centre(RectTransform parent, string name, string sprite, float wPx, float hPx)
+        {
+            var t = UiKit.Node(parent, name);
+            t.anchorMin = t.anchorMax = new Vector2(0.5f, 0.5f);
+            t.sizeDelta = new Vector2(UiKit.Px(wPx), UiKit.Px(hPx));
+            UiKit.Image(t, sprite);
+            return t;
         }
 
         // ---------- B4 bag ----------
@@ -201,6 +281,9 @@ namespace JungleMaze.EditorTools
                 grid.preserveAspect = false;
                 var marks = UiKit.Stretch(UiKit.Node(area, "Marks"), 5); // projection space = the map texture's rect
                 var zoneRings = HudSkinABuild.ZoneRings(marks, BigMapRingPx);
+                // T-018 D1 waypoint (W7): 1 px line hero to flag (alpha 0.5), flag 24 px; under the hero pin.
+                WaypointLine(marks, new Color32(0xBD, 0xE6, 0xF8, 128));
+                MapMark(marks, "WaypointFlag", "wp_flag", 24, 24);
                 var player = MapMark(marks, "Player", "fx_map_player", 49, 66);
 
                 // Header (mock b5; meaning from the pre-icon mock "Pha 3 · Bo thu sau 01:24", "cách bo tiếp theo 420"):
@@ -229,7 +312,7 @@ namespace JungleMaze.EditorTools
                 outside.raycastTarget = false;
                 Centred(legend, "NextZone", "legend_ring_next_dashed", 65 + 228, 65, 32, 32); // T-028 dashed next ring
                 Centred(legend, "Drop", "fx_map_drop", 65 + 342, 65, 41, 52);
-                Centred(legend, "Mark", "fx_map_mark", 65 + 456, 65, 35, 52);
+                Centred(legend, "Mark", "wp_flag", 65 + 456, 65, 44, 44); // T-029 m3: the waypoint flag replaces the pin
                 Centred(legend, "Player", "fx_map_player", 65 + 570, 65, 38, 52);
 
                 // Controls, 4 rows as the mock: mouse → mark, mouse → zoom, mouse → pan, M → close. Only M works today
@@ -243,7 +326,7 @@ namespace JungleMaze.EditorTools
                     if (i < 3) Icon(row, "Mouse", MouseIcon, 106 - 26, cy - 26, 52, 52);
                     else KeyCap(row, "M", 80, cy - 26, 52);
                     InkIcon(row, "Then", "kit_ico_arrow_right", 250, cy, 26);
-                    if (i == 0) Centred(row, "Result", "fx_map_mark", 390, cy, 35, 52);
+                    if (i == 0) Centred(row, "Result", "wp_flag", 390, cy, 44, 44); // left click sets the waypoint (T-018)
                     if (i == 1) InkIcon(row, "Result", "kit_ico_plus", 390, cy, 30);
                     if (i == 2)
                     {

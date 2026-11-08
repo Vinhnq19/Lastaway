@@ -167,7 +167,20 @@ namespace JungleMaze.EditorTools
                 extra++;
             }
             Copy(Path.Combine(pack, "bg", "nen-gach-tile.png"), KitFolder + "/" + FloorTile + ".png", 100f, Vector4.zero, true);
-            return names.Count + fx.Length + extra + 1;
+            return names.Count + fx.Length + extra + 1 + ImportWaypoint();
+        }
+
+        /// <summary>T-029 waypoint icons (CPO duyệt 08/11, commit 00146c98): @2x, no border. Enemy dot and last-seen ring are not used.</summary>
+        public static readonly string[] WaypointSprites = { "wp_flag", "wp_flag_mini", "wp_arrow_edge" };
+
+        [MenuItem("Jungle Maze/UI Kit/Import Waypoint Icons (T-029)")]
+        public static int ImportWaypoint()
+        {
+            var dir = Path.Combine(ArtInbox, "T-029", "files");
+            foreach (var n in WaypointSprites) // check first, as ImportKit
+                if (!File.Exists(Path.Combine(dir, n + "@2x.png"))) throw new FileNotFoundException("waypoint icon missing, nothing imported", n);
+            foreach (var n in WaypointSprites) Copy(Path.Combine(dir, n + "@2x.png"), KitFolder + "/" + n + ".png", 300f, Vector4.zero);
+            return WaypointSprites.Length;
         }
 
         /// <summary>@2x border [L, R, T, B] from T-020 meta.json ("border_LRTB" is @1x).</summary>

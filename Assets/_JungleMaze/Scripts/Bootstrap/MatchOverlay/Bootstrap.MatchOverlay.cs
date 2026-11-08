@@ -56,7 +56,8 @@ namespace JungleMaze.Composition
 
             _registry.Register<IPlayerSettings>(settings);
             _registry.Register<IPlayerSettingsWriter>(settings);
-            _registry.Register<IMatchMenuState>(menu);
+            // T-018 M1: gameplay readers get the menu plus the big map (attack and item use stop, movement stays).
+            _registry.Register<IMatchMenuState>(new MatchInputGate(menu));
             _registry.Register(menu);
             _registry.Register<IEliminationSource>(elimination);
             _registry.Register<ISpectatorSource>(spectator);
