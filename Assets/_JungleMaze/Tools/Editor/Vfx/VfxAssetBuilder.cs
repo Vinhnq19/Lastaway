@@ -337,6 +337,9 @@ namespace JungleMaze.EditorTools
             }
         }
 
+        /// <summary>HDR brightness of glow particle materials so they pass the gameplay bloom threshold.</summary>
+        public const float GlowHdrBoost = 1.6f;
+
         private static Material BrightCopy(Material source)
         {
             if (source == null) return null;
@@ -350,7 +353,9 @@ namespace JungleMaze.EditorTools
                 AssetDatabase.CreateAsset(copy, target);
             }
             else copy.CopyPropertiesFromMaterial(source);
-            if (copy.HasProperty("_BaseColor")) copy.SetColor("_BaseColor", Color.white);
+            // Additive sparks/stars and the soft glow get an HDR tint so they bloom (GameplayPostTuning); smoke/rings stay LDR.
+            var glow = target.Contains("_ADD") || target.Contains("glow");
+            if (copy.HasProperty("_BaseColor")) copy.SetColor("_BaseColor", glow ? new Color(GlowHdrBoost, GlowHdrBoost, GlowHdrBoost, 1f) : Color.white);
             EditorUtility.SetDirty(copy);
             return copy;
         }

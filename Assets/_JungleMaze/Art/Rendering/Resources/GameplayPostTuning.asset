@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a364fb0eb7f499882b6eb6e069e2763, type: 3}
+  m_Name: GameplayPostTuning
+  m_EditorClassIdentifier: JungleMaze.Presentation::JungleMaze.Presentation.Rendering.GameplayPostTuning
+  Enabled: 1
+  Scenes:
+  - Game
+  BloomThreshold: 0.6
+  BloomIntensity: 1
+  BloomScatter: 0.68
+  BloomTint: {r: 1, g: 0.92, b: 0.76, a: 1}
+  BloomClamp: 6
+  BloomHighQuality: 0
+  PostExposure: 0.08
+  Contrast: 14
+  Saturation: 24
+  ColorFilter: {r: 1, g: 1, b: 1, a: 1}
+  Temperature: 12
+  Tint: 0
+  HighlightTint: {r: 1.08, g: 1.03, b: 0.88, a: 1}
+  ShadowTint: {r: 0.94, g: 0.98, b: 1.06, a: 1}
+  MapLightsEnabled: 1
+  SunPatchAngle: 32
+  SunPatchSpacing: 20
+  SunPatchWidth: {x: 5, y: 10}
+  SunPatchLength: {x: 20, y: 38}
+  SunPatchGap: {x: 6, y: 18}
+  SunPatchSkip: 0.3
+  SunPatchColor: {r: 1, g: 0.86, b: 0.55, a: 1}
+  SunPatchIntensity: {x: 0.4, y: 0.65}
+  LanternColor: {r: 1, g: 0.68, b: 0.32, a: 1}
+  LanternRadius: 2.6
+  LanternIntensity: 0.9
+  RuneColor: {r: 0.5, g: 0.85, b: 1, a: 1}
+  RuneRadius: 2
+  RuneIntensity: 0.55
+  PortalColor: {r: 0.55, g: 0.75, b: 1, a: 1}
+  PortalRadius: 3.2
+  PortalIntensity: 0.9
+  VignetteIntensity: 0.26
+  VignetteSmoothness: 0.42
+  VignetteColor: {r: 0.04, g: 0.06, b: 0.03, a: 1}
