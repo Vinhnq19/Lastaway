@@ -154,7 +154,7 @@ namespace JungleMaze.Presentation.World.Phase2
             {
                 _autoPickupAt = Time.unscaledTime + .25f;
                 foreach (var o in _world.Objects) if (o.Kind == 100 && Vector2.Distance(new Vector2(_match.Prediction.PredictedX, _match.Prediction.PredictedY), new Vector2(o.X, o.Y)) <= .6f && _catalog.TryGet(o.ItemId, out var item) &&
-                    (item.Kind == ItemKind.Ammo || item.Kind == ItemKind.Helmet || item.Kind == ItemKind.Armor)) _world.Send(WorldActionKind.Pickup, o.Id);
+                    AutoPicks(item, _world.Inventory)) _world.Send(WorldActionKind.Pickup, o.Id);
             }
             HandleInteraction(_world.Objects,
                 new Vector2(_match.Prediction.PredictedX, _match.Prediction.PredictedY), false);
@@ -174,6 +174,15 @@ namespace JungleMaze.Presentation.World.Phase2
             if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0 || Input.GetMouseButtonDown(0))
                 if (bag != null && bag.IsUsing) _world.Send(WorldActionKind.CancelUse);
         }
+
+        /// <summary>
+        /// Walking over ammo picks it up; a helmet or armor only when that slot is empty. Swapping worn gear is an F
+        /// pickup (the server takes the old piece off), so the piece just dropped is never picked straight back up.
+        /// </summary>
+        private static bool AutoPicks(ItemDefinition item, InventorySnapshot bag) =>
+            item.Kind == ItemKind.Ammo ||
+            item.Kind == ItemKind.Helmet && (bag == null || bag.Helmet.IsEmpty) ||
+            item.Kind == ItemKind.Armor && (bag == null || bag.Armor.IsEmpty);
 
         /// <summary>Q bỏ đồ đang cầm xuống sàn: vật phẩm tiêu dùng trên tay, nếu không thì vũ khí.</summary>
         private static bool DropPressed() => Input.GetKeyDown(KeyCode.Q);
