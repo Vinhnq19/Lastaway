@@ -92,6 +92,19 @@ namespace JungleMaze.Tests.World
         }
 
         [Test]
+        public void TimedAttackFitsTheClipIntoTheActionAndEndsWithIt()
+        {
+            _animator.Step(.016f);
+            _animator.PlayAttack(.1f);
+            _animator.Step(.05f);
+            Assert.IsTrue(_animator.Attacking);
+            _animator.Step(.06f);
+            Assert.IsFalse(_animator.Attacking, "the body pose ends with the 0.1 s action, not the longer source clip");
+            Assert.AreSame(_idleSide, _body.sprite);
+            Assert.AreEqual(.25f, HeroSpriteAnimator.AttackClipTime(.05f, .1f, .5f), 1e-5f);
+        }
+
+        [Test]
         public void HeroWithoutAttackClipsIgnoresAttack()
         {
             _animator.SetHero(1);

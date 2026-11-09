@@ -13,8 +13,8 @@ namespace JungleMaze.Presentation.UI.Lobby
         [SerializeField] private Canvas canvas;
         [SerializeField] private GameObject backdrop;
         [SerializeField] private GameObject splash;
-        [SerializeField] private Sprite mainMenuBackground;
-        private Sprite _loginBackground;
+        [SerializeField] private GameObject mainMenuSplash;
+        private bool _menuSplash;
         [SerializeField] private MainMenuView mainMenu;
         [SerializeField] private JoinFormView joinForm;
         [SerializeField] private ConnectingView connecting;
@@ -32,15 +32,13 @@ namespace JungleMaze.Presentation.UI.Lobby
 
         public Canvas Canvas => canvas;
         public GameObject Backdrop => backdrop;
-        public GameObject Splash => splash;
+        public GameObject Splash => _menuSplash && mainMenuSplash != null ? mainMenuSplash : splash;
         public void SetSplashForMenu(bool menu)
         {
-            var image = splash != null ? splash.GetComponent<UnityEngine.UI.Image>() : null;
-            if (image == null) return;
-            if (_loginBackground == null) _loginBackground = image.sprite;
-            image.sprite = menu && mainMenuBackground != null ? mainMenuBackground : _loginBackground;
-            var fit = image.GetComponent<UnityEngine.UI.AspectRatioFitter>();
-            if (fit != null && image.sprite != null) fit.aspectRatio = image.sprite.rect.width / image.sprite.rect.height;
+            var visible = Splash != null && Splash.activeSelf;
+            _menuSplash = menu;
+            if (splash != null) splash.SetActive(visible && (!menu || mainMenuSplash == null));
+            if (mainMenuSplash != null) mainMenuSplash.SetActive(visible && menu);
         }
 
         public MainMenuView MainMenu => mainMenu;

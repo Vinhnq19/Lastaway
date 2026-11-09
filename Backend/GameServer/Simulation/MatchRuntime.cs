@@ -450,6 +450,8 @@ public sealed partial class MatchRuntime : IMatchRuntime, IServerClock, IEntityR
         using var lifecycle = new ServerMetrics.StageTiming(Phase == MatchPhase.InGame ? null : PerformanceMetrics, TickWorkStage.Lifecycle);
         DeltaTime = deltaTime;
         CurrentTick++;
+        // Shots in flight land inside this call; a lethal one may spend the life-save, keyed by this tick.
+        World?.SetCombatTick(CurrentTick);
         _combat.Tick(CurrentTick);
 
         switch (Phase)

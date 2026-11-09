@@ -5,14 +5,14 @@
       "label": "Unity client",
       "file_type": "concept",
       "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
-      "source_location": "§1–3",
+      "source_location": "sections 1-3; L138 (checkout-local Editor override)",
       "source_url": null,
       "captured_at": null,
       "author": null,
       "contributor": null,
       "_origin": "semantic",
       "evidence_type": "document-derived",
-      "description": "Renders received match state and sends input through composition-root services."
+      "description": "Renders received match state and sends input through composition-root services. Shared Git Editor pin remains 6000.3.15f1; Vinh-only checkout uses 6000.3.21f1 and a local resolved package lock protected by per-checkout skip-worktree. New Editor builds still require validation before AWS deployment."
     },
     {
       "id": "docs_network_architecture_vi_gameserver",
@@ -883,6 +883,16 @@
       "_origin": "semantic",
       "evidence_type": "document-derived",
       "description": "Architecture refers to this report for technical results and limitations; report contents were not read in this extraction."
+    },
+    {
+      "id": "docs_network_architecture_vi_client_quality",
+      "label": "Focused client frame-time capture",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "§ Phase 2 / kiểm thử tái sử dụng",
+      "_origin": "semantic",
+      "evidence_type": "document-derived",
+      "description": "Opt-in QualityClient captures focused 720p/60FPS frame-time by match phase; network input/tick remain 30Hz, insufficient foreground/load-generator coverage is INVALID."
     }
   ],
   "edges": [
@@ -1938,6 +1948,17 @@
       "_origin": "semantic",
       "evidence_type": "document-derived",
       "description": "Per-room isolated runtime together with per-match airdrop state implies room-local dynamic reservations; documentation does not spell out storage implementation."
+    },
+    {
+      "source": "docs_network_architecture_vi_unity",
+      "target": "docs_network_architecture_vi_client_quality",
+      "relation": "supports opt-in quality capture",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "L150",
+      "weight": 1.0,
+      "_origin": "semantic"
     }
   ],
   "hyperedges": [],
@@ -1946,8 +1967,8 @@
   "coverage": {
     "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md": 178
   },
-  "source_sha256": "8f6f8d7551d261b663e4e8a9a59854097a35db47cbc7f66945d5ba6095df9463",
+  "source_sha256": "5781040f253f8d00d174a8e77f4ce03e186b1cd09fa725c83457b8dc34409d46",
   "usage_note": "Host-agent semantic extraction; exact token usage unavailable, zero values do not claim zero session token use; no paid API called.",
-  "extraction_note": "Only Network_Architecture.vi.md was read as source. Document-derived architectural claims are not runtime verification. Missing .graphify_semantic.json schema was replaced by matching architecture-semantic.json schema. No linked report contents or implementation files verified.",
+  "extraction_note": "Only Network_Architecture.vi.md was read as source. Document-derived architectural claims are not runtime verification. Missing .graphify_semantic.json schema was replaced by matching architecture-semantic.json schema. No linked report contents or implementation files verified. 2026-11-08: refreshed the Unity client concept after reviewing the changed Editor-policy paragraph; no runtime validation inferred from documentation.",
   "scope": "replacement semantic fragment for this source document only"
 }

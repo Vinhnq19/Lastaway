@@ -2,6 +2,7 @@ using JungleMaze.App.Player;
 using JungleMaze.Core.DI;
 using JungleMaze.Domain.Player;
 using JungleMaze.Presentation.Player;
+using JungleMaze.Presentation.UI.MatchOverlay;
 using UnityEngine;
 
 namespace JungleMaze.Presentation.Controls
@@ -28,16 +29,18 @@ namespace JungleMaze.Presentation.Controls
             if (_camera == null) _camera = Camera.main;
             if (aimOrigin != null && HeroAim.TryGetTargetDegrees(_camera, aimOrigin.position, Input.mousePosition, out var degrees))
                 _aimDegrees = degrees;
+            // An open popup (ESC menu, big map, bag) stops every action button; movement and aim keep working.
+            var actions = !MatchInputGate.ActionsBlocked;
             _input.SetIntent(new PlayerIntent
             {
                 MoveX = move.x,
                 MoveY = move.y,
                 AimDegrees = _aimDegrees,
-                Attack = Input.GetMouseButton(0),
-                Interact = Input.GetKey(KeyCode.E),
-                Reload = Input.GetKey(KeyCode.R),
-                Dash = Input.GetKey(KeyCode.Space),
-                UseItem = Input.GetKey(KeyCode.Q)
+                Attack = actions && Input.GetMouseButton(0),
+                Interact = actions && Input.GetKey(KeyCode.E),
+                Reload = actions && Input.GetKey(KeyCode.R),
+                Dash = actions && Input.GetKey(KeyCode.Space),
+                UseItem = actions && Input.GetKey(KeyCode.Q)
             });
         }
     }

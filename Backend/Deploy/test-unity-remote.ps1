@@ -5,6 +5,7 @@ param(
     [string]$ApiBaseUrl='https://junglemaze.duckdns.org',
     [ValidateRange(1,10)][int]$Clients=6,
     [ValidateRange(0,5000)][int]$StaggerMs=100,
+    [ValidateRange(0,10)][int]$QualityClient=0,
     [switch]$ReconnectOnly,
     [switch]$Local,
     [switch]$ForceAutoFallback,
@@ -72,6 +73,12 @@ try {
     $env:NET_ACCESS_TOKEN=$taskToken
     $env:NET_USERNAME=$Fixture.username
     $env:NET_PASSWORD=$Fixture.password
+    # A requested test map must exist before launching; otherwise the client can wait in lobby until the watchdog.
+    if ($env:NET_TEST_MAP_ID) {
+        $catalog=Api GET '/api/maps' $null $taskToken
+        Check 'Authenticated map catalog available' ($catalog.status -eq 200)
+        Check 'Requested test map is published' (@($catalog.json.maps | Where-Object { $_.id -ceq $env:NET_TEST_MAP_ID }).Count -eq 1)
+    }
     $created=Api POST '/api/rooms' @{name='Unity online acceptance';maxPlayers=10} $taskToken
     Check 'JWT creates room' ($created.status -eq 201)
     $taskRoom=$created.json; Check 'Six character join code' ($taskRoom.roomCode -match '^[A-Z0-9]{6}$')
@@ -98,7 +105,7 @@ try {
         if ($left -lt ([double]$taskScenario.maxDurationSeconds+45)) { throw 'Not enough AWS soft budget for this full scenario; Stop without shortening acceptance.' }
     }
     $routes=@();for ($i=0;$i -lt $Clients;$i++) { $routes+= $(if (-not $ReconnectOnly -and -not $ForceAutoFallback -and $i -lt [Math]::Floor($Clients/2)) {$wssPath} else {$configPath}) }
-    & (Join-Path $PSScriptRoot 'test-unity-online.ps1') -Player $Player -Config $configPath -ClientConfigs $routes -Scenario $Scenario -Clients $Clients -OutputDirectory (Join-Path $OutputDirectory 'players') -StaggerMs $StaggerMs
+    & (Join-Path $PSScriptRoot 'test-unity-online.ps1') -Player $Player -Config $configPath -ClientConfigs $routes -Scenario $Scenario -Clients $Clients -OutputDirectory (Join-Path $OutputDirectory 'players') -StaggerMs $StaggerMs -QualityClient $QualityClient
     $summaryPath=Join-Path $OutputDirectory 'players/report.json'
     if (-not (Test-Path -LiteralPath $summaryPath)) { throw 'Unity launcher did not produce report.json' }
     $summary=Get-Content -LiteralPath $summaryPath -Raw | ConvertFrom-Json

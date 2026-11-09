@@ -13,7 +13,8 @@ namespace JungleMaze.Presentation.UI.Hud
     /// <summary>
     /// B4 bag (T-022, mock T-021/b/b4-tui-do*.png): read-only view of the 4 weapon + 4 consumable slots, worn helmet and
     /// armour, adrenaline seconds and ammo, with an item tooltip on hover. Nothing here sends a command (no drop).
-    /// Nested in Hud.prefab (no GraphicRaycaster there): hover is a rect test, not a raycast. Tab or I toggles.
+    /// Nested in Hud.prefab (no GraphicRaycaster there): hover is a rect test, not a raycast. No key opens it any more
+    /// (Tab/I removed 08/11: the quickbar already shows every slot); <see cref="Open"/> stays for tools and tests.
     /// The "nearby / on the ground" column has no data source yet and always shows its empty state.
     /// </summary>
     public sealed class HudInventoryView : MonoBehaviour
@@ -39,7 +40,6 @@ namespace JungleMaze.Presentation.UI.Hud
         [SerializeField] private Image tooltipIcon;
         [SerializeField] private TMP_Text tooltipName, tooltipKind;
         [SerializeField] private float tooltipGap = 8f;
-        [SerializeField] private KeyCode[] toggleKeys = { KeyCode.Tab, KeyCode.I };
 
         private IHudState _hud;
         private IInventoryState _inventory;
@@ -72,7 +72,7 @@ namespace JungleMaze.Presentation.UI.Hud
         {
             if (content == null) return;
             content.SetActive(true);
-            UiLayerStack.Push(this, Close); // ESC closes the top panel before the match menu (CPO 07/11)
+            UiLayerStack.Push(this, Close, blocksActions: true); // ESC closes the top panel before the match menu (CPO 07/11)
             var canvas = GetComponentInParent<Canvas>();
             _camera = canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay ? canvas.worldCamera : null;
             Refresh();
@@ -96,8 +96,6 @@ namespace JungleMaze.Presentation.UI.Hud
 
         private void Update()
         {
-            for (var i = 0; i < toggleKeys.Length; i++)
-                if (Input.GetKeyDown(toggleKeys[i])) { Toggle(); break; }
             if (!IsOpen) return;
             Refresh();
             Hover(Input.mousePosition);

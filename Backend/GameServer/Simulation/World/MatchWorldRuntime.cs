@@ -146,7 +146,7 @@ public sealed partial class MatchWorldRuntime : ITransactionalDestructibleLootSi
     public void SpawnLoot(WorldObjectKind source,ushort worldId,WorldPoint position,uint seed)
     {
         // Drops fan out 0.9-1.4 cells around the container (broken, so its center is free) and guns bring an AMMO box.
-        var placements=LootDrops.ForContainer(_loot,source,position,LootSeeds.Mix(seed,LootSeed),_lootSurface);
+        var placements=LootDrops.ForContainer(_loot,LootDrops.LootKind(source,Airdrops?.Owns(worldId)==true),position,LootSeeds.Mix(seed,LootSeed),_lootSurface);
         // Preflight/rollback makes a full floor registry an explicit rejection, never partial loot.
         if(Floor.Items.Count+placements.Count>FloorCapacity||_nextId+placements.Count>ushort.MaxValue)
             return;
@@ -166,7 +166,7 @@ public sealed partial class MatchWorldRuntime : ITransactionalDestructibleLootSi
     public bool CanSpawnLoot(WorldObjectKind source,ushort worldId,uint seed)
     {
         // Counts ammo companions too, so the preflight matches what SpawnLoot will create.
-        var count=LootDrops.CountForContainer(_loot,source,LootSeeds.Mix(seed,LootSeed));
+        var count=LootDrops.CountForContainer(_loot,LootDrops.LootKind(source,Airdrops?.Owns(worldId)==true),LootSeeds.Mix(seed,LootSeed));
         var reserve = Math.Max(0, (Airdrops?.ReservedLootRemaining ?? 0) -
             (source == WorldObjectKind.Supply && Airdrops?.Owns(worldId) == true ? 8 : 0));
         return Floor.Items.Count+count<=FloorCapacity-reserve&&_nextId+count<=ushort.MaxValue&&Layout.Objects.Count+Floor.Items.Count+count<=WorldWire.MaxObjects-reserve-(Airdrops?.ReservedEggsRemaining??0);

@@ -78,6 +78,13 @@ def fingerprint(root: Path, service: str, bases: dict) -> str:
         "platform": "linux/amd64", "bases": bases}, sort_keys=True).encode())
 
 
+def editor_version(root: Path) -> str:
+    text = (root / 'ProjectSettings/ProjectVersion.txt').read_text(encoding='utf-8-sig')
+    match = re.search(r'^m_EditorVersion: ([0-9]+\.[0-9]+\.[0-9]+[abfp][0-9]+)\s*$', text, re.MULTILINE)
+    if not match: raise ValueError('Project must pin a valid Unity Editor version')
+    return match.group(1)
+
+
 def client_source_hash(root: Path) -> str:
     # Gate network/client code, serialized runtime config and protocol data, not unrelated art binaries/importer defaults.
     extensions = {'.cs', '.asmdef', '.asmref', '.unity', '.prefab', '.asset', '.json', '.shader', '.hlsl', '.cginc', '.uss', '.uxml', '.txt', '.bytes', '.csv', '.xml', '.dll'}

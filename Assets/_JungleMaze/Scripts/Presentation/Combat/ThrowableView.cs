@@ -343,7 +343,8 @@ namespace JungleMaze.Presentation.Combat
             }
             else if (IsLocal(actor)) { body = _heroBody; hands = _heroHands; }
             else return;
-            if (body != null) body.PlayAttack();
+            // The body throw lasts as long as the hand motion, not the full source clip.
+            if (body != null) body.PlayAttack(swing ? .35f : .25f);
             if (hands == null) return;
             hands.Show(itemId);
             hands.OnAttack(swing, swing ? .35f : 0f, arcDegrees);

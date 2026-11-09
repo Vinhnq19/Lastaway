@@ -6,6 +6,7 @@ using JungleMaze.App.MatchUi;
 using JungleMaze.App.Ports;
 using JungleMaze.App.World;
 using JungleMaze.Core.DI;
+using JungleMaze.Presentation.Combat;
 using JungleMaze.Presentation.Player;
 using JungleMaze.Presentation.UI.Hud;
 using JungleMaze.Presentation.World.Loot;
@@ -61,7 +62,12 @@ namespace JungleMaze.Presentation.World.Phase2
 
         /// <summary>Ground item icons; the HUD's normalized catalog, never raw JSurviv art.</summary>
         [Inject]
-        public void ConfigureIcons(IItemIconProvider icons) => _icons = icons;
+        public void ConfigureIcons(IItemIconProvider icons)
+        {
+            _icons = icons;
+            // Consumables have no in-hand art: the hand holds their item icon (LocalConsumableHold).
+            HeldWeaponView.IconFallback = icons != null ? icons.GetIcon : null;
+        }
 
         /// <summary>The F pickup list shared with the HUD panel (Docs/hvu/07_Floor_Loot.vi.md section 11).</summary>
         [Inject]
@@ -148,22 +154,53 @@ namespace JungleMaze.Presentation.World.Phase2
             {
                 _autoPickupAt = Time.unscaledTime + .25f;
                 foreach (var o in _world.Objects) if (o.Kind == 100 && Vector2.Distance(new Vector2(_match.Prediction.PredictedX, _match.Prediction.PredictedY), new Vector2(o.X, o.Y)) <= .6f && _catalog.TryGet(o.ItemId, out var item) &&
-                    (item.Kind == ItemKind.Ammo || item.Kind == ItemKind.Helmet || item.Kind == ItemKind.Armor)) _world.Send(WorldActionKind.Pickup, o.Id);
+                    AutoPicks(item, _world.Inventory)) _world.Send(WorldActionKind.Pickup, o.Id);
             }
             HandleInteraction(_world.Objects,
                 new Vector2(_match.Prediction.PredictedX, _match.Prediction.PredictedY), false);
+            var bag = _world.Inventory;
             for (var i = 0; i < 4; i++)
             {
-                if (Input.GetKeyDown((KeyCode)((int)KeyCode.Alpha1 + i))) _world.Send(WorldActionKind.Select, 0, (byte)(_world.Inventory != null && _world.Inventory.ActiveWeapon == i ? 255 : i));
-                if (Input.GetKeyDown((KeyCode)((int)KeyCode.Alpha5 + i))) _world.Send(WorldActionKind.Use, 0, (byte)i);
+                if (Input.GetKeyDown((KeyCode)((int)KeyCode.Alpha1 + i)) && PutAwayConsumable(bag, i))
+                    _world.Send(WorldActionKind.Select, 0, (byte)(bag != null && bag.ActiveWeapon == i ? 255 : i));
+                if (Input.GetKeyDown((KeyCode)((int)KeyCode.Alpha5 + i))) LocalConsumableHold.Toggle(i, bag);
             }
-            if (DropPressed() && _world.Inventory != null && _world.Inventory.ActiveWeapon >= 0) _world.Send(WorldActionKind.Drop, 0, (byte)_world.Inventory.ActiveWeapon);
+            if (UsePressed(bag)) _world.Send(WorldActionKind.Use, 0, (byte)LocalConsumableHold.Slot);
+            if (DropPressed())
+            {
+                if (LocalConsumableHold.Active) _world.Send(WorldActionKind.Drop, 0, (byte)(4 + LocalConsumableHold.Slot));
+                else if (bag != null && bag.ActiveWeapon >= 0) _world.Send(WorldActionKind.Drop, 0, (byte)bag.ActiveWeapon);
+            }
             if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0 || Input.GetMouseButtonDown(0))
-                if (_world.Inventory != null && _world.Inventory.IsUsing) _world.Send(WorldActionKind.CancelUse);
+                if (bag != null && bag.IsUsing) _world.Send(WorldActionKind.CancelUse);
         }
 
-        /// <summary>Q bỏ vũ khí đang cầm xuống sàn.</summary>
+        /// <summary>
+        /// Walking over ammo picks it up; a helmet or armor only when that slot is empty. Swapping worn gear is an F
+        /// pickup (the server takes the old piece off), so the piece just dropped is never picked straight back up.
+        /// </summary>
+        private static bool AutoPicks(ItemDefinition item, InventorySnapshot bag) =>
+            item.Kind == ItemKind.Ammo ||
+            item.Kind == ItemKind.Helmet && (bag == null || bag.Helmet.IsEmpty) ||
+            item.Kind == ItemKind.Armor && (bag == null || bag.Armor.IsEmpty);
+
+        /// <summary>Q bỏ đồ đang cầm xuống sàn: vật phẩm tiêu dùng trên tay, nếu không thì vũ khí.</summary>
         private static bool DropPressed() => Input.GetKeyDown(KeyCode.Q);
+
+        /// <summary>Chuột phải dùng vật phẩm tiêu dùng đang cầm trên tay.</summary>
+        private static bool UsePressed(InventorySnapshot bag) =>
+            LocalConsumableHold.Active && Input.GetMouseButtonDown(1) && (bag == null || !bag.IsUsing);
+
+        /// <summary>
+        /// A weapon key puts a held consumable away first. Returns false when that key only did that (the key of the
+        /// weapon already selected brings it back to hand instead of holstering it).
+        /// </summary>
+        private static bool PutAwayConsumable(InventorySnapshot bag, int weapon)
+        {
+            if (!LocalConsumableHold.Active) return true;
+            LocalConsumableHold.Release();
+            return bag == null || bag.ActiveWeapon != weapon;
+        }
 
         private void UpdateOffline()
         {
@@ -212,24 +249,20 @@ namespace JungleMaze.Presentation.World.Phase2
             if (_hero != null) HandleInteraction(_offlineWorld.Objects, _hero.position, true);
             else ClearPickupList();
 
+            var bag = _offlineWorld.Inventory;
             for (var i = 0; i < 4; i++)
             {
-                if (Input.GetKeyDown((KeyCode)((int)KeyCode.Alpha1 + i)))
-                {
-                    var inv = _offlineWorld.Inventory;
-                    _offlineWorld.SelectWeapon((byte)(inv != null && inv.ActiveWeapon == i ? 255 : i));
-                }
-                if (Input.GetKeyDown((KeyCode)((int)KeyCode.Alpha5 + i)))
-                {
-                    _offlineWorld.UseConsumable((byte)i);
-                }
+                if (Input.GetKeyDown((KeyCode)((int)KeyCode.Alpha1 + i)) && PutAwayConsumable(bag, i))
+                    _offlineWorld.SelectWeapon((byte)(bag != null && bag.ActiveWeapon == i ? 255 : i));
+                if (Input.GetKeyDown((KeyCode)((int)KeyCode.Alpha5 + i))) LocalConsumableHold.Toggle(i, bag);
             }
+            if (UsePressed(bag)) _offlineWorld.UseConsumable((byte)LocalConsumableHold.Slot);
 
             if (DropPressed())
             {
-                var inv = _offlineWorld.Inventory;
-                if (inv != null && inv.ActiveWeapon >= 0)
-                    _offlineWorld.DropWeapon((byte)inv.ActiveWeapon);
+                // Inventory slots 4..7 are the consumables (InventoryService.Drop).
+                if (LocalConsumableHold.Active) _offlineWorld.DropWeapon((byte)(4 + LocalConsumableHold.Slot));
+                else if (bag != null && bag.ActiveWeapon >= 0) _offlineWorld.DropWeapon((byte)bag.ActiveWeapon);
             }
 
             if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0 || Input.GetMouseButtonDown(0))

@@ -19,6 +19,8 @@ public sealed class WeaponRule
     public double ReloadSeconds { get; init; }
     public double StunSeconds { get; init; }
     public bool IsBreakableAxe { get; init; }
+    /// <summary>Cells per second a ranged shot travels; 0 resolves the shot on the firing tick (hitscan).</summary>
+    public float ProjectileSpeed { get; init; }
 }
 
 /// <summary>Validated weapon rule table. Built only from valid JSON; unknown weapons are rejected, never skipped.</summary>
@@ -101,6 +103,7 @@ public sealed class WeaponRules
                 ReserveAmmo = isRanged ? Read<int>(elem, "reserveAmmo") : 0,
                 ReloadSeconds = ReadOr(elem, "reloadSeconds", DefaultReloadSeconds),
                 StunSeconds = ReadOr(elem, "stunSeconds", 0.0),
+                ProjectileSpeed = isRanged ? ReadOr(elem, "projectileSpeed", 0f) : 0f,
                 IsBreakableAxe = weapon == CombatWeaponId.Axe
             };
 
@@ -123,6 +126,8 @@ public sealed class WeaponRules
             throw new ArgumentException($"Weapon {rule.Id} has invalid combat numbers.");
         if (rule.IsRanged && (rule.MagazineSize < 1 || rule.ReserveAmmo < 0))
             throw new ArgumentException($"Ranged weapon {rule.Id} has invalid ammo numbers.");
+        if (rule.ProjectileSpeed < 0f || float.IsNaN(rule.ProjectileSpeed) || float.IsInfinity(rule.ProjectileSpeed))
+            throw new ArgumentException($"Weapon {rule.Id} has invalid projectile speed.");
         if (rule.ReloadSeconds <= 0.0)
             throw new ArgumentException($"Weapon {rule.Id} has invalid reload time.");
     }

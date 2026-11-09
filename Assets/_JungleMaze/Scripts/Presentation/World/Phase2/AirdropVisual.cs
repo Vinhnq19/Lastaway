@@ -10,6 +10,25 @@ namespace JungleMaze.Presentation.World.Phase2
         private SpriteRenderer _dragon,_dragonShadow,_egg,_shadow,_ring,_healthBack,_health;
         private readonly SpriteRenderer[] _shards=new SpriteRenderer[6];
         private uint _revision;private float _effectAt=-100;
+        /// <summary>World width of the gliding dragon (wingspan), in cells.</summary>
+        public const float DragonWingspan=14f;
+        /// <summary>Height the dragon flies above its ground shadow, in cells.</summary>
+        public const float DragonAltitude=5f;
+        private Sprite _glide;
+        /// <summary>The dragon glides on one frame: the source frame with the widest wingspan (art faces up, +Y).</summary>
+        public static Sprite GlideFrame(WorldVisualSet.Frames frames)
+        {
+            Sprite best=null;
+            if(frames?.Sprites==null)return null;
+            foreach(var sprite in frames.Sprites)if(sprite!=null&&(best==null||sprite.bounds.size.x>best.bounds.size.x))best=sprite;
+            return best;
+        }
+        /// <summary>Z rotation that turns the up-facing art toward the flight direction.</summary>
+        public static float HeadingDegrees(Vector2 entry,Vector2 exit)
+        {
+            var d=exit-entry;
+            return d.sqrMagnitude<1e-6f?0f:Mathf.Atan2(d.y,d.x)*Mathf.Rad2Deg-90f;
+        }
         private SpriteRenderer Part(string name,int order)
         {
             var go=new GameObject(name);go.transform.SetParent(transform,false);
@@ -38,16 +57,21 @@ namespace JungleMaze.Presentation.World.Phase2
             {
                 // Entry/exit and timing come from the server, including resume baselines.
                 var route=tick<=p.FallTick?Vector3.Lerp(new Vector3(p.EntryX,p.EntryY,0),point,Mathf.InverseLerp(p.FlyTick,p.FallTick,tick)):Vector3.Lerp(point,new Vector3(p.ExitX,p.ExitY,0),Mathf.InverseLerp(p.FallTick,p.LandTick,tick));
-                var sprite=Visuals.Dragon?.Sample(Mathf.Max(0,(tick-p.FlyTick)/30f));
+                if(_glide==null)_glide=GlideFrame(Visuals.Dragon);
+                var sprite=_glide;
                 if(sprite!=null)
                 {
-                    var scale=Mathf.Min(7/sprite.bounds.size.x,5/sprite.bounds.size.y);
+                    var scale=DragonWingspan/sprite.bounds.size.x;
+                    var heading=Quaternion.Euler(0,0,HeadingDegrees(new Vector2(p.EntryX,p.EntryY),new Vector2(p.ExitX,p.ExitY)));
                     Size(_dragon,sprite,sprite.bounds.size.x*scale,sprite.bounds.size.y*scale,Color.white);
-                    _dragon.transform.position=route+Vector3.up*5-sprite.bounds.center*scale;
-                    Size(_dragonShadow,sprite,sprite.bounds.size.x*scale*.7f,sprite.bounds.size.y*scale*.25f,new Color(0,0,0,.22f));
-                    _dragonShadow.transform.position=route-Vector3.Scale(sprite.bounds.center,new Vector3(scale*.7f,scale*.25f,1));
+                    _dragon.flipX=false;_dragon.transform.rotation=heading;
+                    _dragon.transform.position=route+Vector3.up*DragonAltitude-heading*(sprite.bounds.center*scale);
+                    // Top-down shadow: same silhouette and heading, squashed a little, on the ground under the route.
+                    var shadowScale=new Vector3(scale*.8f,scale*.8f,1);
+                    Size(_dragonShadow,sprite,sprite.bounds.size.x*shadowScale.x,sprite.bounds.size.y*shadowScale.y,new Color(0,0,0,.22f));
+                    _dragonShadow.flipX=false;_dragonShadow.transform.rotation=heading;
+                    _dragonShadow.transform.position=route-heading*Vector3.Scale(sprite.bounds.center,shadowScale);
                 }
-                _dragon.flipX=p.ExitX<p.EntryX;
             }
             _egg.enabled=p.Phase==2||(landing&&!hasGround);
             if(_egg.enabled)

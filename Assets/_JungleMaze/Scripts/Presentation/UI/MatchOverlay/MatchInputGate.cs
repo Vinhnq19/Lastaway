@@ -27,6 +27,9 @@ namespace JungleMaze.Presentation.UI.MatchOverlay
         /// <summary>The ESC menu is open: the big map does not open over it (de-xuat/minimap-chuc-nang.md 7).</summary>
         public static bool MenuOpen => Current != null && Current._menu.IsOpen;
 
+        /// <summary>A popup of the running match blocks gameplay actions (false outside Bootstrap).</summary>
+        public static bool ActionsBlocked => Current != null && Current.BlocksGameplayInput;
+
         public bool IsOpen => _menu.IsOpen;
 
         public bool BlocksGameplayInput => _menu.BlocksGameplayInput || (_menu.InMatch && UiLayerStack.BlocksActions);

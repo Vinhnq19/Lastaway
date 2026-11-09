@@ -669,13 +669,13 @@
   {
     "path": "Assets/_JungleMaze/Art/UI/Menu/Logo.png",
     "size": [
-      1024,
-      256
+      2172,
+      724
     ],
     "pack": "P07",
     "mode": "RGBA",
-    "source": null,
-    "binding": "prepared; Unity binding/import QA pending",
+    "source": "OpenAI built-in image_gen, generated 2026-11-08",
+    "binding": "Unity 6000.3.21f1: imported; menu/login/loading sprite references verified; login and menu rendered at 1280x720",
     "ppu": 100,
     "filter": "Point",
     "mipmaps": false,
@@ -687,7 +687,14 @@
       0
     ],
     "role": "colored pixel art; Image tint must be white",
-    "tint": "#FFFFFF"
+    "tint": "#FFFFFF",
+    "visible_bounds_top_left_xywh": [
+      31,
+      148,
+      2124,
+      451
+    ],
+    "generation_prompt": "Use case: logo-brand. Create ONE finished transparent game title logo for the fantasy pixel-art survival adventure game. Exact text, clearly legible and correctly spaced: \"LAST AWAY\" (L A S T, space, A W A Y). One horizontal line, not stacked. This is a new standalone UI logo, not a background image. Style: premium handcrafted pixel-art lettering, chunky adventurous angular capitals with warm ivory-gold illuminated stone faces, restrained antique-gold bevels, deep forest/charcoal outline and subtle moss/ivy accents at the far edges. Small ancient-ruin and dragon-scale hints integrated tastefully in the lettering; the TEXT dominates and remains extremely readable at 300 pixels wide. Match existing pixel-art jungle splash art: teal dark forest, mossy ancient tower/stone ruins, amber dragon and glowing golden egg, chibi adventure spirit. Confident polished game identity, clean letter silhouettes, crisp pixel clusters, no blurry painterly edges. Wide compact composition about 4.8:1 with all lettering centered and modest transparent padding. Avoid large crests, full dragon illustration, characters, scenery, extra text, slogans, logo mockups, background rectangle, watermark or fake checkerboard. Genuine alpha transparent background. The final asset will sit at the top of a login and main-menu screen over detailed dark jungle scenery."
   },
   {
     "path": "Assets/_JungleMaze/Art/UI/Menu/KeyArt.png",

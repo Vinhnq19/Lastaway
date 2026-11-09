@@ -6,7 +6,13 @@ Pipeline mới nằm ở `Backend/Deploy/deploy-aws.ps1`. Đây là deploy có g
 
 ## 1. Điều kiện và setup một lần
 
-PC: Docker Desktop Linux containers + credential store, Docker Buildx, Python 3.12+, .NET SDK chạy được net8, Windows PowerShell, AWS CLI profile `junglemaze-admin`, SSH alias `junglemaze` qua SSM đã hoạt động. Unity vẫn là **6000.3.15f1**. EC2 hiện có phải là x86_64/t3.small, đã cài Docker Compose, Python 3.12 và systemd; script không tạo hoặc nâng máy.
+PC: Docker Desktop Linux containers + credential store, Docker Buildx, Python 3.12+, .NET SDK chạy được net8, Windows PowerShell, AWS CLI profile `junglemaze-admin`, SSH alias `junglemaze` qua SSM đã hoạt động. Phiên bản Unity chung của team trong Git vẫn là **6000.3.15f1**. Riêng máy Vinh dùng **6000.3.21f1** để kiểm tra bản vá shutdown; không nâng Editor của các dev khác. Gate đọc phiên bản thực từ `ProjectSettings/ProjectVersion.txt` và từ chối receipt của Editor khác. EC2 hiện có phải là x86_64/t3.small, đã cài Docker Compose, Python 3.12 và systemd; script không tạo hoặc nâng máy.
+
+### Editor riêng trên máy Vinh
+
+Checkout này giữ `ProjectSettings/ProjectVersion.txt` và `Packages/packages-lock.json` ở chế độ Git `skip-worktree`: index/Git vẫn là bản chung 15f1, còn file trên máy dùng 21f1 và các dependency Unity đã resolve. Cấu hình riêng nằm tại `UserSettings/LocalEditorVersion.json` (không commit). Mở project bằng Editor 21f1 đã cài; dev khác tiếp tục dùng 15f1 từ Git. Các ví dụ đường dẫn build 21f1 bên dưới dành cho máy Vinh.
+
+`skip-worktree` chỉ áp dụng checkout này. Nếu Git báo xung đột hai file khi đổi nhánh/merge, sao lưu bản cục bộ rồi chạy `git update-index --no-skip-worktree ProjectSettings/ProjectVersion.txt Packages/packages-lock.json` để xử lý; không force-add bản 21f1 vào commit chung. Chưa coi bản build 21f1 là đã nghiệm thu hoặc được phép deploy chỉ vì đã đổi Editor.
 
 ### 1.1. Token và package
 
@@ -51,7 +57,7 @@ Mở Docker Desktop. Kiểm `Backend/.env` có các secret Local và account-tic
 
 ```powershell
 & .\Backend\Deploy\deploy-aws.ps1 -Mode PrepareOnly -VerifyLocal `
-  -Player 'D:\Unity\Lastaway\Builds\Windows-GHCR-6000.3.15f1\Lastaway.exe' `
+  -Player 'D:\Unity\Lastaway\Builds\AWS-Quality-6000.3.21f1\Lastaway.exe' `
   -OutputDirectory 'D:\Unity\Lastaway\Backend\out\registry-local'
 ```
 
@@ -65,7 +71,7 @@ Sau khi commit sạch và Local đạt:
 
 ```powershell
 & .\Backend\Deploy\deploy-aws.ps1 -Mode PrepareOnly `
-  -Player 'D:\Unity\Lastaway\Builds\Windows-GHCR-6000.3.15f1\Lastaway.exe' `
+  -Player 'D:\Unity\Lastaway\Builds\AWS-Quality-6000.3.21f1\Lastaway.exe' `
   -LocalEvidence 'D:\Unity\Lastaway\Backend\out\registry-local\local-evidence.json' `
   -OutputDirectory 'D:\Unity\Lastaway\Backend\out\registry-release'
 ```
@@ -76,6 +82,26 @@ Output gồm thư mục release, `manifest.json`, `release.env` trỏ đủ hai 
 
 Manifest ghi commit, fingerprint, base pins, protocol/data version và thời gian/layer delta mỗi service. Layer bytes là kích thước compressed OCI, không phải đo traffic TLS/retry chính xác. Giữ ledger và bundle để reuse; mất ledger vẫn build/push được nhưng phải coi là phát hành Full đầu tiên.
 
+### Đối chiếu catalog trước nghiệm thu map
+
+Image GameServer chứa bản map đi kèm tại `/app/GameData/Maps`, còn catalog đang phát hành nằm ở volume `/app/data/maps` (host mặc định `/opt/junglemaze/data/maps`). Pull image mới **không tự ghi đè catalog đang chạy**. Sau login JWT, dùng `GET /api/maps` trong Swagger và đối chiếu ID/version/hash với catalog muốn phát hành. Không lấy `catalogGeneration` trong manifest image làm bằng chứng volume đã được cập nhật.
+
+Nếu muốn phát hành bản đi kèm image, trong cửa sổ quản trị được duyệt:
+
+```bash
+game=$(sudo docker ps --filter label=com.docker.compose.service=game-server -q)
+# Phải có đúng một container; kiểm tra trước khi chạy.
+sudo docker exec "$game" dotnet /app/GameServer.dll --maps validate /app/GameData/Maps
+# Thay backup path bằng tên riêng cho lượt này; giữ đến sau nghiệm thu.
+sudo docker exec "$game" dotnet /app/GameServer.dll --maps publish /app/data/maps /tmp/maps-before-release
+sudo docker exec "$game" dotnet /app/GameServer.dll --maps publish /app/GameData/Maps /app/data/maps
+sudo docker exec "$game" dotnet /app/GameServer.dll --maps reload
+```
+
+Publisher kiểm toàn bộ JSON/preview/hash, chuyển catalog nguyên tử, tăng generation và giữ payload/history cũ. Reload dùng secret sẵn trong environment container, không đưa secret vào argv/log hoặc mở control port. Không restart Mongo/GameServer chỉ để đổi map. Nếu cần rollback catalog, publish thư mục backup về `/app/data/maps` rồi reload; generation rollback vẫn tăng. Kiểm lại `GET /api/maps` và client sau mỗi lần đổi. Với gói map ngoài image, validate/publish từ thư mục gói đã kiểm checksum thay cho `/app/GameData/Maps`.
+
+Runner `test-unity-remote.ps1` kiểm `NET_TEST_MAP_ID` sau JWT trước khi chạy client; map không có sẽ fail-fast, không chờ watchdog rồi coi đó là lỗi mạng/FPS. Khi đo quality, dùng `-QualityClient 1` và giữ cửa sổ game foreground; không dùng AttachThreadInput/đổi trạng thái window trong phép đo.
+
 ## 4. Deploy: một cửa sổ bảo trì
 
 Dành riêng server, không có người chơi; bật EC2 thủ công nếu cần, đợi Running/SSM/DuckDNS/HTTPS sẵn sàng. Pipeline tự từ chối máy Stopped, sai instance SSH, DNS/TLS lỗi hoặc hết dung lượng; không tự Start/Stop. Đồng hồ AWS chỉ bắt đầu sau phần chuẩn bị/publish nếu dùng một lệnh gộp.
@@ -83,7 +109,7 @@ Dành riêng server, không có người chơi; bật EC2 thủ công nếu cầ
 ```powershell
 & .\Backend\Deploy\deploy-aws.ps1 -Mode Deploy `
   -Release 'D:\Unity\Lastaway\Backend\out\registry-release\<release-id>' `
-  -Player 'D:\Unity\Lastaway\Builds\Windows-GHCR-6000.3.15f1\Lastaway.exe' `
+  -Player 'D:\Unity\Lastaway\Builds\AWS-Quality-6000.3.21f1\Lastaway.exe' `
   -LocalEvidence 'D:\Unity\Lastaway\Backend\out\registry-local\local-evidence.json' `
   -BudgetMinutes 20
 ```
@@ -148,3 +174,9 @@ Kết thúc xác nhận EC2 vẫn Running. Chi phí EC2/EBS vẫn phát sinh the
 Worker rollback có thể hoàn tất giữa hai lần PC đọc trạng thái. Công cụ đã được sửa để đọc lại kết quả cuối và chỉ chấp nhận `PASS` khi **transactionId và releaseId đều khớp**; trạng thái của lượt cũ không đủ bằng chứng. Kết quả rollback được giữ trong `remote-final.json`.
 
 Nếu dùng công cụ cũ và thấy lỗi “failed before readiness”, kiểm tra journal của đúng unit cùng `/opt/junglemaze/deploy-state/state.json` trước. Không chạy Rollback lặp lại ngay: sau một rollback thành công, `previous` đã đổi và lần bấm tiếp có thể đưa máy về bản vừa bỏ.
+
+## Đo chất lượng client 720p/60 FPS
+
+Runner `test-unity-remote.ps1` và `test-unity-online.ps1` nhận `-QualityClient 1` để chọn một client chạy 1280×720/60 FPS; các client còn lại giữ 640×360/30 FPS. Mặc định 0 không bật đo, giữ nguyên hành vi kiểm mạng. Chỉ bật trong lượt chất lượng; không đổi tick/input server.
+
+Bằng chứng client có `frameQuality` theo phase: số frame, FPS trung bình, frame-time p95/p99 và số stall ≥100 ms. Chỉ lấy frame lúc cửa sổ được focus; `backgroundFrames` và `qualitySampleCapReached` cho biết thiếu bao phủ. Thiếu frame InGame hoặc mất focus/Sleep thì đánh INVALID phần đo, không kết luận FPS game. Không dùng runner mạng bị ép 30 FPS để nghiệm thu 60 FPS.
