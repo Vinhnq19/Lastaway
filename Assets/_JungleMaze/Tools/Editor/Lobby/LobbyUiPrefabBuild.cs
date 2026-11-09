@@ -213,21 +213,47 @@ namespace JungleMaze.EditorTools
             var profile = Drop(p, "Profile", 60, 182, 700);
             FieldLabel((RectTransform)profile.transform, "Kết nối");
             Set(v, "profile", profile);
-            var host = Input(p, "Host", "Host", 60, 282, 456);
+            Set(v, "popup", p);
+            var normal = Rel(p, "NormalFields", 0, 0, w, h);
+            Set(v, "normalFields", normal.gameObject);
+            var host = Input(normal, "Host", "Host", 60, 282, 456);
             FieldLabel((RectTransform)host.transform, "Máy chủ");
             Set(v, "host", host);
-            var port = Input(p, "Port", "Port", 540, 282, 220);
+            var port = Input(normal, "Port", "Port", 540, 282, 220);
             FieldLabel((RectTransform)port.transform, "Cổng");
             Set(v, "port", port);
-            var api = Input(p, "Api", "https://…", 60, 382, 700);
+            var api = Input(normal, "Api", "https://…", 60, 382, 700);
             FieldLabel((RectTransform)api.transform, "URL API");
             Set(v, "api", api);
-            Set(v, "status", Txt(p, "Status", Tier.C, "", C.Muted, 60, 466, 700));
-            Set(v, "save", Btn(p, "Save", Kind.Secondary, Size.M, 60, 496, 260, "kit_ico_save", "Lưu endpoint"));
-            Set(v, "audioSettings", Btn(p, "Audio", Kind.Secondary, Size.M, 344, 496, 416, "kit_ico_sound", "Âm thanh & điều khiển"));
+            Set(v, "status", Txt(normal, "Status", Tier.C, "", C.Muted, 60, 466, 700));
+            Set(v, "save", Btn(normal, "Save", Kind.Secondary, Size.M, 60, 496, 260, "kit_ico_save", "Lưu endpoint"));
+            Set(v, "audioSettings", Btn(normal, "Audio", Kind.Secondary, Size.M, 344, 496, 416, "kit_ico_sound", "Âm thanh & điều khiển"));
             var close = Btn(p, "Close", Kind.Secondary, Size.M, 260, Footer(p, w, h), 300, "kit_icon_cross_ink", "Đóng");
             Set(v, "close", close);
             Close(p, w, close);
+            Set(v, "popupFooter", (RectTransform)p.Find("Footer"));
+            Set(v, "popupTitle", (RectTransform)p.Find("Title"));
+            Set(v, "popupClose", (RectTransform)p.GetComponentInChildren<ForwardClick>().transform);
+            var vpn = Rel(p, "VpnPanel", 0, 0, 1220, 1040);
+            Set(v, "vpnPanel", vpn.gameObject);
+            Para(vpn, "ClientTitle", Tier.B2, "Chơi cùng bạn", C.Muted, 60, 245, 520, 42);
+            Set(v, "vpnCode", Input(vpn, "VpnCode", "VD: may-host.tail123", 60, 316, 520));
+            Set(v, "vpnConnect", Btn(vpn, "VpnConnect", Kind.Primary, Size.M, 60, 400, 520, "kit_ico_save", "Kiểm tra / Kết nối"));
+            Set(v, "vpnClientSetup", Btn(vpn, "VpnClientSetup", Kind.Secondary, Size.M, 60, 480, 520, "kit_ico_gear", "Cài / đăng nhập VPN"));
+            Para(vpn, "ClientHelp", Tier.C, "1. Nhận lời mời Tailscale từ host.\n2. Đăng nhập Tailscale của bạn.\n3. Dán mã kết nối rồi đăng nhập game.\nMã này không phải mã phòng.", C.Muted, 60, 575, 520, 165);
+            Para(vpn, "HostTitle", Tier.B2, "Tự làm host · máy dev", C.Muted, 640, 245, 520, 42);
+            Set(v, "vpnBackend", Para(vpn, "VpnBackend", Tier.C, "Chọn thư mục Backend của source tin cậy", C.Muted, 640, 305, 520, 65));
+            Set(v, "vpnBrowse", Btn(vpn, "VpnBrowse", Kind.Secondary, Size.M, 640, 390, 520, "kit_ico_gear", "Chọn thư mục Backend"));
+            Set(v, "vpnSetup", Btn(vpn, "VpnSetup", Kind.Secondary, Size.M, 640, 470, 248, "kit_ico_gear", "Thiết lập"));
+            Set(v, "vpnStart", Btn(vpn, "VpnStart", Kind.Primary, Size.M, 912, 470, 248, "kit_ico_play", "Bật server"));
+            Set(v, "vpnStop", Btn(vpn, "VpnStop", Kind.Secondary, Size.M, 640, 550, 248, "kit_icon_cross_ink", "Dừng server"));
+            Set(v, "vpnRefresh", Btn(vpn, "VpnRefresh", Kind.Secondary, Size.M, 912, 550, 248, "kit_ico_refresh", "Trạng thái"));
+            Set(v, "vpnCopy", Btn(vpn, "VpnCopy", Kind.Secondary, Size.M, 640, 630, 520, "kit_ico_copy", "Sao chép mã kết nối"));
+            Para(vpn, "HostHelp", Tier.C, "Cần Docker + source. Đóng game không tắt server.\nLời mời Tailscale gửi riêng, không nằm trong mã.", C.Muted, 640, 715, 520, 65);
+            Set(v, "vpnStatus", Para(vpn, "VpnStatus", Tier.C, "Dán mã hoặc thiết lập máy host để bắt đầu.", C.Muted, 60, 800, 1100, 88));
+            v.VpnCode.characterLimit = 1024;
+            v.VpnCode.textComponent.richText = false;
+            vpn.gameObject.SetActive(false);
             return v;
         }
 
@@ -886,7 +912,7 @@ namespace JungleMaze.EditorTools
         /// </summary>
         private static TMP_Dropdown Drop(RectTransform parent, string name, float x, float y, float w)
         {
-            const float arrowBox = 68f, row = 48f, rows = 5f;
+            const float arrowBox = 68f, row = 48f, rows = 6f;
             var go = TMP_DefaultControls.CreateDropdown(new TMP_DefaultControls.Resources());
             go.name = name;
             var r = (RectTransform)go.transform;

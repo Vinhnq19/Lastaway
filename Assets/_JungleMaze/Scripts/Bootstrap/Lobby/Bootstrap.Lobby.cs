@@ -140,7 +140,8 @@ namespace JungleMaze.Composition
             }
             var root = Instantiate(set.UiPrefab, transform);
             root.name = "LobbyUi";
-            root.Bind(new LobbyUiPresenter(root, flow, menu, null, null, settingsOpen, roomMaps));
+            root.Bind(new LobbyUiPresenter(root, flow, menu, null, null, settingsOpen, roomMaps,
+                new WindowsVpnHostTools(Application.dataPath, Application.persistentDataPath)));
             root.Lobby.gameObject.AddComponent<RoomMapPanel>().Bind(roomMaps, match, root.Lobby);
             if (_registry.TryResolve<IHeroSkinPreference>(out var skins))
             {

@@ -52,7 +52,7 @@ Không cần port-forward router cho UDP LAN. Không mở Mongo27017/27018 hoặ
 ### VPN · tự host — người chơi ở mạng khác
 
 1. Host và các máy chơi cài VPN và vào cùng mạng. Radmin dùng IP VPN mà ứng dụng hiển thị; Tailscale dùng IP/hostname được cấp. Chỉ chọn một tuyến thực, không dùng IP mẫu100.80.1.20 nếu đó không phải IP host.
-2. Host thiết lập stack riêng bằng hướng dẫn [Host](../Backend/Deploy/Host/README.md). Với Tailscale, từ Backend chạy `powershell -File Deploy/Host/configure-host.ps1 -Mode vpn` một lần; chạy preflight và compose VPN theo README, sau đó `tailscale serve --bg http://127.0.0.1:8080`. Bật HTTPS trong tailnet nếu Tailscale yêu cầu; đăng nhập VPN trực tiếp, không gửi token vào repo.
+2. Host thiết lập stack riêng bằng hướng dẫn [Host](../Backend/Deploy/Host/README.md). Với Tailscale, từ Backend chạy `powershell -File Deploy/Host/configure-host.ps1 -Mode vpn` một lần; chạy preflight và compose VPN theo README, sau đó `tailscale serve --bg http://127.0.0.1:18080`. Bật HTTPS trong tailnet nếu Tailscale yêu cầu; đăng nhập VPN trực tiếp, không gửi token vào repo.
 3. Với **Radmin**, VPN chỉ tạo đường mạng riêng; cần tự thiết lập gateway HTTPS/chứng chỉ được client tin cậy cho API cùng host. Radmin không thay thế Tailscale Serve. Nếu chưa có HTTPS hợp lệ thì tuyến đăng nhập chưa sẵn sàng; dùng Tailscale Serve hoặc AWS.
 4. Cho UDP7777 qua firewall đúng interface VPN. Client chọn **VPN · tự host**, đặt Host bằng IP VPN; API/WSS dùng hostname HTTPS hợp lệ của host. Preset Tailscale chứa địa chỉ mẫu, phải thay đúng host. Nếu chỉ dùng UDP Radmin, chọn transport UDP qua config riêng; không để WSS trỏ hostname mẫu.
 5. Đăng nhập, tạo/join phòng như Local. Kiểm bằng hai máy ở hai mạng; VPN có thể dùng relay nên cần đo RTT thực.
@@ -168,6 +168,12 @@ Auto thử UDP tối đa5s, rồi WSS tối đa10s kết nối +5s join. RoomFul
 
 API từ xa cần HTTPS, kể cả VPN. WS không TLS chỉ dùng loopback Local. Không dùng certificate callback cho phép mọi chứng chỉ, `curl -k`, hoặc chép Guest credential/JWT vào JSON cấu hình. `NET_TRANSPORT` và `NET_WS_URL` có thể override transport/URL; CLI có `-transport` và `-webSocketUrl`. Bỏ biến override sau khi test để không ảnh hưởng buổi sau.
 
+### VPN Tailscale — giao diện thiết lập nhanh
+
+Trong **Máy chủ → VPN · Tailscale**, host có source dùng **Thiết lập host → Bật server → Sao chép mã kết nối**. Client chỉ cần Tailscale và bản game, nhận lời mời VPN riêng rồi dán mã vào **Kiểm tra / Kết nối**. Host cũng bấm Kết nối nếu muốn chơi trên backend vừa bật. Sau khi chuyển backend phải đăng ký/đăng nhập tài khoản đúng DB host. Xem [hướng dẫn host](../Backend/Deploy/Host/README.md#cách-nhanh-trong-game--tailscale).
+
+Mã không chứa mật khẩu/JWT/mã phòng. Chọn tab VPN chưa đổi endpoint AWS; chỉ lưu sau khi kiểm DNS/IP và HTTPS hợp lệ. Khi đóng bảng hoặc chuyển môi trường trong lúc kiểm, callback cũ không được áp dụng. Đóng game không tự tắt host; dùng Dừng server để kết thúc buổi và giữ dữ liệu. Các bước thủ công bên dưới là đường dự phòng.
+
 ### 6.1. Tự host qua VPN
 
 Đứng tại `Backend`, bật Docker Desktop. Dùng config riêng, không sửa secret của `.env` Local hoặc `.env.aws`:
@@ -186,8 +192,8 @@ Script hỏi mật khẩu Swagger, tạo ba secret riêng và `.env.host.vpn` đ
 docker compose -f compose.host.yaml --env-file Deploy/Host/.env.host.vpn --profile vpn up -d --build
 ```
 
-3. Trong PowerShell Administrator, thực hiện thủ công `Deploy/Host/setup-firewall.ps1 -Action Enable -Mode Vpn`. Chỉ cho UDP từ mạng Tailscale; không mở8080 ra mạng.
-4. Chạy Tailscale Serve HTTPS chuyển vào `http://127.0.0.1:8080`, theo hướng dẫn CLI `tailscale serve --bg http://127.0.0.1:8080`. Xác nhận bật HTTPS trong tailnet khi được hỏi. Không bật Funnel.
+3. Trong PowerShell Administrator, thực hiện thủ công `Deploy/Host/setup-firewall.ps1 -Action Enable -Mode Vpn`. Chỉ cho UDP từ mạng Tailscale; không mở18080 ra mạng.
+4. Chạy Tailscale Serve HTTPS chuyển vào `http://127.0.0.1:18080`, theo hướng dẫn CLI `tailscale serve --bg http://127.0.0.1:18080`. Xác nhận bật HTTPS trong tailnet khi được hỏi. Không bật Funnel.
 5. Lấy IP bằng `tailscale ip -4` và hostname HTTPS mà Serve báo; điền cả hai vào profile `phase2-vpn`. Game UDP và HTTPS phải về cùng host. Tester cũng đăng nhập tailnet.
 6. Xong buổi: `docker compose -f compose.host.yaml --env-file Deploy/Host/.env.host.vpn --profile vpn stop`. Tắt Serve bằng `tailscale serve reset` nếu không còn dùng cấu hình Serve này. Chỉ reset cấu hình thuộc host test, không đụng thiết bị khác.
 

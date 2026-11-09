@@ -151,6 +151,19 @@ namespace JungleMaze.Presentation.UI
             }
         }
 
+        public bool ApplyVpnEndpoint(VpnConnectionCode endpoint)
+        {
+            if (endpoint == null || _config.Current == null) return false;
+            var before = _config.Current;
+            var updated = endpoint.Apply(before);
+            var invalid = updated.Validate() ?? _config.SaveUserConfig(updated);
+            if (invalid != null) { Status = invalid; return false; }
+            LoadFromConfig();
+            Status = "Đã chọn VPN Tailscale. Đăng nhập vào tài khoản của host.";
+            NotifyIfApiChanged(before, _config.Current);
+            return true;
+        }
+
         private string RemoteApiForTarget()
         {
             if (Uri.TryCreate(ApiBaseUrl, UriKind.Absolute, out var uri) && uri.Scheme == "https" &&

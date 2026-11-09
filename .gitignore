@@ -135,3 +135,7 @@ Backend/data/
 /graphify-out/extraction.json
 /graphify-out/code-state.json
 /graphify-out/manifest.json
+
+# Machine-local VPN host ownership and operation lock
+Backend/Deploy/Host/.vpn-state.json
+Backend/Deploy/Host/.vpn.lock

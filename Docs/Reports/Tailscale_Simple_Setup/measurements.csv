@@ -1,0 +1,6 @@
+scope,transport,selected,connectedSeconds,rttP50Ms,rttP95Ms,rttP99Ms,pongTimeouts,inputHz,snapshotHz
+NetSmoke on own VPN IP,Udp,Udp,8.0114455,30.5255,46.4555,46.4555,0,,
+NetSmoke on own VPN IP,Wss,Wss,8.0044844,14.924,15.9386,15.9386,0,,
+NetSmoke on own VPN IP,Auto,Wss,8.0110152,15.1817,15.8576,15.8576,0,,
+Unity Windows evidence-client-1,Wss,Wss,215.46778869628906,33.3348,33.4698,34.0858,0,29.862201590865478,29.997806238911767
+Unity Windows evidence-client-2,Udp,Udp,215.4892120361328,33.3647,34.4037,66.6989,0,29.871343838851264,30.000876347549134

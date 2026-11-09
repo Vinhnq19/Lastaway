@@ -1,4 +1,4 @@
-param([ValidateSet('public','vpn')][string]$Mode='vpn',[string]$Domain='',[string]$AcmeEmail='',[string]$SwaggerUser='hostadmin',[Security.SecureString]$SwaggerPassword,[string]$OutputFile='')
+﻿param([ValidateSet('public','vpn')][string]$Mode='vpn',[string]$Domain='',[string]$AcmeEmail='',[string]$SwaggerUser='hostadmin',[Security.SecureString]$SwaggerPassword,[string]$OutputFile='')
 $ErrorActionPreference='Stop'
 if ($Mode -eq 'public' -and ($Domain -notmatch '^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$' -or $Domain -eq 'junglemaze.duckdns.org' -or $AcmeEmail -notmatch '^[^@\s]+@[^@\s]+\.[^@\s]+$')) { throw 'Provide a selfhost domain distinct from AWS and a valid ACME email.' }
 if ($SwaggerUser -notmatch '^[a-zA-Z0-9_-]{3,32}$') { throw 'Invalid Swagger username' }
@@ -26,7 +26,7 @@ $lines=@(
     'MATCH_PROFILE=main','AUTH_MODE=RoomCode',('ROOM_CODE='+((Random-Hex 6).Substring(0,6).ToUpperInvariant())),
     ('JWT_SIGNING_KEY='+(Random-Hex 32)),('ROOM_CONTROL_TOKEN='+(Random-Hex 32)),('MATCH_RESULT_TOKEN='+(Random-Hex 32)),
     'MAX_PLAYERS=10','MAX_ROOM_PLAYERS=10','MAX_TOTAL_PLAYERS=50','MAX_ROOMS=5','MAX_ROOMS_PER_USER=2',
-    'HOST_GAME_UDP_BIND=0.0.0.0','HOST_GAME_UDP_PORT=7777','HOST_VPN_PORT=8080'
+    'HOST_GAME_UDP_BIND=0.0.0.0','HOST_GAME_UDP_PORT=7777','HOST_VPN_PORT=18080'
 )
 [IO.File]::WriteAllText($path,($lines -join "`n")+"`n",[Text.UTF8Encoding]::new($false))
 $sid=[Security.Principal.WindowsIdentity]::GetCurrent().User

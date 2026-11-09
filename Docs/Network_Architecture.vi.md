@@ -63,7 +63,7 @@ AWS: EC2 hiện có, Caddy public 80/443, UDP 7777. Caddy chuyển **đúng `/ga
 
 UDP là đường chính, WSS443 là dự phòng của cả Unity Windows/Editor và NetSmokeClient. Auto thử UDP tối đa5s, rồi WebSocket tối đa10s mở kết nối và5s join. RoomFull/ServerFull/mã sai trả thẳng; không đổi đường để vượt kiểm tra. Sau join không tự đổi đường. Mỗi lượt kết nối có attempt riêng; chuyển trong lúc join/resume giữ một slot và proof resume chỉ xoay một lần. WSS vẫn cần DNS và HTTPS được mạng cho phép. SSM chỉ dùng quản trị.
 
-Selfhost dùng `compose.host.yaml`, DB/volume/secret riêng. VPN: Tailscale Serve HTTPS tới Caddy loopback8080; UDP qua IP VPN. Public: hostname khác AWS, Caddy80/443 và UDP7777, cần IP public/router phù hợp. Không mở Mongo, API5000, control7780 hoặc listener7781 ra ngoài. Các profile `phase2-local/lan/vpn/selfhost/aws` dùng chung schema, không bỏ kiểm tra TLS.
+Selfhost dùng `compose.host.yaml`, DB/volume/secret riêng. VPN: Tailscale Serve HTTPS tới Caddy loopback18080; UDP qua IP VPN. Public: hostname khác AWS, Caddy80/443 và UDP7777, cần IP public/router phù hợp. Không mở Mongo, API5000, control7780 hoặc listener7781 ra ngoài. Các profile `phase2-local/lan/vpn/selfhost/aws` dùng chung schema, không bỏ kiểm tra TLS.
 
 ## 3. Project, công nghệ và trách nhiệm
 
@@ -176,3 +176,10 @@ Dành trước 3 slot trứng và 24 stack loot. DestructibleService xác nhận
 Bot dùng marker công khai để tới tranh thính; danger/bo/retreat/combat vẫn ưu tiên hơn. Bot phá/nhặt bằng combat và inventory chung, không có quyền tạo loot. Path budget vẫn 1.500 node/tick toàn server.
 
 AirdropVisualSet/prefab dùng art rồng/trứng hiện có; WorldSceneView gắn renderer rồng, bóng, trứng rơi/vỡ, HP và marker minimap. DragonRoar toàn cục; EggLand/EggBreak theo vị trí. Manifest giữ rõ nguồn và trạng thái nghe/kiểm chứng. Kết quả kỹ thuật và giới hạn: [báo cáo DRG-01](Reports/DRG01/report.vi.md).
+
+
+### Điều phối host Tailscale từ Unity
+
+Bảng Máy chủ hiện có gọi port `IVpnHostTools`, adapter Windows chạy script cố định `manage-vpn.ps1` trong Backend đã xác minh; thao tác bất đồng bộ và kết quả JSON không có secret. Setup mở cửa sổ tương tác để người dùng xác nhận đăng nhập/UAC/mật khẩu; Start/Status/Stop chạy nền. Script kiểm lock, ownership stack/Serve, cổng UDP, readiness HTTPS và GameServer; không tác động AWS. VPN UDP chỉ bind IP Tailscale host; API/WSS qua Tailscale Serve tới Caddy loopback18080, các cổng DB/control vẫn private. Map/outbox/Mongo dùng volume bền vững.
+
+Mã ngắn `may-host.tail123` (tự thêm `.ts.net`, mặc định UDP7777, thêm `:port` khi cần) là địa chỉ endpoint; mã `LASTAWAY-VPN1` cũ vẫn được nhận. Mã này, không phải account/room/auth ticket hoặc lời mời VPN. Client kiểm payload giới hạn, IP100.64/10, hostname `.ts.net`, DNS phải trả IP100.64/10 (mã cũ còn kiểm khớp IP đã ghi) và TLS; sau thành công mới lưu Auto UDP/WSS vào config hiện có. Đổi backend dùng cơ chế reset account hiện tại. Hủy/chuyển tab bỏ callback cũ. Việc gọi HTTP health không được báo thành PASS gameplay; phải join/pong. Tailnet invitations do host quản lý thủ công, không nhúng API key quản trị vào client.

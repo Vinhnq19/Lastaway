@@ -893,6 +893,76 @@
       "_origin": "semantic",
       "evidence_type": "document-derived",
       "description": "Opt-in QualityClient captures focused 720p/60FPS frame-time by match phase; network input/tick remain 30Hz, insufficient foreground/load-generator coverage is INVALID."
+    },
+    {
+      "id": "docs_network_architecture_vi_vpn_host_tools",
+      "label": "IVpnHostTools / Windows host tools",
+      "description": "Existing server settings invokes async Windows adapter; Setup/Start/Status/Stop run fixed scripts only from a validated trusted Backend; no AWS operations or credentials in code.",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "L181-185, Tailscale host orchestration section",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "_origin": "semantic",
+      "evidence_type": "document-derived"
+    },
+    {
+      "id": "docs_network_architecture_vi_vpn_host_script",
+      "label": "manage-vpn.ps1",
+      "description": "Owns local lock, private config reuse, stack/Serve ownership and readiness. New VPN host proxy defaults to loopback18080 to avoid Unity MCP8080; persistent Mongo/map/outbox volumes survive Stop.",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "L181-185, Tailscale host orchestration section",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "_origin": "semantic",
+      "evidence_type": "document-derived"
+    },
+    {
+      "id": "docs_network_architecture_vi_tailscale_serve",
+      "label": "Tailscale Serve HTTPS",
+      "description": "Routes tailnet HTTPS443 to private Caddy on loopback18080; UDP binds the host Tailscale IP. Tailnet invitations, browser authentication and UAC remain explicit user steps; other Serve/Funnel configurations are protected.",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "L181-185, Tailscale host orchestration section",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "_origin": "semantic",
+      "evidence_type": "document-derived"
+    },
+    {
+      "id": "docs_network_architecture_vi_vpn_connection_code",
+      "label": "LASTAWAY-VPN1 endpoint code",
+      "description": "Versioned endpoint-only code; validates bounded payload, Tailscale IP and ts.net DNS/TLS before saving Auto UDP/WSS to existing config. No RoomCode/JWT/password/admin key; canceled validation cannot switch AWS endpoint.",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "L181-185, Tailscale host orchestration section",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "_origin": "semantic",
+      "evidence_type": "document-derived"
+    },
+    {
+      "id": "docs_network_architecture_vi_vpn_caddy",
+      "label": "VPN Caddy gateway",
+      "description": "Self-host gateway keeps API5000, room control7780, WS7781 and Mongo private; no upload/reload or internal result endpoint exposed.",
+      "file_type": "concept",
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "L181-185, Tailscale host orchestration section",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "_origin": "semantic",
+      "evidence_type": "document-derived"
     }
   ],
   "edges": [
@@ -1959,16 +2029,115 @@
       "source_location": "L150",
       "weight": 1.0,
       "_origin": "semantic"
+    },
+    {
+      "source": "docs_network_architecture_vi_unity",
+      "target": "docs_network_architecture_vi_vpn_host_tools",
+      "relation": "invokes through port",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "L181-185",
+      "weight": 1.0,
+      "_origin": "semantic"
+    },
+    {
+      "source": "docs_network_architecture_vi_vpn_host_tools",
+      "target": "docs_network_architecture_vi_vpn_host_script",
+      "relation": "executes trusted fixed actions",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "L181-185",
+      "weight": 1.0,
+      "_origin": "semantic"
+    },
+    {
+      "source": "docs_network_architecture_vi_vpn_host_tools",
+      "target": "docs_network_architecture_vi_vpn_connection_code",
+      "relation": "validates before applying endpoint",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "L181-185",
+      "weight": 1.0,
+      "_origin": "semantic"
+    },
+    {
+      "source": "docs_network_architecture_vi_vpn_host_script",
+      "target": "docs_network_architecture_vi_tailscale_serve",
+      "relation": "manages only owned route",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "L181-185",
+      "weight": 1.0,
+      "_origin": "semantic"
+    },
+    {
+      "source": "docs_network_architecture_vi_tailscale_serve",
+      "target": "docs_network_architecture_vi_vpn_caddy",
+      "relation": "proxies HTTPS to loopback18080",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "L181-185",
+      "weight": 1.0,
+      "_origin": "semantic"
+    },
+    {
+      "source": "docs_network_architecture_vi_vpn_caddy",
+      "target": "docs_network_architecture_vi_api",
+      "relation": "forwards account and ticket requests",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "L181-185",
+      "weight": 1.0,
+      "_origin": "semantic"
+    },
+    {
+      "source": "docs_network_architecture_vi_vpn_caddy",
+      "target": "docs_network_architecture_vi_gameserver",
+      "relation": "forwards exact WSS game route",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "L181-185",
+      "weight": 1.0,
+      "_origin": "semantic"
+    },
+    {
+      "source": "docs_network_architecture_vi_vpn_connection_code",
+      "target": "docs_network_architecture_vi_autoroute",
+      "relation": "configures Auto transport",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "L181-185",
+      "weight": 1.0,
+      "_origin": "semantic"
+    },
+    {
+      "source": "docs_network_architecture_vi_vpn_host_script",
+      "target": "docs_network_architecture_vi_mongodb",
+      "relation": "preserves volume on Stop",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md",
+      "source_location": "L181-185",
+      "weight": 1.0,
+      "_origin": "semantic"
     }
   ],
   "hyperedges": [],
   "input_tokens": 0,
   "output_tokens": 0,
   "coverage": {
-    "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md": 178
+    "D:/Unity/Lastaway/Docs/Network_Architecture.vi.md": 185
   },
-  "source_sha256": "5781040f253f8d00d174a8e77f4ce03e186b1cd09fa725c83457b8dc34409d46",
+  "source_sha256": "3c4dce6b501871b1d763d44879d3ebde51976e16012557df52b7647fe047f5a7",
   "usage_note": "Host-agent semantic extraction; exact token usage unavailable, zero values do not claim zero session token use; no paid API called.",
-  "extraction_note": "Only Network_Architecture.vi.md was read as source. Document-derived architectural claims are not runtime verification. Missing .graphify_semantic.json schema was replaced by matching architecture-semantic.json schema. No linked report contents or implementation files verified. 2026-11-08: refreshed the Unity client concept after reviewing the changed Editor-policy paragraph; no runtime validation inferred from documentation.",
+  "extraction_note": "Only Network_Architecture.vi.md was read as source. Document-derived architectural claims are not runtime verification. Missing .graphify_semantic.json schema was replaced by matching architecture-semantic.json schema. No linked report contents or implementation files verified. 2026-11-08: refreshed the Unity client concept after reviewing the changed Editor-policy paragraph; no runtime validation inferred from documentation. 2026-11-09: reviewed existing concepts against unchanged document sections and refreshed the added Tailscale host/endpoint section plus loopback18080 references. Runtime acceptance remains separate from document-derived graph claims.",
   "scope": "replacement semantic fragment for this source document only"
 }

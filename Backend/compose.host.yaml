@@ -2,7 +2,7 @@
 # Isolated project, data volumes, and network configuration.
 # Avoids port conflicts with local development compose (Api 5000, Mongo 27018, WS 7781 are NOT published to host).
 # Direct API, Mongo, RoomControl, and WS ports are strictly internal.
-# Only Caddy (80/443 for public, loopback 8080 for VPN) and UDP 7777 are published.
+# Only Caddy (80/443 for public, loopback 18080 for VPN) and UDP 7777 are published.
 name: junglemaze-host
 
 x-logging: &logging
@@ -92,8 +92,10 @@ services:
       MATCH_RESULTS_API_URL: "http://api:5000/internal/match-results"
       MATCH_RESULT_TOKEN: "${MATCH_RESULT_TOKEN:-}"
       MATCH_OUTBOX_PATH: "/app/data/match-outbox"
+      MAP_DATA_PATH: "/app/data/maps"
     volumes:
       - game-host-outbox:/app/data/match-outbox
+      - game-host-maps:/app/data/maps
     logging: *logging
 
   # Public mode: Caddy manages TLS (port 80/443) with Let's Encrypt / ZeroSSL
@@ -119,14 +121,14 @@ services:
         condition: service_healthy
     logging: *logging
 
-  # VPN / Private mode: Caddy listens on HTTP 127.0.0.1:8080 behind Tailscale Serve HTTPS
+  # VPN / Private mode: Caddy listens on HTTP 127.0.0.1:18080 behind Tailscale Serve HTTPS
   caddy-vpn:
     profiles: ["vpn"]
     image: ${CADDY_IMAGE:-caddy:2}
     restart: unless-stopped
     mem_limit: 128m
     ports:
-      - "127.0.0.1:${HOST_VPN_PORT:-8080}:8080/tcp"
+      - "127.0.0.1:${HOST_VPN_PORT:-18080}:8080/tcp"
     environment:
       SWAGGER_USER: ${SWAGGER_USER:-admin}
       SWAGGER_HASH: ${SWAGGER_HASH:-}
@@ -144,3 +146,4 @@ volumes:
   caddy-host-data:
   caddy-host-config:
   game-host-outbox:
+  game-host-maps:

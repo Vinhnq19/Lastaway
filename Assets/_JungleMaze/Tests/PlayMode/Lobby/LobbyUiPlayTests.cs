@@ -41,7 +41,7 @@ namespace JungleMaze.Tests.PlayMode.Lobby
         public int Quits;
 
         public LobbyUiRig(LobbyCase scenario = LobbyCase.HappyPath, Func<bool> settingsOpen = null, Action<LobbyFlow> wire = null,
-            LobbyOptions options = null)
+            LobbyOptions options = null, JungleMaze.App.Ports.IVpnHostTools vpn = null)
         {
             Scenarios = new LobbyScenarios(Clock) { JoinDelay = 0.1f, LobbySeconds = 1, LoadingSeconds = 1, InGameSeconds = 1, EndingSeconds = 5, DropAfter = 0.2f };
             Scenarios.Use(scenario);
@@ -54,7 +54,7 @@ namespace JungleMaze.Tests.PlayMode.Lobby
             account.Submit();
             wire?.Invoke(Flow);
             Root = Object.Instantiate(AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath)).GetComponent<LobbyUiRoot>();
-            Presenter = new LobbyUiPresenter(Root, Flow, null, () => Quits++, code => Copied = code, settingsOpen);
+            Presenter = new LobbyUiPresenter(Root, Flow, null, () => Quits++, code => Copied = code, settingsOpen, vpn: vpn);
             Root.Bind(Presenter);
             Driver = new GameObject("UI-02 ticker").AddComponent<Ticker>();
             Driver.Rig = this;
