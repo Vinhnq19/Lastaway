@@ -1,6 +1,6 @@
 # Phát hành Windows/AWS — tiếp tục ngày 09/11/2026
 
-**Trạng thái: PARTIAL. Build Windows Unity21 và deploy backend AWS Full đã PASS. AWS còn catalog map cũ; gói Tháp cổ/Thị trấn đã sẵn sàng Local, chờ cửa sổ AWS bổ sung để publish và nghiệm thu.**
+**Trạng thái: PARTIAL về chất lượng; phát hành/flow AWS PASS. Build Windows21 và backend Full PASS; Tháp cổ/Thị trấn v1.2.0 đã publish và kiểm thực từ PC. Frame-time InGame đạt ngưỡng; còn stall khi chờ/tải ban đầu.**
 
 ## 1. Phạm vi và phiên bản
 
@@ -36,19 +36,33 @@ Release `ghcr-20261108-184421-85b9768b`; API/GameServer được cập nhật th
 
 Server AWS:121 mẫu, mean29,9997Hz, CPUmax21,8% một core;118 mẫu RAM,peak25,47%/256MiB;0 dropped/OOM/restart. CPUCreditBalance lúc đầu576; instanceStandard. Đây là đo backend từ PC thật, không phải generator trong EC2; không áp ngưỡng RTT Local cho Sydney.
 
-**Window2 INVALID:** client quality không xuất evidence, bị watchdog dừng; không có mẫu FPS AWS300s hợp lệ. Ảnh lobby đã thu trong window1 xác nhận AWS đang phát hành **Di tích cổ/Bãi đá v1.0.0**, không phải hai map dự kiến. Mình đã bỏ sót đối chiếu catalog trước window2. Runtime map nằm ở volume ngoài image nên cập nhật image không tự thay catalog. Bài yêu cầu `thap-co` không hợp lệ trên catalog này; không quy lượt thiếu telemetry thành server yếu hoặc FPS PASS. Thị trấn online chưa nghiệm thu.
+**Window2 INVALID:** client quality không xuất evidence, bị watchdog dừng; không có mẫu FPS AWS300s hợp lệ. Ảnh lobby đã thu trong window1 xác nhận khi đó AWS phát hành **Di tích cổ v1.1.0/Bãi đá v1.0.0**, không phải hai map dự kiến. Mình đã bỏ sót đối chiếu catalog trước window2. Runtime map nằm ở volume ngoài image nên cập nhật image không tự thay catalog. Bài yêu cầu `thap-co` không hợp lệ trên catalog này; không quy lượt thiếu telemetry thành server yếu hoặc FPS PASS. Tại thời điểm kết thúc window2, Thị trấn online chưa nghiệm thu; kết quả bổ sung nằm ở mục5.
 
-## 5. Gói map và phần còn lại
+## 5. Hai map mới và lượt AWS bổ sung đã duyệt
 
-Gói Local111.334bytes, source catalog generation5: **Tháp cổ/Thị trấn v1.2.0**. Validator và publisher nguyên tử Local PASS; checksum trong JSON/evidence. Cần dùng CLI --maps publish/reload nội bộ để cập nhật volume, giữ payload/history cũ để rollback; không cần rebuild image hoặc restart Mongo/EC2. Generation thực sẽ tăng theo catalog đang chạy.
+Lượt 3 hoàn tất trong 836.81s (<20 phút). Trước publish đã xác nhận server trống, đúng image digest; khóa deploy, validate catalog baked và snapshot catalog cũ. Publish nguyên tử generation5 rồi reload HTTP200; không build/pull image hoặc restart container. Catalog mới: **Tháp cổ/Thị trấn v1.2.0**, đúng MapHash/previewHash đã kiểm Local. Gói chuyển map111.334bytes chỉ là phương án dự phòng; thực tế publish trực tiếp dữ liệu đã có trong image, không upload gói này.
 
-Cần cửa sổ bổ sung tối đa20 phút: publish gói đã validate, xác minh GET/api/maps sau JWT, đo hai map720p/60FPS tối thiểu300s và dọn test. Hai window trước đã dùng; theo kế hoạch “không tự mở lượt thứ ba”, đang chờ phê duyệt. Hai PC vật lý,6–10 người thật, nghe audio/cảm giác PvP và correction/snapshot-gap tail đầy đủ vẫn NOT_TESTED/NOT_MEASURED. Module test không thay nghiệm thu flow hai map mới trên AWS.
+| Map/đường | Thời gian | Input/snapshot | RTT p50/p95/p99 | FPS InGame; frame p95/p99 |
+|---|---|---|---|---|
+| Tháp cổ/Wss | 330.01s | 29.95/30.00Hz | 239.59/267.10/534.00ms | 59.34; 16.68/17.45ms |
+| Thị trấn/Udp | 330.00s | 29.99/29.98Hz | 250.01/266.82/272.36ms | 59.84; 16.67/17.05ms |
+
+Cả hai flow 1 người +9 bot PASS: JWT/ticket guard, map có trong catalog, movement/bo/HP, kết quả/history/replay; client exit0, 1280×720, backgroundFrames0. Số liệu FPS tách theo phase; mức mục tiêu60 không bị ép30. Server 160 mẫu, mean30.0002Hz, CPUmax26.57% một core, RAMpeak47.97%/256MiB; dropped0, OOM=False, restartDelta=0.
+
+**Điểm cần cải thiện:**
+- thap-co/Waiting: frame p95=16.75ms, p99=128.02ms; 5 stall≥100ms. Đánh FAIL tiêu chí frame-tail phase này, không gộp với InGame để báo toàn bộ UI mượt.
+- thi-tran/Waiting: frame p95=16.77ms, p99=180.02ms; 6 stall≥100ms. Đánh FAIL tiêu chí frame-tail phase này, không gộp với InGame để báo toàn bộ UI mượt.
+- Tháp cổ/WSS có RTT p99 tăng rõ so với median. Không có pong timeout; chưa đủ bằng chứng quy nguyên nhân cho server hay TCP/network. Không coi FPS tốt là không có giật do mạng.
+- Natural match có người chết/spectator; đây không phải10 participant còn sống liên tục cả5 phút. Không sửa HP hoặc rút lịch chính để giữ người sống. Các mốc bo/rồng chưa quan sát đủ trong trận thật vẫn chưa được nghiệm thu bằng lượt này.
+- Hai PC vật lý,6–10 người thật, cảm giác PvP/audio và correction/snapshot-gap tail đầy đủ vẫn NOT_TESTED/NOT_MEASURED.
+
+Catalog mới được giữ; backup catalog cũ và payload bất biến vẫn còn để rollback. Rollback map không được kích hoạt trong lượt thành công này; không tuyên bố đã diễn tập rollback ở đây.
 
 ## 6. Vận hành và chi phí
 
-Endpoint game `junglemaze.duckdns.org`, API HTTPS443, UDP7777, WSS`/game`. Account bắt buộc; chọn Online AWS rồi đăng nhập, tạo/vào phòng. Hiện chưa khẳng định catalog mới đã lên AWS. Giữ Follow Player và spectator theo trạng thái thật.
+Endpoint game `junglemaze.duckdns.org`, API HTTPS443, UDP7777, WSS`/game`. Account bắt buộc; chọn Online AWS rồi đăng nhập, tạo/vào phòng. Catalog mới đã lên AWS và cả hai map đã qua flow test từ PC thật. Giữ Follow Player và spectator theo trạng thái thật.
 
-EC2 được xác nhận **Running**,t3.small,x86_64,Standard; tác vụ không Start/Stop/nâng máy hoặc bật Unlimited. Running tiếp tục phát sinh chi phí/credits AWS. Không đổi Mongo, secret, security group hoặc tạo hạ tầng. Window2 tool/sampler được dọn trong1.067,25s; không chạy thêm bài tải sau cửa sổ. OCI layer delta là số nén theo manifest, không phải đo wire bytes thực.
+EC2 được xác nhận **Running**,t3.small,x86_64,Standard; tác vụ không Start/Stop/nâng máy hoặc bật Unlimited. Running tiếp tục phát sinh chi phí/credits AWS. Giữ cấu hình/volume Mongo, secret và security group; không tạo hạ tầng. Register/login smoke có tạo fixture account/guest qua API; không xóa dữ liệu người dùng. Window2 tool/sampler được dọn trong1.067,25s. Window3 được người dùng duyệt thêm riêng; đã dừng sampler, dọn staging riêng, đóng client/dọn phòng test, xác nhận EC2 Running. Sampler đã tự kết thúc thành công trước lệnh stop nên systemctl trả code5; đã xác minh journal inactive/success và thu đủ144 mẫu, không phải lỗi game. CPUCreditBalance cuối576 như đầu; đây là credit CPU T3, không phải số dư tiền/Free Tier AWS. Không chạy thêm bài tải sau cửa sổ. OCI layer delta là số nén theo manifest, không phải đo wire bytes thực.
 
 ## 7. Bằng chứng và bàn giao
 

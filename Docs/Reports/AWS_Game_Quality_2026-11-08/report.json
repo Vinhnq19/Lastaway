@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "status": "PARTIAL",
-  "summary": "Windows21 build and backend AWS Full PASS; deployed external map catalog is legacy; prepared Thap co/Thi tran package awaits additional approved AWS window.",
+  "summary": "Windows21 and backend AWS Full PASS; Thap co/Thi tran v1.2.0 published and both 330s flows PASS. InGame frame tails PASS; initial Waiting/loading frame stalls need improvement; physical two-PC and human group untested.",
   "sourceCommit": "85b9768b632775736974883870c17d9956c6f98a",
   "branch": "codex/aws-quality-release",
   "sharedUnityVersion": "6000.3.15f1",
@@ -5063,13 +5063,415 @@
     "peakContainerMemoryPercent": 25.47
   },
   "awsQuality": {
-    "status": "INVALID",
-    "reason": "No client evidence; watchdog killed PID7312; runtime catalog observed legacy Di tich co/Bai da, unlike requested thap-co. No full 300s FPS claim.",
-    "windowSeconds": 1067.2457177639008,
-    "secondMap": "NOT_TESTED"
+    "status": "PASS_FLOW_WITH_QUALITY_FINDINGS",
+    "windowSeconds": 836.807135105133,
+    "maps": {
+      "thap-co": {
+        "status": "PASS",
+        "launcherStatus": "PASS",
+        "exitCode": 0,
+        "selectedTransport": "Wss",
+        "metrics": {
+          "elapsedSeconds": 333.84161376953125,
+          "connectedSeconds": 330.00653076171875,
+          "snapshots": 9452,
+          "inputs": 4966,
+          "ignoredPackets": 0,
+          "catchupDrops": 1,
+          "maxPlayers": 10,
+          "maxRosterPlayers": 10,
+          "maxOnScreenPlayers": 1,
+          "completedMatches": 1,
+          "inputHz": 29.948262736656233,
+          "activeInputSeconds": 165.81930122850463,
+          "snapshotHz": 30.001350000107593,
+          "snapshotSeconds": 315.0524893035181,
+          "rttP50Ms": 239.5912,
+          "rttP95Ms": 267.0999,
+          "rttP99Ms": 534.0013,
+          "pings": 328,
+          "pongs": 328,
+          "pongTimeouts": 0
+        },
+        "assertions": [
+          {
+            "id": "joined",
+            "status": "PASS",
+            "detail": "Observed during this run"
+          },
+          {
+            "id": "playersVisible",
+            "status": "PASS",
+            "detail": "Roster and network views confirmed; Follow Player viewport count is separate"
+          },
+          {
+            "id": "movement",
+            "status": "PASS",
+            "detail": "Observed during this run"
+          },
+          {
+            "id": "zone",
+            "status": "PASS",
+            "detail": "Observed during this run"
+          },
+          {
+            "id": "hpDamage",
+            "status": "PASS",
+            "detail": "Observed during this run"
+          },
+          {
+            "id": "result",
+            "status": "PASS",
+            "detail": "Observed during this run"
+          },
+          {
+            "id": "replay",
+            "status": "PASS",
+            "detail": "Observed during this run"
+          },
+          {
+            "id": "history",
+            "status": "PASS",
+            "detail": "Observed during this run"
+          }
+        ],
+        "frameQuality": [
+          {
+            "phase": "Waiting",
+            "frames": 420,
+            "stalls100Ms": 5,
+            "fps": 35.65871830430971,
+            "p95Ms": 16.754698008298874,
+            "p99Ms": 128.02310287952423,
+            "tailStatus": "FAIL"
+          },
+          {
+            "phase": "Lobby",
+            "frames": 601,
+            "stalls100Ms": 0,
+            "fps": 59.97337154676076,
+            "p95Ms": 16.675397753715515,
+            "p99Ms": 17.03759841620922,
+            "tailStatus": "PASS"
+          },
+          {
+            "phase": "Loading",
+            "frames": 31,
+            "stalls100Ms": 0,
+            "fps": 59.99934449546694,
+            "p95Ms": 16.672100871801376,
+            "p99Ms": 16.673695296049118,
+            "tailStatus": "PASS"
+          },
+          {
+            "phase": "InGame",
+            "frames": 18695,
+            "stalls100Ms": 2,
+            "fps": 59.33931847778369,
+            "p95Ms": 16.676899045705795,
+            "p99Ms": 17.451997846364975,
+            "tailStatus": "PASS"
+          },
+          {
+            "phase": "Ending",
+            "frames": 16,
+            "stalls100Ms": 0,
+            "fps": 57.98864190302377,
+            "p95Ms": 25.90959519147873,
+            "p99Ms": 25.90959519147873,
+            "tailStatus": "PASS"
+          },
+          {
+            "phase": "Cleanup",
+            "frames": 2,
+            "stalls100Ms": 0,
+            "fps": 59.99718403621885,
+            "p95Ms": 16.670294106006622,
+            "p99Ms": 16.670294106006622,
+            "tailStatus": "PASS"
+          }
+        ],
+        "qualityTargetFps": 60,
+        "backgroundFrames": 0,
+        "screenWidth": 1280,
+        "screenHeight": 720,
+        "qualitySampleCapReached": false
+      },
+      "thi-tran": {
+        "status": "PASS",
+        "launcherStatus": "PASS",
+        "exitCode": 0,
+        "selectedTransport": "Udp",
+        "metrics": {
+          "elapsedSeconds": 332.88836669921875,
+          "connectedSeconds": 330.0047302246094,
+          "snapshots": 9441,
+          "inputs": 4975,
+          "ignoredPackets": 0,
+          "catchupDrops": 0,
+          "maxPlayers": 10,
+          "maxRosterPlayers": 10,
+          "maxOnScreenPlayers": 1,
+          "completedMatches": 1,
+          "inputHz": 29.992967603467793,
+          "activeInputSeconds": 165.87221597321332,
+          "snapshotHz": 29.981341659678943,
+          "snapshotSeconds": 314.8958477964625,
+          "rttP50Ms": 250.0101,
+          "rttP95Ms": 266.8189,
+          "rttP99Ms": 272.3579,
+          "pings": 331,
+          "pongs": 330,
+          "pongTimeouts": 0
+        },
+        "assertions": [
+          {
+            "id": "joined",
+            "status": "PASS",
+            "detail": "Observed during this run"
+          },
+          {
+            "id": "playersVisible",
+            "status": "PASS",
+            "detail": "Roster and network views confirmed; Follow Player viewport count is separate"
+          },
+          {
+            "id": "movement",
+            "status": "PASS",
+            "detail": "Observed during this run"
+          },
+          {
+            "id": "zone",
+            "status": "PASS",
+            "detail": "Observed during this run"
+          },
+          {
+            "id": "hpDamage",
+            "status": "PASS",
+            "detail": "Observed during this run"
+          },
+          {
+            "id": "result",
+            "status": "PASS",
+            "detail": "Observed during this run"
+          },
+          {
+            "id": "replay",
+            "status": "PASS",
+            "detail": "Observed during this run"
+          },
+          {
+            "id": "history",
+            "status": "PASS",
+            "detail": "Observed during this run"
+          }
+        ],
+        "frameQuality": [
+          {
+            "phase": "Waiting",
+            "frames": 352,
+            "stalls100Ms": 6,
+            "fps": 32.71436089091928,
+            "p95Ms": 16.766702756285667,
+            "p99Ms": 180.0203025341034,
+            "tailStatus": "FAIL"
+          },
+          {
+            "phase": "Lobby",
+            "frames": 602,
+            "stalls100Ms": 0,
+            "fps": 59.97979858747233,
+            "p95Ms": 16.674404963850975,
+            "p99Ms": 16.816304996609688,
+            "tailStatus": "PASS"
+          },
+          {
+            "phase": "Loading",
+            "frames": 33,
+            "stalls100Ms": 0,
+            "fps": 59.994873883131056,
+            "p95Ms": 16.673002392053604,
+            "p99Ms": 16.724100336432457,
+            "tailStatus": "PASS"
+          },
+          {
+            "phase": "InGame",
+            "frames": 18843,
+            "stalls100Ms": 1,
+            "fps": 59.83883284539035,
+            "p95Ms": 16.674702987074852,
+            "p99Ms": 17.05150306224823,
+            "tailStatus": "PASS"
+          },
+          {
+            "phase": "Ending",
+            "frames": 14,
+            "stalls100Ms": 0,
+            "fps": 57.318321503916096,
+            "p95Ms": 27.576196938753128,
+            "p99Ms": 27.576196938753128,
+            "tailStatus": "PASS"
+          },
+          {
+            "phase": "Cleanup",
+            "frames": 14,
+            "stalls100Ms": 0,
+            "fps": 59.98584389545805,
+            "p95Ms": 16.719600185751915,
+            "p99Ms": 16.719600185751915,
+            "tailStatus": "PASS"
+          }
+        ],
+        "qualityTargetFps": 60,
+        "backgroundFrames": 0,
+        "screenWidth": 1280,
+        "screenHeight": 720,
+        "qualitySampleCapReached": false
+      }
+    },
+    "server": {
+      "status": "PASS",
+      "sampleCount": 160,
+      "loadedSampleCount": 132,
+      "meanTickHz": 30.0001875,
+      "loadedMeanTickHz": 30.00090909090909,
+      "maxCpuOneCorePercent": 26.57,
+      "memorySamples": 144,
+      "peakContainerMemoryPercent": 47.97,
+      "limitBytes": 268435456,
+      "droppedTicks": 0,
+      "oom": false,
+      "restartDelta": 0,
+      "maxPathNodesPerTick": 12,
+      "maxAiPending": 9
+    },
+    "inGameFrameTailStatus": "PASS",
+    "allPhaseFrameTailStatus": "FAIL",
+    "frameTailFailures": [
+      {
+        "mapId": "thap-co",
+        "phase": "Waiting",
+        "frames": 420,
+        "stalls100Ms": 5,
+        "fps": 35.65871830430971,
+        "p95Ms": 16.754698008298874,
+        "p99Ms": 128.02310287952423,
+        "tailStatus": "FAIL"
+      },
+      {
+        "mapId": "thi-tran",
+        "phase": "Waiting",
+        "frames": 352,
+        "stalls100Ms": 6,
+        "fps": 32.71436089091928,
+        "p95Ms": 16.766702756285667,
+        "p99Ms": 180.0203025341034,
+        "tailStatus": "FAIL"
+      }
+    ],
+    "foregroundValid": true,
+    "window": {
+      "startedUtc": "2026-11-09T02:57:25.546921+00:00",
+      "hardDeadlineUnix": 1794194245.546921,
+      "status": "PASS",
+      "physicalDeviceCount": 1,
+      "ec2Policy": "Keep Running",
+      "maps": [],
+      "instance": {
+        "state": "running",
+        "ip": "13.239.10.69",
+        "type": "t3.small"
+      },
+      "runnerPid": 31836,
+      "mapPublish": "PASS",
+      "quality": {
+        "status": "PASS",
+        "startedUtc": "2026-11-09T02:58:05.8283156Z",
+        "physicalDeviceCount": 1,
+        "humanClients": 1,
+        "bots": 9,
+        "maps": [
+          {
+            "mapId": "thap-co",
+            "seconds": 363.93187489999997,
+            "status": "PASS",
+            "transport": "Wss"
+          },
+          {
+            "mapId": "thi-tran",
+            "seconds": 346.72602029999996,
+            "status": "PASS",
+            "transport": "Udp"
+          }
+        ],
+        "currentMap": "thi-tran",
+        "finishedUtc": "2026-11-09T03:09:56.6021379Z"
+      },
+      "runnerExit": 0,
+      "elapsedSeconds": 836.807135105133,
+      "finishedUtc": "2026-11-09T03:11:22.354031+00:00",
+      "cleanup": {
+        "unitActive": "inactive",
+        "unitStopCode": 5,
+        "unitJournal": "Nov 09 02:58:05 ip-172-31-29-38 systemd[1]: Started lastaway-quality-cc32ae2c0571.service - /usr/bin/python3 /tmp/lastaway-quality-cc32ae2c0571/sampler.py --output /tmp/lastaway-quality-cc32ae2c0571 --seconds 1020.\nNov 09 03:10:06 ip-172-31-29-38 systemd[1]: lastaway-quality-cc32ae2c0571.service: Deactivated successfully.\nNov 09 03:10:06 ip-172-31-29-38 systemd[1]: lastaway-quality-cc32ae2c0571.service: Consumed 5.079s CPU time.\n",
+        "occupancy": {
+          "schemaVersion": 1,
+          "safeToDeploy": true,
+          "humanActive": 0,
+          "humanPending": 0,
+          "humanGrace": 0,
+          "bots": 0,
+          "rooms": [
+            {
+              "roomId": "18cbfdfc-6d58-4263-9938-97dea20e06dc",
+              "phase": "Waiting",
+              "reservedHumans": 0,
+              "bots": 0,
+              "entities": 0
+            }
+          ]
+        },
+        "restarts": 0,
+        "oom": false,
+        "catalog": {
+          "schemaVersion": 1,
+          "generation": 5,
+          "defaultMapId": "thap-co",
+          "maps": [
+            {
+              "id": "thap-co",
+              "name": "Tháp cổ",
+              "description": "Tháp đá và các khu di tích giữa rừng.",
+              "version": "1.2.0",
+              "mapHash": "0d51907a14bccb14a42534edde36923cff6a63f5ab42255ffab743fe2e14ca0f",
+              "previewHash": "bc6cff2d3232ca704ffe085efb1e69881e15617bed2f1b8d26d49adebc1c9d9f"
+            },
+            {
+              "id": "thi-tran",
+              "name": "Thị trấn",
+              "description": "Nhà gạch, đường phố và các lối giao tranh hẹp.",
+              "version": "1.2.0",
+              "mapHash": "5cebbe6fef0f8998ae76911cfbcc63ccd858972aa977de13b5185a1cf420e57e",
+              "previewHash": "a9b4a676ff08cf73d4356387d5e58fd74dcbe604038ba298db400d0e19e06b21"
+            }
+          ]
+        },
+        "ownedSamplerStagingRemoved": true,
+        "rollback": "NOT_REQUIRED"
+      },
+      "initialCleanupRace": "SSH operation failed: Traceback (most recent call last):\n  File \"<stdin>\", line 15, in <module>\n  File \"<stdin>\", line 3, in run\n  File \"/usr/lib/python3.12/subprocess.py\", line 466, in check_output\n    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 571, in run\n    raise CalledProcessError(retcode, process.args,\nsubprocess.CalledProcessError: Command '['systemctl', 'stop', 'lastaway-quality-cc32ae2c0571']' returned non-zero exit status 5.\n",
+      "finalInstance": {
+        "state": "running",
+        "ip": "13.239.10.69",
+        "type": "t3.small"
+      },
+      "finalEc2State": "running"
+    },
+    "cpuCreditBalanceEnd": 576,
+    "cpuCreditBalanceMeaning": "T3 CPU burst credits, not AWS monetary/free-plan credits"
   },
   "preparedMaps": {
-    "status": "READY_LOCAL_NOT_PUBLISHED",
+    "status": "PUBLISHED_AND_FLOW_TESTED",
     "archiveBytes": 111334,
     "sha256": "ba6ffd9c6e4c9fb982d2f4fbff37a6e7c5ef28df216df989b82d44d624c4eb8d",
     "maps": [
@@ -5089,7 +5491,8 @@
         "mapHash": "5cebbe6fef0f8998ae76911cfbcc63ccd858972aa977de13b5185a1cf420e57e",
         "previewHash": "a9b4a676ff08cf73d4356387d5e58fd74dcbe604038ba298db400d0e19e06b21"
       }
-    ]
+    ],
+    "generation": 5
   },
   "ec2": {
     "state": "running",
@@ -5097,9 +5500,15 @@
     "publicIp": "13.239.10.69",
     "ec2Lifecycle": "unchanged by task"
   },
-  "awsWindowsUsed": 2,
-  "additionalAwsWindow": "AWAITING_USER_APPROVAL",
+  "awsWindowsUsed": 3,
+  "additionalAwsWindow": "APPROVED_AND_COMPLETED_WITHIN_20_MINUTES",
   "physicalTwoPc": "NOT_TESTED",
   "human6To10Session": "NOT_TESTED",
-  "subjectiveAudioAndGameplayFeel": "NOT_TESTED"
+  "subjectiveAudioAndGameplayFeel": "NOT_TESTED",
+  "awsQualityWindow2": {
+    "status": "INVALID",
+    "reason": "No client evidence; watchdog killed PID7312; runtime catalog observed legacy Di tich co/Bai da, unlike requested thap-co. No full 300s FPS claim.",
+    "windowSeconds": 1067.2457177639008,
+    "secondMap": "NOT_TESTED"
+  }
 }
