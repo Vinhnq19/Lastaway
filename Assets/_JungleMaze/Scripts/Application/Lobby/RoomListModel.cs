@@ -10,9 +10,10 @@ namespace JungleMaze.App.Lobby
     /// Room manager (AC14–AC17): list, create (one request per press), delete with one confirmation. A 401 from any
     /// call expires the session and raises <see cref="AuthExpired"/>; nothing is sent without a token.
     /// </summary>
-    public sealed class RoomListModel
+    public sealed class RoomListModel : IDisposable
     {
         private readonly IRoomsApi _api;
+        private int _generation;
         private readonly AccountSession _account;
         private readonly List<RoomInfo> _rooms = new List<RoomInfo>();
 
@@ -20,6 +21,8 @@ namespace JungleMaze.App.Lobby
         {
             _api = api ?? throw new ArgumentNullException(nameof(api));
             _account = account ?? throw new ArgumentNullException(nameof(account));
+            _account.LoggedOut += Clear;
+            _account.LoggedIn += Clear;
         }
 
         public ListState State { get; private set; }
@@ -47,8 +50,10 @@ namespace JungleMaze.App.Lobby
             State = ListState.Loading;
             Message = "";
             Changed();
+            var generation = _generation; var revision = _account.Revision;
             _api.List(token, r =>
             {
+                if (!Current(generation, revision, token)) return;
                 if (Unauthorized(r.HttpStatus)) return;
                 if (!r.Ok) { State = ListState.Unavailable; Message = ApiMessages.For(ApiOp.ListRooms, r); Changed(); return; }
                 _rooms.Clear();
@@ -74,8 +79,10 @@ namespace JungleMaze.App.Lobby
             if (token == null) return false;
             Creating = true;
             Message = "";
+            var generation = _generation; var revision = _account.Revision;
             _api.Create(token, NewName.Trim(), NewCapacity, r =>
             {
+                if (!Current(generation, revision, token)) return;
                 Creating = false;
                 if (Unauthorized(r.HttpStatus)) return;
                 if (!r.Ok) { Message = ApiMessages.For(ApiOp.CreateRoom, r); Changed(); return; }
@@ -111,8 +118,10 @@ namespace JungleMaze.App.Lobby
             PendingDelete = null;
             Deleting = true;
             Message = "";
+            var generation = _generation; var revision = _account.Revision;
             _api.Delete(token, id, r =>
             {
+                if (!Current(generation, revision, token)) return;
                 Deleting = false;
                 if (Unauthorized(r.HttpStatus)) return;
                 if (r.Ok || r.HttpStatus == 404) RemoveRoom(id); // 404: the room is already gone
@@ -125,6 +134,8 @@ namespace JungleMaze.App.Lobby
 
         public void Clear()
         {
+            _generation++;
+            Creating = Deleting = false;
             _rooms.Clear();
             State = ListState.Idle;
             Message = "";
@@ -149,6 +160,16 @@ namespace JungleMaze.App.Lobby
             AuthExpired?.Invoke();
             Changed();
             return true;
+        }
+
+        private bool Current(int generation, long revision, string token) =>
+            generation == _generation && revision == _account.Revision && _account.IsValid && token == _account.Token;
+
+        public void Dispose()
+        {
+            _account.LoggedOut -= Clear;
+            _account.LoggedIn -= Clear;
+            Clear();
         }
 
         private void SetListState()

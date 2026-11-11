@@ -71,13 +71,13 @@ namespace JungleMaze.Infrastructure.Network
 
         private string _selectedTransport = "Udp";
         private string _fallbackReason;
-        private readonly Func<ConnectRequest, Guid, Task<string>> _ticketIssuer;
-        private Task<string> _ticketTask;
+        private readonly Func<ConnectRequest, Guid, Task<TicketIssueResult>> _ticketIssuer;
+        private Task<TicketIssueResult> _ticketTask;
         private string _ticket;
         private Guid _resumeToken;
         private Guid _resumeForNextConnect;
 
-        public NetworkClient(IEventBus bus, PacketRegistry registry, ILog log = null, Func<long> clock = null, Func<ConnectRequest, Guid, Task<string>> ticketIssuer = null)
+        public NetworkClient(IEventBus bus, PacketRegistry registry, ILog log = null, Func<long> clock = null, Func<ConnectRequest, Guid, Task<TicketIssueResult>> ticketIssuer = null)
         {
             _bus = bus ?? throw new ArgumentNullException(nameof(bus));
             _registry = registry ?? throw new ArgumentNullException(nameof(registry));
@@ -184,8 +184,8 @@ namespace JungleMaze.Infrastructure.Network
                 { FailBeforeStart(DisconnectReason.AuthenticationRequired, "Đăng nhập trước khi vào phòng."); return; }
                 _connectStarted = _clock();
                 try { _ticketTask = _ticketIssuer(request, AttemptId); }
-                catch { FailBeforeStart(DisconnectReason.LoginFailed, "Không cấp được vé vào phòng."); return; }
-                if (_ticketTask == null) { FailBeforeStart(DisconnectReason.LoginFailed, "Không cấp được vé vào phòng."); return; }
+                catch { FailBeforeStart(DisconnectReason.ServiceUnavailable, "Chưa thể vào phòng. Vui lòng thử lại."); return; }
+                if (_ticketTask == null) { FailBeforeStart(DisconnectReason.ServiceUnavailable, "Chưa thể vào phòng. Vui lòng thử lại."); return; }
                 SetState(NetworkState.Connecting, DisconnectReason.None);
                 return;
             }
@@ -227,13 +227,20 @@ namespace JungleMaze.Infrastructure.Network
                 if (!_ticketTask.IsCompleted)
                 {
                     if (ElapsedMs(_connectStarted, _clock()) >= 10000)
-                        Fail(DisconnectReason.LoginFailed, "Cấp vé quá thời gian; hãy đăng nhập lại.");
+                        Fail(DisconnectReason.ServiceUnavailable, "Chưa thể vào phòng. Vui lòng thử lại.");
                     return;
                 }
                 var task = _ticketTask; _ticketTask = null;
-                if (task.IsFaulted || task.IsCanceled || string.IsNullOrEmpty(task.Result))
-                { Fail(DisconnectReason.LoginFailed, "Không cấp được vé; kiểm tra tài khoản/API."); return; }
-                _ticket = task.Result;
+                if (task.IsFaulted || task.IsCanceled)
+                { Fail(DisconnectReason.ServiceUnavailable, "Chưa thể vào phòng. Vui lòng thử lại."); return; }
+                var result = task.Result;
+                if (!result.Success)
+                {
+                    _log.Warn("[Net] ticket HTTP=" + result.HttpStatus + " category=" + result.Failure);
+                    var reason = result.Failure == DisconnectReason.None ? DisconnectReason.ServiceUnavailable : result.Failure;
+                    Fail(reason, DisconnectReasons.Describe(reason)); return;
+                }
+                _ticket = result.Value;
                 StartSelectedTransport();
                 return;
             }

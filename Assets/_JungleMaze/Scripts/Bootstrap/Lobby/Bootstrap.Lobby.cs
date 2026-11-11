@@ -62,13 +62,22 @@ namespace JungleMaze.Composition
             ILeaderboardApi board = api;
 
             var accountSession = new AccountSession(account, () => DateTime.UtcNow);
+            LobbyFlow flow = null;
             var mapFiles = new RoomMapFiles(() => config.Current, () => accountSession.Token,
                 (JungleMaze.Infrastructure.Config.ClientRuntimeData)_registry.Resolve<IClientRuntimeData>(),
-                System.IO.Path.Combine(Application.persistentDataPath, "maps"), Application.streamingAssetsPath);
+                System.IO.Path.Combine(Application.persistentDataPath, "maps"), Application.streamingAssetsPath,
+                () => accountSession.Revision,
+                revision => { if (accountSession.Revision == revision) { accountSession.Expire(); menu.Disconnect(); flow?.GoHome(); } });
             var roomMaps = new RoomMapSession(match, _registry.Resolve<IPacketSender>(), _registry.Resolve<IPacketReceiver>(), mapFiles);
             _registry.Register(roomMaps);
             ticks.Add(roomMaps);
-            accountSession.LoggedOut += () => menu.AccountToken = null;
+            accountSession.LoggedOut += () =>
+            {
+                menu.AccountToken = null;
+                // A pending response for the old account cannot expire a later login.
+                if (network.State == NetworkState.Connecting || network.State == NetworkState.Authenticating)
+                    menu.Disconnect();
+            };
             if (menu != null)
             {
                 menu.EndpointChanged += () =>
@@ -84,7 +93,7 @@ namespace JungleMaze.Composition
                 if (!accountSession.IsValid || string.IsNullOrEmpty(accountSession.Token))
                 {
                     menu.AccountToken = null;
-                    connection.ReportLocalFailure();
+                    connection.ReportLocalFailure(DisconnectReason.AccountExpired);
                     return;
                 }
                 menu.AccountToken = accountSession.Token;
@@ -119,11 +128,11 @@ namespace JungleMaze.Composition
             var join = new JoinController(commands, clock, options, PlayerPrefs.GetString(DisplayNameKey, menu.DisplayName),
                 menu.RoomCode, name => PlayerPrefs.SetString(DisplayNameKey, name));
             _registry.TryResolve<IEliminationSource>(out var elimination);
-            var flow = new LobbyFlow(lobby, results, state, commands, join, accountSession,
+            flow = new LobbyFlow(lobby, results, state, commands, join, accountSession,
                 new RoomListModel(rooms, accountSession),
                 new HistoryModel(_registry.Resolve<IPlayerHistory>(), () => accountSession.IsValid ? accountSession.Token : null,
                     () => health.Configured, options),
-                new LeaderboardModel(board), new ApiStatusModel(health), clock, options, bus,
+                new LeaderboardModel(board, () => config.Current.ApiBaseUrl), new ApiStatusModel(health), clock, options, bus,
                 () => elimination != null && elimination.IsLocalEliminated ? EliminationText.Cause(elimination.Current) : null,
                 isOffline: () => gameFlow != null && gameFlow.IsOffline,
                 offlineLobby: offlineLobby,

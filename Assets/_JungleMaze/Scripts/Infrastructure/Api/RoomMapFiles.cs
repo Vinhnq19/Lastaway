@@ -41,6 +41,8 @@ namespace JungleMaze.Infrastructure.Api
 
         private readonly Func<ClientConfig> _config;
         private readonly Func<string> _token;
+        private readonly Func<long> _sessionRevision;
+        private readonly Action<long> _unauthorized;
         private readonly ClientRuntimeData _runtime;
         private readonly string _cacheRoot;
         private readonly string _rulesDirectory;
@@ -51,10 +53,11 @@ namespace JungleMaze.Infrastructure.Api
         /// <param name="cacheRoot">Writable directory; the per-endpoint subdirectory is created on demand.</param>
         /// <param name="streamingAssets">Unity <c>Application.streamingAssetsPath</c>, for the bundled rules directory.</param>
         public RoomMapFiles(Func<ClientConfig> config, Func<string> token, ClientRuntimeData runtime, string cacheRoot,
-            string streamingAssets)
+            string streamingAssets, Func<long> sessionRevision = null, Action<long> unauthorized = null)
         {
             _config = config ?? throw new ArgumentNullException(nameof(config));
             _token = token ?? throw new ArgumentNullException(nameof(token));
+            _sessionRevision = sessionRevision ?? (() => 0); _unauthorized = unauthorized;
             _runtime = runtime ?? throw new ArgumentNullException(nameof(runtime));
             if (string.IsNullOrWhiteSpace(cacheRoot)) throw new ArgumentException("Cache root is required.", nameof(cacheRoot));
             if (string.IsNullOrWhiteSpace(streamingAssets)) throw new ArgumentException("StreamingAssets path is required.", nameof(streamingAssets));
@@ -68,7 +71,8 @@ namespace JungleMaze.Infrastructure.Api
             token.ThrowIfCancellationRequested();
             ResolveEndpoint(out var urlPrefix, out _);
             var authorization = Authorization();
-            var bytes = await Download(urlPrefix + "/api/maps", authorization, CatalogLimit, token);
+            var revision = _sessionRevision(); var origin = _config()?.ApiBaseUrl;
+            var bytes = await Download(urlPrefix + "/api/maps", authorization, CatalogLimit, token, revision, origin);
             token.ThrowIfCancellationRequested();
             return await Task.Run(() => ParseCatalog(bytes, token), token);
         }
@@ -77,16 +81,17 @@ namespace JungleMaze.Infrastructure.Api
         {
             token.ThrowIfCancellationRequested();
             if (!IsValidId(id)) throw Fail("Mã map không hợp lệ; thử lại sau.");
-            if (!IsValidHash(hash)) throw Fail("Mã băm map không hợp lệ; cập nhật client rồi thử lại.");
-            if (!IsValidHash(rulesHash)) throw Fail("Mã băm luật không hợp lệ; cập nhật client rồi thử lại.");
+            if (!IsValidHash(hash)) throw Fail("Dữ liệu bản đồ không hợp lệ. Thử tải lại; nếu vẫn lỗi, cập nhật game.");
+            if (!IsValidHash(rulesHash)) throw Fail("Luật chơi chưa phù hợp với máy chủ. Vui lòng cập nhật game.");
             ResolveEndpoint(out var urlPrefix, out var cacheDirectory);
             var authorization = Authorization();
+            var revision = _sessionRevision(); var origin = _config()?.ApiBaseUrl;
             var path = Path.Combine(cacheDirectory, hash + ".json");
 
             var cached = await Task.Run(() => ReadMapCache(path, hash, rulesHash, token), token);
             if (cached != null) return cached;
 
-            var bytes = await Download(urlPrefix + "/api/maps/" + id + "/" + hash, authorization, MapLimit, token);
+            var bytes = await Download(urlPrefix + "/api/maps/" + id + "/" + hash, authorization, MapLimit, token, revision, origin);
             token.ThrowIfCancellationRequested();
             var json = await Task.Run(() => VerifyMap(bytes, hash, rulesHash, token), token);
             token.ThrowIfCancellationRequested();
@@ -98,15 +103,16 @@ namespace JungleMaze.Infrastructure.Api
         public async Task<byte[]> Preview(string hash, CancellationToken token)
         {
             token.ThrowIfCancellationRequested();
-            if (!IsValidHash(hash)) throw Fail("Mã băm ảnh xem trước không hợp lệ; cập nhật client rồi thử lại.");
+            if (!IsValidHash(hash)) throw Fail("Ảnh xem trước không hợp lệ. Hãy tải lại danh sách.");
             ResolveEndpoint(out var urlPrefix, out var cacheDirectory);
             var authorization = Authorization();
+            var revision = _sessionRevision(); var origin = _config()?.ApiBaseUrl;
             var path = Path.Combine(cacheDirectory, hash + ".png");
 
             var cached = await Task.Run(() => ReadPreviewCache(path, hash, token), token);
             if (cached != null) return cached;
 
-            var bytes = await Download(urlPrefix + "/api/maps/previews/" + hash, authorization, PreviewLimit, token);
+            var bytes = await Download(urlPrefix + "/api/maps/previews/" + hash, authorization, PreviewLimit, token, revision, origin);
             token.ThrowIfCancellationRequested();
             if (!IsPng(bytes) || !string.Equals(Sha256Hex(bytes), hash, StringComparison.Ordinal))
                 throw Fail("Ảnh xem trước tải về không hợp lệ; thử lại sau.");
@@ -117,9 +123,9 @@ namespace JungleMaze.Infrastructure.Api
         /// <summary>Delegates to the runtime owner; returns its message instead of throwing so one room stays retryable.</summary>
         public string Activate(string json, string mapHash, string rulesHash)
         {
-            try { return _runtime.ActivateSelectedMap(json, mapHash, rulesHash); }
+            try { var error = _runtime.ActivateSelectedMap(json, mapHash, rulesHash); return error == null ? null : "Dữ liệu bản đồ không hợp lệ. Thử tải lại; nếu vẫn lỗi, cập nhật game."; }
             catch (Exception e) when (!(e is OutOfMemoryException))
-            { return SelectedMapData.ValidationMessage(e); }
+            { return "Dữ liệu bản đồ không hợp lệ. Thử tải lại; nếu vẫn lỗi, cập nhật game."; }
         }
 
         public void Clear()
@@ -139,19 +145,19 @@ namespace JungleMaze.Infrastructure.Api
         {
             var apiBaseUrl = _config()?.ApiBaseUrl?.Trim();
             if (string.IsNullOrEmpty(apiBaseUrl) || !Uri.TryCreate(apiBaseUrl, UriKind.Absolute, out var baseUri))
-                throw Fail("Chưa cấu hình API để tải map; kiểm tra cài đặt mạng.");
+                throw Fail("Chưa có địa chỉ tải bản đồ. Kiểm tra cài đặt máy chủ.");
             var https = string.Equals(baseUri.Scheme, Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase);
             var loopbackHttp = string.Equals(baseUri.Scheme, Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase) && baseUri.IsLoopback;
             if (!https && !loopbackHttp)
-                throw Fail("API tải map cần HTTPS; HTTP chỉ được dùng trên loopback.");
+                throw Fail("Địa chỉ tải bản đồ chưa bảo đảm kết nối an toàn. Kiểm tra cài đặt máy chủ.");
             if (!string.IsNullOrEmpty(baseUri.UserInfo) || !string.IsNullOrEmpty(baseUri.Query) || !string.IsNullOrEmpty(baseUri.Fragment))
-                throw Fail("API tải map không hợp lệ; kiểm tra cài đặt mạng.");
+                throw Fail("Địa chỉ tải bản đồ không hợp lệ. Kiểm tra cài đặt máy chủ.");
             urlPrefix = baseUri.AbsoluteUri.TrimEnd('/');
-            if (urlPrefix.Length == 0) throw Fail("Chưa cấu hình API để tải map; kiểm tra cài đặt mạng.");
+            if (urlPrefix.Length == 0) throw Fail("Chưa có địa chỉ tải bản đồ. Kiểm tra cài đặt máy chủ.");
             cacheDirectory = Path.Combine(_cacheRoot, Sha256Hex(Encoding.UTF8.GetBytes(urlPrefix)));
         }
 
-        private async Task<byte[]> Download(string url, string authorization, int limit, CancellationToken token)
+        private async Task<byte[]> Download(string url, string authorization, int limit, CancellationToken token, long revision, string origin)
         {
             token.ThrowIfCancellationRequested();
             var handler = new BoundedDownloadHandler(limit);
@@ -175,7 +181,13 @@ namespace JungleMaze.Infrastructure.Api
                 }
                 if (token.IsCancellationRequested) throw new OperationCanceledException(token);
                 if (handler.Exceeded) throw Fail("Dữ liệu map tải về vượt quá giới hạn; thử lại sau.");
-                if (request.result != UnityWebRequest.Result.Success) throw TransportError(request);
+                if (request.result != UnityWebRequest.Result.Success)
+                {
+                    UnityEngine.Debug.LogWarning("[Map] operation=download status=" + request.responseCode + " category=" + request.result + " revision=" + revision);
+                    if (request.responseCode == 401 && revision == _sessionRevision() && origin == _config()?.ApiBaseUrl && authorization == _token())
+                        _unauthorized?.Invoke(revision);
+                    throw TransportError(request);
+                }
                 var data = handler.Copy();
                 if (data.Length == 0) throw Fail("Máy chủ trả dữ liệu rỗng; thử lại sau.");
                 if (data.Length > limit) throw Fail("Dữ liệu map tải về vượt quá giới hạn; thử lại sau.");
@@ -202,8 +214,9 @@ namespace JungleMaze.Infrastructure.Api
             switch (request.result)
             {
                 case UnityWebRequest.Result.ProtocolError:
-                    if (status == 401 || status == 403) return Fail("Phiên đăng nhập không hợp lệ hoặc đã hết hạn; đăng nhập lại rồi thử lại.");
-                    if (status == 404) return Fail("Máy chủ chưa có map này; cập nhật client rồi thử lại.");
+                    if (status == 401) return Fail("Phiên đăng nhập không còn hợp lệ. Vui lòng đăng nhập lại.");
+                    if (status == 403) return Fail("Bạn chưa được phép tải bản đồ này.");
+                    if (status == 404) return Fail("Bản đồ này hiện chưa có trên máy chủ. Hãy tải lại danh sách.");
                     if (status == 429) return Fail("Máy chủ đang bận; thử lại sau.");
                     if (status >= 500) return Fail("Máy chủ map đang gặp lỗi; thử lại sau.");
                     if (status >= 300 && status < 400) return Fail("Máy chủ map chuyển hướng không hợp lệ; kiểm tra cài đặt mạng.");
@@ -211,7 +224,7 @@ namespace JungleMaze.Infrastructure.Api
                 case UnityWebRequest.Result.DataProcessingError:
                     return Fail("Dữ liệu map tải về bị lỗi; thử lại sau.");
                 default:
-                    return Fail("Không kết nối được máy chủ map; kiểm tra mạng rồi thử lại.");
+                    return Fail("Chưa tải được bản đồ. Kiểm tra kết nối rồi thử lại.");
             }
         }
 
@@ -232,7 +245,7 @@ namespace JungleMaze.Infrastructure.Api
             var root = JObject.Parse(json);
 
             if (!ReadInteger(Field(root, "schemaVersion"), out var schemaVersion) || schemaVersion != 1)
-                throw Fail("Danh sách map sai phiên bản; cập nhật client rồi thử lại.");
+                throw Fail("Danh sách bản đồ chưa phù hợp. Vui lòng cập nhật game.");
             if (!ReadInteger(Field(root, "generation"), out var generation) || generation <= 0)
                 throw Fail("Danh sách map thiếu phiên bản nội dung; thử lại sau.");
 
@@ -249,7 +262,7 @@ namespace JungleMaze.Infrastructure.Api
                 if (!IsValidId(map.Id)) throw Fail("Danh sách map có mã không hợp lệ; thử lại sau.");
                 if (!ids.Add(map.Id)) throw Fail("Danh sách map trùng mã; thử lại sau.");
                 if (!IsValidHash(map.MapHash) || !IsValidHash(map.PreviewHash))
-                    throw Fail("Danh sách map có mã băm không hợp lệ; thử lại sau.");
+                    throw Fail("Dữ liệu bản đồ không hợp lệ. Thử tải lại; nếu vẫn lỗi, cập nhật game.");
                 if (!IsFilledText(map.Name, 64) || !IsOptionalText(map.Description, 256) || !IsFilledText(map.Version, 32))
                     throw Fail("Danh sách map có tên/mô tả/phiên bản không hợp lệ; thử lại sau.");
             }
@@ -310,7 +323,7 @@ namespace JungleMaze.Infrastructure.Api
             try { json = NormalizeMapText(StrictUtf8(bytes)); }
             catch (InvalidDataException) { throw Fail("Dữ liệu map tải về không hợp lệ; thử lại sau."); }
             if (!string.Equals(Sha256Hex(Encoding.UTF8.GetBytes(json)), hash, StringComparison.Ordinal))
-                throw Fail("Map tải về không khớp mã băm; thử lại sau.");
+                throw Fail("Dữ liệu bản đồ không hợp lệ. Thử tải lại; nếu vẫn lỗi, cập nhật game.");
             PrepareMap(json, hash, rulesHash, token);
             return json;
         }
@@ -320,7 +333,7 @@ namespace JungleMaze.Infrastructure.Api
             token.ThrowIfCancellationRequested();
             try { SelectedMapData.Prepare(json, hash, rulesHash, _rulesDirectory); }
             catch (Exception e) when (!(e is OutOfMemoryException))
-            { throw Fail(SelectedMapData.ValidationMessage(e)); }
+            { throw Fail("Dữ liệu bản đồ không hợp lệ. Thử tải lại; nếu vẫn lỗi, cập nhật game."); }
         }
 
         private static byte[] ReadPreviewCache(string path, string hash, CancellationToken token)

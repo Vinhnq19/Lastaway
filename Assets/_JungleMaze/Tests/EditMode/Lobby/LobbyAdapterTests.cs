@@ -88,7 +88,7 @@ namespace JungleMaze.Tests.Lobby
             Assert.AreEqual(NetworkState.Disconnected, source.State);
             Assert.AreEqual(-1, source.RttMs, "no fake RTT");
             Assert.AreEqual("Auto", source.Step);
-            bus.Publish(new JungleMaze.App.Flow.ConnectionError("login"));
+            bus.Publish(new JungleMaze.App.Flow.ConnectionError("login", DisconnectReason.LoginFailed));
             Assert.AreEqual(NetworkState.Failed, source.State);
             Assert.AreEqual(DisconnectReason.LoginFailed, source.LastReason);
             source.ClearLoginFailure();

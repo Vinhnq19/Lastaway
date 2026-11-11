@@ -114,12 +114,12 @@ namespace JungleMaze.Tests.Lobby
         }
 
         [Test]
-        public void LoadError_Kicked()
+        public void LoadError_KickedOnlyForAuthoritativeLoadingTimeout()
         {
             using var rig = new LobbyRig();
             rig.JoinLobby();
             rig.Phase(MatchPhase.Loading, 30);
-            rig.Connection.Set(NetworkState.Disconnected, DisconnectReason.ServerClosed);
+            rig.Connection.Set(NetworkState.Disconnected, DisconnectReason.LoadingTimeout);
             rig.Tick();
             Assert.AreEqual(LobbyScreenRules.LoadKicked, rig.Flow.LoadErrorText);
         }

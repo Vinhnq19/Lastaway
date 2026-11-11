@@ -64,6 +64,14 @@ namespace JungleMaze.Presentation.UI.Lobby
             vpnPanel.SetActive(visible);
         }
 
+        private void Awake()
+        {
+#if !UNITY_EDITOR && !DEVELOPMENT_BUILD
+            if (api != null) api.gameObject.SetActive(false);
+            if (port != null) port.gameObject.SetActive(false);
+#endif
+        }
+
         public TMP_Dropdown Profile => profile;
         public TMP_InputField Host => host;
         public TMP_InputField Port => port;

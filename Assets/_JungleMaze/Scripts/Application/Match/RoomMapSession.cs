@@ -84,7 +84,13 @@ namespace JungleMaze.App.Match
         private void OnResult(RoomMapCommandResultPacket packet)
         {
             if (!HasState || packet.RoomId != State.RoomId) return;
-            Notice = packet.Error == RoomMapError.None ? null : "Lệnh phòng bị từ chối: " + packet.Error;
+            Notice = packet.Error == RoomMapError.None ? null
+                : packet.Error == RoomMapError.NotHost ? "Chỉ trưởng phòng được chọn bản đồ và bắt đầu."
+                : packet.Error == RoomMapError.MatchLocked ? "Trận đã bắt đầu; hãy chờ trở lại phòng chờ."
+                : packet.Error == RoomMapError.UnknownMap ? "Bản đồ này hiện chưa có trên máy chủ. Hãy tải lại danh sách."
+                : packet.Error == RoomMapError.NotEnoughPlayers ? "Chưa đủ người để bắt đầu."
+                : packet.Error == RoomMapError.MapsNotReady ? "Hãy chờ tất cả người chơi tải xong bản đồ."
+                : "Lựa chọn trong phòng đã đổi. Kiểm tra lại rồi thử lại.";
             Changed?.Invoke();
         }
         public void ManageBots(RoomBotAction action, uint botId = 0)
@@ -99,7 +105,12 @@ namespace JungleMaze.App.Match
         {
             if (!HasState || packet.RoomId != State.RoomId || packet.RequestId != _botRequest) return;
             BotCommandPending = false;
-            Notice = packet.Error == RoomBotError.None ? null : "Không thể sửa bot: " + packet.Error;
+            Notice = packet.Error == RoomBotError.None ? null
+                : packet.Error == RoomBotError.NotHost ? "Chỉ trưởng phòng được thêm hoặc xóa bot."
+                : packet.Error == RoomBotError.MatchLocked ? "Chỉ có thể sửa bot khi đang ở phòng chờ."
+                : packet.Error == RoomBotError.RoomFull ? "Phòng đã đủ người."
+                : packet.Error == RoomBotError.ServerFull ? "Máy chủ đã đầy. Vui lòng thử lại sau."
+                : "Phòng đã thay đổi. Kiểm tra danh sách bot rồi thử lại.";
             Changed?.Invoke();
         }
         public void Select(PublishedMap map)
@@ -125,14 +136,14 @@ namespace JungleMaze.App.Match
             {
                 var catalog = await _files.Catalog(token);
                 if (generation != _generation || token.IsCancellationRequested) return;
-                if (catalog.Generation < selected.CatalogGeneration) throw new InvalidOperationException("Catalog chưa cập nhật; thử lại.");
+                if (catalog.Generation < selected.CatalogGeneration) throw new InvalidOperationException("Danh sách bản đồ đang cập nhật. Hãy thử tải lại.");
                 Catalog = catalog;
                 if (!Verified)
                 {
                     var json = await _files.Map(selected.MapId, selected.MapHash, selected.RulesHash, token);
                     if (generation != _generation || token.IsCancellationRequested) return;
                     var error = _files.Activate(json, selected.MapHash, selected.RulesHash);
-                    if (error != null) throw new InvalidOperationException(error);
+                    if (error != null) throw new InvalidOperationException("Dữ liệu bản đồ không hợp lệ. Thử tải lại; nếu vẫn lỗi, cập nhật game.");
                     VerifiedMapJson = json;
                     Verified = true;
                     var ready = new RoomMapReadyPacket { RoomId = selected.RoomId, SelectionRevision = selected.SelectionRevision, MapHash = selected.MapHash, RulesHash = selected.RulesHash };

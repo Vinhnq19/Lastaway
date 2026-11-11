@@ -12,7 +12,7 @@ namespace JungleMaze.App.Lobby
     /// </summary>
     public sealed class ReconnectController
     {
-        public const string FailedText = "Không kết nối lại được: bạn đã bị loại khỏi trận";
+        public const string FailedText = "Không kết nối lại được. Trạng thái trận chưa thể xác nhận.";
         public const string LostText = "Mất kết nối";
 
         private readonly ILobbyCommands _commands;
@@ -52,7 +52,7 @@ namespace JungleMaze.App.Lobby
             if (State != ReconnectState.Trying) return State;
             if (network == NetworkState.Joined) State = ReconnectState.Succeeded;
             else if (network == NetworkState.Connecting || network == NetworkState.Authenticating) _sawAttempt = true;
-            else if (_sawAttempt) State = ReconnectState.Failed; // rejected after trying
+            else if (_sawAttempt || network == NetworkState.Failed) State = ReconnectState.Failed; // rejected after trying
             if (State == ReconnectState.Trying && _clock() - _startedAt >= _options.GraceSeconds)
             {
                 State = ReconnectState.Failed;

@@ -1,0 +1,497 @@
+{
+  "date": "2026-11-11",
+  "status": "PASS_LOCAL_WITH_NOT_TESTED_ITEMS",
+  "scope": "Local only; no AWS, commit or push",
+  "worker": "DeepSeek HTTP401 before source access; Codex takeover explicitly authorized",
+  "checks": [
+    {
+      "name": "EditMode",
+      "status": "PASS",
+      "passed": 1239,
+      "total": 1239
+    },
+    {
+      "name": "PlayMode",
+      "status": "PASS",
+      "passed": 31,
+      "total": 31
+    },
+    {
+      "name": "Backend NetworkChecks",
+      "status": "PASS",
+      "passed": 149
+    },
+    {
+      "name": "Backend DualTransportChecks",
+      "status": "PASS",
+      "passed": 53
+    },
+    {
+      "name": "Windows Release",
+      "status": "PASS"
+    },
+    {
+      "name": "Two Windows clients Local",
+      "status": "PASS"
+    },
+    {
+      "name": "Two physical PCs",
+      "status": "NOT_TESTED"
+    },
+    {
+      "name": "AWS",
+      "status": "NOT_TESTED",
+      "reason": "Out of scope, no AWS operations"
+    },
+    {
+      "name": "Real Unity interrupted-session resume across two PCs",
+      "status": "NOT_TESTED",
+      "reason": "Resume failure/success and ownership covered by module/harness; no real two-PC interruption run"
+    },
+    {
+      "name": "Manual F3/F8 key check in Release",
+      "status": "NOT_TESTED",
+      "reason": "User input interrupted window control; Release compile guards and UI render verified"
+    },
+    {
+      "name": "Unity6000.3.15f1 rerun",
+      "status": "NOT_TESTED",
+      "reason": "Personal Editor6000.3.21f1 used; shared Editor pin remains unchanged"
+    }
+  ],
+  "baseCommit": "ff6a398e92ecfba9c205034b2a8802601c4a923e",
+  "build": {
+    "schemaVersion": 1,
+    "sourceHash": "5a32eef7bb7d2364d4e279b9f6ebb1d889c79cb17c19129370444239797e7f28",
+    "playerFingerprint": "6a33561c81a46a85530a767b2454ed5d189de9032ffa673d5a2fcdcb5ccd0c31",
+    "unityVersion": "6000.3.21f1",
+    "path": "Builds/Connection-Flow/Lastaway.exe",
+    "result": "PASS",
+    "sizeMiB": 306.43,
+    "durationSeconds": 232.142058,
+    "warnings": 42,
+    "errors": 0,
+    "configuration": "Release"
+  },
+  "runs": [
+    {
+      "name": "local-mixed",
+      "status": "PASS",
+      "apiChecks": [
+        {
+          "name": "HTTPS certificate and API health",
+          "status": "PASS"
+        },
+        {
+          "name": "Room creation without JWT denied",
+          "status": "PASS"
+        },
+        {
+          "name": "Invalid JWT denied",
+          "status": "PASS"
+        },
+        {
+          "name": "Guest profile over HTTPS",
+          "status": "PASS"
+        },
+        {
+          "name": "Guest credential present",
+          "status": "PASS"
+        },
+        {
+          "name": "Guest cannot obtain game ticket",
+          "status": "PASS"
+        },
+        {
+          "name": "Guest cannot create rooms",
+          "status": "PASS"
+        },
+        {
+          "name": "Register test account",
+          "status": "PASS"
+        },
+        {
+          "name": "Login after verified registration",
+          "status": "PASS"
+        },
+        {
+          "name": "JWT creates room",
+          "status": "PASS"
+        },
+        {
+          "name": "Six character join code",
+          "status": "PASS"
+        },
+        {
+          "name": "Actual Windows players completed scenario",
+          "status": "PASS"
+        },
+        {
+          "name": "Forced WSS players actually joined through WSS",
+          "status": "PASS"
+        }
+      ],
+      "cleanupErrors": [],
+      "clients": [
+        {
+          "client": "evidence-client-1",
+          "status": "PASS",
+          "transport": "Wss",
+          "fallbackReason": "",
+          "metrics": {
+            "elapsedSeconds": 26.363418579101562,
+            "connectedSeconds": 24.915620803833008,
+            "snapshots": 690,
+            "inputs": 671,
+            "ignoredPackets": 0,
+            "catchupDrops": 1,
+            "maxPlayers": 2,
+            "maxRosterPlayers": 2,
+            "maxOnScreenPlayers": 1,
+            "completedMatches": 1,
+            "inputHz": 29.663311264828643,
+            "activeInputSeconds": 22.620535988360643,
+            "snapshotHz": 30.005252529235243,
+            "snapshotSeconds": 22.995973765850067,
+            "rttP50Ms": 33.2852,
+            "rttP95Ms": 33.3242,
+            "rttP99Ms": 33.8545,
+            "pings": 25,
+            "pongs": 25,
+            "pongTimeouts": 0
+          },
+          "assertions": [
+            {
+              "id": "joined",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "playersVisible",
+              "status": "PASS",
+              "detail": "Roster and network views confirmed; Follow Player viewport count is separate"
+            },
+            {
+              "id": "movement",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "zone",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "hpDamage",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "result",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "replay",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "history",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            }
+          ],
+          "width": 0,
+          "height": 0
+        },
+        {
+          "client": "evidence-client-2",
+          "status": "PASS",
+          "transport": "Udp",
+          "fallbackReason": "",
+          "metrics": {
+            "elapsedSeconds": 26.44338035583496,
+            "connectedSeconds": 24.964557647705078,
+            "snapshots": 690,
+            "inputs": 671,
+            "ignoredPackets": 0,
+            "catchupDrops": 1,
+            "maxPlayers": 2,
+            "maxRosterPlayers": 2,
+            "maxOnScreenPlayers": 1,
+            "completedMatches": 1,
+            "inputHz": 29.67237786697153,
+            "activeInputSeconds": 22.61362412571907,
+            "snapshotHz": 30.04991605608969,
+            "snapshotSeconds": 22.96179459244013,
+            "rttP50Ms": 33.3071,
+            "rttP95Ms": 33.5546,
+            "rttP99Ms": 74.0649,
+            "pings": 25,
+            "pongs": 25,
+            "pongTimeouts": 0
+          },
+          "assertions": [
+            {
+              "id": "joined",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "playersVisible",
+              "status": "PASS",
+              "detail": "Roster and network views confirmed; Follow Player viewport count is separate"
+            },
+            {
+              "id": "movement",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "zone",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "hpDamage",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "result",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "replay",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "history",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            }
+          ],
+          "width": 0,
+          "height": 0
+        }
+      ]
+    },
+    {
+      "name": "local-fallback",
+      "status": "PASS",
+      "apiChecks": [
+        {
+          "status": "PASS",
+          "name": "HTTPS certificate and API health"
+        },
+        {
+          "status": "PASS",
+          "name": "Room creation without JWT denied"
+        },
+        {
+          "status": "PASS",
+          "name": "Invalid JWT denied"
+        },
+        {
+          "status": "PASS",
+          "name": "Guest profile over HTTPS"
+        },
+        {
+          "status": "PASS",
+          "name": "Guest credential present"
+        },
+        {
+          "status": "PASS",
+          "name": "Guest cannot obtain game ticket"
+        },
+        {
+          "status": "PASS",
+          "name": "Guest cannot create rooms"
+        },
+        {
+          "status": "PASS",
+          "name": "Register test account"
+        },
+        {
+          "status": "PASS",
+          "name": "Login after verified registration"
+        },
+        {
+          "status": "PASS",
+          "name": "JWT creates room"
+        },
+        {
+          "status": "PASS",
+          "name": "Six character join code"
+        },
+        {
+          "status": "PASS",
+          "name": "Actual Windows players completed scenario"
+        },
+        {
+          "status": "PASS",
+          "name": "Auto selected WSS after deliberate UDP failure"
+        }
+      ],
+      "cleanupErrors": [],
+      "clients": [
+        {
+          "client": "evidence-client-1",
+          "status": "PASS",
+          "transport": "Wss",
+          "fallbackReason": "ConnectTimeout",
+          "metrics": {
+            "elapsedSeconds": 38.38945007324219,
+            "connectedSeconds": 31.96995735168457,
+            "snapshots": 900,
+            "inputs": 899,
+            "ignoredPackets": 0,
+            "catchupDrops": 0,
+            "maxPlayers": 2,
+            "maxRosterPlayers": 2,
+            "maxOnScreenPlayers": 1,
+            "completedMatches": 1,
+            "inputHz": 29.987364386633896,
+            "activeInputSeconds": 29.979293558746576,
+            "snapshotHz": 29.987380056309462,
+            "snapshotSeconds": 30.012625254690647,
+            "rttP50Ms": 16.6758,
+            "rttP95Ms": 16.7514,
+            "rttP99Ms": 18.1787,
+            "pings": 32,
+            "pongs": 32,
+            "pongTimeouts": 0
+          },
+          "assertions": [
+            {
+              "id": "joined",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "playersVisible",
+              "status": "PASS",
+              "detail": "Roster and network views confirmed; Follow Player viewport count is separate"
+            },
+            {
+              "id": "movement",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "zone",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "hpDamage",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "result",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "replay",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "history",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            }
+          ],
+          "width": 1280,
+          "height": 720
+        },
+        {
+          "client": "evidence-client-2",
+          "status": "PASS",
+          "transport": "Wss",
+          "fallbackReason": "ConnectTimeout",
+          "metrics": {
+            "elapsedSeconds": 38.406776428222656,
+            "connectedSeconds": 31.941951751708984,
+            "snapshots": 901,
+            "inputs": 899,
+            "ignoredPackets": 0,
+            "catchupDrops": 0,
+            "maxPlayers": 2,
+            "maxRosterPlayers": 2,
+            "maxOnScreenPlayers": 1,
+            "completedMatches": 1,
+            "inputHz": 29.985334566200574,
+            "activeInputSeconds": 29.981322970241308,
+            "snapshotHz": 29.985357390358505,
+            "snapshotSeconds": 30.047999370843172,
+            "rttP50Ms": 33.348,
+            "rttP95Ms": 34.3418,
+            "rttP99Ms": 34.4788,
+            "pings": 32,
+            "pongs": 32,
+            "pongTimeouts": 0
+          },
+          "assertions": [
+            {
+              "id": "joined",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "playersVisible",
+              "status": "PASS",
+              "detail": "Roster and network views confirmed; Follow Player viewport count is separate"
+            },
+            {
+              "id": "movement",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "zone",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "hpDamage",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "result",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "replay",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            },
+            {
+              "id": "history",
+              "status": "PASS",
+              "detail": "Observed during this run"
+            }
+          ],
+          "width": 0,
+          "height": 0
+        }
+      ]
+    }
+  ],
+  "cleanup": {
+    "testRooms": "Deleted by both runners; no cleanup errors",
+    "clients": "All test client processes closed; user-owned executable untouched",
+    "devProfile": "main",
+    "limits": "10/5/50",
+    "docker": "Stack stop requested after restoring main; Docker Desktop engine unavailable/off at final check, not restarted",
+    "aws": "No operations",
+    "serialization": "Only verified auto-serialization differences reverted; original scenes/map/settings retained"
+  }
+}

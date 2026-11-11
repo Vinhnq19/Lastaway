@@ -31,7 +31,8 @@ namespace JungleMaze.Domain.Network
         LoginFailed,
         Unknown,
         MatchInProgress,
-        LoadingTimeout
+        LoadingTimeout,
+        AccountExpired, AccessDenied, RequestLimited, ServiceUnavailable, TicketRejected, GameplayVersionMismatch, InvalidResume, ServerBusy
     }
 
     public static class DisconnectReasons
@@ -52,7 +53,10 @@ namespace JungleMaze.Domain.Network
                 case "AuthRequired":
                 case "AuthenticationRequired": return DisconnectReason.AuthenticationRequired;
                 case "InvalidTicket":
-                case "TicketExpired":
+                case "TicketExpired": return DisconnectReason.TicketRejected;
+                case "GameplayVersionMismatch": return DisconnectReason.GameplayVersionMismatch;
+                case "InvalidResumeToken": return DisconnectReason.InvalidResume;
+                case "ServerBusy": return DisconnectReason.ServerBusy;
                 case "InvalidToken": return DisconnectReason.InvalidToken;
                 case "AuthTimeout": return DisconnectReason.AuthTimeout;
                 case "DuplicateSession": return DisconnectReason.DuplicateSession;
@@ -68,8 +72,16 @@ namespace JungleMaze.Domain.Network
             switch (reason)
             {
                 case DisconnectReason.None: return "";
-                case DisconnectReason.UnsupportedVersion: return "Phiên bản client không khớp server.";
-                case DisconnectReason.AuthModeMismatch: return "Chế độ xác thực không khớp server (RoomCode/Jwt).";
+                case DisconnectReason.AccountExpired: return "Phiên đăng nhập không còn hợp lệ. Vui lòng đăng nhập lại.";
+                case DisconnectReason.AccessDenied: return "Bạn chưa được phép thực hiện thao tác này.";
+                case DisconnectReason.RequestLimited: return "Bạn thao tác quá nhanh. Vui lòng chờ rồi thử lại.";
+                case DisconnectReason.ServiceUnavailable: return "Chưa thể vào phòng lúc này. Kiểm tra kết nối rồi thử lại.";
+                case DisconnectReason.TicketRejected: return "Lượt vào phòng không còn hợp lệ. Vui lòng thử lại.";
+                case DisconnectReason.GameplayVersionMismatch: return "Bản game chưa phù hợp với máy chủ. Vui lòng cập nhật game.";
+                case DisconnectReason.InvalidResume: return "Không thể tiếp tục lượt chơi này. Hãy trở về menu.";
+                case DisconnectReason.ServerBusy: return "Máy chủ đang bận. Vui lòng thử lại sau.";
+                case DisconnectReason.UnsupportedVersion: return "Bản game chưa phù hợp với máy chủ. Vui lòng cập nhật game.";
+                case DisconnectReason.AuthModeMismatch: return "Cài đặt kết nối chưa phù hợp với máy chủ. Kiểm tra địa chỉ rồi thử lại.";
                 case DisconnectReason.InvalidRoomCode: return "Mã phòng không đúng.";
                 case DisconnectReason.InvalidDisplayName: return "Tên hiển thị không hợp lệ (1–32 ký tự).";
                 case DisconnectReason.RoomFull: return "Phòng đã đủ người.";
@@ -77,16 +89,16 @@ namespace JungleMaze.Domain.Network
                 case DisconnectReason.LoadingTimeout: return "Tải trận quá thời gian. Kiểm tra dữ liệu game và thử vào lại.";
                 case DisconnectReason.ServerFull: return "Server đã đủ người.";
                 case DisconnectReason.AuthenticationRequired: return "Server yêu cầu đăng nhập.";
-                case DisconnectReason.InvalidToken: return "Phiên đăng nhập không hợp lệ hoặc đã hết hạn.";
+                case DisconnectReason.InvalidToken: return "Lượt vào phòng không còn hợp lệ. Vui lòng thử lại.";
                 case DisconnectReason.AuthTimeout: return "Xác thực quá thời gian.";
                 case DisconnectReason.DuplicateSession: return "Tài khoản đang có phiên khác trong phòng.";
                 case DisconnectReason.UserRequested: return "Đã ngắt kết nối.";
-                case DisconnectReason.ConnectTimeout: return "Không kết nối được server (hết thời gian). Kiểm tra IP/port và server.";
+                case DisconnectReason.ConnectTimeout: return "Không kết nối được máy chủ. Kiểm tra địa chỉ và mạng rồi thử lại.";
                 case DisconnectReason.JoinTimeout: return "Đã nối server nhưng không vào được phòng (hết thời gian).";
                 case DisconnectReason.ConnectionLost: return "Mất kết nối tới server.";
                 case DisconnectReason.ServerClosed: return "Server đã đóng kết nối.";
-                case DisconnectReason.SocketError: return "Lỗi mạng (socket).";
-                case DisconnectReason.ProtocolError: return "Server gửi dữ liệu không đúng giao thức.";
+                case DisconnectReason.SocketError: return "Không kết nối được máy chủ. Kiểm tra mạng rồi thử lại.";
+                case DisconnectReason.ProtocolError: return "Dữ liệu máy chủ trả về chưa hợp lệ. Vui lòng thử lại.";
                 case DisconnectReason.InvalidConfig: return "Cấu hình kết nối không hợp lệ.";
                 case DisconnectReason.LoginFailed: return "Đăng nhập thất bại.";
                 case DisconnectReason.MalformedRequest:

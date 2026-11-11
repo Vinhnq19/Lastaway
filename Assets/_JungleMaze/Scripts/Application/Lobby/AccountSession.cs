@@ -16,6 +16,7 @@ namespace JungleMaze.App.Lobby
         private readonly Func<DateTime> _utcNow;
         private AuthToken? _token;
         private int _request;
+        public long Revision { get; private set; }
 
         public AccountSession(IAccountApi api, Func<DateTime> utcNow)
         {
@@ -83,6 +84,7 @@ namespace JungleMaze.App.Lobby
         /// <summary>401 or passed expiry: drop the token, ask again, never resend (AC17).</summary>
         public void Expire()
         {
+            Revision++;
             _request++;
             Busy = false;
             _token = null;
@@ -92,6 +94,7 @@ namespace JungleMaze.App.Lobby
 
         public void Logout()
         {
+            Revision++;
             _request++;
             Busy = false;
             _token = null;
@@ -113,6 +116,7 @@ namespace JungleMaze.App.Lobby
                 Message = ApiMessages.SessionExpired; // an already-expired token is not a session
                 return;
             }
+            Revision++;
             _token = r.Value;
             Message = "";
             RegisterMode = false;

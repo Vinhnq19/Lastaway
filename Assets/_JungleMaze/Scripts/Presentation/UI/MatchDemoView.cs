@@ -78,7 +78,7 @@ namespace JungleMaze.Presentation.UI
             _overlayFlow = overlayFlow;
         }
 
-        public bool DetailsVisible => _showDetails && _menuState?.IsOpen != true;
+        public bool DetailsVisible => Debug.isDebugBuild && _showDetails && _menuState?.IsOpen != true;
 
         public bool ShouldHideWorldLabels
         {
@@ -95,7 +95,11 @@ namespace JungleMaze.Presentation.UI
 
         private void Update()
         {
+            #if UNITY_EDITOR || DEVELOPMENT_BUILD
             if (Input.GetKeyDown(KeyCode.F3)) _showDetails = !_showDetails;
+#else
+            _showDetails = false;
+#endif
             var inScene = SceneManager.GetActiveScene().name == "Game";
             if (_offlineSession != null && _offlineSession.IsActive && inScene)
             {
@@ -315,7 +319,8 @@ namespace JungleMaze.Presentation.UI
             {
                 // Normal play uses the composed Lobby/HUD/results UI; only critical load errors stay visible.
                 if (_session.Phase == MatchPhase.InGame && (_dataError != null || worldStatus != null))
-                    GUI.Box(new Rect(10, 52, 370, 62), _dataError ?? worldStatus, _label);
+                    GUI.Box(new Rect(10, 52, 370, 62), _dataError != null
+                        ? (_roomMaps?.Error ?? "Dữ liệu trận chưa hợp lệ. Hãy cập nhật game rồi thử lại.") : worldStatus, _label);
                 return;
             }
             GUILayout.BeginArea(new Rect(_session.Connected ? 10 : 420, 52, 370, Mathf.Min(Screen.height - 62, 590)), GUI.skin.box);

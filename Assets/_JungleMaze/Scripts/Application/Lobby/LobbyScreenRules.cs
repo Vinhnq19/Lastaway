@@ -57,6 +57,6 @@ namespace JungleMaze.App.Lobby
         }
 
         public static string LoadLostText(DisconnectReason reason) =>
-            reason == DisconnectReason.ServerClosed ? LoadKicked : LoadLost;
+            reason == DisconnectReason.LoadingTimeout ? LoadKicked : LoadLost;
     }
 }

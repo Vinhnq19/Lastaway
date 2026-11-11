@@ -94,6 +94,7 @@ namespace JungleMaze.Tests.PlayMode.Lobby
 
             private void Update()
             {
+                if (Rig == null) return; // Test scenes may survive an interrupted domain reload; no live fixture then.
                 Rig.Scenarios.Tick(Time.unscaledDeltaTime);
                 Rig.Flow.Tick(Time.unscaledDeltaTime);
             }
@@ -102,6 +103,23 @@ namespace JungleMaze.Tests.PlayMode.Lobby
 
     public sealed class LobbyUiTimingTests
     {
+        [UnityTest]
+        public IEnumerator ConnectingShowsPlainLanguage_AndFailureKeepsAccount()
+        {
+            using var rig = new LobbyUiRig(); yield return null;
+            rig.Scenarios.JoinDelay = 10;
+            rig.JoinForm(); rig.Click(rig.Root.JoinForm.Join); yield return null;
+            Assert.IsTrue(rig.Visible(rig.Root.Connecting));
+            StringAssert.Contains("Đang kết nối máy chủ", rig.Root.Connecting.Step.text);
+            foreach (var term in new[]{"UDP","WSS","TCP","JWT","ticket","protocol","hash","endpoint"})
+                StringAssert.DoesNotContain(term, rig.Root.Connecting.Step.text);
+            rig.Scenarios.Connection.Set(JungleMaze.Domain.Network.NetworkState.Failed, JungleMaze.Domain.Network.DisconnectReason.TicketRejected);
+            yield return null; yield return null;
+            Assert.IsTrue(rig.Visible(rig.Root.JoinForm)); Assert.IsTrue(rig.Flow.Account.IsValid);
+            StringAssert.Contains("Lượt vào phòng", rig.Root.JoinForm.Message.text);
+            Assert.IsTrue(rig.Root.JoinForm.Join.interactable);
+        }
+
         /// <summary>Round 2: Home after login within 1 s, six buttons, the account card shows who is logged in.</summary>
         [UnityTest]
         public IEnumerator HomeWithin1s_SixButtons_AccountCard()

@@ -241,16 +241,18 @@ namespace JungleMaze.Presentation.UI.Lobby
             v.CodeError.text = j.CodeErrorText;
             v.Message.text = j.Message;
             v.Join.interactable = j.CanSubmit;
-            v.Retry.gameObject.SetActive(j.TimedOut);
+            v.Retry.gameObject.SetActive(!j.Busy && (j.TimedOut || !string.IsNullOrEmpty(j.Message)));
+            v.Retry.interactable = j.CanSubmit;
             if (j.FocusCode) { v.RoomCode.Select(); v.RoomCode.ActivateInputField(); }
         }
 
         private void DrawConnecting()
         {
             var c = _flow.Connection;
-            if (!Changed(Hash(c.Step, c.RttMs))) return;
-            _root.Connecting.Step.text = "Đang kết nối (" + c.Step + ")";
-            _root.Connecting.Rtt.text = c.RttMs >= 0 ? "RTT " + c.RttMs + " ms" : "";
+            if (!Changed(Hash(c.Step, c.RttMs, c.State))) return;
+            _root.Connecting.Step.text = c.State == JungleMaze.Domain.Network.NetworkState.Authenticating
+                ? "Đang kiểm tra quyền vào phòng…" : "Đang kết nối máy chủ…";
+            _root.Connecting.Rtt.text = c.RttMs >= 0 ? "Độ trễ " + c.RttMs + " ms" : "";
         }
 
         private void DrawLogin()
@@ -506,7 +508,7 @@ namespace JungleMaze.Presentation.UI.Lobby
             On(r.ServerSettings.VpnStart, () => RunVpn("Start"));
             On(r.ServerSettings.VpnStop, () => RunVpn("Stop"));
             On(r.ServerSettings.VpnRefresh, () => RunVpn("Status"));
-            On(r.ServerSettings.VpnCopy, () => { if (!string.IsNullOrEmpty(_vpnHostCode)) { _copy(_vpnHostCode); _vpnMessage = "Đã sao chép mã endpoint. Gửi thêm lời mời Tailscale và mã phòng riêng."; } });
+            On(r.ServerSettings.VpnCopy, () => { if (!string.IsNullOrEmpty(_vpnHostCode)) { _copy(_vpnHostCode); _vpnMessage = "Đã sao chép địa chỉ máy chủ. Gửi thêm lời mời Tailscale và mã phòng riêng."; } });
             On(r.ServerSettings.Audio, f.OpenSettings);
             On(r.ServerSettings.Close, () => { _vpnRequest++; f.CloseServerSettings(); });
             On(r.JoinForm.Join, () => f.SubmitJoin());
@@ -670,7 +672,7 @@ namespace JungleMaze.Presentation.UI.Lobby
             {
                 var result = await _vpn.RunAsync(action);
                 if (_disposed) return;
-                _vpnMessage = result.message;
+                _vpnMessage = VpnMessage(result);
                 _vpnHostCode = result.ready ? result.connectionCode : null;
                 if (result.ready && !string.IsNullOrEmpty(result.connectionCode)) _root.ServerSettings.VpnCode.SetTextWithoutNotify(result.connectionCode);
             }
@@ -678,20 +680,31 @@ namespace JungleMaze.Presentation.UI.Lobby
             finally { _vpnBusy = false; }
         }
 
+        private static string VpnMessage(VpnToolResult result)
+        {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            return result.message;
+#else
+            if (result.ready) return "Máy chủ sẵn sàng. Hãy đăng nhập và vào phòng để chơi.";
+            if (result.success) return result.state == "Stopped" ? "Đã dừng máy chủ; dữ liệu được giữ." : "Đã hoàn tất thiết lập máy chủ.";
+            return "Chưa kết nối được máy chủ. Kiểm tra Tailscale, lời mời và cửa sổ thiết lập rồi thử lại.";
+#endif
+        }
+
         private async void ConnectVpn()
         {
             if (_vpn == null || _vpnBusy || _menu == null) return;
             if (!VpnConnectionCode.TryParse(_root.ServerSettings.VpnCode.text, out var endpoint)) { _vpnMessage = "Mã kết nối không hợp lệ. Nhờ host sao chép lại địa chỉ VPN."; return; }
             var request = ++_vpnRequest;
-            _vpnBusy = true; _vpnMessage = "Đang kiểm Tailscale và HTTPS của host…";
+            _vpnBusy = true; _vpnMessage = "Đang kiểm tra kết nối an toàn…";
             try
             {
                 var result = await _vpn.CheckEndpointAsync(endpoint);
                 if (_disposed || request != _vpnRequest || !_vpnSelected) return;
-                _vpnMessage = result.message;
-                if (result.success && result.ready && _menu.ApplyVpnEndpoint(endpoint)) { FillEndpointFields(); _vpnMessage = result.message + " Đã lưu endpoint VPN."; }
+                _vpnMessage = VpnMessage(result);
+                if (result.success && result.ready && _menu.ApplyVpnEndpoint(endpoint)) { FillEndpointFields(); _vpnMessage = VpnMessage(result) + " Đã lưu địa chỉ máy chủ."; }
             }
-            catch (Exception) { if (!_disposed) _vpnMessage = "Không tới được host. Kiểm tra VPN và HTTPS."; }
+            catch (Exception) { if (!_disposed) _vpnMessage = "Không tới được host. Kiểm tra Tailscale và kết nối mạng."; }
             finally { _vpnBusy = false; }
         }
 

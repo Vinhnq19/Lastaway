@@ -75,8 +75,8 @@ namespace JungleMaze.Tests.Lobby
         [TestCase(DisconnectReason.AuthenticationRequired, "Máy chủ yêu cầu đăng nhập")]
         [TestCase(DisconnectReason.AuthModeMismatch, "Máy chủ yêu cầu đăng nhập")]
         [TestCase(DisconnectReason.ConnectTimeout, JoinRejectText.Unreachable)]
-        [TestCase(DisconnectReason.Unknown, "Không vào được phòng (mã lỗi: Unknown)")]
-        [TestCase(DisconnectReason.DuplicateSession, "Không vào được phòng (mã lỗi: DuplicateSession)")]
+        [TestCase(DisconnectReason.Unknown, "Không vào được phòng. Vui lòng thử lại hoặc chọn phòng khác.")]
+        [TestCase(DisconnectReason.DuplicateSession, "Tài khoản đang có phiên khác trong phòng.")]
         [TestCase(DisconnectReason.UserRequested, "")]
         public void RejectText_OneLinePerReason(DisconnectReason reason, string expected) =>
             Assert.AreEqual(expected, JoinRejectText.For(reason));

@@ -114,16 +114,16 @@ namespace JungleMaze.Infrastructure.Network
                         return bytes.Length == 4 && bytes[0] == 100 && bytes[1] >= 64 && bytes[1] <= 127 &&
                             (endpoint.Ip == endpoint.Domain || address.ToString() == endpoint.Ip);
                     }))
-                    return Fail("Hostname VPN không trỏ đúng IP của host. Kiểm tra mã mới, lời mời và Tailscale DNS.");
+                    return Fail("Địa chỉ VPN chưa trỏ đúng máy chủ. Kiểm tra mã kết nối và lời mời Tailscale.");
                 using (var handler = new HttpClientHandler { AllowAutoRedirect = false })
                 using (var http = new HttpClient(handler) { Timeout = TimeSpan.FromSeconds(10) })
                 using (var response = await http.GetAsync(endpoint.Api + "/health", HttpCompletionOption.ResponseHeadersRead))
                 {
-                    if (!response.IsSuccessStatusCode) return Fail("Đã tới host nhưng API chưa sẵn sàng.");
+                    if (!response.IsSuccessStatusCode) return Fail("Đã tới máy chủ nhưng dịch vụ tài khoản chưa sẵn sàng.");
                 }
-                return new VpnToolResult { success = true, ready = true, state = "ApiReady", message = "API HTTPS đã thông. Đăng nhập và vào phòng để xác nhận gameplay UDP/WSS." };
+                return new VpnToolResult { success = true, ready = true, state = "ApiReady", message = "Dịch vụ tài khoản sẵn sàng. Hãy đăng nhập và vào phòng để kiểm tra kết nối chơi." };
             }
-            catch (Exception) { return Fail("Không tới được HTTPS của host. Kiểm tra lời mời VPN, host online, Tailscale DNS và HTTPS/Serve."); }
+            catch (Exception) { return Fail("Chưa kết nối an toàn được tới máy chủ. Kiểm tra lời mời Tailscale và nhờ chủ máy kiểm tra server."); }
         }
         public void OpenClientSetup()
         {

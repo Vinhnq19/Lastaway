@@ -92,9 +92,9 @@ namespace JungleMaze.Presentation.UI
         {
             var before = _config.Current;
             var error = _config.SelectProfile(profile);
-            if (error != null) { Status = error; return; }
+            if (error != null) { Status = "Chưa áp dụng được cài đặt máy chủ. Kiểm tra địa chỉ rồi thử lại."; return; }
             LoadFromConfig();
-            Status = $"Đã chọn profile {profile}.";
+            Status = "Đã chọn máy chủ.";
             NotifyIfApiChanged(before, _config.Current);
         }
 
@@ -107,7 +107,7 @@ namespace JungleMaze.Presentation.UI
             if (string.Equals(target, "Local", StringComparison.OrdinalIgnoreCase))
             {
                 Mode = ConnectionMode.Local;
-                Status = "Chế độ Local: Solo Offline hoặc Loopback.";
+                Status = "Đã chọn Local. Chơi luyện tập hoặc kết nối máy chủ trên máy này.";
             }
             else if (string.Equals(target, "LAN", StringComparison.OrdinalIgnoreCase))
             {
@@ -116,9 +116,9 @@ namespace JungleMaze.Presentation.UI
                 var updated = current.WithEndpoint(host, port, ConnectionMode.LAN, "menu")
                     .WithApiBaseUrl(RemoteApiForTarget(), "menu").WithTransport("Udp", null);
                 var error = _config.SaveUserConfig(updated);
-                if (error != null) { Status = error; return; }
+                if (error != null) { Status = "Chưa áp dụng được cài đặt máy chủ. Kiểm tra địa chỉ rồi thử lại."; return; }
                 LoadFromConfig();
-                Status = "Chế độ LAN: UDP.";
+                Status = "Đã chọn mạng LAN.";
                 NotifyIfApiChanged(current, _config.Current);
             }
             else if (string.Equals(target, "Radmin", StringComparison.OrdinalIgnoreCase))
@@ -129,9 +129,9 @@ namespace JungleMaze.Presentation.UI
                 var updated = current.WithEndpoint(host, port, ConnectionMode.Online, "menu")
                     .WithApiBaseUrl(RemoteApiForTarget(), "menu").WithTransport("Udp", null);
                 var error = _config.SaveUserConfig(updated);
-                if (error != null) { Status = error; return; }
+                if (error != null) { Status = "Chưa áp dụng được cài đặt máy chủ. Kiểm tra địa chỉ rồi thử lại."; return; }
                 LoadFromConfig();
-                Status = "Chế độ Online (Radmin/VPN): UDP.";
+                Status = "Đã chọn mạng VPN tự host.";
                 NotifyIfApiChanged(current, _config.Current);
             }
             else if (string.Equals(target, "AWS", StringComparison.OrdinalIgnoreCase))
@@ -144,9 +144,9 @@ namespace JungleMaze.Presentation.UI
                     .WithApiBaseUrl("https://junglemaze.duckdns.org", "menu")
                     .WithTransport("Auto", "wss://junglemaze.duckdns.org/game");
                 var error = _config.SaveUserConfig(updated);
-                if (error != null) { Status = error; return; }
+                if (error != null) { Status = "Chưa áp dụng được cài đặt máy chủ. Kiểm tra địa chỉ rồi thử lại."; return; }
                 LoadFromConfig();
-                Status = "Chế độ Online (AWS): junglemaze.duckdns.org (Auto UDP->WSS).";
+                Status = "Đã chọn máy chủ AWS.";
                 NotifyIfApiChanged(current, _config.Current);
             }
         }
@@ -157,9 +157,9 @@ namespace JungleMaze.Presentation.UI
             var before = _config.Current;
             var updated = endpoint.Apply(before);
             var invalid = updated.Validate() ?? _config.SaveUserConfig(updated);
-            if (invalid != null) { Status = invalid; return false; }
+            if (invalid != null) { Status = "Địa chỉ máy chủ chưa hợp lệ. Kiểm tra cài đặt rồi thử lại."; return false; }
             LoadFromConfig();
-            Status = "Đã chọn VPN Tailscale. Đăng nhập vào tài khoản của host.";
+            Status = "Đã chọn máy chủ Tailscale. Hãy đăng nhập tài khoản game.";
             NotifyIfApiChanged(before, _config.Current);
             return true;
         }
@@ -180,7 +180,7 @@ namespace JungleMaze.Presentation.UI
             }
             if (_network.State != NetworkState.Disconnected) _network.Disconnect();
             try { _offlineSession.StartRound(); _flow.StartOfflineMatch(); }
-            catch (InvalidOperationException e) { _offlineSession.Leave(); Status = e.Message; }
+            catch (InvalidOperationException) { _offlineSession.Leave(); Status = "Chưa mở được luyện tập. Kiểm tra dữ liệu hoặc cập nhật game rồi thử lại."; }
         }
 
         /// <summary>Lưu host/port/mode người dùng sửa vào persistentDataPath/client.json (lần sau tự dùng).</summary>
@@ -189,7 +189,7 @@ namespace JungleMaze.Presentation.UI
             var before = _config.Current;
             if (!TryBuildConfig(out var config)) return false;
             var error = _config.SaveUserConfig(config);
-            Status = error ?? "Đã lưu endpoint vào client.json.";
+            Status = error == null ? "Đã lưu địa chỉ máy chủ." : "Chưa lưu được địa chỉ máy chủ. Kiểm tra cài đặt rồi thử lại.";
             if (error != null) return false;
             NotifyIfApiChanged(before, _config.Current);
             return true;
@@ -203,7 +203,7 @@ namespace JungleMaze.Presentation.UI
             if (!ReferenceEquals(config, _config.Current))
             {
                 var error = _config.SaveUserConfig(config);
-                if (error != null) { Status = error; return; }
+                if (error != null) { Status = "Chưa áp dụng được cài đặt máy chủ. Kiểm tra địa chỉ rồi thử lại."; return; }
                 NotifyIfApiChanged(before, _config.Current);
             }
             var result = _connect.Execute(new ConnectForm
@@ -239,10 +239,10 @@ namespace JungleMaze.Presentation.UI
         private bool TryBuildConfig(out ClientConfig config)
         {
             config = _config.Current;
-            if (config == null) { Status = "Chưa có config."; return false; }
+            if (config == null) { Status = "Chưa có cài đặt máy chủ. Hãy chọn máy chủ rồi thử lại."; return false; }
             if (!int.TryParse(Port, NumberStyles.Integer, CultureInfo.InvariantCulture, out var port))
             {
-                Status = "Port phải là số nguyên.";
+                Status = "Cổng kết nối cần là một số hợp lệ.";
                 return false;
             }
             var host = Host?.Trim();
@@ -251,7 +251,7 @@ namespace JungleMaze.Presentation.UI
                 return true;
             config = config.WithEndpoint(host, port, Mode, "menu").WithApiBaseUrl(api, "menu");
             var invalid = config.Validate();
-            if (invalid != null) { Status = invalid; return false; }
+            if (invalid != null) { Status = "Địa chỉ máy chủ chưa hợp lệ. Kiểm tra cài đặt rồi thử lại."; return false; }
             return true;
         }
 
@@ -267,7 +267,7 @@ namespace JungleMaze.Presentation.UI
             if (config == null || string.IsNullOrWhiteSpace(config.ApiBaseUrl)) return "";
             var trimmed = config.ApiBaseUrl.Trim();
             if (Uri.TryCreate(trimmed, UriKind.Absolute, out var uri))
-                return uri.GetLeftPart(UriPartial.Authority);
+                return uri.AbsoluteUri.TrimEnd('/');
             return trimmed;
         }
 
@@ -276,7 +276,7 @@ namespace JungleMaze.Presentation.UI
             if (ReferenceEquals(before, after)) return false;
             var beforeOrigin = GetApiOrigin(before);
             var afterOrigin = GetApiOrigin(after);
-            return !string.Equals(beforeOrigin, afterOrigin, StringComparison.OrdinalIgnoreCase);
+            return !string.Equals(beforeOrigin, afterOrigin, StringComparison.Ordinal);
         }
     }
 }

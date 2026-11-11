@@ -313,6 +313,17 @@ namespace JungleMaze.Tests.App
         }
 
         [Test]
+        public void ApiPathChangeOnSameHost_InvalidatesOldBackendSession()
+        {
+            _presenter.SelectTarget("LAN");
+            _presenter.AccountToken = "fixture-session";
+            var changed = 0; _presenter.EndpointChanged += () => changed++;
+            _presenter.ApiBaseUrl = _presenter.ApiBaseUrl.TrimEnd('/') + "/another-backend";
+            Assert.IsTrue(_presenter.SaveEndpoint());
+            Assert.AreEqual(1,changed); Assert.IsNull(_presenter.AccountToken);
+        }
+
+        [Test]
         public void SaveEndpoint_InvalidOrFailedSave_DoesNotInvalidateSession()
         {
             _presenter.SelectTarget("AWS");

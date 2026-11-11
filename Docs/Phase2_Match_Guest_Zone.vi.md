@@ -356,3 +356,15 @@ Client xác minh cả MapHash và RulesHash; không tắt kiểm hash để vào
 Local dùng tài khoản API Local và chọn **Local** trong Cài đặt máy chủ. AWS chỉ dùng được khi release server và client cùng phiên bản dữ liệu; Sync Runtime Data trên PC không cập nhật EC2. Xóa cache không sửa được RulesHash lệch. Skin ở phòng chờ được lưu cùng lựa chọn nhân vật trên menu của thiết bị; giữ cơ chế hiển thị skin hiện có, không đổi sang xác thực hay đồng bộ skin mới.
 
 Nhạc nền menu dùng `Assets/_JungleMaze/Art/Audio/Music/game_menu_looping.ogg`, chạy lặp ở đăng nhập/menu, danh sách phòng, phòng chờ và kết quả. Cài đặt mới bật nhạc mặc định; nếu máy đã lưu tùy chọn tắt nhạc, bật lại tại **Cài đặt → Âm thanh → Nhạc**. Khi kết nối/tải và trong trận, nhạc nền tắt; SFX gameplay vẫn hoạt động. Trở về menu/phòng chờ/kết quả sẽ phát lại nhạc menu.
+
+## Luồng lỗi kết nối và phiên đăng nhập (11/11/2026)
+
+- Chỉ phản hồi **401 thuộc phiên và máy chủ hiện tại**, hoặc thời hạn tài khoản thực sự đã hết, mới yêu cầu đăng nhập lại. Lỗi mạng, quyền403, phòng không còn404, quá nhiều thao tác429, dịch vụ503 và lượt vào phòng hết hạn đều giữ tài khoản.
+- Vào phòng thất bại: ở lại form, sửa mã hoặc bấm **Thử lại**. Mỗi lần bấm tạo lượt kết nối và vé mới; không tự gửi lại vô hạn. Không đổi đường truyền để vượt lỗi nghiệp vụ.
+- Đăng xuất/đổi máy chủ vô hiệu hóa callback phòng cũ và lượt kết nối đang chờ; `Clear` trả busy về trạng thái nghỉ. Request đã tới server có thể đã tạo/xóa phòng: mở danh sách mới để đối chiếu, không tự thực hiện lại thao tác.
+- Reconnect hiển thị thời gian **ước tính**. Không nhận được kết quả authoritative thì chỉ báo chưa xác nhận được trạng thái trận; resume không hợp lệ yêu cầu về menu. Không tự kết luận người chơi bị loại hoặc tự vào lại như một nhân vật mới.
+- Tải bản đồ phân biệt hết phiên, thiếu quyền, nội dung không còn, lỗi tải tạm và dữ liệu không hợp lệ. Tải lỗi không báo sẵn sàng, không tự chọn map khác. Thử lại dùng lựa chọn hiện tại của trưởng phòng.
+- Bảng hạng chỉ nhận phản hồi đúng lượt tải, trận và máy chủ; rời màn/đổi tài khoản làm phản hồi cũ mất hiệu lực.
+- Giao diện người chơi dùng lời dễ hiểu: “Đang kết nối máy chủ”, “Dịch vụ tài khoản”, “Địa chỉ máy chủ”, “Độ trễ”. Bảng thông số F3, menu cũ F8 và trường cấu hình chuyên sâu chỉ dành Editor/Development Build; bản Release không mở các bảng đó.
+
+Kiểm các trường hợp lỗi có kiểm soát bằng `JungleMaze.Tests.Lobby.ConnectionFlowRegressionTests`, nhóm `NetworkClientTests` và PlayMode `LobbyUiTimingTests`. Chạy game Local bằng profile `phase2-local`; đăng nhập, tạo/vào phòng, chọn map rồi bắt đầu như thường lệ. Khi API tạm ngừng, bấm vào phòng phải giữ tài khoản; bật API rồi bấm Thử lại. Hai PC/hai mạng và AWS là các lượt nghiệm thu riêng, không suy ra từ hai process Local.

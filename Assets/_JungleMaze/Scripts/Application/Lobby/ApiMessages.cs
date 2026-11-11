@@ -11,10 +11,10 @@ namespace JungleMaze.App.Lobby
     public static class ApiMessages
     {
         public const string NoApi = "Chưa cấu hình máy chủ tài khoản: chưa đăng nhập được"; // round 2: no guest path
-        public const string ApiReady = "API sẵn sàng";
+        public const string ApiReady = "Dịch vụ tài khoản sẵn sàng";
         public const string ApiDown = "Máy chủ tài khoản không phản hồi: chưa đăng nhập được, hãy Thử lại";
         public const string AccountUnreachable = "Không kết nối được máy chủ tài khoản";
-        public const string SessionExpired = "Phiên đăng nhập đã hết hạn, hãy đăng nhập lại";
+        public const string SessionExpired = "Phiên đăng nhập không còn hợp lệ. Vui lòng đăng nhập lại.";
         public const string RoomsUnavailable = "Máy chủ phòng chưa sẵn sàng";
         public const string NoRooms = "Bạn chưa có phòng";
         public const string HistoryEmpty = "Chưa có trận nào";
@@ -64,7 +64,7 @@ namespace JungleMaze.App.Lobby
         }
     }
 
-    /// <summary>Join reject reason → one line (AC7, AC8). Unknown reasons show their name, never a stack trace.</summary>
+    /// <summary>Join reject reason → one line (AC7, AC8). Unknown reasons use a safe message; raw reasons remain in logs.</summary>
     public static class JoinRejectText
     {
         public const string WrongCode = "Mã phòng không đúng hoặc phòng không còn";
@@ -81,13 +81,25 @@ namespace JungleMaze.App.Lobby
                 case DisconnectReason.ServerFull: return "Máy chủ đã đầy, thử lại sau";
                 case DisconnectReason.AuthenticationRequired:
                 case DisconnectReason.AuthModeMismatch: return "Máy chủ yêu cầu đăng nhập";
-                case DisconnectReason.InvalidConfig: return "Cấu hình máy chủ không hợp lệ: kiểm tra host/port ở Menu chính";
+                case DisconnectReason.InvalidConfig: return "Cấu hình máy chủ không hợp lệ: kiểm tra địa chỉ ở Menu chính";
+                case DisconnectReason.AccountExpired:
+                case DisconnectReason.AccessDenied:
+                case DisconnectReason.RequestLimited:
+                case DisconnectReason.ServiceUnavailable:
+                case DisconnectReason.TicketRejected:
+                case DisconnectReason.GameplayVersionMismatch:
+                case DisconnectReason.InvalidResume:
+                case DisconnectReason.ServerBusy:
+                case DisconnectReason.MatchInProgress:
+                case DisconnectReason.LoadingTimeout:
+                case DisconnectReason.UnsupportedVersion:
+                case DisconnectReason.DuplicateSession: return DisconnectReasons.Describe(reason);
                 case DisconnectReason.LoginFailed: return "Máy chủ yêu cầu đăng nhập: đăng nhập không thành công";
                 case DisconnectReason.InvalidDisplayName: return "Tên hiển thị không hợp lệ (1–32 ký tự)";
                 case DisconnectReason.ConnectTimeout:
                 case DisconnectReason.JoinTimeout:
                 case DisconnectReason.SocketError: return Unreachable;
-                default: return "Không vào được phòng (mã lỗi: " + reason + ")";
+                default: return "Không vào được phòng. Vui lòng thử lại hoặc chọn phòng khác.";
             }
         }
     }

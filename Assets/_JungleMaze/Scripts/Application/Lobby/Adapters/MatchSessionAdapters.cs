@@ -189,7 +189,7 @@ namespace JungleMaze.App.Lobby.Adapters
             _network = network ?? throw new ArgumentNullException(nameof(network));
             _canResume = canResume ?? (() => false);
             _bus = bus;
-            _onError = _ => _local = DisconnectReason.LoginFailed;
+            _onError = e => _local = e.Reason;
             _onState = _ => _local = DisconnectReason.None;
             _bus?.Subscribe(_onError);
             _bus?.Subscribe(_onState);
@@ -205,7 +205,8 @@ namespace JungleMaze.App.Lobby.Adapters
         public void ClearLoginFailure() => _local = DisconnectReason.None;
 
         /// <summary>The join was refused locally (invalid endpoint) and nothing will connect.</summary>
-        public void ReportLocalFailure() => _local = DisconnectReason.InvalidConfig;
+        public void ReportLocalFailure(DisconnectReason reason = DisconnectReason.InvalidConfig)
+        { if (_local == DisconnectReason.None) _local = reason; }
 
         public void Dispose()
         {

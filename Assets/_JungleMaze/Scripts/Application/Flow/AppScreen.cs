@@ -30,7 +30,9 @@ namespace JungleMaze.App.Flow
     public readonly struct ConnectionError
     {
         public readonly string Message;
-        public ConnectionError(string message) => Message = message;
+        public readonly JungleMaze.Domain.Network.DisconnectReason Reason;
+        public ConnectionError(string message, JungleMaze.Domain.Network.DisconnectReason reason = JungleMaze.Domain.Network.DisconnectReason.InvalidConfig)
+        { Message = message; Reason = reason; }
     }
 
     /// <summary>Tên scene và thời gian; Bootstrap có thể đổi mà không sửa state.</summary>

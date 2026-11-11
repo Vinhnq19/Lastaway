@@ -22,7 +22,9 @@ namespace JungleMaze.Presentation.UI.Lobby
 
         private void Update()
         {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
             if (_legacy != null && Input.GetKeyDown(KeyCode.F8)) _legacy.enabled = !_legacy.enabled;
+#endif
         }
     }
 }

@@ -101,8 +101,17 @@ namespace JungleMaze.App.Lobby
     public sealed class LeaderboardModel
     {
         private readonly ILeaderboardApi _api;
+        private readonly Func<string> _backend;
+        private int _generation;
 
-        public LeaderboardModel(ILeaderboardApi api) => _api = api;
+        public LeaderboardModel(ILeaderboardApi api, Func<string> backend = null)
+        { _api = api; _backend = backend ?? (() => ""); }
+
+        public void Clear()
+        {
+            _generation++; MatchId = Guid.Empty; Rows = Array.Empty<LeaderboardEntry>();
+            State = ListState.Idle; Message = "";
+        }
 
         public ListState State { get; private set; }
         public string Message { get; private set; } = "";
@@ -111,6 +120,7 @@ namespace JungleMaze.App.Lobby
 
         public void Load(Guid matchId)
         {
+            var generation = ++_generation; var backend = _backend();
             MatchId = matchId;
             Rows = Array.Empty<LeaderboardEntry>();
             if (_api == null) { State = ListState.Unavailable; Message = "Bảng xếp hạng online tạm ngừng"; return; }
@@ -119,6 +129,7 @@ namespace JungleMaze.App.Lobby
             Message = "";
             _api.Get(matchId, r =>
             {
+                if (generation != _generation || MatchId != matchId || backend != _backend()) return;
                 if (r.Ok)
                 {
                     Rows = r.Value ?? Array.Empty<LeaderboardEntry>();
@@ -148,7 +159,7 @@ namespace JungleMaze.App.Lobby
             if (Checking) return;
             if (_health == null || !_health.Configured) { Text = ApiMessages.NoApi; Ready = false; return; }
             Checking = true;
-            Text = "Đang kiểm tra API…";
+            Text = "Đang kiểm tra dịch vụ tài khoản…";
             _health.Check(r =>
             {
                 Checking = false;

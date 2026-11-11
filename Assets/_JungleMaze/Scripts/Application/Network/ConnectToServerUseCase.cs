@@ -47,7 +47,7 @@ namespace JungleMaze.App.Network
                     config.GameServerPort, JoinAuthMode.RoomCode, NetworkProtocol.Version4, config.ConnectTimeoutMs,
                     config.Transport, config.Source, config.WebSocketUrl, config.WorldEnabled);
             var invalid = config?.Validate();
-            if (config == null || invalid != null) return Error(invalid ?? "Chưa có config.");
+            if (config == null || invalid != null) return Error("Địa chỉ máy chủ chưa hợp lệ. Kiểm tra cài đặt rồi thử lại.");
             if (string.IsNullOrWhiteSpace(form.RoomCode)) return Error("Nhập mã phòng.");
             if (string.IsNullOrWhiteSpace(form.DisplayName)) return Error("Nhập tên hiển thị.");
 
@@ -63,15 +63,15 @@ namespace JungleMaze.App.Network
             _auth.Login(config, form.Username, form.Password, result =>
             {
                 IsLoggingIn = false;
-                if (!result.Success) { Error(result.Error); return; }
+                if (!result.Success) { Error("Đăng nhập không thành công. Kiểm tra tài khoản rồi thử lại.", JungleMaze.Domain.Network.DisconnectReason.LoginFailed); return; }
                 _network.Connect(new ConnectRequest(config, room, name, result.AccessToken));
             });
             return null;
         }
 
-        private string Error(string message)
+        private string Error(string message, JungleMaze.Domain.Network.DisconnectReason reason = JungleMaze.Domain.Network.DisconnectReason.InvalidConfig)
         {
-            _bus.Publish(new ConnectionError(message));
+            _bus.Publish(new ConnectionError(message, reason));
             return message;
         }
     }

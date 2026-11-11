@@ -27,10 +27,11 @@ namespace JungleMaze.Infrastructure.Auth
         public GuestHistoryClient(GuestCredentialStore store, Func<string> accountEndpoint = null)
         { _store = store; _accountEndpoint = accountEndpoint; }
 
-        public async Task<string> AccountTicketAsync(string baseUrl, Guid attempt, string room, string token)
+        public async Task<TicketIssueResult> AccountTicketAsync(string baseUrl, Guid attempt, string room, string token)
         {
-            if (string.IsNullOrWhiteSpace(token) || !ConfigureAccountEndpoint(baseUrl)) return null;
-            return await TicketAsync(attempt, room, token);
+            if (string.IsNullOrWhiteSpace(token)) return new TicketIssueResult(401);
+            if (!ConfigureAccountEndpoint(baseUrl)) return new TicketIssueResult(0);
+            return await RequestTicketAsync(attempt, room, token, default);
         }
         private bool ConfigureAccountEndpoint(string baseUrl)
         {
@@ -91,7 +92,14 @@ namespace JungleMaze.Infrastructure.Auth
         public async Task<string> TicketAsync(Guid attemptId, string roomCode, string accountToken = null,
             CancellationToken cancellation = default)
         {
-            if (_endpoint == null || _identity == null && string.IsNullOrEmpty(accountToken)) return null;
+            var result = await RequestTicketAsync(attemptId, roomCode, accountToken, cancellation);
+            return result.Success ? result.Value : null;
+        }
+
+        private async Task<TicketIssueResult> RequestTicketAsync(Guid attemptId, string roomCode, string accountToken, CancellationToken cancellation)
+        {
+            if (_endpoint == null) return new TicketIssueResult(0);
+            if (_identity == null && string.IsNullOrEmpty(accountToken)) return new TicketIssueResult(401);
             try
             {
                 using (var request = new HttpRequestMessage(HttpMethod.Post, Url("api/game-tickets")))
@@ -100,14 +108,17 @@ namespace JungleMaze.Infrastructure.Auth
                     request.Content = JsonBody(new { attemptId, roomCode });
                     using (var response = await _http.SendAsync(request, cancellation))
                     {
-                        response.EnsureSuccessStatusCode();
+                        if (!response.IsSuccessStatusCode) return new TicketIssueResult((int)response.StatusCode);
                         var data = Newtonsoft.Json.Linq.JObject.Parse(await response.Content.ReadAsStringAsync());
-                        return data.Value<string>("ticket");
+                        var value = data.Value<string>("ticket");
+                        return string.IsNullOrWhiteSpace(value) ? new TicketIssueResult(502) : new TicketIssueResult(value);
                     }
                 }
             }
+            catch (JsonException)
+            { Status = "Máy chủ trả dữ liệu chưa hợp lệ. Vui lòng thử lại."; return new TicketIssueResult(502); }
             catch (Exception e) when (!(e is OutOfMemoryException))
-            { Status = "Không cấp được vé vào phòng; hãy đăng nhập lại"; return null; }
+            { Status = "Chưa thể vào phòng lúc này. Kiểm tra kết nối rồi thử lại."; return new TicketIssueResult(0); }
         }
 
         public async Task RefreshHistoryAsync(string accountToken = null, CancellationToken cancellation = default)

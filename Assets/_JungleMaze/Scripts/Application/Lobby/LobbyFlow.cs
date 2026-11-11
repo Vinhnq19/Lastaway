@@ -55,7 +55,7 @@ namespace JungleMaze.App.Lobby
             _bus = bus;
             _onLeaveMatch = _ => GoHome();
             _bus?.Subscribe(_onLeaveMatch);
-            if (Account != null) Account.LoggedIn += OnLoggedIn;
+            if (Account != null) { Account.LoggedIn += OnLoggedIn; Account.LoggedOut += OnAccountChanged; }
             if (Rooms != null) Rooms.AuthExpired += OnAuthExpired;
             IsOfflineSource = isOffline;
             OfflineLobby = offlineLobby;
@@ -342,7 +342,8 @@ namespace JungleMaze.App.Lobby
         public void Dispose()
         {
             _bus?.Unsubscribe(_onLeaveMatch);
-            if (Account != null) Account.LoggedIn -= OnLoggedIn;
+            if (Account != null) { Account.LoggedIn -= OnLoggedIn; Account.LoggedOut -= OnAccountChanged; }
+            Rooms?.Dispose();
             if (Rooms != null) Rooms.AuthExpired -= OnAuthExpired;
         }
 
@@ -355,7 +356,7 @@ namespace JungleMaze.App.Lobby
             {
                 var reason = _connection.LastReason;
                 Join.Rejected(reason);
-                if (reason == DisconnectReason.LoginFailed)
+                if ((reason == DisconnectReason.LoginFailed || reason == DisconnectReason.AccountExpired))
                 {
                     Account?.Expire();
                     Go(LobbyScreen.Login);
@@ -370,8 +371,15 @@ namespace JungleMaze.App.Lobby
         private void TickReconnecting(NetworkState net)
         {
             var state = Reconnect.Tick(net);
+            if (state == ReconnectState.Failed && _connection.LastReason == DisconnectReason.AccountExpired)
+            { Account?.Expire(); _commands.Cancel(); Go(LobbyScreen.Login); return; }
             if (state == ReconnectState.Succeeded) { Reconnect.Reset(); Notice = ""; Follow(); }
-            else if (state == ReconnectState.Failed) { Notice = ReconnectController.FailedText; Go(LobbyScreen.Disconnected); }
+            else if (state == ReconnectState.Failed) { Notice = _connection.LastReason == DisconnectReason.InvalidResume
+                ? DisconnectReasons.Describe(DisconnectReason.InvalidResume)
+                : _results.HasResult && _results.Current != null && _results.Current.MatchId == _lobby.MatchId
+                    ? "Trận đã có kết quả. Hãy trở về menu để tiếp tục."
+                    : ReconnectController.FailedText;
+                Go(LobbyScreen.Disconnected); }
         }
 
         private void Follow()
@@ -384,7 +392,7 @@ namespace JungleMaze.App.Lobby
             {
                 if (Screen != LobbyScreen.Loading) _loadingSince = _clock();
                 var mapError = _lobby.LoadError;
-                if (mapError != null) { FailLoading(LobbyScreenRules.LoadMapError + ": " + mapError); return; }
+                if (mapError != null) { FailLoading(mapError); return; }
                 if (_clock() - _loadingSince >= Options.LoadingStuckSeconds) { FailLoading(LobbyScreenRules.LoadStuck); return; }
             }
             if (next == LobbyScreen.Results) ShowResultIfNew();
@@ -431,7 +439,7 @@ namespace JungleMaze.App.Lobby
 
         private void OnLost()
         {
-            if (_connection.LastReason == DisconnectReason.LoginFailed)
+            if ((_connection.LastReason == DisconnectReason.LoginFailed || _connection.LastReason == DisconnectReason.AccountExpired))
             {
                 Account?.Expire();
                 Go(LobbyScreen.Login);
@@ -443,6 +451,8 @@ namespace JungleMaze.App.Lobby
             if (next == LobbyScreen.Disconnected) Notice = ReconnectController.LostText;
             Go(next);
         }
+
+        private void OnAccountChanged() { History?.Clear(); Leaderboard?.Clear(); }
 
         private void OnLoggedIn()
         {
@@ -466,6 +476,7 @@ namespace JungleMaze.App.Lobby
 
         private void Go(LobbyScreen next)
         {
+            if (Screen == LobbyScreen.Leaderboard && next != Screen) Leaderboard?.Clear();
             if (next == Screen) return;
             if (next != LobbyScreen.MainMenu) LogoutConfirmOpen = false;
             if (next == LobbyScreen.Login)

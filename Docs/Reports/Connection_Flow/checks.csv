@@ -1,0 +1,5 @@
+run,client,status,transport,fallback,inputHz,snapshotHz,rttP50Ms,rttP95Ms,rttP99Ms,pongTimeouts,completedMatches
+local-mixed,evidence-client-1,PASS,Wss,,29.663311264828643,30.005252529235243,33.2852,33.3242,33.8545,0,1
+local-mixed,evidence-client-2,PASS,Udp,,29.67237786697153,30.04991605608969,33.3071,33.5546,74.0649,0,1
+local-fallback,evidence-client-1,PASS,Wss,ConnectTimeout,29.987364386633896,29.987380056309462,16.6758,16.7514,18.1787,0,1
+local-fallback,evidence-client-2,PASS,Wss,ConnectTimeout,29.985334566200574,29.985357390358505,33.348,34.3418,34.4788,0,1

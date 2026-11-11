@@ -73,14 +73,14 @@ namespace JungleMaze.Tests.Network
         public void AccountV4_AwaitsTicketAndSendsOnlyShortBearer()
         {
             _client.Dispose();
-            var pending = new System.Threading.Tasks.TaskCompletionSource<string>();
+            var pending = new System.Threading.Tasks.TaskCompletionSource<TicketIssueResult>();
             Guid issuedAttempt = Guid.Empty;
             _client = new NetworkClient(_bus, new PacketRegistry(), ticketIssuer: (request, attempt) =>
             { issuedAttempt = attempt; Assert.AreEqual("account-jwt-fixture", request.AccessToken); return pending.Task; });
             _client.Connect(new ConnectRequest(Config(_server.Port, version: 4, api: "http://127.0.0.1:5000"), "ROOM42", "Account", "account-jwt-fixture"));
             _client.Tick(.016f); _server.Poll();
             Assert.AreEqual(0, _client.LocalPort, "No socket before ticket verification");
-            var ticket = new string('a', 64); pending.SetResult(ticket);
+            var ticket = new string('a', 64); pending.SetResult(new TicketIssueResult(ticket));
             Assert.IsTrue(Pump(() => _client.State == NetworkState.Joined));
             Assert.AreEqual(issuedAttempt, _server.LastRequest.AttemptId);
             Assert.AreEqual(ticket, _server.LastRequest.Ticket);
@@ -91,13 +91,29 @@ namespace JungleMaze.Tests.Network
         public void AccountV4_CancelWhileIssuingDoesNotConnectLater()
         {
             _client.Dispose();
-            var pending = new System.Threading.Tasks.TaskCompletionSource<string>();
+            var pending = new System.Threading.Tasks.TaskCompletionSource<TicketIssueResult>();
             _client = new NetworkClient(_bus, new PacketRegistry(), ticketIssuer: (_, __) => pending.Task);
             _client.Connect(new ConnectRequest(Config(_server.Port, version: 4, api: "http://127.0.0.1:5000"), "ROOM42", "Account", "jwt-fixture"));
-            _client.Disconnect(); pending.SetResult(new string('b', 64));
+            _client.Disconnect(); pending.SetResult(new TicketIssueResult(new string('b', 64)));
             _client.Tick(.016f); _server.Poll();
             Assert.AreEqual(NetworkState.Disconnected, _client.State);
             Assert.IsNull(_server.LastRequest);
+        }
+
+        [TestCase(401, DisconnectReason.AccountExpired)]
+        [TestCase(403, DisconnectReason.AccessDenied)]
+        [TestCase(404, DisconnectReason.InvalidRoomCode)]
+        [TestCase(429, DisconnectReason.RequestLimited)]
+        [TestCase(503, DisconnectReason.ServiceUnavailable)]
+        [TestCase(0, DisconnectReason.ServiceUnavailable)]
+        public void AccountV4_TicketFailureDoesNotStartTransport(int status, DisconnectReason expected)
+        {
+            _client.Dispose();
+            _client = new NetworkClient(_bus,new PacketRegistry(),ticketIssuer: (_,__) => System.Threading.Tasks.Task.FromResult(new TicketIssueResult(status)));
+            _client.Connect(new ConnectRequest(Config(_server.Port,version:4,api:"http://127.0.0.1:5000",transport:"Auto",wsUrl:"ws://127.0.0.1:7781/game"),"ROOM42","Account","fixture-jwt"));
+            _client.Tick(.016f);
+            Assert.AreEqual(NetworkState.Failed,_client.State); Assert.AreEqual(expected,_client.LastReason);
+            Assert.AreEqual(0,_client.LocalPort); Assert.IsNull(_server.LastRequest); Assert.IsNull(_client.Stats.FallbackReason);
         }
 
         [Test]

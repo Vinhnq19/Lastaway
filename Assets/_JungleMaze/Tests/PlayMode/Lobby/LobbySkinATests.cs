@@ -261,7 +261,7 @@ namespace JungleMaze.Tests.PlayMode.Lobby
             using var rig = new LobbyUiRig();
             yield return null;
             var s = rig.Root.ServerSettings;
-            var fields = new (Component field, string label)[] { (s.Profile, "Kết nối"), (s.Host, "Máy chủ"), (s.Port, "Cổng"), (s.Api, "URL API") };
+            var fields = new (Component field, string label)[] { (s.Profile, "Kết nối"), (s.Host, "Máy chủ"), (s.Port, "Cổng"), (s.Api, "Dịch vụ tài khoản") };
             foreach (var (field, expected) in fields)
             {
                 var caption = field.transform.Find("FieldLabel").GetComponent<TMP_Text>();

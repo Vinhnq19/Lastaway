@@ -184,7 +184,7 @@ namespace JungleMaze.Tests.App
             var useCase = UseCase(JoinAuthMode.Jwt);
             _auth.Result = JungleMaze.App.Ports.LoginResult.Fail("Sai mật khẩu");
             useCase.Execute(Form());
-            CollectionAssert.Contains(_errors, "Sai mật khẩu");
+            CollectionAssert.Contains(_errors, "Đăng nhập không thành công. Kiểm tra tài khoản rồi thử lại.");
             Assert.IsEmpty(_network.Connects);
         }
     }

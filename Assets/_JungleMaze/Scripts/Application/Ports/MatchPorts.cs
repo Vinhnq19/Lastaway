@@ -26,6 +26,25 @@ namespace JungleMaze.App.Ports
         public bool PvpEligible => MatchKind == "HumanOnly" && (Reason == "LastAlive" || Reason == "Tie");
     }
 
+    public readonly struct TicketIssueResult
+    {
+        public readonly string Value;
+        public readonly int HttpStatus;
+        public readonly JungleMaze.Domain.Network.DisconnectReason Failure;
+        public bool Success => !string.IsNullOrEmpty(Value) && Failure == JungleMaze.Domain.Network.DisconnectReason.None;
+        public TicketIssueResult(string value) { Value = value; HttpStatus = 200; Failure = JungleMaze.Domain.Network.DisconnectReason.None; }
+        public TicketIssueResult(int status)
+        {
+            Value = null; HttpStatus = status;
+            Failure = status == 401 ? JungleMaze.Domain.Network.DisconnectReason.AccountExpired
+                : status == 403 ? JungleMaze.Domain.Network.DisconnectReason.AccessDenied
+                : status == 404 ? JungleMaze.Domain.Network.DisconnectReason.InvalidRoomCode
+                : status == 429 ? JungleMaze.Domain.Network.DisconnectReason.RequestLimited
+                : JungleMaze.Domain.Network.DisconnectReason.ServiceUnavailable;
+        }
+        public override string ToString() => "TicketIssueResult(status=" + HttpStatus + ", success=" + Success + ")";
+    }
+
     public interface IPlayerHistory : IDisposable
     {
         string Status { get; }
