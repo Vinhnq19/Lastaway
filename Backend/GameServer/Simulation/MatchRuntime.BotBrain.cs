@@ -21,7 +21,7 @@ public sealed partial class MatchRuntime
         private ushort _inputSequence, _combatSequence;
         private uint _itemSequence;
         private byte _enemy = 255;
-        private double _seenAt = -100, _reactAt, _repathAt, _progressAt, _ignoreUntil, _nextPartialAt, _lastMotionAt;
+        private double _seenAt = -100, _reactAt, _repathAt, _progressAt, _ignoreUntil, _nextPartialAt, _lastMotionAt, _lootRetryAt;
         private Vector2 _lastSeen, _goal, _progressPosition, _previousPosition, _motionPosition;
         private Vector2? _ignoredGoal;
         private BotPathSearch? _search;
@@ -36,7 +36,7 @@ public sealed partial class MatchRuntime
         {
             _random = new StableRandom(seed); State = BotState.Idle; _nextThink = 0;
             _inputSequence = _combatSequence = 0; _itemSequence = 0; _enemy = 255;
-            _seenAt = -100; _reactAt = _repathAt = _progressAt = _ignoreUntil = _nextPartialAt = _lastMotionAt = 0;
+            _seenAt = -100; _reactAt = _repathAt = _progressAt = _ignoreUntil = _nextPartialAt = _lastMotionAt = _lootRetryAt = 0;
             _hasGoal = false; _directGoal = false; _search = null; _failedPaths = 0; _ignoredGoal = null;
             _pathIndex = 0; _thinkInitialised = false; _hasPreviousPosition = false; _previousPosition = default;
             _motionPosition = default; _pathWorkSinceMotion = false;
@@ -269,6 +269,22 @@ public sealed partial class MatchRuntime
             if (_enemy != 255 && now-_seenAt <= settings.MemorySeconds)
             { State=BotState.Search;Goal(_lastSeen,now,settings);return; }
             _enemy=255;
+            if (now < _lootRetryAt)
+            {
+                // Do not alternate forever between unreachable loot targets: first leave the stalled position.
+                State=BotState.Roam;
+                if (_hasGoal) return;
+                var heading=_random.Range(0,360)*MathF.PI/180;
+                for(var i=0;i<16;i++)
+                {
+                    var angle=heading+i*MathF.PI/8;
+                    var nearby=position+new Vector2(MathF.Cos(angle),MathF.Sin(angle))*1.5f;
+                    if (Ignored(nearby,now) || match.Zone?.IsOutside(nearby.X,nearby.Y)==true ||
+                        !SegmentWalkable(match,position,nearby,actor.Radius)) continue;
+                    Goal(nearby,now,settings); return;
+                }
+                return;
+            }
             var best = float.MaxValue; FloorItem? floorTarget=null;
             foreach(var floor in world.Floor.Items)
             {
@@ -484,7 +500,7 @@ public sealed partial class MatchRuntime
             // Rearm once so the next route gets time to run instead of being cancelled every tick.
             _motionPosition=_previousPosition; _lastMotionAt=now; _pathWorkSinceMotion=false;
             if(unreachable||_failedPaths>=settings.FailedPathLimit)
-            { _ignoredGoal=_goal; _ignoreUntil=now+settings.BlacklistSeconds; _hasGoal=false; _failedPaths=0; State=BotState.Idle; }
+            { _ignoredGoal=_goal; _ignoreUntil=now+settings.BlacklistSeconds; _lootRetryAt=_ignoreUntil; _hasGoal=false; _failedPaths=0; State=BotState.Idle; }
         }
         private void RecordPathWork(double now)
         {

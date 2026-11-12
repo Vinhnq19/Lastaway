@@ -1,0 +1,34 @@
+test_archive_traversal_and_links (__main__.ReleaseTests.test_archive_traversal_and_links) ... ok
+test_checksum_tamper_and_extra_file (__main__.ReleaseTests.test_checksum_tamper_and_extra_file) ... ok
+test_collected_rollback_unit_requires_matching_terminal_result (__main__.ReleaseTests.test_collected_rollback_unit_requires_matching_terminal_result) ... ok
+test_digest_platform_and_repository_guard (__main__.ReleaseTests.test_digest_platform_and_repository_guard) ... ok
+test_dirty_publish_denied_without_git_write (__main__.ReleaseTests.test_dirty_publish_denied_without_git_write) ... ok
+test_duplicate_admin_flock (__main__.ReleaseTests.test_duplicate_admin_flock) ... ok
+test_editor_version_requires_an_exact_project_pin (__main__.ReleaseTests.test_editor_version_requires_an_exact_project_pin) ... ok
+test_effective_legacy_base_images_and_secret_literal (__main__.ReleaseTests.test_effective_legacy_base_images_and_secret_literal) ... ok
+test_failure_retains_candidate_metrics_before_recreate (__main__.ReleaseTests.test_failure_retains_candidate_metrics_before_recreate) ... ok
+test_full_metrics_require_coverage_and_real_thresholds (__main__.ReleaseTests.test_full_metrics_require_coverage_and_real_thresholds) ... ok
+test_inactive_worker_rejects_stale_transaction (__main__.ReleaseTests.test_inactive_worker_rejects_stale_transaction) ... ok
+test_inactive_worker_rejects_wrong_release (__main__.ReleaseTests.test_inactive_worker_rejects_wrong_release) ... ok
+test_input_fingerprint_includes_only_compiled_shared_api_contracts (__main__.ReleaseTests.test_input_fingerprint_includes_only_compiled_shared_api_contracts) ... ok
+test_local_gate_rejects_old_editor_even_when_other_evidence_matches (__main__.ReleaseTests.test_local_gate_rejects_old_editor_even_when_other_evidence_matches) ... ok
+test_occupied_snapshot_denies_without_exposing_secret (__main__.ReleaseTests.test_occupied_snapshot_denies_without_exposing_secret) ... ok
+test_plan_selective_and_idempotent (__main__.ReleaseTests.test_plan_selective_and_idempotent) ... ok
+test_pull_failure_keeps_running_release (__main__.ReleaseTests.test_pull_failure_keeps_running_release) ... ok
+test_registry_auth_and_private_visibility (__main__.ReleaseTests.test_registry_auth_and_private_visibility) ... ok
+test_release_env_cannot_override_digest_even_after_resealing (__main__.ReleaseTests.test_release_env_cannot_override_digest_even_after_resealing) ... ok
+test_rendered_compose_cannot_override_manifest_images (__main__.ReleaseTests.test_rendered_compose_cannot_override_manifest_images) ... ok
+test_rollback_exit_race_rechecks_matching_terminal_state (__main__.ReleaseTests.test_rollback_exit_race_rechecks_matching_terminal_state) ... ok
+test_rollback_failure_reported_separately (__main__.ReleaseTests.test_rollback_failure_reported_separately) ... ok
+test_sealed_host_bundle_import_does_not_create_bytecode (__main__.ReleaseTests.test_sealed_host_bundle_import_does_not_create_bytecode) ... ok
+test_selective_switch_and_rollback_health (__main__.ReleaseTests.test_selective_switch_and_rollback_health) ... ok
+test_success_and_same_release_no_recreate (__main__.ReleaseTests.test_success_and_same_release_no_recreate) ... ok
+test_tier_cannot_quick_downgrade_server_or_connection_change (__main__.ReleaseTests.test_tier_cannot_quick_downgrade_server_or_connection_change) ... ok
+test_windows_source_provenance_ignores_only_inactive_importer_defaults (__main__.ReleaseTests.test_windows_source_provenance_ignores_only_inactive_importer_defaults) ... ok
+test_wrong_architecture_and_missing_digest (__main__.ReleaseTests.test_wrong_architecture_and_missing_digest) ... ok
+test_renderer_option_is_explicit_and_forwarded (__main__.TestPlayerRendererOption.test_renderer_option_is_explicit_and_forwarded) ... ok
+
+----------------------------------------------------------------------
+Ran 29 tests in 1.192s
+
+OK

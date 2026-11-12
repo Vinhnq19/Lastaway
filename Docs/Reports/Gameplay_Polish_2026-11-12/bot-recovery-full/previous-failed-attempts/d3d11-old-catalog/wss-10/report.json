@@ -1,0 +1,64 @@
+﻿{
+    "schemaVersion":  1,
+    "status":  "FAIL",
+    "endpoint":  "http://127.0.0.1:5000",
+    "physicalDeviceCount":  1,
+    "startupStaggerMs":  100,
+    "checks":  [
+                   {
+                       "name":  "HTTPS certificate and API health",
+                       "status":  "PASS"
+                   },
+                   {
+                       "name":  "Room creation without JWT denied",
+                       "status":  "PASS"
+                   },
+                   {
+                       "name":  "Invalid JWT denied",
+                       "status":  "PASS"
+                   },
+                   {
+                       "name":  "Guest profile over HTTPS",
+                       "status":  "PASS"
+                   },
+                   {
+                       "name":  "Guest credential present",
+                       "status":  "PASS"
+                   },
+                   {
+                       "name":  "Guest cannot obtain game ticket",
+                       "status":  "PASS"
+                   },
+                   {
+                       "name":  "Guest cannot create rooms",
+                       "status":  "PASS"
+                   },
+                   {
+                       "name":  "Register test account",
+                       "status":  "PASS"
+                   },
+                   {
+                       "name":  "Login after verified registration",
+                       "status":  "PASS"
+                   },
+                   {
+                       "name":  "JWT creates room",
+                       "status":  "PASS"
+                   },
+                   {
+                       "name":  "Six character join code",
+                       "status":  "PASS"
+                   },
+                   {
+                       "name":  "Actual Windows players completed scenario",
+                       "status":  "FAIL"
+                   }
+               ],
+    "cleanupErrors":  [
+
+                      ],
+    "reason":  "Remote test failed; see sanitized check list and player evidence. DNS/TLS/connectivity failures are BLOCKED.",
+    "errorType":  "System.Management.Automation.RuntimeException",
+    "errorScript":  "test-unity-remote.ps1",
+    "errorLine":  49
+}

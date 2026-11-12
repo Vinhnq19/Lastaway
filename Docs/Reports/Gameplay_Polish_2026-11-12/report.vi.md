@@ -1,7 +1,9 @@
 # Kiểm thử Gameplay Polish — 12/11/2026
 
 ## 1. Kết luận hiện tại
-BOT: NGƯỜI DÙNG TEST THẤY ỔN; KIỂM TỰ ĐỘNG TRƯỚC COMMIT VẪN FAIL. Kiểm lại bản trước với seed cố định đã phát hiện một bot sống gần 90 giây nhưng không dịch chuyển, ở trạng thái Loot. Kết quả tổng số bot di chuyển trước đây không đủ để nghiệm thu từng bot; chưa sẵn sàng deploy. Bản sửa cuối đã compile Release thành công, 0 lỗi/0 cảnh báo; chưa chạy lại test/game theo yêu cầu người dùng tự kiểm. Các kết quả hồi quy/flow cũ bên dưới được giữ làm lịch sử, không đại diện cho bản sửa bot cuối. Windows build hiện có tại `Builds/Gameplay-Polish/Lastaway.exe`; sửa AI server cần rebuild GameServer Docker riêng. Chưa commit, publish GHCR hoặc deploy AWS.
+BẢN SỬA BOT CUỐI: PASS các cổng Local. Ca seed cũ đứng im đã qua, 18/18 bot dịch chuyển; stress 5 phòng/50 slot, 45 bot đồng thời đủ 300 giây PASS, không bot sống ≥15 giây đứng nguyên chỗ. Cổng Local Full bằng client mới cũng PASS: WSS 300 giây, Auto hai client, UDP/account/phòng, kết quả/history/replay, fingerprint source/build và số đo server. Thị trấn 1+9 bot qua Auto→WSS PASS bằng cùng artifact.
+
+Bản bàn giao: `Builds/Bot-Recovery/Lastaway.exe` cùng toàn bộ thư mục; Unity cá nhân 6000.3.21f1, shared Git vẫn 6000.3.15f1. SourceHash `b7f71312d348109f20f40e2ba069bbd8544cb3086caad48349d67b5fbce98a4c`, playerFingerprint `f8b837bd805f284fb4bf8472b2286fb145a93df586a036a87848910b6c333ea6`. Chưa publish GHCR hoặc truy cập/deploy AWS trong đợt sửa này. Các FAIL cũ bên dưới là lịch sử, không bị đổi thành PASS.
 
 ## 2. Các sửa đã thực hiện
 - Bỏ nhãn dài trên nhân vật: ẩn nhãn của mình, tên người khác ngắn, tôn trọng visibility.
@@ -79,7 +81,19 @@ Giữ account-ticket v4, 10 nhân vật/phòng, 5 phòng, 50 slot. Local Docker 
 
 Chưa chuyển sang publish/deploy: cần hoàn tất bản sửa bot và kiểm lại từng bot từ lúc InGame, không tính dịch chuyển lúc spawn. Unity21 sinh thêm ba giá trị mặc định thermal iOS trong ProjectSettings.asset; cần review khi commit, không có nâng phiên bản Editor dùng chung của team. Shared ProjectVersion pin vẫn được giữ.
 
-### Checkpoint trước commit / chuẩn bị deploy
+### Lịch sử checkpoint trước commit / chuẩn bị deploy (đã xử lý sau)
 Người dùng xác nhận chơi Local thấy ổn và yêu cầu commit, chuẩn bị deploy. Chạy lại ca seed cố định hai map, 18 bot, 90 giây: FAIL, một bot Tháp cổ NetId 3 sống 89,87 giây nhưng displacement 0, state Loot, search còn pending. Xem bot-precommit-final.log/json. Các kiểm rearm recovery, slow movement và chờ ngân sách ở đầu suite đã qua trước lỗi stress; không ghi toàn suite PASS.
 
-Kết luận phát hành: BLOCKED. Commit dùng để giữ checkpoint source hiện tại, không phải release đã nghiệm thu. Chưa chạy GHCR PrepareOnly publish, chưa gọi AWS/đổi service. Cần sửa và kiểm lại ca seed này, sau đó VerifyLocal Full bằng client có registry-build.json khớp source, rồi PrepareOnly và giao dịch deploy 20 phút với rollback theo Docs/AWS_GHCR_Deploy.vi.md. Không dùng báo cáo cũ để bỏ qua gate.
+Kết luận phát hành tại checkpoint đó: BLOCKED. Commit dùng để giữ checkpoint source hiện tại, không phải release đã nghiệm thu. Chưa chạy GHCR PrepareOnly publish, chưa gọi AWS/đổi service. Cần sửa và kiểm lại ca seed này, sau đó VerifyLocal Full bằng client có registry-build.json khớp source, rồi PrepareOnly và giao dịch deploy 20 phút với rollback theo Docs/AWS_GHCR_Deploy.vi.md. Không dùng báo cáo cũ để bỏ qua gate.
+
+### Nghiệm thu sau sửa — kết quả mới nhất
+- Nguyên nhân ca bot còn lại: chỉ giữ một mục tiêu vừa thất bại, bot đổi qua lại hai món loot không tới được. Khi hỏng đường, tạm ngừng săn loot 5 giây theo BlacklistSeconds, chọn bước di chuyển gần có segment hợp lệ; bo/hazard/combat vẫn ưu tiên. Không sửa vị trí/HP/tốc độ hoặc bỏ validation. Reset cả cooldown khi chơi lại.
+- Seed cũ: BotChecks 1.693 checks PASS, 18/18 bot có dịch chuyển. Bot NetId3 từng đứng gần90s nay dịch chuyển15,11 cell trước khi bị loại ở42,3s. Khoảng dịch chuyển là độ lệch lớn nhất từ origin, không phải tổng đường đi.
+- Stress realtime300s: 5 phòng, 50slot, 45bot đồng thời, 90 lượt sống qua reset; 0 lượt sống≥15s có displacement<0,5. BotChecks1.730 checks PASS (gồm assertion lặp theo slice). Tick trung bình30,00Hz, dropped0, max tick49,55ms, CPU một core max36,52%, RSSmax96,57MiB, pathnodesmax1.455/1.500. Đây là harness in-process, không phải50người thật/Docker/WAN.
+- Full Docker256MiB + Windows: PASS; 113mẫu tick, 114mẫu RAM, tick29,92Hz, CPU một core max40,58%, RAMmax32,14%, dropped0/restart0/OOMfalse. WSS300,03s: input30,00Hz khi còn điều khiển, snapshot30,00Hz trong InGame, pong300/300, RTTp50/p95/p99=33,33/33,46/33,75ms. Không suy cả10nhân vật sống đủ300s. Auto hai client fallback WSS:220,39s/215,12s, exit0, kết quả/history/replay đạt; smoke UDP riêng PASS.
+- Thị trấn1+9, profile tăng tốc riêng: PASS30,85s, Auto→WSS, exit0. Không coi đây là benchmark300s map Thị trấn hoặc50slot qua mạng.
+- Các regression backend và29test pipeline PASS. Runner thêm deadline trước nhánh return sớm và đếm view mạng tồn tại riêng với visibility; không bỏ yêu cầu đủ roster/view. -ForceD3D11 là lựa chọn test rõ ràng, không đổi renderer mặc định. Build mới0lỗi/42warning; không gọi warning là lỗi C#.
+- Lượt default/oldcatalog thiếu bằng chứng cuối FAIL; lượt D3D11/oldcatalog ghi input0 và thiếu movement FAIL. Local volume khi đó vẫn map1.1.0. Đã backup `Backend/data/maps-before-bot-recovery-20261112`, validate/publish/reload map1.2.0 từ image; lượt với dữ liệu hiện tại PASS. Không khẳng định chi tiết nguyên nhân world cũ đã được cách ly bằng một phép thử chỉ đổi một biến. Image mới không tự cập nhật catalog volume; đối chiếu catalog khi deploy.
+- Bằng chứng tại `bot-recovery-full/`, `bot-recovery-town/`, bot-recovery-seeded-pass.*, bot-recovery-50slots-300s.* và bot-recovery-stress-summary.json. Receipt pipeline để PrepareOnly: `Backend/out/bot-recovery-current-map-20261112/local-evidence.json` (bản sao trong báo cáo để tham khảo).
+- Đã trả Local về MATCH_PROFILE=main, memory_limit=0 và giữ stack đang chạy như lúc bắt đầu; Mongo/map/outbox giữ nguyên. Client tác vụ đều đóng; camera Follow Player, spectator giữ. Build chẩn đoán tạm không phải artifact bàn giao.
+- Chưa kiểm: AWS/WAN của bản này, hai PC vật lý,60FPS/720p và cảm giác chơi/cân bằng người thật. Sẵn sàng bước commit/PrepareOnly theo guard; chưa phải nghiệm thu AWS. Không thay lifecycle hoặc tiêu tài nguyên AWS.

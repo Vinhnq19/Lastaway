@@ -21,6 +21,17 @@ spec = importlib.util.spec_from_file_location('registry_host', DEPLOY / 'Aws/scr
 host = importlib.util.module_from_spec(spec); spec.loader.exec_module(host)
 
 
+class TestPlayerRendererOption(unittest.TestCase):
+    def test_renderer_option_is_explicit_and_forwarded(self):
+        for force in (False, True):
+            with self.subTest(force=force), tempfile.TemporaryDirectory() as directory:
+                args=types.SimpleNamespace(player='fixture.exe',local_api='http://127.0.0.1:5000',domain='fixture.duckdns.org',force_d3d11=force)
+                report={'status':'PASS','playerFingerprint':'fixture','clients':[{'selectedTransport':'Wss','connectedSeconds':300}]}
+                with patch.object(pc,'run') as execute, patch.object(pc,'read_json',return_value=report), patch.object(pc,'build_hash',return_value='fixture'):
+                    pc.unity(args,Path(directory),True,local=True)
+                    self.assertEqual('-ForceD3D11' in execute.call_args.args[0],force)
+
+
 def manifest(name='test-1'):
     return {'schemaVersion': 1, 'format': 'ghcr', 'releaseId': name, 'commit': 'a' * 40,
         'platform': 'linux/amd64', 'connectionConfigHash': 'c' * 64,

@@ -173,6 +173,9 @@ namespace JungleMaze.Composition
                 }
             }
             var elapsed = Time.realtimeSinceStartup - _started;
+            // Setup branches may return early; the deadline must still write diagnostic evidence.
+            if (elapsed >= _scenario.maxDurationSeconds)
+            { Finish("FAIL", "Scenario deadline: required observations missing"); return; }
             if (_failureStats.HasValue) { Finish("FAIL", "Unexpected disconnection: " + _failureReason); return; }
             if (_network.State == NetworkState.Joined)
             {
@@ -267,8 +270,9 @@ namespace JungleMaze.Composition
                 var spawned = 0; var visible = 0; var spawner = FindAnyObjectByType<RemotePlayerSpawner>();
                 if (spawner != null) foreach (var id in _match.Players.ActiveIds)
                 {
-                    var view = spawner.GetView(id); if (view == null || !view.transform.gameObject.activeInHierarchy) continue;
-                    spawned++;
+                    var view = spawner.GetView(id); if (view == null) continue;
+                    spawned++; // A hidden network view still exists; visibility must not change roster acceptance.
+                    if (!view.transform.gameObject.activeInHierarchy) continue;
                     if (Camera.main == null) continue;
                     var point = Camera.main.WorldToViewportPoint(view.transform.position);
                     if (point.z > 0 && point.x >= 0 && point.x <= 1 && point.y >= 0 && point.y <= 1) visible++;

@@ -99,6 +99,7 @@ def unity(args, output, full, local=False):
     command = [PS, '-NoProfile', '-File', DEPLOY / 'test-unity-remote.ps1', '-Player', args.player,
         '-Scenario', scenario, '-OutputDirectory', output, '-Clients', '1' if full else '2',
         '-ApiBaseUrl', args.local_api if local else 'https://' + args.domain]
+    if getattr(args, 'force_d3d11', False): command += ['-ForceD3D11']
     if local: command += ['-Local']
     if full: env['NET_TRANSPORT'] = 'Wss'  # One full 300s WSS measurement, not a connection-only test.
     else: command += ['-ForceAutoFallback']; env.pop('NET_TRANSPORT', None)
@@ -467,6 +468,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--mode', choices=['PrepareOnly', 'Deploy', 'Rollback'], default='PrepareOnly')
     parser.add_argument('--release'); parser.add_argument('--release-id'); parser.add_argument('--player'); parser.add_argument('--local-evidence')
+    parser.add_argument('--force-d3d11', action='store_true', help='Use Direct3D11 for test players; does not change the delivered player default')
     parser.add_argument('--verify-local', action='store_true'); parser.add_argument('--test-mode', choices=['Auto', 'Full'], default='Auto')
     parser.add_argument('--domain', default='junglemaze.duckdns.org'); parser.add_argument('--local-api', default='http://127.0.0.1:5000')
     parser.add_argument('--aws-cli', default='D:/AWS/ConnectionSetup/AWSCLI-portable/aws.exe'); parser.add_argument('--profile', default='junglemaze-admin')

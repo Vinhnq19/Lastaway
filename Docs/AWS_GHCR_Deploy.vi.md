@@ -180,3 +180,6 @@ Nếu dùng công cụ cũ và thấy lỗi “failed before readiness”, kiể
 Runner `test-unity-remote.ps1` và `test-unity-online.ps1` nhận `-QualityClient 1` để chọn một client chạy 1280×720/60 FPS; các client còn lại giữ 640×360/30 FPS. Mặc định 0 không bật đo, giữ nguyên hành vi kiểm mạng. Chỉ bật trong lượt chất lượng; không đổi tick/input server.
 
 Bằng chứng client có `frameQuality` theo phase: số frame, FPS trung bình, frame-time p95/p99 và số stall ≥100 ms. Chỉ lấy frame lúc cửa sổ được focus; `backgroundFrames` và `qualitySampleCapReached` cho biết thiếu bao phủ. Thiếu frame InGame hoặc mất focus/Sleep thì đánh INVALID phần đo, không kết luận FPS game. Không dùng runner mạng bị ép 30 FPS để nghiệm thu 60 FPS.
+
+### Lựa chọn renderer cho máy kiểm thử
+`deploy-aws.ps1 -VerifyLocal -ForceD3D11` chuyển lựa chọn Direct3D11 tới runner Windows hiện có; thêm cờ này vào lệnh Deploy nếu cần cùng đường kiểm trên PC đó. Cờ không đổi renderer mặc định của build và không hạ tiêu chí Full. Báo cáo 12/11 dùng lựa chọn này. Luôn đối chiếu catalog volume: image mới không tự thay map đã phát hành. Local từng còn1.1.0 trong khi source1.2.0; dùng validate/publish/reload và giữ backup theo mục catalog ở trên.

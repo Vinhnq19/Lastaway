@@ -507,6 +507,12 @@ if(args.Contains("--stress"))
                     goal=(bool)type.GetField("_hasGoal",System.Reflection.BindingFlags.NonPublic|System.Reflection.BindingFlags.Instance)!.GetValue(brain)!;
                     var search=(BotPathSearch?)type.GetField("_search",System.Reflection.BindingFlags.NonPublic|System.Reflection.BindingFlags.Instance)!.GetValue(brain);
                     expanded=search?.Expanded??0;
+                    if(actor.NetId==3&&entry.Room==hosted[0].Room&&entry.Room.Match.CurrentTick%180==0)
+                    {
+                        object? Field(string name)=>type.GetField(name,System.Reflection.BindingFlags.NonPublic|System.Reflection.BindingFlags.Instance)!.GetValue(brain);
+                        Console.WriteLine("[bot-trace] "+System.Text.Json.JsonSerializer.Serialize(new{t=entry.Room.Match.ElapsedSeconds,x=actor.X,y=actor.Y,state,goal=Field("_goal")!.ToString(),lastMotion=Field("_lastMotionAt"),work=Field("_pathWorkSinceMotion"),ignore=Field("_ignoredGoal")?.ToString(),until=Field("_ignoreUntil"),repath=Field("_repathAt"),expanded,startWalkable=entry.Room.Match.SelectedMap!.Navigation.WalkableWorld(entry.Room.Match.World!.Layout,point,actor.Radius,entry.Room.Match.World.Destructibles.IsBroken,entry.Room.Match.World.Hazards.IsDoorClosed)}));
+                    }
+
                     speed=entry.Room.Match.World!.SpeedMultiplier(actor.NetId);usingItem=entry.Room.Match.World.Using(actor.NetId);
                     finished=search?.Finished??false;partial=search?.HasPartialPath??false;pathCount=search?.Path.Count??0;
                 }

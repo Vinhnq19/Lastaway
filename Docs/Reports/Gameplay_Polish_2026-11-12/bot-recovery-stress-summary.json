@@ -1,0 +1,16 @@
+{
+  "seconds": 300,
+  "rooms": 5,
+  "slots": 50,
+  "concurrentBots": 45,
+  "observedBotLives": 90,
+  "stationaryLivesAtLeast15s": 0,
+  "meanTickHz": 29.997796610169495,
+  "droppedTicks": 0.0,
+  "maxTickMs": 49.552,
+  "cpuOneCorePercentMax": 36.52,
+  "workingSetMiBMax": 96.57,
+  "pathNodesMax": 1455.0,
+  "process": "in-process harness; not a 50-player Docker or WAN test",
+  "status": "PASS"
+}

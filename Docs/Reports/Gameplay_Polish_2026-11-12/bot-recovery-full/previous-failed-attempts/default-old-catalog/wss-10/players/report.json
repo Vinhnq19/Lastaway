@@ -1,0 +1,34 @@
+﻿{
+    "status":  "FAIL",
+    "scenarioId":  "registry-wss10",
+    "schemaVersion":  1,
+    "timestampUtc":  "2026-11-12T13:30:16.9040177Z",
+    "reason":  null,
+    "playerSha256":  "48efab523aa684c653bd1254a6962d3410127b5c02dc1310f6f16f4810666556",
+    "playerFingerprint":  "ad9aab403fc3e959b4d21a7a7c153937dea9fa4e4f268b72ded1d1b2530ebd31",
+    "clientCount":  1,
+    "passedCount":  0,
+    "physicalDeviceCount":  1,
+    "physicalTwoPc":  "NOT_TESTED",
+    "clients":  [
+                    {
+                        "id":  "Player1",
+                        "index":  1,
+                        "pid":  38408,
+                        "exitCode":  -1,
+                        "status":  "FAIL",
+                        "evidenceStatus":  "UNKNOWN",
+                        "graphicsApi":  "Default",
+                        "selectedTransport":  null,
+                        "fallbackReason":  null,
+                        "connectedSeconds":  0,
+                        "p50RttMs":  0,
+                        "p99RttMs":  0,
+                        "assertionsPassed":  0,
+                        "assertionsTotal":  0,
+                        "reason":  "Missing evidence after player exit/deadline",
+                        "evidenceFile":  "evidence-client-1.json",
+                        "logFile":  "unity-client-1.log"
+                    }
+                ]
+}

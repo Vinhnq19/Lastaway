@@ -1,0 +1,46 @@
+Mono path[0] = 'D:/Unity/Lastaway/Builds/Bot-Recovery/Lastaway_Data/Managed'
+Mono config path = 'D:/Unity/Lastaway/Builds/Bot-Recovery/MonoBleedingEdge/etc'
+Input System module state changed to: Initialized.
+[Physics::Module] Initialized fallback backend.
+[Physics::Module] Id: 0xdecafbad
+Initialize engine version: 6000.3.21f1 (c02631ffc030)
+[Subsystems] Discovering subsystems at path D:/Unity/Lastaway/Builds/Bot-Recovery/Lastaway_Data/UnitySubsystems
+Forcing GfxDevice: Direct3D 11
+GfxDevice: creating device client; kGfxThreadingModeClientWorkerJobs
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.1]
+    Renderer: NVIDIA GeForce GTX 1650 (ID=0x1f9d)
+    Vendor:   NVIDIA
+    VRAM:     3935 MB
+    Driver:   32.0.16.1742
+Begin MonoManager ReloadAssembly
+- Loaded All Assemblies, in  0.191 seconds
+- Finished resetting the current domain, in  0.002 seconds
+[Physics::Module] Selected backend.
+[Physics::Module] Name: PhysX
+[Physics::Module] Id: 0xf2b8ea05
+[Physics::Module] SDK Version: 4.1.2
+[Physics::Module] Integration Version: 1.0.0
+[Physics::Module] Threading Mode: Multi-Threaded
+<RI> Initializing input.
+Using Windows.Gaming.Input
+<RI> Input initialized.
+UnloadTime: 0.800500 ms
+Curl error 35: Recv failure: Connection was reset
+Unloading 6 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 1.042100 ms
+Unloading 4876 unused Assets to reduce memory usage. Loaded Objects now: 14203.
+Total: 8.485600 ms (FindLiveObjects: 1.465600 ms CreateObjectMapping: 0.831600 ms MarkObjects: 4.521900 ms  DeleteObjects: 1.666200 ms)
+
+[OnlineTest] PASS: All scenario assertions observed
+Unloading 4 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 25.885700 ms
+Unloading 777 unused Assets to reduce memory usage. Loaded Objects now: 11828.
+Total: 7.864800 ms (FindLiveObjects: 0.888300 ms CreateObjectMapping: 0.380900 ms MarkObjects: 5.734000 ms  DeleteObjects: 0.859600 ms)
+
+[Physics::Module] Cleanup current backend.
+[Physics::Module] Id: 0xf2b8ea05
+Input System module state changed to: ShutdownInProgress.
+Input System polling thread exited.
+Input System module state changed to: Shutdown.
+GarbageCollector disposing of ComputeBuffer. Please use ComputeBuffer.Release() or .Dispose() to manually release the buffer.

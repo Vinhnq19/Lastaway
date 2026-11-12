@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "status": "COMMIT_CHECKPOINT_DEPLOY_BLOCKED_BOT_REGRESSION",
+  "status": "BOT_RECOVERY_LOCAL_FULL_PASS",
   "date": "2026-11-12",
   "workspace": "D:/Unity/Lastaway",
   "branch": "codex/lan-one-code",
@@ -17,7 +17,7 @@
     "clientPendingActions": "IMPLEMENTED; EditMode PASS",
     "spectatorMapSize": "APPLIED; PlayMode PASS",
     "graphAndDocs": "Updated",
-    "windowsAndTwoClients": "PASS new Windows build + real 1+9 main 300s + UDP/Auto-fallback pair + town bots WSS",
+    "windowsAndTwoClients": "PASS latest Bot-Recovery player: WSS300, Auto2, Town fast",
     "worldStreaming": "IMPLEMENTED; regression PASS"
   },
   "tests": {
@@ -528,7 +528,13 @@
       "nativeOrder": "6e4cbe4e1a7750a178787161747537c74808981bee3428e9137f316a2c93ba26",
       "forwardOrder": "f0e1131fca20b94774ce09e96098f2a9f385c4206ceaebac4c6b1d428cc269cb"
     },
-    "finalArtifactFullFingerprintMatches": true
+    "finalArtifactFullFingerprintMatches": true,
+    "latestFull": {
+      "status": "PASS",
+      "evidence": "bot-recovery-full/local-evidence.json",
+      "graphics": "Direct3D11 explicit test option",
+      "twoPhysicalPc": "NOT_TESTED"
+    }
   },
   "preserved": "Existing LAN changes, Map100x100.prefab and user files; no commit/push/deploy",
   "workers": [
@@ -3599,7 +3605,7 @@
       ]
     }
   ],
-  "deployReady": false,
+  "deployReady": true,
   "physicalTwoPC": "NOT_TESTED",
   "buildJob": "build-ab2ffae52c",
   "cleanup": {
@@ -3615,8 +3621,8 @@
   ],
   "botRecoveryFinal": {
     "compile": "PASS 0 warnings 0 errors",
-    "runtime": "NOT_TESTED",
-    "dockerImage": "NOT_REBUILT_FOR_FINAL_FIX",
+    "runtime": "PASS fixed-seed 90s + five-room 300s + Windows Full + Town fast",
+    "dockerImage": "REBUILT_AND_TESTED",
     "previousSeededRun": "FAIL stationary bot; supersedes aggregate motion acceptance",
     "changes": [
       "rearm actor deadline after recovery",
@@ -3643,7 +3649,7 @@
     "status": "USER_REPORTED_OK",
     "note": "User played Local and requested commit/deploy preparation; this does not replace the automated regression."
   },
-  "preDeployGate": {
+  "preDeployGateBeforeRecovery": {
     "status": "FAIL",
     "test": "seeded authored BotChecks 2 rooms 90 seconds",
     "stationaryBotLives": 1,
@@ -3658,5 +3664,35 @@
     ],
     "publish": "NOT_RUN",
     "aws": "NOT_ACCESSED"
-  }
+  },
+  "preDeployGate": {
+    "status": "PASS",
+    "localEvidence": "bot-recovery-full/local-evidence.json",
+    "physicalTwoPc": "NOT_TESTED",
+    "aws": "NOT_ACCESSED",
+    "player": "Builds/Bot-Recovery/Lastaway.exe"
+  },
+  "finalStress": {
+    "seconds": 300,
+    "rooms": 5,
+    "slots": 50,
+    "concurrentBots": 45,
+    "observedBotLives": 90,
+    "stationaryLivesAtLeast15s": 0,
+    "meanTickHz": 29.997796610169495,
+    "droppedTicks": 0.0,
+    "maxTickMs": 49.552,
+    "cpuOneCorePercentMax": 36.52,
+    "workingSetMiBMax": 96.57,
+    "pathNodesMax": 1455.0,
+    "process": "in-process harness; not a 50-player Docker or WAN test",
+    "status": "PASS"
+  },
+  "finalPlayer": {
+    "schemaVersion": 1,
+    "sourceHash": "b7f71312d348109f20f40e2ba069bbd8544cb3086caad48349d67b5fbce98a4c",
+    "playerFingerprint": "f8b837bd805f284fb4bf8472b2286fb145a93df586a036a87848910b6c333ea6",
+    "unityVersion": "6000.3.21f1"
+  },
+  "awsAcceptance": "NOT_TESTED"
 }

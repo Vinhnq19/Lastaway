@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "status": "PASS",
+  "unityVersion": "6000.3.21f1",
+  "sourceHash": "b7f71312d348109f20f40e2ba069bbd8544cb3086caad48349d67b5fbce98a4c",
+  "playerFingerprint": "f8b837bd805f284fb4bf8472b2286fb145a93df586a036a87848910b6c333ea6",
+  "bases": {
+    "build": "mcr.microsoft.com/dotnet/sdk:8.0@sha256:4cdea2a99ba7f4d8a48ebe250ec01db119d2102c141f85411a576be7bac5eb23",
+    "runtime": "mcr.microsoft.com/dotnet/aspnet:8.0@sha256:f34fd5466d42d8f21b41f9f752622838c1de794c95de167eb371ba22d3fadb5a"
+  },
+  "services": {
+    "api": "1a6f9da132fe86de7da4a2ee86139886e8ca40a6eb160eb64f416082bb580901",
+    "game-server": "b1fc90e4e8763bedf20da2f81d6c329181e16b7eb279cf043143e9feba576790"
+  },
+  "connectionConfigHash": "b13dd9efd151670541cec5c41f0f5f283db41160acbc2f3420aae328313e46d9",
+  "physicalTwoPc": "NOT_TESTED",
+  "serverMetrics": {
+    "status": "PASS",
+    "samples": 113,
+    "memorySamples": 114,
+    "meanTickHz": 29.919646017699115,
+    "maxCpuOneCorePercent": 40.58,
+    "peakContainerMemoryPercent": 32.14,
+    "droppedTicks": 0,
+    "restartDelta": 0,
+    "oom": false
+  },
+  "checks": {
+    "wss300": "PASS",
+    "auto2ResultHistoryReplay": "PASS",
+    "udp": "PASS"
+  }
+}

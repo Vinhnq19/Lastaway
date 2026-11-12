@@ -1,0 +1,5 @@
+{
+  "status": "BLOCKED",
+  "reason": "powershell.exe operation failed (exit 1); no service changed unless rollback is reported",
+  "ec2Lifecycle": "unchanged"
+}
