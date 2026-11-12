@@ -210,6 +210,18 @@ try
     var high=Start("HP150",150);high.Health.ApplyDamage(0,20,1);((HealthService)high.Health).Heal(0,255);Check(high.Health.GetHp(0)==150,"healing respects profile max150");
     var secondActor=other.Entities.All.First();var newItem=new ItemStack{ItemId="GOD_LEAF",Count=1};second.Floor.TrySpawn(newItem,secondActor.X,secondActor.Y,out var healId);
     var serial=second.SnapshotObjects();Check(serial.Any(o=>o.Id==healId&&o.Kind==100&&o.ItemId=="GOD_LEAF"),"world snapshot includes floor catalog identity");
+    var scratch=new List<WorldObjectWire>();second.SnapshotObjects(scratch);
+    Check(scratch.Count==serial.Count&&scratch.Select(o=>o.Id).SequenceEqual(serial.Select(o=>o.Id)),"reused snapshot contains every current object in wire order");
+    var allocated=GC.GetAllocatedBytesForCurrentThread();
+    for(var i=0;i<100;i++)second.SnapshotObjects();
+    var freshBytes=GC.GetAllocatedBytesForCurrentThread()-allocated;
+    allocated=GC.GetAllocatedBytesForCurrentThread();
+    for(var i=0;i<100;i++)second.SnapshotObjects(scratch);
+    var reusedBytes=GC.GetAllocatedBytesForCurrentThread()-allocated;
+    Console.WriteLine($"[snapshot-allocation] freshBytes={freshBytes} reusedBytes={reusedBytes}");
+    Check(reusedBytes*2<freshBytes,"repeated world sync avoids allocating a full object array each revision");
+    second.Floor.Remove(healId);second.SnapshotObjects(scratch);
+    Check(scratch.All(o=>o.Id!=healId)&&serial.Any(o=>o.Id==healId),"reuse clears removed objects without mutating an earlier standalone snapshot");
     var pageObjects=serial.Take(WorldWire.PageSize).ToArray();var page=new WorldObjectStatePacket{MatchId=other.MatchId,Revision=second.Revision,PageIndex=0,PageCount=(ushort)((serial.Count+23)/24),TotalObjects=(ushort)serial.Count,Objects=pageObjects};
     var pageReader=new PacketRegistry();WorldObjectStatePacket pageReceived=default;pageReader.Subscribe<WorldObjectStatePacket>(p=>pageReceived=p);writer.Reset();pageReader.WriteFrame(writer,ref page);Check(writer.Length<=4096&&pageReader.TryReadFrame(new NetDataReader(writer.CopyData()))&&pageReceived.Objects.Length==24,"world page is bounded and roundtrips");
     var s=second.SnapshotInventory(0);var inventoryReader=new PacketRegistry();inventoryReader.Subscribe<InventoryStatePacket>(_=>{});writer.Reset();inventoryReader.WriteFrame(writer,ref s);Check(inventoryReader.TryReadFrame(new NetDataReader(writer.CopyData())),"inventory snapshot roundtrip");

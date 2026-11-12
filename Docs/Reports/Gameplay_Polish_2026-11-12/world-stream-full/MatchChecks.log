@@ -1,0 +1,191 @@
+=== Starting Jungle Maze MatchChecks ===
+
+--- TEST 1: Phase, Lobby Cancellation & Loading Timeout ---
+[PASS] Initial phase is Waiting
+[PASS] 1 player ready < minPlayers(2), stays Waiting
+[PASS] 2 players ready reaches minPlayers, transitions to Lobby
+[PASS] Player leaves during lobby, count < min, lobby cancelled -> Waiting
+[PASS] Re-ready transitions back to Lobby
+[PASS] Lobby countdown finished -> Loading
+[PASS] Loading timeout drops unacknowledged player, returns to Waiting
+[PASS] Both players loaded -> InGame
+
+--- TEST 2: Tick, Input Stale, Wrap & StaleMatch ---
+[PASS] Valid input sequence 10 accepted
+[PASS] Stale input sequence 5 after 10 rejected
+[PASS] Sequence wrap 65535 -> 0 accepted safely
+[PASS] Player moved with active input
+[PASS] Input stale >= 8 ticks stops movement
+[PASS] Input with stale MatchId rejected
+[PASS] Action with stale MatchId rejected
+
+--- TEST 3: Physics Slide & Highspeed Bounds ---
+[PASS] High speed against max X clamps to map bounds [0, 50]
+[PASS] High speed slides along Y boundary
+[PASS] Continuous sweep slides against obstacle without penetrating
+[PASS] Sliding tangential movement succeeds
+[PASS] Penetration resolved outside obstacle
+
+--- TEST 4: Two-Room Isolation ---
+[PASS] Two rooms have distinct independent MatchIds
+[PASS] Entities do not leak between rooms
+[PASS] NetIds are local to room and never cross-contaminate
+
+--- TEST 5: Latejoin Rejection & Loading Freeze ---
+[PASS] Late join during Loading rejected
+[PASS] Late join during InGame rejected with MatchInProgress
+
+--- TEST 6: Grace, Rotation, Expiry & Explicit Leave ---
+[PASS] Disconnect preserves character in grace
+[PASS] Resume succeeds and rotates token
+[PASS] Player reconnected
+[PASS] Old resume token cannot be reused
+[PASS] Grace expiry eliminates disconnected player
+[PASS] Explicit leave packet eliminates player immediately
+
+--- TEST 7: Same-Tick Tie, Winner & Replay Restart ---
+[PASS] Single survivor ends match -> Ending phase
+[PASS] Sole survivor receives Rank 1
+[PASS] Same-tick death ends match
+[PASS] Same-tick death results in Tie
+[PASS] Same-tick elimination shares rank
+[PASS] Replay ack resets world back to Waiting in same room
+
+--- TEST 8: All Zone Phases, Damage Idempotence & r0 ---
+[PASS] Phase 0 radius is 25, no warning
+[PASS] Warning active within 10s of shrink start
+[PASS] Interval 1 radius shrinks 25 -> 18
+[PASS] Interval 2 radius shrinks 18 -> 12
+[PASS] Interval 3 radius shrinks 12 -> 7
+[PASS] Interval 4 radius shrinks 7 -> 3
+[PASS] Interval 5 reaches radius 0 (r0)
+[PASS] r0 damages exact center (25, 25)
+[PASS] r0 damages zone center
+[PASS] Zone damage is idempotent within same 1-second interval
+
+--- TEST 9: No Premature Forced 420s End ---
+[PASS] 420s is target only; match never force-ends while > 1 alive
+
+--- TEST 10: Fake Peer Transport Integration & ClientHello Handshake ---
+[PASS] UDP peer joins hub
+[PASS] WS peer joins hub
+[joined] playerId=c3a408d6-e2df-4a1c-93e0-11b359f6754d roomId=af28659c-67e5-47c9-a645-a3350239b9cc transport=Udp serverSlots=2/50
+[joined] playerId=d93a7f0d-147b-46bd-a87e-0089be67f820 roomId=af28659c-67e5-47c9-a645-a3350239b9cc transport=Wss serverSlots=2/50
+[PASS] UDP peer received JoinAccepted
+[PASS] WS peer received JoinAccepted
+[PASS] Ping-only Connected does NOT register match entity
+[PASS] Valid ClientHello registers entities in match
+[PASS] Both peers sent hello/ready -> room starts Lobby
+
+--- TEST 11: HookRoom Exactly Once (No Duplicate Broadcasts) ---
+[joined] playerId=8876010a-c48a-42c9-a57a-0f779745df6e roomId=1d63eafa-5cc6-4c31-b973-85116bf895e9 transport=Udp serverSlots=1/50
+[joined] playerId=674c4787-387c-49db-9b10-d6f053c63fea roomId=1d63eafa-5cc6-4c31-b973-85116bf895e9 transport=Udp serverSlots=2/50
+[PASS] Broadcasts are not duplicated across multiple joins
+
+--- TEST 12: Unused NetId Allocation ---
+[PASS] NetIds initially 0, 1, 2
+[PASS] p1 removed
+[PASS] Unused NetId 1 allocated for p3 to fill hole
+[PASS] p2 remained safe at NetId 2 without overwrite
+
+--- TEST 13: Same MatchId Through Result & Cleanup Resets ---
+[PASS] MatchId same in Lobby
+[PASS] MatchId same in Loading
+[PASS] MatchId remains SAME in InGame (not regenerated at game start)
+[PASS] MatchResult carries the SAME MatchId
+[PASS] Cleanup auto-returns to Waiting
+[PASS] Cleanup generates fresh MatchId for next match
+[PASS] Cleanup preserves connected players in room
+[PASS] Preserved players have HP reset to 100 and Rank 0
+
+--- TEST 14: Authoritative Slot Accounting & InGame Resume ---
+[joined] playerId=9309d454-8fa4-4d69-9335-e5b3df26e97b roomId=7b028fc3-3543-41e5-adc2-6ed0ad3208db transport=Udp serverSlots=2/50
+[joined] playerId=43627f31-2ae9-499d-8e24-a303f1cad412 roomId=7b028fc3-3543-41e5-adc2-6ed0ad3208db transport=Udp serverSlots=2/50
+[PASS] Room transitioned to InGame
+[PASS] InGame disconnect preserves global slot in ReservedPeers
+[PASS] InGame disconnect preserves room slot in room.Peers
+[rejected] reason=MatchInProgress serverSlots=2/50
+[PASS] New join during InGame rejected
+[rejected] reason=InvalidResumeToken serverSlots=2/50
+[PASS] Spoofed resume with wrong token rejected
+[PASS] Failed fake resume did not allocate new session
+[PASS] Valid resume succeeds even at room capacity
+[joined] playerId=9309d454-8fa4-4d69-9335-e5b3df26e97b roomId=7b028fc3-3543-41e5-adc2-6ed0ad3208db transport=Udp serverSlots=2/50
+[PASS] Player successfully re-connected and resumed control
+[PASS] Resume token rotated upon resume
+[rejected] reason=InvalidResumeToken serverSlots=2/50
+[PASS] Reusing old rotated resume token rejected
+
+--- TEST 15: Full Offline Result & RoomId Not Secret RoomCode ---
+[PASS] Match completed result fired
+[PASS] Persisted result uses RoomId and does NOT contain secret RoomCode
+[PASS] Offline/eliminated player included in final participants
+[PASS] Offline participant retains session/name/rank data
+
+--- TEST 16: Slow Consumer Broadcast Failure ---
+[joined] playerId=6e315d41-1f92-47ba-895e-681cef3e71e4 roomId=097ccaa8-2bef-42e9-89d2-3dae7fe41fe6 transport=Udp serverSlots=2/50
+[joined] playerId=9bf12e9c-1ca1-4b73-933b-9225a8bbfba9 roomId=097ccaa8-2bef-42e9-89d2-3dae7fe41fe6 transport=Udp serverSlots=1/50
+[PASS] Slow consumer closed safely on broadcast failure
+[PASS] Slow peer disconnected
+
+--- TEST 17: Killcam Authoritative Elimination, Replay Capture & Privacy Isolation ---
+[PASS] Room A in InGame
+[PASS] Room B in InGame
+[PASS] Authoritative MatchEliminationEventPacket was broadcast
+[PASS] Elimination packet has correct MatchId
+[PASS] Elimination packet has correct VictimNetId
+[PASS] Elimination packet has correct KillerNetId
+[PASS] Elimination packet has Cause == Player
+[PASS] EventPacket PlayerDied broadcast
+[PASS] Living player request rejected (cannot spy on positions)
+[PASS] Requesting victim NetId of another player rejected
+[PASS] Requesting with Room B MatchId rejected
+[PASS] Session from Room B requesting in Room A rejected
+[PASS] Dead victim requesting own replay succeeds
+[PASS] Replay status is Ok (0)
+[PASS] Replay window has exactly 150 frames (5s @ 30Hz)
+[PASS] Replay result has correct VictimNetId
+[PASS] Replay result has correct KillerNetId
+[PASS] Replay EndTick matches authoritative death tick
+[PASS] Killer present in replay frame
+
+--- TEST 18: Killcam Window 150, Zone Fallback & Too Short Window Fallback ---
+[PASS] Short match InGame
+[PASS] Short match request answered
+[PASS] Short match replay status is TooShort (7)
+[PASS] TooShort replay carries 0 frames
+[PASS] Zone kill request answered
+[PASS] Zone kill replay status is NoData (4)
+[PASS] Zone kill replay carries 0 frames
+
+--- TEST 19: Killcam Duplicate, Rate Limit, Late & Wrong Match Requests ---
+[PASS] Request 1 succeeded
+[PASS] Request 2 succeeded
+[PASS] Request 3 succeeded
+[PASS] Request 4 rejected by rate limit (bounded requests per victim/match)
+[PASS] Unknown session request rejected
+
+--- TEST 20: Killcam NewMatch Cleanup & Memory Safety ---
+[PASS] Match transitioned to Ending
+[PASS] Match reset back to Waiting
+[PASS] Fresh MatchId generated for next match
+[PASS] Requesting replay with old MatchId rejected after cleanup
+[PASS] Requesting replay in fresh match while alive rejected
+
+--- TEST 21: Killcam Packets Serialization, Framing & Bounds Checks ---
+[PASS] KillcamRequestPacket frame read succeeded
+[PASS] KillcamRequestPacket roundtrip values match
+[PASS] KillcamRequestPacket bad version rejected
+[PASS] MatchEliminationEventPacket frame read succeeded
+[PASS] MatchEliminationEventPacket values match
+[PASS] 75-frame KillcamDataChunkPacket size 2513 <= 4096 bytes
+[PASS] KillcamDataChunkPacket frame read succeeded
+[PASS] Chunk frame count is 75
+[PASS] Chunk frames array length is 75
+[PASS] Frame 0 KillerPresent == true
+[PASS] Frame 0 VictimX == 10
+[PASS] Oversized chunk FrameCount > 75 rejected before allocating
+[PASS] Oversized TotalFrames > 150 rejected before allocating
+
+=== Test Results: 133 passed, 0 failed ===
+ALL MATCH CHECKS PASSED SUCCESSFULLY!

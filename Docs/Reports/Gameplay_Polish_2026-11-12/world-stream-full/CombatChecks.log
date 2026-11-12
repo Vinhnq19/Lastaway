@@ -1,0 +1,45 @@
+=== Starting Jungle Maze CombatChecks (WPN-02) ===
+[PASS] weapons.json: 13 combat weapons loaded (thrown/special skipped)
+[PASS] weapons.json: Shotgun has 5 pellets over 25 degrees
+[PASS] weapons.json: Axe is the breakable axe with damage 42
+[PASS] weapons.json: Shotgun reload is 2.8 s from JSON
+[PASS] weapons.json: Rubber Slingshot reload is 1.2 s from JSON
+[PASS] geometry: segment crosses a box
+[PASS] geometry: segment above a box misses
+[PASS] geometry: ray enters circle at the expected distance
+[PASS] melee: knife hits a target inside the arc for 22 damage
+[PASS] melee: attacker HP is untouched
+[PASS] melee: target 90 degrees off aim is outside the knife arc
+[PASS] melee: Hard Cover between attacker and target blocks the hit
+[PASS] melee: mace deals 60 damage and stuns for 1.0 s
+[PASS] cooldown: knife is rejected inside 0.45 s and accepted at the cooldown tick
+[PASS] dedupe: repeated or older RequestSeq is Duplicate and does no damage
+[PASS] validation: unheld weapon and melee reload are InvalidWeapon
+[PASS] validation: dead attacker is rejected
+[PASS] ranged: magazine of 12 fires 12 shots for 15 damage each, then NoAmmo
+[PASS] shotgun: 5 pellets over 25 degrees hit 3 pellets at 3 m and cost one shell
+[PASS] ranged: Hard Cover stops the bolt and the target takes no damage
+[PASS] reload: Crossbow request is accepted, lasts 2.4 s (72 ticks), and attacks during it are Reloading
+[PASS] reload: magazine refills 6 from reserve (30 to 24) when the reload finishes, then one shot is fired
+[PASS] reload: full magazine is rejected with MagazineFull
+[PASS] ranged: a target that leaves the path before the bolt arrives is not hit
+[PASS] life save: lethal hit saved once, HP set to 50, invulnerable for 2 s
+[PASS] life save: hits during invulnerability do no damage and the passive is not used again
+[PASS] lethal: without a life save the target dies and the hit is reported as a kill
+[PASS] axe: breakable crate takes 42 * 1.5 = 63 damage, non-breakable wall is not forwarded
+[PASS] Pistol: authoritative shot applies configured damage and spends one round
+[PASS] Pistol: damage lands when the projectile arrives (7 ticks), not on the firing tick
+[PASS] Pistol: server rejects early follow-up
+[PASS] Pistol: reload uses configured duration
+[PASS] Pistol: remote held-weapon code preserves state flags
+[PASS] AssaultRifle: authoritative shot applies configured damage and spends one round
+[PASS] AssaultRifle: damage lands when the projectile arrives (8 ticks), not on the firing tick
+[PASS] AssaultRifle: server rejects early follow-up
+[PASS] AssaultRifle: reload uses configured duration
+[PASS] AssaultRifle: remote held-weapon code preserves state flags
+[PASS] SniperRifle: authoritative shot applies configured damage and spends one round
+[PASS] SniperRifle: damage lands when the projectile arrives (10 ticks), not on the firing tick
+[PASS] SniperRifle: server rejects early follow-up
+[PASS] SniperRifle: reload uses configured duration
+[PASS] SniperRifle: remote held-weapon code preserves state flags
+=== CombatChecks: 43 passed, 0 failed ===

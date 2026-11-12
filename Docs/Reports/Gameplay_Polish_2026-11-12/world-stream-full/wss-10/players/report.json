@@ -1,0 +1,34 @@
+﻿{
+    "status":  "PASS",
+    "scenarioId":  "registry-wss10",
+    "schemaVersion":  1,
+    "timestampUtc":  "2026-11-12T15:48:35.5969105Z",
+    "reason":  null,
+    "playerSha256":  "48efab523aa684c653bd1254a6962d3410127b5c02dc1310f6f16f4810666556",
+    "playerFingerprint":  "0be25b7fc3b1a2b58441f64a20d4f2e920232d2df686adcb9762b1d02e57a647",
+    "clientCount":  1,
+    "passedCount":  1,
+    "physicalDeviceCount":  1,
+    "physicalTwoPc":  "NOT_TESTED",
+    "clients":  [
+                    {
+                        "id":  "Player1",
+                        "index":  1,
+                        "pid":  33556,
+                        "exitCode":  0,
+                        "status":  "PASS",
+                        "evidenceStatus":  "PASS",
+                        "graphicsApi":  "Direct3D11",
+                        "selectedTransport":  "Wss",
+                        "fallbackReason":  "",
+                        "connectedSeconds":  300.03,
+                        "p50RttMs":  33.34,
+                        "p99RttMs":  38.53,
+                        "assertionsPassed":  8,
+                        "assertionsTotal":  8,
+                        "reason":  "Required observations and rates verified",
+                        "evidenceFile":  "evidence-client-1.json",
+                        "logFile":  "unity-client-1.log"
+                    }
+                ]
+}

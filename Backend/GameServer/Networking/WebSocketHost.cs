@@ -45,6 +45,13 @@ public sealed class WebSocketHost : IAsyncDisposable
             }
         }
 
+        public bool TrySendBulk(byte[] packet, byte channel)
+        {
+            // Keep sixteen of the existing sixty-four slots for control/inventory/replies.
+            if (_controlSend.Reader.Count >= 48) return false;
+            return TrySend(packet,true,channel);
+        }
+
         public void Close(string reason)
         {
             if (!_open) return;

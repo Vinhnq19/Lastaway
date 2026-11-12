@@ -1,0 +1,5 @@
+{
+  "status": "BLOCKED",
+  "reason": "Tick/drop/CPU budget failed",
+  "ec2Lifecycle": "unchanged"
+}

@@ -1,0 +1,109 @@
+PASS 1: v2 reserves UDP slot
+[joined] playerId=d6082cdb-a8f2-47e6-8ddc-d37716fda1a5 roomId=6ae9189e-07de-41a2-aaaf-d0f79b566511 transport=Udp serverSlots=1/50
+PASS 2: same initial attempt transfers UDP -> WSS
+[joined] playerId=d6082cdb-a8f2-47e6-8ddc-d37716fda1a5 roomId=6ae9189e-07de-41a2-aaaf-d0f79b566511 transport=Wss serverSlots=1/50
+PASS 3: transfer preserves one slot and server PlayerId
+PASS 4: late UDP disconnect/input cannot release WSS slot
+PASS 5: late UDP cannot recreate the migrated attempt
+PASS 6: a committed application cannot be taken over
+PASS 7: disconnect releases shared slot
+PASS 8: WSS quit probe reserves a slot
+[joined] playerId=08eedf3f-971b-44ec-88b2-ccd5f143cecb roomId=6ae9189e-07de-41a2-aaaf-d0f79b566511 transport=Wss serverSlots=1/50
+PASS 9: explicit WSS quit releases slot without grace delay
+[joined] playerId=bcd3c674-7c0f-45f9-b66b-adbe1cdb68f6 roomId=9df7d6d4-f107-4c20-b622-960b54331013 transport=Udp serverSlots=1/50
+[joined] playerId=28b3c6b1-2e7d-4440-b766-5ebe80b751fd roomId=9df7d6d4-f107-4c20-b622-960b54331013 transport=Udp serverSlots=2/50
+PASS 10: resume transfer probe enters real runtime
+PASS 11: resume accepted before simulated lost UDP JoinAccepted
+[joined] playerId=bcd3c674-7c0f-45f9-b66b-adbe1cdb68f6 roomId=9df7d6d4-f107-4c20-b622-960b54331013 transport=Udp serverSlots=2/50
+PASS 12: first resume rotates proof
+PASS 13: same unconfirmed resume can continue through WSS
+[joined] playerId=bcd3c674-7c0f-45f9-b66b-adbe1cdb68f6 roomId=9df7d6d4-f107-4c20-b622-960b54331013 transport=Wss serverSlots=2/50
+PASS 14: resume fallback keeps one slot and rotates exactly once
+PASS 15: stale resumed UDP callback cannot release WSS
+PASS 16: resume fallback cannot be taken over twice
+[joined] playerId=7af30786-99d8-4bde-ad25-ff071985eba0 roomId=6ae9189e-07de-41a2-aaaf-d0f79b566511 transport=Udp serverSlots=1/50
+PASS 17: retired unconfirmed UDP can complete once through WSS
+[joined] playerId=82224807-f8c7-400c-b6bc-05c73be679c5 roomId=6ae9189e-07de-41a2-aaaf-d0f79b566511 transport=Wss serverSlots=0/50
+PASS 18: slow outgoing consumer releases its slot
+[room-created] roomId=99418011-f9e1-40aa-ab5c-0fc4a4a9fffa capacity=10
+PASS 19: mixed total reserve 0
+PASS 20: mixed total reserve 1
+PASS 21: mixed total reserve 2
+PASS 22: mixed total reserve 3
+PASS 23: mixed total reserve 4
+PASS 24: mixed total reserve 5
+PASS 25: mixed total reserve 6
+PASS 26: mixed total reserve 7
+PASS 27: mixed total reserve 8
+PASS 28: mixed total reserve 9
+PASS 29: mixed total reserve 10
+PASS 30: mixed total reserve 11
+PASS 31: mixed transports share global twelve-session cap
+PASS 32: returned UDP slot can be reused by WSS in another room
+PASS 33: transport config validation: Wss/v2/True
+PASS 34: transport config validation: Auto/v2/True
+PASS 35: transport config validation: Wss/v2/False
+PASS 36: transport config validation: Wss/v2/False
+PASS 37: transport config validation: Wss/v2/False
+PASS 38: transport config validation: Auto/v1/False
+PASS 39: transport config validation: Bad/v2/False
+PASS 40: a loopback ws URI cannot be pinned to a remote plaintext destination
+[ready] udp=127.0.0.1:54381 maxPlayers=10 tickRate=30 authMode=RoomCode protocol=4 accountRequired=False supported=1,2,3,4
+[websocket] enabled port=54001 path=/game
+[joined] playerId=8ad51c75-f7aa-478d-b802-031a1d558b66 roomId=dd20485b-247a-4901-929a-08702253fd06 transport=Wss serverSlots=1/50
+PASS 41: actual WebSocket binary handshake and ping/pong
+[joined] playerId=2cfa1f62-2305-4396-a1c8-3850157377d4 roomId=dd20485b-247a-4901-929a-08702253fd06 transport=Wss serverSlots=1/50
+PASS 42: explicit TCP pin works through the custom HTTP handler without hosts edits
+[ws-receive-error] type=WebSocketException
+[joined] playerId=5303be7f-0f28-415a-baca-072ddfa4116c roomId=dd20485b-247a-4901-929a-08702253fd06 transport=Udp serverSlots=1/50
+PASS 43: actual UDP v2 joins/pongs
+[joined] playerId=3e13ee27-cfd9-474e-81ba-22ef3c91b2eb roomId=dd20485b-247a-4901-929a-08702253fd06 transport=Wss serverSlots=1/50
+PASS 44: Auto falls back from blocked UDP to WSS
+PASS 45: fallback reason recorded without secret nonce
+[ws-receive-error] type=WebSocketException
+[rejected] reason=InvalidRoomCode serverSlots=0/50
+[client 1] disconnectedOrRejected reason=InvalidRoomCode
+PASS 46: business rejection does not trigger fallback
+[joined] playerId=2ee48cd8-53f3-4ab5-8280-66e25bb0101a roomId=dd20485b-247a-4901-929a-08702253fd06 transport=Udp serverSlots=6/50
+[joined] playerId=74c0d28c-c7e6-4795-8e98-9382b9d15780 roomId=dd20485b-247a-4901-929a-08702253fd06 transport=Udp serverSlots=6/50
+[joined] playerId=9371bed4-8b8f-4d44-a0a0-0ed6ea4c1dd3 roomId=dd20485b-247a-4901-929a-08702253fd06 transport=Udp serverSlots=6/50
+[joined] playerId=00eddf74-f5af-433c-be87-2bdd5992c65e roomId=dd20485b-247a-4901-929a-08702253fd06 transport=Udp serverSlots=6/50
+[joined] playerId=2188b9a0-703f-46cc-a9a8-206fff8958c8 roomId=dd20485b-247a-4901-929a-08702253fd06 transport=Udp serverSlots=6/50
+[joined] playerId=ed6dd7e1-61de-4207-9256-ccd88784e7fd roomId=dd20485b-247a-4901-929a-08702253fd06 transport=Udp serverSlots=6/50
+[joined] playerId=74917d06-a998-484f-9e55-595e0277204a roomId=dd20485b-247a-4901-929a-08702253fd06 transport=Wss serverSlots=7/50
+[joined] playerId=319a931b-9196-4579-ae7b-e508bccc98af roomId=dd20485b-247a-4901-929a-08702253fd06 transport=Wss serverSlots=8/50
+[joined] playerId=687d7e8c-7ddc-4c49-882f-c061e37ef0c6 roomId=dd20485b-247a-4901-929a-08702253fd06 transport=Wss serverSlots=9/50
+[joined] playerId=b9741947-bd9d-4a40-8a1b-51665bb8e04f roomId=dd20485b-247a-4901-929a-08702253fd06 transport=Wss serverSlots=10/50
+[ws-close] reason=RoomFull controlQueued=0
+[rejected] reason=RoomFull serverSlots=10/50
+[client 7] disconnectedOrRejected reason=RoomFull
+PASS 47: mixed UDP/WSS total ten, eleventh RoomFull
+PASS 48: both transports use one room registry
+[ws-receive-error] type=WebSocketException
+[ws-receive-error] type=WebSocketException
+[ws-close] reason=ConnectionTimeout controlQueued=0
+[ws-receive-error] type=WebSocketException
+[joined] playerId=62d0dc19-7020-4661-85ca-b89c07cc3819 roomId=dd20485b-247a-4901-929a-08702253fd06 transport=Wss serverSlots=1/50
+[ws-receive-error] type=WebSocketException
+[ws-close] reason=ConnectionTimeout controlQueued=0
+PASS 49: fragmented binary handshake assembled before parse
+[ws-close] reason=BinaryRequired controlQueued=0
+PASS 50: WebSocket rejects BinaryRequired
+[ws-close] reason=PayloadTooLarge controlQueued=0
+PASS 51: WebSocket rejects PayloadTooLarge
+[ws-close] reason=MalformedRequest controlQueued=0
+[rejected] reason=MalformedRequest serverSlots=0/50
+PASS 52: WebSocket rejects MalformedRequest
+[client 1] disconnectedOrRejected reason=WssConnectFailed
+PASS 53: pinned WSS rejects untrusted TLS before sending an HTTP Upgrade
+PASS 54: world-stream fixture joins
+[joined] playerId=a5047299-cdd1-4191-b56f-51edd548291d roomId=524b98c8-96b6-4801-84e0-f061f8f912b3 transport=Wss serverSlots=1/50
+PASS 55: world-stream fixture joins
+[joined] playerId=567a7404-5f4e-42fe-a59d-e7764030830a roomId=524b98c8-96b6-4801-84e0-f061f8f912b3 transport=Wss serverSlots=2/50
+PASS 56: world-stream fixture initializes production world
+PASS 57: fixture exceeds the WebSocket reliable queue capacity
+PASS 58: world transfer experiences controlled backpressure
+PASS 59: all pages of one frozen revision eventually arrive without disconnect
+PASS 60: world transfer with no progress is bounded and disconnects instead of hanging forever
+PASS 60 dual transport checks.
+[stopped] UDP socket đã đóng.

@@ -31,6 +31,10 @@ public sealed partial class SessionHub
         public (uint Revision, float Speed, byte Effects, bool Using, uint Portal, uint Equipment) LastWorldEffectKey;
         public readonly Queue<WorldActionRequestPacket> WorldRequests=new(8);
         public Guid WorldRequestMatch;
+        public List<byte[]>? PendingWorldPackets;
+        public int PendingWorldCursor;
+        public Guid PendingWorldMatch;
+        public uint PendingWorldRevision,PendingWorldProgressTick;
     }
     private sealed class Attempt(JoinRequest request)
     {

@@ -1,0 +1,9 @@
+{
+  "status": "FAIL",
+  "reason": "Tick/drop/CPU budget failed",
+  "functionalClients": "PASS",
+  "samples": 109,
+  "droppedTicks": 5,
+  "maxGcPauseMs": 305.798,
+  "note": "GC pause correlation is measured; this is not proof that every tick overrun comes from GC."
+}

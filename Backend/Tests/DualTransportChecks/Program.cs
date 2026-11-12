@@ -209,6 +209,49 @@ try
         }
         finally{tlsListener.Stop();}
     }
+    {
+        var names=new[]{"MATCH_PROFILE","WORLD_ENABLED","WORLD_LAYOUT_MODE"};
+        var previous=names.ToDictionary(n=>n,Environment.GetEnvironmentVariable);
+        try
+        {
+            Environment.SetEnvironmentVariable("MATCH_PROFILE","test");
+            Environment.SetEnvironmentVariable("WORLD_ENABLED","1");
+            Environment.SetEnvironmentVariable("WORLD_LAYOUT_MODE","Prototype");
+            var streamHub=new SessionHub(options,new ServerMetrics());var peers=new[]{new FakePeer("Wss"),new FakePeer("Wss")};
+            var ids=new List<string>();var writer=new NetDataWriter();var codec=new PacketRegistry();
+            foreach(var peer in peers)
+            {
+                Check(streamHub.Join(new JoinRequest(2,JoinAuthMode.RoomCode,"DUAL_TEST","World",Guid.NewGuid()),peer),"world-stream fixture joins");streamHub.Connected(peer);
+                NetworkProtocol.TryReadStringMessage(new NetDataReader(peer.Messages.Last()),NetworkProtocol.JoinAccepted,256,64,out var id);ids.Add(id!);
+                var hello=new ClientHelloPacket{ProtocolVersion=MatchProtocol.Version,Ready=true};codec.WriteFrame(writer,ref hello);streamHub.Receive(peer,writer.CopyData(),true);
+            }
+            for(var i=0;i<20;i++)streamHub.Tick(1d/30);
+            var match=streamHub.Rooms.Find("DUAL_TEST")!.Match;foreach(var id in ids)match.SetPlayerLoaded(id,match.MatchId);streamHub.Tick(1d/30);
+            Check(match.World!=null,"world-stream fixture initializes production world");
+            var world=match.World!;
+            // Transport-size fixture only: authored maps also exceed 64 pages. No client may add these objects.
+            for(ushort i=5000;i<6700;i++)world.Layout.Objects.Add(new JungleMaze.World.WorldObjectDefinition{Id=i,Kind=JungleMaze.World.WorldObjectKind.Wall,Bounds=new JungleMaze.World.WorldBounds(25,25,.1f,.1f)});
+            Check(world.SnapshotObjects().Count>64*WorldWire.PageSize,"fixture exceeds the WebSocket reliable queue capacity");
+            peers[0].LimitBulk=true;
+            var pageIds=new HashSet<ushort>();uint firstRevision=0;ushort expectedPages=0;var seen=peers[0].Messages.Count;
+            var reader=new PacketRegistry();reader.Subscribe<WorldManifestPacket>(p=>{if(firstRevision==0)firstRevision=p.Revision;});
+            reader.Subscribe<WorldObjectStatePacket>(p=>{if(p.Revision==firstRevision){expectedPages=p.PageCount;pageIds.Add(p.PageIndex);}});
+            var request=new WorldActionRequestPacket{MatchId=match.MatchId,RequestId=1,Action=WorldActionKind.Resync,Slot=255};codec.WriteFrame(writer,ref request);streamHub.Receive(peers[0],writer.CopyData(),true);
+            for(var tick=0;tick<150&&(expectedPages==0||pageIds.Count<expectedPages);tick++)
+            {
+                peers[0].BulkAllowance=2;streamHub.Tick(1d/30);
+                foreach(var bytes in peers[0].Messages.Skip(seen))reader.TryReadFrame(new NetDataReader(bytes));seen=peers[0].Messages.Count;
+                // Simulate constantly changing loot while an older snapshot is still being transferred.
+                world.GetType().GetProperty("Revision")!.SetValue(world,world.Revision+1);
+            }
+            Check(peers[0].BulkDenied>0,"world transfer experiences controlled backpressure");
+            Check(expectedPages>64&&pageIds.Count==expectedPages&&peers[0].IsOpen,"all pages of one frozen revision eventually arrive without disconnect");
+            peers[0].BulkAllowance=0;request.RequestId=2;codec.WriteFrame(writer,ref request);streamHub.Receive(peers[0],writer.CopyData(),true);
+            for(var tick=0;tick<200&&peers[0].IsOpen;tick++)streamHub.Tick(1d/30);
+            Check(!peers[0].IsOpen,"world transfer with no progress is bounded and disconnects instead of hanging forever");streamHub.CloseAll();
+        }
+        finally{foreach(var n in names)Environment.SetEnvironmentVariable(n,previous[n]);}
+    }
     Console.WriteLine($"PASS {passed} dual transport checks.");return 0;
 }
 catch(Exception e){Console.Error.WriteLine(e);return 1;}
@@ -219,7 +262,22 @@ sealed class FakePeer(string transport):IGamePeer
     public string Transport=>transport;
     public bool IsOpen{get;private set;}=true;
     public bool Writable=true;
+    public int BulkAllowance=int.MaxValue,BulkDenied;
+    public bool LimitBulk;
+    private PacketRegistry? _bulkInspector;
+    private bool _isBulk;
+    public bool TrySendBulk(byte[] packet,byte channel)=>TrySend(packet,true);
     public List<byte[]> Messages=new();
-    public bool TrySend(byte[] packet,bool reliable){if(!Writable)return false;Messages.Add(packet);return true;}
+    public bool TrySend(byte[] packet,bool reliable)
+    {
+        if(!Writable)return false;
+        if(LimitBulk)
+        {
+            if(_bulkInspector==null){_bulkInspector=new PacketRegistry();_bulkInspector.Subscribe<WorldManifestPacket>(_=>_isBulk=true);_bulkInspector.Subscribe<WorldObjectStatePacket>(_=>_isBulk=true);}
+            _isBulk=false;_bulkInspector.TryReadFrame(new NetDataReader(packet));
+            if(_isBulk){if(BulkAllowance<=0){BulkDenied++;return false;}BulkAllowance--;}
+        }
+        Messages.Add(packet);return true;
+    }
     public void Close(string reason){IsOpen=false;}
 }

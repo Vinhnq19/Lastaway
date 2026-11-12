@@ -59,35 +59,57 @@ public sealed partial class SessionHub
             {
                 var match=session.Room.Match;
                 if(!match.Entities.TryGetBySession(session.PlayerId,out var actor)||actor==null)continue;
+                if(session.PendingWorldPackets!=null&&session.PendingWorldMatch!=match.MatchId)
+                    session.PendingWorldPackets=null;
                 var key=match.World.OwnerEffectKey(actor.NetId);
                 if(match.CurrentTick-session.LastWorldInventoryTick>=15||key!=session.LastWorldEffectKey)
                 {SendWorldState(session,false);session.LastWorldEffectKey=key;}
+                PumpWorldState(session);
             }
     }
     private void SendWorldPacket<T>(Session session,ref T packet) where T:struct,INetSerializable
     {
         var writer=new NetDataWriter();_gameplayRegistry.WriteFrame(writer,ref packet);
-        session.Peer.TrySend(writer.CopyData(),true,GameplayProtocol.GameplayChannel);
+        if(!session.Peer.TrySend(writer.CopyData(),true,GameplayProtocol.GameplayChannel))
+            session.Peer.Close("ServerBusy");
     }
     private readonly Dictionary<string,(Guid Match,uint Revision,List<byte[]> Packets)> _worldPackets=new();
+    private readonly List<WorldObjectWire> _worldObjectScratch=new();
     private List<byte[]> WorldPackets(MatchRuntime match,MatchWorldRuntime world)
     {
         if(_worldPackets.TryGetValue(match.RoomId,out var cached)&&cached.Match==match.MatchId&&cached.Revision==world.Revision)return cached.Packets;
         if(_worldPackets.Count>=16)
             foreach(var id in _worldPackets.Keys.Where(id=>!Rooms.AllRooms.Any(r=>r.Id.ToString()==id)).ToArray())_worldPackets.Remove(id);
-        var packets=new List<byte[]>();
+        var packets=new List<byte[]>();var writer=new NetDataWriter(true,2048);
         void Add<T>(ref T packet) where T:struct,INetSerializable
-        { var writer=new NetDataWriter();_gameplayRegistry.WriteFrame(writer,ref packet);packets.Add(writer.CopyData()); }
+        { _gameplayRegistry.WriteFrame(writer,ref packet);packets.Add(writer.CopyData()); }
         var manifest=new WorldManifestPacket{MatchId=match.MatchId,Seed=world.Layout.Seed,Version=world.Layout.Version,Hash=world.Layout.Hash,Size=(ushort)world.Layout.Size,Revision=world.Revision};
         Add(ref manifest);
-        var all=world.SnapshotObjects();var pages=Math.Max(1,(all.Count+WorldWire.PageSize-1)/WorldWire.PageSize);
+        var all=world.SnapshotObjects(_worldObjectScratch);var pages=Math.Max(1,(all.Count+WorldWire.PageSize-1)/WorldWire.PageSize);
         for(var page=0;page<pages;page++)
         {
             var count=Math.Min(WorldWire.PageSize,all.Count-page*WorldWire.PageSize);
-            var packet=new WorldObjectStatePacket{MatchId=match.MatchId,Revision=world.Revision,Tick=match.CurrentTick,PageIndex=(ushort)page,PageCount=(ushort)pages,TotalObjects=(ushort)all.Count,Objects=all.GetRange(page*WorldWire.PageSize,count).ToArray()};
+            var objects=new WorldObjectWire[count];all.CopyTo(page*WorldWire.PageSize,objects,0,count);
+            var packet=new WorldObjectStatePacket{MatchId=match.MatchId,Revision=world.Revision,Tick=match.CurrentTick,PageIndex=(ushort)page,PageCount=(ushort)pages,TotalObjects=(ushort)all.Count,Objects=objects};
             Add(ref packet);
         }
         _worldPackets[match.RoomId]=(match.MatchId,world.Revision,packets);return packets;
+    }
+    private void PumpWorldState(Session session)
+    {
+        var packets=session.PendingWorldPackets;
+        if(packets==null||!session.Peer.IsOpen)return;
+        var tick=session.Room.Match.CurrentTick;
+        if(unchecked(tick-session.PendingWorldProgressTick)>=150)
+        {session.PendingWorldPackets=null;session.Peer.Close("ServerBusy");return;}
+        for(var sent=0;sent<8&&session.PendingWorldCursor<packets.Count;sent++)
+        {
+            if(!session.Peer.TrySendBulk(packets[session.PendingWorldCursor],GameplayProtocol.GameplayChannel))return;
+            session.PendingWorldCursor++;session.PendingWorldProgressTick=tick;
+        }
+        if(session.PendingWorldCursor<packets.Count)return;
+        session.LastWorldRevision=session.PendingWorldRevision;session.LastWorldMatch=session.PendingWorldMatch;
+        session.LastWorldSyncTick=tick;session.PendingWorldPackets=null;
     }
     private void SendWorldState(Session session,bool force)
     {
@@ -98,12 +120,12 @@ public sealed partial class SessionHub
             {var drop=match.AirdropPacket(state,true);SendWorldPacket(session,ref drop);}
         var inventory=world.SnapshotInventory(actor.NetId);
         SendWorldPacket(session,ref inventory);
-        if(force||((session.LastWorldRevision!=world.Revision||session.LastWorldMatch!=match.MatchId)&&match.CurrentTick-session.LastWorldSyncTick>=15))
+        if(session.PendingWorldPackets==null&&(force||((session.LastWorldRevision!=world.Revision||session.LastWorldMatch!=match.MatchId)&&match.CurrentTick-session.LastWorldSyncTick>=15)))
         {
-            var cache=WorldPackets(match,world);
-            foreach(var bytes in cache)session.Peer.TrySend(bytes,true,GameplayProtocol.GameplayChannel);
-            session.LastWorldRevision=world.Revision;session.LastWorldMatch=match.MatchId;
-            session.LastWorldSyncTick=match.CurrentTick;
+            // Retain this immutable revision until every page has entered the reliable transport.
+            session.PendingWorldPackets=WorldPackets(match,world);session.PendingWorldCursor=0;
+            session.PendingWorldMatch=match.MatchId;session.PendingWorldRevision=world.Revision;
+            session.PendingWorldProgressTick=match.CurrentTick;
         }
         session.LastWorldInventoryTick=match.CurrentTick;
         session.LastWorldEffectKey=world.OwnerEffectKey(actor.NetId);

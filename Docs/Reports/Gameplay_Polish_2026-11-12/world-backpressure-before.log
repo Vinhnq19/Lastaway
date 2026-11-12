@@ -1,0 +1,112 @@
+D:\Unity\Lastaway\Backend\GameServer\Networking\SessionHub.cs(36,21): warning CS0649: Field 'SessionHub.Session.PendingWorldMatch' is never assigned to, and will always have its default value [D:\Unity\Lastaway\Backend\GameServer\GameServer.csproj]
+D:\Unity\Lastaway\Backend\GameServer\Networking\SessionHub.cs(35,20): warning CS0649: Field 'SessionHub.Session.PendingWorldCursor' is never assigned to, and will always have its default value 0 [D:\Unity\Lastaway\Backend\GameServer\GameServer.csproj]
+D:\Unity\Lastaway\Backend\GameServer\Networking\SessionHub.cs(37,21): warning CS0649: Field 'SessionHub.Session.PendingWorldRevision' is never assigned to, and will always have its default value 0 [D:\Unity\Lastaway\Backend\GameServer\GameServer.csproj]
+D:\Unity\Lastaway\Backend\GameServer\Networking\SessionHub.cs(34,30): warning CS0649: Field 'SessionHub.Session.PendingWorldPackets' is never assigned to, and will always have its default value null [D:\Unity\Lastaway\Backend\GameServer\GameServer.csproj]
+D:\Unity\Lastaway\Backend\GameServer\Networking\SessionHub.cs(37,42): warning CS0649: Field 'SessionHub.Session.PendingWorldProgressTick' is never assigned to, and will always have its default value 0 [D:\Unity\Lastaway\Backend\GameServer\GameServer.csproj]
+PASS 1: v2 reserves UDP slot
+[joined] playerId=03784489-4c35-48db-baa4-0f635cd892d6 roomId=4cd5b5a1-9b2b-41c1-835e-2a57c000a7fd transport=Udp serverSlots=1/50
+PASS 2: same initial attempt transfers UDP -> WSS
+[joined] playerId=03784489-4c35-48db-baa4-0f635cd892d6 roomId=4cd5b5a1-9b2b-41c1-835e-2a57c000a7fd transport=Wss serverSlots=1/50
+PASS 3: transfer preserves one slot and server PlayerId
+PASS 4: late UDP disconnect/input cannot release WSS slot
+PASS 5: late UDP cannot recreate the migrated attempt
+PASS 6: a committed application cannot be taken over
+PASS 7: disconnect releases shared slot
+PASS 8: WSS quit probe reserves a slot
+[joined] playerId=86e656e6-0f62-40ef-a035-2acd2a571539 roomId=4cd5b5a1-9b2b-41c1-835e-2a57c000a7fd transport=Wss serverSlots=1/50
+PASS 9: explicit WSS quit releases slot without grace delay
+[joined] playerId=77825b6d-1279-4cfa-b897-6d6de84eaf05 roomId=0ce144a3-4f26-4805-b9e6-c4a7a30ab0e0 transport=Udp serverSlots=1/50
+[joined] playerId=9b7cb1fe-b12e-4865-9b6a-295ea829f626 roomId=0ce144a3-4f26-4805-b9e6-c4a7a30ab0e0 transport=Udp serverSlots=2/50
+PASS 10: resume transfer probe enters real runtime
+PASS 11: resume accepted before simulated lost UDP JoinAccepted
+[joined] playerId=77825b6d-1279-4cfa-b897-6d6de84eaf05 roomId=0ce144a3-4f26-4805-b9e6-c4a7a30ab0e0 transport=Udp serverSlots=2/50
+PASS 12: first resume rotates proof
+PASS 13: same unconfirmed resume can continue through WSS
+[joined] playerId=77825b6d-1279-4cfa-b897-6d6de84eaf05 roomId=0ce144a3-4f26-4805-b9e6-c4a7a30ab0e0 transport=Wss serverSlots=2/50
+PASS 14: resume fallback keeps one slot and rotates exactly once
+PASS 15: stale resumed UDP callback cannot release WSS
+PASS 16: resume fallback cannot be taken over twice
+[joined] playerId=73848956-38cc-4882-90f6-8d5eadadde56 roomId=4cd5b5a1-9b2b-41c1-835e-2a57c000a7fd transport=Udp serverSlots=1/50
+PASS 17: retired unconfirmed UDP can complete once through WSS
+[joined] playerId=7f5725cb-f28d-480f-b568-30a9f4704d2c roomId=4cd5b5a1-9b2b-41c1-835e-2a57c000a7fd transport=Wss serverSlots=0/50
+PASS 18: slow outgoing consumer releases its slot
+[room-created] roomId=88a84fb0-7453-4ad4-b205-2a0ae0e73dea capacity=10
+PASS 19: mixed total reserve 0
+PASS 20: mixed total reserve 1
+PASS 21: mixed total reserve 2
+PASS 22: mixed total reserve 3
+PASS 23: mixed total reserve 4
+PASS 24: mixed total reserve 5
+PASS 25: mixed total reserve 6
+PASS 26: mixed total reserve 7
+PASS 27: mixed total reserve 8
+PASS 28: mixed total reserve 9
+PASS 29: mixed total reserve 10
+PASS 30: mixed total reserve 11
+PASS 31: mixed transports share global twelve-session cap
+PASS 32: returned UDP slot can be reused by WSS in another room
+PASS 33: transport config validation: Wss/v2/True
+PASS 34: transport config validation: Auto/v2/True
+PASS 35: transport config validation: Wss/v2/False
+PASS 36: transport config validation: Wss/v2/False
+PASS 37: transport config validation: Wss/v2/False
+PASS 38: transport config validation: Auto/v1/False
+PASS 39: transport config validation: Bad/v2/False
+PASS 40: a loopback ws URI cannot be pinned to a remote plaintext destination
+[ready] udp=127.0.0.1:57624 maxPlayers=10 tickRate=30 authMode=RoomCode protocol=4 accountRequired=False supported=1,2,3,4
+[websocket] enabled port=64749 path=/game
+[joined] playerId=d96f43bb-9886-472c-9471-204b97f6bb7e roomId=2b9a54c7-413c-49c9-b46a-c8df571a2b38 transport=Wss serverSlots=1/50
+PASS 41: actual WebSocket binary handshake and ping/pong
+[joined] playerId=5dae243b-2978-44c6-8445-51c560206bb1 roomId=2b9a54c7-413c-49c9-b46a-c8df571a2b38 transport=Wss serverSlots=1/50
+PASS 42: explicit TCP pin works through the custom HTTP handler without hosts edits
+[ws-receive-error] type=WebSocketException
+[ws-close] reason=ConnectionTimeout controlQueued=0
+[joined] playerId=51d27dcb-21bf-42a8-a2af-5d20351f82e7 roomId=2b9a54c7-413c-49c9-b46a-c8df571a2b38 transport=Udp serverSlots=1/50
+PASS 43: actual UDP v2 joins/pongs
+[joined] playerId=18bd4387-af79-4833-8335-9380cfa59213 roomId=2b9a54c7-413c-49c9-b46a-c8df571a2b38 transport=Wss serverSlots=1/50
+PASS 44: Auto falls back from blocked UDP to WSS
+PASS 45: fallback reason recorded without secret nonce
+[rejected] reason=InvalidRoomCode serverSlots=0/50
+[client 1] disconnectedOrRejected reason=InvalidRoomCode
+PASS 46: business rejection does not trigger fallback
+[joined] playerId=68b7e635-1625-4aa3-9fee-e98753dc8b37 roomId=2b9a54c7-413c-49c9-b46a-c8df571a2b38 transport=Udp serverSlots=6/50
+[joined] playerId=4d765909-854e-4f0a-ba57-ed6f02e1e322 roomId=2b9a54c7-413c-49c9-b46a-c8df571a2b38 transport=Udp serverSlots=6/50
+[joined] playerId=84bc4920-c1a0-42c2-aaef-d28ae91659bd roomId=2b9a54c7-413c-49c9-b46a-c8df571a2b38 transport=Udp serverSlots=6/50
+[joined] playerId=e5ccf310-2fd7-475d-ac6a-b1e5dc98bc1c roomId=2b9a54c7-413c-49c9-b46a-c8df571a2b38 transport=Udp serverSlots=6/50
+[joined] playerId=679e800c-0513-406e-a65e-d0c6a02d0aed roomId=2b9a54c7-413c-49c9-b46a-c8df571a2b38 transport=Udp serverSlots=6/50
+[joined] playerId=77e9484d-604a-4ee0-98a5-479f53f658ce roomId=2b9a54c7-413c-49c9-b46a-c8df571a2b38 transport=Udp serverSlots=6/50
+[joined] playerId=8829f958-9cca-4075-9b53-77d17cb07c03 roomId=2b9a54c7-413c-49c9-b46a-c8df571a2b38 transport=Wss serverSlots=7/50
+[joined] playerId=09bbffeb-3fb1-49d2-806f-87fc28f08ade roomId=2b9a54c7-413c-49c9-b46a-c8df571a2b38 transport=Wss serverSlots=8/50
+[joined] playerId=aee6fa82-ec71-44d9-b442-9d1918e602ec roomId=2b9a54c7-413c-49c9-b46a-c8df571a2b38 transport=Wss serverSlots=9/50
+[joined] playerId=3ee56e64-77aa-4313-b016-cbb3accf1080 roomId=2b9a54c7-413c-49c9-b46a-c8df571a2b38 transport=Wss serverSlots=10/50
+[ws-close] reason=RoomFull controlQueued=0
+[rejected] reason=RoomFull serverSlots=10/50
+[client 9] disconnectedOrRejected reason=RoomFull
+PASS 47: mixed UDP/WSS total ten, eleventh RoomFull
+PASS 48: both transports use one room registry
+[ws-receive-error] type=WebSocketException
+[ws-receive-error] type=WebSocketException
+[ws-close] reason=ConnectionTimeout controlQueued=0
+[joined] playerId=50818616-9289-4a67-99e8-fcf4e22c37b8 roomId=2b9a54c7-413c-49c9-b46a-c8df571a2b38 transport=Wss serverSlots=1/50
+PASS 49: fragmented binary handshake assembled before parse
+[ws-close] reason=BinaryRequired controlQueued=0
+PASS 50: WebSocket rejects BinaryRequired
+[ws-close] reason=PayloadTooLarge controlQueued=0
+PASS 51: WebSocket rejects PayloadTooLarge
+[ws-close] reason=MalformedRequest controlQueued=0
+[rejected] reason=MalformedRequest serverSlots=0/50
+PASS 52: WebSocket rejects MalformedRequest
+[client 1] disconnectedOrRejected reason=WssConnectFailed
+PASS 53: pinned WSS rejects untrusted TLS before sending an HTTP Upgrade
+PASS 54: world-stream fixture joins
+[joined] playerId=fd543fb3-8c00-4c67-ae3c-14693aa737b2 roomId=466b88aa-c8dc-4272-ad23-57c0773e6df1 transport=Wss serverSlots=1/50
+PASS 55: world-stream fixture joins
+[joined] playerId=35fe1446-1aff-4833-afa0-e9980e092216 roomId=466b88aa-c8dc-4272-ad23-57c0773e6df1 transport=Wss serverSlots=2/50
+PASS 56: world-stream fixture initializes production world
+PASS 57: fixture exceeds the WebSocket reliable queue capacity
+PASS 58: world transfer experiences controlled backpressure
+[stopped] UDP socket đã đóng.
+System.InvalidOperationException: all pages of one frozen revision eventually arrive without disconnect
+   at Program.<<Main>$>g__Check|0_0(Boolean ok, String name, <>c__DisplayClass0_0&) in D:\Unity\Lastaway\Backend\Tests\DualTransportChecks\Program.cs:line 17
+   at Program.<Main>$(String[] args) in D:\Unity\Lastaway\Backend\Tests\DualTransportChecks\Program.cs:line 248
+   at Program.<Main>$(String[] args) in D:\Unity\Lastaway\Backend\Tests\DualTransportChecks\Program.cs:line 255

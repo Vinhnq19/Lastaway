@@ -15,6 +15,7 @@ public sealed partial class MatchWorldRuntime : ITransactionalDestructibleLootSi
     private readonly Dictionary<byte,double> _invulnerable=new();
     private readonly Dictionary<byte,double> _poisonDue=new();
     private readonly HashSet<byte> _registered=new();
+    private readonly List<FloorItem> _pickupSnapshot=new();
     private readonly LootTable _loot;
     private LootSurface _lootSurface;
     private bool _usingSupplyReserve;
@@ -117,7 +118,9 @@ public sealed partial class MatchWorldRuntime : ITransactionalDestructibleLootSi
             var poison=_effects.Where(p=>p.Key.Actor==e.NetId&&p.Key.Effect=="Poison"&&p.Value.End>now).Select(p=>p.Value.Magnitude).DefaultIfEmpty(0).Max();
             if(poison>0&&(!_poisonDue.TryGetValue(e.NetId,out var due)||now>=due)){_poisonDue[e.NetId]=now+1;ApplyEnvironmentalDamage(e.NetId,(int)poison);}
             else if(poison==0)_poisonDue.Remove(e.NetId);
-            foreach(var floor in Floor.Items.ToArray())
+            // AutoPickup mutates Floor; reuse a snapshot rather than allocate one per actor per tick.
+            _pickupSnapshot.Clear();_pickupSnapshot.AddRange(Floor.Items);
+            foreach(var floor in _pickupSnapshot)
                 if((floor.X-e.X)*(floor.X-e.X)+(floor.Y-e.Y)*(floor.Y-e.Y)<=Inventory.PickupRadius*Inventory.PickupRadius)
                     Inventory.AutoPickup(e.NetId,floor.Id);
         }
@@ -203,9 +206,10 @@ public sealed partial class MatchWorldRuntime : ITransactionalDestructibleLootSi
         if(_invulnerable.TryGetValue(actor,out var end)&&end>_now)return true;
         return _entities.TryGet(actor,out var e)&&e!=null&&amount>=e.Hp&&_registered.Contains(actor)&&Inventory.TryConsumeLifePassive(actor,_tick==0?1:_tick);
     }
-    public List<WorldObjectWire> SnapshotObjects()
+    public List<WorldObjectWire> SnapshotObjects(List<WorldObjectWire>? result=null)
     {
-        var result=new List<WorldObjectWire>();
+        result??=new List<WorldObjectWire>(Layout.Objects.Count+Floor.Items.Count);
+        result.Clear();
         foreach(var o in Layout.Objects){Destructibles.TryGet(o.Id,out var d);var center=o.Bounds.Center;result.Add(new WorldObjectWire{Id=o.Id,Kind=(byte)o.Kind,Flags=(byte)((d?.Broken==true?1:0)|(o.Kind==WorldObjectKind.Door&&Hazards.IsDoorClosed(o.Id)?2:0)),PairId=o.PairId,Hp=(ushort)(d?.Hp??0),X=center.X,Y=center.Y,Width=o.Bounds.MaxX-o.Bounds.MinX,Height=o.Bounds.MaxY-o.Bounds.MinY});}
         foreach(var floor in Floor.Items)result.Add(new WorldObjectWire{Id=floor.Id,Kind=100,X=floor.X,Y=floor.Y,Width=.4f,Height=.4f,ItemId=floor.Stack.ItemId,Count=(ushort)floor.Stack.Count});
         return result;

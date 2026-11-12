@@ -1,0 +1,53 @@
+  AST cache: 1496/1558 files served from cache (96%); 4 to extract; 58 without an extractor
+  AST extraction: 4/4 uncached files (100%)
+  warning: 5 file(s) had syntax errors and may be partially extracted: Assets/Imported/JSurviv/Plugins/UniTask/Runtime/IUniTaskSource.cs (error region at line 26, 29 symbol(s) extracted), Assets/Imported/JSurviv/Plugins/UniTask/Runtime/Internal/ContinuationQueue.cs (error region at line 136, 26 symbol(s) extracted), Assets/Imported/JSurviv/Plugins/UniTask/Runtime/Internal/PlayerLoopRunner.cs (error region at line 122, 28 symbol(s) extracted), Assets/Imported/JSurviv/Plugins/UniTask/Runtime/PlayerLoopHelper.cs (error region at line 114, 100 symbol(s) extracted), Backend/Tests/BotChecks/Program.cs (error region at line 517, no symbols extracted)
+  warning: 22 code file(s) yielded no symbols (0.13 MB) � a data file, or source this extractor models no symbols for: Assets/Imported/JSurviv/Plugins/UniTask/Runtime/_InternalVisibleTo.cs, Backend/Api/Program.cs, Backend/Deploy/Host/setup-firewall.ps1, Backend/Deploy/Host/setup-lan-firewall.ps1, Backend/Deploy/deploy-aws.ps1 (+17 more)
+wrote D:\Unity\Lastaway\graphify-out\GRAPH_TREE.html (1380.6 KB)
+open with: xdg-open D:\Unity\Lastaway\graphify-out\GRAPH_TREE.html  (or file://D:\Unity\Lastaway\graphify-out\GRAPH_TREE.html)
+WARNING: architecture document changed; semantic extraction must be refreshed. Stale concepts omitted.
+Graph: 23377 nodes, 89474 edges; 479 communities
+WARNING: >5000 nodes; graph.html opens aggregated community view.
+Graph has 23377 nodes (above 5000 limit). Building aggregated community view...
+graph.html written (aggregated: 479 community nodes, 5129 cross-community edges)
+Tip: run with --obsidian for full node-level detail.
+[graphify] MultiDiGraph edge-collapse diagnostic
+input: <in-memory>
+input_stage: provided JSON (normal graph.json is post-build)
+effective_directed: <direct-call>
+nodes: 24550
+unverified_code_nodes: 0
+raw_edges: 98155
+valid_candidate_edges: 94367
+missing_endpoint_edges: 0
+dangling_endpoint_edges: 3788
+external_reference_edges: 0
+self_loop_edges: 102
+exact_duplicate_edges: 40
+directed_unique_endpoint_pairs: 88988
+directed_same_endpoint_collapsed_edges: 5379
+undirected_unique_endpoint_pairs: 88656
+undirected_same_endpoint_collapsed_edges: 5711
+same_endpoint_group_count: 3270
+relation_variant_groups: 840
+source_file_variant_groups: 22
+source_location_variant_groups: 1786
+context_variant_groups: 1056
+post_build_graph_type: DiGraph
+post_build_edges: 89474
+producer_suppression_sites: 12
+producer_suppression_examples:
+  - L1829 seen_ids arity=unknown
+  - L2393 seen_ids arity=unknown
+  - L2395 seen_doc_refs arity=unknown
+  - L3062 seen_ids arity=unknown
+  - L3209 seen_ids arity=unknown
+  - L4350 seen_keys arity=unknown
+  - L4536 seen_keys arity=unknown
+  - L7947 seen_ids arity=unknown
+examples:
+  - assets_imported_jsurviv_plugins_unitask_runtime_linq_combinelatest_cysharp_threading_tasks_linq_combinelatest -> assets_imported_jsurviv_plugins_unitask_runtime_iunitaskasyncenumerable_cysharp_threading_tasks_iunitaskasyncenumerator_1 edges=133 relations=['implements', 'references'] locations=['L10076', 'L10114', 'L10120', 'L10126', 'L10132', 'L10138', 'L10144', 'L10150', 'L10156', 'L10162', 'L10168', 'L10174', 'L10180', 'L10186', 'L10192', 'L10198', 'L1256', 'L1274', 'L1280', 'L1286', 'L1292', 'L1298', 'L1760', 'L1780', 'L1786', 'L1792', 'L1798', 'L1804', 'L1810', 'L2348', 'L2370', 'L2376', 'L2382', 'L2388', 'L2394', 'L2400', 'L2406', 'L248', 'L260', 'L266', 'L3020', 'L3044', 'L3050', 'L3056', 'L3062', 'L3068', 'L3074', 'L3080', 'L3086', 'L3776', 'L3802', 'L3808', 'L3814', 'L3820', 'L3826', 'L3832', 'L3838', 'L3844', 'L3850', 'L4616', 'L4644', 'L4650', 'L4656', 'L4662', 'L4668', 'L4674', 'L4680', 'L4686', 'L4692', 'L4698', 'L500', 'L514', 'L520', 'L526', 'L5540', 'L5570', 'L5576', 'L5582', 'L5588', 'L5594', 'L5600', 'L5606', 'L5612', 'L5618', 'L5624', 'L5630', 'L6548', 'L6580', 'L6586', 'L6592', 'L6598', 'L6604', 'L6610', 'L6616', 'L6622', 'L6628', 'L6634', 'L6640', 'L6646', 'L7640', 'L7674', 'L7680', 'L7686', 'L7692', 'L7698', 'L7704', 'L7710', 'L7716', 'L7722', 'L7728', 'L7734', 'L7740', 'L7746', 'L836', 'L852', 'L858', 'L864', 'L870', 'L8816', 'L8852', 'L8858', 'L8864', 'L8870', 'L8876', 'L8882', 'L8888', 'L8894', 'L8900', 'L8906', 'L8912', 'L8918', 'L8924', 'L8930'] contexts=['', 'field']
+  - assets_imported_jsurviv_plugins_unitask_runtime_linq_combinelatest_cysharp_threading_tasks_linq_combinelatest -> action edges=119 relations=['references'] locations=['L10078', 'L10079', 'L10080', 'L10081', 'L10082', 'L10083', 'L10084', 'L10085', 'L10086', 'L10087', 'L10088', 'L10089', 'L10090', 'L10091', 'L10092', 'L1258', 'L1259', 'L1260', 'L1261', 'L1262', 'L1762', 'L1763', 'L1764', 'L1765', 'L1766', 'L1767', 'L2350', 'L2351', 'L2352', 'L2353', 'L2354', 'L2355', 'L2356', 'L250', 'L251', 'L3022', 'L3023', 'L3024', 'L3025', 'L3026', 'L3027', 'L3028', 'L3029', 'L3778', 'L3779', 'L3780', 'L3781', 'L3782', 'L3783', 'L3784', 'L3785', 'L3786', 'L4618', 'L4619', 'L4620', 'L4621', 'L4622', 'L4623', 'L4624', 'L4625', 'L4626', 'L4627', 'L502', 'L503', 'L504', 'L5542', 'L5543', 'L5544', 'L5545', 'L5546', 'L5547', 'L5548', 'L5549', 'L5550', 'L5551', 'L5552', 'L6550', 'L6551', 'L6552', 'L6553', 'L6554', 'L6555', 'L6556', 'L6557', 'L6558', 'L6559', 'L6560', 'L6561', 'L7642', 'L7643', 'L7644', 'L7645', 'L7646', 'L7647', 'L7648', 'L7649', 'L7650', 'L7651', 'L7652', 'L7653', 'L7654', 'L838', 'L839', 'L840', 'L841', 'L8818', 'L8819', 'L8820', 'L8821', 'L8822', 'L8823', 'L8824', 'L8825', 'L8826', 'L8827', 'L8828', 'L8829', 'L8830', 'L8831'] contexts=['field']
+  - assets_imported_jsurviv_plugins_unitask_runtime_linq_combinelatest_cysharp_threading_tasks_linq_combinelatest -> assets_imported_jsurviv_plugins_unitask_runtime_iunitaskasyncenumerable_cysharp_threading_tasks_iunitaskasyncenumerable_1 edges=119 relations=['references'] locations=['L10095', 'L10096', 'L10097', 'L10098', 'L10099', 'L10100', 'L10101', 'L10102', 'L10103', 'L10104', 'L10105', 'L10106', 'L10107', 'L10108', 'L10109', 'L1265', 'L1266', 'L1267', 'L1268', 'L1269', 'L1770', 'L1771', 'L1772', 'L1773', 'L1774', 'L1775', 'L2359', 'L2360', 'L2361', 'L2362', 'L2363', 'L2364', 'L2365', 'L254', 'L255', 'L3032', 'L3033', 'L3034', 'L3035', 'L3036', 'L3037', 'L3038', 'L3039', 'L3789', 'L3790', 'L3791', 'L3792', 'L3793', 'L3794', 'L3795', 'L3796', 'L3797', 'L4630', 'L4631', 'L4632', 'L4633', 'L4634', 'L4635', 'L4636', 'L4637', 'L4638', 'L4639', 'L507', 'L508', 'L509', 'L5555', 'L5556', 'L5557', 'L5558', 'L5559', 'L5560', 'L5561', 'L5562', 'L5563', 'L5564', 'L5565', 'L6564', 'L6565', 'L6566', 'L6567', 'L6568', 'L6569', 'L6570', 'L6571', 'L6572', 'L6573', 'L6574', 'L6575', 'L7657', 'L7658', 'L7659', 'L7660', 'L7661', 'L7662', 'L7663', 'L7664', 'L7665', 'L7666', 'L7667', 'L7668', 'L7669', 'L844', 'L845', 'L846', 'L847', 'L8834', 'L8835', 'L8836', 'L8837', 'L8838', 'L8839', 'L8840', 'L8841', 'L8842', 'L8843', 'L8844', 'L8845', 'L8846', 'L8847'] contexts=['field']
+  - assets_imported_jsurviv_plugins_unitask_runtime_linq_combinelatest_cysharp_threading_tasks_linq_combinelatest -> awaiter edges=119 relations=['references'] locations=['L10115', 'L10121', 'L10127', 'L10133', 'L10139', 'L10145', 'L10151', 'L10157', 'L10163', 'L10169', 'L10175', 'L10181', 'L10187', 'L10193', 'L10199', 'L1275', 'L1281', 'L1287', 'L1293', 'L1299', 'L1781', 'L1787', 'L1793', 'L1799', 'L1805', 'L1811', 'L2371', 'L2377', 'L2383', 'L2389', 'L2395', 'L2401', 'L2407', 'L261', 'L267', 'L3045', 'L3051', 'L3057', 'L3063', 'L3069', 'L3075', 'L3081', 'L3087', 'L3803', 'L3809', 'L3815', 'L3821', 'L3827', 'L3833', 'L3839', 'L3845', 'L3851', 'L4645', 'L4651', 'L4657', 'L4663', 'L4669', 'L4675', 'L4681', 'L4687', 'L4693', 'L4699', 'L515', 'L521', 'L527', 'L5571', 'L5577', 'L5583', 'L5589', 'L5595', 'L5601', 'L5607', 'L5613', 'L5619', 'L5625', 'L5631', 'L6581', 'L6587', 'L6593', 'L6599', 'L6605', 'L6611', 'L6617', 'L6623', 'L6629', 'L6635', 'L6641', 'L6647', 'L7675', 'L7681', 'L7687', 'L7693', 'L7699', 'L7705', 'L7711', 'L7717', 'L7723', 'L7729', 'L7735', 'L7741', 'L7747', 'L853', 'L859', 'L865', 'L871', 'L8853', 'L8859', 'L8865', 'L8871', 'L8877', 'L8883', 'L8889', 'L8895', 'L8901', 'L8907', 'L8913', 'L8919', 'L8925', 'L8931'] contexts=['field']
+  - assets_imported_jsurviv_plugins_unitask_runtime_triggers_monobehaviourmessagestriggers -> assets_imported_jsurviv_plugins_unitask_runtime_triggers_asynctriggerbase_cysharp_threading_tasks_triggers_asynctriggerhandler_1 edges=74 relations=['contains'] locations=['L1032', 'L1093', 'L1153', 'L1212', 'L1271', 'L1330', 'L136', 'L1389', 'L1449', 'L1510', 'L1571', 'L1632', 'L1693', 'L1754', 'L18', 'L1815', 'L1876', 'L1937', 'L195', 'L1997', 'L2056', 'L2115', 'L2175', 'L2235', 'L2294', 'L2353', 'L2412', 'L2471', 'L2530', 'L254', 'L2589', 'L2648', 'L2707', 'L2766', 'L2826', 'L2887', 'L2948', 'L3009', 'L3070', 'L313', 'L3131', 'L3191', 'L3250', 'L3309', 'L3368', 'L3428', 'L3489', 'L3550', 'L3611', 'L3672', 'L372', 'L3733', 'L3794', 'L3855', 'L3916', 'L3977', 'L4038', 'L4099', 'L4160', 'L4221', 'L4282', 'L431', 'L4343', 'L4404', 'L490', 'L549', 'L608', 'L667', 'L727', 'L77', 'L788', 'L849', 'L910', 'L971'] contexts=['']
+note: normal graph.json is post-build; raw producer loss must be measured earlier.

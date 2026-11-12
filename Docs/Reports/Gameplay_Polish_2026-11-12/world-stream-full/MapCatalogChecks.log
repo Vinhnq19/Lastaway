@@ -1,0 +1,86 @@
+PASS: current map_demo fixture is available to checks
+PASS: CRLF + BOM map normalizes to the same SHA-256 map hash
+PASS: snapshot exposes generation and default map
+PASS: snapshot exposes every catalog entry
+PASS: Find returns the requested map
+PASS: authored map keeps exactly 10 spawn points
+PASS: authored map reachable cells validated
+PASS: authoritative layout built from authored document
+PASS: stored JSON is BOM-free with LF line endings
+PASS: preview bytes retained with validated hash
+PASS: Find accepts the matching map hash
+PASS: Find rejects a mismatched map hash
+PASS: Find returns null for an unknown id
+PASS: Find returns null for an empty id
+PASS: snapshot dictionary cannot be mutated
+PASS: entry access cannot mutate the published snapshot
+PASS: each snapshot owns copies of its entries
+PASS: every bundled map passes authoritative validation
+PASS: register p1
+PASS: register p2
+PASS: enough players do not auto-start a manual room
+PASS: non-host cannot start
+PASS: host cannot start before map acknowledgements
+PASS: map verified for p1
+PASS: map verified for p2
+PASS: host starts verified room
+PASS: register p3
+PASS: joining during countdown cancels it
+PASS: manual countdown fixture has three verified-capability players
+PASS: disconnect immediately cancels countdown even when minimum players remain
+PASS: disconnect on final countdown tick cannot advance to Loading
+PASS: legacy fixture retains count-based lobby behavior
+PASS: legacy handshake fixture reserves one slot before gameplay negotiation
+[joined] playerId=bac07b1f-937a-45e1-9bff-c4948eca4cab roomId=80c8aa39-1ff0-4c11-85af-d8b68da5e781 transport=Udp serverSlots=1/50
+[rejected] reason=GameplayVersionMismatch serverSlots=0/50
+PASS: old gameplay version is rejected explicitly and releases its slot
+PASS: non-host cannot select map
+PASS: host selects second map
+PASS: changing map resets all readiness
+PASS: stale start packet rejected
+PASS: map verified for p1
+PASS: map verified for p2
+PASS: selected authored map supplies actual world, collision and spawns
+PASS: online map starts with a safe zone sized to its bounds
+PASS: in-game map changes rejected
+[room-created] roomId=03f43f91-853c-4f23-ae86-e4992a35a215 capacity=10
+PASS: register visitor
+PASS: created room waits for creator rather than granting a visitor host
+PASS: register creator-session
+PASS: creator receives initial host authority
+PASS: host leave transfers to earliest remaining member
+PASS: register creator-returned
+PASS: returning owner does not reclaim session host authority
+PASS: map verified for visitor
+PASS: map verified for creator-returned
+PASS: leaving during manual countdown cancels start
+PASS: register creator-returned-again
+PASS: map verified for visitor
+PASS: map verified for creator-returned-again
+PASS: two concurrent rooms use different authoritative geometry, placements and hashes
+[room-created] roomId=2948dec2-376c-4330-8c29-066c856161e3 capacity=10
+PASS: new valid catalog activates without restart
+PASS: running matches frozen, waiting room switches to published default
+PASS: removed map version remains available to pinned matches
+PASS: after results the room returns to waiting on latest map without auto-start
+PASS: new waiting round publishes identity/proof so host can start again before InGame
+PASS: publish validates and installs complete immutable payloads
+PASS: repeat publish advances generation without replacing immutable map bytes
+PASS: invalid publish rejected before activation
+PASS: failed publish preserves active catalog byte for byte
+PASS: room map packet roundtrip preserves independent map/rules identities
+PASS: map hash mismatch rejected
+PASS: failed load leaves the previous snapshot unchanged
+PASS: duplicate map id rejected
+PASS: unknown default map rejected
+PASS: unsupported schema version rejected
+PASS: zero generation rejected
+PASS: invalid map geometry rejected
+PASS: preview larger than 512KiB rejected
+PASS: oversized map fixture exceeds the 2MiB bound
+PASS: map.json larger than 2MiB rejected
+PASS: path traversal map id rejected
+PASS: non-PNG preview rejected
+PASS: missing world version rejected
+PASS: missing catalog directory rejected
+MapCatalogChecks: 81 passed, 0 failed

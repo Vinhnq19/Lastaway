@@ -1,0 +1,248 @@
+PASS 1: v4 roundtrip preserves attempt/resume/ticket without JWT
+PASS 2: JoinRequest logging redacts bearer and room
+PASS 3: v4 rejects trailing data
+PASS 4: v4 rejects every truncated prefix without throwing
+PASS 5: v4 rejects malformed bearer before transport
+PASS 6: v4 rejects malformed bearer before transport
+PASS 7: v4 rejects malformed bearer before transport
+PASS 8: v4 rejects malformed bearer before transport
+PASS 9: v4 rejects malformed bearer before transport
+PASS 10: v4 enforces 512-byte cap
+[ready] udp=127.0.0.1:57836 maxPlayers=10 tickRate=30 authMode=RoomCode protocol=4 accountRequired=False supported=1,2,3,4
+PASS 11: Empty server deployment snapshot is safe
+[rejected] reason=InvalidRoomCode serverSlots=0/50
+PASS 12: Mã phòng sai bị reject, không giữ slot
+[rejected] reason=MalformedRequest serverSlots=0/50
+PASS 13: Connection payload thiếu byte không crash
+[rejected] reason=UnsupportedVersion serverSlots=0/50
+PASS 14: Request reject: UnsupportedVersion
+[rejected] reason=AuthModeMismatch serverSlots=0/50
+PASS 15: Request reject: AuthModeMismatch
+[rejected] reason=AuthModeMismatch serverSlots=0/50
+PASS 16: Request reject: AuthModeMismatch
+[rejected] reason=InvalidDisplayName serverSlots=0/50
+PASS 17: Request reject: InvalidDisplayName
+[rejected] reason=InvalidDisplayName serverSlots=0/50
+PASS 18: Request reject: InvalidDisplayName
+[rejected] reason=InvalidRoomCode serverSlots=0/50
+PASS 19: Request reject: InvalidRoomCode
+[rejected] reason=PayloadTooLarge serverSlots=0/50
+PASS 20: Request reject: PayloadTooLarge
+[rejected] reason=MalformedRequest serverSlots=0/50
+PASS 21: Key smoke cũ không còn được accept
+[rejected] reason=RoomFull serverSlots=10/50
+[joined] playerId=82658380-3575-48b4-bd84-7a15a035dfd2 roomId=0bbc49fb-5ffe-4ce2-a460-0bd9eb2bdb69 transport=Udp serverSlots=10/50
+[joined] playerId=c26544ad-1ea7-4395-a427-5a3fbc37f900 roomId=0bbc49fb-5ffe-4ce2-a460-0bd9eb2bdb69 transport=Udp serverSlots=10/50
+[joined] playerId=3b615458-9870-4dff-97f8-dd9297f207e8 roomId=0bbc49fb-5ffe-4ce2-a460-0bd9eb2bdb69 transport=Udp serverSlots=10/50
+[joined] playerId=ef175e40-46f7-4c52-8105-774fb0ddfde5 roomId=0bbc49fb-5ffe-4ce2-a460-0bd9eb2bdb69 transport=Udp serverSlots=10/50
+[joined] playerId=4676b8de-1d55-4188-a879-b3e7bcd1ec64 roomId=0bbc49fb-5ffe-4ce2-a460-0bd9eb2bdb69 transport=Udp serverSlots=10/50
+[joined] playerId=c2260ae6-90f9-4b9f-91c6-40f0810214e0 roomId=0bbc49fb-5ffe-4ce2-a460-0bd9eb2bdb69 transport=Udp serverSlots=10/50
+[joined] playerId=b8d0808b-0ebf-4bb8-98d5-ad826babc301 roomId=0bbc49fb-5ffe-4ce2-a460-0bd9eb2bdb69 transport=Udp serverSlots=10/50
+[joined] playerId=5800f5d2-dc04-4b99-81f4-d0b607b17206 roomId=0bbc49fb-5ffe-4ce2-a460-0bd9eb2bdb69 transport=Udp serverSlots=10/50
+[joined] playerId=1e1ade67-b8b7-4f81-88f3-cae37ca54f61 roomId=0bbc49fb-5ffe-4ce2-a460-0bd9eb2bdb69 transport=Udp serverSlots=10/50
+[joined] playerId=4da0e58d-711d-48f3-9ee6-74f0759a585d roomId=0bbc49fb-5ffe-4ce2-a460-0bd9eb2bdb69 transport=Udp serverSlots=10/50
+PASS 22: Deployment refuses occupied server
+PASS 23: 11 request đồng thời chỉ nhận 10
+PASS 24: Peer thứ 11 nhận RoomFull
+PASS 25: RoomCode: server cấp 10 PlayerId khác nhau
+PASS 26: 10 client nhận Pong với đúng sequence
+PASS 27: Packet thiếu/thừa/lạ/sequence sai/quá dài không được Pong
+PASS 28: Sau packet lỗi, server vẫn trả Pong hợp lệ
+PASS 29: Disconnect trả slot
+[joined] playerId=7d87e14e-6b63-4e09-8276-b32037da2107 roomId=0bbc49fb-5ffe-4ce2-a460-0bd9eb2bdb69 transport=Udp serverSlots=10/50
+PASS 30: RoomCode reconnect nhận PlayerId mới
+PASS 31: Client mới vào slot vừa trả và ping được
+PASS 32: Timeout client mất mạng cũng trả slot
+PASS 33: Dừng toàn bộ client dọn hết slot
+[ready] udp=127.0.0.1:54501 maxPlayers=10 tickRate=30 authMode=Jwt protocol=4 accountRequired=False supported=1,2,3,4
+[joined] playerId=58b2519d-ffd7-444c-a4b5-2b06cf0f758e roomId=a9f730a5-e23f-403c-87dc-7f9f55a8b771 transport=Udp serverSlots=1/50
+PASS 34: JWT hợp lệ: PlayerId lấy từ sub đã xác minh
+PASS 35: JWT accepted rồi mới Ping/Pong
+[rejected] reason=DuplicateSession serverSlots=1/50
+PASS 36: Cùng user không thể giữ hai phiên
+[joined] playerId=58b2519d-ffd7-444c-a4b5-2b06cf0f758e roomId=a9f730a5-e23f-403c-87dc-7f9f55a8b771 transport=Udp serverSlots=1/50
+PASS 37: Disconnect dọn user mapping, JWT join lại được cùng ID
+[rejected] reason=InvalidToken serverSlots=0/50
+PASS 38: JWT reject: malformed
+[rejected] reason=InvalidToken serverSlots=0/50
+PASS 39: JWT reject: sai chữ ký
+[rejected] reason=InvalidToken serverSlots=0/50
+PASS 40: JWT reject: hết hạn
+[rejected] reason=InvalidToken serverSlots=0/50
+PASS 41: JWT reject: chưa có hiệu lực
+[rejected] reason=InvalidToken serverSlots=0/50
+PASS 42: JWT reject: sai issuer
+[rejected] reason=InvalidToken serverSlots=0/50
+PASS 43: JWT reject: sai audience
+[rejected] reason=InvalidToken serverSlots=0/50
+PASS 44: JWT reject: thiếu exp
+[rejected] reason=InvalidToken serverSlots=0/50
+PASS 45: JWT reject: thiếu sub
+[rejected] reason=InvalidToken serverSlots=0/50
+PASS 46: JWT reject: sub trống
+[rejected] reason=InvalidToken serverSlots=0/50
+PASS 47: JWT reject: HS512
+[rejected] reason=InvalidToken serverSlots=0/50
+PASS 48: JWT reject: unsigned
+PASS 49: Token test lớn hơn một datagram smoke
+[joined] playerId=4f0b302c-67d6-4b74-a331-a8084f83196d roomId=a9f730a5-e23f-403c-87dc-7f9f55a8b771 transport=Udp serverSlots=1/50
+PASS 50: Auth ReliableOrdered có fragmentation vẫn xác thực được
+[rejected] reason=AuthenticationRequired serverSlots=0/50
+PASS 51: Pending không được gửi Ping trước Auth
+[rejected] reason=AuthenticationRequired serverSlots=0/50
+PASS 52: Auth thiếu token bị reject
+[rejected] reason=PayloadTooLarge serverSlots=0/50
+PASS 53: Auth packet vượt 4096 byte bị reject
+[rejected] reason=AuthenticationRequired serverSlots=0/50
+PASS 54: Token vượt giới hạn 2048 ký tự bị reject
+PASS 55: 10 pending giữ đủ 10 slot
+[rejected] reason=RoomFull serverSlots=10/50
+PASS 56: Peer thứ 11 bị chặn dù 10 peer còn pending
+[rejected] reason=AuthTimeout serverSlots=9/50
+[rejected] reason=AuthTimeout serverSlots=8/50
+[rejected] reason=AuthTimeout serverSlots=7/50
+[rejected] reason=AuthTimeout serverSlots=6/50
+[rejected] reason=AuthTimeout serverSlots=5/50
+[rejected] reason=AuthTimeout serverSlots=4/50
+[rejected] reason=AuthTimeout serverSlots=3/50
+[rejected] reason=AuthTimeout serverSlots=2/50
+[rejected] reason=AuthTimeout serverSlots=1/50
+[rejected] reason=AuthTimeout serverSlots=0/50
+PASS 57: Pending hết deadline trả hết slot, không tự join
+PASS 58: Pending không Auth nhận AuthTimeout
+[rejected] reason=RoomFull serverSlots=10/50
+[joined] playerId=cd111e80-7e55-4bda-b6e4-f5ad0d509b6c roomId=a9f730a5-e23f-403c-87dc-7f9f55a8b771 transport=Udp serverSlots=10/50
+[joined] playerId=03f650e4-c5c2-4db9-946e-e5622093d97a roomId=a9f730a5-e23f-403c-87dc-7f9f55a8b771 transport=Udp serverSlots=10/50
+[joined] playerId=38909a11-939a-4445-8b8f-a463c03f2b47 roomId=a9f730a5-e23f-403c-87dc-7f9f55a8b771 transport=Udp serverSlots=10/50
+[joined] playerId=ad5d7b57-ec54-4041-afb7-2ed33b553965 roomId=a9f730a5-e23f-403c-87dc-7f9f55a8b771 transport=Udp serverSlots=10/50
+[joined] playerId=3f4ae904-b3c9-41e0-9019-b771a6f39a36 roomId=a9f730a5-e23f-403c-87dc-7f9f55a8b771 transport=Udp serverSlots=10/50
+[joined] playerId=c097441e-5670-4c8d-b6d6-fca82260a8fa roomId=a9f730a5-e23f-403c-87dc-7f9f55a8b771 transport=Udp serverSlots=10/50
+[joined] playerId=5a75e91c-0bbd-46ab-ae55-e2fd46c8b912 roomId=a9f730a5-e23f-403c-87dc-7f9f55a8b771 transport=Udp serverSlots=10/50
+[joined] playerId=23e7cb6e-ec87-4e71-a46d-6102617f028c roomId=a9f730a5-e23f-403c-87dc-7f9f55a8b771 transport=Udp serverSlots=10/50
+[joined] playerId=8bef18c3-288e-459b-a989-d1bfc17ec8e5 roomId=a9f730a5-e23f-403c-87dc-7f9f55a8b771 transport=Udp serverSlots=10/50
+[joined] playerId=978444f7-f4c2-4be3-97f4-d18a763eb6ea roomId=a9f730a5-e23f-403c-87dc-7f9f55a8b771 transport=Udp serverSlots=10/50
+PASS 59: 10 JWT user khác nhau join, thứ 11 RoomFull
+PASS 60: 10 JWT user đều nhận Pong đúng sequence
+PASS 61: Fixed delta 1/30 và nhịp gần 30Hz trong 2 giây
+PASS 62: Stall 300ms: tối đa 5 catch-up tick, báo droppedTicks
+PASS 63: Stall diagnostics preserve max work/loop spacing even when p99 hides a rare pause
+PASS 64: Stage timing identifies the deliberately stalled network poll
+PASS 65: Window reports distinguish GC pause and previous metric-output time without dropping counters
+PASS 66: Endpoint JSON dùng khi không có env
+PASS 67: Env override endpoint, giữ auth và wire v1
+PASS 68: Env endpoint sai bị từ chối, không fallback JSON: NET_MODE/bad
+PASS 69: Env endpoint sai bị từ chối, không fallback JSON: NET_GAME_SERVER_HOST/http://bad:7777
+PASS 70: Env endpoint sai bị từ chối, không fallback JSON: NET_GAME_SERVER_PORT/abc
+PASS 71: Env endpoint sai bị từ chối, không fallback JSON: NET_GAME_SERVER_PORT/65536
+PASS 72: Env endpoint sai bị từ chối, không fallback JSON: NET_GAME_SERVER_HOST/ 
+PASS 73: Env override API vẫn kiểm tra bảo vệ JWT từ xa
+PASS 74: Config sai mode: báo lỗi và exit 1
+PASS 75: Config sai gameServerHost: báo lỗi và exit 1
+PASS 76: Config sai gameServerPort: báo lỗi và exit 1
+PASS 77: Config sai authMode: báo lỗi và exit 1
+PASS 78: Config sai protocolVersion: báo lỗi và exit 1
+PASS 79: Config sai connectTimeoutMs: báo lỗi và exit 1
+PASS 80: JWT client từ chối API URL không được phép: Local
+PASS 81: JWT client từ chối API URL không được phép: LAN
+PASS 82: JSON lỗi bị từ chối
+PASS 83: File config không tồn tại bị từ chối
+PASS 84: Room-plan CLI: null-list
+PASS 85: Room-plan CLI: empty-list
+PASS 86: Room-plan CLI: null-entry
+PASS 87: Room-plan CLI: empty-id
+PASS 88: Room-plan CLI: empty-code
+PASS 89: Room-plan CLI: null-code
+PASS 90: Room-plan CLI: long-code
+PASS 91: Room-plan CLI: zero-clients
+PASS 92: Room-plan CLI: too-many-per-room
+PASS 93: Room-plan CLI: too-many-total
+PASS 94: Room-plan CLI: duplicate-id
+PASS 95: Room-plan CLI: too-many-rooms
+PASS 96: Room-plan CLI: unknown-field
+PASS 97: Room-plan CLI: valid-single-256
+PASS 98: Room-plan CLI: valid-multi-256
+PASS 99: Room-plan CLI: valid-32-rooms
+PASS 100: Server không chạy: client timeout, không exit thành công giả
+PASS 101: Server config sai GAME_BIND_ADDRESS: dừng trước khi mở socket
+PASS 102: Server config sai GAME_PORT: dừng trước khi mở socket
+PASS 103: Server config sai MAX_PLAYERS: dừng trước khi mở socket
+PASS 104: Server config sai TICK_RATE: dừng trước khi mở socket
+PASS 105: Server config sai AUTH_MODE: dừng trước khi mở socket
+PASS 106: Server config sai ROOM_CODE: dừng trước khi mở socket
+PASS 107: Server config sai AUTH_TIMEOUT_MS: dừng trước khi mở socket
+PASS 108: Server config sai METRICS_INTERVAL_SECONDS: dừng trước khi mở socket
+[room-created] roomId=3fe91c57-0067-466f-80f4-cd499d564640 capacity=2
+[room-created] roomId=dbb22e73-51b0-4671-ba34-6bbcfcc007cc capacity=2
+PASS 109: Owner quota: at most 2 added rooms
+PASS 110: Room capacity cannot exceed total server capacity
+PASS 111: Distinct six-character readable join codes
+PASS 112: Owner list includes default without its code
+PASS 113: Other user cannot list private rooms or codes
+PASS 114: Non-owner cannot delete room
+PASS 115: Default room cannot be deleted
+PASS 116: Pending JWT also prevents deleting a room
+PASS 117: Empty rooms survive before TTL
+[room-expired] roomId=dbb22e73-51b0-4671-ba34-6bbcfcc007cc
+PASS 118: 600s expires empty rooms, preserves occupied/default
+PASS 119: Empty TTL starts again after last pending/active peer leaves
+[room-expired] roomId=3fe91c57-0067-466f-80f4-cd499d564640
+PASS 120: Released room expires after full empty TTL
+PASS 121: Restart restores only default room
+[room-created] roomId=70d30d2a-afa9-48e6-9f4c-cbae539e6ce0 capacity=2
+[room-created] roomId=e753b3a5-6991-4071-b593-0fc773b41a76 capacity=2
+[room-created] roomId=6e360452-dbe3-40c4-adc6-2970dbe4015c capacity=2
+[room-created] roomId=a952391a-1033-4e82-85a1-a0e35b5a3614 capacity=2
+PASS 122: Maximum 5 rooms includes default; reject sixth
+PASS 123: Bounded control queue rejects overflow
+PASS 124: Control commands drain on UDP application thread
+PASS 125: Cancelled queued operation does not mutate room registry
+PASS 126: Selected policy defaults: 10 players/room, 5 rooms, 50 total, 2 created rooms/user
+PASS 127: Reject configuration above the selected room policy
+PASS 128: Reject configuration above the selected room policy
+PASS 129: Reject configuration above the selected room policy
+PASS 130: Reject configuration above the selected room policy
+PASS 131: Created room cannot exceed configured total capacity
+[ready] udp=127.0.0.1:49746 maxPlayers=2 tickRate=30 authMode=RoomCode protocol=4 accountRequired=False supported=1,2,3,4
+[room-created] roomId=11522197-31a1-44d5-8ee0-273793bc7d0f capacity=2
+[rejected] reason=RoomFull serverSlots=2/3
+[joined] playerId=48234a22-30f5-4fba-b9fa-4fac1cc020ab roomId=52369706-4d75-4e4b-a411-e63ffa1f9b21 transport=Udp serverSlots=2/3
+[joined] playerId=9b1c6f14-6eb9-435e-a25d-ae183d14d68e roomId=52369706-4d75-4e4b-a411-e63ffa1f9b21 transport=Udp serverSlots=2/3
+PASS 132: Room A reaches its own capacity
+[joined] playerId=1c99ebb4-d7ab-4ca1-a74b-89421044575a roomId=11522197-31a1-44d5-8ee0-273793bc7d0f transport=Udp serverSlots=3/3
+PASS 133: Full room A does not block room B
+[rejected] reason=ServerFull serverSlots=3/3
+PASS 134: Total server capacity includes all rooms
+PASS 135: Occupied room cannot be deleted
+PASS 136: Disconnect returns only the correct room slot
+PASS 137: Owner can delete empty room
+[room-created] roomId=b2c34272-6b5c-41e2-b198-8f0afeb3d446 capacity=2
+[rejected] reason=ServerFull serverSlots=3/3
+[joined] playerId=d8689484-510c-4fbb-a023-6c3dee21ed2b roomId=52369706-4d75-4e4b-a411-e63ffa1f9b21 transport=Udp serverSlots=3/3
+[joined] playerId=7fc06a9e-785d-4699-acfe-f2a4bca746c8 roomId=52369706-4d75-4e4b-a411-e63ffa1f9b21 transport=Udp serverSlots=3/3
+[joined] playerId=2c8dcd2c-cc26-44ec-8613-58f832e724a0 roomId=b2c34272-6b5c-41e2-b198-8f0afeb3d446 transport=Udp serverSlots=3/3
+PASS 138: Simultaneous joins across rooms never exceed total cap
+PASS 139: Missing control secret keeps default UDP available without HTTP
+PASS 140: Configured control secret must contain at least 32 bytes
+[ready] udp=127.0.0.1:49756 maxPlayers=2 tickRate=30 authMode=Jwt protocol=4 accountRequired=False supported=1,2,3,4
+[room-created] roomId=a5923184-2c27-4ffc-abc9-03a250c02fd2 capacity=2
+[rejected] reason=RoomFull serverSlots=2/3
+PASS 141: JWT pending occupies capacity in its own room
+[rejected] reason=ServerFull serverSlots=3/3
+PASS 142: JWT pending in multiple rooms occupies total server capacity
+[rejected] reason=AuthTimeout serverSlots=2/3
+[rejected] reason=AuthTimeout serverSlots=1/3
+[rejected] reason=AuthTimeout serverSlots=0/3
+PASS 143: JWT auth deadline returns the correct slots across rooms
+[joined] playerId=multi-user roomId=a5923184-2c27-4ffc-abc9-03a250c02fd2 transport=Udp serverSlots=1/3
+PASS 144: JWT activation after timeout uses the selected room
+[room-control] enabled port=49812
+PASS 145: Private control requires its own secret
+PASS 146: Deployment status is never public without control secret
+PASS 147: Wrong private secret rejected
+PASS 148: Authorized HTTP control completes through UDP command queue
+PASS 149: Deployment snapshot is queued, read-only and omits join codes/secrets
+PASS 149 network checks. Không nghiệm thu LAN/VPN hoặc gameplay.
+[stopped] UDP socket đã đóng.
+[stopped] UDP socket đã đóng.
+[stopped] UDP socket đã đóng.
+[stopped] UDP socket đã đóng.

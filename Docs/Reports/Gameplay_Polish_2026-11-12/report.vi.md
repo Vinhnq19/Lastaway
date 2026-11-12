@@ -1,99 +1,73 @@
 # Kiểm thử Gameplay Polish — 12/11/2026
 
 ## 1. Kết luận hiện tại
-BẢN SỬA BOT CUỐI: PASS các cổng Local. Ca seed cũ đứng im đã qua, 18/18 bot dịch chuyển; stress 5 phòng/50 slot, 45 bot đồng thời đủ 300 giây PASS, không bot sống ≥15 giây đứng nguyên chỗ. Cổng Local Full bằng client mới cũng PASS: WSS 300 giây, Auto hai client, UDP/account/phòng, kết quả/history/replay, fingerprint source/build và số đo server. Thị trấn 1+9 bot qua Auto→WSS PASS bằng cùng artifact.
 
-Bản bàn giao: `Builds/Bot-Recovery/Lastaway.exe` cùng toàn bộ thư mục; Unity cá nhân 6000.3.21f1, shared Git vẫn 6000.3.15f1. SourceHash `b7f71312d348109f20f40e2ba069bbd8544cb3086caad48349d67b5fbce98a4c`, playerFingerprint `f8b837bd805f284fb4bf8472b2286fb145a93df586a036a87848910b6c333ea6`. Chưa publish GHCR hoặc truy cập/deploy AWS trong đợt sửa này. Các FAIL cũ bên dưới là lịch sử, không bị đổi thành PASS.
+**PASS cổng Local mới nhất.** Đã xử lý bot đứng tại spawn, lỗi thiếu dữ liệu world khiến client không gửi input, và giảm cấp phát bộ nhớ trong gameplay. Full bằng Windows client mới + Docker giới hạn 256 MiB đạt; chưa deploy hoặc truy cập AWS.
 
-## 2. Các sửa đã thực hiện
-- Bỏ nhãn dài trên nhân vật: ẩn nhãn của mình, tên người khác ngắn, tôn trọng visibility.
-- Spectator dùng kích thước map runtime, tự chọn người còn sống sau khi chết/killcam, không suy ra kết quả trận từ việc thiếu target; giữ vị trí camera lúc chờ dữ liệu.
-- Bot tiếp tục A* qua nhiều tick, theo đường partial hợp lệ, không tính chờ ngân sách là kẹt. Ưu tiên vào bo trong lúc đang co và tính thời gian đi; stun không làm sai ETA. Bỏ rương có chỗ đứng bị chặn.
-- Dùng index không gian của map cho collision tìm đường; vẫn kiểm cửa/vật đã phá theo từng phòng, trứng động và cùng bán kính nhân vật.
-- Hàng đợi world action tối đa 8/phiên, xử lý 1/tick sau movement; trả lỗi Busy khi đầy thay vì bỏ thao tác cùng tick. Client giữ số thứ tự qua resume, hạn chế thao tác đang chờ và hiện dấu chờ nhặt.
-- Cache world pages theo phòng/trận/revision; bỏ cấp phát snapshot/string chỉ để kiểm effects. WebSocket xen snapshot mới giữa burst reliable. Buffer interpolation thích ứng jitter; prediction hiện có được giữ.
-- Sửa panel Local Docker dev bị footer che; người chơi Release vẫn chỉ thấy 3 môi trường.
+Bản bàn giao: `D:/Unity/Lastaway/Builds/Bot-Recovery-Main/Lastaway.exe` cùng toàn bộ thư mục. Unity cá nhân **6000.3.21f1**; phiên bản chung trong Git vẫn **6000.3.15f1**. Build `build-a09ec938a2`: 0 lỗi, 2 warning, 306,49 MiB. Không coi warning là lỗi compile.
 
-## 3. Kiểm module
-- Unity 6000.3.21f1: 1.254 EditMode và 215 PlayMode PASS, không skipped. Các test killcam cập nhật kỳ vọng sau tick thành tự spectator, giữ kiểm thời lượng 5 giây và UI 500ms.
-- Inventory, World, MapCatalog, Network, DualTransport, GameplayNetwork, Match, MatchResult, LanHost, Combat, Throwable, MapScale, FloorLoot, Telemetry PASS; log riêng trong thư mục này.
-- WorldNetwork Mixed: 82 kiểm tra PASS trên UDP/WebSocket loopback thực, gồm 20 request dồn nhận đủ phản hồi, loot tranh và chống trùng.
-- Airdrop: 215 PASS. Lượt seed ngẫu nhiên ban đầu có lượt thả thứ ba bị hủy hợp lệ do không có điểm đáp. Fixture socket cố định seed 42 để lặp lại; không sửa lịch/luật thả của production.
+- SourceHash: `40c799f06c4fb2b4d06c4fca33fd865204e3e1262ba9336fa03e9ad123cbb279`.
+- Player fingerprint: `0be25b7fc3b1a2b58441f64a20d4f2e920232d2df686adcb9762b1d02e57a647`.
+- Receipt dùng cho pipeline: `Backend/out/bot-world-stream-gc-20261112/local-evidence.json`.
+- Báo cáo này gồm cả FAIL cũ và PASS mới; không sửa receipt hoặc giảm gate để nhận PASS.
 
-## 4. Kiểm bot và hiệu năng
-### Sửa bổ sung sau phản hồi bot đứng im
-- Đã tái hiện lỗi bằng MatchId `fb9db6ce-2f53-4e27-8fef-452abc13f29b` trên Tháp cổ; bot NetId 3 ở Loot, displacement 0 dù còn sống gần 90 giây. Lượt seed cố định sau đó vẫn FAIL, vì vậy lượt random 18/18 di chuyển không được dùng để kết luận đã hết lỗi.
-- Vòng phục hồi có nhiều timer chồng nhau: timer ngắn hủy A* còn pending; timer actor không được rearm khi FailPath khiến đường mới bị hủy tiếp từng frame. Đi chậm bị đo bằng độ lệch mỗi tick thay vì tích lũy. Đi hết partial route bị coi là mục tiêu không thể tới.
-- Bản cuối giữ frontier khi chờ, lấy partial route có kiểm collision, cho tìm tiếp phần còn lại; timer actor chỉ hoạt động sau khi thực sự có công việc tìm đường/di chuyển. FailPath rearm timer một lần để đường mới có cơ hội chạy. Heal/stun không bị tính là kẹt; đổi mục tiêu không reset timer actor đang theo dõi.
-- Thêm kiểm chờ ngân sách 8 giây rồi tiếp tục, rearm recovery, di chuyển chậm và partial path. Fixture stress chỉ lấy origin sau InGame và kiểm từng bot sống ít nhất 15 giây phải dịch chuyển ít nhất 0,5 cell; không tính bước dịch chuyển spawn. Đây là kiểm phát hiện đứng im cả đời, không chứng minh bot luôn có chiến thuật tốt hoặc không bao giờ đứng lại để bắn/phá vật/hồi máu.
-- `dotnet build Backend/Tests/BotChecks/BotChecks.csproj -c Release --no-restore`: PASS, 0 warnings/0 errors. Bản sửa cuối: runtime/gameplay NOT_TESTED; không dùng số PASS cũ thay thế.
-- Graphify có cảnh báo parser tại BotChecks (top-level program) và một số file UniTask; phần trích xuất có thể thiếu symbol. Đây là giới hạn bản đồ mã, không thay kết quả compiler hoặc bằng chứng runtime.
-- DeepSeek được gọi 2 lượt: lượt đầu NO_CHANGES; lượt thu hẹp có patch C# không hợp lệ, đã CANCELED và giữ đề xuất, không apply. Codex hoàn thiện theo quyền tiếp quản trước đó. Không gọi thêm model.
+## 2. Nguyên nhân và sửa đổi
 
-Có hai map thật Tháp cổ/Thị trấn; golden collision đối chiếu 1.000 điểm/map với truy vấn gốc, gồm trạng thái cửa/vật phá khác nhau. BotChecks còn kiểm perception, reload, loot, phá vật, hazard, bo đang co không có warning flag, thiếu budget, chết, NoHumans và chơi lại.
+**Bot:** ca cố định MatchId `fb9db6ce-2f53-4e27-8fef-452abc13f29b`, NetId 3 từng sống gần90s mà không dịch chuyển. Bot đổi qua lại giữa hai mục tiêu loot không thể tới, trong khi chỉ nhớ một mục tiêu thất bại. Bản sửa tạm ngừng tìm loot5s theo cấu hình hiện có, chọn bước đi gần qua segment đã kiểm collision; giữ ưu tiên bo/hazard/combat. Đồng thời giữ A* pending, không hủy partial route hợp lệ, rearm timer kẹt một lần và đo tiến triển tích lũy. Không teleport/tăng tốc hoặc sửa HP.
 
-5 phòng/50 slot (45 bot), 300 giây: không dropped tick; 86/90 lượt sống bot từng dịch chuyển hơn 0,5 cell. Đây là các lượt sống qua reset, không phải 90 bot đồng thời. Bốn lượt chưa đạt khoảng dịch chuyển đó trước khi bị loại/reset. Lượt này chạy trước guard cuối tránh mục tiêu rương bị chặn.
+**World stream:** map có hơn64page; hàng đợi reliable WebSocket chứa64message. Bản cũ gửi cả batch, bỏ qua TrySend=false rồi đánh dấu revision đã gửi; client thiếu page giữ trạng thái chưa sẵn sàng và không phát input. Sửa bằng cursor từng phiên, tối đa8page/tick, giữ nguyên revision bất biến tới khi gửi đủ; dành16slot cho control/inventory/reply, không tăng hàng đợi. Không tiến triển5s thì ngắt rõ ServerBusy. Điều khiển reliable không gửi được không còn bị bỏ im lặng. Không đổi wire protocol/account guard.
 
-Bản code cuối chạy lại 1 phòng/9 bot đủ 300 giây: BotChecks 1.660 checks PASS (có assertion lặp theo slice; không phải 1.660 kịch bản khác nhau). Xem bot-summary.json/CSV cho RAM, tick spike và số đo. Không dùng kết quả runtime để tuyên bố chất lượng cảm giác chơi hoặc Internet.
+**Cấp phát/GC:** một lượt Full có5dropped tick đi cùng GC pause305,798ms. Đã bỏ Floor.Items.ToArray cho từng actor từng tick, tái dùng snapshot buffer, writer theo batch và bỏ copy page trung gian. Phép đo100lần snapshot giảm1.401.600→488.000byte, khoảng65%; không phải giảm65% RAM toàn server. Lượt Full sau sửa không dropped tick; không cam kết mọi pause GC/giật mạng đã biến mất.
 
-## 5. Windows build và chơi Docker thật
-Unity 6000.3.21f1, build cuối `build-0e4c2cb632` tạo đầy đủ artifact mới. Lượt đầu serialize lại asset nên build incremental để ổn định fingerprint; `source-build-verification.json` xác nhận current == build, không sửa manifest thủ công. Gọi BuildPipeline qua execute_code trước đó không hoàn tất, đã khôi phục Editor và chuyển sang công cụ build chuyên dụng. Xem manifest `Builds/Gameplay-Polish/registry-build.json`.
+Các sửa checkpoint trước vẫn giữ: nhãn tên gọn, camera spectator theo map/runtime, hàng đợi world action có giới hạn và xử lý sau movement, chờ nhặt trên client, interpolation thích ứng jitter, Local Docker dành cho dev. Prediction/reconciliation hiện có không bị thay bằng mô phỏng thứ hai.
 
-- Tháp cổ, 1 người +9 bot, main profile, UDP: PASS 300 giây kết nối; cả 9 bot dịch chuyển >0,5 cell theo snapshot client. Input 29,94Hz, snapshot 30,01Hz, 300/300 pong; RTT p50 33,32ms, p95 33,84ms, p99 66,60ms. Đăng nhập, map, bo/HP, kết quả, history, replay và thoát code 0 đạt. Một catchup drop phía client được ghi nhận; không đánh đồng với dropped tick server.
-- Thị trấn, 2 Windows client, profile test: PASS. Một UDP và một Auto fallback sang WebSocket với lý do ConnectTimeout (cố ý cấu hình cổng UDP không có listener). Input 29,71/29,72Hz, snapshot 30,02/30,04Hz; không timeout pong. Cả hai có kết quả/history/replay và thoát code 0.
-- Thị trấn, 1+9 bot, profile tăng tốc riêng, Auto→WebSocket: PASS 29,29 giây kết nối, input 29,76Hz, snapshot 29,98Hz, không timeout pong. Có 4 bot dịch chuyển >0,5 cell trước khi bị loại/reset trong lịch test nhanh. Không dùng lượt này để tuyên bố 9 bot đi liên tục trong 5 phút trên map này.
+## 3. Kiểm module và ca lỗi
 
-Ảnh lobby/in-game/kết quả và JSON/CSV nằm trong ba thư mục unity-bots10, unity-mixed-two, unity-bots-town. maxBotsMoved/maxBotTravelCells đo từ snapshot authoritative; độ lệch vị trí có thể gồm portal, không phải tổng quãng đường đi bộ. Camera trong ảnh dùng Follow Player; maxOnScreenPlayers khác số actor đã spawn.
+- Cổng mới chạy lại9suite: Network, DualTransport, MapCatalog, Bot, MatchResult, Combat, Inventory, World, Match — PASS.
+- DualTransport60assertion: fixture lớn hơn64page, chỉ nhận2page/tick, revision đổi liên tục vẫn nhận đủ revision đầu; không tiến triển thì ngắt có giới hạn. **Chạy code sender cũ với cùng fixture: FAIL đúng ca thiếu page; khôi phục bản sửa: PASS.**
+- WorldChecks177assertion: thứ tự/nội dung snapshot, tái dùng buffer không giữ đồ đã xóa, snapshot độc lập cũ không bị sửa, giảm cấp phát và roundtrip page.
+- WorldNetwork Mixed82: socket UDP/WebSocket thực, loot tranh, inventory, combat và20request dồn nhận đủ phản hồi. Airdrop215: trứng/loot/stream và fixture seed42 ổn định.
+- Unity tại checkpoint client:1.254 EditMode và215 PlayMode PASS. Không chạy lại hai bộ này chỉ vì sửa server; Windows build hiện tại được kiểm trực tiếp dưới đây.
+- Các con số là assertion/check, có kiểm lặp theo slice, không phải số kịch bản độc lập.
 
-### Cổng Full trên artifact cuối
-Fingerprint source `6e4cbe4e1a7750a178787161747537c74808981bee3428e9137f316a2c93ba26` đã khớp. Lượt `unity-final-full` PASS qua Auto→WebSocket, đủ 300.03 giây, code 0, có kết quả/history/replay. Client xác nhận 9 bot có di chuyển; input 29.88Hz, snapshot 30.00Hz, timeout pong 0. Đây là lượt Full gắn với manifest/fingerprint cuối.
+## 4. Bot và sức chứa
 
-Metrics container được giữ trước khi recreate: 101 mẫu, max RAM 130.18MiB/256MiB, max CPU một core 39.56%, dropped tick 0. Xem docker-final-full-metrics.log; không trộn với log container cũ.
+- Seed lỗi cũ:1.693check PASS,18/18bot dịch chuyển. Bot NetId3 dịch chuyển tối đa15,11cell từ origin trước khi bị loại ở42,3s.
+- Stress realtime300s:5phòng/50slot,45bot đồng thời,90lượt sống qua replay. **0bot sống≥15s đứng nguyên chỗ** theo ngưỡng displacement0,5cell.1.730check PASS.
+- Tick trung bình29.998Hz; dropped0; max tick49.55ms; CPU một core max36.52%; RSSmax96.57MiB; pathnodesmax1455.0/1.500.
+- Đây là harness in-process, không phải50người thật/Docker/WAN. Displacement là độ lệch lớn nhất từ origin, không phải tổng đường đi; portal cũng làm thay đổi vị trí. Bot được dừng hợp lệ để bắn, phá vật, hồi máu hoặc phản ứng.
 
-## 6. Trạng thái nghiệm thu và giới hạn
-PASS: module/regression ở phần 3, runtime bot phần 4, Windows artifact và các flow phần 5.
-NOT_TESTED: hai PC vật lý, buổi LAN thật, chất lượng 60 FPS/720p, AWS/public Internet và cảm giác chơi WAN/VPN trong đợt này. Chưa chứng minh giảm RTT tới Sydney.
-Một lượt HTTP test 503 ban đầu diễn ra ngay sau recreate GameServer, trước khi tạo phòng/client; chạy lại sau readiness đạt. Không có retry tự động vô hạn trong game.
-Số đo Docker được quan sát trong test; log Docker lưu sau recreate không giữ đầy đủ lịch sử container main trước đó. Dùng các log benchmark runtime 300 giây để đánh giá đầy đủ tick/RAM; không che lấp giới hạn bằng chứng này.
+## 5. Windows + Docker thật mới nhất
 
-## 7. Chuẩn bị deploy và dọn sau test
-### Người dùng tự kiểm bản sửa bot cuối
-Thoát trận trước khi rebuild: GameServer restart làm mất phòng/session RAM. Tại PowerShell:
+| Bài kiểm | Kết quả |
+|---|---|
+| WSS1người+9bot | PASS300,03s; exit0; input29.99Hz khi còn điều khiển; snapshot30.00Hz trong InGame; pong300/300, timeout0 |
+| Độ trễ loopback WSS | p50/p95/p99=33.34/33.59/38.53ms; không phải RTT AWS |
+| Auto2client+4bot | PASS136.43/136.29s; cả hai fallback WSS theo cấu hình UDP không có listener; kết quả/history/replay; exit0 |
+| Smoke UDP/account/phòng | PASS; giữ account guard và kiểm không được tạo phòng khi thiếu/sai JWT |
+| Thị trấn1người+9bot | PASS29.66s qua WSS; profile tăng tốc riêng; kết quả/history/replay; không coi là benchmark300s map này |
+| Container GameServer256MiB | PASS96mẫu tick/96mẫu RAM; tick trung bình29.917Hz; CPU một core max41.18%; RAMmax30.98%; dropped0/restart0/OOMfalse |
+
+Đủ roster/view và dữ liệu world vẫn là điều kiện bắt buộc. Không dùng bước spawn làm bằng chứng bot đã đi; không yêu cầu cả10nhân vật sống đủ300s. Main và test profile giữ lịch riêng. Client xác nhận9bot có dịch chuyển trong lượt main; không suy ra bot luôn có chiến thuật tối ưu.
+
+Lượt FAIL ngay trước sửa cấp phát được giữ tại `world-stream-prior-gc-fail/`: các client đã PASS nhưng server có5dropped tick, nên **toàn bài vẫn FAIL**. Bản cũ input0/thiếu dữ liệu cũng giữ trong bằng chứng checkpoint. Catalog volume Local cũ1.1.0 đã được backup tại `Backend/data/maps-before-bot-recovery-20261112`, publish/reload gói generation5 hai map1.2.0; image mới không tự thay catalog volume. Không gộp việc đổi map và sửa queue thành một phép thử một biến.
+
+## 6. Phần chưa nghiệm thu và giới hạn
+
+**NOT_TESTED:** hai PC vật lý, LAN thật/hai mạng, buổi6–10người, AWS/public Internet của release này, chất lượng60FPS/720p và cảm giác/cân bằng PvP người thật. Chưa chứng minh giảm RTT Sydney hoặc VPN.
+
+WSS dự phòng vẫn chịu đặc tính TCP khi mạng mất gói. Bản sửa giải quyết thiếu world page và giảm công việc cấp phát; không thay vị trí region, đường mạng hoặc bỏ TLS. Các lượt local không thay bằng chứng WAN. Shared Editor15f1 chưa được build lại trong lượt này; bản Windows bàn giao dùng21f1 theo lựa chọn cá nhân đã chốt.
+
+## 7. Bàn giao, deploy và trạng thái sau test
+
+Dùng toàn bộ thư mục `Builds/Bot-Recovery-Main`, không chỉ chép EXE. Trong game chọn **Local Docker dành cho dev** → đăng nhập → tạo phòng → chọn Tháp cổ/Thị trấn → thêm9bot → Bắt đầu. Quan sát bot, bo, loot/combat, chết/spectator, kết quả/history rồi chơi lại. Với server source mới cần rebuild Docker; chờ ready trước khi mở client.
+
 ```powershell
 Set-Location 'D:\Unity\Lastaway\Backend'
 docker compose --profile account up -d --build game-server api mongo
 docker compose logs --tail 20 game-server
 ```
-Chờ server ready, mở Editor hoặc client hiện có → Local Docker dành cho dev → đăng nhập → tạo phòng → Tháp cổ → thêm 9 bot → Bắt đầu. Quan sát từng bot sau khi spawn; bot có thể dừng để phản ứng, bắn, phá vật hoặc hồi máu, nhưng không được đứng tại spawn từ đầu đến cuối. Quan sát khi bo co, chết/spectator rồi chơi lại; đổi sang Thị trấn và lặp lại. AI chạy ở server: client mới nhưng image Docker cũ vẫn dùng AI cũ; không cần build Windows chỉ cho thay đổi server này.
 
-Chạy ca hồi quy tự động (từ thư mục gốc, không gọi AWS):
-```powershell
-Set-Location 'D:\Unity\Lastaway'
-dotnet run --project Backend/Tests/BotChecks/BotChecks.csproj -c Release -- --stress --authored --stress-rooms 2 --stress-seconds 90 --diagnose
-```
-Kỳ vọng không FAIL, `Stationary lives >=15s: 0`; dữ liệu từng bot tại `.utmp/bot-immobile-diagnostics.json`. Sau khi đạt mới chạy lại lượt 300 giây/kiểm Docker để nghiệm thu deploy. Chưa rebuild/restart Docker hoặc thay trạng thái AWS trong bước bàn giao này; giữ camera bình thường Follow Player và spectator hiện có.
+Local đã trả `MATCH_PROFILE=main`, memory_limit=0 và giữ stack dev đang chạy như khi bắt đầu. Client tác vụ đã đóng; camera Follow Player, spectator giữ nguyên. Mongo/map/outbox/secret không bị xóa. Không nâng máy hoặc tác động lifecycle AWS.
 
-### Dung lượng build đã đo
-Build hiện có 306,86 MiB: asset/data 203,60 MiB; Managed DLL 52,43 MiB; native/runtime 50,47 MiB; debug 0,37 MiB. Build log có texture lớn như map_grid 10,8 MB, vignette 7,9 MB, logo/background cũ khoảng 6 MB mỗi ảnh, hiệu ứng nhập và hai splash. BuildSettings còn bật scene tham khảo SampleScene/GameConfig/GameMain; player còn Roslyn DLL và MCP runtime. Chưa đổi scene list/import settings/package hoặc xóa DLL thủ công. Tối ưu dung lượng cần một lượt riêng để kiểm đủ tham chiếu và chất lượng hình, không ảnh hưởng phạm vi sửa bot.
-
-### Lịch sử khôi phục môi trường ở lượt kiểm trước
-Giữ account-ticket v4, 10 nhân vật/phòng, 5 phòng, 50 slot. Local Docker đã rebuild GameServer mới; chỉ restart image cũ không có bản sửa bot. Đã trả MATCH_PROFILE=main, memory limit=0 (dev), dừng api/game-server/mongo và giữ Mongo/map/outbox. Client test do tác vụ mở đã thoát code 0; phòng RAM được dọn khi dừng server. Không thay trạng thái AWS.
-
-Chưa chuyển sang publish/deploy: cần hoàn tất bản sửa bot và kiểm lại từng bot từ lúc InGame, không tính dịch chuyển lúc spawn. Unity21 sinh thêm ba giá trị mặc định thermal iOS trong ProjectSettings.asset; cần review khi commit, không có nâng phiên bản Editor dùng chung của team. Shared ProjectVersion pin vẫn được giữ.
-
-### Lịch sử checkpoint trước commit / chuẩn bị deploy (đã xử lý sau)
-Người dùng xác nhận chơi Local thấy ổn và yêu cầu commit, chuẩn bị deploy. Chạy lại ca seed cố định hai map, 18 bot, 90 giây: FAIL, một bot Tháp cổ NetId 3 sống 89,87 giây nhưng displacement 0, state Loot, search còn pending. Xem bot-precommit-final.log/json. Các kiểm rearm recovery, slow movement và chờ ngân sách ở đầu suite đã qua trước lỗi stress; không ghi toàn suite PASS.
-
-Kết luận phát hành tại checkpoint đó: BLOCKED. Commit dùng để giữ checkpoint source hiện tại, không phải release đã nghiệm thu. Chưa chạy GHCR PrepareOnly publish, chưa gọi AWS/đổi service. Cần sửa và kiểm lại ca seed này, sau đó VerifyLocal Full bằng client có registry-build.json khớp source, rồi PrepareOnly và giao dịch deploy 20 phút với rollback theo Docs/AWS_GHCR_Deploy.vi.md. Không dùng báo cáo cũ để bỏ qua gate.
-
-### Nghiệm thu sau sửa — kết quả mới nhất
-- Nguyên nhân ca bot còn lại: chỉ giữ một mục tiêu vừa thất bại, bot đổi qua lại hai món loot không tới được. Khi hỏng đường, tạm ngừng săn loot 5 giây theo BlacklistSeconds, chọn bước di chuyển gần có segment hợp lệ; bo/hazard/combat vẫn ưu tiên. Không sửa vị trí/HP/tốc độ hoặc bỏ validation. Reset cả cooldown khi chơi lại.
-- Seed cũ: BotChecks 1.693 checks PASS, 18/18 bot có dịch chuyển. Bot NetId3 từng đứng gần90s nay dịch chuyển15,11 cell trước khi bị loại ở42,3s. Khoảng dịch chuyển là độ lệch lớn nhất từ origin, không phải tổng đường đi.
-- Stress realtime300s: 5 phòng, 50slot, 45bot đồng thời, 90 lượt sống qua reset; 0 lượt sống≥15s có displacement<0,5. BotChecks1.730 checks PASS (gồm assertion lặp theo slice). Tick trung bình30,00Hz, dropped0, max tick49,55ms, CPU một core max36,52%, RSSmax96,57MiB, pathnodesmax1.455/1.500. Đây là harness in-process, không phải50người thật/Docker/WAN.
-- Full Docker256MiB + Windows: PASS; 113mẫu tick, 114mẫu RAM, tick29,92Hz, CPU một core max40,58%, RAMmax32,14%, dropped0/restart0/OOMfalse. WSS300,03s: input30,00Hz khi còn điều khiển, snapshot30,00Hz trong InGame, pong300/300, RTTp50/p95/p99=33,33/33,46/33,75ms. Không suy cả10nhân vật sống đủ300s. Auto hai client fallback WSS:220,39s/215,12s, exit0, kết quả/history/replay đạt; smoke UDP riêng PASS.
-- Thị trấn1+9, profile tăng tốc riêng: PASS30,85s, Auto→WSS, exit0. Không coi đây là benchmark300s map Thị trấn hoặc50slot qua mạng.
-- Các regression backend và29test pipeline PASS. Runner thêm deadline trước nhánh return sớm và đếm view mạng tồn tại riêng với visibility; không bỏ yêu cầu đủ roster/view. -ForceD3D11 là lựa chọn test rõ ràng, không đổi renderer mặc định. Build mới0lỗi/42warning; không gọi warning là lỗi C#.
-- Lượt default/oldcatalog thiếu bằng chứng cuối FAIL; lượt D3D11/oldcatalog ghi input0 và thiếu movement FAIL. Local volume khi đó vẫn map1.1.0. Đã backup `Backend/data/maps-before-bot-recovery-20261112`, validate/publish/reload map1.2.0 từ image; lượt với dữ liệu hiện tại PASS. Không khẳng định chi tiết nguyên nhân world cũ đã được cách ly bằng một phép thử chỉ đổi một biến. Image mới không tự cập nhật catalog volume; đối chiếu catalog khi deploy.
-- Bằng chứng tại `bot-recovery-full/`, `bot-recovery-town/`, bot-recovery-seeded-pass.*, bot-recovery-50slots-300s.* và bot-recovery-stress-summary.json. Receipt pipeline để PrepareOnly: `Backend/out/bot-recovery-current-map-20261112/local-evidence.json` (bản sao trong báo cáo để tham khảo).
-- Đã trả Local về MATCH_PROFILE=main, memory_limit=0 và giữ stack đang chạy như lúc bắt đầu; Mongo/map/outbox giữ nguyên. Client tác vụ đều đóng; camera Follow Player, spectator giữ. Build chẩn đoán tạm không phải artifact bàn giao.
-- Chưa kiểm: AWS/WAN của bản này, hai PC vật lý,60FPS/720p và cảm giác chơi/cân bằng người thật. Sẵn sàng bước commit/PrepareOnly theo guard; chưa phải nghiệm thu AWS. Không thay lifecycle hoặc tiêu tài nguyên AWS.
+Bước chuẩn bị registry dùng receipt mới và source đã commit sạch. Chưa gọi Deploy AWS; chưa dùng kết quả Local để ghi PASS AWS. Bằng chứng chính ở `world-stream-full/`, `world-stream-town/`, các log regression và `bot-recovery-evidence.zip`; checksum tại `evidence.sha256`. Graphify cập nhật theo code, cảnh báo parser top-level/UniTask là giới hạn bản đồ, không phải lỗi compiler.

@@ -1,0 +1,131 @@
+D:\Unity\Lastaway\Backend\Tests\MatchResultChecks\Program.cs(900,16): warning CS8602: Dereference of a possibly null reference. [D:\Unity\Lastaway\Backend\Tests\MatchResultChecks\MatchResultChecks.csproj]
+=============================================================
+=== NET-02 Match Persistence & Guest Identity Unit Checks ===
+=============================================================
+
+--- Check 1: Guest Credential Cryptography & Hash Separation ---
+[PASS] Guest credential is 256-bit hex (64 chars)
+[PASS] Stored DB value is SHA-256 hash, not plaintext credential
+[PASS] Constant-time comparison succeeds for matching credential proof
+[PASS] Constant-time comparison fails for tampered credential proof
+
+--- Check 2: ProfileKey Separation & Owner Isolation ---
+[PASS] Account profile key format is account:<sub>
+[PASS] Guest profile key format is guest:<uuid>
+[PASS] Account and Guest profiles are distinct
+[PASS] Owner isolation: querying account returns only account's record despite identical displayName
+[PASS] Owner isolation: querying guest returns only guest's record despite identical displayName
+
+--- Check 3: One-Use Game Tickets & Real SessionHub Binding ---
+[PASS] Game ticket registered without attaching identity
+[PASS] Session joined room anonymously
+[joined] playerId=ba1aa99b-aade-4c56-aaec-ef2627475bdb roomId=2ea16783-86fb-4fb0-b086-d673ab1fff63 transport=Udp serverSlots=1/10
+[PASS] Matching gameplay attachment consumes ticket
+[PASS] Reused ticket stays consumed and cannot bind again
+[PASS] Entity registered upon ClientHello
+[PASS] Entity has correct displayName
+[PASS] Old RoomCode client cannot bypass mandatory account
+[PASS] Unregistered bearer cannot reserve slot
+[PASS] Guest ticket rejected by production session hub
+[PASS] Account ticket registered
+[PASS] Ticket bound to attempt
+[PASS] Ticket bound to room
+[PASS] Verified v4 join consumes one ticket and one slot
+[joined] playerId=1bb45b17-f00c-4964-92bf-8519275daad9 roomId=ef3aab95-631b-4a37-a4da-a8f68bc3e6cb transport=Udp serverSlots=1/50
+[PASS] Fallback cannot change request identity
+[PASS] UDP to WSS transfers same consumed ticket and slot
+[joined] playerId=1bb45b17-f00c-4964-92bf-8519275daad9 roomId=ef3aab95-631b-4a37-a4da-a8f68bc3e6cb transport=Wss serverSlots=1/50
+[PASS] Late UDP cannot revive transferred attempt
+[PASS] Consumed ticket cannot be replayed for another attempt
+[PASS] Verified account attached before roster readiness
+[PASS] Committed attempt cannot fallback again
+[PASS] Disconnect returns v4 slot
+[PASS] Expired ticket cannot be registered
+[PASS] Near-expiry ticket registered
+[PASS] Ticket expiring after registration cannot join
+[joined] playerId=baf35015-07e7-4b9d-8e21-57d9f22d2ed6 roomId=ef3aab95-631b-4a37-a4da-a8f68bc3e6cb transport=Udp serverSlots=1/50
+[PASS] Consumed v4 ticket may finish one uncommitted fallback after UDP release
+[joined] playerId=95c94751-09c4-4243-9d60-1b54d278dc83 roomId=0eb2ab89-a5ab-4691-971b-3e2e3a2c70e7 transport=Udp serverSlots=1/50
+[joined] playerId=6bb39380-7385-4af6-9ced-dcf50ca089d2 roomId=0eb2ab89-a5ab-4691-971b-3e2e3a2c70e7 transport=Udp serverSlots=2/50
+[PASS] Resume fixture verifies selected map
+[PASS] Resume fixture verifies selected map
+[PASS] Resume fixture host starts verified room
+[PASS] Account resume fixture enters match
+[PASS] Different account cannot claim character or rotate proof
+[PASS] Same account with fresh ticket and resume proof keeps one held slot
+
+--- Check 4: Forbid Relinking Once Loading / InGame Begins ---
+[PASS] Attaching profile allowed in Waiting/Lobby phase
+[PASS] Match reached Loading phase
+[PASS] Forbid relinking profile once match loading begins
+[PASS] Match reached InGame phase
+[PASS] Forbid relinking profile during InGame phase
+
+--- Check 5: Cannot Overwrite Existing Different Profile ---
+[PASS] First profile attachment succeeded
+[PASS] Attaching same profile key again is valid
+[PASS] Attaching different profile key to already-linked player is rejected
+
+--- Check 6: Canonical Match Hasher Normalization ---
+[PASS] Canonical hash is deterministic and invariant to participant ordering
+[PASS] Canonical hash is valid 64-char hex SHA-256
+[PASS] Modified participant payload yields distinct canonical hash
+
+--- Check 12: Bot Result Metadata & Legacy Hash Compatibility ---
+[PASS] Bot match canonical hash is invariant to participant ordering
+[PASS] Flipping IsBot changes the canonical hash
+[PASS] Changing MatchKind changes the canonical hash
+[PASS] HumanOnly result hash matches independent pre-bot binary layout (legacy outbox compatible)
+[PASS] MatchRecord defaults to HumanOnly match kind
+[PASS] HumanOnly LastAlive/Tie records are PvP-eligible
+[PASS] WithBots LastAlive record is not PvP-eligible
+[PASS] NoHumans record is not PvP-eligible
+
+--- Check 7: Standalone Mongo Idempotence & Conflict Handling ---
+[PASS] Initial match insert returns Inserted (201 Created)
+[PASS] Duplicate identical match returns DuplicateIdentical (200 OK idempotent)
+[PASS] Idempotent insert does not create duplicate match document
+[PASS] Same MatchId with conflicting payload returns ConflictDifferent (409 Conflict)
+[PASS] Conflicting insert rejected and does not overwrite existing record
+
+--- Check 8: Public Leaderboard Sanitization ---
+[PASS] Leaderboard JSON does not contain account profile key
+[PASS] Leaderboard JSON does not contain guest profile key
+[PASS] Leaderboard schema omits ProfileKey entirely
+[PASS] Leaderboard ordered by rank ascending
+
+--- Check 9: History Pagination ---
+[PASS] Page 1 default returns 20 items and correct total 55
+[PASS] Page 3 returns remaining 15 items
+[PASS] Page size bounded at maximum 100
+
+--- Check 10: Match Outbox Worker, Retry & Quarantine ---
+[outbox] MATCH_RESULT_TOKEN missing or < 32 bytes. Match persistence outbox disabled.
+[PASS] Outbox disabled when MATCH_RESULT_TOKEN < 32 bytes
+[PASS] TryEnqueue returns false when outbox disabled
+[outbox] MATCH_RESULTS_API_URL invalid (must be HTTP/HTTPS without credentials or query). Match persistence outbox disabled.
+[PASS] Outbox disabled when API URL contains credentials
+[outbox] MATCH_RESULTS_API_URL invalid (must be HTTP/HTTPS without credentials or query). Match persistence outbox disabled.
+[PASS] Outbox disabled when API URL contains query string
+[PASS] Bounded memory queue returns false on capacity overflow without blocking
+[PASS] Outbox enabled when token >= 32 UTF-8 bytes and URL is clean
+[outbox] started path=C:\Users\Vinh\AppData\Local\Temp\JungleOutboxTest_b9defa1861e9432a8717d54cb8c9cd80 target=http://localhost:5000/internal/match-results
+[PASS] Outage with 3 new matches all reach disk independently of delivery failure
+[PASS] Automatic retry occurs without new enqueue and delivers pending files after recovery
+[PASS] 409 Conflict moves match result file to quarantine and stops retry loop
+[PASS] Malformed JSON file on replay quarantined without crashing outbox
+[outbox] started path=C:\Users\Vinh\AppData\Local\Temp\JungleOutboxTest_b9defa1861e9432a8717d54cb8c9cd80 target=http://localhost:5000/internal/match-results
+[PASS] Restart replays disk files, sends and deletes after ACK
+[outbox] started path=C:\Users\Vinh\AppData\Local\Temp\JungleQuotaTest_c29711e28f034414a1504cf2305e860b target=http://localhost:5000/internal/match-results
+[PASS] Quarantine files count against disk quota and block disk overflow
+[outbox] started path=C:\Users\Vinh\AppData\Local\Temp\JungleFlushTest_c72df370d2234a3cbacfce5f6a55d287 target=http://localhost:5000/internal/match-results
+[PASS] Stop persists pending memory queue to disk within bounded deadline (shutdown flush)
+
+--- Check 11: Protocol & Snapshot Security Bounds ---
+[PASS] World snapshot packet has compact fixed binary layout
+[PASS] AttachIdentityPacket respects <= 64 char ticket bounds
+
+-------------------------------------------------------------
+Checks Finished: 85 passed, 0 failed.
+-------------------------------------------------------------
+ALL MATCH RESULT & GUEST CHECKS PASSED.
