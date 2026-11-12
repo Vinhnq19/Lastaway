@@ -56,7 +56,7 @@ Lượt FAIL ngay trước sửa cấp phát được giữ tại `world-stream-
 
 **NOT_TESTED:** hai PC vật lý, LAN thật/hai mạng, buổi6–10người, AWS/public Internet của release này, chất lượng60FPS/720p và cảm giác/cân bằng PvP người thật. Chưa chứng minh giảm RTT Sydney hoặc VPN.
 
-WSS dự phòng vẫn chịu đặc tính TCP khi mạng mất gói. Bản sửa giải quyết thiếu world page và giảm công việc cấp phát; không thay vị trí region, đường mạng hoặc bỏ TLS. Các lượt local không thay bằng chứng WAN. Shared Editor15f1 chưa được build lại trong lượt này; bản Windows bàn giao dùng21f1 theo lựa chọn cá nhân đã chốt.
+WSS dự phòng vẫn chịu đặc tính TCP khi mạng mất gói. Bản sửa giải quyết thiếu world page và giảm công việc cấp phát; không thay vị trí region, đường mạng hoặc bỏ TLS. Các lượt local không thay bằng chứng WAN. Một số log lúc thoát Unity còn cảnh báo cleanup ComputeBuffer; mọi client nghiệm thu đều exit0. Chưa điều tra nguồn cảnh báo này, không coi là đã sửa. Shared Editor15f1 chưa được build lại trong lượt này; bản Windows bàn giao dùng21f1 theo lựa chọn cá nhân đã chốt.
 
 ## 7. Bàn giao, deploy và trạng thái sau test
 
@@ -71,3 +71,5 @@ docker compose logs --tail 20 game-server
 Local đã trả `MATCH_PROFILE=main`, memory_limit=0 và giữ stack dev đang chạy như khi bắt đầu. Client tác vụ đã đóng; camera Follow Player, spectator giữ nguyên. Mongo/map/outbox/secret không bị xóa. Không nâng máy hoặc tác động lifecycle AWS.
 
 Bước chuẩn bị registry dùng receipt mới và source đã commit sạch. Chưa gọi Deploy AWS; chưa dùng kết quả Local để ghi PASS AWS. Bằng chứng chính ở `world-stream-full/`, `world-stream-town/`, các log regression và `bot-recovery-evidence.zip`; checksum tại `evidence.sha256`. Graphify cập nhật theo code, cảnh báo parser top-level/UniTask là giới hạn bản đồ, không phải lỗi compiler.
+
+Chuẩn bị GHCR **PASS**: release `ghcr-20261112-160052-b6e76560`, source commit `b6e76560`; hai image private đã publish theo digest, bundle23.206byte và checksum hợp lệ. Build/push API24,708s, GameServer11,567s; metadata ghi compressed OCI layer delta, không phải số byte truyền trên dây. Xem `registry-preparation.json`/`registry-manifest.json`. Chưa push Git hoặc deploy AWS. Commit bàn giao tài liệu sau đó không đổi fingerprint code của release.

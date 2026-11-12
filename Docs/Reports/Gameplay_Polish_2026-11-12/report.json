@@ -222,7 +222,43 @@
     "data": "Mongo, maps, outbox and secrets retained"
   },
   "registryPreparation": {
-    "status": "NOT_PUBLISHED_YET",
-    "note": "Clean committed source and matching Local receipt required; does not access EC2."
-  }
+    "status": "PASS",
+    "mode": "PrepareOnly",
+    "releaseId": "ghcr-20261112-160052-b6e76560",
+    "commit": "b6e76560d4ca64c8ee0c08f1b89b08a69cd6e08b",
+    "folder": "D:/Unity/Lastaway/Backend/out/bot-world-stream-ghcr-20261112/ghcr-20261112-160052-b6e76560",
+    "archiveBytes": 23206,
+    "checksum": "PASS",
+    "services": {
+      "api": {
+        "image": "ghcr.io/vinhnq19/lastaway-api@sha256:3a4f84c0f5636ffa9e51b9931d31b266cc0706851224d9c92144c3b63f69dbff",
+        "fingerprint": "1a6f9da132fe86de7da4a2ee86139886e8ca40a6eb160eb64f416082bb580901"
+      },
+      "game-server": {
+        "image": "ghcr.io/vinhnq19/lastaway-game-server@sha256:a11bcb55eacda70931622871d86eee5c660d60b7ab90675775b80f42dd671f79",
+        "fingerprint": "e07f923e3b220f23b3f0281fd879a7a47e63b01d233ee97350e19f98a63812b8"
+      }
+    },
+    "publishSteps": [
+      {
+        "service": "api",
+        "reused": false,
+        "seconds": 24.708,
+        "newLayerBytes": 67587062,
+        "byteMeasure": "compressed OCI layer delta, excludes TLS/retries; not wire traffic"
+      },
+      {
+        "service": "game-server",
+        "reused": false,
+        "seconds": 11.567,
+        "newLayerBytes": 65463111,
+        "byteMeasure": "compressed OCI layer delta, excludes TLS/retries; not wire traffic"
+      }
+    ],
+    "aws": "NOT_ACCESSED",
+    "gitPush": "NOT_PERFORMED"
+  },
+  "runtimeWarnings": [
+    "Some Unity shutdown logs contain ComputeBuffer cleanup warnings; every acceptance player exited code 0. Source of that warning has not been diagnosed; not claimed fixed."
+  ]
 }
