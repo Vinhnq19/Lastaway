@@ -1,0 +1,63 @@
+{
+  "room": null,
+  "mode": "Online",
+  "endpoint": {
+    "host": "junglemaze.duckdns.org",
+    "port": 7777
+  },
+  "webSocketUrl": "wss://junglemaze.duckdns.org/game",
+  "webSocketConnectIp": null,
+  "requestedTransport": "Wss",
+  "authMode": "RoomCode",
+  "protocolVersion": 4,
+  "generatorHost": "DESKTOP-JDQDIQH",
+  "requested": 1,
+  "connected": 1,
+  "joined": 1,
+  "failed": 0,
+  "pingRate": 1,
+  "warmupSeconds": 0,
+  "measuredSeconds": 5.0018274,
+  "measurementUtc": "2026-11-12T16:18:33.8847986Z",
+  "measurementEndUtc": "2026-11-12T16:18:38.8866259Z",
+  "generatorCpuOneCorePercent": 0.9371574876814023,
+  "rejected": 0,
+  "disconnected": 0,
+  "cancelled": false,
+  "clients": [
+    {
+      "client": 1,
+      "room": null,
+      "connected": true,
+      "joined": true,
+      "playerId": "758c83e2-1f6f-4ca7-a085-7ad3fafd4ce9",
+      "localUdpPort": 0,
+      "transport": "Wss",
+      "requestedTransport": "Wss",
+      "fallbackReason": null,
+      "webSocketConnectIp": null,
+      "gameplay": null,
+      "transportPacketsSent": 0,
+      "transportPacketsReceived": 0,
+      "rejected": false,
+      "disconnected": false,
+      "failed": false,
+      "reason": null,
+      "sent": 5,
+      "pongs": 5,
+      "timedOut": 0,
+      "outstanding": 0,
+      "actualHz": 0.999634653526829,
+      "rttP50Ms": 248.2628,
+      "rttP95Ms": 248.9007,
+      "rttP99Ms": 248.9007,
+      "rttMs": [
+        248.2628,
+        248.7622,
+        248.0172,
+        247.6641,
+        248.9007
+      ]
+    }
+  ]
+}

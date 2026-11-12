@@ -1,0 +1,32 @@
+{
+  "transactionId": "12bb66bff29240dc6f0d34dc754ff702",
+  "releaseId": "ghcr-20261112-160052-b6e76560",
+  "previous": "ghcr-20261108-184421-85b9768b",
+  "changedServices": [
+    "api",
+    "game-server"
+  ],
+  "status": "PASS",
+  "steps": {
+    "pullSeconds": 11.209,
+    "totalSeconds": 541.739
+  },
+  "ec2Lifecycle": "unchanged",
+  "restartCounts": {
+    "mongo": 0,
+    "api": 0,
+    "game-server": 0,
+    "caddy": 0
+  },
+  "preserved": {
+    "privateConfig": true,
+    "mongoContainer": true,
+    "unchangedServices": [
+      "mongo",
+      "caddy"
+    ]
+  },
+  "measurementSince": 1794499819,
+  "memorySamples": 100,
+  "peakContainerMemoryPercent": 32.55
+}

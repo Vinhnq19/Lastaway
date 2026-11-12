@@ -1,0 +1,3 @@
+﻿"ClientId","Name","Status","SelectedTransport","FallbackReason","ConnectedSeconds","P50RttMs","P99RttMs","ExitCode","AssertionsPassed","AssertionsTotal","PhysicalDeviceCount","PhysicalTwoPc","Reason"
+"1","Player1","PASS","Wss","ConnectTimeout","134.14","233.66","566.69","0","8","8","1","NOT_TESTED","Required observations and rates verified"
+"2","Player2","PASS","Wss","ConnectTimeout","133.94","266.8","463.4","0","8","8","1","NOT_TESTED","Required observations and rates verified"

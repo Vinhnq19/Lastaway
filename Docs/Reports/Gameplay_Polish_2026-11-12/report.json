@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "date": "2026-11-12",
-  "status": "LOCAL_FULL_PASS",
+  "status": "LOCAL_AND_AWS_FULL_PASS",
   "deployReady": true,
   "workspace": "D:/Unity/Lastaway",
   "branch": "main",
   "baselineCommit": "869538ca",
-  "scope": "Bot recovery, world-stream backpressure and allocation reductions; prepare registry release, no AWS deployment.",
+  "scope": "Bot recovery/world stream verified Local; prepared GHCR release deployed to existing EC2 and accepted by PC Full gate.",
   "units": {
     "botRecovery": "PASS seeded and five-room stress",
     "worldStream": "PASS baseline reproduction, bounded queue and real sockets",
@@ -211,8 +211,8 @@
   },
   "limits": {
     "physicalTwoPC": "NOT_TESTED",
-    "awsCurrentRelease": "NOT_TESTED / NOT_ACCESSED",
-    "wanPingImprovement": "NOT_TESTED",
+    "awsCurrentRelease": "PASS Full from one PC",
+    "wanPingImprovement": "WAN RTT recorded for this run, no controlled before/after comparison",
     "render60Fps720p": "NOT_TESTED",
     "fiftyRealHumans": "NOT_TESTED"
   },
@@ -260,5 +260,172 @@
   },
   "runtimeWarnings": [
     "Some Unity shutdown logs contain ComputeBuffer cleanup warnings; every acceptance player exited code 0. Source of that warning has not been diagnosed; not claimed fixed."
-  ]
+  ],
+  "awsDeployment": {
+    "status": "PASS",
+    "tier": "Full",
+    "releaseId": "ghcr-20261112-160052-b6e76560",
+    "sourceCommit": "b6e76560d4ca64c8ee0c08f1b89b08a69cd6e08b",
+    "endpoint": "https://junglemaze.duckdns.org",
+    "instance": "i-0e617f8072fbb9878",
+    "type": "t3.small",
+    "cpuCreditMode": "standard",
+    "ec2": "running",
+    "seconds": 577.4693256000173,
+    "pullSeconds": 11.209,
+    "changedServices": [
+      "api",
+      "game-server"
+    ],
+    "preserved": {
+      "privateConfig": true,
+      "mongoContainer": true,
+      "unchangedServices": [
+        "mongo",
+        "caddy"
+      ]
+    },
+    "serverMetrics": {
+      "samples": 101,
+      "meanTickHz": 30.00079207920792,
+      "droppedTicks": 0,
+      "maxCpuOneCorePercent": 27.4,
+      "memorySamples": 99,
+      "peakContainerMemoryPercent": 32.55,
+      "oom": false,
+      "restartCount": 0
+    },
+    "wssMetrics": {
+      "elapsedSeconds": 303.72174072265625,
+      "connectedSeconds": 300.0213317871094,
+      "snapshots": 8603,
+      "inputs": 5996,
+      "ignoredPackets": 0,
+      "catchupDrops": 0,
+      "maxPlayers": 10,
+      "maxRosterPlayers": 10,
+      "maxOnScreenPlayers": 4,
+      "completedMatches": 1,
+      "inputHz": 29.995090499534836,
+      "activeInputSeconds": 199.89938020333648,
+      "snapshotHz": 29.99927175306124,
+      "snapshotSeconds": 286.7736280672252,
+      "rttP50Ms": 166.8883,
+      "rttP95Ms": 200.1526,
+      "rttP99Ms": 300.1382,
+      "pings": 300,
+      "pongs": 300,
+      "pongTimeouts": 0,
+      "maxBotsMoved": 9,
+      "maxBotTravelCells": 103.46625518798828
+    },
+    "autoClients": [
+      {
+        "id": "Player1",
+        "index": 1,
+        "pid": 3796,
+        "exitCode": 0,
+        "status": "PASS",
+        "evidenceStatus": "PASS",
+        "graphicsApi": "Direct3D11",
+        "selectedTransport": "Wss",
+        "fallbackReason": "ConnectTimeout",
+        "connectedSeconds": 134.14,
+        "p50RttMs": 233.66,
+        "p99RttMs": 566.69,
+        "assertionsPassed": 8,
+        "assertionsTotal": 8,
+        "reason": "Required observations and rates verified",
+        "evidenceFile": "evidence-client-1.json",
+        "logFile": "unity-client-1.log"
+      },
+      {
+        "id": "Player2",
+        "index": 2,
+        "pid": 33264,
+        "exitCode": 0,
+        "status": "PASS",
+        "evidenceStatus": "PASS",
+        "graphicsApi": "Direct3D11",
+        "selectedTransport": "Wss",
+        "fallbackReason": "ConnectTimeout",
+        "connectedSeconds": 133.94,
+        "p50RttMs": 266.8,
+        "p99RttMs": 463.4,
+        "assertionsPassed": 8,
+        "assertionsTotal": 8,
+        "reason": "Required observations and rates verified",
+        "evidenceFile": "evidence-client-2.json",
+        "logFile": "unity-client-2.log"
+      }
+    ],
+    "udp": {
+      "room": null,
+      "mode": "Online",
+      "endpoint": {
+        "host": "junglemaze.duckdns.org",
+        "port": 7777
+      },
+      "webSocketUrl": "wss://junglemaze.duckdns.org/game",
+      "webSocketConnectIp": null,
+      "requestedTransport": "Udp",
+      "authMode": "RoomCode",
+      "protocolVersion": 4,
+      "generatorHost": "DESKTOP-JDQDIQH",
+      "requested": 1,
+      "connected": 1,
+      "joined": 1,
+      "failed": 0,
+      "pingRate": 1,
+      "warmupSeconds": 0,
+      "measuredSeconds": 5.0070252,
+      "measurementUtc": "2026-11-12T16:18:27.0119988Z",
+      "measurementEndUtc": "2026-11-12T16:18:32.019024Z",
+      "generatorCpuOneCorePercent": 2.1844307873665185,
+      "rejected": 0,
+      "disconnected": 0,
+      "cancelled": false,
+      "clients": [
+        {
+          "client": 1,
+          "room": null,
+          "connected": true,
+          "joined": true,
+          "playerId": "f83dbb07-fff9-442e-8780-78838a279cff",
+          "localUdpPort": 60880,
+          "transport": "Udp",
+          "requestedTransport": "Udp",
+          "fallbackReason": null,
+          "webSocketConnectIp": null,
+          "gameplay": null,
+          "transportPacketsSent": 23,
+          "transportPacketsReceived": 23,
+          "rejected": false,
+          "disconnected": false,
+          "failed": false,
+          "reason": null,
+          "sent": 5,
+          "pongs": 5,
+          "timedOut": 0,
+          "outstanding": 0,
+          "actualHz": 0.9985969313675513,
+          "rttP50Ms": 264.0247,
+          "rttP95Ms": 278.4736,
+          "rttP99Ms": 278.4736,
+          "rttMs": [
+            271.8683,
+            249.1436,
+            278.4736,
+            245.3561,
+            264.0247
+          ]
+        }
+      ]
+    },
+    "evidence": "aws-deploy/deployment.json",
+    "physicalTwoPC": "NOT_TESTED",
+    "townFullAws": "NOT_TESTED",
+    "client60Fps720p": "NOT_TESTED",
+    "rollback": "NOT_NEEDED; no new rollback drill performed"
+  }
 }

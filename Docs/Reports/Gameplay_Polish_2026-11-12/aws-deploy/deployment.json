@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "tier": "Full",
+  "seconds": 577.4693256000173,
+  "bundleBytes": 23206,
+  "imageLayerDeltaBytes": 133050173,
+  "wireBytes": "NOT_MEASURED: OCI compressed layer sizes exclude protocol overhead/cache/retries",
+  "untested": [],
+  "physicalTwoPc": "NOT_TESTED",
+  "ec2": "running",
+  "ec2Lifecycle": "unchanged"
+}

@@ -1,0 +1,5 @@
+{"release": "ghcr-20261112-160052-b6e76560", "commit": "b6e76560d4ca64c8ee0c08f1b89b08a69cd6e08b", "images": {"api": "ghcr.io/vinhnq19/lastaway-api@sha256:3a4f84c0f5636ffa9e51b9931d31b266cc0706851224d9c92144c3b63f69dbff", "game-server": "ghcr.io/vinhnq19/lastaway-game-server@sha256:a11bcb55eacda70931622871d86eee5c660d60b7ab90675775b80f42dd671f79"}}
+{"container": "junglemaze-aws-api-1", "running": true, "image": "ghcr.io/vinhnq19/lastaway-api@sha256:3a4f84c0f5636ffa9e51b9931d31b266cc0706851224d9c92144c3b63f69dbff", "restartCount": 0}
+{"container": "junglemaze-aws-game-server-1", "running": true, "image": "ghcr.io/vinhnq19/lastaway-game-server@sha256:a11bcb55eacda70931622871d86eee5c660d60b7ab90675775b80f42dd671f79", "restartCount": 0}
+{"container": "junglemaze-aws-mongo-1", "running": true, "image": "junglemaze-mongo:aws-20261012-kernel7", "restartCount": 0}
+{"container": "junglemaze-aws-caddy-1", "running": true, "image": "junglemaze-caddy:aws-20261012-kernel7", "restartCount": 0}
