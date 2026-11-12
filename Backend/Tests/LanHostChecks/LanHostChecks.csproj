@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+<PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net8.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable></PropertyGroup>
+<ItemGroup><ProjectReference Include="../../GameServer/GameServer.csproj" /></ItemGroup>
+<ItemGroup><FrameworkReference Include="Microsoft.AspNetCore.App" />
+<Compile Include="../../../Assets/_JungleMaze/Scripts/Application/Config/ClientConfig.cs" Link="ClientConfig.cs" />
+<Compile Include="../../../Assets/_JungleMaze/Scripts/Infrastructure/Network/LanTls.cs" Link="LanTls.cs" />
+</ItemGroup></Project>

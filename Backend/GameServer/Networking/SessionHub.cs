@@ -26,9 +26,11 @@ public sealed partial class SessionHub
         public long LastMessage = Stopwatch.GetTimestamp();
         public bool ApplicationSeen;
         public bool WorldEnabled;
-        public uint LastWorldRequestTick=uint.MaxValue,LastWorldSyncTick,LastWorldRevision,LastWorldResyncTick,LastWorldInventoryTick;
+        public uint LastWorldSyncTick,LastWorldRevision,LastWorldResyncTick,LastWorldInventoryTick;
         public Guid LastWorldMatch;
-        public string LastWorldEffectKey = "";
+        public (uint Revision, float Speed, byte Effects, bool Using, uint Portal, uint Equipment) LastWorldEffectKey;
+        public readonly Queue<WorldActionRequestPacket> WorldRequests=new(8);
+        public Guid WorldRequestMatch;
     }
     private sealed class Attempt(JoinRequest request)
     {
@@ -649,6 +651,7 @@ public sealed partial class SessionHub
     public void Disconnect(IGamePeer peer)
     {
         if (!_sessions.Remove(peer, out var session)) return;
+        session.WorldRequests.Clear();
 
         if (session.PlayerId is not null && session.Room.Match.Phase == MatchPhase.InGame &&
             session.Room.Match.Entities.TryGetBySession(session.PlayerId, out var entity) && entity is { IsAlive: true })
@@ -717,7 +720,7 @@ public sealed partial class SessionHub
     public void Tick(double dt)
     {
         using (new ServerMetrics.StageTiming(_metrics, TickWorkStage.Simulation)) Rooms.Tick(dt);
-        using (new ServerMetrics.StageTiming(_metrics, TickWorkStage.Streams)) TickWorldStreams();
+        using (new ServerMetrics.StageTiming(_metrics, TickWorkStage.Streams)) { TickWorldRequests(); TickWorldStreams(); }
     }
 
     public void CloseAll()

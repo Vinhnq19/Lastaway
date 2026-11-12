@@ -29,13 +29,13 @@ namespace JungleMaze.Tests.PlayMode.Lobby
             using var rig=new LobbyUiRig(vpn:tools);
             yield return null;
             rig.Flow.OpenServerSettings(); yield return null;
-            var v=rig.Root.ServerSettings;v.ShowVpn(true);
+            var v=rig.Root.ServerSettings;v.Profile.value=2;rig.Presenter.Tick();
             rig.Click(v.VpnStart);Assert.AreEqual("Start",tools.Action);
             yield return null;Assert.False(v.VpnStart.interactable,"pending operation must not start twice");
-            rig.Flow.CloseServerSettings();
+            rig.Click(v.Close);
             tools.Pending.SetResult(new VpnToolResult{success=true,ready=true,message="Ready",connectionCode="endpoint-only"});
             yield return null;Assert.AreEqual(0,tools.Stops,"closing panel never owns server lifetime");
-            Assert.AreEqual("endpoint-only",v.VpnCode.text);
+            Assert.AreEqual("",v.VpnCode.text,"late host status cannot overwrite a closed panel");
         }
         [UnityTest]
         public IEnumerator VpnPanelFitsAndRestoresNormalEndpointForm()
@@ -61,7 +61,7 @@ namespace JungleMaze.Tests.PlayMode.Lobby
             ScreenCapture.CaptureScreenshot(System.IO.Path.GetFullPath("Backend/out/tailscale-ui/vpn-panel.png"));
             yield return null;
             v.ShowVpn(false);
-            Assert.AreEqual(before,panel.sizeDelta);Assert.True(v.Host.gameObject.activeInHierarchy);Assert.False(v.VpnCode.gameObject.activeInHierarchy);
+            Assert.AreEqual(before,panel.sizeDelta);Assert.False(v.Host.gameObject.activeInHierarchy,"AWS keeps advanced fields hidden");Assert.False(v.VpnCode.gameObject.activeInHierarchy);
         }
     }
 }

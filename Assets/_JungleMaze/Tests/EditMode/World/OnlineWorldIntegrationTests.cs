@@ -44,6 +44,41 @@ namespace JungleMaze.Tests.World
                 audio.Dispose();
             }
         }
+        [Test] public void Actions_AreBounded_Deduplicated_AndConfirmedWithoutOptimisticInventory()
+        {
+            using(var r=new Rig())
+            {
+                r.Ready();
+                Assert.IsTrue(r.World.Send(WorldActionKind.Pickup,321));
+                var request=r.Sender.Last<WorldActionRequestPacket>();
+                Assert.IsTrue(r.World.IsPickupPending(321));
+                Assert.IsFalse(r.World.Send(WorldActionKind.Pickup,321));
+                Assert.IsFalse(r.World.Inventory.Weapons.Any(w=>w.ItemId=="KNIFE"));
+                r.Network.Push(new WorldActionResultPacket{MatchId=Guid.NewGuid(),RequestId=request.RequestId,Accepted=true});
+                Assert.IsTrue(r.World.IsPickupPending(321),"old match result cannot clear current pending action");
+                r.Network.Push(new WorldActionResultPacket{MatchId=r.MatchId,RequestId=request.RequestId,Accepted=true});
+                Assert.IsFalse(r.World.IsPickupPending(321));
+                for(ushort target=400;target<420;target++)r.World.Send(WorldActionKind.Pickup,target,automatic:true);
+                Assert.LessOrEqual(r.World.PendingActions,6);
+                Assert.IsTrue(r.World.Send(WorldActionKind.Select,slot:0),"manual command retains room in bounded window");
+                Assert.LessOrEqual(r.World.PendingActions,8);
+                r.World.Tick(3.1f);
+                Assert.Greater(r.World.ActionTimeouts,0);
+                Assert.IsFalse(r.World.IsPickupPending(400));
+            }
+        }
+        [Test] public void Resume_DoesNotReuseInventoryRequestSequence()
+        {
+            using(var r=new Rig())
+            {
+                r.Ready();r.World.Send(WorldActionKind.Pickup,321);
+                var before=r.Sender.Last<WorldActionRequestPacket>().RequestId;
+                r.Network.SetState(NetworkState.Disconnected,DisconnectReason.None);r.World.Tick(0);
+                r.Network.SetState(NetworkState.Joined,DisconnectReason.None);r.StartRound();r.Ready();
+                Assert.IsTrue(r.World.Send(WorldActionKind.Pickup,321));
+                Assert.Greater(r.Sender.Last<WorldActionRequestPacket>().RequestId,before);
+            }
+        }
         [Test] public void WorldHashMatchesCoreClrGoldenVector()
         {
             var map=new MapLayout{Version="hash-vector",Seed=7,Size=50};

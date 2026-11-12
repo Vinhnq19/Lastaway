@@ -1,5 +1,26 @@
 # Tự host backend Local / VPN / public
 
+## LAN bằng một mã — giao diện hiện hành (11/11/2026)
+
+Bảng **Máy chủ** có đúng ba lựa chọn: **Online · AWS**, **LAN · cùng mạng**, **VPN · Tailscale**. Game khởi động thường dùng AWS. Mở một mục chỉ xem cấu hình, không đổi máy chủ hoặc đăng xuất; chỉ bấm Kết nối và kiểm tra thành công mới áp dụng. Địa chỉ lưu dưới tên `user` vẫn được nhận diện theo cấu hình thực. Local Docker và Internet tự host nằm trong phần dev của Editor/Development Build; CLI/profile cũ vẫn dùng được. Luyện tập offline là nút riêng, không cần backend.
+
+**Máy host LAN:** dùng Windows có source Backend và Docker Desktop. Hai máy cùng router/Wi-Fi thông thường; tránh Wi-Fi khách hoặc mạng chặn các thiết bị liên lạc. Trong Windows, chỉ với mạng bạn tin cậy, mở Settings → Network & Internet → Wi-Fi/Ethernet → mạng hiện tại → chọn **Private**. Game không tự đổi thiết lập này.
+
+1. Bật Docker Desktop. Trong game, mở **Máy chủ → LAN · cùng mạng**.
+2. Ở **Tự làm máy chủ**, chọn Wi-Fi/Ethernet phù hợp. Có nhiều card thì chọn đúng mạng mà bạn bè đang dùng. Bản EXE chọn thư mục `Backend` một lần; Editor tự tìm source.
+3. Bấm **Thiết lập** lần đầu. Nhập mật khẩu riêng bảo vệ Swagger trong cửa sổ setup, xác nhận UAC mở kết nối LAN khi Windows hỏi. Không gửi mật khẩu qua mã kết nối. Lần chuẩn bị image đầu tiên có thể cần Internet.
+4. Bấm **Bật server**; chỉ khi báo sẵn sàng mới **Sao chép mã kết nối**. Host muốn chơi trên chính máy mình cũng dán mã và Kết nối, xác nhận máy chủ rồi đăng nhập game.
+5. Gửi mã cho bạn. Lần sau chỉ bật Docker, mở LAN và Bật server. Đóng game không dừng server; hết buổi bấm Dừng server. Dữ liệu tài khoản/map/outbox/secret vẫn còn; phòng và trận trong RAM mất khi GameServer dừng.
+
+**Máy người chơi:** chỉ cần bản game và cùng mạng, không cần Docker/source/Tailscale/quyền admin. Chọn LAN → **Dán mã → Kết nối → Tin máy chủ này** (lần đầu, chỉ tin mã nhận trực tiếp từ host). Sau kiểm tra thành công, đóng bảng và đăng ký/đăng nhập game trên máy chủ đó → tạo/vào phòng → chọn map, thêm bot → Bắt đầu. **Mã kết nối máy chủ khác mã phòng**. Lần sau cùng mã đã xác nhận sẽ được kiểm lại kết nối mà không hỏi lại. IP hoặc chứng chỉ đổi thì cần mã mới và xác nhận mới.
+
+Nếu báo mạng Public, host tự kiểm tra mạng đáng tin rồi đổi Private; không tắt firewall. Cổng bị chiếm hoặc đang có host Local/Tailscale/Internet khác thì tự kết thúc buổi cũ trước; công cụ không giành cổng hay tự dừng chương trình khác. Khi đang có người, bot/grace hoặc trận chưa dọn, đổi chế độ/cấu hình bị từ chối. Chưa sẵn sàng thì thử Trạng thái; không tự chuyển sang AWS. Chỉ thông dịch vụ tài khoản chưa chứng minh gameplay thông: phải vào phòng và nhận phản hồi game.
+
+**Dev:** `Deploy/Host/manage-lan.ps1 -Action Setup|Start|Status|Stop -LanIp <IPv4>` là owner duy nhất của LAN, tái sử dụng `compose.host.yaml` và project `junglemaze-host`. `.env.host.lan`, `.lan-state.json` và `Backend/data/lan-tls/` là dữ liệu riêng bị Git bỏ qua. Không chia sẻ key/secret. Lệnh cấp chứng chỉ của GameServer là `--lan-cert <thư-mục> <IPv4> 7777 8443`, chỉ dùng qua công cụ host khi server trống. Không mở thêm API/Mongo/control ra mạng. Nếu đổi card/IP, chạy Thiết lập lại để cập nhật đúng rule trước Bật server.
+
+**Nghiệm thu hai PC:** máy A host, máy B dùng code mới rồi xác nhận/đăng nhập, cùng phòng; kiểm chọn cả hai map, bot, movement/loot/combat/bo/kết quả/history/chơi lại; kiểm đường dự phòng khi đường chính bị chặn có chủ đích. Sau khi tải đủ image/map/client, ngắt Internet nhưng giữ router và lặp lại; tài khoản/API/HTTPS LAN phải hoạt động. Stop–Start phải giữ account/map, phòng cũ không được khôi phục giả. Ghi rõ thiết bị, hai card mạng, profile Private, thời điểm và kết quả; hai process trên một máy không thay nghiệm thu này.
+
+
 Hướng dẫn đầy đủ: [Phase 2, mục6–9](../../../Docs/Phase2_Match_Guest_Zone.vi.md#6-chọn-môi-trường-online). Chạy các lệnh dưới từ `Backend`. Đây là công cụ chuẩn bị host; chỉ ghi PASS kết nối từ xa khi đã chạy checklist với thiết bị thật.
 
 ## Cách nhanh trong game — Tailscale
@@ -78,3 +99,15 @@ powershell -File Deploy/Host/setup-firewall.ps1 -Action Disable
 ```
 
 Không thêm `-v`: Mongo/outbox có volume riêng của `junglemaze-host`. Dừng GameServer dev đang chiếm UDP7777 trước khi bật host này. Không publish Mongo27017, API5000, control7780 hoặc WS7781. Caddy chặn `/internal`, chỉ Swagger yêu cầu Basic auth. LAN/VPN/public đều cần account: JWT qua API HTTPS → ticket v4 → join RoomCode. Tạo/list/xóa phòng cần JWT; Guest cũ chỉ xem lịch sử, không lấy vé chơi mới. Offline luyện tập không đi qua stack này.
+
+### Kiểm lại LAN dành cho dev
+
+Tại root source, dùng `dotnet run --project Backend/Tests/LanHostChecks -c Release` (mã, SAN/pin/thời hạn và HTTPS/WebSocket thật trên loopback) và `powershell -NoProfile -File Backend/Tests/LanHostChecks/HostScriptChecks.ps1` (cổng/mode/phiên đang hoạt động, không sửa firewall thật).
+
+Để kiểm cổng LAN với API/Mongo/GameServer thật: chuẩn bị image Local `backend-api:latest`, `backend-game-server:latest`, `caddy:2`, `mongo:7.0.43` và GameServer Release, rồi chạy `python Backend/Tests/LanHostChecks/ProxyIntegration.py`. Công cụ dùng project/volume riêng có ID ngẫu nhiên, chỉ publish loopback, tạo credential/chứng chỉ tạm và dọn chúng khi kết thúc; không gọi AWS hoặc sửa profile Windows. JSON kết quả ở `Backend/out/lan-host-tests/`. Bài này kiểm chính sách proxy/TLS và account; không thay nghiệm thu Unity LAN hai PC.
+
+Cấu hình LAN đặt `PUBLIC_HOSTING=true`, `ALLOW_LOCAL_HTTP=false`: đây là chính sách API yêu cầu kết nối HTTPS từ proxy nội bộ, không phải yêu cầu Internet hoặc mở thêm cổng. Chứng chỉ tự ký LAN chỉ được game tin sau xác nhận riêng; không cài CA hệ thống.
+
+### Đối chiếu lỗi đồ họa khi test Windows
+
+Nếu bản Windows crash trước khi hiện menu, dev có thể thử `Lastaway.exe -force-d3d11`. Đây là tùy chọn chẩn đoán theo máy, không thay Unity/URP hoặc mặc định renderer của cả team. Runner hiện có nhận `-ForceD3D11` (cả `test-unity-remote.ps1` và `test-unity-online.ps1`), ghi rõ chế độ ở kết quả. Không tự dùng một lượt Direct3D11 PASS để kết luận Direct3D12 đã hết lỗi. Luôn đợi `/health` Local trả200 trước khi gọi runner sau khi vừa bật Docker.

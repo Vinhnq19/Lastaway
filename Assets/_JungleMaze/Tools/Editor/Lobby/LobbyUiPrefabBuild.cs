@@ -253,8 +253,34 @@ namespace JungleMaze.EditorTools
             Set(v, "vpnStatus", Para(vpn, "VpnStatus", Tier.C, "Dán mã hoặc thiết lập máy host để bắt đầu.", C.Muted, 60, 800, 1100, 88));
             v.VpnCode.characterLimit = 1024;
             v.VpnCode.textComponent.richText = false;
+            AddConnectionControls(v);
             vpn.gameObject.SetActive(false);
             return v;
+        }
+
+        // Incremental upgrade preserves existing prefab IDs and unrelated UI edits.
+        [MenuItem("Jungle Maze/UI-02/Upgrade LAN Settings")]
+        public static void UpgradeLanSettings()
+        {
+            var root = PrefabUtility.LoadPrefabContents(PrefabPath);
+            try { AddConnectionControls(root.GetComponent<LobbyUiRoot>().ServerSettings); UiKit.FaceAll(root); PrefabUtility.SaveAsPrefabAsset(root, PrefabPath); }
+            finally { PrefabUtility.UnloadPrefabContents(root); }
+        }
+        private static void AddConnectionControls(ServerSettingsView v)
+        {
+            var p = (RectTransform)v.Profile.transform.parent;
+            var vpn = (RectTransform)v.VpnCode.transform.parent;
+            var normal = (RectTransform)v.Host.transform.parent;
+            if(v.LanInterface == null) Set(v, "lanInterface", Drop(vpn, "LanInterface", 640, 722, 520));
+            if(v.LanInterface.transform.Find("FieldLabel")==null)FieldLabel((RectTransform)v.LanInterface.transform,"Mạng của máy chủ");
+            if(v.TrustConfirm == null) Set(v, "trustConfirm", Btn(vpn, "TrustConfirm", Kind.Primary, Size.S, 60, 714, 250, "kit_ico_check", "Tin máy chủ này"));
+            if(v.TrustCancel == null) Set(v, "trustCancel", Btn(vpn, "TrustCancel", Kind.Secondary, Size.S, 330, 714, 250, "kit_icon_cross_ink", "Hủy"));
+            if(v.DevProfile == null) Set(v, "devProfile", Drop(normal, "DevProfile", 60, 560, 700));
+            if(normal.Find("ServerDescription") == null) Set(v, "serverDescription", Para(normal, "ServerDescription", Tier.B2,
+                "Online · AWS\nChơi trực tuyến bằng tài khoản game.\nBấm Kết nối để kiểm tra máy chủ.", C.Muted, 60, 282, 700, 150));
+            var note=p.Find("Advanced")?.GetComponent<TMP_Text>();if(note!=null)note.text="Chọn cách chơi và kết nối máy chủ của bạn.";
+            v.Profile.ClearOptions();v.Profile.AddOptions(new System.Collections.Generic.List<string>{"Online · AWS","LAN · cùng mạng","VPN · Tailscale"});
+            v.ShowMode(0,false,false);
         }
 
         /// <summary>Caption 20 above a form field, as a child so it hides with the field (the presenter hides Profile without a menu).</summary>

@@ -21,12 +21,12 @@ public sealed partial class MatchRuntime
         private ushort _inputSequence, _combatSequence;
         private uint _itemSequence;
         private byte _enemy = 255;
-        private double _seenAt = -100, _reactAt, _repathAt, _progressAt, _ignoreUntil;
-        private Vector2 _lastSeen, _goal, _progressPosition, _previousPosition;
+        private double _seenAt = -100, _reactAt, _repathAt, _progressAt, _ignoreUntil, _nextPartialAt, _lastMotionAt;
+        private Vector2 _lastSeen, _goal, _progressPosition, _previousPosition, _motionPosition;
         private Vector2? _ignoredGoal;
         private BotPathSearch? _search;
         private int _pathIndex, _failedPaths;
-        private bool _hasGoal, _thinkInitialised, _hasPreviousPosition;
+        private bool _hasGoal, _thinkInitialised, _hasPreviousPosition, _directGoal, _pathWorkSinceMotion;
         // Cached combat intent: decided at ThinkHz, executed every tick so authoritative combat rules apply at the tick rate.
         private bool _attackWanted;
         private CombatWeaponId _attackWeapon;
@@ -36,9 +36,10 @@ public sealed partial class MatchRuntime
         {
             _random = new StableRandom(seed); State = BotState.Idle; _nextThink = 0;
             _inputSequence = _combatSequence = 0; _itemSequence = 0; _enemy = 255;
-            _seenAt = -100; _reactAt = _repathAt = _progressAt = _ignoreUntil = 0;
-            _hasGoal = false; _search = null; _failedPaths = 0; _ignoredGoal = null;
+            _seenAt = -100; _reactAt = _repathAt = _progressAt = _ignoreUntil = _nextPartialAt = _lastMotionAt = 0;
+            _hasGoal = false; _directGoal = false; _search = null; _failedPaths = 0; _ignoredGoal = null;
             _pathIndex = 0; _thinkInitialised = false; _hasPreviousPosition = false; _previousPosition = default;
+            _motionPosition = default; _pathWorkSinceMotion = false;
             _attackWanted = false; _attackWeapon = CombatWeaponId.Hand;
         }
 
@@ -53,10 +54,21 @@ public sealed partial class MatchRuntime
             // Large displacement invalidates stale path; drop it without touching position.
             if (_hasPreviousPosition && Vector2.DistanceSquared(position, _previousPosition) > 4f)
             {
-                _search = null; _pathIndex = 0; _repathAt = now;
+                _search = null; _directGoal = false; _pathIndex = 0; _repathAt = now;
                 _progressPosition = position; _progressAt = now;
             }
+            // Use a stable anchor: slow movement across several ticks is still progress.
+            var movementPaused = match.World.Using(actor.NetId) || match.World.SpeedMultiplier(actor.NetId) <= 0;
+            if (!_hasPreviousPosition || !_hasGoal || movementPaused || Vector2.DistanceSquared(position, _motionPosition) > .16f)
+            { _motionPosition = position; _lastMotionAt = now; _pathWorkSinceMotion = false; }
             _previousPosition = position; _hasPreviousPosition = true;
+
+            if (_hasGoal && !movementPaused && _pathWorkSinceMotion &&
+                now - _lastMotionAt >= settings.StuckSeconds * settings.FailedPathLimit)
+            {
+                // Goal changes cannot hide a stalled actor; waiting without any path budget is not failure.
+                FailPath(now, settings, true);
+            }
 
             var period = (uint)Math.Max(1, 30 / settings.ThinkHz);
             if (!_thinkInitialised)
@@ -73,33 +85,72 @@ public sealed partial class MatchRuntime
             var move = Vector2.Zero;
             if (_hasGoal && !match.World.Using(actor.NetId))
             {
-                // Container attacks begin at .25 cells, so arrival must allow reaching that range instead of stopping at ~.387 cells.
-                if (Vector2.DistanceSquared(position, _goal) < .04f) _hasGoal = false;
+                if (Vector2.DistanceSquared(position, _goal) < .04f)
+                { _hasGoal = false; _directGoal = false; _search = null; }
                 else
                 {
-                    if (_search is null && now >= _repathAt)
+                    // Only short, cached probes bypass A*: long traces must stay in the shared navigation budget.
+                    if ((_search is null || _directGoal) && now >= _repathAt)
                     {
-                        _search = new BotPathSearch(match.SelectedMap.Navigation, position, _goal);
-                        _pathIndex = 0; _repathAt = now + settings.RepathSeconds;
+                        _directGoal = Vector2.DistanceSquared(position, _goal) <= 4f &&
+                            SegmentWalkable(match, position, _goal, actor.Radius, allowHazards);
+                        if (_directGoal) _repathAt = now + settings.RepathSeconds;
                     }
-                    if (_search is { Finished: false })
-                        using (new ServerMetrics.StageTiming(match.PerformanceMetrics, TickWorkStage.BotPath))
-                        _search.Advance(match.NavigationBudget, settings.PathNodesPerTick, actor.Radius,
-                            p => Walkable(match, p, actor.Radius, allowHazards),
-                            (a,b) => SegmentWalkable(match,a,b,actor.Radius,allowHazards), p => Penalty(match,p));
-                    if (_search is { Finished: true, ReachedGoal: false })
-                    { FailPath(now, settings); }
-                    else if (_search is { ReachedGoal: true })
+                    if (_directGoal) move = Direction(_goal-position);
+                    else
                     {
-                        var path = _search.Path;
-                        while (_pathIndex < path.Count && Vector2.DistanceSquared(position,path[_pathIndex]) < .09f) _pathIndex++;
-                        var next = _pathIndex < path.Count ? path[_pathIndex] : _goal;
-                        if (SegmentWalkable(match,position,next,actor.Radius,allowHazards)) move = Direction(next-position);
-                        else { _search = null; _repathAt = now; }
+                        if (_search is null && now >= _repathAt)
+                        {
+                            _search = new BotPathSearch(match.SelectedMap.Navigation, position, _goal);
+                            _pathIndex = 0; _repathAt = now + settings.RepathSeconds;
+                            _nextPartialAt=now+settings.StuckSeconds;
+                        }
+                        if (_search is { Finished: false })
+                        {
+                            var expandedBefore = _search.Expanded;
+                            using (new ServerMetrics.StageTiming(match.PerformanceMetrics, TickWorkStage.BotPath))
+                                _search.Advance(match.NavigationBudget, settings.PathNodesPerTick, actor.Radius,
+                                    p => Walkable(match,p,actor.Radius,allowHazards),
+                                    (a,b) => SegmentWalkable(match,a,b,actor.Radius,allowHazards), p => Penalty(match,p));
+                            if (_search.Expanded > expandedBefore) RecordPathWork(now);
+                        }
+                        if(_search is { Finished:false } && now>=_nextPartialAt)
+                        {
+                            _nextPartialAt=now+settings.RepathSeconds;
+                            _search.TryFinishPartial();
+                        }
+                        if (_search is { Finished: true })
+                        {
+                            if (!_search.ReachedGoal && !_search.HasPartialPath) FailPath(now,settings,true);
+                            else
+                            {
+                                var path = _search.Path;
+                                while (_pathIndex < path.Count && Vector2.DistanceSquared(position,path[_pathIndex]) < .09f) _pathIndex++;
+                                if (_pathIndex < path.Count)
+                                {
+                                    var next = path[_pathIndex];
+                                    if (SegmentWalkable(match,position,next,actor.Radius,allowHazards)) move=Direction(next-position);
+                                    else { _search=null; _pathIndex=0; _repathAt=now; }
+                                }
+                                else if (_search.ReachedGoal && Vector2.DistanceSquared(position,_goal)<=4f &&
+                                    SegmentWalkable(match,position,_goal,actor.Radius,allowHazards))
+                                    move=Direction(_goal-position);
+                                else
+                                {
+                                    // A partial route is progress, not proof that the remaining goal is blocked.
+                                    _search=null; _pathIndex=0; _repathAt=now;
+                                    _progressPosition=position; _progressAt=now;
+                                }
+                            }
+                        }
                     }
-                    if (Vector2.DistanceSquared(position,_progressPosition) > .16f)
-                    { _progressPosition = position; _progressAt = now; _failedPaths = 0; }
-                    else if (now-_progressAt >= settings.StuckSeconds) { _progressAt = now; FailPath(now,settings); }
+                    if (move.LengthSquared() > 0) RecordPathWork(now);
+                    // The actor deadline owns planning recovery; this short timer only checks following a path.
+                    if (match.World.SpeedMultiplier(actor.NetId)<=0 || _search is { Finished:false })
+                    { _progressPosition=position; _progressAt=now; }
+                    else if (Vector2.DistanceSquared(position,_progressPosition)>.16f)
+                    { _progressPosition=position; _progressAt=now; _failedPaths=0; }
+                    else if (now-_progressAt>=settings.StuckSeconds) FailPath(now,settings);
                 }
             }
             // Keep normal input validation/normalisation and input timeout; never write position directly.
@@ -130,43 +181,53 @@ public sealed partial class MatchRuntime
             }
             var zone = match.Zone;
             var zoneState = zone?.GetStatePacket(match.CurrentTick) ?? default;
-            var outside = zone != null && zone.IsOutside(position.X,position.Y);
-            var unsafeSoon = zoneState.InWarning && Vector2.Distance(position,new Vector2(zoneState.TargetCenterX,zoneState.TargetCenterY)) > zoneState.TargetRadius-actor.Radius;
-            // Leave the current hazard before planning the longer route back into the zone.
+            var outside = zone != null && zone.CurrentRadius>0 && zone.IsOutside(position.X,position.Y);
+            var targetCenter = new Vector2(zoneState.TargetCenterX,zoneState.TargetCenterY);
+            var targetRadius = Math.Max(0,zoneState.TargetRadius-actor.Radius-1f);
+            var start = zoneState.ShrinkStartTick/30d*match.Profile.ZoneTimeScale;
+            var end = zoneState.ShrinkEndTick/30d*match.Profile.ZoneTimeScale;
+            var targetUnsafe = Vector2.Distance(position,targetCenter)>targetRadius;
+            var unsafeSoon = zone != null && zone.CurrentRadius>0 && targetUnsafe &&
+                ((now>=start && now<end) || start-now<=EscapeTravelSeconds(match,actor,position,targetCenter,targetRadius)+settings.EscapeLeadSeconds);
             if (Dangerous(world,position))
             {
-                State = BotState.EscapeZone;
-                var radius = actor.Radius; var margin = radius + .1f;
-                var exitDistance = float.MaxValue; var exit = position;
+                EnterEscape(world,actor);
+                var radius=actor.Radius; var margin=radius+.1f;
+                var exitDistance=float.MaxValue; var exit=position;
                 void Consider(Vector2 candidate)
                 {
-                    var distance = Vector2.DistanceSquared(position,candidate);
-                    if (distance >= exitDistance) return;
-                    if (!Walkable(match,candidate,radius) || !SegmentWalkable(match,position,candidate,radius,true)) return;
-                    exitDistance = distance; exit = candidate;
+                    var distance=Vector2.DistanceSquared(position,candidate);
+                    if(distance>=exitDistance || !Walkable(match,candidate,radius) ||
+                        !SegmentWalkable(match,position,candidate,radius,true)) return;
+                    exitDistance=distance; exit=candidate;
                 }
-                foreach (var hazard in world.Layout.Objects)
+                foreach(var hazard in world.Layout.Objects)
                 {
-                    if (hazard.Kind != WorldObjectKind.Lava && hazard.Kind != WorldObjectKind.Poison) continue;
-                    var bounds = hazard.Bounds;
-                    if (!bounds.Contains(new WorldPoint(position.X,position.Y))) continue;
+                    if(hazard.Kind!=WorldObjectKind.Lava && hazard.Kind!=WorldObjectKind.Poison) continue;
+                    var bounds=hazard.Bounds;
+                    if(!bounds.Contains(new WorldPoint(position.X,position.Y))) continue;
                     Consider(new Vector2(bounds.MinX-margin,position.Y));
                     Consider(new Vector2(bounds.MaxX+margin,position.Y));
                     Consider(new Vector2(position.X,bounds.MinY-margin));
                     Consider(new Vector2(position.X,bounds.MaxY+margin));
                 }
-                if (exitDistance < float.MaxValue) { Goal(exit,now,settings); return; }
+                if(exitDistance<float.MaxValue) { Goal(exit,now,settings); return; }
                 SeekSafe(match,actor,position,settings); return;
             }
-            if (outside || unsafeSoon)
+            if(outside || unsafeSoon)
             {
-                State = BotState.EscapeZone;
-                var center = zoneState.InWarning ? new Vector2(zoneState.TargetCenterX,zoneState.TargetCenterY) : new Vector2(zoneState.CurrentCenterX,zoneState.CurrentCenterY);
-                SeekSafe(match,actor,center,settings); return;
+                EnterEscape(world,actor);
+                // The published next circle is nested in the current circle. At r0 no point is safe.
+                if(zoneState.TargetRadius>0)
+                    SeekSafe(match,actor,targetCenter,settings,targetCenter,targetRadius);
+                else
+                    SeekSafe(match,actor,targetCenter,settings);
+                return;
             }
             var healthFraction = actor.Hp/(float)match.Profile.PlayerHp;
             if (enemy != null && now >= _reactAt && healthFraction <= settings.RetreatHpFraction)
             {
+                if(State!=BotState.Retreat) { _hasGoal=false; _search=null; _directGoal=false; }
                 State = BotState.Retreat;
                 SeekSafe(match,actor,position+Direction(position-_lastSeen)*5,settings); return;
             }
@@ -212,7 +273,7 @@ public sealed partial class MatchRuntime
             foreach(var floor in world.Floor.Items)
             {
                 var point=new Vector2(floor.X,floor.Y);var distance=Vector2.DistanceSquared(position,point);
-                if(distance>settings.DetectRadius*settings.DetectRadius||distance>=best||!Visible(match,position,point)||!Wants(match,actor,floor.Stack))continue;
+                if(distance>settings.DetectRadius*settings.DetectRadius||distance>=best||Ignored(point,now)||!Visible(match,position,point)||!Wants(match,actor,floor.Stack))continue;
                 best=distance;floorTarget=floor;
             }
             if(floorTarget.HasValue)
@@ -236,7 +297,7 @@ public sealed partial class MatchRuntime
                     var target=new Vector2(drop.Position.X,drop.Position.Y);
                     if(match.Zone?.IsOutside(target.X,target.Y)==true||Dangerous(world,target))continue;
                     var edge=Approach(new WorldBounds(target.X,target.Y,world.Airdrops.EggSize,world.Airdrops.EggSize),position,actor.Radius+.2f);
-                    if(!Walkable(match,edge,actor.Radius))continue;
+                    if(!Walkable(match,edge,actor.Radius)||Ignored(edge,now))continue;
                     if(drop.Phase==JungleMaze.World.Airdrops.AirdropPhase.Landed&&Vector2.DistanceSquared(position,target)<=settings.DetectRadius*settings.DetectRadius&&Visible(match,position,edge))
                     {preferredSupply=world.Layout.Objects.First(o=>o.Id==drop.WorldId);break;}
                     State=BotState.Roam;Goal(edge,now,settings);return;
@@ -249,7 +310,7 @@ public sealed partial class MatchRuntime
                 if(distance>=best||distance>settings.DetectRadius*settings.DetectRadius)continue;
                 // The target's own bounds block the ray, so test up to its near surface.
                 var edge=Approach(item.Bounds,position,actor.Radius+.1f);
-                if(!Visible(match,position,edge))continue;
+                if(Ignored(edge,now)||!Walkable(match,edge,actor.Radius)||!Visible(match,position,edge))continue;
                 best=distance;container=item;
             }
             if(container!=null)
@@ -383,35 +444,81 @@ public sealed partial class MatchRuntime
         }
         private bool Item(MatchRuntime match,WorldActionKind action,ushort target=0,byte slot=0) =>
             match.ProcessWorldRequest(SessionId,new WorldActionRequestPacket{MatchId=match.MatchId,RequestId=++_itemSequence,Action=action,TargetId=target,Slot=slot});
+        private void EnterEscape(MatchWorldRuntime world,Entity actor)
+        {
+            if(State!=BotState.EscapeZone) { _hasGoal=false; _search=null; _directGoal=false; }
+            State=BotState.EscapeZone;
+            world.Inventory.CancelForAction(actor.NetId,ItemCancelAction.Move);
+        }
+        private double EscapeTravelSeconds(MatchRuntime match,Entity actor,Vector2 position,Vector2 center,float radius)
+        {
+            var distance=Math.Max(0,Vector2.Distance(position,center)-radius);
+            if(State==BotState.EscapeZone && _search is { Finished:true } && (_search.ReachedGoal||_search.HasPartialPath))
+            {
+                var route=0f; var previous=position;
+                for(var i=_pathIndex;i<_search.Path.Count;i++)
+                { route+=Vector2.Distance(previous,_search.Path[i]); previous=_search.Path[i]; }
+                route+=Math.Max(0,Vector2.Distance(previous,center)-radius);
+                distance=Math.Max(distance,route);
+            }
+            var multiplier=match.World!.SpeedMultiplier(actor.NetId);
+            // A temporary stun cannot turn a nearby safe circle into an infinite travel-time estimate.
+            return distance*1.5/(match.Profile.PlayerSpeed*(multiplier>0?multiplier:1));
+        }
+        private bool Ignored(Vector2 point,double now) => _ignoredGoal.HasValue && now<_ignoreUntil &&
+            Vector2.DistanceSquared(point,_ignoredGoal.Value)<1;
         private void Goal(Vector2 goal,double now,BotSettings settings)
         {
-            if(_ignoredGoal.HasValue&&now<_ignoreUntil&&Vector2.DistanceSquared(goal,_ignoredGoal.Value)<1)return;
-            if(!_hasGoal||Vector2.DistanceSquared(goal,_goal)>1){_search=null;_pathIndex=0;}
-            _goal=goal;_hasGoal=true;
+            if(Ignored(goal,now)) return;
+            if(!_hasGoal || (Vector2.DistanceSquared(goal,_goal)>1 && now>=_repathAt))
+            {
+                _search=null; _directGoal=false; _pathIndex=0; _repathAt=now;
+                _progressPosition=_previousPosition; _progressAt=now;
+            }
+            _goal=goal; _hasGoal=true;
         }
-        private void FailPath(double now,BotSettings settings)
+        private void FailPath(double now,BotSettings settings,bool unreachable=false)
         {
-            _search=null;_repathAt=now+settings.RepathSeconds;_failedPaths++;
-            if(_failedPaths>=settings.FailedPathLimit){_ignoredGoal=_goal;_ignoreUntil=now+settings.BlacklistSeconds;_hasGoal=false;_failedPaths=0;State=BotState.Idle;}
+            _search=null; _directGoal=false; _pathIndex=0; _repathAt=now+settings.RepathSeconds;
+            _progressPosition=_previousPosition; _progressAt=now; _failedPaths++;
+            // Rearm once so the next route gets time to run instead of being cancelled every tick.
+            _motionPosition=_previousPosition; _lastMotionAt=now; _pathWorkSinceMotion=false;
+            if(unreachable||_failedPaths>=settings.FailedPathLimit)
+            { _ignoredGoal=_goal; _ignoreUntil=now+settings.BlacklistSeconds; _hasGoal=false; _failedPaths=0; State=BotState.Idle; }
         }
-        private void SeekSafe(MatchRuntime match,Entity actor,Vector2 desired,BotSettings settings)
+        private void RecordPathWork(double now)
         {
+            if (_pathWorkSinceMotion) return;
+            _pathWorkSinceMotion=true; _lastMotionAt=now;
+        }
+        private void SeekSafe(MatchRuntime match,Entity actor,Vector2 desired,BotSettings settings,Vector2? futureCenter=null,float futureRadius=0)
+        {
+            bool Safe(Vector2 p) => !Ignored(p,match.ElapsedSeconds) && Walkable(match,p,actor.Radius) &&
+                match.Zone?.IsOutside(p.X,p.Y)!=true &&
+                (!futureCenter.HasValue || Vector2.DistanceSquared(p,futureCenter.Value)<=futureRadius*futureRadius);
+            if(_hasGoal && Safe(_goal)) return;
             var size=match.World!.Layout.Size;
-            desired=Vector2.Clamp(desired,new Vector2(1),new Vector2(size-1));
+            desired=Vector2.Clamp(desired,new Vector2(actor.Radius),new Vector2(size-actor.Radius));
             for(var i=0;i<40;i++)
             {
-                var p=i==0?desired:desired+new Vector2(_random.Range(-80,81)/10f,_random.Range(-80,81)/10f);
-                if(!Walkable(match,p,actor.Radius)||match.Zone?.IsOutside(p.X,p.Y)==true)continue;
-                Goal(p,match.ElapsedSeconds,settings);return;
+                var p=desired;
+                if(i!=0)
+                {
+                    var angle=_random.Range(0,360)*MathF.PI/180;
+                    var distance=_random.Range(0,1001)/1000f*(futureCenter.HasValue?Math.Min(8,futureRadius):8);
+                    p=desired+new Vector2(MathF.Cos(angle),MathF.Sin(angle))*distance;
+                }
+                if(!Safe(p)) continue;
+                Goal(p,match.ElapsedSeconds,settings); return;
             }
-            _hasGoal=false;
+            _hasGoal=false; _search=null; _directGoal=false;
         }
         private static bool Walkable(MatchRuntime match,Vector2 p,float radius,bool allowHazards=false) =>
-            match.World!.Layout.IsWalkable(new WorldPoint(p.X,p.Y),radius,match.World.Destructibles.IsBroken,match.World.Hazards.IsDoorClosed)&&(allowHazards||!Dangerous(match.World,p));
-        private static bool Dangerous(MatchWorldRuntime world,Vector2 p) => world.Layout.Objects.Any(o=>
+            match.SelectedMap!.Navigation.WalkableWorld(match.World!.Layout,p,radius,match.World.Destructibles.IsBroken,match.World.Hazards.IsDoorClosed)&&(allowHazards||!Dangerous(match.World,p));
+        private static bool Dangerous(MatchWorldRuntime world,Vector2 p) => world.NavigationHazards.Any(o=>
             (o.Kind==WorldObjectKind.Lava||o.Kind==WorldObjectKind.Poison)&&o.Bounds.Contains(new WorldPoint(p.X,p.Y)));
         private static float Penalty(MatchRuntime match,Vector2 p) => (match.Zone?.IsOutside(p.X,p.Y)==true?10:1)*
-            (match.World!.Layout.Objects.Any(o=>o.Kind==WorldObjectKind.Swamp&&o.Bounds.Contains(new WorldPoint(p.X,p.Y)))?3:1)*
+            (match.World!.NavigationHazards.Any(o=>o.Kind==WorldObjectKind.Swamp&&o.Bounds.Contains(new WorldPoint(p.X,p.Y)))?3:1)*
             (Dangerous(match.World,p)?20:1);
         private static bool SegmentWalkable(MatchRuntime match,Vector2 a,Vector2 b,float radius,bool allowHazards=false)
         {

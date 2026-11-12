@@ -42,6 +42,8 @@ namespace JungleMaze.Infrastructure.Auth
                 timeout = TimeoutSeconds,
                 redirectLimit = 0
             };
+            if (!JungleMaze.Infrastructure.Network.LanTls.Attach(request,config))
+            { request.Dispose();onComplete(LoginResult.Fail("Hãy xác nhận lại máy chủ LAN."));return; }
             request.SetRequestHeader("Content-Type", "application/json");
             request.SendWebRequest().completed += _ =>
             {

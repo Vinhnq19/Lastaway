@@ -1,0 +1,182 @@
+[
+  {
+    "Room": "bb3f9279-399f-4386-a8be-3a1d224e5783",
+    "Match": "1041f4fe-9c5f-4f1b-919f-dd0745b34cb9",
+    "Id": 1,
+    "aliveSeconds": 89.86666666666413,
+    "maxDisplacement": 54.54653,
+    "state": "Roam",
+    "hasGoal": true,
+    "expanded": 16
+  },
+  {
+    "Room": "bb3f9279-399f-4386-a8be-3a1d224e5783",
+    "Match": "1041f4fe-9c5f-4f1b-919f-dd0745b34cb9",
+    "Id": 2,
+    "aliveSeconds": 89.86666666666413,
+    "maxDisplacement": 35.625744,
+    "state": "EscapeZone",
+    "hasGoal": true,
+    "expanded": 4604
+  },
+  {
+    "Room": "bb3f9279-399f-4386-a8be-3a1d224e5783",
+    "Match": "1041f4fe-9c5f-4f1b-919f-dd0745b34cb9",
+    "Id": 3,
+    "aliveSeconds": 89.86666666666413,
+    "maxDisplacement": 26.157715,
+    "state": "Chase",
+    "hasGoal": true,
+    "expanded": 2975
+  },
+  {
+    "Room": "bb3f9279-399f-4386-a8be-3a1d224e5783",
+    "Match": "1041f4fe-9c5f-4f1b-919f-dd0745b34cb9",
+    "Id": 4,
+    "aliveSeconds": 89.86666666666413,
+    "maxDisplacement": 20.667809,
+    "state": "Chase",
+    "hasGoal": true,
+    "expanded": 2537
+  },
+  {
+    "Room": "bb3f9279-399f-4386-a8be-3a1d224e5783",
+    "Match": "1041f4fe-9c5f-4f1b-919f-dd0745b34cb9",
+    "Id": 5,
+    "aliveSeconds": 45.99999999999995,
+    "maxDisplacement": 15.362819,
+    "state": "Dead",
+    "hasGoal": true,
+    "expanded": 79
+  },
+  {
+    "Room": "bb3f9279-399f-4386-a8be-3a1d224e5783",
+    "Match": "1041f4fe-9c5f-4f1b-919f-dd0745b34cb9",
+    "Id": 6,
+    "aliveSeconds": 89.86666666666413,
+    "maxDisplacement": 33.94463,
+    "state": "Roam",
+    "hasGoal": true,
+    "expanded": 593
+  },
+  {
+    "Room": "bb3f9279-399f-4386-a8be-3a1d224e5783",
+    "Match": "1041f4fe-9c5f-4f1b-919f-dd0745b34cb9",
+    "Id": 7,
+    "aliveSeconds": 89.86666666666413,
+    "maxDisplacement": 35.92797,
+    "state": "BreakContainer",
+    "hasGoal": true,
+    "expanded": 0
+  },
+  {
+    "Room": "bb3f9279-399f-4386-a8be-3a1d224e5783",
+    "Match": "1041f4fe-9c5f-4f1b-919f-dd0745b34cb9",
+    "Id": 8,
+    "aliveSeconds": 89.86666666666413,
+    "maxDisplacement": 40.013454,
+    "state": "Roam",
+    "hasGoal": true,
+    "expanded": 16
+  },
+  {
+    "Room": "bb3f9279-399f-4386-a8be-3a1d224e5783",
+    "Match": "1041f4fe-9c5f-4f1b-919f-dd0745b34cb9",
+    "Id": 9,
+    "aliveSeconds": 72.49999999999845,
+    "maxDisplacement": 24.298502,
+    "state": "Dead",
+    "hasGoal": false,
+    "expanded": 0
+  },
+  {
+    "Room": "c22429cb-9282-4205-b70f-85e7d0e39f14",
+    "Match": "46d5401e-ac58-4ccc-be21-44148ad1057a",
+    "Id": 1,
+    "aliveSeconds": 89.86666666666413,
+    "maxDisplacement": 15.132271,
+    "state": "Roam",
+    "hasGoal": true,
+    "expanded": 0
+  },
+  {
+    "Room": "c22429cb-9282-4205-b70f-85e7d0e39f14",
+    "Match": "46d5401e-ac58-4ccc-be21-44148ad1057a",
+    "Id": 2,
+    "aliveSeconds": 89.86666666666413,
+    "maxDisplacement": 22.03722,
+    "state": "EscapeZone",
+    "hasGoal": true,
+    "expanded": 2000
+  },
+  {
+    "Room": "c22429cb-9282-4205-b70f-85e7d0e39f14",
+    "Match": "46d5401e-ac58-4ccc-be21-44148ad1057a",
+    "Id": 3,
+    "aliveSeconds": 89.86666666666413,
+    "maxDisplacement": 28.201399,
+    "state": "Roam",
+    "hasGoal": true,
+    "expanded": 2648
+  },
+  {
+    "Room": "c22429cb-9282-4205-b70f-85e7d0e39f14",
+    "Match": "46d5401e-ac58-4ccc-be21-44148ad1057a",
+    "Id": 4,
+    "aliveSeconds": 18.466666666666743,
+    "maxDisplacement": 32.438374,
+    "state": "Dead",
+    "hasGoal": true,
+    "expanded": 15
+  },
+  {
+    "Room": "c22429cb-9282-4205-b70f-85e7d0e39f14",
+    "Match": "46d5401e-ac58-4ccc-be21-44148ad1057a",
+    "Id": 5,
+    "aliveSeconds": 89.86666666666413,
+    "maxDisplacement": 34.148758,
+    "state": "Combat",
+    "hasGoal": false,
+    "expanded": 0
+  },
+  {
+    "Room": "c22429cb-9282-4205-b70f-85e7d0e39f14",
+    "Match": "46d5401e-ac58-4ccc-be21-44148ad1057a",
+    "Id": 6,
+    "aliveSeconds": 89.86666666666413,
+    "maxDisplacement": 11.496564,
+    "state": "Chase",
+    "hasGoal": true,
+    "expanded": 4
+  },
+  {
+    "Room": "c22429cb-9282-4205-b70f-85e7d0e39f14",
+    "Match": "46d5401e-ac58-4ccc-be21-44148ad1057a",
+    "Id": 7,
+    "aliveSeconds": 89.86666666666413,
+    "maxDisplacement": 46.05062,
+    "state": "Roam",
+    "hasGoal": true,
+    "expanded": 24
+  },
+  {
+    "Room": "c22429cb-9282-4205-b70f-85e7d0e39f14",
+    "Match": "46d5401e-ac58-4ccc-be21-44148ad1057a",
+    "Id": 8,
+    "aliveSeconds": 12.933333333333298,
+    "maxDisplacement": 17.449463,
+    "state": "Dead",
+    "hasGoal": true,
+    "expanded": 15
+  },
+  {
+    "Room": "c22429cb-9282-4205-b70f-85e7d0e39f14",
+    "Match": "46d5401e-ac58-4ccc-be21-44148ad1057a",
+    "Id": 9,
+    "aliveSeconds": 39.06666666666701,
+    "maxDisplacement": 38.216106,
+    "state": "Dead",
+    "hasGoal": true,
+    "expanded": 28
+  }
+]

@@ -172,6 +172,30 @@ namespace JungleMaze.Tests.MatchUi
             Assert.IsTrue(_flow.Camera.HasPosition);
         }
 
+        [Test]
+        public void NextTick_AutomaticallySpectatesKiller_OrAnotherSurvivor()
+        {
+            Eliminate();
+            _flow.Tick(1f / 60);
+            Assert.AreEqual(MatchOverlayPhase.Spectating, _flow.Phase);
+            Assert.AreEqual(MockEliminationSource.KillerNetId, _flow.Targets.Current);
+            _spectator.Eliminate(MockEliminationSource.KillerNetId);
+            Assert.AreNotEqual(MockEliminationSource.KillerNetId, _flow.Targets.Current);
+            _flow.ApplyScreen(AppScreen.MainMenu);
+            _flow.Tick(1f / 60);
+            Assert.AreEqual(MatchOverlayPhase.Inactive, _flow.Phase);
+        }
+
+        [Test]
+        public void AutomaticSpectate_UsesSurvivorWhenKillerAlreadyDead()
+        {
+            _spectator.Eliminate(MockEliminationSource.KillerNetId);
+            Eliminate();
+            _flow.Tick(1f / 60);
+            Assert.AreEqual(MatchOverlayPhase.Spectating, _flow.Phase);
+            Assert.AreEqual(1, _flow.Targets.Current);
+        }
+
         // AC21: nobody alive → disabled with a reason, no hang.
         [Test]
         public void SpectateDisabled_WhenNoneAlive()
@@ -204,13 +228,16 @@ namespace JungleMaze.Tests.MatchUi
 
         // AC28
         [Test]
-        public void NoAliveOrMatchEnded_HandOff_SameCall()
+        public void NoVisibleTarget_WaitsForAuthoritativeMatchEnd()
         {
             Eliminate();
             _flow.Spectate();
             for (byte id = 1; id <= 9; id++) _spectator.Eliminate(id);
-            Assert.AreEqual(MatchOverlayPhase.HandedOff, _flow.Phase, "last alive gone → results flow");
+            Assert.AreEqual(MatchOverlayPhase.Spectating, _flow.Phase, "missing targets do not prove a match result");
             Assert.IsFalse(_flow.Targets.HasTarget);
+            Assert.IsTrue(_flow.Camera.HasPosition, "hold the last camera position while waiting");
+            _spectator.EndMatch();
+            Assert.AreEqual(MatchOverlayPhase.HandedOff, _flow.Phase);
             Assert.IsFalse(_flow.Camera.HasPosition);
 
             _bus.Publish(new AppScreenChanged(AppScreen.InMatch, AppScreen.Results, null));

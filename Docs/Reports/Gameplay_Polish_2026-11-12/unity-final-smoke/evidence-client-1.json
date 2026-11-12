@@ -1,0 +1,84 @@
+{
+    "schemaVersion": 1,
+    "physicalDeviceCount": 1,
+    "scenarioId": "connection",
+    "status": "PASS",
+    "reason": "All scenario assertions observed",
+    "selectedTransport": "Udp",
+    "fallbackReason": "",
+    "endpoint": "127.0.0.1:7777",
+    "matchId": "00000000-0000-0000-0000-000000000000",
+    "disconnectCallSite": "",
+    "metrics": {
+        "elapsedSeconds": 6.49227237701416,
+        "connectedSeconds": 5.004343509674072,
+        "snapshots": 0,
+        "inputs": 0,
+        "ignoredPackets": 0,
+        "catchupDrops": 0,
+        "maxPlayers": 0,
+        "maxRosterPlayers": 0,
+        "maxOnScreenPlayers": 0,
+        "completedMatches": 0,
+        "inputHz": 0.0,
+        "activeInputSeconds": 0.0,
+        "snapshotHz": 0.0,
+        "snapshotSeconds": 0.0,
+        "rttP50Ms": 33.3204,
+        "rttP95Ms": 74.6729,
+        "rttP99Ms": 74.6729,
+        "pings": 5,
+        "pongs": 5,
+        "pongTimeouts": 0,
+        "maxBotsMoved": 0,
+        "maxBotTravelCells": 0.0
+    },
+    "assertions": [
+        {
+            "id": "joined",
+            "status": "PASS",
+            "detail": "Observed during this run"
+        },
+        {
+            "id": "playersVisible",
+            "status": "NOT_OBSERVED",
+            "detail": "Roster and network views confirmed; Follow Player viewport count is separate"
+        },
+        {
+            "id": "movement",
+            "status": "NOT_OBSERVED",
+            "detail": "Observed during this run"
+        },
+        {
+            "id": "zone",
+            "status": "NOT_OBSERVED",
+            "detail": "Observed during this run"
+        },
+        {
+            "id": "hpDamage",
+            "status": "NOT_OBSERVED",
+            "detail": "Observed during this run"
+        },
+        {
+            "id": "result",
+            "status": "NOT_OBSERVED",
+            "detail": "Observed during this run"
+        },
+        {
+            "id": "replay",
+            "status": "NOT_OBSERVED",
+            "detail": "Observed during this run"
+        },
+        {
+            "id": "history",
+            "status": "NOT_OBSERVED",
+            "detail": "Observed during this run"
+        }
+    ],
+    "frameQuality": [],
+    "qualitySampleCapReached": false,
+    "qualityTargetFps": 0,
+    "backgroundFrames": 0,
+    "screenWidth": 0,
+    "screenHeight": 0
+}

@@ -1,0 +1,3 @@
+evidence,seconds,samples,maxRssMiB,maxDropped,maxTickMs,movement
+bot-authored-300s.log,300,59,84.84,0,86.716,Movement observed: 86/90 bot lives moved more than half a cell
+bot-final-300s.log,300,297,94.32,0,29.0,Movement observed: 17/18 bot lives moved more than half a cell

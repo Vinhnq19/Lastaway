@@ -291,6 +291,64 @@ namespace JungleMaze.Tests.PlayMode.MatchUi
                 Object.DestroyImmediate(camGo);
             }
         }
+
+        // AC24 (driver): the clamp follows the runtime map, not the configured default; unusable provider values fall
+        // back to the construct size, and the camera z and non-spectating frames stay untouched.
+        [Test]
+        public void CameraDriver_UsesCurrentRuntimeMapSize()
+        {
+            Build(false);
+            var camGo = new GameObject("cam", typeof(Camera));
+            var host = new GameObject("driver");
+            try
+            {
+                var cam = camGo.GetComponent<Camera>();
+                cam.orthographic = true;
+                cam.orthographicSize = 6f;
+                cam.aspect = 16f / 9f;
+                cam.transform.position = new Vector3(0, 0, -10);
+                var mapSize = 150f;
+                var driver = host.AddComponent<MatchOverlayCameraDriver>();
+                driver.Construct(_flow, _clock.Read, 50f, cam, () => mapSize);
+                driver.Drive();
+                Assert.IsFalse(driver.Wrote, "not spectating: camera untouched");
+
+                Eliminate(EliminationCause.Player);
+                _flow.Spectate();
+                _spectator.SetPosition(_flow.Targets.Current, 100f, 110f);
+                _clock.Now += 0.3;
+                driver.Drive();
+                Assert.IsTrue(driver.Wrote);
+                Assert.AreEqual(100f, cam.transform.position.x, 0.1f, "follows the target on a 150 map, not clamped to 50");
+                Assert.AreEqual(110f, cam.transform.position.y, 0.1f);
+                Assert.AreEqual(-10f, cam.transform.position.z);
+
+                mapSize = 50f;
+                _spectator.SetPosition(_flow.Targets.Current, 49f, 49f);
+                driver.Drive();
+                Assert.AreEqual(50f - 6f * 16f / 9f, cam.transform.position.x, 0.01f, "clamped on the smaller runtime map");
+                Assert.AreEqual(44f, cam.transform.position.y, 0.01f);
+                Assert.AreEqual(-10f, cam.transform.position.z);
+
+                driver.Construct(_flow, _clock.Read, 50f, cam, () => float.NaN);
+                driver.Drive();
+                Assert.AreEqual(50f - 6f * 16f / 9f, cam.transform.position.x, 0.01f, "NaN: construct size used");
+                Assert.AreEqual(44f, cam.transform.position.y, 0.01f);
+                Assert.AreEqual(-10f, cam.transform.position.z);
+
+                _bus.Publish(new AppScreenChanged(AppScreen.InMatch, AppScreen.Results, null));
+                driver.Drive();
+                Assert.IsFalse(driver.Wrote, "outside spectating: camera untouched");
+                Assert.AreEqual(50f - 6f * 16f / 9f, cam.transform.position.x, 0.01f);
+                Assert.AreEqual(44f, cam.transform.position.y, 0.01f);
+                Assert.AreEqual(-10f, cam.transform.position.z);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+                Object.DestroyImmediate(camGo);
+            }
+        }
     }
 }
 #endif

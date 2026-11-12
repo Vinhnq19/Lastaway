@@ -177,7 +177,7 @@ namespace JungleMaze.Tests.PlayMode.Lobby
             rig.Click(rig.Root.MainMenu.Settings);
             yield return null;
             Assert.IsTrue(rig.Visible(rig.Root.ServerSettings));
-            Assert.IsTrue(rig.Root.ServerSettings.Host.gameObject.activeInHierarchy);
+            Assert.IsFalse(rig.Root.ServerSettings.Host.gameObject.activeInHierarchy,"AWS hides advanced endpoint fields");
             rig.Click(rig.Root.ServerSettings.Close);
             yield return null;
             Assert.IsFalse(rig.Visible(rig.Root.ServerSettings));

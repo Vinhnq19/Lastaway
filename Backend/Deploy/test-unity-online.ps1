@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Reusable multi-client online readiness test launcher for JungleMaze Unity Windows standalone builds.
 .DESCRIPTION
@@ -54,7 +54,8 @@ param(
     [Parameter(Mandatory=$false)]
     [int]$StaggerMs = 100,
     [string[]]$ClientConfigs = @(),
-    [ValidateRange(0,10)][int]$QualityClient = 0
+    [ValidateRange(0,10)][int]$QualityClient = 0,
+    [switch]$ForceD3D11
 )
 
 Set-StrictMode -Version Latest
@@ -183,6 +184,7 @@ namespace JungleMaze {
                    "-name `"$clientName`" " +
                    "-logfile `"$logFile`""
 
+        if($ForceD3D11){$argList += " -force-d3d11"}
         if ($QualityClient -eq $i) {
             $argList = $argList.Replace('-screen-width 640 -screen-height 360', '-screen-width 1280 -screen-height 720') + ' -qualityCapture'
         }
@@ -353,6 +355,7 @@ foreach ($c in $trackedClients) {
         exitCode = $c.ExitCode
         status = $c.EvaluatedStatus
         evidenceStatus = $c.EvidenceStatus
+        graphicsApi = $(if($ForceD3D11){"Direct3D11"}else{"Default"})
         selectedTransport = $c.SelectedTransport
         fallbackReason = $c.FallbackReason
         connectedSeconds = [Math]::Round($c.ConnectedSeconds, 2)

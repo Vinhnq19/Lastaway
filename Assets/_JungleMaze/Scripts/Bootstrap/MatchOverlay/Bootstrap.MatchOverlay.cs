@@ -76,7 +76,11 @@ namespace JungleMaze.Composition
             root.Bind(new MatchOverlayPresenter(root, menu, overlayFlow, settings, audio, tuning, balance.Match.HeroMaxHp),
                 new MatchOverlayInput(menu, overlayFlow));
             root.BindSettingsFlush(settings.Flush);
-            gameObject.AddComponent<MatchOverlayCameraDriver>().Construct(overlayFlow, clock, balance.Match.MapSizeCells);
+            // The map a match runs on can differ from the balance default; resolve it once and let the driver read
+            // the current runtime size instead of the configured fallback.
+            var runtime = _registry.Resolve<IClientRuntimeData>();
+            gameObject.AddComponent<MatchOverlayCameraDriver>().Construct(overlayFlow, clock, balance.Match.MapSizeCells,
+                mapSizeProvider: () => JungleMaze.Presentation.World.MapGridView.MapSize(runtime, balance));
             _registry.Register(new HudSpectatorMask(overlayFlow));
 
             // Temporary hook (T-12): delete the line when MOV-02 reads IMatchMenuState. UI-02 now handles LeaveMatchRequested.

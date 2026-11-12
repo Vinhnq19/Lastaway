@@ -37,6 +37,20 @@ namespace JungleMaze.App.World
         private bool _hasRevision, _hasInventory;
         private float _retry;
         private string _collisionKey;
+        private readonly Dictionary<uint,(WorldActionKind Kind,ushort Target,float Age)> _pendingActions = new Dictionary<uint,(WorldActionKind,ushort,float)>();
+        private readonly List<uint> _pendingKeys = new List<uint>(8);
+        public int PendingActions => _pendingActions.Count;
+        public int ActionTimeouts { get; private set; }
+        public string ActionMessage { get; private set; }
+        public bool IsPickupPending(ushort target)
+        { foreach(var action in _pendingActions.Values)if(action.Kind==WorldActionKind.Pickup&&action.Target==target)return true;return false; }
+        private void ActionResult(WorldActionResultPacket p)
+        {
+            if(p.MatchId!=_requested||p.MatchId!=_match.MatchId||!_pendingActions.Remove(p.RequestId))return;
+            ActionMessage=p.Accepted?null:p.Reason=="Busy"?"Máy chủ đang bận. Vui lòng thử lại.":"Chưa thực hiện được thao tác. Hãy kiểm tra rồi thử lại.";
+            Changed?.Invoke();
+        }
+
         public MapLayout Layout { get; private set; }
         public WorldObjectWire[] Objects { get; private set; } = Array.Empty<WorldObjectWire>();
         public InventorySnapshot Inventory { get; private set; }
@@ -57,31 +71,44 @@ namespace JungleMaze.App.World
             IClientRuntimeData runtime, InventoryHudBinding hud, MapLayoutConfig config, Func<bool> enabled = null, IEffectStateWriter effects = null, MapLayout authored = null, Func<MapLayout> selectedMap = null)
         { _match=match; _sender=sender; _receiver=receiver; _runtime=runtime; _hud=hud; _config=config; _enabled=enabled; _effects=effects; _authored=authored; _selectedMap=selectedMap; }
         public void Initialize()
-        { _match.GameplayReady = GameplayReady; _receiver.Subscribe<AirdropStatePacket>(Airdrop); _receiver.Subscribe<WorldManifestPacket>(Manifest); _receiver.Subscribe<WorldObjectStatePacket>(Page); _receiver.Subscribe<InventoryStatePacket>(Items); }
+        { _receiver.Subscribe<WorldActionResultPacket>(ActionResult); _match.GameplayReady = GameplayReady; _receiver.Subscribe<AirdropStatePacket>(Airdrop); _receiver.Subscribe<WorldManifestPacket>(Manifest); _receiver.Subscribe<WorldObjectStatePacket>(Page); _receiver.Subscribe<InventoryStatePacket>(Items); }
         public void Dispose()
-        { if (_match.GameplayReady == GameplayReady) _match.GameplayReady=null; _receiver.Unsubscribe<AirdropStatePacket>(Airdrop); _receiver.Unsubscribe<WorldManifestPacket>(Manifest); _receiver.Unsubscribe<WorldObjectStatePacket>(Page); _receiver.Unsubscribe<InventoryStatePacket>(Items); }
+        { _receiver.Unsubscribe<WorldActionResultPacket>(ActionResult); if (_match.GameplayReady == GameplayReady) _match.GameplayReady=null; _receiver.Unsubscribe<AirdropStatePacket>(Airdrop); _receiver.Unsubscribe<WorldManifestPacket>(Manifest); _receiver.Unsubscribe<WorldObjectStatePacket>(Page); _receiver.Unsubscribe<InventoryStatePacket>(Items); }
         private bool GameplayReady() => !Required || IsReady;
         public void Tick(float dt)
         {
             if (!Required || !_match.Connected || _match.Phase != MatchPhase.InGame || _match.OwnNetId == 255)
             { if (_requested != Guid.Empty) Reset(); return; }
             if (_requested != _match.MatchId) { Reset(); _requested = _match.MatchId; _retry=0; }
+            _pendingKeys.Clear();
+            foreach(var id in _pendingActions.Keys)_pendingKeys.Add(id);
+            foreach(var id in _pendingKeys)
+            {
+                var action=_pendingActions[id];action.Age+=Math.Max(0,dt);
+                if(action.Age>=3)
+                { _pendingActions.Remove(id);ActionTimeouts++;ActionMessage="Thao tác chưa được xác nhận. Hãy kiểm tra rồi thử lại.";Changed?.Invoke(); }
+                else _pendingActions[id]=action;
+            }
             _retry -= dt;
             if (!IsReady && _retry <= 0) { Send(WorldActionKind.Resync); _retry=2; }
         }
-        public bool Send(WorldActionKind kind, ushort target=0, byte slot=255)
+        public bool Send(WorldActionKind kind, ushort target=0, byte slot=255, bool automatic=false)
         {
             if (!Required || !_match.Connected || _match.Phase!=MatchPhase.InGame || _requested!=_match.MatchId ||
                 (kind != WorldActionKind.Resync && !IsReady)) return false;
+            if(_pendingActions.Count>=(automatic?6:8))return false;
+            if(kind==WorldActionKind.Pickup||kind==WorldActionKind.CancelUse||kind==WorldActionKind.Resync)
+                foreach(var pending in _pendingActions.Values)if(pending.Kind==kind&&pending.Target==target)return false;
             if (++_request==0) _request=1;
             var packet=new WorldActionRequestPacket{MatchId=_requested,RequestId=_request,Action=kind,TargetId=target,Slot=slot};
-            return _sender.Send(ref packet,PacketDelivery.ReliableOrdered);
+            if(!_sender.Send(ref packet,PacketDelivery.ReliableOrdered))return false;
+            _pendingActions[_request]=(kind,target,0);ActionMessage=null;Changed?.Invoke();return true;
         }
         private void Reset()
         {
             if(Layout!=null&&_runtime.PlayerRadius>0&&_runtime.PlayerSpeed>0)
                 _match.Prediction.SetWorld(new MovementSimulation(_runtime.Bounds,_runtime.Covers,_runtime.PlayerRadius,_runtime.PlayerSpeed));
-            Airdrops.Clear();_requested=Guid.Empty;Layout=null;Objects=Array.Empty<WorldObjectWire>();Inventory=null;EquipmentGeneration=0;_pages.Clear();_hasRevision=_hasInventory=_hasEffects=false;_request=_portalSequence=0;_collisionKey=null;Error=null;_movementMultiplier=1;_match.Prediction.MovementMultiplier=1;ClearEffects();_hud.Reset();Changed?.Invoke();
+            Airdrops.Clear();_requested=Guid.Empty;Layout=null;Objects=Array.Empty<WorldObjectWire>();Inventory=null;EquipmentGeneration=0;_pages.Clear();_hasRevision=_hasInventory=_hasEffects=false;_portalSequence=0;_pendingActions.Clear();ActionMessage=null;_collisionKey=null;Error=null;_movementMultiplier=1;_match.Prediction.MovementMultiplier=1;ClearEffects();_hud.Reset();Changed?.Invoke();
         }
         private void Airdrop(AirdropStatePacket p)
         {

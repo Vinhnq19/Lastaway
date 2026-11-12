@@ -78,10 +78,11 @@ namespace JungleMaze.Composition
             // Infrastructure (implement port của Application)
             var config = new FileConfigProvider(Application.streamingAssetsPath, Application.persistentDataPath,
                 Environment.GetCommandLineArgs(), Environment.GetEnvironmentVariable, _log);
+            LanTls.Configure(Application.persistentDataPath);
             var packets = new PacketRegistry();
-            var history = new GuestHistoryClient(new GuestCredentialStore(Application.persistentDataPath), () => config.Current.ApiBaseUrl);
+            var history = new GuestHistoryClient(new GuestCredentialStore(Application.persistentDataPath), () => config.Current.ApiBaseUrl, () => config.Current);
             var network = new NetworkClient(bus, packets, _log, ticketIssuer: (request, attempt) =>
-                history.AccountTicketAsync(request.Config.ApiBaseUrl, attempt, request.RoomCode, request.AccessToken));
+                history.AccountTicketAsync(request.Config.ApiBaseUrl, attempt, request.RoomCode, request.AccessToken, request.Config));
             var tickRunner = gameObject.AddComponent<TickRunner>();
             tickRunner.SetLog(_log);
             var depthSorting = gameObject.AddComponent<DepthSortingSystem>(); // Y-sorting, LateUpdate sau mọi script
@@ -226,6 +227,7 @@ namespace JungleMaze.Composition
             Attach<HudFeedbackDebugPanel>();
 #endif
             var demoView = Attach<MatchDemoView>();
+            demoView.BindWorldLabelVisibility(new JungleMaze.App.Visibility.DeferredVisibilityPolicy(() => _registry.TryResolve<IVisibilityPolicy>(out var policy) ? policy : null));
             // The menu itself, not MatchInputGate: the demo disables the offline hero (movement) only for the ESC menu.
             _registry.TryResolve<JungleMaze.App.MatchUi.MatchMenuController>(out var menuState);
             _registry.TryResolve<MatchOverlayFlow>(out var overlayFlow);

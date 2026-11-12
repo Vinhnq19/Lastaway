@@ -13,7 +13,7 @@ using UnityEngine;
 
 namespace JungleMaze.Infrastructure.Network
 {
-    public sealed class WindowsVpnHostTools : IVpnHostTools
+    public sealed partial class WindowsVpnHostTools : IVpnHostTools, ILanHostTools
     {
         private readonly string _settings;
         private readonly string _results;
@@ -60,7 +60,8 @@ namespace JungleMaze.Infrastructure.Network
             Directory.CreateDirectory(Path.GetDirectoryName(_settings)); File.WriteAllText(_settings, BackendPath);
             return true;
         }
-        public async Task<VpnToolResult> RunAsync(string action)
+        public Task<VpnToolResult> RunAsync(string action) => RunToolAsync(action,"manage-vpn.ps1");
+        private async Task<VpnToolResult> RunToolAsync(string action,string scriptName,string lanIp = null)
         {
             if (_busy) return Fail("Đang xử lý thao tác trước.");
             if (Environment.OSVersion.Platform != PlatformID.Win32NT) return Fail("Công cụ host hiện hỗ trợ Windows.");
@@ -71,8 +72,9 @@ namespace JungleMaze.Infrastructure.Network
             var output = Path.Combine(_results, Guid.NewGuid().ToString("N") + ".json");
             try
             {
-                var script = Path.Combine(BackendPath, "Deploy", "Host", "manage-vpn.ps1");
+                var script = Path.Combine(BackendPath, "Deploy", "Host", scriptName);
                 var args = "-NoProfile -ExecutionPolicy Bypass -File \"" + script + "\" -Action " + action + " -ResultFile \"" + output + "\"";
+                if(lanIp!=null) { if(!JungleBackend.Hosting.LanConnectionCode.IsPrivateIp(lanIp))return Fail("Chọn kết nối Wi-Fi/Ethernet hợp lệ."); args += " -LanIp " + lanIp; }
                 var result = await Task.Run(() =>
                 {
                     var interactive = action == "Setup";

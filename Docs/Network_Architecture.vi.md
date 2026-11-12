@@ -1,10 +1,23 @@
 # Kiến trúc mạng Jungle Maze / Lastaway
 
+## Kết nối LAN có xác nhận riêng trong game (11/11/2026)
+
+Bảng người chơi gồm AWS (mặc định), LAN cùng mạng, Tailscale. Local Docker và Internet tự host chỉ ở phần dev; CLI giữ nguyên. `LobbyUiPresenter.Servers` giữ lựa chọn đang xem độc lập `ClientConfig` đang dùng. Health check không gửi credential; chỉ kết nối thành công mới `ApplyCheckedServer` và vô hiệu phiên backend cũ. Generation bỏ phản hồi cũ sau đổi tab/đóng bảng; đóng game không quản lý vòng đời host.
+
+`LanConnectionCode` trong shared Protocol/Hosting là cấu hình public có version, không phải packet gameplay hay quyền truy cập: prefix LWLAN1 + IPv4 RFC1918 + UDP port + HTTPS port + SHA256 DER leaf certificate. Payload 40 byte, mã 61 ký tự; không nhận URL, public IP, VPN/loopback hoặc dữ liệu thừa. `LanHostTools --lan-cert` (.NET8) tạo RSA2048/SHA256, IP SAN, server EKU, hạn một năm, tái dùng khi còn hợp lệ. Key PEM đặt ngoài image/repo, thư mục chỉ user/SYSTEM được đọc; không gửi key qua Unity hoặc mã.
+
+`LanTls` là chính sách dùng chung cho UnityWebRequest (account/phòng/map/bảng hạng), HttpClient (vé/lịch sử/health) và ClientWebSocket. Chỉ ngoại lệ chain cho đúng mode LAN, địa chỉ/cổng đã xác nhận, exact leaf fingerprint, IP SAN, server EKU và thời hạn hợp lệ. Không callback toàn cục, không accept-all, không cài CA Windows, không redirect mang credential. Lưu pin theo origin trong persistentDataPath/lan-trust; không có pin đã xác nhận thì request có account bị chặn trước khi gửi. IP/pin đổi cần xác nhận mới; pin đổi cùng origin cũng vô hiệu phiên account cũ. AWS/Tailscale/Internet vẫn kiểm TLS hệ điều hành thông thường. Không thay REST, Mongo schema hay handshake/gameplay protocol.
+
+`WindowsVpnHostTools` triển khai thêm ILanHostTools, gọi cố định manage-lan.ps1 và đọc card physical Wi-Fi/Ethernet. Cùng compose.host.yaml/project junglemaze-host, volume Mongo/map/outbox hiện có; cấu hình .env.host.lan riêng với VPN/AWS. Host bind UDP7777 và Caddy HTTPS8443 trên IPv4 đã chọn; Caddy dùng cert/key read-only, chuyển /game tới 7781 và API tới5000; /internal bị404, Swagger có mật khẩu. Mongo27017 và control7780 không publish. LAN dùng PUBLIC_HOSTING=true để API yêu cầu dấu hiệu HTTPS từ proxy Docker riêng, ALLOW_LOCAL_HTTP=false; tên flag này không mở thêm cổng Internet. Host chỉ nhận mạng Private; rule đúng IP/interface, LocalSubnet, Private cho7777/8443; không tự đổi profile hoặc sửa rule Public.
+
+Setup/Start/Status/Stop có khóa liên tiến trình chung với VPN. Kiểm quyền sở hữu checkout/container, cổng, rule IP và deployment-status trước đổi cấu hình/cert; server còn participant/grace/bot hoặc trận chưa dọn thì từ chối. Start giữ phiên nếu cấu hình không đổi; đổi IP/cert phải server trống và gateway cập nhật. Chỉ báo Ready sau health qua TLS kiểm pin; Gameplay được xác nhận sau join/pong. Stop giữ dữ liệu/secret, chỉ dừng stack sở hữu; không tác động AWS hay Tailscale Serve của ứng dụng khác. Mạng khách/client-isolation có thể chặn LAN; không có tự dò hoặc tự đổi backend khi lỗi.
+
+
 ## Chọn map theo phòng
 
 Nguồn map phát hành là catalog `Backend/Shared/GameData/Maps/`; production đọc bản ngoài image qua `MAP_DATA_PATH`. Local Compose bind `Backend/data/maps`, AWS dùng `/opt/junglemaze/data/maps` từ release `maps-hvu-20261103`. `MapPublisher` validate cả gói, giữ payload ID/hash bất biến, lưu manifest cũ, đổi catalog nguyên tử; `/internal/maps/reload` có secret chỉ ở control API private đưa snapshot catalog đã parse vào hàng đợi ứng dụng. Không upload/reload công khai, không I/O/parse trong tick.
 
-Mỗi room giữ MapDefinition riêng. Bộ luật dùng RulesHash độc lập với MapHash. Trận được chốt bằng **MapId + MapHash + RulesHash** và ghi bộ khóa này vào kết quả/outbox/Mongo/lịch sử. Hai map khởi đầu cùng luật, khác bố cục: Di tích cổ và Bãi đá. World, movement/collision, spawn, loot/portal đều nhận map của room. Trận đang chạy không đổi dữ liệu khi reload; phòng chờ chuyển bản mới hoặc map mặc định còn được phát hành.
+Mỗi room giữ MapDefinition riêng. Bộ luật dùng RulesHash độc lập với MapHash. Trận được chốt bằng **MapId + MapHash + RulesHash** và ghi bộ khóa này vào kết quả/outbox/Mongo/lịch sử. Hai map chính cùng luật, khác bố cục: Tháp cổ và Thị trấn. World, movement/collision, spawn, loot/portal đều nhận map của room. Trận đang chạy không đổi dữ liệu khi reload; phòng chờ chuyển bản mới hoặc map mặc định còn được phát hành.
 
 Gameplay protocol **4** giữ RoomMapState/SelectRoomMap/RoomMapReady/StartRoomMatch của v2 và thêm quản lý bot, loại participant/metadata kết quả; v4 bổ sung trạng thái thính authoritative (DropId, revision, đường bay, tick, HP/size và baseline khi resync); client cũ nhận `GameplayVersionMismatch`. Handshake account-ticket vẫn **v4**, không gửi JWT qua UDP. Trưởng phòng phiên tách khỏi account owner quản lý/xóa room. Phòng tạo thêm chờ chủ account vào làm trưởng phòng đầu tiên; phòng mặc định lấy người vào đầu; khi trưởng phòng rời phòng chờ, quyền chuyển cho người còn kết nối sớm nhất.
 
@@ -30,7 +43,7 @@ Bằng chứng bot và mức độ nghiệm thu nằm ở [báo cáo bot](Report
 
 Local offline dùng OfflineMatchSession trong Unity, dữ liệu runtime có kiểm manifest và scene Game; không mở socket hoặc HTTP, không Docker, không gửi kết quả lên API/outbox. Luật solo bỏ chờ6 người và không trao LastAlive ngay; nhân vật sống tới khi bo loại rồi xem kết quả/chơi lại. Đây là chế độ luyện tập, không nguồn thành tích authoritative.
 
-LAN dùng UDP tới IP LAN host; Online tự host dùng IP Radmin VPN với UDP, hoặc AWS Auto UDP/WSS443. Các mode này dùng cùng GameServer authoritative bên dưới; không đưa logic offline vào server online. UI chỉ hiện trường cần thiết, phần Nâng cao giữ backend loopback/CLI/profile cũ. Radmin phải được cài và cấu hình riêng; game không vượt mọi chính sách chặn mạng.
+LAN dùng mã xác nhận máy chủ với IP LAN và HTTPS8443; VPN tự host dùng Tailscale với HTTPS/Auto; AWS dùng Auto qua gateway443. Các mode này dùng cùng GameServer authoritative bên dưới; không đưa logic offline vào server online. UI chỉ hiện trường cần thiết, phần Nâng cao giữ backend loopback/CLI/profile cũ. VPN cần lời mời và ứng dụng Tailscale; game không vượt mọi chính sách chặn mạng.
 
 Replay có packet riêng version1, giữ nguyên layout packet cũ. SessionHub xác định người yêu cầu từ session trong room, chỉ cho nạn nhân đã bị loại lấy150frame kết thúc ở death tick server, chỉ nạn nhân+killer, tối đa3 request/người/trận. Mỗi chunk tối đa75frame (<4KiB); client kiểm shape, số frame, metadata và discard/cancel. API/DB không tham gia tick hay đọc replay. Zone/unknown killer dùng NoData, cửa sổ ngắn dùng TooShort. Tick/room/MatchId mới dọn buffer; Bootstrap nối NetworkKillcamReplaySource. Không dùng task ngoài phạm vi làm tiêu chí nghiệm thu.
 

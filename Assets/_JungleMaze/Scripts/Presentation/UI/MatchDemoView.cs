@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using JungleBackend.Protocol.Gameplay;
 using JungleMaze.App.Match;
 using JungleMaze.App.MatchUi;
@@ -54,6 +55,7 @@ namespace JungleMaze.Presentation.UI
         private bool _showDetails;
         private bool _busyHistory;
         private GUIStyle _label;
+        private IVisibilityPolicy _worldLabelVisibility;
 
         [Inject] public void BindWorld(WorldClientSession world) => _generatedWorld=world;
         [Inject] public void BindMaps(RoomMapSession maps) => _roomMaps = maps;
@@ -77,6 +79,9 @@ namespace JungleMaze.Presentation.UI
             _menuState = menuState;
             _overlayFlow = overlayFlow;
         }
+
+        /// <summary>Optional per-target label visibility (null keeps the default-visible behaviour).</summary>
+        public void BindWorldLabelVisibility(IVisibilityPolicy policy) => _worldLabelVisibility = policy;
 
         public bool DetailsVisible => Debug.isDebugBuild && _showDetails && _menuState?.IsOpen != true;
 
@@ -276,6 +281,30 @@ namespace JungleMaze.Presentation.UI
         { if (_zoneOverlay != null) _zoneOverlay.Hide(); }
         private void OnDestroy() { if (_offlineSession != null) _offlineSession.RoundStarted -= ResetOfflineHero; if (_zoneOverlay != null) Destroy(_zoneOverlay); }
 
+        /// <summary>
+        /// Safe short label for an overhead name: control characters (newlines) and angle brackets are suppressed so the
+        /// label cannot break layout or inject markup, whitespace is trimmed, and long names are truncated by text element
+        /// (grapheme) count so surrogate pairs and combining marks are never split.
+        /// </summary>
+        public static string ShortOverheadName(string name)
+        {
+            const int maxElements = 16;
+            const string fallback = "Người chơi";
+            if (string.IsNullOrEmpty(name)) return fallback;
+            var builder = new System.Text.StringBuilder(name.Length);
+            foreach (var c in name)
+            {
+                if (char.IsControl(c) || c == '<' || c == '>') continue;
+                builder.Append(c);
+            }
+            var clean = builder.ToString().Trim();
+            if (clean.Length == 0) return fallback;
+            var info = new StringInfo(clean);
+            if (info.LengthInTextElements <= maxElements) return clean;
+            var shortened = info.SubstringByTextElements(0, maxElements).TrimEnd();
+            return shortened.Length == 0 ? fallback : shortened + "…";
+        }
+
         private void OnGUI()
         {
             _label ??= new GUIStyle(GUI.skin.label) { wordWrap = true, richText = false };
@@ -306,12 +335,17 @@ namespace JungleMaze.Presentation.UI
                 foreach (var id in _session.Players.ActiveIds)
                 {
                     var view = _spawner.GetView(id);
-                    if (view == null || !_session.Players.TryGet(id, out var player) || !player.HasState) continue;
+                    if (id == _session.OwnNetId) continue;
+                    if (view == null || !view.gameObject.activeInHierarchy || !view.isActiveAndEnabled) continue;
+                    if (!_session.Players.TryGet(id, out var player) || !player.HasState) continue;
+                    if (player.Current.IsDead || player.Current.Hp == 0) continue;
+                    if (_worldLabelVisibility != null &&
+                        !_worldLabelVisibility.IsVisible(view.transform.position.x, view.transform.position.y, id)) continue;
                     var point = _camera.WorldToScreenPoint(view.transform.position);
                     if (point.z <= 0) continue;
-                    var name = id == _session.OwnNetId ? "Bạn" : "Player " + id;
-                    foreach (var row in _session.Roster) if (row.NetId == id) { name = (id == _session.OwnNetId ? "Bạn: " : "") + row.DisplayName; break; }
-                    GUI.Label(new Rect(point.x - 50, Screen.height - point.y - 30, 150, 25), name + " · HP " + player.Current.Hp);
+                    var name = "Player " + id;
+                    foreach (var row in _session.Roster) if (row.NetId == id) { name = row.DisplayName; break; }
+                    GUI.Label(new Rect(point.x - 50, Screen.height - point.y - 30, 150, 25), ShortOverheadName(name), _label);
                 }
             var worldStatus = _generatedWorld != null && _generatedWorld.Required && _session.Phase == MatchPhase.InGame && !_generatedWorld.IsReady
                 ? (_generatedWorld.Error != null ? "Không thể tải bản đồ. Dữ liệu client và server không khớp; hãy cập nhật game." : "Đang đồng bộ bản đồ và túi đồ…") : null;

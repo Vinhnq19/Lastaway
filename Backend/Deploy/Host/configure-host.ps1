@@ -1,4 +1,4 @@
-﻿param([ValidateSet('public','vpn')][string]$Mode='vpn',[string]$Domain='',[string]$AcmeEmail='',[string]$SwaggerUser='hostadmin',[Security.SecureString]$SwaggerPassword,[string]$OutputFile='')
+﻿param([ValidateSet('public','vpn','lan')][string]$Mode='vpn',[string]$Domain='',[string]$AcmeEmail='',[string]$SwaggerUser='hostadmin',[Security.SecureString]$SwaggerPassword,[string]$OutputFile='')
 $ErrorActionPreference='Stop'
 if ($Mode -eq 'public' -and ($Domain -notmatch '^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$' -or $Domain -eq 'junglemaze.duckdns.org' -or $AcmeEmail -notmatch '^[^@\s]+@[^@\s]+\.[^@\s]+$')) { throw 'Provide a selfhost domain distinct from AWS and a valid ACME email.' }
 if ($SwaggerUser -notmatch '^[a-zA-Z0-9_-]{3,32}$') { throw 'Invalid Swagger username' }
@@ -18,7 +18,8 @@ try {
     $hash=$stdout.GetAwaiter().GetResult().Trim()
     if ($p.ExitCode -ne 0 -or $hash -notmatch '^\$2[aby]\$\d\d\$.{53}$') { throw 'Caddy password hash failed; check Docker Desktop and caddy:2 image' }
 } finally { [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($pointer);$plain=$null;$secure.Dispose() }
-$public=($Mode -eq 'public').ToString().ToLowerInvariant()
+# LAN also terminates HTTPS at Caddy; the API must require its trusted private proxy header.
+$public=($Mode -ne 'vpn').ToString().ToLowerInvariant()
 $localHttp=($Mode -eq 'vpn').ToString().ToLowerInvariant()
 $lines=@(
     ('COMPOSE_PROFILES='+$Mode), ('HOST_DOMAIN='+$Domain), ('ACME_EMAIL='+$AcmeEmail), ('SWAGGER_USER='+$SwaggerUser),

@@ -108,7 +108,7 @@ namespace JungleMaze.Infrastructure.Network
             if (c == null) return;
             _resumeForNextConnect = proof;
             var upgraded = new ClientConfig(c.Mode, c.ApiBaseUrl, c.GameServerHost, c.GameServerPort, c.AuthMode,
-                c.ProtocolVersion >= NetworkProtocol.Version4 ? NetworkProtocol.Version4 : NetworkProtocol.Version3, c.ConnectTimeoutMs, c.Transport, c.Source, c.WebSocketUrl, c.WorldEnabled);
+                c.ProtocolVersion >= NetworkProtocol.Version4 ? NetworkProtocol.Version4 : NetworkProtocol.Version3, c.ConnectTimeoutMs, c.Transport, c.Source, c.WebSocketUrl, c.WorldEnabled, c.LanCertificateSha256);
             Connect(new ConnectRequest(upgraded, old.RoomCode, old.DisplayName, old.AccessToken));
         }
 
@@ -463,7 +463,7 @@ namespace JungleMaze.Infrastructure.Network
 
             try
             {
-                _webSocket = new UnityWebSocketTransport(new Uri(_request.Config.WebSocketUrl), handshake);
+                _webSocket = new UnityWebSocketTransport(new Uri(_request.Config.WebSocketUrl), handshake, _request.Config);
             }
             catch (Exception e)
             {

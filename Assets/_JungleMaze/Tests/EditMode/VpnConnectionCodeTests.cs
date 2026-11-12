@@ -29,6 +29,15 @@ namespace JungleMaze.Tests.EditMode
         [TestCase("user@host.tail")]
         public void RejectMalformedShortEndpoint(string input) => Assert.False(VpnConnectionCode.TryParse(input, out _));
         [Test]
+        public void SwitchingFromLanToVpnDoesNotCarryPrivateLanCertificateTrust()
+        {
+            Assert.True(VpnConnectionCode.TryParse("host.tail123",out var endpoint));
+            var lan=new ClientConfig(ConnectionMode.LAN,"https://192.168.1.20:8443","192.168.1.20",7777,
+                JoinAuthMode.RoomCode,4,5000,"Auto","fixture","wss://192.168.1.20:8443/game",true,new string('a',64));
+            var vpn=endpoint.Apply(lan);Assert.Null(vpn.LanCertificateSha256);Assert.Null(vpn.Validate());
+            Assert.AreEqual(new string('a',64),lan.LanCertificateSha256);
+        }
+        [Test]
         public void ValidCodeProducesAutoWithoutCredentialsAndPreservesProtocol()
         {
             Assert.True(VpnConnectionCode.TryParse(Encode("host\n100.80.1.20\n7777\nhost.tail123.ts.net"), out var endpoint));

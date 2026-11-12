@@ -1,4 +1,4 @@
-param(
+﻿param(
     [Parameter(Mandatory=$true)][string]$Player,
     [Parameter(Mandatory=$true)][string]$Scenario,
     [Parameter(Mandatory=$true)][string]$OutputDirectory,
@@ -9,6 +9,7 @@ param(
     [switch]$ReconnectOnly,
     [switch]$Local,
     [switch]$ForceAutoFallback,
+    [switch]$ForceD3D11,
     # Only an in-process lifecycle controller may request the private restart fixture.
     [switch]$ReturnFixture,
     [object]$Fixture
@@ -105,7 +106,7 @@ try {
         if ($left -lt ([double]$taskScenario.maxDurationSeconds+45)) { throw 'Not enough AWS soft budget for this full scenario; Stop without shortening acceptance.' }
     }
     $routes=@();for ($i=0;$i -lt $Clients;$i++) { $routes+= $(if (-not $ReconnectOnly -and -not $ForceAutoFallback -and $i -lt [Math]::Floor($Clients/2)) {$wssPath} else {$configPath}) }
-    & (Join-Path $PSScriptRoot 'test-unity-online.ps1') -Player $Player -Config $configPath -ClientConfigs $routes -Scenario $Scenario -Clients $Clients -OutputDirectory (Join-Path $OutputDirectory 'players') -StaggerMs $StaggerMs -QualityClient $QualityClient
+    & (Join-Path $PSScriptRoot 'test-unity-online.ps1') -Player $Player -Config $configPath -ClientConfigs $routes -Scenario $Scenario -Clients $Clients -OutputDirectory (Join-Path $OutputDirectory 'players') -StaggerMs $StaggerMs -QualityClient $QualityClient -ForceD3D11:$ForceD3D11
     $summaryPath=Join-Path $OutputDirectory 'players/report.json'
     if (-not (Test-Path -LiteralPath $summaryPath)) { throw 'Unity launcher did not produce report.json' }
     $summary=Get-Content -LiteralPath $summaryPath -Raw | ConvertFrom-Json

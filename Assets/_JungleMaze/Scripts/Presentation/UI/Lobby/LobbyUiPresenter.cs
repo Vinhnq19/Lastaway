@@ -20,7 +20,7 @@ namespace JungleMaze.Presentation.UI.Lobby
     /// The join form is a modal over Home; logout confirm and server settings are modals driven by the flow flags.
     /// The endpoint picker (now in the server-settings modal) reuses <see cref="ConnectionMenuPresenter"/> as is (T-2).
     /// </summary>
-    public sealed class LobbyUiPresenter : IDisposable
+    public sealed partial class LobbyUiPresenter : IDisposable
     {
         public const string EmptySlot = "Chỗ trống";
         public const string SelfTag = "Bạn";
@@ -39,7 +39,8 @@ namespace JungleMaze.Presentation.UI.Lobby
         private bool _serverShown;
         private readonly RoomMapSession _maps;
         private readonly IVpnHostTools _vpn;
-        private bool _vpnBusy, _disposed, _vpnSelected;
+        private readonly ILanHostTools _lan;
+        private bool _vpnBusy, _disposed;
         private int _vpnRequest;
         private string _vpnMessage = "Dán mã kết nối hoặc thiết lập máy host.", _vpnHostCode;
 
@@ -55,6 +56,7 @@ namespace JungleMaze.Presentation.UI.Lobby
             _settingsOpen = settingsOpen;
             _maps = maps;
             _vpn = vpn;
+            _lan = vpn as ILanHostTools;
             _unbind = BindButtons();
             BindInputs();
             FillEndpoint();
@@ -83,6 +85,9 @@ namespace JungleMaze.Presentation.UI.Lobby
         public void Dispose()
         {
             _disposed = true;
+            _root.ServerSettings.Profile.onValueChanged.RemoveListener(SelectProfile);
+            if(_root.ServerSettings.DevProfile != null)_root.ServerSettings.DevProfile.onValueChanged.RemoveListener(SelectDevProfile);
+            if(_root.ServerSettings.VpnCode != null)_root.ServerSettings.VpnCode.onValueChanged.RemoveAllListeners();
             foreach (var unbind in _unbind) unbind();
             var j = _root != null ? _root.JoinForm : null;
             if (j != null)
@@ -215,19 +220,23 @@ namespace JungleMaze.Presentation.UI.Lobby
             if (open != _serverShown)
             {
                 _serverShown = open;
+                if(!open){_vpnRequest++;_pendingLan=null;}
                 r.ServerSettings.Show(open);
-                if (open) FillEndpointFields();
+                if (open) FillEndpoint();
                 r.ServerSettings.Audio.gameObject.SetActive(_flow.Screen == LobbyScreen.MainMenu && _flow.OpenSettingsPanel != null);
             }
             if (open)
             {
                 var v = r.ServerSettings;
-                v.Status.text = _menu?.Status ?? "";
-                v.ShowVpn(_vpnSelected);
+                v.Status.text = _serverMode == 0 ? _vpnMessage : _menu?.Status ?? "";
+                v.ShowMode(_serverMode, _pendingLan != null, _devSettings);
                 if (v.VpnStatus != null) v.VpnStatus.text = _vpnMessage;
                 if (v.VpnBackend != null) v.VpnBackend.text = _vpn?.BackendPath ?? "Chưa chọn Backend. Người chơi không cần source.";
                 foreach (var button in new[] { v.VpnConnect, v.VpnClientSetup, v.VpnBrowse, v.VpnSetup, v.VpnStart, v.VpnStop, v.VpnRefresh })
-                    if (button != null) button.interactable = !_vpnBusy && _vpn != null;
+                    if (button != null) button.interactable = !_vpnBusy && (_serverMode == 1 ? _lan != null : _vpn != null);
+                v.Save.interactable = !_vpnBusy;
+                if(v.TrustConfirm != null)v.TrustConfirm.interactable = !_vpnBusy;
+                if(v.LanInterface != null)v.LanInterface.interactable = !_vpnBusy;
                 if (v.VpnCopy != null) v.VpnCopy.interactable = !_vpnBusy && !string.IsNullOrEmpty(_vpnHostCode);
             }
         }
@@ -502,13 +511,15 @@ namespace JungleMaze.Presentation.UI.Lobby
             On(r.LogoutConfirm.No, f.CancelLogout);
             On(r.ServerSettings.Save, SaveEndpoint);
             On(r.ServerSettings.VpnConnect, ConnectVpn);
-            On(r.ServerSettings.VpnClientSetup, () => { try { _vpn?.OpenClientSetup(); _vpnMessage = "Đăng nhập Tailscale, nhận lời mời VPN rồi dán mã kết nối."; } catch (Exception) { _vpnMessage = "Không mở được Tailscale; cài hoặc mở ứng dụng thủ công."; } });
+            On(r.ServerSettings.VpnClientSetup, ClientSetupOrPaste);
+            On(r.ServerSettings.TrustConfirm, () => ConnectLan(true));
+            On(r.ServerSettings.TrustCancel, () => { _pendingLan = null; _vpnRequest++; _vpnMessage = "Chưa xác nhận máy chủ. Bạn có thể dán mã khác."; });
             On(r.ServerSettings.VpnBrowse, BrowseVpnBackend);
             On(r.ServerSettings.VpnSetup, () => RunVpn("Setup"));
             On(r.ServerSettings.VpnStart, () => RunVpn("Start"));
             On(r.ServerSettings.VpnStop, () => RunVpn("Stop"));
             On(r.ServerSettings.VpnRefresh, () => RunVpn("Status"));
-            On(r.ServerSettings.VpnCopy, () => { if (!string.IsNullOrEmpty(_vpnHostCode)) { _copy(_vpnHostCode); _vpnMessage = "Đã sao chép địa chỉ máy chủ. Gửi thêm lời mời Tailscale và mã phòng riêng."; } });
+            On(r.ServerSettings.VpnCopy, () => { if (!string.IsNullOrEmpty(_vpnHostCode)) { _copy(_vpnHostCode); _vpnMessage = _serverMode == 1 ? "Đã sao chép mã. Gửi cho bạn cùng mạng; mã phòng gửi riêng." : "Đã sao chép mã. Gửi lời mời Tailscale và mã phòng riêng."; } });
             On(r.ServerSettings.Audio, f.OpenSettings);
             On(r.ServerSettings.Close, () => { _vpnRequest++; f.CloseServerSettings(); });
             On(r.JoinForm.Join, () => f.SubmitJoin());
@@ -574,7 +585,9 @@ namespace JungleMaze.Presentation.UI.Lobby
                 l.Username.onValueChanged.AddListener(t => _flow.Account.Username = t);
                 l.Password.onValueChanged.AddListener(t => _flow.Account.Password = t);
             }
-            if (_menu != null) _root.ServerSettings.Profile.onValueChanged.AddListener(SelectProfile);
+            _root.ServerSettings.Profile.onValueChanged.AddListener(SelectProfile);
+            if (_root.ServerSettings.DevProfile != null) _root.ServerSettings.DevProfile.onValueChanged.AddListener(SelectDevProfile);
+            if (_root.ServerSettings.VpnCode != null) _root.ServerSettings.VpnCode.onValueChanged.AddListener(_ => { _pendingLan=null; _vpnRequest++; });
         }
 
         private void SubmitLogin()
@@ -608,125 +621,6 @@ namespace JungleMaze.Presentation.UI.Lobby
             if (string.IsNullOrEmpty(code)) return;
             CopyCount++;
             _copy(code); // Preserve the configured default room code too.
-        }
-
-        private void FillEndpoint()
-        {
-            var m = _root.ServerSettings;
-            if (_menu == null)
-            {
-                m.Profile.gameObject.SetActive(false);
-                return;
-            }
-            var profiles = _menu.Profiles;
-            var labels = new System.Collections.Generic.List<string> { "Chọn môi trường…" };
-            foreach (var profile in profiles)
-                labels.Add(ProfileLabel(profile));
-            m.Profile.ClearOptions();
-            m.Profile.AddOptions(labels);
-            var current = System.Array.FindIndex(profiles, name => _menu.ConfigSource == "profile:" + name);
-            m.Profile.SetValueWithoutNotify(current + 1);
-            m.Host.SetTextWithoutNotify(_menu.Host ?? "");
-            m.Port.SetTextWithoutNotify(_menu.Port ?? "");
-            m.Api.SetTextWithoutNotify(_menu.ApiBaseUrl ?? "");
-        }
-
-        private static string ProfileLabel(string profile)
-        {
-            switch (profile)
-            {
-                case "phase2-local": return "Local · Docker";
-                case "phase2-lan": return "LAN · cùng mạng";
-                case "phase2-vpn": return "VPN · Tailscale";
-                case "phase2-selfhost": return "Internet · tự host";
-                case "phase2-aws": return "Online · AWS";
-                default: return profile;
-            }
-        }
-
-        private void SelectProfile(int index)
-        {
-            var profiles = _menu.Profiles;
-            if (index <= 0 || index > profiles.Length) return;
-            _vpnRequest++;
-            _vpnSelected = profiles[index - 1] == "phase2-vpn";
-            // Merely opening VPN setup must not save placeholder endpoints or log out the AWS account.
-            if (!_vpnSelected) _menu.SelectProfile(profiles[index - 1]);
-            FillEndpointFields();
-        }
-
-        private async void BrowseVpnBackend()
-        {
-            if (_vpn == null || _vpnBusy) return;
-            _vpnBusy = true;
-            try { var ok = await _vpn.ChooseBackendAsync(); if (!_disposed) _vpnMessage = ok ? "Đã chọn Backend. Bấm Thiết lập host lần đầu." : "Chưa chọn thư mục Backend hợp lệ."; }
-            catch (Exception) { if (!_disposed) _vpnMessage = "Không chọn được thư mục Backend."; }
-            finally { _vpnBusy = false; }
-        }
-
-        private async void RunVpn(string action)
-        {
-            if (_vpn == null || _vpnBusy) return;
-            _vpnBusy = true; _vpnMessage = action == "Setup" ? "Hoàn tất cài đặt/UAC/đăng nhập trong cửa sổ thiết lập…" : "Đang xử lý host…";
-            try
-            {
-                var result = await _vpn.RunAsync(action);
-                if (_disposed) return;
-                _vpnMessage = VpnMessage(result);
-                _vpnHostCode = result.ready ? result.connectionCode : null;
-                if (result.ready && !string.IsNullOrEmpty(result.connectionCode)) _root.ServerSettings.VpnCode.SetTextWithoutNotify(result.connectionCode);
-            }
-            catch (Exception) { if (!_disposed) _vpnMessage = "Không chạy được công cụ host. Kiểm tra Docker/Tailscale."; }
-            finally { _vpnBusy = false; }
-        }
-
-        private static string VpnMessage(VpnToolResult result)
-        {
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
-            return result.message;
-#else
-            if (result.ready) return "Máy chủ sẵn sàng. Hãy đăng nhập và vào phòng để chơi.";
-            if (result.success) return result.state == "Stopped" ? "Đã dừng máy chủ; dữ liệu được giữ." : "Đã hoàn tất thiết lập máy chủ.";
-            return "Chưa kết nối được máy chủ. Kiểm tra Tailscale, lời mời và cửa sổ thiết lập rồi thử lại.";
-#endif
-        }
-
-        private async void ConnectVpn()
-        {
-            if (_vpn == null || _vpnBusy || _menu == null) return;
-            if (!VpnConnectionCode.TryParse(_root.ServerSettings.VpnCode.text, out var endpoint)) { _vpnMessage = "Mã kết nối không hợp lệ. Nhờ host sao chép lại địa chỉ VPN."; return; }
-            var request = ++_vpnRequest;
-            _vpnBusy = true; _vpnMessage = "Đang kiểm tra kết nối an toàn…";
-            try
-            {
-                var result = await _vpn.CheckEndpointAsync(endpoint);
-                if (_disposed || request != _vpnRequest || !_vpnSelected) return;
-                _vpnMessage = VpnMessage(result);
-                if (result.success && result.ready && _menu.ApplyVpnEndpoint(endpoint)) { FillEndpointFields(); _vpnMessage = VpnMessage(result) + " Đã lưu địa chỉ máy chủ."; }
-            }
-            catch (Exception) { if (!_disposed) _vpnMessage = "Không tới được host. Kiểm tra Tailscale và kết nối mạng."; }
-            finally { _vpnBusy = false; }
-        }
-
-        private void SaveEndpoint()
-        {
-            if (_menu == null) return;
-            var m = _root.ServerSettings;
-            _menu.Host = m.Host.text;
-            _menu.Port = m.Port.text;
-            _menu.ApiBaseUrl = m.Api.text;
-            _menu.SaveEndpoint();
-            _flow.Api?.Check();
-        }
-
-        private void FillEndpointFields()
-        {
-            if (_menu == null) return;
-            var m = _root.ServerSettings;
-            m.Host.SetTextWithoutNotify(_menu.Host ?? "");
-            m.Port.SetTextWithoutNotify(_menu.Port ?? "");
-            m.Api.SetTextWithoutNotify(_menu.ApiBaseUrl ?? "");
-            _flow.Api?.Check();
         }
 
         private static void SetOptional(TMP_Text text, string value)

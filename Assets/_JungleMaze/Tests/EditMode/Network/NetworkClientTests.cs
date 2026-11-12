@@ -70,6 +70,19 @@ namespace JungleMaze.Tests.Network
         }
 
         [Test]
+        public void LanResumePreservesConfirmedCertificatePolicyBeforeNewTicket()
+        {
+            _client.Dispose();var pins=new List<string>();
+            _client=new NetworkClient(_bus,new PacketRegistry(),ticketIssuer:(request,attempt)=>
+            { pins.Add(request.Config.LanCertificateSha256);return System.Threading.Tasks.Task.FromResult(new TicketIssueResult(0)); });
+            var config=new ClientConfig(ConnectionMode.LAN,"https://192.168.1.20:8443","192.168.1.20",7777,
+                JoinAuthMode.RoomCode,4,5000,"Auto","fixture","wss://192.168.1.20:8443/game",true,new string('a',64));
+            _client.Connect(new ConnectRequest(config,"ROOM42","Account","synthetic-jwt"));
+            _client.Tick(.016f);Assert.AreEqual(NetworkState.Failed,_client.State);
+            _client.Resume(Guid.NewGuid());
+            Assert.AreEqual(2,pins.Count);Assert.AreEqual(config.LanCertificateSha256,pins[1]);Assert.AreEqual(0,_client.LocalPort);
+        }
+        [Test]
         public void AccountV4_AwaitsTicketAndSendsOnlyShortBearer()
         {
             _client.Dispose();

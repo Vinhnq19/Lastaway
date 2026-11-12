@@ -139,6 +139,8 @@ namespace JungleMaze.Infrastructure.Api
                 timeout = timeout,
                 redirectLimit = 0
             };
+            if (!JungleMaze.Infrastructure.Network.LanTls.Attach(request,config))
+            { request.Dispose();done(new Reply(0,ApiResult<bool>.NotConfigured,null));return; }
             if (body != null)
             {
                 request.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body.ToString(Formatting.None)));

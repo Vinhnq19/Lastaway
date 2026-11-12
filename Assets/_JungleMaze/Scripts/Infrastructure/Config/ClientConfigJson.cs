@@ -20,7 +20,7 @@ namespace JungleMaze.Infrastructure.Config
         private static readonly HashSet<string> Known = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
             "mode", "apiBaseUrl", "gameServerHost", "gameServerPort", "authMode", "protocolVersion",
-            "connectTimeoutMs", "transport", "webSocketUrl", "webSocketConnectIp", "worldEnabled"
+            "connectTimeoutMs", "transport", "webSocketUrl", "webSocketConnectIp", "worldEnabled", "lanCertificateSha256"
         };
 
         public static bool TryParse(string json, string source, out ClientConfig config, out string error)
@@ -60,7 +60,7 @@ namespace JungleMaze.Infrastructure.Config
                 worldEnabled = worldToken.Value<bool>();
             }
             config = new ClientConfig(mode, String(values, "apiBaseUrl"), String(values, "gameServerHost"), port,
-                authMode, (ushort)version, timeout, String(values, "transport") ?? "Udp", source, String(values, "webSocketUrl"), worldEnabled);
+                authMode, (ushort)version, timeout, String(values, "transport") ?? "Udp", source, String(values, "webSocketUrl"), worldEnabled, String(values, "lanCertificateSha256"));
             error = null;
             return true;
         }
@@ -81,6 +81,7 @@ namespace JungleMaze.Infrastructure.Config
             };
             if (!string.IsNullOrEmpty(config.WebSocketUrl))
                 root["webSocketUrl"] = config.WebSocketUrl;
+            if (!string.IsNullOrEmpty(config.LanCertificateSha256)) root["lanCertificateSha256"] = config.LanCertificateSha256;
             return root.ToString(Formatting.Indented);
         }
 

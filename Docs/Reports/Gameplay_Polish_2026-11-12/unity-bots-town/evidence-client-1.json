@@ -1,0 +1,84 @@
+{
+    "schemaVersion": 1,
+    "physicalDeviceCount": 1,
+    "scenarioId": "bots-town-fast",
+    "status": "PASS",
+    "reason": "All scenario assertions observed",
+    "selectedTransport": "Wss",
+    "fallbackReason": "ConnectTimeout",
+    "endpoint": "ws://127.0.0.1:7781/game",
+    "matchId": "bb6d83f4-b502-4a15-ae95-cc5b855069a6",
+    "disconnectCallSite": "",
+    "metrics": {
+        "elapsedSeconds": 35.88090896606445,
+        "connectedSeconds": 29.290613174438478,
+        "snapshots": 810,
+        "inputs": 683,
+        "ignoredPackets": 0,
+        "catchupDrops": 1,
+        "maxPlayers": 10,
+        "maxRosterPlayers": 10,
+        "maxOnScreenPlayers": 1,
+        "completedMatches": 1,
+        "inputHz": 29.756173727489434,
+        "activeInputSeconds": 22.953219935297967,
+        "snapshotHz": 29.97738292857629,
+        "snapshotSeconds": 27.020370721817018,
+        "rttP50Ms": 33.3624,
+        "rttP95Ms": 35.075,
+        "rttP99Ms": 36.474,
+        "pings": 30,
+        "pongs": 30,
+        "pongTimeouts": 0,
+        "maxBotsMoved": 4,
+        "maxBotTravelCells": 5.171711444854736
+    },
+    "assertions": [
+        {
+            "id": "joined",
+            "status": "PASS",
+            "detail": "Observed during this run"
+        },
+        {
+            "id": "playersVisible",
+            "status": "PASS",
+            "detail": "Roster and network views confirmed; Follow Player viewport count is separate"
+        },
+        {
+            "id": "movement",
+            "status": "PASS",
+            "detail": "Observed during this run"
+        },
+        {
+            "id": "zone",
+            "status": "PASS",
+            "detail": "Observed during this run"
+        },
+        {
+            "id": "hpDamage",
+            "status": "PASS",
+            "detail": "Observed during this run"
+        },
+        {
+            "id": "result",
+            "status": "PASS",
+            "detail": "Observed during this run"
+        },
+        {
+            "id": "replay",
+            "status": "PASS",
+            "detail": "Observed during this run"
+        },
+        {
+            "id": "history",
+            "status": "PASS",
+            "detail": "Observed during this run"
+        }
+    ],
+    "frameQuality": [],
+    "qualitySampleCapReached": false,
+    "qualityTargetFps": 0,
+    "backgroundFrames": 0,
+    "screenWidth": 0,
+    "screenHeight": 0
+}

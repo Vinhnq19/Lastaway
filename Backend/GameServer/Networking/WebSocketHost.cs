@@ -72,8 +72,8 @@ public sealed class WebSocketHost : IAsyncDisposable
                 {
                     await _signal.WaitAsync(Stop.Token);
 
-                    // Drain all reliable control first so control messages are never starved
-                    while (_controlSend.Reader.TryRead(out var controlPacket))
+                    // Interleave fresh movement with reliable bursts; never discard/reorder transactions.
+                    for(var burst=0;burst<4&&_controlSend.Reader.TryRead(out var controlPacket);burst++)
                     {
                         using var timeout = CancellationTokenSource.CreateLinkedTokenSource(Stop.Token);
                         timeout.CancelAfter(TimeSpan.FromSeconds(2));

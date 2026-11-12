@@ -115,7 +115,7 @@ namespace JungleMaze.Tests.PlayMode.MatchUi
             yield return null;
             var start = Time.unscaledTimeAsDouble;
             _rig.Eliminate();
-            while (_rig.Root.Eliminated.Group.alpha < 1f && Time.unscaledTimeAsDouble - start < 2.0) yield return null;
+            while (_rig.Root.Spectator.Group.alpha < 1f && Time.unscaledTimeAsDouble - start < 2.0) yield return null;
             var shown = Time.unscaledTimeAsDouble - start;
             Assert.LessOrEqual(shown, 0.5, $"eliminated screen after {shown * 1000:0} ms");
 
@@ -160,7 +160,7 @@ namespace JungleMaze.Tests.PlayMode.MatchUi
                 yield return null;
             }
             var played = _rig.Killcam.EndedAt - start;
-            Assert.AreEqual(MatchOverlayPhase.Eliminated, _rig.Flow.Phase);
+            Assert.AreEqual(MatchOverlayPhase.Spectating, _rig.Flow.Phase);
             Assert.AreEqual(5.0, played, 0.1, $"played {played:0.000} s");
             Debug.Log($"[UI-03 AC32] killcam played {played:0.000} s with a 100 ms hitch");
         }
@@ -181,7 +181,7 @@ namespace JungleMaze.Tests.PlayMode.MatchUi
             var input = new JungleMaze.Presentation.UI.MatchOverlay.MatchOverlayInput(_rig.Menu, _rig.Flow, keys.Contains);
             var start = Time.unscaledTimeAsDouble;
             input.Poll();
-            while (_rig.Root.Eliminated.Group.alpha < 1f && Time.unscaledTimeAsDouble - start < 2.0) yield return null;
+            while (_rig.Root.Spectator.Group.alpha < 1f && Time.unscaledTimeAsDouble - start < 2.0) yield return null;
             Assert.LessOrEqual(Time.unscaledTimeAsDouble - start, 0.5);
             Assert.IsTrue(_rig.Killcam.Skipped);
         }

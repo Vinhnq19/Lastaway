@@ -62,6 +62,17 @@ Check(small.ManageBots(smallRoom,"small",Command(smallRoom,small,RoomBotAction.A
 Check(small.ManageBots(smallRoom,"small",Command(smallRoom,small,RoomBotAction.Add))==RoomBotError.ServerFull,"bot respects global server cap");
 small.Release(smallRoom,1,"small");small.Tick(1d/30);
 Check(smallRoom.Match.BotCount==0&&small.ReservedPeers==0,"last human leaving waiting room clears bot slots");
+foreach(var publishedMap in new MapCatalogStore(Path.Combine(AppContext.BaseDirectory,"GameData","Maps"),"world-prototype-1").Current.Maps.Values)
+{
+    var layout=publishedMap.Layout;var nav=publishedMap.Navigation;var rng=new Random(123);
+    for(var sample=0;sample<1000;sample++)
+    {
+        var point=new Vector2((float)rng.NextDouble()*layout.Size,(float)rng.NextDouble()*layout.Size);
+        var radius=sample%2==0?.4f:.8f;
+        if(nav.WalkableWorld(layout,point,radius,id=>id%2==0,id=>id%3==0)!=layout.IsWalkable(new WorldPoint(point.X,point.Y),radius,id=>id%2==0,id=>id%3==0))throw new Exception("Spatial query differs from canonical collision");
+    }
+    Check(true,"navigation spatial query matches canonical collision for "+publishedMap.Entry.Id);
+}
 var main = MatchProfile.Current;
 var mainRooms=Manager(main);var mainRoom=mainRooms.AllRooms.Single();Human(mainRooms,mainRoom,"main",1);
 Check(mainRooms.ManageBots(mainRoom,"main",Command(mainRoom,mainRooms,RoomBotAction.FillMinimum))==RoomBotError.None&&mainRoom.Match.BotCount==main.MinPlayers-1,"fill minimum follows profile");
@@ -252,6 +263,57 @@ if(Vector2.Distance(new Vector2(zoneEscape.Bot.X,zoneEscape.Bot.Y),new Vector2(2
     Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(new { zoneEscape.Bot.X,zoneEscape.Bot.Y,zoneEscape.Bot.Hp,phase=escapeRuntime.Phase.ToString(),state=escapeRuntime.BotStates,elapsed=escapeRuntime.ElapsedSeconds,budget=escapeRuntime.NavigationBudget.Used }));
 Check(zoneEscape.Bot.IsAlive&&Vector2.Distance(new Vector2(zoneEscape.Bot.X,zoneEscape.Bot.Y),new Vector2(25,25))<distanceBefore-1,"bot moves back toward safe zone from outside");
 
+// No warning flag is sent during an active shrink: the bot must still move toward the published target.
+var shrinking=Fixture();var shrink=shrinking.Room.Match;
+typeof(MatchRuntime).GetField("_matchElapsedSeconds",System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic)!.SetValue(shrink,93d);
+shrink.Zone!.Update(93,shrink.CurrentTick);
+var published=shrink.Zone.GetStatePacket(shrink.CurrentTick);Vector2 shrinkPoint=default;var foundShrinkPoint=false;
+for(float y=2;y<48&&!foundShrinkPoint;y+=.5f)for(float x=2;x<48&&!foundShrinkPoint;x+=.5f)
+{
+    var point=new Vector2(x,y);
+    if(Safe(shrink,point)&&Vector2.Distance(point,new Vector2(published.TargetCenterX,published.TargetCenterY))>published.TargetRadius+1)
+    {shrinkPoint=point;foundShrinkPoint=true;}
+}
+Check(foundShrinkPoint&&!published.InWarning,"active shrink fixture is inside current circle but outside target without warning flag");
+Position(shrink,shrinking.Bot,shrinkPoint);shrink.World!.ApplyEffect(shrinking.Human.NetId,ItemEffect.Invisible,30);
+Pump(shrinking.Manager,6);
+Check(shrink.BotStates.Values.Contains(BotState.EscapeZone),"bot keeps escaping while the zone is actively shrinking");
+var starving=Fixture();var starve=starving.Room.Match;
+Position(starve,starving.Bot,new Vector2(1.25f,1.25f));starve.World!.ApplyEffect(starving.Human.NetId,ItemEffect.Invisible,30);
+typeof(BotNavigationBudget).GetField("Shared",System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic)!.SetValue(starve.NavigationBudget,true);
+for(var t=0;t<240;t++){starve.NavigationBudget.Reset(0);starve.Tick(1d/30);}
+Check(starve.PendingBotPaths==1,"waiting for a shared budget does not repeatedly discard the path as stuck");
+var starveStart=new Vector2(starving.Bot.X,starving.Bot.Y);
+for(var t=0;t<100;t++){starve.NavigationBudget.Reset(1500);starve.Tick(1d/30);}
+Check(Vector2.Distance(starveStart,new Vector2(starving.Bot.X,starving.Bot.Y))>1,"bot resumes movement when navigation budget becomes available");
+
+// Recovery must rearm its deadline rather than cancelling every route on the next tick.
+var recovery=Fixture();var recoveryMatch=recovery.Room.Match;
+var brains=(System.Collections.IDictionary)typeof(MatchRuntime).GetField("_bots",System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic)!.GetValue(recoveryMatch)!;
+var recoveryBrain=brains.Values.Cast<object>().Single();var brainType=recoveryBrain.GetType();
+var privateFields=System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic;
+brainType.GetField("_lastMotionAt",privateFields)!.SetValue(recoveryBrain,-100d);
+brainType.GetField("_pathWorkSinceMotion",privateFields)!.SetValue(recoveryBrain,true);
+brainType.GetMethod("FailPath",privateFields)!.Invoke(recoveryBrain,new object[]{recoveryMatch.ElapsedSeconds,settings,true});
+Check((double)brainType.GetField("_lastMotionAt",privateFields)!.GetValue(recoveryBrain)! == recoveryMatch.ElapsedSeconds&&
+    !(bool)brainType.GetField("_pathWorkSinceMotion",privateFields)!.GetValue(recoveryBrain)!,"recovery rearms the actor deadline and permits new path work");
+
+// Slow real movement accumulates across ticks; it must not be judged against one tick's displacement.
+var slow=Fixture();var slowMatch=slow.Room.Match;var slowLane=Lane(slowMatch,3);
+Position(slowMatch,slow.Bot,slowLane.A);slowMatch.World!.ApplyEffect(slow.Human.NetId,ItemEffect.Invisible,30);
+slowMatch.World.ApplyEffect(slow.Bot.NetId,65000,"Slow",slowMatch.CurrentTick,12,.1f);
+var slowBrains=(System.Collections.IDictionary)typeof(MatchRuntime).GetField("_bots",privateFields)!.GetValue(slowMatch)!;
+var slowBrain=slowBrains.Values.Cast<object>().Single();
+brainType.GetField("_hasGoal",privateFields)!.SetValue(slowBrain,true);
+brainType.GetField("_goal",privateFields)!.SetValue(slowBrain,slowLane.B);
+brainType.GetField("_directGoal",privateFields)!.SetValue(slowBrain,true);
+brainType.GetField("_repathAt",privateFields)!.SetValue(slowBrain,slowMatch.ElapsedSeconds+20);
+brainType.GetField("_thinkInitialised",privateFields)!.SetValue(slowBrain,true);
+brainType.GetField("_nextThink",privateFields)!.SetValue(slowBrain,uint.MaxValue);
+Pump(slow.Manager,210);
+Check(Vector2.Distance(slowLane.A,new Vector2(slow.Bot.X,slow.Bot.Y))>1&&
+    (double)brainType.GetField("_ignoreUntil",privateFields)!.GetValue(slowBrain)! == 0,"slow moving bot progresses without blacklisting its valid goal");
+
 // Regression: a portal/server displacement may leave a bot inside an otherwise avoided hazard.
 foreach(var hazardKind in new[]{WorldObjectKind.Lava,WorldObjectKind.Poison})
 {
@@ -281,6 +343,66 @@ bool NavSegment(Vector2 a,Vector2 b)=>Enumerable.Range(0,21).All(i=>NavWalk(Vect
 for(var t=0;t<100&&!job.Finished;t++){budget.Reset(7);job.Advance(budget,500,.4f,NavWalk,NavSegment,_=>1);Check(budget.Used<=7,"resumable navigation respects tick slice");}
 Check(job.ReachedGoal&&job.Expanded<=500,"bounded A star routes around cover");
 Check(job.Path.Zip(job.Path.Skip(1)).All(pair=>NavSegment(pair.First,pair.Second)),"path segments do not cut cover corners");
+
+// One huge centered wall leaves only narrow edge corridors at 0.5-grid resolution and radius .4.
+var longLayout=new MapLayout{Size=150};
+longLayout.Objects.Add(new WorldObjectDefinition{Id=100,Kind=WorldObjectKind.Wall,Bounds=new WorldBounds(75,74,146,146)});
+var longGrid=new BotNavigationGrid(longLayout);
+var longStart=new Vector2(1.25f,1.25f);var longGoal=new Vector2(148.75f,1.25f);
+var longJob=new BotPathSearch(longGrid,longStart,longGoal);
+bool LongWalk(Vector2 p)=>longLayout.IsWalkable(new WorldPoint(p.X,p.Y),.4f);
+bool LongSegment(Vector2 a,Vector2 b)=>Enumerable.Range(0,21).All(i=>LongWalk(Vector2.Lerp(a,b,i/20f)));
+var longCalls=0;var longFrontierSurvived=false;
+while(!longJob.Finished&&longCalls<2000)
+{
+    budget.Reset(7);longJob.Advance(budget,500,.4f,LongWalk,LongSegment,_=>1);
+    Check(budget.Used<=7,"long navigation respects shared tick slice");
+    longCalls++;
+    if(longJob.Expanded>=500&&!longJob.Finished)longFrontierSurvived=true;
+}
+Check(longFrontierSurvived,"bounded A star frontier survives more than five hundred expansions");
+Check(longJob.ReachedGoal&&longJob.Expanded>500&&longJob.Expanded<BotPathSearch.MaxDiscoveredNodes&&longCalls<=2000,"narrow edge corridor reaches its goal within bounded calls");
+Check(longJob.Path.Any(p=>p.Y>147.4f),"narrow corridor route passes above the wall because bottom clearance is blocked");
+Check(longJob.DiscoveredNodes<=BotPathSearch.MaxDiscoveredNodes,"long navigation respects discovered node cap");
+Check(longJob.Path.Count>1&&longJob.Path.Zip(longJob.Path.Skip(1)).All(pair=>LongSegment(pair.First,pair.Second)),"long route segments stay clear of cover");
+
+// Four overlapping walls form a sealed cage around the goal; search must end with a shorter partial path.
+var cageLayout=new MapLayout{Size=150};
+cageLayout.Objects.Add(new WorldObjectDefinition{Id=200,Kind=WorldObjectKind.Wall,Bounds=new WorldBounds(75,70,12,1)});
+cageLayout.Objects.Add(new WorldObjectDefinition{Id=201,Kind=WorldObjectKind.Wall,Bounds=new WorldBounds(75,80,12,1)});
+cageLayout.Objects.Add(new WorldObjectDefinition{Id=202,Kind=WorldObjectKind.Wall,Bounds=new WorldBounds(70,75,1,10)});
+cageLayout.Objects.Add(new WorldObjectDefinition{Id=203,Kind=WorldObjectKind.Wall,Bounds=new WorldBounds(80,75,1,10)});
+var cageGrid=new BotNavigationGrid(cageLayout);
+var cageStart=new Vector2(1.25f,1.25f);var cageGoal=new Vector2(75.25f,75.25f);
+var cageJob=new BotPathSearch(cageGrid,cageStart,cageGoal);
+bool CageWalk(Vector2 p)=>cageLayout.IsWalkable(new WorldPoint(p.X,p.Y),.4f);
+bool CageSegment(Vector2 a,Vector2 b)=>Enumerable.Range(0,21).All(i=>CageWalk(Vector2.Lerp(a,b,i/20f)));
+var cageCalls=0;
+while(!cageJob.Finished&&cageCalls<3000)
+{
+    budget.Reset(7);cageJob.Advance(budget,500,.4f,CageWalk,CageSegment,_=>1);
+    Check(budget.Used<=7,"sealed navigation respects shared tick slice");
+    cageCalls++;
+}
+Check(cageJob.Finished&&!cageJob.ReachedGoal&&cageCalls<=3000,"sealed goal is not reachable");
+Check(cageJob.Expanded<=BotPathSearch.MaxDiscoveredNodes&&cageJob.DiscoveredNodes<=BotPathSearch.MaxDiscoveredNodes,"sealed search obeys discovered node cap");
+Check(cageJob.HasPartialPath&&cageJob.Path.Count>0,"sealed search returns a partial path");
+var cageInitialDistance=Vector2.Distance(cageStart,cageGoal);
+var cageFinalDistance=Vector2.Distance(cageJob.Path[cageJob.Path.Count-1],cageGoal);
+Check(cageFinalDistance<cageInitialDistance,"sealed search partial path strictly improves distance to goal");
+Check(cageJob.Path.Zip(cageJob.Path.Skip(1)).All(pair=>CageSegment(pair.First,pair.Second)),"sealed partial path segments do not cut cover");
+
+// A bot should start along a verified partial route before the global node cap is reached.
+var earlyPartial=new BotPathSearch(cageGrid,cageStart,cageGoal);
+budget.Reset(120);earlyPartial.Advance(budget,500,.4f,CageWalk,CageSegment,_=>1);
+Check(!earlyPartial.Finished&&earlyPartial.DiscoveredNodes<BotPathSearch.MaxDiscoveredNodes,"partial fixture is still searching below its node cap");
+Check(earlyPartial.TryFinishPartial()&&earlyPartial.Path.Count>0&&!earlyPartial.ReachedGoal,"planning deadline can yield a reachable progress route");
+Check(Vector2.Distance(earlyPartial.Path[^1],cageGoal)<cageInitialDistance&&earlyPartial.Path.Zip(earlyPartial.Path.Skip(1)).All(pair=>CageSegment(pair.First,pair.Second)),"early partial route progresses without crossing cover");
+var deferredPartial=new BotPathSearch(grid,new Vector2(1.25f,2.25f),new Vector2(8.25f,2.25f));
+budget.Reset(0);deferredPartial.Advance(budget,500,.4f,NavWalk,NavSegment,_=>1);
+Check(!deferredPartial.TryFinishPartial()&&!deferredPartial.Finished,"no-budget planning keeps its frontier and does not invent movement");
+for(var t=0;t<100&&!deferredPartial.Finished;t++){budget.Reset(7);deferredPartial.Advance(budget,500,.4f,NavWalk,NavSegment,_=>1);}
+Check(deferredPartial.ReachedGoal,"deferred planning resumes after navigation budget returns");
 
 foreach (var invalidMs in new[] { 0, 11 })
 {
@@ -330,7 +452,8 @@ if(args.Contains("--stress"))
     int StressOption(string name,int fallback,int max){var index=Array.IndexOf(args,name);if(index<0)return fallback;if(index+1>=args.Length||!int.TryParse(args[index+1],out var value)||value<1||value>max)throw new ArgumentException(name);return value;}
     var stressRooms=StressOption("--stress-rooms",5,5);var stressSeconds=StressOption("--stress-seconds",60,600);
     var stressProfile=new MatchProfile{Version=main.Version,MinPlayers=6,LobbyDurationSeconds=.1,LoadingTimeoutSeconds=1,ZoneTimeScale=1,WorldEnabled=true};
-    var stress=Manager(stressProfile);var hosted=new List<(RoomManager.Room Room,string Human)>();
+    var stressCatalog=args.Contains("--authored")?new MapCatalogStore(Path.Combine(AppContext.BaseDirectory,"GameData","Maps"),"world-prototype-1"):maps;
+    var stress=new RoomManager(new ServerOptions(IPAddress.Loopback,7777,10,30,5,"RoomCode","BotsTest",Rooms:new RoomOptions(MaxTotalPlayers:50)),profile:stressProfile,catalog:stressCatalog);var hosted=new List<(RoomManager.Room Room,string Human)>();
     for(var i=0;i<stressRooms;i++)
     {
         RoomManager.Room r;
@@ -339,15 +462,22 @@ if(args.Contains("--stress"))
         var id="stress"+i;Human(stress,r,id,i+1);
         if(i%2==1)
         {
-            var other=maps.Current.Maps.Values.Last();var state=stress.GetMapState(r);
+            var other=stressCatalog.Current.Maps.Values.Last();var state=stress.GetMapState(r);
             Check(stress.SelectMap(r,id,new SelectRoomMapPacket{RoomId=r.Id,SelectionRevision=state.SelectionRevision,MapId=other.Entry.Id,MapHash=other.Entry.MapHash})==RoomMapError.None,"stress alternate room map");
             state=stress.GetMapState(r);stress.AcknowledgeMap(r,id,new RoomMapReadyPacket{RoomId=r.Id,SelectionRevision=state.SelectionRevision,MapHash=state.MapHash,RulesHash=state.RulesHash});
         }
         for(var b=0;b<9;b++)Check(stress.ManageBots(r,id,Command(r,stress,RoomBotAction.Add))==RoomBotError.None,"stress bot slot");
+        if(args.Contains("--diagnose"))
+            typeof(MatchRuntime).GetProperty(nameof(MatchRuntime.MatchId))!.SetValue(r.Match,
+                i%2==0?new Guid("fb9db6ce-2f53-4e27-8fef-452abc13f29b"):new Guid("48d7f49a-e8b5-45b0-809c-0553ee6f1c39"));
         hosted.Add((r,id));
     }
     Check(stress.ReservedPeers==stressRooms*10&&stress.BotCount==stressRooms*9,"five rooms reserve exactly fifty human and bot slots");
-    var metrics=new ServerMetrics();var maxNodes=0;using var stop=new CancellationTokenSource(TimeSpan.FromSeconds(stressSeconds));
+    Console.WriteLine("Stress catalog: "+string.Join(",",stressCatalog.Current.Maps.Values.Select(m=>m.Entry.Id)));
+    var metrics=new ServerMetrics();foreach(var entry in hosted)typeof(MatchRuntime).GetProperty("PerformanceMetrics",System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic)!.SetValue(entry.Room.Match,metrics);var maxNodes=0;using var stop=new CancellationTokenSource(TimeSpan.FromSeconds(stressSeconds));
+    var diagnose=args.Contains("--diagnose");
+    var diagnostics=new Dictionary<(string Room,Guid Match,byte Id),(double Alive,float Travel,string State,bool Goal,int Expanded,float Speed,bool Using,bool Finished,bool Partial,int PathCount)>();
+    var observed=new Dictionary<(string Room,Guid Match,byte Id),Vector2>();var moved=new HashSet<(string Room,Guid Match,byte Id)>();
     var loop=new FixedTickLoop(30,metrics);
     loop.Run(()=>
     {
@@ -358,8 +488,42 @@ if(args.Contains("--stress"))
             if(m.Phase==MatchPhase.Loading)m.SetPlayerLoaded(entry.Human,m.MatchId);
             if(m.Phase==MatchPhase.Ending)m.ProcessReplayAck(entry.Human,m.MatchId);
         }
-    },dt=>{stress.Tick(dt);maxNodes=Math.Max(maxNodes,stress.BotPathNodes);metrics.RecordBotWork(stress.BotPathNodes,stress.PendingBotPaths);},
+    },dt=>{stress.Tick(dt);
+        foreach(var entry in hosted.Where(e=>e.Room.Match.Phase==MatchPhase.InGame))foreach(var actor in entry.Room.Match.Entities.All.Where(a=>a.PlayerSessionId.StartsWith("bot:")))
+        {
+            var key=(entry.Room.Match.RoomId,entry.Room.Match.MatchId,actor.NetId);var point=new Vector2(actor.X,actor.Y);
+            if(!observed.TryGetValue(key,out var initial)){observed[key]=point;initial=point;}
+            else if(Vector2.Distance(initial,point)>.5f)moved.Add(key);
+            if(diagnose)
+            {
+                diagnostics.TryGetValue(key,out var data);
+                var state=data.State;var goal=data.Goal;var expanded=data.Expanded;var speed=1f;var usingItem=false;var finished=false;var partial=false;var pathCount=0;
+                if(entry.Room.Match.CurrentTick%30==0)
+                {
+                    var roster=entry.Room.Match.GetRosterPacket().Players!.First(p=>p.NetId==actor.NetId);
+                    var brains=(System.Collections.IDictionary)typeof(MatchRuntime).GetField("_bots",System.Reflection.BindingFlags.NonPublic|System.Reflection.BindingFlags.Instance)!.GetValue(entry.Room.Match)!;
+                    var brain=brains[roster.BotId]!;var type=brain.GetType();
+                    state=type.GetProperty("State")!.GetValue(brain)!.ToString()!;
+                    goal=(bool)type.GetField("_hasGoal",System.Reflection.BindingFlags.NonPublic|System.Reflection.BindingFlags.Instance)!.GetValue(brain)!;
+                    var search=(BotPathSearch?)type.GetField("_search",System.Reflection.BindingFlags.NonPublic|System.Reflection.BindingFlags.Instance)!.GetValue(brain);
+                    expanded=search?.Expanded??0;
+                    speed=entry.Room.Match.World!.SpeedMultiplier(actor.NetId);usingItem=entry.Room.Match.World.Using(actor.NetId);
+                    finished=search?.Finished??false;partial=search?.HasPartialPath??false;pathCount=search?.Path.Count??0;
+                }
+                diagnostics[key]=(data.Alive+(actor.IsAlive?dt:0),Math.Max(data.Travel,Vector2.Distance(initial,point)),state,goal,expanded,speed,usingItem,finished,partial,pathCount);
+            }
+        }
+        maxNodes=Math.Max(maxNodes,stress.BotPathNodes);metrics.RecordBotWork(stress.BotPathNodes,stress.PendingBotPaths);},
         ()=>metrics.ReportIfDue(stressRooms,stressRooms,stressRooms,0,stress.Count,stress.Occupancy(),stress.BotCount),stop.Token);
+    if(diagnose)
+    {
+        var data=diagnostics.Select(p=>new{p.Key.Room,p.Key.Match,p.Key.Id,aliveSeconds=p.Value.Alive,maxDisplacement=p.Value.Travel,state=p.Value.State,hasGoal=p.Value.Goal,expanded=p.Value.Expanded,speed=p.Value.Speed,usingItem=p.Value.Using,searchFinished=p.Value.Finished,partialPath=p.Value.Partial,pathCount=p.Value.PathCount}).ToArray();
+        File.WriteAllText(".utmp/bot-immobile-diagnostics.json",System.Text.Json.JsonSerializer.Serialize(data,new System.Text.Json.JsonSerializerOptions{WriteIndented=true}));
+        Console.WriteLine("Stationary lives >=15s: "+data.Count(p=>p.aliveSeconds>=15&&p.maxDisplacement<.5f));
+        Check(data.All(p=>p.aliveSeconds<15||p.maxDisplacement>=.5f),"every bot alive fifteen seconds moves after spawn; aggregate movement cannot mask a stationary bot");
+    }
+    Console.WriteLine($"Movement observed: {moved.Count}/{observed.Count} bot lives moved more than half a cell");
+    Check(moved.Count>=stressRooms*8,"at least eight bots per authored room actually move during stress");
     Check(maxNodes<=1500&&stress.ReservedPeers==stressRooms*10,"shared navigation budget and slots remain bounded during five-room stress");
 }
 Console.WriteLine($"BotChecks: {checks} passed, 0 failed");

@@ -154,7 +154,7 @@ namespace JungleMaze.Presentation.World.Phase2
             {
                 _autoPickupAt = Time.unscaledTime + .25f;
                 foreach (var o in _world.Objects) if (o.Kind == 100 && Vector2.Distance(new Vector2(_match.Prediction.PredictedX, _match.Prediction.PredictedY), new Vector2(o.X, o.Y)) <= .6f && _catalog.TryGet(o.ItemId, out var item) &&
-                    AutoPicks(item, _world.Inventory)) _world.Send(WorldActionKind.Pickup, o.Id);
+                    AutoPicks(item, _world.Inventory)) _world.Send(WorldActionKind.Pickup, o.Id, automatic:true);
             }
             HandleInteraction(_world.Objects,
                 new Vector2(_match.Prediction.PredictedX, _match.Prediction.PredictedY), false);

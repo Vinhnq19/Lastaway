@@ -113,6 +113,8 @@ namespace JungleMaze.World.Inventory
             if (!alive) Cancel(a, actor);
             else if ((controls & ItemControlFlags.Stun) != 0) CancelForAction(actor, ItemCancelAction.Stun);
         }
+        public uint Revision(byte actor) => _actors.TryGetValue(actor, out var a) ? a.Revision : 0;
+
         public InventorySnapshot GetSnapshot(byte actor)
         {
             if (!_actors.TryGetValue(actor, out var a)) throw new ArgumentException("Unknown actor.");

@@ -70,9 +70,9 @@ namespace JungleMaze.Infrastructure.Api
         {
             token.ThrowIfCancellationRequested();
             ResolveEndpoint(out var urlPrefix, out _);
-            var authorization = Authorization();
+            var settings = _config(); var authorization = Authorization();
             var revision = _sessionRevision(); var origin = _config()?.ApiBaseUrl;
-            var bytes = await Download(urlPrefix + "/api/maps", authorization, CatalogLimit, token, revision, origin);
+            var bytes = await Download(urlPrefix + "/api/maps", authorization, CatalogLimit, token, revision, origin, settings);
             token.ThrowIfCancellationRequested();
             return await Task.Run(() => ParseCatalog(bytes, token), token);
         }
@@ -84,14 +84,14 @@ namespace JungleMaze.Infrastructure.Api
             if (!IsValidHash(hash)) throw Fail("Dữ liệu bản đồ không hợp lệ. Thử tải lại; nếu vẫn lỗi, cập nhật game.");
             if (!IsValidHash(rulesHash)) throw Fail("Luật chơi chưa phù hợp với máy chủ. Vui lòng cập nhật game.");
             ResolveEndpoint(out var urlPrefix, out var cacheDirectory);
-            var authorization = Authorization();
+            var settings = _config(); var authorization = Authorization();
             var revision = _sessionRevision(); var origin = _config()?.ApiBaseUrl;
             var path = Path.Combine(cacheDirectory, hash + ".json");
 
             var cached = await Task.Run(() => ReadMapCache(path, hash, rulesHash, token), token);
             if (cached != null) return cached;
 
-            var bytes = await Download(urlPrefix + "/api/maps/" + id + "/" + hash, authorization, MapLimit, token, revision, origin);
+            var bytes = await Download(urlPrefix + "/api/maps/" + id + "/" + hash, authorization, MapLimit, token, revision, origin, settings);
             token.ThrowIfCancellationRequested();
             var json = await Task.Run(() => VerifyMap(bytes, hash, rulesHash, token), token);
             token.ThrowIfCancellationRequested();
@@ -105,14 +105,14 @@ namespace JungleMaze.Infrastructure.Api
             token.ThrowIfCancellationRequested();
             if (!IsValidHash(hash)) throw Fail("Ảnh xem trước không hợp lệ. Hãy tải lại danh sách.");
             ResolveEndpoint(out var urlPrefix, out var cacheDirectory);
-            var authorization = Authorization();
+            var settings = _config(); var authorization = Authorization();
             var revision = _sessionRevision(); var origin = _config()?.ApiBaseUrl;
             var path = Path.Combine(cacheDirectory, hash + ".png");
 
             var cached = await Task.Run(() => ReadPreviewCache(path, hash, token), token);
             if (cached != null) return cached;
 
-            var bytes = await Download(urlPrefix + "/api/maps/previews/" + hash, authorization, PreviewLimit, token, revision, origin);
+            var bytes = await Download(urlPrefix + "/api/maps/previews/" + hash, authorization, PreviewLimit, token, revision, origin, settings);
             token.ThrowIfCancellationRequested();
             if (!IsPng(bytes) || !string.Equals(Sha256Hex(bytes), hash, StringComparison.Ordinal))
                 throw Fail("Ảnh xem trước tải về không hợp lệ; thử lại sau.");
@@ -157,7 +157,7 @@ namespace JungleMaze.Infrastructure.Api
             cacheDirectory = Path.Combine(_cacheRoot, Sha256Hex(Encoding.UTF8.GetBytes(urlPrefix)));
         }
 
-        private async Task<byte[]> Download(string url, string authorization, int limit, CancellationToken token, long revision, string origin)
+        private async Task<byte[]> Download(string url, string authorization, int limit, CancellationToken token, long revision, string origin, ClientConfig settings)
         {
             token.ThrowIfCancellationRequested();
             var handler = new BoundedDownloadHandler(limit);
@@ -167,6 +167,8 @@ namespace JungleMaze.Infrastructure.Api
                 timeout = TimeoutSeconds,
                 redirectLimit = 0
             };
+            if (!JungleMaze.Infrastructure.Network.LanTls.Attach(request,settings))
+            { request.Dispose();handler.Release();throw Fail("Hãy xác nhận lại máy chủ LAN trước khi tải bản đồ."); }
             var completion = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
             try
             {

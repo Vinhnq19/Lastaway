@@ -44,10 +44,11 @@ namespace JungleMaze.Infrastructure.Network
         public long BytesSent;
         public long BytesReceived;
 
-        public UnityWebSocketTransport(Uri uri, byte[] handshake)
+        public UnityWebSocketTransport(Uri uri, byte[] handshake, JungleMaze.App.Config.ClientConfig config = null)
         {
             if (uri == null) throw new ArgumentNullException(nameof(uri));
             if (handshake == null) throw new ArgumentNullException(nameof(handshake));
+            LanTls.Attach(_socket,uri,config);
             _worker = Run(uri, handshake);
         }
 

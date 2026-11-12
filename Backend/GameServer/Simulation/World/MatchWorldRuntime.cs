@@ -34,6 +34,7 @@ public sealed partial class MatchWorldRuntime : ITransactionalDestructibleLootSi
     private double _now;
     public Guid MatchId {get;}
     public MapLayout Layout {get;}
+    public WorldObjectDefinition[] NavigationHazards {get;}
     public InventoryService Inventory {get;}
     public MemoryItemWorld Floor {get;}
     public DestructibleService Destructibles {get;}
@@ -49,6 +50,7 @@ public sealed partial class MatchWorldRuntime : ITransactionalDestructibleLootSi
         Layout=settings.Layout ?? (settings.LayoutMode=="Prototype" ? MapLayoutGenerator.Generate(settings.Map,settings.Seed) : throw new InvalidOperationException("Authored map must be loaded before starting world services."));
         var authoredLayout = Layout;
         Layout = AirdropController.CopyLayout(authoredLayout);
+        NavigationHazards=Layout.Objects.Where(o=>o.IsHazard).ToArray();
         _airdropTimeScale = airdropTimeScale;
         _nextId=(ushort)(Layout.Objects.Count+1);
         Floor=new MemoryItemWorld(AllocateId);
@@ -223,10 +225,18 @@ public sealed partial class MatchWorldRuntime : ITransactionalDestructibleLootSi
         }
         return remaining;
     }
-    public string OwnerEffectKey(byte actor)
+    public (uint Revision, float Speed, byte Effects, bool Using, uint Portal, uint Equipment) OwnerEffectKey(byte actor)
     {
-        var state=SnapshotInventory(actor);
-        return $"{state.MovementMultiplier:R}|{state.SlowRemaining!=0}|{state.PoisonRemaining>0}|{state.StunRemaining>0}|{state.SpeedRemaining>0}|{state.InvisibleRemaining>0}|{state.ImmuneRemaining>0}|{state.IsUsing}|{state.PortalSequence}|{state.EquipmentGeneration}";
+        byte effects=0;
+        if(Remaining(actor,"Slow")!=0) effects|=1;
+        if(Remaining(actor,"Poison")>0) effects|=2;
+        if(Remaining(actor,"Stun")>0) effects|=4;
+        if(Remaining(actor,"Speed")>0) effects|=8;
+        if(Remaining(actor,"Invisible")>0) effects|=16;
+        if(Remaining(actor,"Immune")>0) effects|=32;
+        _portals.TryGetValue(actor,out var portal);
+        var usingItem=Inventory.IsUsing(actor);
+        return (Inventory.Revision(actor),usingItem?0:SpeedMultiplier(actor),effects,usingItem,portal.Sequence,Inventory.EquipmentGeneration(actor));
     }
     private static InventorySlotWire Slot(ItemStack s){return new InventorySlotWire{ItemId=s.ItemId,Count=(ushort)Math.Max(0,s.Count),Ammo=(ushort)Math.Max(0,s.Ammo),Durability=s.Durability,Magazine=(ushort)Math.Max(0,s.Magazine),MagazineKnown=s.MagazineKnown};}
 }

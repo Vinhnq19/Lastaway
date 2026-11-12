@@ -17,17 +17,24 @@ namespace JungleMaze.Presentation.UI.MatchOverlay
         private MatchOverlayFlow _flow;
         private Func<double> _clock;
         private float _mapSize = 50f;
+        private Func<float> _mapSizeProvider;
         private Camera _camera;
 
         public bool Wrote { get; private set; }
         public Vector2 LastCenter { get; private set; }
 
-        public void Construct(MatchOverlayFlow flow, Func<double> clock, float mapSizeCells, Camera cameraOverride = null)
+        public void Construct(
+            MatchOverlayFlow flow,
+            Func<double> clock,
+            float mapSizeCells,
+            Camera cameraOverride = null,
+            Func<float> mapSizeProvider = null)
         {
             _flow = flow;
             _clock = clock;
             _mapSize = mapSizeCells > 0f ? mapSizeCells : 50f;
             _camera = cameraOverride;
+            _mapSizeProvider = mapSizeProvider;
         }
 
         private void LateUpdate() => Drive();
@@ -39,14 +46,22 @@ namespace JungleMaze.Presentation.UI.MatchOverlay
             if (_flow == null || _flow.Phase != MatchOverlayPhase.Spectating) return;
             var spectator = _flow.Spectator;
             var target = _flow.Targets.Current;
-            if (spectator == null || target == SpectatorTargets.None || !spectator.TryGetPosition(target, out var x, out var y)) return;
             var cam = _camera != null ? _camera : Camera.main;
             if (cam == null) return;
-            _flow.Camera.Step(x, y, _clock());
+            if (spectator != null && target != SpectatorTargets.None && spectator.TryGetPosition(target, out var x, out var y))
+                _flow.Camera.Step(x, y, _clock());
+            else if (!_flow.Camera.HasPosition)
+                _flow.Camera.Snap(cam.transform.position.x, cam.transform.position.y);
             var cx = _flow.Camera.X;
             var cy = _flow.Camera.Y;
             var halfHeight = cam.orthographic ? cam.orthographicSize : 0f;
-            SpectatorCameraMath.ClampToMap(ref cx, ref cy, halfHeight * cam.aspect, halfHeight, _mapSize);
+            var mapSize = _mapSize;
+            if (_mapSizeProvider != null)
+            {
+                var provided = _mapSizeProvider();
+                if (provided > 0f && !float.IsNaN(provided) && !float.IsInfinity(provided)) mapSize = provided;
+            }
+            SpectatorCameraMath.ClampToMap(ref cx, ref cy, halfHeight * cam.aspect, halfHeight, mapSize);
             var p = cam.transform.position;
             cam.transform.position = new Vector3(cx, cy, p.z);
             LastCenter = new Vector2(cx, cy);

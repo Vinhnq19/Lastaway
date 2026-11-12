@@ -1,0 +1,2 @@
+﻿"ClientId","Name","Status","SelectedTransport","FallbackReason","ConnectedSeconds","P50RttMs","P99RttMs","ExitCode","AssertionsPassed","AssertionsTotal","PhysicalDeviceCount","PhysicalTwoPc","Reason"
+"1","Player1","PASS","Udp","","300","33.32","66.6","0","8","8","1","NOT_TESTED","Required observations and rates verified"

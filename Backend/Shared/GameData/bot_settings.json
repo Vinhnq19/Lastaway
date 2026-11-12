@@ -1,5 +1,5 @@
 {
-  "version": "bots-normal-1",
+  "version": "bots-normal-2",
   "thinkHz": 5,
   "detectRadius": 12,
   "bushRevealRadius": 2,
@@ -14,5 +14,6 @@
   "repathSeconds": 1,
   "stuckSeconds": 2,
   "failedPathLimit": 3,
-  "blacklistSeconds": 5
+  "blacklistSeconds": 5,
+  "escapeLeadSeconds": 2
 }

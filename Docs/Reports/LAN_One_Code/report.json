@@ -1,0 +1,355 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-11",
+  "branch": "codex/lan-one-code",
+  "status": "LOCAL_MODULES_PASS_PHYSICAL_LAN_NOT_TESTED",
+  "physicalDeviceCount": 1,
+  "checks": [
+    {
+      "name": "LAN code + certificate + real pinned HTTP/WebSocket",
+      "status": "PASS",
+      "count": 43
+    },
+    {
+      "name": "Host ownership/capacity/occupied-port guards",
+      "status": "PASS",
+      "count": 11
+    },
+    {
+      "name": "LAN gateway with real API/Mongo/GameServer on isolated loopback",
+      "status": "PASS",
+      "count": 12
+    },
+    {
+      "name": "Backend NetworkChecks",
+      "status": "PASS",
+      "count": 149
+    },
+    {
+      "name": "Backend DualTransportChecks",
+      "status": "PASS",
+      "count": 53
+    },
+    {
+      "name": "API/account regression",
+      "status": "PASS",
+      "count": 68
+    },
+    {
+      "name": "Unity lobby PlayMode",
+      "status": "PASS",
+      "count": 34
+    },
+    {
+      "name": "Physical two-PC LAN and no-Internet acceptance",
+      "status": "NOT_TESTED"
+    },
+    {
+      "name": "Real Private-network firewall/UAC setup",
+      "status": "NOT_TESTED"
+    },
+    {
+      "name": "Real Tailscale mode switch after LAN",
+      "status": "NOT_TESTED"
+    },
+    {
+      "name": "AWS",
+      "status": "NOT_TESTED",
+      "reason": "Not touched by this task"
+    }
+  ],
+  "editModeFull": {
+    "total": 1246,
+    "passed": 1245,
+    "failed": 1,
+    "skipped": 0,
+    "durationSeconds": 64.55613,
+    "resultState": "Failed(Child)"
+  },
+  "editModeFocused": null,
+  "playMode": {
+    "total": 34,
+    "passed": 34,
+    "failed": 0,
+    "skipped": 0,
+    "durationSeconds": 33.4468185,
+    "resultState": "Passed"
+  },
+  "runs": [
+    {
+      "name": "local-mixed",
+      "status": "PASS",
+      "playerFingerprint": "daebb7078532efb20fbb1b835ac2b88347284f0273800e4ced4d3175cdf8247d",
+      "graphics": "Default"
+    },
+    {
+      "name": "local-fallback",
+      "status": "PASS",
+      "playerFingerprint": "daebb7078532efb20fbb1b835ac2b88347284f0273800e4ced4d3175cdf8247d",
+      "graphics": "Default"
+    },
+    {
+      "name": "final-d3d11-live",
+      "status": "PASS",
+      "playerFingerprint": "d0d02e9e5795a77859bfc82e583f1ec488db501b266783561474431f089365b6",
+      "graphics": "Direct3D11"
+    },
+    {
+      "name": "final-d3d11-fallback",
+      "status": "PASS",
+      "playerFingerprint": "d0d02e9e5795a77859bfc82e583f1ec488db501b266783561474431f089365b6",
+      "graphics": "Direct3D11"
+    },
+    {
+      "name": "handoff-mixed",
+      "status": "PASS",
+      "playerFingerprint": "c721cb184fb620ed4ca7cf711f3e1667e45dc7422c2e0f963ca79d00a4c3d13d",
+      "graphics": "Direct3D11"
+    },
+    {
+      "name": "handoff-fallback",
+      "status": "PASS",
+      "playerFingerprint": "c721cb184fb620ed4ca7cf711f3e1667e45dc7422c2e0f963ca79d00a4c3d13d",
+      "graphics": "Direct3D11"
+    },
+    {
+      "name": "handoff-default",
+      "status": "FAIL",
+      "playerFingerprint": "c721cb184fb620ed4ca7cf711f3e1667e45dc7422c2e0f963ca79d00a4c3d13d",
+      "graphics": "Default"
+    }
+  ],
+  "metrics": [
+    {
+      "run": "local-mixed",
+      "client": "Player1",
+      "status": "PASS",
+      "transport": "Wss",
+      "graphics": "Default",
+      "inputHz": 29.684857442063976,
+      "snapshotHz": 30.02596179166488,
+      "rttP50Ms": 33.3106,
+      "rttP95Ms": 33.4376,
+      "rttP99Ms": 91.5791,
+      "pongTimeouts": 0,
+      "catchupDrops": 1
+    },
+    {
+      "run": "local-mixed",
+      "client": "Player2",
+      "status": "PASS",
+      "transport": "Udp",
+      "graphics": "Default",
+      "inputHz": 29.690898111216026,
+      "snapshotHz": 30.06773878489134,
+      "rttP50Ms": 33.3208,
+      "rttP95Ms": 33.7083,
+      "rttP99Ms": 73.9668,
+      "pongTimeouts": 0,
+      "catchupDrops": 1
+    },
+    {
+      "run": "local-fallback",
+      "client": "Player1",
+      "status": "PASS",
+      "transport": "Wss",
+      "graphics": "Default",
+      "inputHz": 29.74708142900353,
+      "snapshotHz": 29.964953420077247,
+      "rttP50Ms": 33.3393,
+      "rttP95Ms": 33.543,
+      "rttP99Ms": 38.8896,
+      "pongTimeouts": 0,
+      "catchupDrops": 1
+    },
+    {
+      "run": "local-fallback",
+      "client": "Player2",
+      "status": "PASS",
+      "transport": "Wss",
+      "graphics": "Default",
+      "inputHz": 29.793538076213103,
+      "snapshotHz": 29.964580018785345,
+      "rttP50Ms": 33.3858,
+      "rttP95Ms": 47.4339,
+      "rttP99Ms": 66.6484,
+      "pongTimeouts": 0,
+      "catchupDrops": 1
+    },
+    {
+      "run": "final-d3d11-live",
+      "client": "Player1",
+      "status": "PASS",
+      "transport": "Wss",
+      "graphics": "Direct3D11",
+      "inputHz": 29.683783584772467,
+      "snapshotHz": 30.042505286891657,
+      "rttP50Ms": 33.3496,
+      "rttP95Ms": 39.0611,
+      "rttP99Ms": 135.9594,
+      "pongTimeouts": 0,
+      "catchupDrops": 1
+    },
+    {
+      "run": "final-d3d11-live",
+      "client": "Player2",
+      "status": "PASS",
+      "transport": "Udp",
+      "graphics": "Direct3D11",
+      "inputHz": 29.67806066365676,
+      "snapshotHz": 30.030301775035785,
+      "rttP50Ms": 32.918,
+      "rttP95Ms": 42.1011,
+      "rttP99Ms": 76.5253,
+      "pongTimeouts": 0,
+      "catchupDrops": 1
+    },
+    {
+      "run": "final-d3d11-fallback",
+      "client": "Player1",
+      "status": "PASS",
+      "transport": "Wss",
+      "graphics": "Direct3D11",
+      "inputHz": 29.664399940863337,
+      "snapshotHz": 29.930466852108083,
+      "rttP50Ms": 33.3676,
+      "rttP95Ms": 64.9497,
+      "rttP99Ms": 150.6141,
+      "pongTimeouts": 0,
+      "catchupDrops": 1
+    },
+    {
+      "run": "final-d3d11-fallback",
+      "client": "Player2",
+      "status": "PASS",
+      "transport": "Wss",
+      "graphics": "Direct3D11",
+      "inputHz": 29.976563883208406,
+      "snapshotHz": 29.92208726876191,
+      "rttP50Ms": 33.3498,
+      "rttP95Ms": 33.7541,
+      "rttP99Ms": 34.8461,
+      "pongTimeouts": 0,
+      "catchupDrops": 0
+    },
+    {
+      "run": "handoff-mixed",
+      "client": "Player1",
+      "status": "PASS",
+      "transport": "Wss",
+      "graphics": "Direct3D11",
+      "inputHz": 29.681969893678012,
+      "snapshotHz": 29.972056856296312,
+      "rttP50Ms": 33.3277,
+      "rttP95Ms": 33.6321,
+      "rttP99Ms": 36.5793,
+      "pongTimeouts": 0,
+      "catchupDrops": 1
+    },
+    {
+      "run": "handoff-mixed",
+      "client": "Player2",
+      "status": "PASS",
+      "transport": "Udp",
+      "graphics": "Direct3D11",
+      "inputHz": 29.665008435344767,
+      "snapshotHz": 30.060648488302917,
+      "rttP50Ms": 33.3028,
+      "rttP95Ms": 50.777,
+      "rttP99Ms": 66.6648,
+      "pongTimeouts": 0,
+      "catchupDrops": 1
+    },
+    {
+      "run": "handoff-fallback",
+      "client": "Player1",
+      "status": "PASS",
+      "transport": "Wss",
+      "graphics": "Direct3D11",
+      "inputHz": 29.98988474289096,
+      "snapshotHz": 29.952936253337185,
+      "rttP50Ms": 33.354,
+      "rttP95Ms": 33.5203,
+      "rttP99Ms": 34.614,
+      "pongTimeouts": 0,
+      "catchupDrops": 0
+    },
+    {
+      "run": "handoff-fallback",
+      "client": "Player2",
+      "status": "PASS",
+      "transport": "Wss",
+      "graphics": "Direct3D11",
+      "inputHz": 29.83676644327981,
+      "snapshotHz": 29.985245978925857,
+      "rttP50Ms": 33.3465,
+      "rttP95Ms": 33.4135,
+      "rttP99Ms": 34.6851,
+      "pongTimeouts": 0,
+      "catchupDrops": 1
+    },
+    {
+      "run": "handoff-default",
+      "client": "Player1",
+      "status": "PASS",
+      "transport": "Wss",
+      "graphics": "Default",
+      "inputHz": 29.83466136550138,
+      "snapshotHz": 29.96542823832041,
+      "rttP50Ms": 33.3361,
+      "rttP95Ms": 33.6334,
+      "rttP99Ms": 34.5706,
+      "pongTimeouts": 0,
+      "catchupDrops": 1
+    },
+    {
+      "run": "handoff-default",
+      "client": "Player2",
+      "status": "FAIL",
+      "transport": "Udp",
+      "graphics": "Default",
+      "inputHz": 29.968558015211784,
+      "snapshotHz": 30.05559223088346,
+      "rttP50Ms": 33.3372,
+      "rttP95Ms": 33.4639,
+      "rttP99Ms": 33.8958,
+      "pongTimeouts": 0,
+      "catchupDrops": 0
+    }
+  ],
+  "artifact": "D:\\Unity\\Lastaway\\Builds\\LAN-One-Code",
+  "artifactMetadata": {
+    "schemaVersion": 1,
+    "sourceHash": "9b679e1ccc0b14f8abccc528e2a8905477d76a7d87c337183d3e2ab94d5d6637",
+    "playerFingerprint": "c721cb184fb620ed4ca7cf711f3e1667e45dc7422c2e0f963ca79d00a4c3d13d",
+    "unityVersion": "6000.3.21f1"
+  },
+  "graphicsDefault": "Observed native crash before managed startup in a two-client Direct3D12 run; cause not conclusively established",
+  "graphicsWorkaround": "Explicit -force-d3d11; no project renderer default changed",
+  "awsTouched": false,
+  "editModeFocusedCleanCli": {
+    "result": "Passed",
+    "total": "61",
+    "passed": "61",
+    "failed": "0"
+  },
+  "cleanup": {
+    "localProfile": "main",
+    "limits": "10/5/50",
+    "localStopped": true,
+    "hostVolumesPreserved": true,
+    "fixtureSecretsRemoved": true,
+    "awsTouched": false
+  },
+  "openIssues": [
+    {
+      "status": "NOT_TESTED",
+      "name": "Physical LAN, UAC Private and no-Internet run"
+    },
+    {
+      "status": "FAIL",
+      "name": "Default graphics retest: replay observation missing on one client; separate earlier native startup crash"
+    }
+  ],
+  "sourceHashNote": "Metadata is authentic at build time; verified Editor-only serialization cleanup after build requires a fresh gate before a future publish."
+}

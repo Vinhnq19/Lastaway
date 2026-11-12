@@ -89,6 +89,7 @@ namespace JungleMaze.Presentation.UI.Hud
         private readonly char[] _buffer = new char[24];
         private readonly Vector3[] _corners = new Vector3[4];
         private NearbyLootPicker _picker;
+        private WorldClientSession _world;
         private IItemIconProvider _icons;
         private HudItemLabels _labels;
         private HudPalette _palette = HudPalette.Default;
@@ -113,6 +114,9 @@ namespace JungleMaze.Presentation.UI.Hud
             _icons = icons;
             _labels = balance != null ? new HudItemLabels(balance) : null;
         }
+
+        [Inject]
+        public void ConstructWorld(WorldClientSession world) => _world=world;
 
         private void Awake()
         {
@@ -250,6 +254,8 @@ namespace JungleMaze.Presentation.UI.Hud
                 if (quantity > 0) row.Count.SetCharArray(_buffer, 0, HudFeedbackFormat.Count(_buffer, quantity));
                 row.Selected = !selected;
             }
+            var pending=_world != null && _world.IsPickupPending(data.Id);
+            row.KeyLabel.text=pending?"…":"Nhặt";
             if (row.Selected != selected)
             {
                 row.Selected = selected;

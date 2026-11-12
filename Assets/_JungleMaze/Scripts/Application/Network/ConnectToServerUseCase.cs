@@ -45,7 +45,7 @@ namespace JungleMaze.App.Network
             if (config != null && !string.IsNullOrWhiteSpace(form.AccessToken))
                 config = new JungleMaze.App.Config.ClientConfig(config.Mode, config.ApiBaseUrl, config.GameServerHost,
                     config.GameServerPort, JoinAuthMode.RoomCode, NetworkProtocol.Version4, config.ConnectTimeoutMs,
-                    config.Transport, config.Source, config.WebSocketUrl, config.WorldEnabled);
+                    config.Transport, config.Source, config.WebSocketUrl, config.WorldEnabled, config.LanCertificateSha256);
             var invalid = config?.Validate();
             if (config == null || invalid != null) return Error("Địa chỉ máy chủ chưa hợp lệ. Kiểm tra cài đặt rồi thử lại.");
             if (string.IsNullOrWhiteSpace(form.RoomCode)) return Error("Nhập mã phòng.");

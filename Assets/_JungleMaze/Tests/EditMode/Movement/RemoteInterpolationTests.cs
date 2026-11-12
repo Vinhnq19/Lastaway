@@ -219,6 +219,23 @@ namespace JungleMaze.Tests.Movement
         }
 
         [Test]
+        public void AdaptiveDelay_StaysBounded_RecoversSlowly_AndNeverRewinds()
+        {
+            var remote=new RemotePlayerInterpolator(new EventBus(),new PlayerRegistry());
+            var previous=double.NegativeInfinity;
+            for(uint t=1;t<=300;t++)
+            {
+                remote.Tick(t<100&&t%9==0?.12f:TickDt);
+                remote.Push(1,At(t,t*TickDt));
+                Assert.GreaterOrEqual(remote.RenderTick,previous);
+                previous=remote.RenderTick;
+                Assert.That(remote.Stats.RenderDelayMs,Is.InRange(66.6f,166.8f));
+            }
+            Assert.Less(remote.Stats.RenderDelayMs,100f,"stable arrivals recover a shorter buffer");
+            remote.Clear();Assert.IsFalse(remote.ClockStarted);
+        }
+
+        [Test]
         public void Despawn_ThenRespawnFarAway_NoGhostInterpolation()
         {
             var remote = new RemotePlayerInterpolator(new EventBus(), new PlayerRegistry());

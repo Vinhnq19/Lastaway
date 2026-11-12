@@ -10,9 +10,28 @@ public sealed class BotNavigationGrid
     public const float Step = .5f;
     public int Width { get; }
     private readonly WorldObjectDefinition[] _cover;
+    private readonly WorldObjectDefinition[][] _nearby;
+    private readonly int _bucketWidth, _sourceCount;
+    public WorldObjectDefinition[] Nearby(Vector2 p) => _nearby[Math.Clamp((int)(p.Y/4),0,_bucketWidth-1)*_bucketWidth+Math.Clamp((int)(p.X/4),0,_bucketWidth-1)];
+    public bool WalkableWorld(MapLayout layout,Vector2 p,float radius,Func<ushort,bool> broken,Func<ushort,bool> doorClosed)
+    {
+        if(radius>1||layout.Objects.Count<_sourceCount)return layout.IsWalkable(new WorldPoint(p.X,p.Y),radius,broken,doorClosed);
+        if(!float.IsFinite(p.X)||!float.IsFinite(p.Y)||p.X<radius||p.Y<radius||p.X>layout.Size-radius||p.Y>layout.Size-radius)return false;
+        bool Blocks(WorldObjectDefinition o) => (o.IsHardCover||o.IsDestructible&&!broken(o.Id)||o.Kind==WorldObjectKind.Door&&doorClosed(o.Id))&&o.Bounds.IntersectsCircle(new WorldPoint(p.X,p.Y),radius);
+        foreach(var o in Nearby(p))if(Blocks(o))return false;
+        // Dynamic eggs are appended to the private world layout, never the shared map index.
+        for(var i=_sourceCount;i<layout.Objects.Count;i++)if(Blocks(layout.Objects[i]))return false;
+        return true;
+    }
     public BotNavigationGrid(MapLayout layout)
     {
         Width = checked(layout.Size * 2);
+        _sourceCount=layout.Objects.Count;_bucketWidth=(layout.Size+3)/4;
+        var buckets=Enumerable.Range(0,_bucketWidth*_bucketWidth).Select(_=>new List<WorldObjectDefinition>()).ToArray();
+        foreach(var o in layout.Objects)
+            for(var y=Math.Clamp((int)MathF.Floor((o.Bounds.MinY-1)/4),0,_bucketWidth-1);y<=Math.Clamp((int)MathF.Floor((o.Bounds.MaxY+1)/4),0,_bucketWidth-1);y++)
+                for(var x=Math.Clamp((int)MathF.Floor((o.Bounds.MinX-1)/4),0,_bucketWidth-1);x<=Math.Clamp((int)MathF.Floor((o.Bounds.MaxX+1)/4),0,_bucketWidth-1);x++)buckets[y*_bucketWidth+x].Add(o);
+        _nearby=buckets.Select(b=>b.ToArray()).ToArray();
         _cover = layout.Objects.Where(o => o.IsHardCover).ToArray();
     }
     public Vector2 Point(int id) => new((id % Width + .5f) * Step, (id / Width + .5f) * Step);
@@ -21,7 +40,7 @@ public sealed class BotNavigationGrid
     {
         var p = Point(id);
         if (p.X < radius || p.Y < radius || p.X > Width * Step - radius || p.Y > Width * Step - radius) return false;
-        foreach (var o in _cover) if (o.Bounds.IntersectsCircle(new WorldPoint(p.X, p.Y), radius)) return false;
+        foreach (var o in radius<=1?Nearby(p):_cover) if (o.IsHardCover && o.Bounds.IntersectsCircle(new WorldPoint(p.X, p.Y), radius)) return false;
         return true;
     }
 }
@@ -61,8 +80,11 @@ public sealed class BotPathSearch
     private readonly HashSet<int> _closed = new();
     private readonly List<Vector2> _path = new();
     public bool Finished { get; private set; }
+    public const int MaxDiscoveredNodes = 8192;
     public bool ReachedGoal { get; private set; }
+    public bool HasPartialPath { get; private set; }
     public int Expanded { get; private set; }
+    public int DiscoveredNodes => _cost.Count;
     public IReadOnlyList<Vector2> Path => _path;
     public BotPathSearch(BotNavigationGrid grid, Vector2 start, Vector2 goal)
     {
@@ -71,12 +93,14 @@ public sealed class BotPathSearch
     public void Advance(BotNavigationBudget budget, int requestLimit, float radius,
         Func<Vector2, bool> walkable, Func<Vector2, Vector2, bool> segment, Func<Vector2, float> penalty)
     {
+        if (Finished) return;
+        var sliceStart = Expanded;
         if (!_initialised)
         {
             // The 50 endpoint probes are work too: retain progress instead of doing all of them in one tick.
             while (_initialisationIndex < 50)
             {
-                if (!budget.CanWork) return;
+                if (!budget.Take()) return;
                 var index = _initialisationIndex++;
                 var origin = index % 2 == 0 ? _destination : _start;
                 var dx = index / 2 % 5 - 2; var dy = index / 10 - 2;
@@ -92,10 +116,11 @@ public sealed class BotPathSearch
             if (_bestStart < 0 || _bestGoal < 0) { Finished = true; return; }
             _goal = _bestGoal; _cost[_bestStart] = 0; _open.Enqueue(_bestStart, 0);
         }
-        while (!Finished && _open.Count > 0 && budget.CanWork)
+        while (!Finished && _open.Count > 0 && budget.CanWork && Expanded - sliceStart < requestLimit)
         {
             var current = _open.Peek();
             if (_closed.Contains(current)) { _open.Dequeue(); continue; }
+            if (_cost.Count >= MaxDiscoveredNodes) { CloseUnavailable(); return; }
             // Do not consume the frontier node until both shared budgets allow processing it.
             if (!budget.Take()) return;
             _open.Dequeue(); _closed.Add(current);
@@ -111,12 +136,41 @@ public sealed class BotPathSearch
                 if (!walkable(q) || !segment(p, q)) continue;
                 var cost = _cost[current] + Vector2.Distance(p, q) * Math.Max(1, penalty(q));
                 if (_cost.TryGetValue(next, out var old) && old <= cost) continue;
+                if (!_cost.ContainsKey(next) && _cost.Count >= MaxDiscoveredNodes) { CloseUnavailable(); return; }
                 _cost[next] = cost; _parent[next] = current;
                 _open.Enqueue(next, cost + Vector2.Distance(q, _grid.Point(_goal)));
             }
-            if (Expanded >= requestLimit) { Finished = true; return; }
+            if (Expanded - sliceStart >= requestLimit) return;
         }
         if (_open.Count == 0) Finished = true;
+    }
+    public bool TryFinishPartial()
+    {
+        if(Finished)return HasPartialPath;
+        if(!_initialised)return false;
+        CloseUnavailable();
+        // Keep the frontier when the detour has not found a closer reachable waypoint yet.
+        if(!HasPartialPath)Finished=false;
+        return HasPartialPath;
+    }
+    private void CloseUnavailable()
+    {
+        Finished = true;
+        var startDistance = Vector2.DistanceSquared(_grid.Point(_bestStart), _grid.Point(_goal));
+        var best = -1; var bestDistance = float.MaxValue;
+        foreach (var entry in _open.UnorderedItems)
+        {
+            var id = entry.Element;
+            if (id == _goal || _closed.Contains(id) || !_parent.ContainsKey(id)) continue;
+            var distance = Vector2.DistanceSquared(_grid.Point(id), _grid.Point(_goal));
+            if (distance >= startDistance || distance > bestDistance || distance == bestDistance && best >= 0 && id >= best) continue;
+            best = id; bestDistance = distance;
+        }
+        if (best >= 0)
+        {
+            Complete(best);
+            HasPartialPath = _path.Count > 0;
+        }
     }
     private void Complete(int id)
     {

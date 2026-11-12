@@ -14,7 +14,7 @@ namespace JungleMaze.Infrastructure.Auth
     public sealed class GuestHistoryClient : IPlayerHistory
     {
         private readonly GuestCredentialStore _store;
-        private readonly HttpClient _http = new HttpClient(new HttpClientHandler { AllowAutoRedirect = false }) { Timeout = TimeSpan.FromSeconds(5) };
+        private readonly Func<JungleMaze.App.Config.ClientConfig> _config;
         private readonly Func<string> _accountEndpoint;
         private GuestCredential _identity;
         private Uri _endpoint;
@@ -24,14 +24,14 @@ namespace JungleMaze.Infrastructure.Auth
         public bool IsReady => _identity != null;
         public IReadOnlyList<PlayerMatchHistory> Rows { get; private set; } = Array.Empty<PlayerMatchHistory>();
         private sealed class HistoryPage { public PlayerMatchHistory[] Items; }
-        public GuestHistoryClient(GuestCredentialStore store, Func<string> accountEndpoint = null)
-        { _store = store; _accountEndpoint = accountEndpoint; }
+        public GuestHistoryClient(GuestCredentialStore store, Func<string> accountEndpoint = null, Func<JungleMaze.App.Config.ClientConfig> config = null)
+        { _store = store; _accountEndpoint = accountEndpoint; _config=config; }
 
-        public async Task<TicketIssueResult> AccountTicketAsync(string baseUrl, Guid attempt, string room, string token)
+        public async Task<TicketIssueResult> AccountTicketAsync(string baseUrl, Guid attempt, string room, string token, JungleMaze.App.Config.ClientConfig settings = null)
         {
             if (string.IsNullOrWhiteSpace(token)) return new TicketIssueResult(401);
             if (!ConfigureAccountEndpoint(baseUrl)) return new TicketIssueResult(0);
-            return await RequestTicketAsync(attempt, room, token, default);
+            return await RequestTicketAsync(attempt, room, token, default, settings);
         }
         private bool ConfigureAccountEndpoint(string baseUrl)
         {
@@ -65,7 +65,8 @@ namespace JungleMaze.Infrastructure.Auth
                     using (var request = new HttpRequestMessage(HttpMethod.Post, new Uri(endpoint.GetLeftPart(UriPartial.Authority) + "/api/guests")))
                     {
                         request.Content = JsonBody(new { });
-                        using (var response = await _http.SendAsync(request, cancellation))
+                        using (var http = JungleMaze.Infrastructure.Network.LanTls.CreateHttpClient(_config?.Invoke()))
+                    using (var response = await http.SendAsync(request, cancellation))
                         {
                             response.EnsureSuccessStatusCode();
                             identity = JsonConvert.DeserializeObject<GuestCredential>(await response.Content.ReadAsStringAsync());
@@ -96,7 +97,7 @@ namespace JungleMaze.Infrastructure.Auth
             return result.Success ? result.Value : null;
         }
 
-        private async Task<TicketIssueResult> RequestTicketAsync(Guid attemptId, string roomCode, string accountToken, CancellationToken cancellation)
+        private async Task<TicketIssueResult> RequestTicketAsync(Guid attemptId, string roomCode, string accountToken, CancellationToken cancellation, JungleMaze.App.Config.ClientConfig settings = null)
         {
             if (_endpoint == null) return new TicketIssueResult(0);
             if (_identity == null && string.IsNullOrEmpty(accountToken)) return new TicketIssueResult(401);
@@ -106,7 +107,8 @@ namespace JungleMaze.Infrastructure.Auth
                 {
                     SetProof(request, accountToken);
                     request.Content = JsonBody(new { attemptId, roomCode });
-                    using (var response = await _http.SendAsync(request, cancellation))
+                    using (var http = JungleMaze.Infrastructure.Network.LanTls.CreateHttpClient(settings ?? _config?.Invoke()))
+                    using (var response = await http.SendAsync(request, cancellation))
                     {
                         if (!response.IsSuccessStatusCode) return new TicketIssueResult((int)response.StatusCode);
                         var data = Newtonsoft.Json.Linq.JObject.Parse(await response.Content.ReadAsStringAsync());
@@ -131,7 +133,8 @@ namespace JungleMaze.Infrastructure.Auth
                 using (var request = new HttpRequestMessage(HttpMethod.Get, Url("api/me/matches?page=1&pageSize=20")))
                 {
                     SetProof(request, accountToken);
-                    using (var response = await _http.SendAsync(request, cancellation))
+                    using (var http = JungleMaze.Infrastructure.Network.LanTls.CreateHttpClient(_config?.Invoke()))
+                    using (var response = await http.SendAsync(request, cancellation))
                     {
                         response.EnsureSuccessStatusCode();
                         var json = await response.Content.ReadAsStringAsync();
@@ -153,6 +156,6 @@ namespace JungleMaze.Infrastructure.Auth
         }
         private Uri Url(string path) => new Uri(_endpoint.GetLeftPart(UriPartial.Authority) + "/" + path);
         private static StringContent JsonBody(object value) => new StringContent(JsonConvert.SerializeObject(value), Encoding.UTF8, "application/json");
-        public void Dispose() => _http.Dispose();
+        public void Dispose() { }
     }
 }

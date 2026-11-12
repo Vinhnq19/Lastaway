@@ -1,5 +1,8 @@
 # Phase 2: account, vòng trận, gameplay và Safe Zone
 
+**Chọn máy chủ hiện hành (11/11):** người chơi chỉ thấy AWS / LAN / Tailscale. LAN dùng mã kết nối có xác nhận máy chủ, không nhập IP/API. Xem [hướng dẫn LAN bằng một mã](Phase1_First4Tasks.vi.md#lan-bằng-một-mã--giao-diện-hiện-hành-11112026). Các profile Local Docker / Internet tự host bên dưới dành cho phần dev Editor/Development Build hoặc CLI; bản Release dùng nút Luyện tập offline khi chơi một mình.
+
+
 Cập nhật **01/11/2026**. Hướng dẫn setup và kiểm thử **SRV-03, NET-02, ZON-01**. Xem [báo cáo nghiệm thu Phase 2](Reports/Phase2_Local/report.vi.md) để đọc kết quả, giới hạn và bằng chứng. Setup nền và vận hành AWS nằm trong [hướng dẫn Phase 1](Phase1_First4Tasks.vi.md).
 
 
@@ -353,7 +356,7 @@ Bằng chứng và các tiêu chí chưa kiểm: [DRG-01](Reports/DRG01/report.v
 
 Client xác minh cả MapHash và RulesHash; không tắt kiểm hash để vào trận. Khi source có thay đổi vũ khí, loot, bo hoặc lịch rồng, phải cập nhật cả hai phía: Unity chạy **Jungle Maze → Phase 2 → Sync Runtime Data**, build client mới; tại `Backend` chạy `docker compose --profile account up -d --build api game-server`. Mongo không cần xóa hay reset. Để chơi thường giữ profile `main`; profile `test` chỉ dành cho kiểm thử riêng.
 
-Local dùng tài khoản API Local và chọn **Local** trong Cài đặt máy chủ. AWS chỉ dùng được khi release server và client cùng phiên bản dữ liệu; Sync Runtime Data trên PC không cập nhật EC2. Xóa cache không sửa được RulesHash lệch. Skin ở phòng chờ được lưu cùng lựa chọn nhân vật trên menu của thiết bị; giữ cơ chế hiển thị skin hiện có, không đổi sang xác thực hay đồng bộ skin mới.
+Dev Local dùng tài khoản API Local và chọn **Local · Docker** trong phần dev của Cài đặt máy chủ (Editor/Development Build). AWS chỉ dùng được khi release server và client cùng phiên bản dữ liệu; Sync Runtime Data trên PC không cập nhật EC2. Xóa cache không sửa được RulesHash lệch. Skin ở phòng chờ được lưu cùng lựa chọn nhân vật trên menu của thiết bị; giữ cơ chế hiển thị skin hiện có, không đổi sang xác thực hay đồng bộ skin mới.
 
 Nhạc nền menu dùng `Assets/_JungleMaze/Art/Audio/Music/game_menu_looping.ogg`, chạy lặp ở đăng nhập/menu, danh sách phòng, phòng chờ và kết quả. Cài đặt mới bật nhạc mặc định; nếu máy đã lưu tùy chọn tắt nhạc, bật lại tại **Cài đặt → Âm thanh → Nhạc**. Khi kết nối/tải và trong trận, nhạc nền tắt; SFX gameplay vẫn hoạt động. Trở về menu/phòng chờ/kết quả sẽ phát lại nhạc menu.
 

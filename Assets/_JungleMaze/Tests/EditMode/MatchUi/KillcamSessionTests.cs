@@ -90,7 +90,7 @@ namespace JungleMaze.Tests.MatchUi
                 Frames(20);
             }
             RunUntilEliminated();
-            Assert.AreEqual(MatchOverlayPhase.Eliminated, _flow.Phase);
+            Assert.AreEqual(MatchOverlayPhase.Spectating, _flow.Phase);
             Assert.AreEqual(5.0, _killcam.EndedAt - start, 0.1, "played 5.0 ± 0.1 s");
             Assert.IsFalse(_killcam.Skipped);
         }
@@ -107,7 +107,7 @@ namespace JungleMaze.Tests.MatchUi
             Assert.IsTrue(_killcam.Skipped);
             Assert.IsFalse(_flow.SkipKillcam(), "no replay after skipping");
             Frames(400);
-            Assert.AreEqual(MatchOverlayPhase.Eliminated, _flow.Phase);
+            Assert.AreEqual(MatchOverlayPhase.Spectating, _flow.Phase);
             Assert.AreEqual(1, _replay.RequestCount);
         }
 
@@ -131,7 +131,7 @@ namespace JungleMaze.Tests.MatchUi
                 Assert.AreEqual(expectedX, x, 0.1f);
                 Assert.AreEqual(MockKillcamReplaySource.KillerY, y, 0.1f);
             }
-            Assert.AreEqual(MatchOverlayPhase.Eliminated, _flow.Phase, "the loop ended because the killcam finished");
+            Assert.AreEqual(MatchOverlayPhase.Spectating, _flow.Phase, "finished killcam automatically follows a survivor");
             Assert.Greater(measured, 290, "the whole 5 s (≈ 300 frames) measured");
             Assert.AreEqual(MockEliminationSource.KillerNetId, _killcam.LastRequest.KillerNetId);
         }
@@ -148,7 +148,7 @@ namespace JungleMaze.Tests.MatchUi
             Build(enabled: true, mode);
             Eliminate();
             var took = RunUntilEliminated();
-            Assert.AreEqual(MatchOverlayPhase.Eliminated, _flow.Phase);
+            Assert.AreEqual(took>0?MatchOverlayPhase.Spectating:MatchOverlayPhase.Eliminated, _flow.Phase);
             Assert.AreEqual(expected, _killcam.Reason);
             Assert.LessOrEqual(took, 1.5, "eliminated screen ≤ 1.5 s after the elimination");
             StringAssert.StartsWith("Killcam không khả dụng: ", _flow.Notice);
@@ -169,7 +169,7 @@ namespace JungleMaze.Tests.MatchUi
             Assert.AreEqual(KillcamUnavailableReason.None, _killcam.Reason);
             Assert.IsNull(_flow.Notice);
             Assert.AreEqual(5.0, RunUntilEliminated(), 0.1, "the whole killcam played");
-            Assert.AreEqual(MatchOverlayPhase.Eliminated, _flow.Phase);
+            Assert.AreEqual(MatchOverlayPhase.Spectating, _flow.Phase);
             Assert.IsFalse(_killcam.Skipped);
         }
 
@@ -238,7 +238,7 @@ namespace JungleMaze.Tests.MatchUi
 
             Frames(60);
             Assert.IsTrue(stubborn.HasLateAnswer, "the late clip exists and would be handed out");
-            Assert.AreEqual(MatchOverlayPhase.Eliminated, _flow.Phase, "never pulled back into the killcam");
+            Assert.AreEqual(MatchOverlayPhase.Spectating, _flow.Phase, "never pulled back into the killcam");
             Assert.IsNull(_killcam.Clip);
             Assert.AreEqual(takesAtTimeout, stubborn.Takes, "nobody asks for an answer after the timeout");
 

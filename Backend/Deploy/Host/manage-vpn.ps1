@@ -63,16 +63,24 @@ function Compose([string[]]$Commands,[int]$Seconds=30) {
 }
 function ReadState { if (Test-Path -LiteralPath $statePath) { $value=Get-Content -LiteralPath $statePath -Encoding UTF8 -Raw | ConvertFrom-Json; if (-not $value.PSObject.Properties['proxyPort']) { $value | Add-Member -NotePropertyName proxyPort -NotePropertyValue 8080 };return $value };return [pscustomobject]@{schemaVersion=1;backend=$backend;stackOwned=$false;serveOwned=$false;dns='';proxyPort=18080} }
 function SaveState($State) { [IO.File]::WriteAllText($statePath,($State | ConvertTo-Json),[Text.UTF8Encoding]::new($false)) }
-function VerifyStack($Owner) {
+function VerifyStack($Owner,[switch]$Changing) {
     if ($Owner.backend -ne $backend) { Fail 'File quản lý host thuộc checkout khác; không can thiệp stack.' }
     $ids=Native 'docker' @('ps','-aq','--filter','label=com.docker.compose.project=junglemaze-host')
     if ($ids) {
         $items=Native 'docker' (@('inspect')+@($ids -split '\s+')) | ConvertFrom-Json
         foreach ($item in $items) {
             $service=$item.Config.Labels.'com.docker.compose.service'
-            if ($service -notin @('mongo','api','game-server','caddy-vpn')) { Fail 'Stack đang có service ngoài VPN (có thể là Public). Không can thiệp.' }
             $dir=$item.Config.Labels.'com.docker.compose.project.working_dir'
-            if (-not $Owner.stackOwned -or -not $dir -or $dir.Replace('\','/').TrimEnd('/') -ine $backend.Replace('\','/').TrimEnd('/')) { Fail 'Stack self-host đã được chạy ngoài công cụ hoặc ở source khác. Không tự chiếm/dừng stack.' }
+            if (-not $dir -or $dir.Replace('\','/').TrimEnd('/') -ine $backend.Replace('\','/').TrimEnd('/')) { Fail 'Stack thuộc source khác; không can thiệp.' }
+            if ($service -eq 'caddy-lan' -and -not $item.State.Running) { continue }
+            if ($service -notin @('mongo','api','game-server','caddy-vpn')) { Fail 'Stack đang có service ngoài VPN (có thể là Public). Không can thiệp.' }
+            if ($item.State.Running -and $service -eq 'game-server' -and $item.Config.Env -contains 'LASTAWAY_HOST_MODE=lan') { Fail 'Máy chủ LAN đang chạy. Dừng chế độ hiện tại trước khi dùng Tailscale.' }
+            if ($Changing -and $item.State.Running -and $service -eq 'game-server') {
+                $status=Native 'docker' @('exec',$item.Id,'dotnet','GameServer.dll','--lan-status') | ConvertFrom-Json
+                if($status.safeToDeploy -ne $true){Fail 'Máy chủ còn người chơi hoặc trận chưa dọn. Kết thúc buổi hiện tại trước khi thay đổi.'}
+            }
+            $dir=$item.Config.Labels.'com.docker.compose.project.working_dir'
+            if (($item.State.Running -and -not $Owner.stackOwned) -or -not $dir -or $dir.Replace('\','/').TrimEnd('/') -ine $backend.Replace('\','/').TrimEnd('/')) { Fail 'Stack self-host đã được chạy ngoài công cụ hoặc ở source khác. Không tự chiếm/dừng stack.' }
         }
     }
     return $ids
@@ -110,8 +118,9 @@ function Health([string]$Dns) {
 }
 if ($LibraryOnly) { return }
 $result=[ordered]@{success=$false;ready=$false;state='NeedsAttention';message='';connectionCode=''}
-$lock=$null
+$lock=$null;$hostLock=$null
 try {
+    $hostLock=[IO.File]::Open((Join-Path $PSScriptRoot '.host.lock'),[IO.FileMode]::OpenOrCreate,[IO.FileAccess]::ReadWrite,[IO.FileShare]::None)
     $lock=[IO.File]::Open((Join-Path $PSScriptRoot '.vpn.lock'),[IO.FileMode]::OpenOrCreate,[IO.FileAccess]::ReadWrite,[IO.FileShare]::None)
     $owner=ReadState
     if ($owner.backend -ne $backend) { Fail 'Trạng thái host thuộc checkout khác; không thay stack hoặc Serve.' }
@@ -133,7 +142,7 @@ try {
         if (-not (Test-Path -LiteralPath $privateConfig)) {
             & (Join-Path $PSScriptRoot 'configure-host.ps1') -Mode vpn
         }
-        $null=VerifyStack $owner
+        $null=VerifyStack $owner -Changing
         $vpnPort=ProxyPort;EnsureProxyAvailable $vpnPort $owner
         # A separate UAC step adds only our VPN rule, leaving Public/other rules intact.
         $fw=Join-Path $PSScriptRoot 'setup-firewall.ps1'
@@ -153,6 +162,7 @@ try {
     } else {
         if (-not (Test-Path -LiteralPath $privateConfig)) { Fail 'Chưa có cấu hình host. Bấm Thiết lập máy host trước.' }
         if ($Action -eq 'Stop') {
+            if($owner.stackOwned){$null=VerifyStack $owner -Changing}
             if ($owner.serveOwned) {
                 $current=Native $ts @('serve','status','--json') | ConvertFrom-Json
                 if (OurServe $current $owner.dns $owner.proxyPort) { $null=Native $ts @('serve','--https=443','off');$owner.serveOwned=$false;SaveState $owner }
@@ -161,13 +171,13 @@ try {
             }
             if ($owner.stackOwned) {
                 $null=Native 'docker' @('info','--format','{{.ServerVersion}}')
-                $null=VerifyStack $owner
-                $null=Compose @('down') 90
+                $null=VerifyStack $owner -Changing
+                $null=Compose @('stop','caddy-vpn','game-server','api','mongo') 90
             }
             $result.success=$true;$result.state='Stopped';$result.message='Đã dừng stack/Serve do công cụ quản lý. Account, map và secret được giữ.'
         } else {
             $null=Native 'docker' @('info','--format','{{.ServerVersion}}')
-            $ids=VerifyStack $owner
+            $ids=VerifyStack $owner -Changing:($Action -eq 'Start')
             $vpnPort=ProxyPort
             $tail=TailState;$dns=$tail.Self.DNSName.TrimEnd('.').ToLowerInvariant()
             $ip=@($tail.Self.TailscaleIPs | Where-Object { $_ -match '^100\.' })[0]
@@ -186,6 +196,7 @@ try {
                 $text=[IO.File]::ReadAllText($privateConfig)
                 if ($text -match '(?m)^HOST_GAME_UDP_BIND=') { $text=[regex]::Replace($text,'(?m)^HOST_GAME_UDP_BIND=.*$',('HOST_GAME_UDP_BIND='+$ip)) }
                 else { $text+="`nHOST_GAME_UDP_BIND=$ip`n" }
+                if($text -match '(?m)^HOST_MODE='){$text=[regex]::Replace($text,'(?m)^HOST_MODE=.*$','HOST_MODE=vpn')}else{$text+="`nHOST_MODE=vpn`n"}
                 [IO.File]::WriteAllText($privateConfig,$text,[Text.UTF8Encoding]::new($false))
                 $owner.stackOwned=$true;SaveState $owner
                 $null=Compose @('up','-d','--build') 720
@@ -218,6 +229,7 @@ try {
     else { $result.message='Không hoàn tất thao tác. Kiểm tra Docker/Tailscale, quyền Windows hoặc một thao tác host khác đang chạy.' }
 } finally {
     if ($lock) { $lock.Dispose() }
+    if ($hostLock) { $hostLock.Dispose() }
     $json=$result | ConvertTo-Json -Compress
     if ($ResultFile) { [IO.File]::WriteAllText([IO.Path]::GetFullPath($ResultFile),$json,[Text.UTF8Encoding]::new($false)) }
     else { Write-Output $json }

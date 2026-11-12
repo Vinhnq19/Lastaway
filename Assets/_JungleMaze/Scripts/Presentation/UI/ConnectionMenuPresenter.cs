@@ -151,6 +151,18 @@ namespace JungleMaze.Presentation.UI
             }
         }
 
+        public ClientConfig CurrentConfig => _config.Current;
+        public ClientConfig AwsConfig => new ClientConfig(ConnectionMode.Online,"https://junglemaze.duckdns.org","junglemaze.duckdns.org",7777,
+            JungleBackend.Protocol.JoinAuthMode.RoomCode,4,5000,"Auto","profile:phase2-aws","wss://junglemaze.duckdns.org/game",true);
+        public bool ApplyCheckedServer(ClientConfig config)
+        {
+            var before=_config.Current;var error=config.Validate() ?? _config.SaveUserConfig(config);
+            if(error!=null){Status="Chưa lưu được máy chủ. Kiểm tra cài đặt rồi thử lại.";return false;}
+            LoadFromConfig();Status="Đã chọn máy chủ. Hãy đăng nhập để chơi.";NotifyIfApiChanged(before,_config.Current);return true;
+        }
+        public bool ApplyLanEndpoint(JungleBackend.Hosting.LanConnectionCode code)=>ApplyCheckedServer(new ClientConfig(ConnectionMode.LAN,code.Api,code.Ip,code.GamePort,
+            JungleBackend.Protocol.JoinAuthMode.RoomCode,4,5000,"Auto","lan-code",code.WebSocket,true,code.CertificateSha256));
+
         public bool ApplyVpnEndpoint(VpnConnectionCode endpoint)
         {
             if (endpoint == null || _config.Current == null) return false;
@@ -276,7 +288,8 @@ namespace JungleMaze.Presentation.UI
             if (ReferenceEquals(before, after)) return false;
             var beforeOrigin = GetApiOrigin(before);
             var afterOrigin = GetApiOrigin(after);
-            return !string.Equals(beforeOrigin, afterOrigin, StringComparison.Ordinal);
+            return !string.Equals(beforeOrigin, afterOrigin, StringComparison.Ordinal)
+                || !string.Equals(before?.LanCertificateSha256, after?.LanCertificateSha256, StringComparison.Ordinal);
         }
     }
 }

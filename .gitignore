@@ -119,6 +119,10 @@ Backend/.env
 Backend/.env.aws
 Backend/Deploy/Host/.env.host.public
 Backend/Deploy/Host/.env.host.vpn
+Backend/Deploy/Host/.env.host.lan
+Backend/Deploy/Host/.lan-state.json
+Backend/Deploy/Host/.lan.lock
+Backend/Deploy/Host/.host.lock
 Backend/**/bin/
 Backend/**/obj/
 Backend/**/__pycache__/

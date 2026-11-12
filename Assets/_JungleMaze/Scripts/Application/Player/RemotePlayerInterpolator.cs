@@ -61,6 +61,9 @@ namespace JungleMaze.App.Player
         }
 
         public float DelaySeconds { get; set; } = 0.1f;
+        public bool AdaptiveDelay { get; set; } = true;
+        private float _adaptiveDelay = .1f;
+        private float RenderDelay => AdaptiveDelay ? _adaptiveDelay : DelaySeconds;
         public float MaxExtrapolationSeconds { get; set; } = 0.1f;
         public double RenderTick => _renderTick;
         public bool ClockStarted => _clockStarted;
@@ -71,7 +74,7 @@ namespace JungleMaze.App.Player
             {
                 var s = _stats;
                 s.JitterMs = _jitterTicks * 1000f / TickRate;
-                s.RenderDelayMs = DelaySeconds * 1000f;
+                s.RenderDelayMs = RenderDelay * 1000f;
                 // Không còn ai (hết trận/rời phòng) thì không có gì đang đệm; âm nghĩa là đang thiếu snapshot.
                 s.BufferedMs = _clockStarted && !AllEmpty() ? (float)((_newestTick - _renderTick) * 1000.0 / TickRate) : 0f;
                 return s;
@@ -126,6 +129,7 @@ namespace JungleMaze.App.Player
         {
             for (var i = 0; i < _buffers.Length; i++) _buffers[i].Clear();
             _clockStarted = false;
+            _adaptiveDelay=.1f;
         }
 
         public void Tick(float deltaTime)
@@ -133,7 +137,12 @@ namespace JungleMaze.App.Player
             if (deltaTime <= 0f) return;
             _localTicks += deltaTime * TickRate;
             if (!_clockStarted) return;
-            var target = _localTicks + _offset - DelaySeconds * TickRate;
+            if (AdaptiveDelay)
+            {
+                var desired=Math.Max(2f/TickRate,Math.Min(5f/TickRate,(2f+2f*_jitterTicks)/TickRate));
+                _adaptiveDelay=desired>=_adaptiveDelay?desired:Math.Max(desired,_adaptiveDelay-deltaTime/TickRate);
+            }
+            var target = _localTicks + _offset - RenderDelay * TickRate;
             // Không lùi đồng hồ (hình giật ngược); offset giảm thì chỉ chậm lại cho tới khi khớp.
             if (target > _renderTick) _renderTick = target;
             for (var i = 0; i < _buffers.Length; i++) _buffers[i].TrimBefore(_renderTick - 1);
@@ -187,7 +196,7 @@ namespace JungleMaze.App.Player
                 _clockStarted = true;
                 _newestTick = asDouble;
                 _offset = asDouble - _localTicks;
-                _renderTick = asDouble - DelaySeconds * TickRate;
+                _renderTick = asDouble - RenderDelay * TickRate;
                 _jitterTicks = 0f;
                 _stats.ClockResets++;
                 return;
@@ -201,7 +210,7 @@ namespace JungleMaze.App.Player
                 // Độ trễ đổi hẳn (sau nghẽn, đổi đường mạng): đo lại offset. Chỉ nhảy TỚI, không tua lùi để
                 // phát lại state cũ; nếu gói giờ đến chậm hơn thì đồng hồ tự đứng chờ trong Tick.
                 _offset = sample;
-                _renderTick = Math.Max(_renderTick, asDouble - DelaySeconds * TickRate);
+                _renderTick = Math.Max(_renderTick, asDouble - RenderDelay * TickRate);
                 for (var i = 0; i < _buffers.Length; i++) _buffers[i].TrimBefore(_renderTick - 1);
                 _stats.ClockResets++;
                 return;

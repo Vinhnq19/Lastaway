@@ -17,8 +17,8 @@ def main():
     OUT.mkdir(exist_ok=True)
     paths = subprocess.check_output(['git','ls-files','--cached','--others','--exclude-standard','-z'], cwd=ROOT).decode('utf-8').split('\0')
     paths = sorted(set(p for p in paths if p and not p.startswith(('graphify-out/','.utmp/','.claude/','.codex/','.agents/'))))
-    code = [p for p in paths if Path(p).suffix.lower() in SUFFIXES or Path(p).name in {'Dockerfile','Caddyfile'}]
-    code = [p for p in code if Path(p).is_file() and not Path(p).is_symlink() and not any(x in p.lower() for x in ('.env','credential','private','secret'))]
+    code = [p for p in paths if Path(p).suffix.lower() in SUFFIXES or (Path(p).name == 'Dockerfile' or Path(p).name.startswith('Caddyfile'))]
+    code = [p for p in code if not p.startswith('Docs/Reports/') and Path(p).is_file() and not Path(p).is_symlink() and not any(x in p.lower() for x in ('.env','credential','private','secret'))]
     hashes = {p:hashlib.sha256(Path(p).read_bytes()).hexdigest() for p in code}
     old = json.loads((OUT/'code-state.json').read_text(encoding='utf-8')) if (OUT/'code-state.json').exists() else {}
     if hashes == old.get('hashes') and (OUT/'graph.html').exists() and (OUT/'GRAPH_TREE.html').exists():

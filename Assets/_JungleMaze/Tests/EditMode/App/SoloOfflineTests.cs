@@ -313,6 +313,17 @@ namespace JungleMaze.Tests.App
         }
 
         [Test]
+        public void LanCertificateRotationOnSameOrigin_InvalidatesAccountOnlyWhenApplied()
+        {
+            var first=new ClientConfig(ConnectionMode.LAN,"https://192.168.1.20:8443","192.168.1.20",7777,
+                JoinAuthMode.RoomCode,4,5000,"Auto","fixture","wss://192.168.1.20:8443/game",true,new string('a',64));
+            Assert.True(_presenter.ApplyCheckedServer(first));_presenter.AccountToken="old-account";
+            var changed=0;_presenter.EndpointChanged+=()=>changed++;
+            Assert.True(_presenter.ApplyCheckedServer(first));Assert.AreEqual(0,changed);Assert.AreEqual("old-account",_presenter.AccountToken);
+            var rotated=new ClientConfig(ConnectionMode.LAN,first.ApiBaseUrl,first.GameServerHost,7777,JoinAuthMode.RoomCode,4,5000,"Auto","fixture",first.WebSocketUrl,true,new string('b',64));
+            Assert.True(_presenter.ApplyCheckedServer(rotated));Assert.AreEqual(1,changed);Assert.IsNull(_presenter.AccountToken);
+        }
+        [Test]
         public void ApiPathChangeOnSameHost_InvalidatesOldBackendSession()
         {
             _presenter.SelectTarget("LAN");

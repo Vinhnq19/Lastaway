@@ -8,7 +8,7 @@ namespace JungleMaze.App.MatchUi
 {
     /// <summary>
     /// UI-03 sub-states of a match (G-13): Playing → (Killcam) → Eliminated → Spectating → HandedOff. Leaving
-    /// <see cref="AppScreen.InMatch"/> resets everything (AC5, AC42); the match ending or nobody left alive hands off
+    /// <see cref="AppScreen.InMatch"/> resets everything (AC5, AC42); the authoritative match ending hands off
     /// at once to the results flow, which stays GameFlow/UI-02's (AC28, T-10). Every switch happens inside the call
     /// that caused it, so the "≤ 500 ms" budgets of G-6/G-8 are met on the same frame. The ESC menu is separate and
     /// works on top of any phase (AC6).
@@ -86,11 +86,13 @@ namespace JungleMaze.App.MatchUi
         }
 
         /// <summary>"Theo dõi người khác": Eliminated → Spectating when someone is alive (AC21).</summary>
-        public bool Spectate()
+        public bool Spectate() => BeginSpectating(SpectatorTargets.None);
+
+        private bool BeginSpectating(byte preferred)
         {
             if (Phase != MatchOverlayPhase.Eliminated || !CanSpectate) return false;
             Targets.KillerNetId = Info.HasKiller ? Info.KillerNetId : SpectatorTargets.None;
-            if (!Targets.Begin()) return false;
+            if (!Targets.Begin(preferred)) return false;
             if (_spectator.TryGetPosition(Targets.Current, out var x, out var y)) Camera.Snap(x, y);
             SetPhase(MatchOverlayPhase.Spectating);
             return true;
@@ -111,6 +113,8 @@ namespace JungleMaze.App.MatchUi
             if (Notice != null && now >= NoticeUntil) { Notice = null; NoticeRaised?.Invoke(null); }
             if (Phase == MatchOverlayPhase.Killcam) TickKillcam();
             CheckEnd();
+            if (Phase == MatchOverlayPhase.Eliminated && CanSpectate)
+                BeginSpectating(Info.HasKiller ? Info.KillerNetId : SpectatorTargets.None);
         }
 
         public void Dispose()
@@ -198,9 +202,8 @@ namespace JungleMaze.App.MatchUi
         {
             if (Phase != MatchOverlayPhase.Eliminated && Phase != MatchOverlayPhase.Spectating && Phase != MatchOverlayPhase.Killcam) return;
             if (_spectator == null) return;
-            var ended = _spectator.MatchEnded;
-            var nobody = Phase == MatchOverlayPhase.Spectating && (_spectator.AliveCount == 0 || !Targets.HasTarget);
-            if (ended || nobody) HandOff();
+            // A missing snapshot/target is not an authoritative match result.
+            if (_spectator.MatchEnded) HandOff();
         }
 
         private void HandOff()
@@ -213,6 +216,7 @@ namespace JungleMaze.App.MatchUi
         private void Release()
         {
             _killcam?.Stop();
+            if (Notice != null) { Notice = null; NoticeRaised?.Invoke(null); }
             Targets.Clear();
             Camera.Clear();
             if (Phase == MatchOverlayPhase.Inactive || Phase == MatchOverlayPhase.Playing) Info = default;

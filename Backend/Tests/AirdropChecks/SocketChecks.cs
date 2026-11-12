@@ -40,6 +40,8 @@ internal static class SocketChecks
             }
             foreach(var transport in new[]{"Udp","Wss"})
             {var c=new WorldNetworkClient(transport);clients.Add(c);await c.ConnectAsync("127.0.0.1",udp,$"ws://127.0.0.1:{tcp}/game","AIRDROP_CHECK");}
+            // Keep the landing geometry fixture reproducible across runs.
+            typeof(GameServer.Simulation.MatchRuntime).GetProperty("MatchId")!.SetValue(host.Hub.Rooms.Find("AIRDROP_CHECK")!.Match,new Guid(42,0,0,new byte[8]));
             Pump(()=>clients.All(c=>c.Phase==MatchPhase.InGame&&c.SnapshotCount>2));
             var match=host.Hub.Rooms.Find("AIRDROP_CHECK")!.Match;
             foreach(var c in clients){var request=new WorldActionRequestPacket{MatchId=c.MatchId,RequestId=1,Action=WorldActionKind.Resync};c.Send(ref request,true);}

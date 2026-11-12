@@ -308,6 +308,11 @@ try
         Check(true, client.Transport + " " + itemId + " dropped weapon returns to synchronized floor loot");
     }
     Check(clients.All(c => c.InvalidFrames == 0), "firearm pickup, combat, reload and drop packets deserialize without errors");
+    var burstClient=clients[0];
+    for(uint id=200000;id<200020;id++)Send(burstClient,id,WorldActionKind.Pickup,65000);
+    Pump(()=>burstClient.Results.Count(r=>r.RequestId>=200000&&r.RequestId<200020)==20);
+    Check(burstClient.Results.Where(r=>r.RequestId>=200000&&r.RequestId<200020).All(r=>!r.Accepted),"burst invalid pickups each receive a rejection instead of silent same-tick loss");
+    Check(burstClient.Results.Where(r=>r.RequestId>=200000&&r.RequestId<200020).Select(r=>r.RequestId).Distinct().Count()==20,"bounded world queue responds once to every unique burst action");
     var report = new { mode, passed, elapsedSeconds = clock.Elapsed.TotalSeconds, realSocketClients = clients.Select(c => new { c.Transport, c.SnapshotCount, c.WorldPacketsSeen, c.InvalidFrames }) };
     if (args.Length > 1) { var path = Path.GetFullPath(args[1]); Directory.CreateDirectory(Path.GetDirectoryName(path)!); File.WriteAllText(path, JsonSerializer.Serialize(report, new JsonSerializerOptions { WriteIndented = true })); }
     Console.WriteLine($"WorldNetworkChecks {mode}: {passed.Count} passed, 0 failed");

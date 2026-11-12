@@ -5,6 +5,8 @@ using GameServer.Simulation;
 using System.Runtime.InteropServices;
 using GameServer.Rooms;
 
+if (args.Length > 0 && args[0].StartsWith("--lan-",StringComparison.Ordinal)) return await LanHostTools.Run(args);
+
 // Composition root: cấu hình -> mở UDP -> poll + tick -> đóng socket khi dừng.
 if (args.Length > 0 && args[0] == "--maps") return await GameServer.Maps.MapPublisher.Run(args);
 try

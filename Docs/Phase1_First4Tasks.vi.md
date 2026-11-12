@@ -1,5 +1,26 @@
 # Hướng dẫn setup, phát triển và kiểm thử Jungle Maze
 
+## LAN bằng một mã — giao diện hiện hành (11/11/2026)
+
+Bảng **Máy chủ** có đúng ba lựa chọn: **Online · AWS**, **LAN · cùng mạng**, **VPN · Tailscale**. Game khởi động thường dùng AWS. Mở một mục chỉ xem cấu hình, không đổi máy chủ hoặc đăng xuất; chỉ bấm Kết nối và kiểm tra thành công mới áp dụng. Địa chỉ lưu dưới tên `user` vẫn được nhận diện theo cấu hình thực. Local Docker và Internet tự host nằm trong phần dev của Editor/Development Build; CLI/profile cũ vẫn dùng được. Luyện tập offline là nút riêng, không cần backend.
+
+**Máy host LAN:** dùng Windows có source Backend và Docker Desktop. Hai máy cùng router/Wi-Fi thông thường; tránh Wi-Fi khách hoặc mạng chặn các thiết bị liên lạc. Trong Windows, chỉ với mạng bạn tin cậy, mở Settings → Network & Internet → Wi-Fi/Ethernet → mạng hiện tại → chọn **Private**. Game không tự đổi thiết lập này.
+
+1. Bật Docker Desktop. Trong game, mở **Máy chủ → LAN · cùng mạng**.
+2. Ở **Tự làm máy chủ**, chọn Wi-Fi/Ethernet phù hợp. Có nhiều card thì chọn đúng mạng mà bạn bè đang dùng. Bản EXE chọn thư mục `Backend` một lần; Editor tự tìm source.
+3. Bấm **Thiết lập** lần đầu. Nhập mật khẩu riêng bảo vệ Swagger trong cửa sổ setup, xác nhận UAC mở kết nối LAN khi Windows hỏi. Không gửi mật khẩu qua mã kết nối. Lần chuẩn bị image đầu tiên có thể cần Internet.
+4. Bấm **Bật server**; chỉ khi báo sẵn sàng mới **Sao chép mã kết nối**. Host muốn chơi trên chính máy mình cũng dán mã và Kết nối, xác nhận máy chủ rồi đăng nhập game.
+5. Gửi mã cho bạn. Lần sau chỉ bật Docker, mở LAN và Bật server. Đóng game không dừng server; hết buổi bấm Dừng server. Dữ liệu tài khoản/map/outbox/secret vẫn còn; phòng và trận trong RAM mất khi GameServer dừng.
+
+**Máy người chơi:** chỉ cần bản game và cùng mạng, không cần Docker/source/Tailscale/quyền admin. Chọn LAN → **Dán mã → Kết nối → Tin máy chủ này** (lần đầu, chỉ tin mã nhận trực tiếp từ host). Sau kiểm tra thành công, đóng bảng và đăng ký/đăng nhập game trên máy chủ đó → tạo/vào phòng → chọn map, thêm bot → Bắt đầu. **Mã kết nối máy chủ khác mã phòng**. Lần sau cùng mã đã xác nhận sẽ được kiểm lại kết nối mà không hỏi lại. IP hoặc chứng chỉ đổi thì cần mã mới và xác nhận mới.
+
+Nếu báo mạng Public, host tự kiểm tra mạng đáng tin rồi đổi Private; không tắt firewall. Cổng bị chiếm hoặc đang có host Local/Tailscale/Internet khác thì tự kết thúc buổi cũ trước; công cụ không giành cổng hay tự dừng chương trình khác. Khi đang có người, bot/grace hoặc trận chưa dọn, đổi chế độ/cấu hình bị từ chối. Chưa sẵn sàng thì thử Trạng thái; không tự chuyển sang AWS. Chỉ thông dịch vụ tài khoản chưa chứng minh gameplay thông: phải vào phòng và nhận phản hồi game.
+
+**Dev:** `Deploy/Host/manage-lan.ps1 -Action Setup|Start|Status|Stop -LanIp <IPv4>` là owner duy nhất của LAN, tái sử dụng `compose.host.yaml` và project `junglemaze-host`. `.env.host.lan`, `.lan-state.json` và `Backend/data/lan-tls/` là dữ liệu riêng bị Git bỏ qua. Không chia sẻ key/secret. Lệnh cấp chứng chỉ của GameServer là `--lan-cert <thư-mục> <IPv4> 7777 8443`, chỉ dùng qua công cụ host khi server trống. Không mở thêm API/Mongo/control ra mạng. Nếu đổi card/IP, chạy Thiết lập lại để cập nhật đúng rule trước Bật server.
+
+**Nghiệm thu hai PC:** máy A host, máy B dùng code mới rồi xác nhận/đăng nhập, cùng phòng; kiểm chọn cả hai map, bot, movement/loot/combat/bo/kết quả/history/chơi lại; kiểm đường dự phòng khi đường chính bị chặn có chủ đích. Sau khi tải đủ image/map/client, ngắt Internet nhưng giữ router và lặp lại; tài khoản/API/HTTPS LAN phải hoạt động. Stop–Start phải giữ account/map, phòng cũ không được khôi phục giả. Ghi rõ thiết bị, hai card mạng, profile Private, thời điểm và kết quả; hai process trên một máy không thay nghiệm thu này.
+
+
 > Chính sách hiện tại (01/11/2026): LAN/online bắt buộc account ở Unity **và GameServer**. Register/login → JWT → HTTPS game-ticket30s → handshake v4 với RoomCode. Guest không cấp vé mới. Local luyện tập không cần account/API/Docker. Khởi chạy backend để join cần cả API/DB/control token: `docker compose --profile account up -d --build`. Các bài v1/v2/v3 và JWT UDP cũ bên dưới chỉ là fixture lịch sử, không bật bypass trên server thật. Xem [hướng dẫn Phase 2](Phase2_Match_Guest_Zone.vi.md) cho flow chơi hiện tại. Lượt AWS account-flow dùng `-UseRunningInstance -KeepInstanceRunning`, không tự Stop máy.
 
 
@@ -686,22 +707,9 @@ foreach ($settingName in @('Jwt__SigningKey', 'Jwt__Issuer', 'Jwt__Audience', 'M
 
 Profile http dùng `http://localhost:5204/swagger`; nếu client Jwt login API này, apiBaseUrl phải dùng cổng 5204. Mongo container hostname `mongo` chỉ dùng trong Docker; API Windows dùng loopback 27018. Compass vẫn đọc cùng DB Local.
 
-### 12.5. LAN hoặc VPN, nhánh tùy chọn
+### 12.5. LAN/VPN hiện hành
 
-LAN RoomCode: host lấy IPv4 Wi-Fi/Ethernet thật, đổi PUBLISH_HOST trong `.env` thành IP đó, giữ bind container 0.0.0.0, recreate game-server. Tester sửa client.lan.json tới IP/cổng host. Admin Windows mở UDP 7777 cho LocalSubnet trên profile Private bằng firewall; không tắt firewall. Wi-Fi trường có thể client isolation hoặc chặn UDP.
-
-Ví dụ **PowerShell Run as administrator trên host LAN**, khi GAME_PORT mặc định 7777 và mạng được phép dùng profile Private:
-
-```powershell
-$lanHostIp = Read-Host 'IPv4 Wi-Fi/Ethernet cua host LAN'
-New-NetFirewallRule -DisplayName 'Jungle Maze LAN UDP 7777' -Direction Inbound -Action Allow -Protocol UDP -LocalPort 7777 -LocalAddress $lanHostIp -RemoteAddress LocalSubnet -Profile Private
-```
-
-Nếu host publish cổng khác, thay LocalPort cho khớp. Mạng trường Public cần chính sách/rule được quản trị cho phép, không tự đổi profile để vượt hạn chế. Tester chạy bài mục 3.3 với `client.lan.json` sau khi sửa IP/cổng. Muốn Jwt trong LAN, client cần API HTTPS hoặc đường VPN được cấu hình; chỉ mở cổng HTTP LAN chưa đủ.
-
-VPN: chỉ khi team chọn nhánh này, cấu hình quyền VPN/firewall trước; IP Tailscale 100.64.0.0/10 trong client.online.json không tự bật VPN. Client Jwt cho phép HTTP qua IP này khi mode Online, nhưng admin phải xác nhận VPN thực tế. API và UDP cần quyền tới đúng cổng; Mongo vẫn loopback. Kiểm tra điều kiện gói/quyền sharing hiện hành tại [Tailscale sharing](https://tailscale.com/docs/features/sharing) trước buổi lớp. AWS public là nhánh online chính của dự án, không cần VPN cho tester.
-
-## 13. Cấu hình tham chiếu và kết quả đã biết
+Dùng **LAN bằng một mã** ở đầu tài liệu để chơi cùng router; dùng mã Tailscale khi khác mạng. Không gửi account qua HTTP LAN hoặc HTTP tới IP VPN. Profile raw ở các bài lịch sử dành cho dev; cấu hình không có HTTPS hợp lệ không đáp ứng account-ticket v4. Đường chính và dự phòng phải về cùng backend.
 
 ### 13.1. Server và endpoint
 

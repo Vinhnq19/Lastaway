@@ -45,6 +45,58 @@ namespace JungleMaze.Tests.Hud
         }
 
         [Test]
+        public void ShortOverheadName_NormalNickname_IsUnchanged()
+        {
+            Assert.AreEqual("PlayerOne", MatchDemoView.ShortOverheadName("PlayerOne"), "Plain nickname passes through unchanged");
+            Assert.AreEqual("Nguyễn Văn A", MatchDemoView.ShortOverheadName("Nguyễn Văn A"), "Diacritics are not text elements to strip");
+        }
+
+        [Test]
+        public void ShortOverheadName_StripsMarkupControlAndWhitespace_AndFallsBackWhenBlank()
+        {
+            Assert.AreEqual("AB", MatchDemoView.ShortOverheadName("  A\n<B>  "),
+                "Control characters, angle brackets and surrounding whitespace are removed");
+            Assert.AreEqual("Người chơi", MatchDemoView.ShortOverheadName(string.Empty),
+                "Empty nickname falls back to the shared default name");
+            Assert.AreEqual("Người chơi", MatchDemoView.ShortOverheadName(" \n\t<> "),
+                "Control/markup-only nickname falls back to the shared default name");
+        }
+
+        [Test]
+        public void ShortOverheadName_TruncatesToSixteenTextElements_WithoutBreakingSurrogatesOrCombiningMarks()
+        {
+            // 20 emoji (astral code points): each is one text element, never split in the middle of a surrogate pair.
+            var emojiInput = new System.Text.StringBuilder();
+            var emojiExpected = new System.Text.StringBuilder();
+            for (var i = 0; i < 20; i++)
+            {
+                emojiInput.Append("\U0001F600");
+                if (i < 16) emojiExpected.Append("\U0001F600");
+            }
+            emojiExpected.Append("…");
+
+            var emojiResult = MatchDemoView.ShortOverheadName(emojiInput.ToString());
+            Assert.AreEqual(emojiExpected.ToString(), emojiResult, "20 emoji keep the first 16 text elements plus an ellipsis");
+            Assert.AreEqual(17, System.Globalization.StringInfo.ParseCombiningCharacters(emojiResult).Length,
+                "16 emoji elements + ellipsis, no broken surrogate pair");
+
+            // 20 combining sequences (e + U+0301): each pair is one text element and must stay together.
+            var combiningInput = new System.Text.StringBuilder();
+            var combiningExpected = new System.Text.StringBuilder();
+            for (var i = 0; i < 20; i++)
+            {
+                combiningInput.Append("e\u0301");
+                if (i < 16) combiningExpected.Append("e\u0301");
+            }
+            combiningExpected.Append("…");
+
+            var combiningResult = MatchDemoView.ShortOverheadName(combiningInput.ToString());
+            Assert.AreEqual(combiningExpected.ToString(), combiningResult, "20 combining sequences keep the first 16 text elements plus an ellipsis");
+            Assert.AreEqual(17, System.Globalization.StringInfo.ParseCombiningCharacters(combiningResult).Length,
+                "16 combining elements + ellipsis, base char never separated from its mark");
+        }
+
+        [Test]
         public void InitialNoSnapshot_AvoidsWritingZero_RetainsHudDefaults()
         {
             // Initial state before any snapshots or InGame state

@@ -27,7 +27,8 @@ namespace JungleMaze.Composition
             public float elapsedSeconds, connectedSeconds;
             public int snapshots, inputs, ignoredPackets, catchupDrops, maxPlayers, maxRosterPlayers, maxOnScreenPlayers, completedMatches;
             public double inputHz, activeInputSeconds, snapshotHz, snapshotSeconds, rttP50Ms, rttP95Ms, rttP99Ms;
-            public int pings, pongs, pongTimeouts;
+            public int pings, pongs, pongTimeouts, maxBotsMoved;
+            public float maxBotTravelCells;
         }
         [Serializable] public sealed class FrameQuality
         {
@@ -88,6 +89,9 @@ namespace JungleMaze.Composition
         private bool _startRequested;
         private string _testMapId;
         private int _testBotCount;
+        private Guid _botMotionMatch;
+        private readonly Dictionary<byte,Vector2> _botOrigins=new Dictionary<byte,Vector2>();
+        private readonly HashSet<byte> _movedBots=new HashSet<byte>();
         private uint _testMapRevision;
         private bool _capturedLobby;
         [Inject] public void BindRoomMaps(RoomMapSession maps) => _roomMaps = maps;
@@ -245,6 +249,21 @@ namespace JungleMaze.Composition
                     if (Vector2.Distance(position, _firstPosition.Value) > .5f) Mark("movement");
                     if (own.Current.Hp < 100) Mark("hpDamage");
                 }
+                if(_botMotionMatch!=_match.MatchId){_botMotionMatch=_match.MatchId;_botOrigins.Clear();_movedBots.Clear();}
+                foreach(var participant in _match.Roster)
+                    if(participant.IsBot&&_match.Players.TryGet(participant.NetId,out var model)&&model.HasState)
+                    {
+                        var point=new Vector2(model.Current.X,model.Current.Y);
+                        if(!_botOrigins.TryGetValue(participant.NetId,out var origin))_botOrigins[participant.NetId]=point;
+                        else
+                        {
+                            var distance=Vector2.Distance(origin,point);
+                            _evidence.metrics.maxBotTravelCells=Math.Max(_evidence.metrics.maxBotTravelCells,distance);
+                            if(distance>.5f)_movedBots.Add(participant.NetId);
+                        }
+                    }
+                _evidence.metrics.maxBotsMoved=Math.Max(_evidence.metrics.maxBotsMoved,_movedBots.Count);
+                if(_movedBots.Count>0)Mark("botMovement");
                 var spawned = 0; var visible = 0; var spawner = FindAnyObjectByType<RemotePlayerSpawner>();
                 if (spawner != null) foreach (var id in _match.Players.ActiveIds)
                 {
@@ -285,6 +304,7 @@ namespace JungleMaze.Composition
                 && (!_scenario.requireHpDamage || Seen("hpDamage")) && (!_scenario.requireResult || Seen("result"))
                 && (!_scenario.requireReplay || Seen("replay")) && (!_scenario.requireHistory || Seen("history"));
             if (_scenario.expectedPlayers > 1) ready &= Seen("playersVisible");
+            if (_testBotCount > 0) ready &= Seen("botMovement");
             foreach (var check in _checkResults.Values) ready &= check.Status == "PASS";
             if (ready)
             {

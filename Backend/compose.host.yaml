@@ -75,6 +75,7 @@ services:
       WS_ENABLED: "${WS_ENABLED:-true}"
       WS_BIND_ADDRESS: 0.0.0.0
       WS_PORT: "7781"
+      LASTAWAY_HOST_MODE: "${HOST_MODE:-legacy}"
       MATCH_PROFILE: "${MATCH_PROFILE:-main}"
       MAX_PLAYERS: "${MAX_PLAYERS:-10}"
       TICK_RATE: "${TICK_RATE:-30}"
@@ -116,6 +117,24 @@ services:
       - ./Deploy/Host/Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy-host-data:/data
       - caddy-host-config:/config
+    depends_on:
+      api:
+        condition: service_healthy
+    logging: *logging
+
+  caddy-lan:
+    profiles: ["lan"]
+    image: ${CADDY_IMAGE:-caddy:2}
+    restart: unless-stopped
+    mem_limit: 128m
+    ports:
+      - "${HOST_LAN_IP:-127.0.0.1}:${HOST_LAN_HTTPS_PORT:-8443}:8443/tcp"
+    environment:
+      SWAGGER_USER: ${SWAGGER_USER:-admin}
+      SWAGGER_HASH: ${SWAGGER_HASH:-}
+    volumes:
+      - ./Deploy/Host/Caddyfile.lan:/etc/caddy/Caddyfile:ro
+      - ./data/lan-tls:/lan-tls:ro
     depends_on:
       api:
         condition: service_healthy

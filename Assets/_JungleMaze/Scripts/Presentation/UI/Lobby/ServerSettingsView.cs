@@ -27,6 +27,48 @@ namespace JungleMaze.Presentation.UI.Lobby
         [SerializeField] private TMP_Text vpnBackend;
         [SerializeField] private Button vpnConnect, vpnClientSetup, vpnBrowse, vpnSetup, vpnStart, vpnStop, vpnRefresh, vpnCopy;
         [SerializeField] private RectTransform popupFooter, popupTitle, popupClose;
+        [SerializeField] private TMP_Dropdown lanInterface, devProfile;
+        [SerializeField] private TMP_Text serverDescription;
+        [SerializeField] private Button trustConfirm, trustCancel;
+        public TMP_Dropdown LanInterface => lanInterface;
+        public TMP_Dropdown DevProfile => devProfile;
+        public Button TrustConfirm => trustConfirm;
+        public Button TrustCancel => trustCancel;
+        public void ShowMode(int mode, bool confirm, bool advanced)
+        {
+            ShowVpn(mode != 0);
+            // Reserve the dev picker row even before a dev profile has been selected.
+            if(mode==0 && Debug.isDebugBuild && popup!=null && _sizesRead)
+            {
+                var scale=_popupSize.x/820f;
+                popup.sizeDelta=_popupSize+new Vector2(0,140)*scale;
+                ((RectTransform)close.transform).anchoredPosition=_closePosition+new Vector2(0,-140)*scale;
+                popupFooter.anchoredPosition=_footerPosition+new Vector2(0,-140)*scale;
+            }
+            if (lanInterface != null) lanInterface.gameObject.SetActive(mode == 1);
+            if (trustConfirm != null) trustConfirm.gameObject.SetActive(mode == 1 && confirm);
+            if (trustCancel != null) trustCancel.gameObject.SetActive(mode == 1 && confirm);
+            if (devProfile != null) devProfile.gameObject.SetActive(mode == 0 && Debug.isDebugBuild);
+            if (host != null) host.gameObject.SetActive(mode == 0 && advanced);
+            if (port != null) port.gameObject.SetActive(mode == 0 && advanced);
+            if (api != null) api.gameObject.SetActive(mode == 0 && advanced);
+            if (serverDescription != null) serverDescription.gameObject.SetActive(mode == 0 && !advanced);
+            if(vpnCode != null && vpnCode.placeholder is TMP_Text placeholder)
+                placeholder.text=mode==1 ? "Dán mã do chủ máy sao chép" : "VD: may-host.tail123";
+            var panel = vpnPanel != null ? vpnPanel.transform : null;
+            var help = panel != null ? panel.Find("ClientHelp")?.GetComponent<TMP_Text>() : null;
+            if (help != null) help.text = mode == 1
+                ? "Nhận mã từ chủ máy cùng mạng, dán và kết nối.\nLần đầu cần xác nhận máy chủ.\nMã này khác mã phòng; không cần cài thêm ứng dụng."
+                : "Nhận lời mời Tailscale và đăng nhập ứng dụng.\nDán mã kết nối rồi đăng nhập game.\nMã này khác mã phòng.";
+            var hostHelp = panel != null ? panel.Find("HostHelp") : null;
+            if (hostHelp != null) hostHelp.gameObject.SetActive(mode != 1);
+            var title = panel != null ? panel.Find("HostTitle")?.GetComponent<TMP_Text>() : null;
+            if (title != null) title.text = "Tự làm máy chủ";
+            Label(vpnClientSetup, mode == 1 ? "Dán mã" : "Cài / đăng nhập Tailscale");
+            Label(save, advanced ? "Lưu (dev)" : "Kết nối AWS");
+        }
+        private static void Label(Button button, string value)
+        { if (button != null) { var text=button.GetComponentInChildren<TMP_Text>(); if(text!=null)text.text=value; } }
         private Vector2 _popupSize, _closePosition, _profileSize, _footerSize, _footerPosition, _titleSize, _xPosition;
         private bool _sizesRead;
         public TMP_InputField VpnCode => vpnCode;
