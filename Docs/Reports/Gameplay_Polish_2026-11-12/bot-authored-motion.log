@@ -1,0 +1,1704 @@
+PASS: versioned fair bot settings
+PASS: register human human
+PASS: human verifies map
+PASS: non-host cannot add bot
+PASS: host adds bot
+PASS: duplicate request does not add twice
+PASS: bot occupies actor slot but has no peer
+PASS: no simulated transport session
+PASS: fill room bot slot
+PASS: fill room bot slot
+PASS: fill room bot slot
+PASS: fill room bot slot
+PASS: fill room bot slot
+PASS: fill room bot slot
+PASS: fill room bot slot
+PASS: fill room bot slot
+PASS: 1 human plus 9 bots is full
+PASS: cannot exceed ten actors
+PASS: removing bot frees slot
+PASS: old lobby revision rejected
+PASS: host starts human plus bots
+PASS: bots load without sockets or acknowledgements
+PASS: cannot modify bots in match
+PASS: bots generate real movement input
+PASS: bot state machine advances
+PASS: register human small
+PASS: human verifies map
+PASS: bot fits server remaining slot
+PASS: bot respects global server cap
+PASS: last human leaving waiting room clears bot slots
+PASS: register human main
+PASS: human verifies map
+PASS: fill minimum follows profile
+PASS: bots satisfy minimum only after human map verification
+PASS: global navigation budget is bounded
+PASS: register human loot-human
+PASS: human verifies map
+PASS: loot room adds one bot
+PASS: loot room match starts
+PASS: loot room reaches in game
+PASS: pickup fixture starts with an empty weapon bag
+PASS: fixture catalog explicitly disables test item
+PASS: disabled item fixture
+PASS: knife spawns on floor at bot
+PASS: bot picks up one knife through brain
+PASS: picked up knife leaves the floor
+PASS: bot ignores items disabled by current catalog
+PASS: register human fixture
+PASS: human verifies map
+PASS: fixture selects deterministic geometry
+PASS: fixture verifies selected geometry
+PASS: fixture adds bot
+PASS: fixture starts
+PASS: new enemy does not receive damage before 350ms reaction
+PASS: new enemy does not trigger movement before reaction
+PASS: bot causes actual melee damage after reaction
+PASS: bot obeys normal movement speed
+PASS: register human fixture
+PASS: human verifies map
+PASS: fixture selects deterministic geometry
+PASS: fixture verifies selected geometry
+PASS: fixture adds bot
+PASS: fixture starts
+PASS: invisible opponent is not detected
+PASS: register human fixture
+PASS: human verifies map
+PASS: fixture selects deterministic geometry
+PASS: fixture verifies selected geometry
+PASS: fixture adds bot
+PASS: fixture starts
+PASS: healing item fixture
+PASS: bot begins timed healing via inventory
+PASS: bot stands still while healing
+PASS: timed inventory use restores HP
+PASS: register human fixture
+PASS: human verifies map
+PASS: fixture selects deterministic geometry
+PASS: fixture verifies selected geometry
+PASS: fixture adds bot
+PASS: fixture starts
+PASS: weapon slot fixture
+PASS: weapon slot fixture
+PASS: weapon slot fixture
+PASS: weapon slot fixture
+PASS: bot fills four weapon slots without fake inventory commands
+PASS: upgrade fixture
+PASS: full inventory upgrades weapon and drops replaced item
+PASS: register human fixture
+PASS: human verifies map
+PASS: fixture selects deterministic geometry
+PASS: fixture verifies selected geometry
+PASS: fixture adds bot
+PASS: fixture starts
+PASS: partly loaded gun fixture
+PASS: bot acquires reload fixture gun before opponent is introduced
+PASS: bot reload consumes reserve ammo through real combat service
+PASS: register human fixture
+PASS: human verifies map
+PASS: fixture selects deterministic geometry
+PASS: fixture verifies selected geometry
+PASS: fixture adds bot
+PASS: fixture starts
+PASS: human grace preserves match and both slots
+PASS: bot has no resumable human proof
+PASS: no audience after grace ends match without win
+PASS: NoHumans cleanup returns all bot and human slots
+PASS: register human fixture
+PASS: human verifies map
+PASS: fixture selects deterministic geometry
+PASS: fixture verifies selected geometry
+PASS: fixture adds bot
+PASS: fixture starts
+PASS: bot can win while connected eliminated human watches
+PASS: bot results never carry account profiles
+PASS: human replay ack alone resets match and retains bot configuration
+PASS: register human fixture
+PASS: human verifies map
+PASS: fixture selects deterministic geometry
+PASS: fixture verifies selected geometry
+PASS: fixture adds bot
+PASS: fixture adds bot
+PASS: fixture starts
+PASS: dead bot stops decisions and input while other actors continue
+PASS: register human fixture
+PASS: human verifies map
+PASS: fixture selects deterministic geometry
+PASS: fixture verifies selected geometry
+PASS: fixture adds bot
+PASS: fixture starts
+PASS: cover blocks bot perception
+PASS: unobstructed nearby opponent is detected
+PASS: lost opponent is searched at last seen position
+PASS: target memory expires after three seconds
+PASS: register human fixture
+PASS: human verifies map
+PASS: fixture selects deterministic geometry
+PASS: fixture verifies selected geometry
+PASS: fixture adds bot
+PASS: fixture starts
+PASS: bush hides opponent beyond two cells
+PASS: bush opponent is revealed within two cells without cover
+PASS: register human fixture
+PASS: human verifies map
+PASS: fixture selects deterministic geometry
+PASS: fixture verifies selected geometry
+PASS: fixture adds bot
+PASS: fixture starts
+PASS: bot breaks a real chest through combat
+PASS: broken chest produces authoritative loot
+PASS: continued bot attacks do not break or spawn chest loot twice
+PASS: register human fixture
+PASS: human verifies map
+PASS: fixture selects deterministic geometry
+PASS: fixture verifies selected geometry
+PASS: fixture adds bot
+PASS: fixture starts
+PASS: bot moves back toward safe zone from outside
+PASS: register human fixture
+PASS: human verifies map
+PASS: fixture selects deterministic geometry
+PASS: fixture verifies selected geometry
+PASS: fixture adds bot
+PASS: fixture starts
+PASS: active shrink fixture is inside current circle but outside target without warning flag
+PASS: bot keeps escaping while the zone is actively shrinking
+PASS: register human fixture
+PASS: human verifies map
+PASS: fixture selects deterministic geometry
+PASS: fixture verifies selected geometry
+PASS: fixture adds bot
+PASS: fixture starts
+PASS: waiting for a shared budget does not repeatedly discard the path as stuck
+PASS: bot resumes movement when navigation budget becomes available
+PASS: register human fixture
+PASS: human verifies map
+PASS: fixture selects deterministic geometry
+PASS: fixture verifies selected geometry
+PASS: fixture adds bot
+PASS: fixture starts
+PASS: bot escapes from inside Lava through normal movement
+PASS: hazard escape does not teleport or exceed movement speed
+PASS: register human fixture
+PASS: human verifies map
+PASS: fixture selects deterministic geometry
+PASS: fixture verifies selected geometry
+PASS: fixture adds bot
+PASS: fixture starts
+PASS: bot escapes from inside Poison through normal movement
+PASS: hazard escape does not teleport or exceed movement speed
+PASS: resumable navigation respects tick slice
+PASS: resumable navigation respects tick slice
+PASS: resumable navigation respects tick slice
+PASS: resumable navigation respects tick slice
+PASS: resumable navigation respects tick slice
+PASS: resumable navigation respects tick slice
+PASS: resumable navigation respects tick slice
+PASS: resumable navigation respects tick slice
+PASS: resumable navigation respects tick slice
+PASS: resumable navigation respects tick slice
+PASS: resumable navigation respects tick slice
+PASS: resumable navigation respects tick slice
+PASS: resumable navigation respects tick slice
+PASS: resumable navigation respects tick slice
+PASS: resumable navigation respects tick slice
+PASS: resumable navigation respects tick slice
+PASS: resumable navigation respects tick slice
+PASS: resumable navigation respects tick slice
+PASS: resumable navigation respects tick slice
+PASS: resumable navigation respects tick slice
+PASS: resumable navigation respects tick slice
+PASS: bounded A star routes around cover
+PASS: path segments do not cut cover corners
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: long navigation respects shared tick slice
+PASS: bounded A star frontier survives more than five hundred expansions
+PASS: narrow edge corridor reaches its goal within bounded calls
+PASS: narrow corridor route passes above the wall because bottom clearance is blocked
+PASS: long navigation respects discovered node cap
+PASS: long route segments stay clear of cover
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed navigation respects shared tick slice
+PASS: sealed goal is not reachable
+PASS: sealed search obeys discovered node cap
+PASS: sealed search returns a partial path
+PASS: sealed search partial path strictly improves distance to goal
+PASS: sealed partial path segments do not cut cover
+PASS: invalid production navigation wall-time budget rejected
+PASS: invalid production navigation wall-time budget rejected
+PASS: endpoint preparation yields when wall-time slice expires
+PASS: time-sliced endpoints preserve deterministic path/frontier
+PASS: expired time budget cannot consume a node
+PASS: register human fixture
+PASS: human verifies map
+PASS: fixture selects deterministic geometry
+PASS: fixture verifies selected geometry
+PASS: fixture adds bot
+PASS: fixture starts
+PASS: bot supply fixture announces a real scheduled drop
+PASS: human stays safe outside bot perception for supply fixture
+PASS: bot target egg lands
+PASS: bot has an accessible egg approach
+PASS: bot destroys dynamic egg through real combat intents
+PASS: bot picks up scheduled supply loot through inventory
+PASS: register human stress0
+PASS: human verifies map
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+[room-created] roomId=97595a38-552b-4e5e-af45-8dad73055c33 capacity=10
+PASS: create isolated stress room
+PASS: register human stress1
+PASS: human verifies map
+PASS: stress alternate room map
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: five rooms reserve exactly fifty human and bot slots
+Stress catalog: thap-co,thi-tran
+[metrics] peers=2 active=2 pending=0 ticks=60 ticksPerSecond=29.70 tickP95Ms=6.791 tickP99Ms=9.050 tickMaxMs=9.050 loopMaxMs=9.068 loopGapMaxMs=25.874 pollMaxMs=1.416 simulationMaxMs=0.000 botMaxMs=5.073 movementMaxMs=0.098 worldMaxMs=2.568 resolutionMaxMs=0.018 snapshotMaxMs=0.017 streamsMaxMs=0.000 lifecycleMaxMs=6.838 botDecisionMaxMs=0.129 botPathMaxMs=4.752 gcPauseMs=6.841 previousReportMs=0.000 loopP95Ms=6.030 loopP99Ms=7.959 cpuOneCorePercent=29.39 tickOverruns=0 droppedTicks=0 pings=0 invalidPackets=0 historyUnavailable=0 rejected=0 rooms=2 workingSetMiB=77.48 roomSlots=df3c7822-d238-4b0e-9653-df7dc7fbb217:10/10,97595a38-552b-4e5e-af45-8dad73055c33:10/10 bots=18 botPathNodesMax=51 botPathPendingMax=18 utc=2026-11-12T07:20:21.1371340Z
+[metrics] peers=2 active=2 pending=0 ticks=120 ticksPerSecond=29.91 tickP95Ms=5.991 tickP99Ms=10.334 tickMaxMs=10.334 loopMaxMs=10.337 loopGapMaxMs=30.811 pollMaxMs=0.017 simulationMaxMs=0.000 botMaxMs=8.464 movementMaxMs=0.113 worldMaxMs=0.589 resolutionMaxMs=0.008 snapshotMaxMs=0.009 streamsMaxMs=0.000 lifecycleMaxMs=0.000 botDecisionMaxMs=0.419 botPathMaxMs=4.742 gcPauseMs=3.454 previousReportMs=11.577 loopP95Ms=5.644 loopP99Ms=9.232 cpuOneCorePercent=11.68 tickOverruns=0 droppedTicks=0 pings=0 invalidPackets=0 historyUnavailable=0 rejected=0 rooms=2 workingSetMiB=77.31 roomSlots=df3c7822-d238-4b0e-9653-df7dc7fbb217:10/10,97595a38-552b-4e5e-af45-8dad73055c33:10/10 bots=18 botPathNodesMax=44 botPathPendingMax=16 utc=2026-11-12T07:20:23.1389262Z
+[metrics] peers=2 active=2 pending=0 ticks=180 ticksPerSecond=29.92 tickP95Ms=5.793 tickP99Ms=5.876 tickMaxMs=5.876 loopMaxMs=5.880 loopGapMaxMs=16.745 pollMaxMs=0.008 simulationMaxMs=0.000 botMaxMs=5.039 movementMaxMs=0.214 worldMaxMs=0.711 resolutionMaxMs=0.006 snapshotMaxMs=0.006 streamsMaxMs=0.000 lifecycleMaxMs=0.000 botDecisionMaxMs=0.067 botPathMaxMs=4.740 gcPauseMs=3.552 previousReportMs=4.798 loopP95Ms=5.622 loopP99Ms=5.848 cpuOneCorePercent=24.15 tickOverruns=0 droppedTicks=0 pings=0 invalidPackets=0 historyUnavailable=0 rejected=0 rooms=2 workingSetMiB=77.36 roomSlots=df3c7822-d238-4b0e-9653-df7dc7fbb217:10/10,97595a38-552b-4e5e-af45-8dad73055c33:10/10 bots=18 botPathNodesMax=51 botPathPendingMax=17 utc=2026-11-12T07:20:25.1448767Z
+[metrics] peers=2 active=2 pending=0 ticks=240 ticksPerSecond=29.96 tickP95Ms=5.618 tickP99Ms=6.508 tickMaxMs=6.508 loopMaxMs=6.512 loopGapMaxMs=16.795 pollMaxMs=0.011 simulationMaxMs=0.000 botMaxMs=5.086 movementMaxMs=0.150 worldMaxMs=0.783 resolutionMaxMs=0.006 snapshotMaxMs=0.007 streamsMaxMs=0.000 lifecycleMaxMs=0.000 botDecisionMaxMs=0.378 botPathMaxMs=4.680 gcPauseMs=3.737 previousReportMs=5.074 loopP95Ms=5.581 loopP99Ms=5.833 cpuOneCorePercent=12.48 tickOverruns=0 droppedTicks=0 pings=0 invalidPackets=0 historyUnavailable=0 rejected=0 rooms=2 workingSetMiB=77.12 roomSlots=df3c7822-d238-4b0e-9653-df7dc7fbb217:10/10,97595a38-552b-4e5e-af45-8dad73055c33:10/10 bots=18 botPathNodesMax=51 botPathPendingMax=16 utc=2026-11-12T07:20:27.1468507Z
+[metrics] peers=2 active=2 pending=0 ticks=301 ticksPerSecond=30.23 tickP95Ms=6.372 tickP99Ms=9.176 tickMaxMs=9.176 loopMaxMs=9.181 loopGapMaxMs=16.532 pollMaxMs=0.035 simulationMaxMs=0.000 botMaxMs=7.434 movementMaxMs=0.251 worldMaxMs=0.744 resolutionMaxMs=0.008 snapshotMaxMs=0.023 streamsMaxMs=0.000 lifecycleMaxMs=0.000 botDecisionMaxMs=0.189 botPathMaxMs=4.577 gcPauseMs=4.085 previousReportMs=4.476 loopP95Ms=6.047 loopP99Ms=8.744 cpuOneCorePercent=20.91 tickOverruns=0 droppedTicks=0 pings=0 invalidPackets=0 historyUnavailable=0 rejected=0 rooms=2 workingSetMiB=77.14 roomSlots=df3c7822-d238-4b0e-9653-df7dc7fbb217:10/10,97595a38-552b-4e5e-af45-8dad73055c33:10/10 bots=18 botPathNodesMax=50 botPathPendingMax=14 utc=2026-11-12T07:20:29.1655684Z
+[metrics] peers=2 active=2 pending=0 ticks=361 ticksPerSecond=29.85 tickP95Ms=7.874 tickP99Ms=9.431 tickMaxMs=9.431 loopMaxMs=9.437 loopGapMaxMs=30.985 pollMaxMs=0.046 simulationMaxMs=0.000 botMaxMs=7.061 movementMaxMs=0.432 worldMaxMs=0.827 resolutionMaxMs=0.010 snapshotMaxMs=0.015 streamsMaxMs=0.000 lifecycleMaxMs=0.000 botDecisionMaxMs=0.064 botPathMaxMs=4.590 gcPauseMs=4.021 previousReportMs=5.453 loopP95Ms=5.716 loopP99Ms=8.824 cpuOneCorePercent=27.21 tickOverruns=0 droppedTicks=0 pings=0 invalidPackets=0 historyUnavailable=0 rejected=0 rooms=2 workingSetMiB=77.15 roomSlots=df3c7822-d238-4b0e-9653-df7dc7fbb217:10/10,97595a38-552b-4e5e-af45-8dad73055c33:10/10 bots=18 botPathNodesMax=43 botPathPendingMax=15 utc=2026-11-12T07:20:31.1753375Z
+[metrics] peers=2 active=2 pending=0 ticks=421 ticksPerSecond=29.98 tickP95Ms=7.598 tickP99Ms=10.259 tickMaxMs=10.259 loopMaxMs=10.267 loopGapMaxMs=16.906 pollMaxMs=0.021 simulationMaxMs=0.000 botMaxMs=9.380 movementMaxMs=0.217 worldMaxMs=0.582 resolutionMaxMs=0.007 snapshotMaxMs=0.007 streamsMaxMs=0.000 lifecycleMaxMs=0.000 botDecisionMaxMs=0.152 botPathMaxMs=4.508 gcPauseMs=5.257 previousReportMs=5.159 loopP95Ms=5.511 loopP99Ms=9.031 cpuOneCorePercent=4.68 tickOverruns=0 droppedTicks=0 pings=0 invalidPackets=0 historyUnavailable=0 rejected=0 rooms=2 workingSetMiB=74.60 roomSlots=df3c7822-d238-4b0e-9653-df7dc7fbb217:10/10,97595a38-552b-4e5e-af45-8dad73055c33:10/10 bots=18 botPathNodesMax=50 botPathPendingMax=15 utc=2026-11-12T07:20:33.1758628Z
+[metrics] peers=2 active=2 pending=0 ticks=481 ticksPerSecond=29.87 tickP95Ms=6.338 tickP99Ms=8.192 tickMaxMs=8.192 loopMaxMs=8.197 loopGapMaxMs=16.894 pollMaxMs=0.007 simulationMaxMs=0.000 botMaxMs=7.114 movementMaxMs=0.160 worldMaxMs=0.712 resolutionMaxMs=0.010 snapshotMaxMs=0.008 streamsMaxMs=0.000 lifecycleMaxMs=0.000 botDecisionMaxMs=0.080 botPathMaxMs=4.586 gcPauseMs=3.520 previousReportMs=4.447 loopP95Ms=6.097 loopP99Ms=7.696 cpuOneCorePercent=0.78 tickOverruns=0 droppedTicks=0 pings=0 invalidPackets=0 historyUnavailable=0 rejected=0 rooms=2 workingSetMiB=74.68 roomSlots=df3c7822-d238-4b0e-9653-df7dc7fbb217:10/10,97595a38-552b-4e5e-af45-8dad73055c33:10/10 bots=18 botPathNodesMax=44 botPathPendingMax=15 utc=2026-11-12T07:20:35.1847733Z
+[metrics] peers=2 active=2 pending=0 ticks=542 ticksPerSecond=30.25 tickP95Ms=7.247 tickP99Ms=8.452 tickMaxMs=8.452 loopMaxMs=8.458 loopGapMaxMs=16.692 pollMaxMs=0.018 simulationMaxMs=0.000 botMaxMs=7.048 movementMaxMs=0.169 worldMaxMs=0.655 resolutionMaxMs=0.012 snapshotMaxMs=0.007 streamsMaxMs=0.000 lifecycleMaxMs=0.000 botDecisionMaxMs=0.059 botPathMaxMs=4.799 gcPauseMs=4.220 previousReportMs=4.906 loopP95Ms=5.654 loopP99Ms=7.689 cpuOneCorePercent=6.20 tickOverruns=0 droppedTicks=0 pings=0 invalidPackets=0 historyUnavailable=0 rejected=0 rooms=2 workingSetMiB=74.38 roomSlots=df3c7822-d238-4b0e-9653-df7dc7fbb217:10/10,97595a38-552b-4e5e-af45-8dad73055c33:10/10 bots=18 botPathNodesMax=42 botPathPendingMax=15 utc=2026-11-12T07:20:37.2016482Z
+[metrics] peers=2 active=2 pending=0 ticks=602 ticksPerSecond=29.94 tickP95Ms=5.543 tickP99Ms=7.688 tickMaxMs=7.688 loopMaxMs=7.692 loopGapMaxMs=31.252 pollMaxMs=0.034 simulationMaxMs=0.000 botMaxMs=5.379 movementMaxMs=0.103 worldMaxMs=0.548 resolutionMaxMs=0.009 snapshotMaxMs=0.013 streamsMaxMs=0.000 lifecycleMaxMs=0.000 botDecisionMaxMs=0.074 botPathMaxMs=4.835 gcPauseMs=3.672 previousReportMs=5.474 loopP95Ms=5.457 loopP99Ms=6.388 cpuOneCorePercent=18.72 tickOverruns=0 droppedTicks=0 pings=0 invalidPackets=0 historyUnavailable=0 rejected=0 rooms=2 workingSetMiB=74.40 roomSlots=df3c7822-d238-4b0e-9653-df7dc7fbb217:10/10,97595a38-552b-4e5e-af45-8dad73055c33:10/10 bots=18 botPathNodesMax=52 botPathPendingMax=16 utc=2026-11-12T07:20:39.2058754Z
+[metrics] peers=2 active=2 pending=0 ticks=662 ticksPerSecond=29.97 tickP95Ms=7.594 tickP99Ms=9.014 tickMaxMs=9.014 loopMaxMs=9.020 loopGapMaxMs=31.536 pollMaxMs=0.017 simulationMaxMs=0.000 botMaxMs=6.946 movementMaxMs=0.083 worldMaxMs=0.541 resolutionMaxMs=0.006 snapshotMaxMs=0.008 streamsMaxMs=0.000 lifecycleMaxMs=0.000 botDecisionMaxMs=0.338 botPathMaxMs=4.483 gcPauseMs=3.690 previousReportMs=6.085 loopP95Ms=7.320 loopP99Ms=7.746 cpuOneCorePercent=2.34 tickOverruns=0 droppedTicks=0 pings=0 invalidPackets=0 historyUnavailable=0 rejected=0 rooms=2 workingSetMiB=75.78 roomSlots=df3c7822-d238-4b0e-9653-df7dc7fbb217:10/10,97595a38-552b-4e5e-af45-8dad73055c33:10/10 bots=18 botPathNodesMax=42 botPathPendingMax=16 utc=2026-11-12T07:20:41.2059506Z
+[metrics] peers=2 active=2 pending=0 ticks=722 ticksPerSecond=29.93 tickP95Ms=5.674 tickP99Ms=7.251 tickMaxMs=7.251 loopMaxMs=7.255 loopGapMaxMs=16.781 pollMaxMs=0.030 simulationMaxMs=0.000 botMaxMs=6.684 movementMaxMs=0.080 worldMaxMs=0.575 resolutionMaxMs=0.012 snapshotMaxMs=0.008 streamsMaxMs=0.000 lifecycleMaxMs=0.000 botDecisionMaxMs=0.096 botPathMaxMs=4.796 gcPauseMs=3.518 previousReportMs=4.419 loopP95Ms=5.340 loopP99Ms=7.180 cpuOneCorePercent=3.12 tickOverruns=0 droppedTicks=0 pings=0 invalidPackets=0 historyUnavailable=0 rejected=0 rooms=2 workingSetMiB=76.10 roomSlots=df3c7822-d238-4b0e-9653-df7dc7fbb217:10/10,97595a38-552b-4e5e-af45-8dad73055c33:10/10 bots=18 botPathNodesMax=42 botPathPendingMax=18 utc=2026-11-12T07:20:43.2119230Z
+[metrics] peers=2 active=2 pending=0 ticks=782 ticksPerSecond=29.89 tickP95Ms=5.761 tickP99Ms=5.930 tickMaxMs=5.930 loopMaxMs=5.939 loopGapMaxMs=16.991 pollMaxMs=0.044 simulationMaxMs=0.000 botMaxMs=5.088 movementMaxMs=0.244 worldMaxMs=0.620 resolutionMaxMs=0.009 snapshotMaxMs=0.008 streamsMaxMs=0.000 lifecycleMaxMs=0.000 botDecisionMaxMs=0.072 botPathMaxMs=4.908 gcPauseMs=3.939 previousReportMs=5.912 loopP95Ms=5.670 loopP99Ms=5.877 cpuOneCorePercent=30.36 tickOverruns=0 droppedTicks=0 pings=0 invalidPackets=0 historyUnavailable=0 rejected=0 rooms=2 workingSetMiB=76.11 roomSlots=df3c7822-d238-4b0e-9653-df7dc7fbb217:10/10,97595a38-552b-4e5e-af45-8dad73055c33:10/10 bots=18 botPathNodesMax=45 botPathPendingMax=18 utc=2026-11-12T07:20:45.2178049Z
+[metrics] peers=2 active=2 pending=0 ticks=843 ticksPerSecond=30.18 tickP95Ms=5.867 tickP99Ms=7.561 tickMaxMs=7.561 loopMaxMs=7.566 loopGapMaxMs=16.879 pollMaxMs=0.030 simulationMaxMs=0.000 botMaxMs=6.448 movementMaxMs=0.131 worldMaxMs=0.548 resolutionMaxMs=0.005 snapshotMaxMs=0.019 streamsMaxMs=0.000 lifecycleMaxMs=0.000 botDecisionMaxMs=0.163 botPathMaxMs=4.628 gcPauseMs=4.035 previousReportMs=4.543 loopP95Ms=5.664 loopP99Ms=7.284 cpuOneCorePercent=0.00 tickOverruns=0 droppedTicks=0 pings=0 invalidPackets=0 historyUnavailable=0 rejected=0 rooms=2 workingSetMiB=76.12 roomSlots=df3c7822-d238-4b0e-9653-df7dc7fbb217:10/10,97595a38-552b-4e5e-af45-8dad73055c33:10/10 bots=18 botPathNodesMax=50 botPathPendingMax=13 utc=2026-11-12T07:20:47.2397983Z
+[metrics] peers=2 active=2 pending=0 ticks=903 ticksPerSecond=30.00 tickP95Ms=7.194 tickP99Ms=7.851 tickMaxMs=7.851 loopMaxMs=7.913 loopGapMaxMs=30.452 pollMaxMs=0.094 simulationMaxMs=0.000 botMaxMs=7.240 movementMaxMs=0.219 worldMaxMs=0.624 resolutionMaxMs=0.006 snapshotMaxMs=0.007 streamsMaxMs=0.000 lifecycleMaxMs=0.000 botDecisionMaxMs=0.065 botPathMaxMs=4.571 gcPauseMs=3.592 previousReportMs=5.042 loopP95Ms=5.816 loopP99Ms=7.858 cpuOneCorePercent=12.50 tickOverruns=0 droppedTicks=0 pings=0 invalidPackets=0 historyUnavailable=0 rejected=0 rooms=2 workingSetMiB=76.13 roomSlots=df3c7822-d238-4b0e-9653-df7dc7fbb217:10/10,97595a38-552b-4e5e-af45-8dad73055c33:10/10 bots=18 botPathNodesMax=49 botPathPendingMax=14 utc=2026-11-12T07:20:49.2392952Z
+[metrics] peers=2 active=2 pending=0 ticks=963 ticksPerSecond=29.93 tickP95Ms=7.437 tickP99Ms=8.366 tickMaxMs=8.366 loopMaxMs=8.375 loopGapMaxMs=31.711 pollMaxMs=0.209 simulationMaxMs=0.000 botMaxMs=7.415 movementMaxMs=0.105 worldMaxMs=0.667 resolutionMaxMs=0.006 snapshotMaxMs=0.008 streamsMaxMs=0.000 lifecycleMaxMs=0.000 botDecisionMaxMs=0.068 botPathMaxMs=4.573 gcPauseMs=4.645 previousReportMs=4.428 loopP95Ms=5.731 loopP99Ms=8.114 cpuOneCorePercent=10.91 tickOverruns=0 droppedTicks=0 pings=0 invalidPackets=0 historyUnavailable=0 rejected=0 rooms=2 workingSetMiB=76.23 roomSlots=df3c7822-d238-4b0e-9653-df7dc7fbb217:10/10,97595a38-552b-4e5e-af45-8dad73055c33:10/10 bots=18 botPathNodesMax=49 botPathPendingMax=15 utc=2026-11-12T07:20:51.2444540Z
+[metrics] peers=2 active=2 pending=0 ticks=1023 ticksPerSecond=29.99 tickP95Ms=6.259 tickP99Ms=7.721 tickMaxMs=7.721 loopMaxMs=7.726 loopGapMaxMs=16.754 pollMaxMs=0.051 simulationMaxMs=0.000 botMaxMs=6.619 movementMaxMs=0.130 worldMaxMs=0.751 resolutionMaxMs=0.006 snapshotMaxMs=0.007 streamsMaxMs=0.000 lifecycleMaxMs=0.000 botDecisionMaxMs=0.078 botPathMaxMs=4.611 gcPauseMs=4.714 previousReportMs=4.593 loopP95Ms=5.745 loopP99Ms=7.334 cpuOneCorePercent=12.50 tickOverruns=0 droppedTicks=0 pings=0 invalidPackets=0 historyUnavailable=0 rejected=0 rooms=2 workingSetMiB=73.63 roomSlots=df3c7822-d238-4b0e-9653-df7dc7fbb217:10/10,97595a38-552b-4e5e-af45-8dad73055c33:10/10 bots=18 botPathNodesMax=45 botPathPendingMax=17 utc=2026-11-12T07:20:53.2457057Z
+[metrics] peers=2 active=2 pending=0 ticks=1083 ticksPerSecond=29.87 tickP95Ms=5.543 tickP99Ms=6.107 tickMaxMs=6.107 loopMaxMs=6.116 loopGapMaxMs=16.804 pollMaxMs=0.067 simulationMaxMs=0.000 botMaxMs=4.938 movementMaxMs=0.089 worldMaxMs=0.850 resolutionMaxMs=0.013 snapshotMaxMs=0.018 streamsMaxMs=0.000 lifecycleMaxMs=0.000 botDecisionMaxMs=0.419 botPathMaxMs=4.586 gcPauseMs=3.361 previousReportMs=5.269 loopP95Ms=5.268 loopP99Ms=5.669 cpuOneCorePercent=41.23 tickOverruns=0 droppedTicks=0 pings=0 invalidPackets=0 historyUnavailable=0 rejected=0 rooms=2 workingSetMiB=73.63 roomSlots=df3c7822-d238-4b0e-9653-df7dc7fbb217:10/10,97595a38-552b-4e5e-af45-8dad73055c33:10/10 bots=18 botPathNodesMax=51 botPathPendingMax=17 utc=2026-11-12T07:20:55.2536547Z
+[metrics] peers=2 active=2 pending=0 ticks=1144 ticksPerSecond=30.26 tickP95Ms=5.601 tickP99Ms=5.956 tickMaxMs=5.956 loopMaxMs=5.959 loopGapMaxMs=16.686 pollMaxMs=0.055 simulationMaxMs=0.000 botMaxMs=4.905 movementMaxMs=0.160 worldMaxMs=0.579 resolutionMaxMs=0.013 snapshotMaxMs=0.010 streamsMaxMs=0.000 lifecycleMaxMs=0.000 botDecisionMaxMs=0.115 botPathMaxMs=4.480 gcPauseMs=3.640 previousReportMs=4.606 loopP95Ms=5.491 loopP99Ms=5.768 cpuOneCorePercent=6.20 tickOverruns=0 droppedTicks=0 pings=0 invalidPackets=0 historyUnavailable=0 rejected=0 rooms=2 workingSetMiB=73.63 roomSlots=df3c7822-d238-4b0e-9653-df7dc7fbb217:10/10,97595a38-552b-4e5e-af45-8dad73055c33:10/10 bots=18 botPathNodesMax=51 botPathPendingMax=16 utc=2026-11-12T07:20:57.2695694Z
+[metrics] peers=2 active=2 pending=0 ticks=1204 ticksPerSecond=29.98 tickP95Ms=5.641 tickP99Ms=7.396 tickMaxMs=7.396 loopMaxMs=7.399 loopGapMaxMs=16.907 pollMaxMs=0.023 simulationMaxMs=0.000 botMaxMs=4.806 movementMaxMs=0.087 worldMaxMs=0.593 resolutionMaxMs=0.007 snapshotMaxMs=0.007 streamsMaxMs=0.000 lifecycleMaxMs=0.000 botDecisionMaxMs=0.081 botPathMaxMs=4.520 gcPauseMs=3.784 previousReportMs=4.517 loopP95Ms=5.566 loopP99Ms=5.809 cpuOneCorePercent=0.00 tickOverruns=0 droppedTicks=0 pings=0 invalidPackets=0 historyUnavailable=0 rejected=0 rooms=2 workingSetMiB=73.86 roomSlots=df3c7822-d238-4b0e-9653-df7dc7fbb217:10/10,97595a38-552b-4e5e-af45-8dad73055c33:10/10 bots=18 botPathNodesMax=43 botPathPendingMax=16 utc=2026-11-12T07:20:59.2724240Z
+[metrics] peers=2 active=2 pending=0 ticks=1264 ticksPerSecond=29.91 tickP95Ms=7.515 tickP99Ms=8.078 tickMaxMs=8.078 loopMaxMs=8.085 loopGapMaxMs=30.152 pollMaxMs=0.453 simulationMaxMs=0.000 botMaxMs=5.083 movementMaxMs=0.159 worldMaxMs=0.594 resolutionMaxMs=0.007 snapshotMaxMs=0.009 streamsMaxMs=0.000 lifecycleMaxMs=0.000 botDecisionMaxMs=0.069 botPathMaxMs=4.745 gcPauseMs=3.906 previousReportMs=5.756 loopP95Ms=5.874 loopP99Ms=7.687 cpuOneCorePercent=0.78 tickOverruns=0 droppedTicks=0 pings=0 invalidPackets=0 historyUnavailable=0 rejected=0 rooms=2 workingSetMiB=73.88 roomSlots=df3c7822-d238-4b0e-9653-df7dc7fbb217:10/10,97595a38-552b-4e5e-af45-8dad73055c33:10/10 bots=18 botPathNodesMax=43 botPathPendingMax=13 utc=2026-11-12T07:21:01.2782922Z
+[metrics] peers=2 active=2 pending=0 ticks=1324 ticksPerSecond=30.00 tickP95Ms=7.028 tickP99Ms=9.213 tickMaxMs=9.213 loopMaxMs=9.217 loopGapMaxMs=16.810 pollMaxMs=0.007 simulationMaxMs=0.000 botMaxMs=7.575 movementMaxMs=0.141 worldMaxMs=0.545 resolutionMaxMs=1.080 snapshotMaxMs=0.009 streamsMaxMs=0.000 lifecycleMaxMs=0.000 botDecisionMaxMs=0.080 botPathMaxMs=4.709 gcPauseMs=4.062 previousReportMs=5.571 loopP95Ms=5.649 loopP99Ms=8.216 cpuOneCorePercent=20.31 tickOverruns=0 droppedTicks=0 pings=0 invalidPackets=0 historyUnavailable=0 rejected=0 rooms=2 workingSetMiB=74.00 roomSlots=df3c7822-d238-4b0e-9653-df7dc7fbb217:10/10,97595a38-552b-4e5e-af45-8dad73055c33:10/10 bots=18 botPathNodesMax=46 botPathPendingMax=15 utc=2026-11-12T07:21:03.2773812Z
+[metrics] peers=2 active=2 pending=0 ticks=1385 ticksPerSecond=30.19 tickP95Ms=6.043 tickP99Ms=10.230 tickMaxMs=10.230 loopMaxMs=10.236 loopGapMaxMs=29.849 pollMaxMs=0.037 simulationMaxMs=0.000 botMaxMs=7.316 movementMaxMs=0.182 worldMaxMs=0.618 resolutionMaxMs=0.012 snapshotMaxMs=0.011 streamsMaxMs=0.000 lifecycleMaxMs=0.000 botDecisionMaxMs=0.313 botPathMaxMs=4.907 gcPauseMs=3.936 previousReportMs=4.461 loopP95Ms=5.674 loopP99Ms=7.512 cpuOneCorePercent=3.87 tickOverruns=0 droppedTicks=0 pings=0 invalidPackets=0 historyUnavailable=0 rejected=0 rooms=2 workingSetMiB=74.00 roomSlots=df3c7822-d238-4b0e-9653-df7dc7fbb217:10/10,97595a38-552b-4e5e-af45-8dad73055c33:10/10 bots=18 botPathNodesMax=51 botPathPendingMax=16 utc=2026-11-12T07:21:05.2977644Z
+[metrics] peers=2 active=2 pending=0 ticks=1445 ticksPerSecond=30.00 tickP95Ms=5.458 tickP99Ms=6.125 tickMaxMs=6.125 loopMaxMs=6.130 loopGapMaxMs=16.671 pollMaxMs=0.020 simulationMaxMs=0.000 botMaxMs=5.008 movementMaxMs=0.086 worldMaxMs=0.700 resolutionMaxMs=0.012 snapshotMaxMs=0.011 streamsMaxMs=0.000 lifecycleMaxMs=0.000 botDecisionMaxMs=0.453 botPathMaxMs=4.821 gcPauseMs=4.405 previousReportMs=4.410 loopP95Ms=5.241 loopP99Ms=5.732 cpuOneCorePercent=0.00 tickOverruns=0 droppedTicks=0 pings=0 invalidPackets=0 historyUnavailable=0 rejected=0 rooms=2 workingSetMiB=74.01 roomSlots=df3c7822-d238-4b0e-9653-df7dc7fbb217:10/10,97595a38-552b-4e5e-af45-8dad73055c33:10/10 bots=18 botPathNodesMax=59 botPathPendingMax=18 utc=2026-11-12T07:21:07.2994559Z
+[metrics] peers=2 active=2 pending=0 ticks=1505 ticksPerSecond=29.93 tickP95Ms=5.558 tickP99Ms=9.210 tickMaxMs=9.210 loopMaxMs=9.217 loopGapMaxMs=29.758 pollMaxMs=0.020 simulationMaxMs=0.000 botMaxMs=4.859 movementMaxMs=0.114 worldMaxMs=0.589 resolutionMaxMs=0.007 snapshotMaxMs=0.008 streamsMaxMs=0.000 lifecycleMaxMs=0.000 botDecisionMaxMs=0.152 botPathMaxMs=4.630 gcPauseMs=3.846 previousReportMs=5.869 loopP95Ms=5.367 loopP99Ms=7.363 cpuOneCorePercent=22.60 tickOverruns=0 droppedTicks=0 pings=0 invalidPackets=0 historyUnavailable=0 rejected=0 rooms=2 workingSetMiB=74.01 roomSlots=df3c7822-d238-4b0e-9653-df7dc7fbb217:10/10,97595a38-552b-4e5e-af45-8dad73055c33:10/10 bots=18 botPathNodesMax=51 botPathPendingMax=17 utc=2026-11-12T07:21:09.3036095Z
+[metrics] peers=2 active=2 pending=0 ticks=1565 ticksPerSecond=29.91 tickP95Ms=5.481 tickP99Ms=6.742 tickMaxMs=6.742 loopMaxMs=6.748 loopGapMaxMs=30.522 pollMaxMs=0.007 simulationMaxMs=0.000 botMaxMs=5.992 movementMaxMs=0.093 worldMaxMs=0.728 resolutionMaxMs=0.006 snapshotMaxMs=0.007 streamsMaxMs=0.000 lifecycleMaxMs=0.000 botDecisionMaxMs=0.080 botPathMaxMs=5.730 gcPauseMs=4.637 previousReportMs=5.307 loopP95Ms=5.457 loopP99Ms=5.715 cpuOneCorePercent=3.89 tickOverruns=0 droppedTicks=0 pings=0 invalidPackets=0 historyUnavailable=0 rejected=0 rooms=2 workingSetMiB=74.20 roomSlots=df3c7822-d238-4b0e-9653-df7dc7fbb217:10/10,97595a38-552b-4e5e-af45-8dad73055c33:10/10 bots=18 botPathNodesMax=37 botPathPendingMax=17 utc=2026-11-12T07:21:11.3089475Z
+[metrics] peers=2 active=2 pending=0 ticks=1625 ticksPerSecond=29.97 tickP95Ms=5.441 tickP99Ms=7.842 tickMaxMs=7.842 loopMaxMs=7.846 loopGapMaxMs=16.541 pollMaxMs=0.048 simulationMaxMs=0.000 botMaxMs=5.084 movementMaxMs=0.216 worldMaxMs=0.607 resolutionMaxMs=0.006 snapshotMaxMs=0.011 streamsMaxMs=0.000 lifecycleMaxMs=0.000 botDecisionMaxMs=0.410 botPathMaxMs=4.625 gcPauseMs=3.924 previousReportMs=4.599 loopP95Ms=5.337 loopP99Ms=5.732 cpuOneCorePercent=30.44 tickOverruns=0 droppedTicks=0 pings=0 invalidPackets=0 historyUnavailable=0 rejected=0 rooms=2 workingSetMiB=74.20 roomSlots=df3c7822-d238-4b0e-9653-df7dc7fbb217:10/10,97595a38-552b-4e5e-af45-8dad73055c33:10/10 bots=18 botPathNodesMax=43 botPathPendingMax=17 utc=2026-11-12T07:21:13.3110990Z
+[metrics] peers=2 active=2 pending=0 ticks=1685 ticksPerSecond=30.00 tickP95Ms=5.468 tickP99Ms=5.600 tickMaxMs=5.600 loopMaxMs=5.609 loopGapMaxMs=17.199 pollMaxMs=0.036 simulationMaxMs=0.000 botMaxMs=4.893 movementMaxMs=0.155 worldMaxMs=0.600 resolutionMaxMs=0.006 snapshotMaxMs=0.013 streamsMaxMs=0.000 lifecycleMaxMs=0.000 botDecisionMaxMs=0.090 botPathMaxMs=4.695 gcPauseMs=3.928 previousReportMs=4.707 loopP95Ms=5.240 loopP99Ms=5.522 cpuOneCorePercent=2.34 tickOverruns=0 droppedTicks=0 pings=0 invalidPackets=0 historyUnavailable=0 rejected=0 rooms=2 workingSetMiB=74.15 roomSlots=df3c7822-d238-4b0e-9653-df7dc7fbb217:10/10,97595a38-552b-4e5e-af45-8dad73055c33:10/10 bots=18 botPathNodesMax=41 botPathPendingMax=18 utc=2026-11-12T07:21:15.3113727Z
+[metrics] peers=2 active=2 pending=0 ticks=1745 ticksPerSecond=29.89 tickP95Ms=5.771 tickP99Ms=7.638 tickMaxMs=7.638 loopMaxMs=7.644 loopGapMaxMs=16.800 pollMaxMs=0.159 simulationMaxMs=0.000 botMaxMs=5.045 movementMaxMs=0.220 worldMaxMs=0.688 resolutionMaxMs=0.006 snapshotMaxMs=0.006 streamsMaxMs=0.000 lifecycleMaxMs=0.000 botDecisionMaxMs=0.097 botPathMaxMs=4.510 gcPauseMs=4.209 previousReportMs=4.960 loopP95Ms=5.677 loopP99Ms=7.490 cpuOneCorePercent=36.58 tickOverruns=0 droppedTicks=0 pings=0 invalidPackets=0 historyUnavailable=0 rejected=0 rooms=2 workingSetMiB=74.14 roomSlots=df3c7822-d238-4b0e-9653-df7dc7fbb217:10/10,97595a38-552b-4e5e-af45-8dad73055c33:10/10 bots=18 botPathNodesMax=45 botPathPendingMax=16 utc=2026-11-12T07:21:17.3188375Z
+Movement observed: 18/18 bot lives moved more than half a cell
+PASS: at least eight bots per authored room actually move during stress
+PASS: shared navigation budget and slots remain bounded during five-room stress
+BotChecks: 1671 passed, 0 failed

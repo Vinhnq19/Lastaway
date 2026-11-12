@@ -1,0 +1,38 @@
+[ready] udp=127.0.0.1:49303 maxPlayers=10 tickRate=30 authMode=RoomCode protocol=4 accountRequired=False supported=1,2,3,4
+[websocket] enabled port=61096 path=/game
+[joined] playerId=3c5c5617-450f-4631-bacf-526dcd50edad roomId=e57d4d82-4ea4-4844-80a6-0ee484b32b32 transport=Wss serverSlots=1/50
+[joined] playerId=014f7037-80c3-40d1-b5b9-8e9bcb062bad roomId=e57d4d82-4ea4-4844-80a6-0ee484b32b32 transport=Wss serverSlots=2/50
+[joined] playerId=3f00a4e5-4ac7-47d8-a36d-d457a3525ccc roomId=e57d4d82-4ea4-4844-80a6-0ee484b32b32 transport=Wss serverSlots=3/50
+[joined] playerId=07f88d33-ce37-4b01-8224-b6b679498189 roomId=e57d4d82-4ea4-4844-80a6-0ee484b32b32 transport=Wss serverSlots=4/50
+[joined] playerId=d035ec1f-f04b-453f-8d4d-857a2d1607e4 roomId=e57d4d82-4ea4-4844-80a6-0ee484b32b32 transport=Wss serverSlots=5/50
+[joined] playerId=6323028f-162e-4bbb-92e6-5c4c34ca1100 roomId=e57d4d82-4ea4-4844-80a6-0ee484b32b32 transport=Udp serverSlots=10/50
+[joined] playerId=d99742f9-37c0-4307-bac1-9ab32fdee959 roomId=e57d4d82-4ea4-4844-80a6-0ee484b32b32 transport=Udp serverSlots=10/50
+[joined] playerId=3bfbc53a-f878-4538-9538-8e85570bdc60 roomId=e57d4d82-4ea4-4844-80a6-0ee484b32b32 transport=Udp serverSlots=10/50
+[joined] playerId=0d73e537-82ea-4b96-bd4c-62b962e309cb roomId=e57d4d82-4ea4-4844-80a6-0ee484b32b32 transport=Udp serverSlots=10/50
+[joined] playerId=a7c34221-ef21-4fad-bc53-27c5aede0046 roomId=e57d4d82-4ea4-4844-80a6-0ee484b32b32 transport=Udp serverSlots=10/50
+PASS Ten mixed network sessions reserve exactly ten slots
+[rejected] reason=RoomFull serverSlots=10/50
+PASS Eleventh network client rejected RoomFull
+PASS Both transports receive match-scoped zone with snapshots
+PASS 30Hz snapshots: no repeated hooks or invalid frames on ten peers
+PASS Real UDP/WS melee attack accepted and stamped with attacker NetId
+PASS Other real client receives the accepted attack broadcast
+PASS Repeated RequestSeq is Duplicate, answered only to the sender
+PASS Reload with bare hands is InvalidWeapon and not broadcast
+PASS Other clients' snapshots show the attacker bare-handed before equipping
+PASS Server accepts held RubberGun for the attacker
+PASS Snapshot carries the attacker's held RubberGun to other clients without touching state flags
+PASS Ranged shot accepted over real transport and broadcast to the room
+PASS Reload accepted with 1.2 s end tick and broadcast to the room
+PASS Own filtered 150-frame replay arrives over real transport
+PASS Lost transport holds same server slot
+[joined] playerId=6323028f-162e-4bbb-92e6-5c4c34ca1100 roomId=e57d4d82-4ea4-4844-80a6-0ee484b32b32 transport=Udp serverSlots=10/50
+PASS Full-room resume retains PlayerId, rotates proof and keeps one slot
+PASS Real UDP/WS clients receive full ten-participant result
+PASS Replay creates next match without new sessions or lost slots
+ALL 18 REAL GAMEPLAY CHECKS PASS (Mixed)
+[ws-receive-error] type=WebSocketException
+[ws-close] reason=ConnectionTimeout controlQueued=0
+[ws-receive-error] type=WebSocketException
+[ws-close] reason=ConnectionTimeout controlQueued=0
+[stopped] UDP socket đã đóng.

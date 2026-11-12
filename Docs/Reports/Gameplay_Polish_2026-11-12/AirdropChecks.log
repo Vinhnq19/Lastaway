@@ -1,0 +1,223 @@
+=== Starting AirdropChecks ===
+[PASS] production defaults validate
+[PASS] default version is 1.0.0
+[PASS] default enabled is true
+[PASS] default egg size is 2
+[PASS] default egg hp is 150
+[PASS] default edge margin is 3
+[PASS] default retry seconds is 1
+[PASS] default max retries is 5
+[PASS] default candidate limit is 64
+[PASS] default reserved eggs is 3
+[PASS] default reserved loot stacks is 24
+[PASS] default drop count is 3
+[PASS] default drop ids are 1,2,3
+[PASS] default drop 1 flies 110 lands 120
+[PASS] default drop 2 flies 230 lands 240
+[PASS] default drop 3 flies 320 lands 330
+[PASS] airdrop_schedule.json located relative to AppContext.BaseDirectory
+[PASS] production JSON settings validate
+[PASS] JSON version mirrors defaults
+[PASS] JSON enabled mirrors defaults
+[PASS] JSON egg size mirrors defaults
+[PASS] JSON egg hp mirrors defaults
+[PASS] JSON edge margin mirrors defaults
+[PASS] JSON retry seconds mirrors defaults
+[PASS] JSON max retries mirrors defaults
+[PASS] JSON candidate limit mirrors defaults
+[PASS] JSON reserved eggs mirrors defaults
+[PASS] JSON reserved loot stacks mirrors defaults
+[PASS] JSON drop count mirrors defaults
+[PASS] JSON drops mirror defaults
+[PASS] empty drop array is rejected
+[PASS] two drops with reservations 3/24 remain valid
+[PASS] duplicate drop ids are rejected
+[PASS] negative fly time is rejected
+[PASS] NaN fly time is rejected
+[PASS] overlapping flights are rejected
+[PASS] out-of-order flights are rejected
+[PASS] egg hp 0 is rejected
+[PASS] reserved eggs below drop count are rejected
+[PASS] reserved loot stacks below eight per drop are rejected
+[PASS] blank version is rejected
+[PASS] version longer than 48 characters is rejected
+[PASS] runtime exposes one state per scheduled drop
+[PASS] runtime starts drop 1 scheduled
+[PASS] runtime default revision and world id are zero
+[PASS] runtime default timing is 110/115/120
+[PASS] runtime performs no host work before fly time
+[PASS] runtime chooses landing at fly time
+[PASS] runtime enters flying once
+[PASS] runtime keeps schedule when selection succeeds immediately
+[PASS] runtime does not land early
+[PASS] runtime lands once at LandAt with a valid world id
+[PASS] runtime passes configured egg size and hp
+[PASS] runtime lands with the scheduled drop id
+[PASS] runtime repeated tick is idempotent
+[PASS] runtime jump to 130 lands drop 1
+[PASS] runtime jump creates exactly one egg
+[PASS] runtime jump emits flying falling landed in order
+[PASS] runtime jump leaves later drops scheduled
+[PASS] runtime skip tick then repeat never duplicates
+[PASS] runtime lands three drops with distinct ids
+[PASS] runtime derives a distinct stable seed per drop
+[PASS] runtime is deterministic for the same match seed
+[PASS] runtime seed depends on the match seed
+[PASS] runtime reports broken landing
+[PASS] runtime broken is terminal and emitted once
+[PASS] runtime selection waits for fly time
+[PASS] runtime selection attempts once at fly time
+[PASS] runtime selection waits for the retry window
+[PASS] runtime failed selection cancels after one plus MaxRetries attempts
+[PASS] runtime failed selection cancels once
+[PASS] runtime cancel emits once
+[PASS] runtime cancelled selection never lands
+[PASS] runtime selection retries shift the predicted land time
+[PASS] runtime cancelled selection has no floating retries
+[PASS] runtime recovers selection on the retry attempt
+[PASS] runtime shifts all times by the selection retry delay
+[PASS] runtime failed landing stays falling without a landed state
+[PASS] runtime publishes the deferred land time
+[PASS] runtime deferred land time is emitted to listeners
+[PASS] runtime deferred landing is not retried on the same tick
+[PASS] runtime deferred landing waits for the retry window
+[PASS] runtime landing retries once per retry seconds
+[PASS] runtime recovers landing on a later attempt
+[PASS] runtime landing retry never re-chooses or relaunches
+[PASS] runtime landing retry does not shift other drops
+[PASS] runtime emits flying exactly once after landing failures
+[PASS] runtime failed landing stops after one plus MaxRetries attempts
+[PASS] runtime landing failure bounded then cancelled
+[PASS] runtime landing failure keeps the single launch
+[PASS] runtime never emits landed for failed landings
+[PASS] runtime cancelled landing has no later attempts
+[PASS] runtime rejects TryLand success with world id zero
+[PASS] runtime zero world id is retried and then cancelled
+[PASS] runtime zero world id never emits landed
+[PASS] runtime disabled makes no host calls
+[PASS] runtime disabled emits no transitions
+[PASS] runtime rejects negative clock
+[PASS] runtime rejects NaN clock
+[PASS] runtime rejects infinite clock
+[PASS] runtime rejects backward clock
+[PASS] runtime equal tick is idempotent
+[PASS] runtime rejects null settings
+[PASS] runtime rejects null host
+[PASS] runtime rejects invalid settings
+[PASS] runtime rejects retry window above five seconds
+[PASS] runtime rejects overflow-prone retry window
+[PASS] runtime accepts a five second retry window
+[PASS] runtime copies the drop list at construction
+[PASS] runtime copies drop times at construction
+[PASS] runtime settings mutations after constructor do not disable the match
+[PASS] runtime settings mutations after constructor keep egg size and hp
+[PASS] runtime copies retry settings at construction
+[PASS] runtime states view is read only
+[PASS] runtime states view rejects mutation
+[PASS] airborne egg has no collision
+[PASS] landed egg uses reserved world id
+[PASS] dynamic egg starts at150HP
+[PASS] authored map and hash remain unchanged
+[PASS] full loot registry preserves egg for retry
+[PASS] retry succeeds and produces loot once
+[PASS] duplicate hit never produces duplicate loot
+[PASS] broken egg releases reservation
+[PASS] hazard-overlapping candidate cancels bounded drop
+[PASS] full footprint must remain3cells inside zone
+[PASS] blast outside egg footprint cannot damage it
+[PASS] hard cover blocks blast damage to supply egg
+[PASS] exposed supply egg breaks through shared explosion damage
+[PASS] replayed explosion cannot duplicate egg loot
+[PASS] thap-co starts airdrop world
+[PASS] 24 supply stacks reserved
+[PASS] thap-co landed at 120
+[PASS] dynamic egg does not mutate cached map
+[PASS] egg footprint and HP
+[PASS] nonlethal hit confirmed
+[PASS] 149 hit leaves 1 HP
+[PASS] lethal hit confirmed
+[PASS] 6-8 unique physical stacks
+[PASS] guaranteed mace and compass
+[PASS] simultaneous duplicate cannot spawn again
+[PASS] broken phase follows loot commit
+[PASS] resume baseline packet roundtrip
+[PASS] thap-co landed at 240
+[PASS] dynamic egg does not mutate cached map
+[PASS] egg footprint and HP
+[PASS] nonlethal hit confirmed
+[PASS] 149 hit leaves 1 HP
+[PASS] lethal hit confirmed
+[PASS] 6-8 unique physical stacks
+[PASS] guaranteed mace and compass
+[PASS] simultaneous duplicate cannot spawn again
+[PASS] broken phase follows loot commit
+[PASS] resume baseline packet roundtrip
+[PASS] thap-co landed at 330
+[PASS] dynamic egg does not mutate cached map
+[PASS] egg footprint and HP
+[PASS] nonlethal hit confirmed
+[PASS] 149 hit leaves 1 HP
+[PASS] lethal hit confirmed
+[PASS] 6-8 unique physical stacks
+[PASS] guaranteed mace and compass
+[PASS] simultaneous duplicate cannot spawn again
+[PASS] broken phase follows loot commit
+[PASS] resume baseline packet roundtrip
+[PASS] all three loot reservations released once
+[PASS] thi-tran starts airdrop world
+[PASS] 24 supply stacks reserved
+[PASS] thi-tran landed at 120
+[PASS] dynamic egg does not mutate cached map
+[PASS] egg footprint and HP
+[PASS] nonlethal hit confirmed
+[PASS] 149 hit leaves 1 HP
+[PASS] lethal hit confirmed
+[PASS] 6-8 unique physical stacks
+[PASS] guaranteed mace and compass
+[PASS] simultaneous duplicate cannot spawn again
+[PASS] broken phase follows loot commit
+[PASS] resume baseline packet roundtrip
+[PASS] thi-tran landed at 240
+[PASS] dynamic egg does not mutate cached map
+[PASS] egg footprint and HP
+[PASS] nonlethal hit confirmed
+[PASS] 149 hit leaves 1 HP
+[PASS] lethal hit confirmed
+[PASS] 6-8 unique physical stacks
+[PASS] guaranteed mace and compass
+[PASS] simultaneous duplicate cannot spawn again
+[PASS] broken phase follows loot commit
+[PASS] resume baseline packet roundtrip
+[PASS] thi-tran landed at 330
+[PASS] dynamic egg does not mutate cached map
+[PASS] egg footprint and HP
+[PASS] nonlethal hit confirmed
+[PASS] 149 hit leaves 1 HP
+[PASS] lethal hit confirmed
+[PASS] 6-8 unique physical stacks
+[PASS] guaranteed mace and compass
+[PASS] simultaneous duplicate cannot spawn again
+[PASS] broken phase follows loot commit
+[PASS] resume baseline packet roundtrip
+[PASS] all three loot reservations released once
+[ready] udp=127.0.0.1:57338 maxPlayers=10 tickRate=30 authMode=RoomCode protocol=4 accountRequired=False supported=1,2,3,4
+[websocket] enabled port=52069 path=/game
+[joined] playerId=ce13726c-bdfa-4623-9349-2fcb25266f28 roomId=08fe0d5e-943f-4285-897b-de4049d54b9e transport=Wss serverSlots=1/50
+[joined] playerId=98580219-fd61-4540-8b50-d41c7ebe7102 roomId=08fe0d5e-943f-4285-897b-de4049d54b9e transport=Udp serverSlots=2/50
+[PASS] UDP/WS same drop geometry and landing tick 1
+[PASS] one reliable flight per transport 1
+[PASS] both clients see confirmed egg HP
+[PASS] complete unique loot batch streamed to UDP and WS
+[PASS] UDP/WS same drop geometry and landing tick 2
+[PASS] one reliable flight per transport 2
+[PASS] both clients see confirmed egg HP
+[PASS] complete unique loot batch streamed to UDP and WS
+[airdrop] cancelled match=71296c30-ab5f-4806-b9fc-6d22591d2362 drop=3 reason=no-valid-landing
+[stopped] UDP socket đã đóng.
+Unhandled exception. System.TimeoutException: Airdrop UDP/WS fixture timeout
+   at JungleMaze.Tests.Airdrops.SocketChecks.<>c__DisplayClass0_0.<Run>g__Pump|2(Func`1 done, Int32 max, <>c__DisplayClass0_1&) in D:\Unity\Lastaway\Backend\Tests\AirdropChecks\SocketChecks.cs:line 38
+   at JungleMaze.Tests.Airdrops.SocketChecks.Run(Action`2 check) in D:\Unity\Lastaway\Backend\Tests\AirdropChecks\SocketChecks.cs:line 49
+   at JungleMaze.Tests.Airdrops.SocketChecks.Run(Action`2 check) in D:\Unity\Lastaway\Backend\Tests\AirdropChecks\SocketChecks.cs:line 67
+   at JungleMaze.Tests.Airdrops.SocketChecks.Run(Action`2 check) in D:\Unity\Lastaway\Backend\Tests\AirdropChecks\SocketChecks.cs:line 73
+   at Program.<Main>$(String[] args) in D:\Unity\Lastaway\Backend\Tests\AirdropChecks\Program.cs:line 217
+   at Program.<Main>(String[] args)

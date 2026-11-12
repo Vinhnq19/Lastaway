@@ -1,0 +1,23 @@
+=================================================================
+ JungleMaze Online Readiness Test Launcher
+ Scenario    : bots-town-fast (Clients: 1, MaxDuration: 130s)
+ Output Dir  : D:\Unity\Lastaway\Docs\Reports\Gameplay_Polish_2026-11-12\unity-bots-town
+ Room Auth   : NET_ROOM_CODE env injected (masked from argv/logs)
+ Physical PCs: 1 (physicalTwoPc: NOT_TESTED)
+=================================================================
+Launching client 1/1 (Player1)...
+All 1 clients launched. Monitoring execution (deadline: 130s)...
+Cleaning up owned client processes...
+
+========================= RUN SUMMARY =========================
+Overall Status: PASS (1/1 clients passed)
+PhysicalTwoPc : NOT_TESTED (single physical device)
+Report JSON   : D:\Unity\Lastaway\Docs\Reports\Gameplay_Polish_2026-11-12\unity-bots-town\report.json
+Summary CSV   : D:\Unity\Lastaway\Docs\Reports\Gameplay_Polish_2026-11-12\unity-bots-town\summary.csv
+---------------------------------------------------------------
+
+id      status selectedTransport connectedSeconds p50RttMs exitCode reason                                  
+--      ------ ----------------- ---------------- -------- -------- ------                                  
+Player1 PASS   Wss                          29.29    33.36        0 Required observations and rates verified
+
+

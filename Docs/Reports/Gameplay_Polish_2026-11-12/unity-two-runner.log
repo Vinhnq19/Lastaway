@@ -1,0 +1,7 @@
+Invoke-RestMethod : {"error":"RoomServiceUnavailable"}
+At D:\Unity\Lastaway\.utmp\run-gameplay-two.ps1:9 char:7
++ $room=Invoke-RestMethod http://127.0.0.1:5000/api/rooms -Method Post  ...
++       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation: (System.Net.HttpWebRequest:HttpWebRequest) [Invoke-RestMethod], WebExc 
+   eption
+    + FullyQualifiedErrorId : WebCmdletWebResponseException,Microsoft.PowerShell.Commands.InvokeRestMethodCommand

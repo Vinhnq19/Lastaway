@@ -1,0 +1,65 @@
+D:\Unity\Lastaway\Assets\_JungleMaze\Scripts\Application\Config\ClientConfig.cs(37,55): warning CS8625: Cannot convert null literal to non-nullable reference type. [D:\Unity\Lastaway\Backend\Tests\LanHostChecks\LanHostChecks.csproj]
+D:\Unity\Lastaway\Assets\_JungleMaze\Scripts\Application\Config\ClientConfig.cs(37,118): warning CS8625: Cannot convert null literal to non-nullable reference type. [D:\Unity\Lastaway\Backend\Tests\LanHostChecks\LanHostChecks.csproj]
+D:\Unity\Lastaway\Assets\_JungleMaze\Scripts\Application\Config\ClientConfig.cs(60,83): warning CS8625: Cannot convert null literal to non-nullable reference type. [D:\Unity\Lastaway\Backend\Tests\LanHostChecks\LanHostChecks.csproj]
+D:\Unity\Lastaway\Assets\_JungleMaze\Scripts\Application\Config\ClientConfig.cs(64,98): warning CS8625: Cannot convert null literal to non-nullable reference type. [D:\Unity\Lastaway\Backend\Tests\LanHostChecks\LanHostChecks.csproj]
+D:\Unity\Lastaway\Assets\_JungleMaze\Scripts\Application\Config\ClientConfig.cs(40,26): warning CS8601: Possible null reference assignment. [D:\Unity\Lastaway\Backend\Tests\LanHostChecks\LanHostChecks.csproj]
+D:\Unity\Lastaway\Assets\_JungleMaze\Scripts\Application\Config\ClientConfig.cs(48,28): warning CS8601: Possible null reference assignment. [D:\Unity\Lastaway\Backend\Tests\LanHostChecks\LanHostChecks.csproj]
+D:\Unity\Lastaway\Assets\_JungleMaze\Scripts\Application\Config\ClientConfig.cs(35,16): warning CS8618: Non-nullable property 'ApiBaseUrl' must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring the property as nullable. [D:\Unity\Lastaway\Backend\Tests\LanHostChecks\LanHostChecks.csproj]
+D:\Unity\Lastaway\Assets\_JungleMaze\Scripts\Application\Config\ClientConfig.cs(35,16): warning CS8618: Non-nullable property 'WebSocketUrl' must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring the property as nullable. [D:\Unity\Lastaway\Backend\Tests\LanHostChecks\LanHostChecks.csproj]
+D:\Unity\Lastaway\Assets\_JungleMaze\Scripts\Application\Config\ClientConfig.cs(54,152): warning CS8604: Possible null reference argument for parameter 'lanCertificateSha256' in 'ClientConfig.ClientConfig(ConnectionMode mode, string apiBaseUrl, string gameServerHost, int gameServerPort, JoinAuthMode authMode, ushort protocolVersion, int connectTimeoutMs, string transport = "Udp", string source = "", string webSocketUrl = null, bool worldEnabled = false, string lanCertificateSha256 = null)'. [D:\Unity\Lastaway\Backend\Tests\LanHostChecks\LanHostChecks.csproj]
+D:\Unity\Lastaway\Assets\_JungleMaze\Scripts\Infrastructure\Network\LanTls.cs(50,21): warning CS8602: Dereference of a possibly null reference. [D:\Unity\Lastaway\Backend\Tests\LanHostChecks\LanHostChecks.csproj]
+D:\Unity\Lastaway\Assets\_JungleMaze\Scripts\Infrastructure\Network\LanTls.cs(51,37): warning CS8604: Possible null reference argument for parameter 'der' in 'bool LanTls.Validate(ClientConfig config, byte[] der, bool confirmed = true)'. [D:\Unity\Lastaway\Backend\Tests\LanHostChecks\LanHostChecks.csproj]
+D:\Unity\Lastaway\Assets\_JungleMaze\Scripts\Application\Config\ClientConfig.cs(107,68): warning CS8603: Possible null reference return. [D:\Unity\Lastaway\Backend\Tests\LanHostChecks\LanHostChecks.csproj]
+D:\Unity\Lastaway\Assets\_JungleMaze\Scripts\Application\Config\ClientConfig.cs(113,20): warning CS8603: Possible null reference return. [D:\Unity\Lastaway\Backend\Tests\LanHostChecks\LanHostChecks.csproj]
+D:\Unity\Lastaway\Assets\_JungleMaze\Scripts\Infrastructure\Network\LanTls.cs(68,108): warning CS8604: Possible null reference argument for parameter 'der' in 'bool LanTls.Validate(ClientConfig config, byte[] der, bool confirmed = true)'. [D:\Unity\Lastaway\Backend\Tests\LanHostChecks\LanHostChecks.csproj]
+D:\Unity\Lastaway\Assets\_JungleMaze\Scripts\Infrastructure\Network\LanTls.cs(17,31): warning CS8618: Non-nullable field '_directory' must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring the field as nullable. [D:\Unity\Lastaway\Backend\Tests\LanHostChecks\LanHostChecks.csproj]
+D:\Unity\Lastaway\Assets\_JungleMaze\Scripts\Application\Config\ClientConfig.cs(119,111): warning CS8601: Possible null reference assignment. [D:\Unity\Lastaway\Backend\Tests\LanHostChecks\LanHostChecks.csproj]
+D:\Unity\Lastaway\Assets\_JungleMaze\Scripts\Application\Config\ClientConfig.cs(126,23): warning CS8625: Cannot convert null literal to non-nullable reference type. [D:\Unity\Lastaway\Backend\Tests\LanHostChecks\LanHostChecks.csproj]
+D:\Unity\Lastaway\Assets\_JungleMaze\Scripts\Application\Config\ClientConfig.cs(133,20): warning CS8603: Possible null reference return. [D:\Unity\Lastaway\Backend\Tests\LanHostChecks\LanHostChecks.csproj]
+D:\Unity\Lastaway\Assets\_JungleMaze\Scripts\Application\Config\ClientConfig.cs(139,66): warning CS8601: Possible null reference assignment. [D:\Unity\Lastaway\Backend\Tests\LanHostChecks\LanHostChecks.csproj]
+D:\Unity\Lastaway\Assets\_JungleMaze\Scripts\Application\Config\ClientConfig.cs(145,20): warning CS8603: Possible null reference return. [D:\Unity\Lastaway\Backend\Tests\LanHostChecks\LanHostChecks.csproj]
+D:\Unity\Lastaway\Backend\Tests\LanHostChecks\ClientTlsChecks.cs(77,56): warning CS8625: Cannot convert null literal to non-nullable reference type. [D:\Unity\Lastaway\Backend\Tests\LanHostChecks\LanHostChecks.csproj]
+PASS compact code is 61 characters
+PASS code address and ports roundtrip
+PASS host PEM key pairs with certificate
+PASS generated certificate passes exact IP pin and validity
+PASS SAN rejects different IP
+PASS reject incorrect fingerprint
+PASS reject expired certificate at boundary
+PASS reject not-yet-valid certificate
+PASS certificate validity at most a year
+PASS setup/start reuses valid key and code
+PASS reject address 127.0.0.1
+PASS reject address 0.0.0.0
+PASS reject address 8.8.8.8
+PASS reject address 100.70.1.1
+PASS reject address 169.254.1.1
+PASS reject address ::1
+PASS reject address 192.168.001.1
+PASS reject address 192.168.1.1:8443
+PASS reject address https://192.168.1.1
+PASS accept RFC1918 10.0.0.1
+PASS accept RFC1918 172.16.0.1
+PASS accept RFC1918 172.31.255.254
+PASS accept RFC1918 192.168.1.1
+PASS reject malformed code length=0
+PASS reject malformed code length=62
+PASS reject malformed code length=61
+PASS reject malformed code length=65
+PASS reject malformed code length=61
+PASS reject malformed code length=60
+PASS reject zero port
+PASS IP change yields new certificate/code
+PASS malformed DER rejected safely
+PASS malformed DER rejected safely
+PASS malformed DER rejected safely
+PASS LAN starts unconfirmed
+PASS unconfirmed LAN rejects account HTTP before sending
+PASS exact-pin HTTPS probe succeeds without account data
+PASS health probe alone does not persist trust or send account
+PASS confirmed exact-pin account HTTP succeeds
+PASS redirect cannot resend account payload to HTTP
+PASS confirmed LAN WebSocket uses same exact pin and echoes binary
+PASS wrong advertised fingerprint rejects TLS before account bytes
+PASS non-LAN client still rejects the self-signed certificate
+43 LAN host and TLS checks passed

@@ -1,0 +1,24 @@
+=================================================================
+ JungleMaze Online Readiness Test Launcher
+ Scenario    : bots10-main (Clients: 1, MaxDuration: 610s)
+ Output Dir  : D:\Unity\Lastaway\Docs\Reports\Gameplay_Polish_2026-11-12\unity-bots10
+ Room Auth   : NET_ROOM_CODE env injected (masked from argv/logs)
+ Physical PCs: 1 (physicalTwoPc: NOT_TESTED)
+=================================================================
+Launching client 1/1 (Player1)...
+All 1 clients launched. Monitoring execution (deadline: 610s)...
+Cleaning up owned client processes...
+
+========================= RUN SUMMARY =========================
+Overall Status: PASS (1/1 clients passed)
+PhysicalTwoPc : NOT_TESTED (single physical device)
+Report JSON   : D:\Unity\Lastaway\Docs\Reports\Gameplay_Polish_2026-11-12\unity-bots10\report.json
+Summary CSV   : D:\Unity\Lastaway\Docs\Reports\Gameplay_Polish_2026-11-12\unity-bots10\summary.csv
+---------------------------------------------------------------
+
+id      status selectedTransport connectedSeconds p50RttMs exitCode reason                                  
+--      ------ ----------------- ---------------- -------- -------- ------                                  
+Player1 PASS   Udp                            300    33.32        0 Required observations and rates verified
+
+
+Room cleanup pending: server has not returned to empty Waiting.

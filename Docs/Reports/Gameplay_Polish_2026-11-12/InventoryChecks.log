@@ -1,0 +1,1623 @@
+PASS full catalog 21 weapons +16 equipment +ammo
+PASS HAND outside inventory and loot
+PASS Elixir immediate cleanse profile
+PASS tentative gun enabled config
+PASS duplicate catalog rejected
+PASS missing HAND rejected
+PASS NaN rule rejected
+PASS invalid armor reduction rejected
+PASS 100 seeds deterministic count/source/disabled rules
+PASS supply count and distinct IDs seed 1
+PASS supply guarantees seed 1
+PASS supply deterministic seed 1
+PASS supply count and distinct IDs seed 2
+PASS supply guarantees seed 2
+PASS supply deterministic seed 2
+PASS supply count and distinct IDs seed 3
+PASS supply guarantees seed 3
+PASS supply deterministic seed 3
+PASS supply count and distinct IDs seed 4
+PASS supply guarantees seed 4
+PASS supply deterministic seed 4
+PASS supply count and distinct IDs seed 5
+PASS supply guarantees seed 5
+PASS supply deterministic seed 5
+PASS supply count and distinct IDs seed 6
+PASS supply guarantees seed 6
+PASS supply deterministic seed 6
+PASS supply count and distinct IDs seed 7
+PASS supply guarantees seed 7
+PASS supply deterministic seed 7
+PASS supply count and distinct IDs seed 8
+PASS supply guarantees seed 8
+PASS supply deterministic seed 8
+PASS supply count and distinct IDs seed 9
+PASS supply guarantees seed 9
+PASS supply deterministic seed 9
+PASS supply count and distinct IDs seed 10
+PASS supply guarantees seed 10
+PASS supply deterministic seed 10
+PASS supply count and distinct IDs seed 11
+PASS supply guarantees seed 11
+PASS supply deterministic seed 11
+PASS supply count and distinct IDs seed 12
+PASS supply guarantees seed 12
+PASS supply deterministic seed 12
+PASS supply count and distinct IDs seed 13
+PASS supply guarantees seed 13
+PASS supply deterministic seed 13
+PASS supply count and distinct IDs seed 14
+PASS supply guarantees seed 14
+PASS supply deterministic seed 14
+PASS supply count and distinct IDs seed 15
+PASS supply guarantees seed 15
+PASS supply deterministic seed 15
+PASS supply count and distinct IDs seed 16
+PASS supply guarantees seed 16
+PASS supply deterministic seed 16
+PASS supply count and distinct IDs seed 17
+PASS supply guarantees seed 17
+PASS supply deterministic seed 17
+PASS supply count and distinct IDs seed 18
+PASS supply guarantees seed 18
+PASS supply deterministic seed 18
+PASS supply count and distinct IDs seed 19
+PASS supply guarantees seed 19
+PASS supply deterministic seed 19
+PASS supply count and distinct IDs seed 20
+PASS supply guarantees seed 20
+PASS supply deterministic seed 20
+PASS supply count and distinct IDs seed 21
+PASS supply guarantees seed 21
+PASS supply deterministic seed 21
+PASS supply count and distinct IDs seed 22
+PASS supply guarantees seed 22
+PASS supply deterministic seed 22
+PASS supply count and distinct IDs seed 23
+PASS supply guarantees seed 23
+PASS supply deterministic seed 23
+PASS supply count and distinct IDs seed 24
+PASS supply guarantees seed 24
+PASS supply deterministic seed 24
+PASS supply count and distinct IDs seed 25
+PASS supply guarantees seed 25
+PASS supply deterministic seed 25
+PASS supply count and distinct IDs seed 26
+PASS supply guarantees seed 26
+PASS supply deterministic seed 26
+PASS supply count and distinct IDs seed 27
+PASS supply guarantees seed 27
+PASS supply deterministic seed 27
+PASS supply count and distinct IDs seed 28
+PASS supply guarantees seed 28
+PASS supply deterministic seed 28
+PASS supply count and distinct IDs seed 29
+PASS supply guarantees seed 29
+PASS supply deterministic seed 29
+PASS supply count and distinct IDs seed 30
+PASS supply guarantees seed 30
+PASS supply deterministic seed 30
+PASS supply count and distinct IDs seed 31
+PASS supply guarantees seed 31
+PASS supply deterministic seed 31
+PASS supply count and distinct IDs seed 32
+PASS supply guarantees seed 32
+PASS supply deterministic seed 32
+PASS supply count and distinct IDs seed 33
+PASS supply guarantees seed 33
+PASS supply deterministic seed 33
+PASS supply count and distinct IDs seed 34
+PASS supply guarantees seed 34
+PASS supply deterministic seed 34
+PASS supply count and distinct IDs seed 35
+PASS supply guarantees seed 35
+PASS supply deterministic seed 35
+PASS supply count and distinct IDs seed 36
+PASS supply guarantees seed 36
+PASS supply deterministic seed 36
+PASS supply count and distinct IDs seed 37
+PASS supply guarantees seed 37
+PASS supply deterministic seed 37
+PASS supply count and distinct IDs seed 38
+PASS supply guarantees seed 38
+PASS supply deterministic seed 38
+PASS supply count and distinct IDs seed 39
+PASS supply guarantees seed 39
+PASS supply deterministic seed 39
+PASS supply count and distinct IDs seed 40
+PASS supply guarantees seed 40
+PASS supply deterministic seed 40
+PASS supply count and distinct IDs seed 41
+PASS supply guarantees seed 41
+PASS supply deterministic seed 41
+PASS supply count and distinct IDs seed 42
+PASS supply guarantees seed 42
+PASS supply deterministic seed 42
+PASS supply count and distinct IDs seed 43
+PASS supply guarantees seed 43
+PASS supply deterministic seed 43
+PASS supply count and distinct IDs seed 44
+PASS supply guarantees seed 44
+PASS supply deterministic seed 44
+PASS supply count and distinct IDs seed 45
+PASS supply guarantees seed 45
+PASS supply deterministic seed 45
+PASS supply count and distinct IDs seed 46
+PASS supply guarantees seed 46
+PASS supply deterministic seed 46
+PASS supply count and distinct IDs seed 47
+PASS supply guarantees seed 47
+PASS supply deterministic seed 47
+PASS supply count and distinct IDs seed 48
+PASS supply guarantees seed 48
+PASS supply deterministic seed 48
+PASS supply count and distinct IDs seed 49
+PASS supply guarantees seed 49
+PASS supply deterministic seed 49
+PASS supply count and distinct IDs seed 50
+PASS supply guarantees seed 50
+PASS supply deterministic seed 50
+PASS supply count and distinct IDs seed 51
+PASS supply guarantees seed 51
+PASS supply deterministic seed 51
+PASS supply count and distinct IDs seed 52
+PASS supply guarantees seed 52
+PASS supply deterministic seed 52
+PASS supply count and distinct IDs seed 53
+PASS supply guarantees seed 53
+PASS supply deterministic seed 53
+PASS supply count and distinct IDs seed 54
+PASS supply guarantees seed 54
+PASS supply deterministic seed 54
+PASS supply count and distinct IDs seed 55
+PASS supply guarantees seed 55
+PASS supply deterministic seed 55
+PASS supply count and distinct IDs seed 56
+PASS supply guarantees seed 56
+PASS supply deterministic seed 56
+PASS supply count and distinct IDs seed 57
+PASS supply guarantees seed 57
+PASS supply deterministic seed 57
+PASS supply count and distinct IDs seed 58
+PASS supply guarantees seed 58
+PASS supply deterministic seed 58
+PASS supply count and distinct IDs seed 59
+PASS supply guarantees seed 59
+PASS supply deterministic seed 59
+PASS supply count and distinct IDs seed 60
+PASS supply guarantees seed 60
+PASS supply deterministic seed 60
+PASS supply count and distinct IDs seed 61
+PASS supply guarantees seed 61
+PASS supply deterministic seed 61
+PASS supply count and distinct IDs seed 62
+PASS supply guarantees seed 62
+PASS supply deterministic seed 62
+PASS supply count and distinct IDs seed 63
+PASS supply guarantees seed 63
+PASS supply deterministic seed 63
+PASS supply count and distinct IDs seed 64
+PASS supply guarantees seed 64
+PASS supply deterministic seed 64
+PASS supply count and distinct IDs seed 65
+PASS supply guarantees seed 65
+PASS supply deterministic seed 65
+PASS supply count and distinct IDs seed 66
+PASS supply guarantees seed 66
+PASS supply deterministic seed 66
+PASS supply count and distinct IDs seed 67
+PASS supply guarantees seed 67
+PASS supply deterministic seed 67
+PASS supply count and distinct IDs seed 68
+PASS supply guarantees seed 68
+PASS supply deterministic seed 68
+PASS supply count and distinct IDs seed 69
+PASS supply guarantees seed 69
+PASS supply deterministic seed 69
+PASS supply count and distinct IDs seed 70
+PASS supply guarantees seed 70
+PASS supply deterministic seed 70
+PASS supply count and distinct IDs seed 71
+PASS supply guarantees seed 71
+PASS supply deterministic seed 71
+PASS supply count and distinct IDs seed 72
+PASS supply guarantees seed 72
+PASS supply deterministic seed 72
+PASS supply count and distinct IDs seed 73
+PASS supply guarantees seed 73
+PASS supply deterministic seed 73
+PASS supply count and distinct IDs seed 74
+PASS supply guarantees seed 74
+PASS supply deterministic seed 74
+PASS supply count and distinct IDs seed 75
+PASS supply guarantees seed 75
+PASS supply deterministic seed 75
+PASS supply count and distinct IDs seed 76
+PASS supply guarantees seed 76
+PASS supply deterministic seed 76
+PASS supply count and distinct IDs seed 77
+PASS supply guarantees seed 77
+PASS supply deterministic seed 77
+PASS supply count and distinct IDs seed 78
+PASS supply guarantees seed 78
+PASS supply deterministic seed 78
+PASS supply count and distinct IDs seed 79
+PASS supply guarantees seed 79
+PASS supply deterministic seed 79
+PASS supply count and distinct IDs seed 80
+PASS supply guarantees seed 80
+PASS supply deterministic seed 80
+PASS supply count and distinct IDs seed 81
+PASS supply guarantees seed 81
+PASS supply deterministic seed 81
+PASS supply count and distinct IDs seed 82
+PASS supply guarantees seed 82
+PASS supply deterministic seed 82
+PASS supply count and distinct IDs seed 83
+PASS supply guarantees seed 83
+PASS supply deterministic seed 83
+PASS supply count and distinct IDs seed 84
+PASS supply guarantees seed 84
+PASS supply deterministic seed 84
+PASS supply count and distinct IDs seed 85
+PASS supply guarantees seed 85
+PASS supply deterministic seed 85
+PASS supply count and distinct IDs seed 86
+PASS supply guarantees seed 86
+PASS supply deterministic seed 86
+PASS supply count and distinct IDs seed 87
+PASS supply guarantees seed 87
+PASS supply deterministic seed 87
+PASS supply count and distinct IDs seed 88
+PASS supply guarantees seed 88
+PASS supply deterministic seed 88
+PASS supply count and distinct IDs seed 89
+PASS supply guarantees seed 89
+PASS supply deterministic seed 89
+PASS supply count and distinct IDs seed 90
+PASS supply guarantees seed 90
+PASS supply deterministic seed 90
+PASS supply count and distinct IDs seed 91
+PASS supply guarantees seed 91
+PASS supply deterministic seed 91
+PASS supply count and distinct IDs seed 92
+PASS supply guarantees seed 92
+PASS supply deterministic seed 92
+PASS supply count and distinct IDs seed 93
+PASS supply guarantees seed 93
+PASS supply deterministic seed 93
+PASS supply count and distinct IDs seed 94
+PASS supply guarantees seed 94
+PASS supply deterministic seed 94
+PASS supply count and distinct IDs seed 95
+PASS supply guarantees seed 95
+PASS supply deterministic seed 95
+PASS supply count and distinct IDs seed 96
+PASS supply guarantees seed 96
+PASS supply deterministic seed 96
+PASS supply count and distinct IDs seed 97
+PASS supply guarantees seed 97
+PASS supply deterministic seed 97
+PASS supply count and distinct IDs seed 98
+PASS supply guarantees seed 98
+PASS supply deterministic seed 98
+PASS supply count and distinct IDs seed 99
+PASS supply guarantees seed 99
+PASS supply deterministic seed 99
+PASS supply count and distinct IDs seed 100
+PASS supply guarantees seed 100
+PASS supply deterministic seed 100
+PASS supply count and distinct IDs seed 101
+PASS supply guarantees seed 101
+PASS supply deterministic seed 101
+PASS supply count and distinct IDs seed 102
+PASS supply guarantees seed 102
+PASS supply deterministic seed 102
+PASS supply count and distinct IDs seed 103
+PASS supply guarantees seed 103
+PASS supply deterministic seed 103
+PASS supply count and distinct IDs seed 104
+PASS supply guarantees seed 104
+PASS supply deterministic seed 104
+PASS supply count and distinct IDs seed 105
+PASS supply guarantees seed 105
+PASS supply deterministic seed 105
+PASS supply count and distinct IDs seed 106
+PASS supply guarantees seed 106
+PASS supply deterministic seed 106
+PASS supply count and distinct IDs seed 107
+PASS supply guarantees seed 107
+PASS supply deterministic seed 107
+PASS supply count and distinct IDs seed 108
+PASS supply guarantees seed 108
+PASS supply deterministic seed 108
+PASS supply count and distinct IDs seed 109
+PASS supply guarantees seed 109
+PASS supply deterministic seed 109
+PASS supply count and distinct IDs seed 110
+PASS supply guarantees seed 110
+PASS supply deterministic seed 110
+PASS supply count and distinct IDs seed 111
+PASS supply guarantees seed 111
+PASS supply deterministic seed 111
+PASS supply count and distinct IDs seed 112
+PASS supply guarantees seed 112
+PASS supply deterministic seed 112
+PASS supply count and distinct IDs seed 113
+PASS supply guarantees seed 113
+PASS supply deterministic seed 113
+PASS supply count and distinct IDs seed 114
+PASS supply guarantees seed 114
+PASS supply deterministic seed 114
+PASS supply count and distinct IDs seed 115
+PASS supply guarantees seed 115
+PASS supply deterministic seed 115
+PASS supply count and distinct IDs seed 116
+PASS supply guarantees seed 116
+PASS supply deterministic seed 116
+PASS supply count and distinct IDs seed 117
+PASS supply guarantees seed 117
+PASS supply deterministic seed 117
+PASS supply count and distinct IDs seed 118
+PASS supply guarantees seed 118
+PASS supply deterministic seed 118
+PASS supply count and distinct IDs seed 119
+PASS supply guarantees seed 119
+PASS supply deterministic seed 119
+PASS supply count and distinct IDs seed 120
+PASS supply guarantees seed 120
+PASS supply deterministic seed 120
+PASS supply count and distinct IDs seed 121
+PASS supply guarantees seed 121
+PASS supply deterministic seed 121
+PASS supply count and distinct IDs seed 122
+PASS supply guarantees seed 122
+PASS supply deterministic seed 122
+PASS supply count and distinct IDs seed 123
+PASS supply guarantees seed 123
+PASS supply deterministic seed 123
+PASS supply count and distinct IDs seed 124
+PASS supply guarantees seed 124
+PASS supply deterministic seed 124
+PASS supply count and distinct IDs seed 125
+PASS supply guarantees seed 125
+PASS supply deterministic seed 125
+PASS supply count and distinct IDs seed 126
+PASS supply guarantees seed 126
+PASS supply deterministic seed 126
+PASS supply count and distinct IDs seed 127
+PASS supply guarantees seed 127
+PASS supply deterministic seed 127
+PASS supply count and distinct IDs seed 128
+PASS supply guarantees seed 128
+PASS supply deterministic seed 128
+PASS supply count and distinct IDs seed 129
+PASS supply guarantees seed 129
+PASS supply deterministic seed 129
+PASS supply count and distinct IDs seed 130
+PASS supply guarantees seed 130
+PASS supply deterministic seed 130
+PASS supply count and distinct IDs seed 131
+PASS supply guarantees seed 131
+PASS supply deterministic seed 131
+PASS supply count and distinct IDs seed 132
+PASS supply guarantees seed 132
+PASS supply deterministic seed 132
+PASS supply count and distinct IDs seed 133
+PASS supply guarantees seed 133
+PASS supply deterministic seed 133
+PASS supply count and distinct IDs seed 134
+PASS supply guarantees seed 134
+PASS supply deterministic seed 134
+PASS supply count and distinct IDs seed 135
+PASS supply guarantees seed 135
+PASS supply deterministic seed 135
+PASS supply count and distinct IDs seed 136
+PASS supply guarantees seed 136
+PASS supply deterministic seed 136
+PASS supply count and distinct IDs seed 137
+PASS supply guarantees seed 137
+PASS supply deterministic seed 137
+PASS supply count and distinct IDs seed 138
+PASS supply guarantees seed 138
+PASS supply deterministic seed 138
+PASS supply count and distinct IDs seed 139
+PASS supply guarantees seed 139
+PASS supply deterministic seed 139
+PASS supply count and distinct IDs seed 140
+PASS supply guarantees seed 140
+PASS supply deterministic seed 140
+PASS supply count and distinct IDs seed 141
+PASS supply guarantees seed 141
+PASS supply deterministic seed 141
+PASS supply count and distinct IDs seed 142
+PASS supply guarantees seed 142
+PASS supply deterministic seed 142
+PASS supply count and distinct IDs seed 143
+PASS supply guarantees seed 143
+PASS supply deterministic seed 143
+PASS supply count and distinct IDs seed 144
+PASS supply guarantees seed 144
+PASS supply deterministic seed 144
+PASS supply count and distinct IDs seed 145
+PASS supply guarantees seed 145
+PASS supply deterministic seed 145
+PASS supply count and distinct IDs seed 146
+PASS supply guarantees seed 146
+PASS supply deterministic seed 146
+PASS supply count and distinct IDs seed 147
+PASS supply guarantees seed 147
+PASS supply deterministic seed 147
+PASS supply count and distinct IDs seed 148
+PASS supply guarantees seed 148
+PASS supply deterministic seed 148
+PASS supply count and distinct IDs seed 149
+PASS supply guarantees seed 149
+PASS supply deterministic seed 149
+PASS supply count and distinct IDs seed 150
+PASS supply guarantees seed 150
+PASS supply deterministic seed 150
+PASS supply count and distinct IDs seed 151
+PASS supply guarantees seed 151
+PASS supply deterministic seed 151
+PASS supply count and distinct IDs seed 152
+PASS supply guarantees seed 152
+PASS supply deterministic seed 152
+PASS supply count and distinct IDs seed 153
+PASS supply guarantees seed 153
+PASS supply deterministic seed 153
+PASS supply count and distinct IDs seed 154
+PASS supply guarantees seed 154
+PASS supply deterministic seed 154
+PASS supply count and distinct IDs seed 155
+PASS supply guarantees seed 155
+PASS supply deterministic seed 155
+PASS supply count and distinct IDs seed 156
+PASS supply guarantees seed 156
+PASS supply deterministic seed 156
+PASS supply count and distinct IDs seed 157
+PASS supply guarantees seed 157
+PASS supply deterministic seed 157
+PASS supply count and distinct IDs seed 158
+PASS supply guarantees seed 158
+PASS supply deterministic seed 158
+PASS supply count and distinct IDs seed 159
+PASS supply guarantees seed 159
+PASS supply deterministic seed 159
+PASS supply count and distinct IDs seed 160
+PASS supply guarantees seed 160
+PASS supply deterministic seed 160
+PASS supply count and distinct IDs seed 161
+PASS supply guarantees seed 161
+PASS supply deterministic seed 161
+PASS supply count and distinct IDs seed 162
+PASS supply guarantees seed 162
+PASS supply deterministic seed 162
+PASS supply count and distinct IDs seed 163
+PASS supply guarantees seed 163
+PASS supply deterministic seed 163
+PASS supply count and distinct IDs seed 164
+PASS supply guarantees seed 164
+PASS supply deterministic seed 164
+PASS supply count and distinct IDs seed 165
+PASS supply guarantees seed 165
+PASS supply deterministic seed 165
+PASS supply count and distinct IDs seed 166
+PASS supply guarantees seed 166
+PASS supply deterministic seed 166
+PASS supply count and distinct IDs seed 167
+PASS supply guarantees seed 167
+PASS supply deterministic seed 167
+PASS supply count and distinct IDs seed 168
+PASS supply guarantees seed 168
+PASS supply deterministic seed 168
+PASS supply count and distinct IDs seed 169
+PASS supply guarantees seed 169
+PASS supply deterministic seed 169
+PASS supply count and distinct IDs seed 170
+PASS supply guarantees seed 170
+PASS supply deterministic seed 170
+PASS supply count and distinct IDs seed 171
+PASS supply guarantees seed 171
+PASS supply deterministic seed 171
+PASS supply count and distinct IDs seed 172
+PASS supply guarantees seed 172
+PASS supply deterministic seed 172
+PASS supply count and distinct IDs seed 173
+PASS supply guarantees seed 173
+PASS supply deterministic seed 173
+PASS supply count and distinct IDs seed 174
+PASS supply guarantees seed 174
+PASS supply deterministic seed 174
+PASS supply count and distinct IDs seed 175
+PASS supply guarantees seed 175
+PASS supply deterministic seed 175
+PASS supply count and distinct IDs seed 176
+PASS supply guarantees seed 176
+PASS supply deterministic seed 176
+PASS supply count and distinct IDs seed 177
+PASS supply guarantees seed 177
+PASS supply deterministic seed 177
+PASS supply count and distinct IDs seed 178
+PASS supply guarantees seed 178
+PASS supply deterministic seed 178
+PASS supply count and distinct IDs seed 179
+PASS supply guarantees seed 179
+PASS supply deterministic seed 179
+PASS supply count and distinct IDs seed 180
+PASS supply guarantees seed 180
+PASS supply deterministic seed 180
+PASS supply count and distinct IDs seed 181
+PASS supply guarantees seed 181
+PASS supply deterministic seed 181
+PASS supply count and distinct IDs seed 182
+PASS supply guarantees seed 182
+PASS supply deterministic seed 182
+PASS supply count and distinct IDs seed 183
+PASS supply guarantees seed 183
+PASS supply deterministic seed 183
+PASS supply count and distinct IDs seed 184
+PASS supply guarantees seed 184
+PASS supply deterministic seed 184
+PASS supply count and distinct IDs seed 185
+PASS supply guarantees seed 185
+PASS supply deterministic seed 185
+PASS supply count and distinct IDs seed 186
+PASS supply guarantees seed 186
+PASS supply deterministic seed 186
+PASS supply count and distinct IDs seed 187
+PASS supply guarantees seed 187
+PASS supply deterministic seed 187
+PASS supply count and distinct IDs seed 188
+PASS supply guarantees seed 188
+PASS supply deterministic seed 188
+PASS supply count and distinct IDs seed 189
+PASS supply guarantees seed 189
+PASS supply deterministic seed 189
+PASS supply count and distinct IDs seed 190
+PASS supply guarantees seed 190
+PASS supply deterministic seed 190
+PASS supply count and distinct IDs seed 191
+PASS supply guarantees seed 191
+PASS supply deterministic seed 191
+PASS supply count and distinct IDs seed 192
+PASS supply guarantees seed 192
+PASS supply deterministic seed 192
+PASS supply count and distinct IDs seed 193
+PASS supply guarantees seed 193
+PASS supply deterministic seed 193
+PASS supply count and distinct IDs seed 194
+PASS supply guarantees seed 194
+PASS supply deterministic seed 194
+PASS supply count and distinct IDs seed 195
+PASS supply guarantees seed 195
+PASS supply deterministic seed 195
+PASS supply count and distinct IDs seed 196
+PASS supply guarantees seed 196
+PASS supply deterministic seed 196
+PASS supply count and distinct IDs seed 197
+PASS supply guarantees seed 197
+PASS supply deterministic seed 197
+PASS supply count and distinct IDs seed 198
+PASS supply guarantees seed 198
+PASS supply deterministic seed 198
+PASS supply count and distinct IDs seed 199
+PASS supply guarantees seed 199
+PASS supply deterministic seed 199
+PASS supply count and distinct IDs seed 200
+PASS supply guarantees seed 200
+PASS supply deterministic seed 200
+PASS supply count and distinct IDs seed 201
+PASS supply guarantees seed 201
+PASS supply deterministic seed 201
+PASS supply count and distinct IDs seed 202
+PASS supply guarantees seed 202
+PASS supply deterministic seed 202
+PASS supply count and distinct IDs seed 203
+PASS supply guarantees seed 203
+PASS supply deterministic seed 203
+PASS supply count and distinct IDs seed 204
+PASS supply guarantees seed 204
+PASS supply deterministic seed 204
+PASS supply count and distinct IDs seed 205
+PASS supply guarantees seed 205
+PASS supply deterministic seed 205
+PASS supply count and distinct IDs seed 206
+PASS supply guarantees seed 206
+PASS supply deterministic seed 206
+PASS supply count and distinct IDs seed 207
+PASS supply guarantees seed 207
+PASS supply deterministic seed 207
+PASS supply count and distinct IDs seed 208
+PASS supply guarantees seed 208
+PASS supply deterministic seed 208
+PASS supply count and distinct IDs seed 209
+PASS supply guarantees seed 209
+PASS supply deterministic seed 209
+PASS supply count and distinct IDs seed 210
+PASS supply guarantees seed 210
+PASS supply deterministic seed 210
+PASS supply count and distinct IDs seed 211
+PASS supply guarantees seed 211
+PASS supply deterministic seed 211
+PASS supply count and distinct IDs seed 212
+PASS supply guarantees seed 212
+PASS supply deterministic seed 212
+PASS supply count and distinct IDs seed 213
+PASS supply guarantees seed 213
+PASS supply deterministic seed 213
+PASS supply count and distinct IDs seed 214
+PASS supply guarantees seed 214
+PASS supply deterministic seed 214
+PASS supply count and distinct IDs seed 215
+PASS supply guarantees seed 215
+PASS supply deterministic seed 215
+PASS supply count and distinct IDs seed 216
+PASS supply guarantees seed 216
+PASS supply deterministic seed 216
+PASS supply count and distinct IDs seed 217
+PASS supply guarantees seed 217
+PASS supply deterministic seed 217
+PASS supply count and distinct IDs seed 218
+PASS supply guarantees seed 218
+PASS supply deterministic seed 218
+PASS supply count and distinct IDs seed 219
+PASS supply guarantees seed 219
+PASS supply deterministic seed 219
+PASS supply count and distinct IDs seed 220
+PASS supply guarantees seed 220
+PASS supply deterministic seed 220
+PASS supply count and distinct IDs seed 221
+PASS supply guarantees seed 221
+PASS supply deterministic seed 221
+PASS supply count and distinct IDs seed 222
+PASS supply guarantees seed 222
+PASS supply deterministic seed 222
+PASS supply count and distinct IDs seed 223
+PASS supply guarantees seed 223
+PASS supply deterministic seed 223
+PASS supply count and distinct IDs seed 224
+PASS supply guarantees seed 224
+PASS supply deterministic seed 224
+PASS supply count and distinct IDs seed 225
+PASS supply guarantees seed 225
+PASS supply deterministic seed 225
+PASS supply count and distinct IDs seed 226
+PASS supply guarantees seed 226
+PASS supply deterministic seed 226
+PASS supply count and distinct IDs seed 227
+PASS supply guarantees seed 227
+PASS supply deterministic seed 227
+PASS supply count and distinct IDs seed 228
+PASS supply guarantees seed 228
+PASS supply deterministic seed 228
+PASS supply count and distinct IDs seed 229
+PASS supply guarantees seed 229
+PASS supply deterministic seed 229
+PASS supply count and distinct IDs seed 230
+PASS supply guarantees seed 230
+PASS supply deterministic seed 230
+PASS supply count and distinct IDs seed 231
+PASS supply guarantees seed 231
+PASS supply deterministic seed 231
+PASS supply count and distinct IDs seed 232
+PASS supply guarantees seed 232
+PASS supply deterministic seed 232
+PASS supply count and distinct IDs seed 233
+PASS supply guarantees seed 233
+PASS supply deterministic seed 233
+PASS supply count and distinct IDs seed 234
+PASS supply guarantees seed 234
+PASS supply deterministic seed 234
+PASS supply count and distinct IDs seed 235
+PASS supply guarantees seed 235
+PASS supply deterministic seed 235
+PASS supply count and distinct IDs seed 236
+PASS supply guarantees seed 236
+PASS supply deterministic seed 236
+PASS supply count and distinct IDs seed 237
+PASS supply guarantees seed 237
+PASS supply deterministic seed 237
+PASS supply count and distinct IDs seed 238
+PASS supply guarantees seed 238
+PASS supply deterministic seed 238
+PASS supply count and distinct IDs seed 239
+PASS supply guarantees seed 239
+PASS supply deterministic seed 239
+PASS supply count and distinct IDs seed 240
+PASS supply guarantees seed 240
+PASS supply deterministic seed 240
+PASS supply count and distinct IDs seed 241
+PASS supply guarantees seed 241
+PASS supply deterministic seed 241
+PASS supply count and distinct IDs seed 242
+PASS supply guarantees seed 242
+PASS supply deterministic seed 242
+PASS supply count and distinct IDs seed 243
+PASS supply guarantees seed 243
+PASS supply deterministic seed 243
+PASS supply count and distinct IDs seed 244
+PASS supply guarantees seed 244
+PASS supply deterministic seed 244
+PASS supply count and distinct IDs seed 245
+PASS supply guarantees seed 245
+PASS supply deterministic seed 245
+PASS supply count and distinct IDs seed 246
+PASS supply guarantees seed 246
+PASS supply deterministic seed 246
+PASS supply count and distinct IDs seed 247
+PASS supply guarantees seed 247
+PASS supply deterministic seed 247
+PASS supply count and distinct IDs seed 248
+PASS supply guarantees seed 248
+PASS supply deterministic seed 248
+PASS supply count and distinct IDs seed 249
+PASS supply guarantees seed 249
+PASS supply deterministic seed 249
+PASS supply count and distinct IDs seed 250
+PASS supply guarantees seed 250
+PASS supply deterministic seed 250
+PASS supply count and distinct IDs seed 251
+PASS supply guarantees seed 251
+PASS supply deterministic seed 251
+PASS supply count and distinct IDs seed 252
+PASS supply guarantees seed 252
+PASS supply deterministic seed 252
+PASS supply count and distinct IDs seed 253
+PASS supply guarantees seed 253
+PASS supply deterministic seed 253
+PASS supply count and distinct IDs seed 254
+PASS supply guarantees seed 254
+PASS supply deterministic seed 254
+PASS supply count and distinct IDs seed 255
+PASS supply guarantees seed 255
+PASS supply deterministic seed 255
+PASS supply count and distinct IDs seed 256
+PASS supply guarantees seed 256
+PASS supply deterministic seed 256
+PASS supply count and distinct IDs seed 257
+PASS supply guarantees seed 257
+PASS supply deterministic seed 257
+PASS supply count and distinct IDs seed 258
+PASS supply guarantees seed 258
+PASS supply deterministic seed 258
+PASS supply count and distinct IDs seed 259
+PASS supply guarantees seed 259
+PASS supply deterministic seed 259
+PASS supply count and distinct IDs seed 260
+PASS supply guarantees seed 260
+PASS supply deterministic seed 260
+PASS supply count and distinct IDs seed 261
+PASS supply guarantees seed 261
+PASS supply deterministic seed 261
+PASS supply count and distinct IDs seed 262
+PASS supply guarantees seed 262
+PASS supply deterministic seed 262
+PASS supply count and distinct IDs seed 263
+PASS supply guarantees seed 263
+PASS supply deterministic seed 263
+PASS supply count and distinct IDs seed 264
+PASS supply guarantees seed 264
+PASS supply deterministic seed 264
+PASS supply count and distinct IDs seed 265
+PASS supply guarantees seed 265
+PASS supply deterministic seed 265
+PASS supply count and distinct IDs seed 266
+PASS supply guarantees seed 266
+PASS supply deterministic seed 266
+PASS supply count and distinct IDs seed 267
+PASS supply guarantees seed 267
+PASS supply deterministic seed 267
+PASS supply count and distinct IDs seed 268
+PASS supply guarantees seed 268
+PASS supply deterministic seed 268
+PASS supply count and distinct IDs seed 269
+PASS supply guarantees seed 269
+PASS supply deterministic seed 269
+PASS supply count and distinct IDs seed 270
+PASS supply guarantees seed 270
+PASS supply deterministic seed 270
+PASS supply count and distinct IDs seed 271
+PASS supply guarantees seed 271
+PASS supply deterministic seed 271
+PASS supply count and distinct IDs seed 272
+PASS supply guarantees seed 272
+PASS supply deterministic seed 272
+PASS supply count and distinct IDs seed 273
+PASS supply guarantees seed 273
+PASS supply deterministic seed 273
+PASS supply count and distinct IDs seed 274
+PASS supply guarantees seed 274
+PASS supply deterministic seed 274
+PASS supply count and distinct IDs seed 275
+PASS supply guarantees seed 275
+PASS supply deterministic seed 275
+PASS supply count and distinct IDs seed 276
+PASS supply guarantees seed 276
+PASS supply deterministic seed 276
+PASS supply count and distinct IDs seed 277
+PASS supply guarantees seed 277
+PASS supply deterministic seed 277
+PASS supply count and distinct IDs seed 278
+PASS supply guarantees seed 278
+PASS supply deterministic seed 278
+PASS supply count and distinct IDs seed 279
+PASS supply guarantees seed 279
+PASS supply deterministic seed 279
+PASS supply count and distinct IDs seed 280
+PASS supply guarantees seed 280
+PASS supply deterministic seed 280
+PASS supply count and distinct IDs seed 281
+PASS supply guarantees seed 281
+PASS supply deterministic seed 281
+PASS supply count and distinct IDs seed 282
+PASS supply guarantees seed 282
+PASS supply deterministic seed 282
+PASS supply count and distinct IDs seed 283
+PASS supply guarantees seed 283
+PASS supply deterministic seed 283
+PASS supply count and distinct IDs seed 284
+PASS supply guarantees seed 284
+PASS supply deterministic seed 284
+PASS supply count and distinct IDs seed 285
+PASS supply guarantees seed 285
+PASS supply deterministic seed 285
+PASS supply count and distinct IDs seed 286
+PASS supply guarantees seed 286
+PASS supply deterministic seed 286
+PASS supply count and distinct IDs seed 287
+PASS supply guarantees seed 287
+PASS supply deterministic seed 287
+PASS supply count and distinct IDs seed 288
+PASS supply guarantees seed 288
+PASS supply deterministic seed 288
+PASS supply count and distinct IDs seed 289
+PASS supply guarantees seed 289
+PASS supply deterministic seed 289
+PASS supply count and distinct IDs seed 290
+PASS supply guarantees seed 290
+PASS supply deterministic seed 290
+PASS supply count and distinct IDs seed 291
+PASS supply guarantees seed 291
+PASS supply deterministic seed 291
+PASS supply count and distinct IDs seed 292
+PASS supply guarantees seed 292
+PASS supply deterministic seed 292
+PASS supply count and distinct IDs seed 293
+PASS supply guarantees seed 293
+PASS supply deterministic seed 293
+PASS supply count and distinct IDs seed 294
+PASS supply guarantees seed 294
+PASS supply deterministic seed 294
+PASS supply count and distinct IDs seed 295
+PASS supply guarantees seed 295
+PASS supply deterministic seed 295
+PASS supply count and distinct IDs seed 296
+PASS supply guarantees seed 296
+PASS supply deterministic seed 296
+PASS supply count and distinct IDs seed 297
+PASS supply guarantees seed 297
+PASS supply deterministic seed 297
+PASS supply count and distinct IDs seed 298
+PASS supply guarantees seed 298
+PASS supply deterministic seed 298
+PASS supply count and distinct IDs seed 299
+PASS supply guarantees seed 299
+PASS supply deterministic seed 299
+PASS supply count and distinct IDs seed 300
+PASS supply guarantees seed 300
+PASS supply deterministic seed 300
+PASS supply count and distinct IDs seed 301
+PASS supply guarantees seed 301
+PASS supply deterministic seed 301
+PASS supply count and distinct IDs seed 302
+PASS supply guarantees seed 302
+PASS supply deterministic seed 302
+PASS supply count and distinct IDs seed 303
+PASS supply guarantees seed 303
+PASS supply deterministic seed 303
+PASS supply count and distinct IDs seed 304
+PASS supply guarantees seed 304
+PASS supply deterministic seed 304
+PASS supply count and distinct IDs seed 305
+PASS supply guarantees seed 305
+PASS supply deterministic seed 305
+PASS supply count and distinct IDs seed 306
+PASS supply guarantees seed 306
+PASS supply deterministic seed 306
+PASS supply count and distinct IDs seed 307
+PASS supply guarantees seed 307
+PASS supply deterministic seed 307
+PASS supply count and distinct IDs seed 308
+PASS supply guarantees seed 308
+PASS supply deterministic seed 308
+PASS supply count and distinct IDs seed 309
+PASS supply guarantees seed 309
+PASS supply deterministic seed 309
+PASS supply count and distinct IDs seed 310
+PASS supply guarantees seed 310
+PASS supply deterministic seed 310
+PASS supply count and distinct IDs seed 311
+PASS supply guarantees seed 311
+PASS supply deterministic seed 311
+PASS supply count and distinct IDs seed 312
+PASS supply guarantees seed 312
+PASS supply deterministic seed 312
+PASS supply count and distinct IDs seed 313
+PASS supply guarantees seed 313
+PASS supply deterministic seed 313
+PASS supply count and distinct IDs seed 314
+PASS supply guarantees seed 314
+PASS supply deterministic seed 314
+PASS supply count and distinct IDs seed 315
+PASS supply guarantees seed 315
+PASS supply deterministic seed 315
+PASS supply count and distinct IDs seed 316
+PASS supply guarantees seed 316
+PASS supply deterministic seed 316
+PASS supply count and distinct IDs seed 317
+PASS supply guarantees seed 317
+PASS supply deterministic seed 317
+PASS supply count and distinct IDs seed 318
+PASS supply guarantees seed 318
+PASS supply deterministic seed 318
+PASS supply count and distinct IDs seed 319
+PASS supply guarantees seed 319
+PASS supply deterministic seed 319
+PASS supply count and distinct IDs seed 320
+PASS supply guarantees seed 320
+PASS supply deterministic seed 320
+PASS supply count and distinct IDs seed 321
+PASS supply guarantees seed 321
+PASS supply deterministic seed 321
+PASS supply count and distinct IDs seed 322
+PASS supply guarantees seed 322
+PASS supply deterministic seed 322
+PASS supply count and distinct IDs seed 323
+PASS supply guarantees seed 323
+PASS supply deterministic seed 323
+PASS supply count and distinct IDs seed 324
+PASS supply guarantees seed 324
+PASS supply deterministic seed 324
+PASS supply count and distinct IDs seed 325
+PASS supply guarantees seed 325
+PASS supply deterministic seed 325
+PASS supply count and distinct IDs seed 326
+PASS supply guarantees seed 326
+PASS supply deterministic seed 326
+PASS supply count and distinct IDs seed 327
+PASS supply guarantees seed 327
+PASS supply deterministic seed 327
+PASS supply count and distinct IDs seed 328
+PASS supply guarantees seed 328
+PASS supply deterministic seed 328
+PASS supply count and distinct IDs seed 329
+PASS supply guarantees seed 329
+PASS supply deterministic seed 329
+PASS supply count and distinct IDs seed 330
+PASS supply guarantees seed 330
+PASS supply deterministic seed 330
+PASS supply count and distinct IDs seed 331
+PASS supply guarantees seed 331
+PASS supply deterministic seed 331
+PASS supply count and distinct IDs seed 332
+PASS supply guarantees seed 332
+PASS supply deterministic seed 332
+PASS supply count and distinct IDs seed 333
+PASS supply guarantees seed 333
+PASS supply deterministic seed 333
+PASS supply count and distinct IDs seed 334
+PASS supply guarantees seed 334
+PASS supply deterministic seed 334
+PASS supply count and distinct IDs seed 335
+PASS supply guarantees seed 335
+PASS supply deterministic seed 335
+PASS supply count and distinct IDs seed 336
+PASS supply guarantees seed 336
+PASS supply deterministic seed 336
+PASS supply count and distinct IDs seed 337
+PASS supply guarantees seed 337
+PASS supply deterministic seed 337
+PASS supply count and distinct IDs seed 338
+PASS supply guarantees seed 338
+PASS supply deterministic seed 338
+PASS supply count and distinct IDs seed 339
+PASS supply guarantees seed 339
+PASS supply deterministic seed 339
+PASS supply count and distinct IDs seed 340
+PASS supply guarantees seed 340
+PASS supply deterministic seed 340
+PASS supply count and distinct IDs seed 341
+PASS supply guarantees seed 341
+PASS supply deterministic seed 341
+PASS supply count and distinct IDs seed 342
+PASS supply guarantees seed 342
+PASS supply deterministic seed 342
+PASS supply count and distinct IDs seed 343
+PASS supply guarantees seed 343
+PASS supply deterministic seed 343
+PASS supply count and distinct IDs seed 344
+PASS supply guarantees seed 344
+PASS supply deterministic seed 344
+PASS supply count and distinct IDs seed 345
+PASS supply guarantees seed 345
+PASS supply deterministic seed 345
+PASS supply count and distinct IDs seed 346
+PASS supply guarantees seed 346
+PASS supply deterministic seed 346
+PASS supply count and distinct IDs seed 347
+PASS supply guarantees seed 347
+PASS supply deterministic seed 347
+PASS supply count and distinct IDs seed 348
+PASS supply guarantees seed 348
+PASS supply deterministic seed 348
+PASS supply count and distinct IDs seed 349
+PASS supply guarantees seed 349
+PASS supply deterministic seed 349
+PASS supply count and distinct IDs seed 350
+PASS supply guarantees seed 350
+PASS supply deterministic seed 350
+PASS supply count and distinct IDs seed 351
+PASS supply guarantees seed 351
+PASS supply deterministic seed 351
+PASS supply count and distinct IDs seed 352
+PASS supply guarantees seed 352
+PASS supply deterministic seed 352
+PASS supply count and distinct IDs seed 353
+PASS supply guarantees seed 353
+PASS supply deterministic seed 353
+PASS supply count and distinct IDs seed 354
+PASS supply guarantees seed 354
+PASS supply deterministic seed 354
+PASS supply count and distinct IDs seed 355
+PASS supply guarantees seed 355
+PASS supply deterministic seed 355
+PASS supply count and distinct IDs seed 356
+PASS supply guarantees seed 356
+PASS supply deterministic seed 356
+PASS supply count and distinct IDs seed 357
+PASS supply guarantees seed 357
+PASS supply deterministic seed 357
+PASS supply count and distinct IDs seed 358
+PASS supply guarantees seed 358
+PASS supply deterministic seed 358
+PASS supply count and distinct IDs seed 359
+PASS supply guarantees seed 359
+PASS supply deterministic seed 359
+PASS supply count and distinct IDs seed 360
+PASS supply guarantees seed 360
+PASS supply deterministic seed 360
+PASS supply count and distinct IDs seed 361
+PASS supply guarantees seed 361
+PASS supply deterministic seed 361
+PASS supply count and distinct IDs seed 362
+PASS supply guarantees seed 362
+PASS supply deterministic seed 362
+PASS supply count and distinct IDs seed 363
+PASS supply guarantees seed 363
+PASS supply deterministic seed 363
+PASS supply count and distinct IDs seed 364
+PASS supply guarantees seed 364
+PASS supply deterministic seed 364
+PASS supply count and distinct IDs seed 365
+PASS supply guarantees seed 365
+PASS supply deterministic seed 365
+PASS supply count and distinct IDs seed 366
+PASS supply guarantees seed 366
+PASS supply deterministic seed 366
+PASS supply count and distinct IDs seed 367
+PASS supply guarantees seed 367
+PASS supply deterministic seed 367
+PASS supply count and distinct IDs seed 368
+PASS supply guarantees seed 368
+PASS supply deterministic seed 368
+PASS supply count and distinct IDs seed 369
+PASS supply guarantees seed 369
+PASS supply deterministic seed 369
+PASS supply count and distinct IDs seed 370
+PASS supply guarantees seed 370
+PASS supply deterministic seed 370
+PASS supply count and distinct IDs seed 371
+PASS supply guarantees seed 371
+PASS supply deterministic seed 371
+PASS supply count and distinct IDs seed 372
+PASS supply guarantees seed 372
+PASS supply deterministic seed 372
+PASS supply count and distinct IDs seed 373
+PASS supply guarantees seed 373
+PASS supply deterministic seed 373
+PASS supply count and distinct IDs seed 374
+PASS supply guarantees seed 374
+PASS supply deterministic seed 374
+PASS supply count and distinct IDs seed 375
+PASS supply guarantees seed 375
+PASS supply deterministic seed 375
+PASS supply count and distinct IDs seed 376
+PASS supply guarantees seed 376
+PASS supply deterministic seed 376
+PASS supply count and distinct IDs seed 377
+PASS supply guarantees seed 377
+PASS supply deterministic seed 377
+PASS supply count and distinct IDs seed 378
+PASS supply guarantees seed 378
+PASS supply deterministic seed 378
+PASS supply count and distinct IDs seed 379
+PASS supply guarantees seed 379
+PASS supply deterministic seed 379
+PASS supply count and distinct IDs seed 380
+PASS supply guarantees seed 380
+PASS supply deterministic seed 380
+PASS supply count and distinct IDs seed 381
+PASS supply guarantees seed 381
+PASS supply deterministic seed 381
+PASS supply count and distinct IDs seed 382
+PASS supply guarantees seed 382
+PASS supply deterministic seed 382
+PASS supply count and distinct IDs seed 383
+PASS supply guarantees seed 383
+PASS supply deterministic seed 383
+PASS supply count and distinct IDs seed 384
+PASS supply guarantees seed 384
+PASS supply deterministic seed 384
+PASS supply count and distinct IDs seed 385
+PASS supply guarantees seed 385
+PASS supply deterministic seed 385
+PASS supply count and distinct IDs seed 386
+PASS supply guarantees seed 386
+PASS supply deterministic seed 386
+PASS supply count and distinct IDs seed 387
+PASS supply guarantees seed 387
+PASS supply deterministic seed 387
+PASS supply count and distinct IDs seed 388
+PASS supply guarantees seed 388
+PASS supply deterministic seed 388
+PASS supply count and distinct IDs seed 389
+PASS supply guarantees seed 389
+PASS supply deterministic seed 389
+PASS supply count and distinct IDs seed 390
+PASS supply guarantees seed 390
+PASS supply deterministic seed 390
+PASS supply count and distinct IDs seed 391
+PASS supply guarantees seed 391
+PASS supply deterministic seed 391
+PASS supply count and distinct IDs seed 392
+PASS supply guarantees seed 392
+PASS supply deterministic seed 392
+PASS supply count and distinct IDs seed 393
+PASS supply guarantees seed 393
+PASS supply deterministic seed 393
+PASS supply count and distinct IDs seed 394
+PASS supply guarantees seed 394
+PASS supply deterministic seed 394
+PASS supply count and distinct IDs seed 395
+PASS supply guarantees seed 395
+PASS supply deterministic seed 395
+PASS supply count and distinct IDs seed 396
+PASS supply guarantees seed 396
+PASS supply deterministic seed 396
+PASS supply count and distinct IDs seed 397
+PASS supply guarantees seed 397
+PASS supply deterministic seed 397
+PASS supply count and distinct IDs seed 398
+PASS supply guarantees seed 398
+PASS supply deterministic seed 398
+PASS supply count and distinct IDs seed 399
+PASS supply guarantees seed 399
+PASS supply deterministic seed 399
+PASS supply count and distinct IDs seed 400
+PASS supply guarantees seed 400
+PASS supply deterministic seed 400
+PASS supply count and distinct IDs seed 401
+PASS supply guarantees seed 401
+PASS supply deterministic seed 401
+PASS supply count and distinct IDs seed 402
+PASS supply guarantees seed 402
+PASS supply deterministic seed 402
+PASS supply count and distinct IDs seed 403
+PASS supply guarantees seed 403
+PASS supply deterministic seed 403
+PASS supply count and distinct IDs seed 404
+PASS supply guarantees seed 404
+PASS supply deterministic seed 404
+PASS supply count and distinct IDs seed 405
+PASS supply guarantees seed 405
+PASS supply deterministic seed 405
+PASS supply count and distinct IDs seed 406
+PASS supply guarantees seed 406
+PASS supply deterministic seed 406
+PASS supply count and distinct IDs seed 407
+PASS supply guarantees seed 407
+PASS supply deterministic seed 407
+PASS supply count and distinct IDs seed 408
+PASS supply guarantees seed 408
+PASS supply deterministic seed 408
+PASS supply count and distinct IDs seed 409
+PASS supply guarantees seed 409
+PASS supply deterministic seed 409
+PASS supply count and distinct IDs seed 410
+PASS supply guarantees seed 410
+PASS supply deterministic seed 410
+PASS supply count and distinct IDs seed 411
+PASS supply guarantees seed 411
+PASS supply deterministic seed 411
+PASS supply count and distinct IDs seed 412
+PASS supply guarantees seed 412
+PASS supply deterministic seed 412
+PASS supply count and distinct IDs seed 413
+PASS supply guarantees seed 413
+PASS supply deterministic seed 413
+PASS supply count and distinct IDs seed 414
+PASS supply guarantees seed 414
+PASS supply deterministic seed 414
+PASS supply count and distinct IDs seed 415
+PASS supply guarantees seed 415
+PASS supply deterministic seed 415
+PASS supply count and distinct IDs seed 416
+PASS supply guarantees seed 416
+PASS supply deterministic seed 416
+PASS supply count and distinct IDs seed 417
+PASS supply guarantees seed 417
+PASS supply deterministic seed 417
+PASS supply count and distinct IDs seed 418
+PASS supply guarantees seed 418
+PASS supply deterministic seed 418
+PASS supply count and distinct IDs seed 419
+PASS supply guarantees seed 419
+PASS supply deterministic seed 419
+PASS supply count and distinct IDs seed 420
+PASS supply guarantees seed 420
+PASS supply deterministic seed 420
+PASS supply count and distinct IDs seed 421
+PASS supply guarantees seed 421
+PASS supply deterministic seed 421
+PASS supply count and distinct IDs seed 422
+PASS supply guarantees seed 422
+PASS supply deterministic seed 422
+PASS supply count and distinct IDs seed 423
+PASS supply guarantees seed 423
+PASS supply deterministic seed 423
+PASS supply count and distinct IDs seed 424
+PASS supply guarantees seed 424
+PASS supply deterministic seed 424
+PASS supply count and distinct IDs seed 425
+PASS supply guarantees seed 425
+PASS supply deterministic seed 425
+PASS supply count and distinct IDs seed 426
+PASS supply guarantees seed 426
+PASS supply deterministic seed 426
+PASS supply count and distinct IDs seed 427
+PASS supply guarantees seed 427
+PASS supply deterministic seed 427
+PASS supply count and distinct IDs seed 428
+PASS supply guarantees seed 428
+PASS supply deterministic seed 428
+PASS supply count and distinct IDs seed 429
+PASS supply guarantees seed 429
+PASS supply deterministic seed 429
+PASS supply count and distinct IDs seed 430
+PASS supply guarantees seed 430
+PASS supply deterministic seed 430
+PASS supply count and distinct IDs seed 431
+PASS supply guarantees seed 431
+PASS supply deterministic seed 431
+PASS supply count and distinct IDs seed 432
+PASS supply guarantees seed 432
+PASS supply deterministic seed 432
+PASS supply count and distinct IDs seed 433
+PASS supply guarantees seed 433
+PASS supply deterministic seed 433
+PASS supply count and distinct IDs seed 434
+PASS supply guarantees seed 434
+PASS supply deterministic seed 434
+PASS supply count and distinct IDs seed 435
+PASS supply guarantees seed 435
+PASS supply deterministic seed 435
+PASS supply count and distinct IDs seed 436
+PASS supply guarantees seed 436
+PASS supply deterministic seed 436
+PASS supply count and distinct IDs seed 437
+PASS supply guarantees seed 437
+PASS supply deterministic seed 437
+PASS supply count and distinct IDs seed 438
+PASS supply guarantees seed 438
+PASS supply deterministic seed 438
+PASS supply count and distinct IDs seed 439
+PASS supply guarantees seed 439
+PASS supply deterministic seed 439
+PASS supply count and distinct IDs seed 440
+PASS supply guarantees seed 440
+PASS supply deterministic seed 440
+PASS supply count and distinct IDs seed 441
+PASS supply guarantees seed 441
+PASS supply deterministic seed 441
+PASS supply count and distinct IDs seed 442
+PASS supply guarantees seed 442
+PASS supply deterministic seed 442
+PASS supply count and distinct IDs seed 443
+PASS supply guarantees seed 443
+PASS supply deterministic seed 443
+PASS supply count and distinct IDs seed 444
+PASS supply guarantees seed 444
+PASS supply deterministic seed 444
+PASS supply count and distinct IDs seed 445
+PASS supply guarantees seed 445
+PASS supply deterministic seed 445
+PASS supply count and distinct IDs seed 446
+PASS supply guarantees seed 446
+PASS supply deterministic seed 446
+PASS supply count and distinct IDs seed 447
+PASS supply guarantees seed 447
+PASS supply deterministic seed 447
+PASS supply count and distinct IDs seed 448
+PASS supply guarantees seed 448
+PASS supply deterministic seed 448
+PASS supply count and distinct IDs seed 449
+PASS supply guarantees seed 449
+PASS supply deterministic seed 449
+PASS supply count and distinct IDs seed 450
+PASS supply guarantees seed 450
+PASS supply deterministic seed 450
+PASS supply count and distinct IDs seed 451
+PASS supply guarantees seed 451
+PASS supply deterministic seed 451
+PASS supply count and distinct IDs seed 452
+PASS supply guarantees seed 452
+PASS supply deterministic seed 452
+PASS supply count and distinct IDs seed 453
+PASS supply guarantees seed 453
+PASS supply deterministic seed 453
+PASS supply count and distinct IDs seed 454
+PASS supply guarantees seed 454
+PASS supply deterministic seed 454
+PASS supply count and distinct IDs seed 455
+PASS supply guarantees seed 455
+PASS supply deterministic seed 455
+PASS supply count and distinct IDs seed 456
+PASS supply guarantees seed 456
+PASS supply deterministic seed 456
+PASS supply count and distinct IDs seed 457
+PASS supply guarantees seed 457
+PASS supply deterministic seed 457
+PASS supply count and distinct IDs seed 458
+PASS supply guarantees seed 458
+PASS supply deterministic seed 458
+PASS supply count and distinct IDs seed 459
+PASS supply guarantees seed 459
+PASS supply deterministic seed 459
+PASS supply count and distinct IDs seed 460
+PASS supply guarantees seed 460
+PASS supply deterministic seed 460
+PASS supply count and distinct IDs seed 461
+PASS supply guarantees seed 461
+PASS supply deterministic seed 461
+PASS supply count and distinct IDs seed 462
+PASS supply guarantees seed 462
+PASS supply deterministic seed 462
+PASS supply count and distinct IDs seed 463
+PASS supply guarantees seed 463
+PASS supply deterministic seed 463
+PASS supply count and distinct IDs seed 464
+PASS supply guarantees seed 464
+PASS supply deterministic seed 464
+PASS supply count and distinct IDs seed 465
+PASS supply guarantees seed 465
+PASS supply deterministic seed 465
+PASS supply count and distinct IDs seed 466
+PASS supply guarantees seed 466
+PASS supply deterministic seed 466
+PASS supply count and distinct IDs seed 467
+PASS supply guarantees seed 467
+PASS supply deterministic seed 467
+PASS supply count and distinct IDs seed 468
+PASS supply guarantees seed 468
+PASS supply deterministic seed 468
+PASS supply count and distinct IDs seed 469
+PASS supply guarantees seed 469
+PASS supply deterministic seed 469
+PASS supply count and distinct IDs seed 470
+PASS supply guarantees seed 470
+PASS supply deterministic seed 470
+PASS supply count and distinct IDs seed 471
+PASS supply guarantees seed 471
+PASS supply deterministic seed 471
+PASS supply count and distinct IDs seed 472
+PASS supply guarantees seed 472
+PASS supply deterministic seed 472
+PASS supply count and distinct IDs seed 473
+PASS supply guarantees seed 473
+PASS supply deterministic seed 473
+PASS supply count and distinct IDs seed 474
+PASS supply guarantees seed 474
+PASS supply deterministic seed 474
+PASS supply count and distinct IDs seed 475
+PASS supply guarantees seed 475
+PASS supply deterministic seed 475
+PASS supply count and distinct IDs seed 476
+PASS supply guarantees seed 476
+PASS supply deterministic seed 476
+PASS supply count and distinct IDs seed 477
+PASS supply guarantees seed 477
+PASS supply deterministic seed 477
+PASS supply count and distinct IDs seed 478
+PASS supply guarantees seed 478
+PASS supply deterministic seed 478
+PASS supply count and distinct IDs seed 479
+PASS supply guarantees seed 479
+PASS supply deterministic seed 479
+PASS supply count and distinct IDs seed 480
+PASS supply guarantees seed 480
+PASS supply deterministic seed 480
+PASS supply count and distinct IDs seed 481
+PASS supply guarantees seed 481
+PASS supply deterministic seed 481
+PASS supply count and distinct IDs seed 482
+PASS supply guarantees seed 482
+PASS supply deterministic seed 482
+PASS supply count and distinct IDs seed 483
+PASS supply guarantees seed 483
+PASS supply deterministic seed 483
+PASS supply count and distinct IDs seed 484
+PASS supply guarantees seed 484
+PASS supply deterministic seed 484
+PASS supply count and distinct IDs seed 485
+PASS supply guarantees seed 485
+PASS supply deterministic seed 485
+PASS supply count and distinct IDs seed 486
+PASS supply guarantees seed 486
+PASS supply deterministic seed 486
+PASS supply count and distinct IDs seed 487
+PASS supply guarantees seed 487
+PASS supply deterministic seed 487
+PASS supply count and distinct IDs seed 488
+PASS supply guarantees seed 488
+PASS supply deterministic seed 488
+PASS supply count and distinct IDs seed 489
+PASS supply guarantees seed 489
+PASS supply deterministic seed 489
+PASS supply count and distinct IDs seed 490
+PASS supply guarantees seed 490
+PASS supply deterministic seed 490
+PASS supply count and distinct IDs seed 491
+PASS supply guarantees seed 491
+PASS supply deterministic seed 491
+PASS supply count and distinct IDs seed 492
+PASS supply guarantees seed 492
+PASS supply deterministic seed 492
+PASS supply count and distinct IDs seed 493
+PASS supply guarantees seed 493
+PASS supply deterministic seed 493
+PASS supply count and distinct IDs seed 494
+PASS supply guarantees seed 494
+PASS supply deterministic seed 494
+PASS supply count and distinct IDs seed 495
+PASS supply guarantees seed 495
+PASS supply deterministic seed 495
+PASS supply count and distinct IDs seed 496
+PASS supply guarantees seed 496
+PASS supply deterministic seed 496
+PASS supply count and distinct IDs seed 497
+PASS supply guarantees seed 497
+PASS supply deterministic seed 497
+PASS supply count and distinct IDs seed 498
+PASS supply guarantees seed 498
+PASS supply deterministic seed 498
+PASS supply count and distinct IDs seed 499
+PASS supply guarantees seed 499
+PASS supply deterministic seed 499
+PASS supply count and distinct IDs seed 500
+PASS supply guarantees seed 500
+PASS supply deterministic seed 500
+PASS supply count and distinct IDs seed 501
+PASS supply guarantees seed 501
+PASS supply deterministic seed 501
+PASS supply count and distinct IDs seed 502
+PASS supply guarantees seed 502
+PASS supply deterministic seed 502
+PASS supply count and distinct IDs seed 503
+PASS supply guarantees seed 503
+PASS supply deterministic seed 503
+PASS supply count and distinct IDs seed 504
+PASS supply guarantees seed 504
+PASS supply deterministic seed 504
+PASS supply count and distinct IDs seed 505
+PASS supply guarantees seed 505
+PASS supply deterministic seed 505
+PASS supply count and distinct IDs seed 506
+PASS supply guarantees seed 506
+PASS supply deterministic seed 506
+PASS supply count and distinct IDs seed 507
+PASS supply guarantees seed 507
+PASS supply deterministic seed 507
+PASS supply count and distinct IDs seed 508
+PASS supply guarantees seed 508
+PASS supply deterministic seed 508
+PASS supply count and distinct IDs seed 509
+PASS supply guarantees seed 509
+PASS supply deterministic seed 509
+PASS supply count and distinct IDs seed 510
+PASS supply guarantees seed 510
+PASS supply deterministic seed 510
+PASS supply count and distinct IDs seed 511
+PASS supply guarantees seed 511
+PASS supply deterministic seed 511
+PASS supply count and distinct IDs seed 512
+PASS supply guarantees seed 512
+PASS supply deterministic seed 512
+PASS supply guaranteed rare items
+PASS infeasible zero-weight source rejected
+PASS loot counts data configurable
+PASS JSON config roundtrip preserves catalog
+PASS actual packaged JSON contains all 38 IDs
+PASS actual packaged JSON profile validated and sampled
+PASS chests and pots top out at Rare (blue); Epic and Legendary only from the dragon egg
+PASS catalog returns defensive item copy
+PASS catalog owns copied input definitions
+PASS loot owns profile array and rule copies
+PASS initial inventory has HAND outside all slots
+PASS first pickup succeeds
+PASS second actor cannot duplicate pickup
+PASS duplicate request rejected without mutation
+PASS wrong match rejected
+PASS zero request rejected
+PASS authoritative pickup radius
+PASS stale request bounded dedupe
+PASS fill four weapon slots
+PASS select weapon
+PASS full weapon bag swaps selected slot
+PASS swap drops original exactly once
+PASS toggle weapon to unarmed
+PASS weapon carry capped and unarmed swaps slot zero
+PASS partial pickup keeps remaining floor stack
+PASS ammo adds one magazine to first eligible gun
+PASS ammo reserve capped
+PASS full reserves do not consume ammo
+PASS better armor equips and replaces
+PASS picking up other armor takes the worn one off onto the floor and wears the new one
+PASS walk-over pickup never swaps worn armor back
+PASS armor back to the better one for the rest of the checks
+PASS fill four consumable types
+PASS full consumables refuse different type
+PASS use starts and locks movement
+PASS damage does not cancel proposed GDD use
+PASS move cancels without consuming healing item
+PASS restart use
+PASS heal not early
+PASS complete use consumes and heals once
+PASS ordinary medicine rejected during CC
+PASS Elixir cleanses immediately during CC
+PASS Elixir immune to stun cancel
+PASS immediate cleanse cannot be repeatedly granted for free
+PASS drop consumable slot
+PASS loot passive
+PASS two hits only consume passive once
+PASS passive requests external 50 HP and 2 seconds immortality
+PASS passive removed
+PASS snapshot cannot mutate authoritative state
+PASS death drop succeeds
+PASS death drop exactly once
+PASS death clears inventory and worn armor
+PASS dead player cannot pickup
+PASS invalid clock rejected
+PASS invalid position rejected
+PASS empty floor item rejected
+PASS nonfinite floor position rejected
+PASS invalid floor durability rejected
+PASS invalid floor ammo rejected
+PASS unknown floor catalog id rejected
+PASS Root still allows using medicine
+PASS attack cancels without consuming delayed medicine
+PASS last immediate-use item retains progress identity
+PASS completed use clears progress identity
+PASS partial death-drop allocation rolls back floor spawns
+PASS failed death-drop preserves inventory for retry
+PASS retry after capacity recovery drops exactly all items
+PASS repeated successful death-drop cannot duplicate
+PASS fresh round has fresh state and request dedupe
+PASS two same-kind guns can have different loaded magazines
+PASS combat updates only the selected physical gun
+PASS same-kind slot switch keeps separate ammo and changes equipment identity
+PASS firing the second same-kind gun cannot overwrite the first gun
+PASS drop preserves loaded and reserve rounds
+PASS another actor picks up the same remaining ammunition
+PASS death-drop preserves an empty magazine without refilling it
+InventoryChecks: 1622 passed, 0 failed

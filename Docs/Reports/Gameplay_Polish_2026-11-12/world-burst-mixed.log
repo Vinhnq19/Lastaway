@@ -1,0 +1,90 @@
+[ready] udp=127.0.0.1:61715 maxPlayers=10 tickRate=30 authMode=RoomCode protocol=4 accountRequired=False supported=1,2,3,4
+[websocket] enabled port=59538 path=/game
+[joined] playerId=d1696ba2-e76a-4530-9ae1-2aef4b303317 roomId=4385046e-07eb-41eb-adf8-3b96a8fafc8b transport=Wss serverSlots=1/50
+[joined] playerId=c96f5742-b72e-49a9-a7d5-85407e48fd37 roomId=4385046e-07eb-41eb-adf8-3b96a8fafc8b transport=Udp serverSlots=2/50
+PASS network zone supplies current and target radii
+PASS both transports receive identical zone geometry at the same tick
+PASS both transports agree on zone warning and shrink timing
+PASS configured world created at match start without client mutation
+PASS both network clients verify same match map identity
+PASS paged initial world state matches both clients
+PASS network inventory has 4+4 slots with unarmed outside slots
+PASS real network bare-hand attack accepted 1
+PASS real network bare-hand attack accepted 2
+PASS real network bare-hand attack accepted 3
+PASS real network bare-hand attack accepted 4
+PASS four real weapon requests break chest through combat adapter
+PASS duplicate attack request cannot create loot twice
+PASS one chest yields one 3-4 item batch
+PASS both transports receive same floor loot
+PASS simultaneous network pickup accepted by exactly one actor
+PASS picked floor item removed authoritatively
+PASS duplicate network request cannot consume or duplicate loot
+PASS wrong-match request cannot mutate current room
+[room-created] roomId=912de91b-975e-495d-a9d6-100a66f9ace0 capacity=2
+PASS isolated second room created
+[joined] playerId=89fa2733-b7a1-4af1-b036-6eb17f66cb94 roomId=912de91b-975e-495d-a9d6-100a66f9ace0 transport=Udp serverSlots=3/50
+PASS world state never broadcasts into another room
+PASS resync keeps chest broken and picked loot absent
+PASS fixture places a throwable at the owner
+PASS other clients learn the held throwable: snapshot says other item, held-items list says BANANA
+PASS both clients see the banana thrown toward the witness
+PASS duplicate throw request is not thrown twice
+PASS banana blast removes HP through the combat service (30 before armor)
+PASS both clients see the same hit on the witness
+PASS the network throw breaks the pot and spawns loot
+PASS both clients see the pot break and its loot from one detonation despite the duplicate request
+PASS both clients see the banana trap armed
+PASS witness slips on the trap once, seen by both clients
+PASS the only banana was spent once and the hand is empty
+PASS throwable events never reach another room
+PASS all real packet frames deserialize without protocol errors
+PASS next round resets world floor and MatchId
+PASS next round clears previous inventory
+PASS Udp server Chest loot spawns PISTOL
+PASS Udp PISTOL floor spawn reaches both clients
+PASS Udp PISTOL pickup, selection and remote held code agree
+PASS Udp PISTOL chest loot includes usable reserve ammo
+PASS Udp PISTOL accepted shot broadcasts and authoritative ammo decrements
+PASS Udp PISTOL timed reload reaches both clients and consumes one reserve round
+PASS Udp PISTOL dropped weapon returns to synchronized floor loot
+PASS Udp server Chest loot spawns ASSAULT_RIFLE
+PASS Udp ASSAULT_RIFLE floor spawn reaches both clients
+PASS Udp ASSAULT_RIFLE pickup, selection and remote held code agree
+PASS Udp ASSAULT_RIFLE chest loot includes usable reserve ammo
+PASS Udp ASSAULT_RIFLE accepted shot broadcasts and authoritative ammo decrements
+PASS Udp ASSAULT_RIFLE timed reload reaches both clients and consumes one reserve round
+PASS Udp ASSAULT_RIFLE dropped weapon returns to synchronized floor loot
+PASS Udp server Floor loot spawns SNIPER_RIFLE
+PASS Udp SNIPER_RIFLE floor spawn reaches both clients
+PASS Udp SNIPER_RIFLE pickup, selection and remote held code agree
+PASS Udp SNIPER_RIFLE chest loot includes usable reserve ammo
+PASS Udp SNIPER_RIFLE accepted shot broadcasts and authoritative ammo decrements
+PASS Udp SNIPER_RIFLE timed reload reaches both clients and consumes one reserve round
+PASS Udp SNIPER_RIFLE dropped weapon returns to synchronized floor loot
+PASS Wss server Chest loot spawns PISTOL
+PASS Wss PISTOL floor spawn reaches both clients
+PASS Wss PISTOL pickup, selection and remote held code agree
+PASS Wss PISTOL chest loot includes usable reserve ammo
+PASS Wss PISTOL accepted shot broadcasts and authoritative ammo decrements
+PASS Wss PISTOL timed reload reaches both clients and consumes one reserve round
+PASS Wss PISTOL dropped weapon returns to synchronized floor loot
+PASS Wss server Chest loot spawns ASSAULT_RIFLE
+PASS Wss ASSAULT_RIFLE floor spawn reaches both clients
+PASS Wss ASSAULT_RIFLE pickup, selection and remote held code agree
+PASS Wss ASSAULT_RIFLE chest loot includes usable reserve ammo
+PASS Wss ASSAULT_RIFLE accepted shot broadcasts and authoritative ammo decrements
+PASS Wss ASSAULT_RIFLE timed reload reaches both clients and consumes one reserve round
+PASS Wss ASSAULT_RIFLE dropped weapon returns to synchronized floor loot
+PASS Wss server Floor loot spawns SNIPER_RIFLE
+PASS Wss SNIPER_RIFLE floor spawn reaches both clients
+PASS Wss SNIPER_RIFLE pickup, selection and remote held code agree
+PASS Wss SNIPER_RIFLE chest loot includes usable reserve ammo
+PASS Wss SNIPER_RIFLE accepted shot broadcasts and authoritative ammo decrements
+PASS Wss SNIPER_RIFLE timed reload reaches both clients and consumes one reserve round
+PASS Wss SNIPER_RIFLE dropped weapon returns to synchronized floor loot
+PASS firearm pickup, combat, reload and drop packets deserialize without errors
+PASS burst invalid pickups each receive a rejection instead of silent same-tick loss
+PASS bounded world queue responds once to every unique burst action
+WorldNetworkChecks Mixed: 82 passed, 0 failed
+[stopped] UDP socket đã đóng.

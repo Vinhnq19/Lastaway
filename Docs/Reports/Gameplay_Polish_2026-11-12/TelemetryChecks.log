@@ -1,0 +1,94 @@
+=== Starting Jungle Maze TelemetryChecks ===
+
+--- Ring: bounded MPSC ---
+[PASS] Full ring rejects the 9th write and counts one critical drop
+[PASS] Reads return the 8 writes in order, then empty
+[PASS] Bulk stops at its limit while critical still fills the reserved slots (R5)
+[PASS] Read slot releases the frame reference
+[PASS] 4 producers x 200k: read + dropped = written, per-producer FIFO
+
+--- JSON: invariant, escaped, finite ---
+[PASS] Numbers use invariant culture with at most 3 decimals; NaN -> null; strings escaped
+[PASS] Escaped string round-trips through a JSON parser
+
+--- Writer: one file per match, header/trailer, caps ---
+[PASS] Two matches produce two files named <matchId>.server.<wid>.jsonl
+[PASS] File is UTF-8 without BOM, LF only, ends with a newline
+[PASS] First line is _header, last line is _trailer
+[PASS] _trailer.written equals the number of record lines
+[PASS] seq runs 1..N without gaps
+[PASS] Header, records and trailer keys match the shared schema in order
+[PASS] Stop closes still-open files with a trailer
+[PASS] Per-file cap stops writing, marks truncated, counts dropped records
+[PASS] Total cap truncates every open file
+
+--- Disk errors: self-disable, one warning, no exception ---
+[PASS] Root path that is a file disables telemetry with one warning
+[PASS] Read-only target disables telemetry with one warning
+[PASS] Disk full mid-match disables telemetry, one warning, no exception
+
+--- TryWrite never waits for the disk (AC24) ---
+[PASS] 10,000 TryWrite with a blocked writer finish fast; overflow is dropped and counted
+
+--- Host: disabled by default (AC27) ---
+[PASS] No TELEMETRY_PATH: host disabled, no writer thread
+[PASS] PUBLIC_HOSTING=true refuses telemetry and creates nothing
+[PASS] Enabled host clamps sample rate, ignores bad numbers, creates no folder until a match writes
+[PASS] Dispose is idempotent
+
+--- Real MatchRuntime: two matches in one room ---
+[PASS] Two consecutive matches give two files (new MatchId after Cleanup opens a new file)
+[PASS] Without H5/H6 no optional event is bound (reflection finds nothing)
+[PASS] No display name, RoomCode, raw session id or resume token in any file (AC4)
+[PASS] match 1: every line has exactly the schema keys in order
+[PASS] match 1: seq runs 1..172 without gaps
+[PASS] match 1: _trailer.written = 172, nothing dropped or truncated
+[PASS] match 1: envelope carries matchId, src=server, cfg, cfgHash and balHash=null
+[PASS] match 1: real data never carries the fake flag
+[PASS] match 1: one match_start, 4 players, mt = 0, profile test
+[PASS] match 1: player_spawn = 4, at map spawn points, sess is a 16-hex hash
+[PASS] match 1: zone_phase has all 5 phases x WARNING/SHRINK_START/SHRINK_END plus FINAL, once each
+[PASS] match 1: SHRINK_START ticks match zone_schedule x zoneTimeScale (±2 ticks)
+[PASS] match 1: elimination count = eliminated players (4), one per victim
+[PASS] match 1: elimination.rank equals the server MatchResult rank (copied, not recomputed)
+[PASS] match 1: grace expiry gives elimination cause DISCONNECT, killer null (M8)
+[PASS] match 1: zone deaths give cause ZONE, hazard ZONE, zonePhase set
+[PASS] match 1: match_end.reason = MatchResult.Reason (Tie), alive and durTicks consistent
+[PASS] match 1: exactly one RESUMED (netId 2); the token rotation at match start is not a resume (X1)
+[PASS] match 1: exactly one GRACE_EXPIRED (netId 3); no DROPPED/LEFT without H5
+[PASS] match 1: damage has zone hits and one DISCONNECT hit; applied <= raw
+[PASS] match 1: position_sample at 1 Hz (every 30 ticks) per living player
+[PASS] match 1: after the zone reaches radius 0 every sample is outside the zone
+[PASS] match 2: every line has exactly the schema keys in order
+[PASS] match 2: seq runs 1..109 without gaps
+[PASS] match 2: _trailer.written = 109, nothing dropped or truncated
+[PASS] match 2: envelope carries matchId, src=server, cfg, cfgHash and balHash=null
+[PASS] match 2: real data never carries the fake flag
+[PASS] match 2: one LOAD_TIMEOUT for the player that never loaded, mt = null
+[PASS] match 2: match_start counts only the 2 loaded players
+[PASS] match 2: damage still recorded after HealthService is recreated (R3 rebind)
+[PASS] match 2: match_end.reason = MatchResult.Reason
+
+--- H7 factories on a real match ---
+[PASS] h7: every line has exactly the schema keys in order
+[PASS] h7: seq runs 1..19 without gaps
+[PASS] h7: _trailer.written = 19, nothing dropped or truncated
+[PASS] h7: envelope carries matchId, src=server, cfg, cfgHash and balHash=null
+[PASS] h7: real data never carries the fake flag
+[PASS] Each H7 type gives exactly one record
+[PASS] DamageDetail merges with the following EntityDamaged into ONE damage record with weapon/absorbed/durability
+[PASS] A fully absorbed hit (detail without EntityDamaged) is still recorded with applied = 0
+[PASS] Weapon kill: elimination killer and weapon come from the last damage; hidden=false once a bush system reports
+[PASS] match_end: LastAlive, winner netId 0
+[PASS] loot_drop items serialise as [{id, qty}]
+[PASS] position_sample.weapon follows the last WEAPON equip_change
+[PASS] cc_span carries ROOT/EXPIRED, by=ROPE, endTick >= startTick
+
+--- Attach lifecycle ---
+[PASS] Disabled host: Attach is a no-op and returns null
+[PASS] An empty, quiet non-default room is detached and releases its ring
+
+--- Queue drops are charged to the match that is closing ---
+[PASS] Trailer of the match closed at Cleanup carries that match's queue drops
+
+=== TelemetryChecks: 71 passed, 0 failed ===

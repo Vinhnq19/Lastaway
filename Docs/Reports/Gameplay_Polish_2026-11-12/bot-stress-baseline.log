@@ -1,0 +1,285 @@
+PASS: versioned fair bot settings
+PASS: register human human
+PASS: human verifies map
+PASS: non-host cannot add bot
+PASS: host adds bot
+PASS: duplicate request does not add twice
+PASS: bot occupies actor slot but has no peer
+PASS: no simulated transport session
+PASS: fill room bot slot
+PASS: fill room bot slot
+PASS: fill room bot slot
+PASS: fill room bot slot
+PASS: fill room bot slot
+PASS: fill room bot slot
+PASS: fill room bot slot
+PASS: fill room bot slot
+PASS: 1 human plus 9 bots is full
+PASS: cannot exceed ten actors
+PASS: removing bot frees slot
+PASS: old lobby revision rejected
+PASS: host starts human plus bots
+PASS: bots load without sockets or acknowledgements
+PASS: cannot modify bots in match
+PASS: bots generate real movement input
+PASS: bot state machine advances
+PASS: register human small
+PASS: human verifies map
+PASS: bot fits server remaining slot
+PASS: bot respects global server cap
+PASS: last human leaving waiting room clears bot slots
+PASS: register human main
+PASS: human verifies map
+PASS: fill minimum follows profile
+PASS: bots satisfy minimum only after human map verification
+PASS: global navigation budget is bounded
+PASS: register human loot-human
+PASS: human verifies map
+PASS: loot room adds one bot
+PASS: loot room match starts
+PASS: loot room reaches in game
+PASS: pickup fixture starts with an empty weapon bag
+PASS: fixture catalog explicitly disables test item
+PASS: disabled item fixture
+PASS: knife spawns on floor at bot
+PASS: bot picks up one knife through brain
+PASS: picked up knife leaves the floor
+PASS: bot ignores items disabled by current catalog
+PASS: register human fixture
+PASS: human verifies map
+PASS: fixture selects deterministic geometry
+PASS: fixture verifies selected geometry
+PASS: fixture adds bot
+PASS: fixture starts
+PASS: new enemy does not receive damage before 350ms reaction
+PASS: new enemy does not trigger movement before reaction
+PASS: bot causes actual melee damage after reaction
+PASS: bot obeys normal movement speed
+PASS: register human fixture
+PASS: human verifies map
+PASS: fixture selects deterministic geometry
+PASS: fixture verifies selected geometry
+PASS: fixture adds bot
+PASS: fixture starts
+PASS: invisible opponent is not detected
+PASS: register human fixture
+PASS: human verifies map
+PASS: fixture selects deterministic geometry
+PASS: fixture verifies selected geometry
+PASS: fixture adds bot
+PASS: fixture starts
+PASS: healing item fixture
+PASS: bot begins timed healing via inventory
+PASS: bot stands still while healing
+PASS: timed inventory use restores HP
+PASS: register human fixture
+PASS: human verifies map
+PASS: fixture selects deterministic geometry
+PASS: fixture verifies selected geometry
+PASS: fixture adds bot
+PASS: fixture starts
+PASS: weapon slot fixture
+PASS: weapon slot fixture
+PASS: weapon slot fixture
+PASS: weapon slot fixture
+PASS: bot fills four weapon slots without fake inventory commands
+PASS: upgrade fixture
+PASS: full inventory upgrades weapon and drops replaced item
+PASS: register human fixture
+PASS: human verifies map
+PASS: fixture selects deterministic geometry
+PASS: fixture verifies selected geometry
+PASS: fixture adds bot
+PASS: fixture starts
+PASS: partly loaded gun fixture
+PASS: bot acquires reload fixture gun before opponent is introduced
+PASS: bot reload consumes reserve ammo through real combat service
+PASS: register human fixture
+PASS: human verifies map
+PASS: fixture selects deterministic geometry
+PASS: fixture verifies selected geometry
+PASS: fixture adds bot
+PASS: fixture starts
+PASS: human grace preserves match and both slots
+PASS: bot has no resumable human proof
+PASS: no audience after grace ends match without win
+PASS: NoHumans cleanup returns all bot and human slots
+PASS: register human fixture
+PASS: human verifies map
+PASS: fixture selects deterministic geometry
+PASS: fixture verifies selected geometry
+PASS: fixture adds bot
+PASS: fixture starts
+PASS: bot can win while connected eliminated human watches
+PASS: bot results never carry account profiles
+PASS: human replay ack alone resets match and retains bot configuration
+PASS: register human fixture
+PASS: human verifies map
+PASS: fixture selects deterministic geometry
+PASS: fixture verifies selected geometry
+PASS: fixture adds bot
+PASS: fixture adds bot
+PASS: fixture starts
+PASS: dead bot stops decisions and input while other actors continue
+PASS: register human fixture
+PASS: human verifies map
+PASS: fixture selects deterministic geometry
+PASS: fixture verifies selected geometry
+PASS: fixture adds bot
+PASS: fixture starts
+PASS: cover blocks bot perception
+PASS: unobstructed nearby opponent is detected
+PASS: lost opponent is searched at last seen position
+PASS: target memory expires after three seconds
+PASS: register human fixture
+PASS: human verifies map
+PASS: fixture selects deterministic geometry
+PASS: fixture verifies selected geometry
+PASS: fixture adds bot
+PASS: fixture starts
+PASS: bush hides opponent beyond two cells
+PASS: bush opponent is revealed within two cells without cover
+PASS: register human fixture
+PASS: human verifies map
+PASS: fixture selects deterministic geometry
+PASS: fixture verifies selected geometry
+PASS: fixture adds bot
+PASS: fixture starts
+PASS: bot breaks a real chest through combat
+PASS: broken chest produces authoritative loot
+PASS: continued bot attacks do not break or spawn chest loot twice
+PASS: register human fixture
+PASS: human verifies map
+PASS: fixture selects deterministic geometry
+PASS: fixture verifies selected geometry
+PASS: fixture adds bot
+PASS: fixture starts
+PASS: bot moves back toward safe zone from outside
+PASS: register human fixture
+PASS: human verifies map
+PASS: fixture selects deterministic geometry
+PASS: fixture verifies selected geometry
+PASS: fixture adds bot
+PASS: fixture starts
+PASS: bot escapes from inside Lava through normal movement
+PASS: hazard escape does not teleport or exceed movement speed
+PASS: register human fixture
+PASS: human verifies map
+PASS: fixture selects deterministic geometry
+PASS: fixture verifies selected geometry
+PASS: fixture adds bot
+PASS: fixture starts
+PASS: bot escapes from inside Poison through normal movement
+PASS: hazard escape does not teleport or exceed movement speed
+PASS: resumable navigation respects tick slice
+PASS: resumable navigation respects tick slice
+PASS: resumable navigation respects tick slice
+PASS: resumable navigation respects tick slice
+PASS: resumable navigation respects tick slice
+PASS: resumable navigation respects tick slice
+PASS: resumable navigation respects tick slice
+PASS: resumable navigation respects tick slice
+PASS: resumable navigation respects tick slice
+PASS: resumable navigation respects tick slice
+PASS: resumable navigation respects tick slice
+PASS: resumable navigation respects tick slice
+PASS: resumable navigation respects tick slice
+PASS: resumable navigation respects tick slice
+PASS: bounded A star routes around cover
+PASS: path segments do not cut cover corners
+PASS: invalid production navigation wall-time budget rejected
+PASS: invalid production navigation wall-time budget rejected
+PASS: endpoint preparation yields when wall-time slice expires
+PASS: time-sliced endpoints preserve deterministic path/frontier
+PASS: expired time budget cannot consume a node
+PASS: register human fixture
+PASS: human verifies map
+PASS: fixture selects deterministic geometry
+PASS: fixture verifies selected geometry
+PASS: fixture adds bot
+PASS: fixture starts
+PASS: bot supply fixture announces a real scheduled drop
+PASS: human stays safe outside bot perception for supply fixture
+PASS: bot target egg lands
+PASS: bot has an accessible egg approach
+PASS: bot destroys dynamic egg through real combat intents
+PASS: bot picks up scheduled supply loot through inventory
+PASS: register human stress0
+PASS: human verifies map
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+[room-created] roomId=501e9548-b47c-44a1-a3fb-c29e8dc77c40 capacity=10
+PASS: create isolated stress room
+PASS: register human stress1
+PASS: human verifies map
+PASS: stress alternate room map
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+[room-created] roomId=6fbd5db9-e537-43a1-a81c-e62b6154b1d8 capacity=10
+PASS: create isolated stress room
+PASS: register human stress2
+PASS: human verifies map
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+[room-created] roomId=50b2c622-7f32-4c7d-9985-1e0662ba3c6a capacity=10
+PASS: create isolated stress room
+PASS: register human stress3
+PASS: human verifies map
+PASS: stress alternate room map
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+[room-created] roomId=46b61654-6ae0-44a9-8b4e-9a054202d091 capacity=10
+PASS: create isolated stress room
+PASS: register human stress4
+PASS: human verifies map
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: stress bot slot
+PASS: five rooms reserve exactly fifty human and bot slots
+[metrics] peers=5 active=5 pending=0 ticks=150 ticksPerSecond=29.94 tickP95Ms=5.601 tickP99Ms=7.003 tickMaxMs=7.016 loopMaxMs=7.024 loopGapMaxMs=17.006 pollMaxMs=0.280 simulationMaxMs=0.000 botMaxMs=0.000 movementMaxMs=0.000 worldMaxMs=0.000 resolutionMaxMs=0.000 snapshotMaxMs=0.000 streamsMaxMs=0.000 lifecycleMaxMs=0.000 botDecisionMaxMs=0.000 botPathMaxMs=0.000 gcPauseMs=7.799 previousReportMs=0.000 loopP95Ms=5.386 loopP99Ms=5.859 cpuOneCorePercent=18.40 tickOverruns=0 droppedTicks=0 pings=0 invalidPackets=0 historyUnavailable=0 rejected=0 rooms=5 workingSetMiB=61.81 roomSlots=7f55efb2-c7a7-4aac-af6f-06799a674ed0:10/10,501e9548-b47c-44a1-a3fb-c29e8dc77c40:10/10,6fbd5db9-e537-43a1-a81c-e62b6154b1d8:10/10,50b2c622-7f32-4c7d-9985-1e0662ba3c6a:10/10,46b61654-6ae0-44a9-8b4e-9a054202d091:10/10 bots=45 botPathNodesMax=57 botPathPendingMax=45 utc=2026-11-12T02:27:50.1132092Z
+[metrics] peers=5 active=5 pending=0 ticks=300 ticksPerSecond=29.95 tickP95Ms=4.395 tickP99Ms=4.718 tickMaxMs=4.841 loopMaxMs=4.844 loopGapMaxMs=31.308 pollMaxMs=0.007 simulationMaxMs=0.000 botMaxMs=0.000 movementMaxMs=0.000 worldMaxMs=0.000 resolutionMaxMs=0.000 snapshotMaxMs=0.000 streamsMaxMs=0.000 lifecycleMaxMs=0.000 botDecisionMaxMs=0.000 botPathMaxMs=0.000 gcPauseMs=4.478 previousReportMs=11.309 loopP95Ms=4.370 loopP99Ms=4.520 cpuOneCorePercent=3.74 tickOverruns=0 droppedTicks=0 pings=0 invalidPackets=0 historyUnavailable=0 rejected=0 rooms=5 workingSetMiB=60.04 roomSlots=7f55efb2-c7a7-4aac-af6f-06799a674ed0:10/10,501e9548-b47c-44a1-a3fb-c29e8dc77c40:10/10,6fbd5db9-e537-43a1-a81c-e62b6154b1d8:10/10,50b2c622-7f32-4c7d-9985-1e0662ba3c6a:10/10,46b61654-6ae0-44a9-8b4e-9a054202d091:10/10 bots=45 botPathNodesMax=61 botPathPendingMax=45 utc=2026-11-12T02:27:55.1170744Z
+[metrics] peers=5 active=5 pending=0 ticks=450 ticksPerSecond=29.97 tickP95Ms=4.414 tickP99Ms=4.637 tickMaxMs=5.014 loopMaxMs=5.018 loopGapMaxMs=16.701 pollMaxMs=0.025 simulationMaxMs=0.000 botMaxMs=0.000 movementMaxMs=0.000 worldMaxMs=0.000 resolutionMaxMs=0.000 snapshotMaxMs=0.000 streamsMaxMs=0.000 lifecycleMaxMs=0.000 botDecisionMaxMs=0.000 botPathMaxMs=0.000 gcPauseMs=7.265 previousReportMs=5.099 loopP95Ms=4.373 loopP99Ms=4.484 cpuOneCorePercent=5.93 tickOverruns=0 droppedTicks=0 pings=0 invalidPackets=0 historyUnavailable=0 rejected=0 rooms=5 workingSetMiB=64.47 roomSlots=7f55efb2-c7a7-4aac-af6f-06799a674ed0:10/10,501e9548-b47c-44a1-a3fb-c29e8dc77c40:10/10,6fbd5db9-e537-43a1-a81c-e62b6154b1d8:10/10,50b2c622-7f32-4c7d-9985-1e0662ba3c6a:10/10,46b61654-6ae0-44a9-8b4e-9a054202d091:10/10 bots=45 botPathNodesMax=57 botPathPendingMax=45 utc=2026-11-12T02:28:00.1205740Z
+[metrics] peers=5 active=5 pending=0 ticks=600 ticksPerSecond=29.96 tickP95Ms=4.395 tickP99Ms=4.565 tickMaxMs=4.603 loopMaxMs=4.606 loopGapMaxMs=16.667 pollMaxMs=0.020 simulationMaxMs=0.000 botMaxMs=0.000 movementMaxMs=0.000 worldMaxMs=0.000 resolutionMaxMs=0.000 snapshotMaxMs=0.000 streamsMaxMs=0.000 lifecycleMaxMs=0.000 botDecisionMaxMs=0.000 botPathMaxMs=0.000 gcPauseMs=3.641 previousReportMs=4.030 loopP95Ms=4.370 loopP99Ms=4.424 cpuOneCorePercent=3.74 tickOverruns=0 droppedTicks=0 pings=0 invalidPackets=0 historyUnavailable=0 rejected=0 rooms=5 workingSetMiB=65.13 roomSlots=7f55efb2-c7a7-4aac-af6f-06799a674ed0:10/10,501e9548-b47c-44a1-a3fb-c29e8dc77c40:10/10,6fbd5db9-e537-43a1-a81c-e62b6154b1d8:10/10,50b2c622-7f32-4c7d-9985-1e0662ba3c6a:10/10,46b61654-6ae0-44a9-8b4e-9a054202d091:10/10 bots=45 botPathNodesMax=61 botPathPendingMax=45 utc=2026-11-12T02:28:05.1276938Z
+[metrics] peers=5 active=5 pending=0 ticks=750 ticksPerSecond=29.99 tickP95Ms=4.461 tickP99Ms=4.751 tickMaxMs=5.196 loopMaxMs=5.200 loopGapMaxMs=17.121 pollMaxMs=0.021 simulationMaxMs=0.000 botMaxMs=0.000 movementMaxMs=0.000 worldMaxMs=0.000 resolutionMaxMs=0.000 snapshotMaxMs=0.000 streamsMaxMs=0.000 lifecycleMaxMs=0.000 botDecisionMaxMs=0.000 botPathMaxMs=0.000 gcPauseMs=5.812 previousReportMs=4.407 loopP95Ms=4.427 loopP99Ms=4.703 cpuOneCorePercent=1.87 tickOverruns=0 droppedTicks=0 pings=0 invalidPackets=0 historyUnavailable=0 rejected=0 rooms=5 workingSetMiB=57.49 roomSlots=7f55efb2-c7a7-4aac-af6f-06799a674ed0:10/10,501e9548-b47c-44a1-a3fb-c29e8dc77c40:10/10,6fbd5db9-e537-43a1-a81c-e62b6154b1d8:10/10,50b2c622-7f32-4c7d-9985-1e0662ba3c6a:10/10,46b61654-6ae0-44a9-8b4e-9a054202d091:10/10 bots=45 botPathNodesMax=57 botPathPendingMax=45 utc=2026-11-12T02:28:10.1288349Z
+[metrics] peers=5 active=5 pending=0 ticks=900 ticksPerSecond=30.00 tickP95Ms=4.239 tickP99Ms=4.451 tickMaxMs=4.486 loopMaxMs=4.491 loopGapMaxMs=16.844 pollMaxMs=0.014 simulationMaxMs=0.000 botMaxMs=0.000 movementMaxMs=0.000 worldMaxMs=0.000 resolutionMaxMs=0.000 snapshotMaxMs=0.000 streamsMaxMs=0.000 lifecycleMaxMs=0.000 botDecisionMaxMs=0.000 botPathMaxMs=0.000 gcPauseMs=2.739 previousReportMs=4.522 loopP95Ms=0.862 loopP99Ms=4.414 cpuOneCorePercent=0.94 tickOverruns=0 droppedTicks=0 pings=0 invalidPackets=0 historyUnavailable=0 rejected=0 rooms=5 workingSetMiB=58.66 roomSlots=7f55efb2-c7a7-4aac-af6f-06799a674ed0:10/10,501e9548-b47c-44a1-a3fb-c29e8dc77c40:10/10,6fbd5db9-e537-43a1-a81c-e62b6154b1d8:10/10,50b2c622-7f32-4c7d-9985-1e0662ba3c6a:10/10,46b61654-6ae0-44a9-8b4e-9a054202d091:10/10 bots=45 botPathNodesMax=51 botPathPendingMax=27 utc=2026-11-12T02:28:15.1288943Z
+[metrics] peers=5 active=5 pending=0 ticks=1050 ticksPerSecond=29.99 tickP95Ms=4.638 tickP99Ms=4.722 tickMaxMs=4.723 loopMaxMs=4.726 loopGapMaxMs=16.753 pollMaxMs=0.017 simulationMaxMs=0.000 botMaxMs=0.000 movementMaxMs=0.000 worldMaxMs=0.000 resolutionMaxMs=0.000 snapshotMaxMs=0.000 streamsMaxMs=0.000 lifecycleMaxMs=0.000 botDecisionMaxMs=0.000 botPathMaxMs=0.000 gcPauseMs=5.885 previousReportMs=4.263 loopP95Ms=4.489 loopP99Ms=4.707 cpuOneCorePercent=1.25 tickOverruns=0 droppedTicks=0 pings=0 invalidPackets=0 historyUnavailable=0 rejected=0 rooms=5 workingSetMiB=58.69 roomSlots=7f55efb2-c7a7-4aac-af6f-06799a674ed0:10/10,501e9548-b47c-44a1-a3fb-c29e8dc77c40:10/10,6fbd5db9-e537-43a1-a81c-e62b6154b1d8:10/10,50b2c622-7f32-4c7d-9985-1e0662ba3c6a:10/10,46b61654-6ae0-44a9-8b4e-9a054202d091:10/10 bots=45 botPathNodesMax=65 botPathPendingMax=41 utc=2026-11-12T02:28:20.1308584Z
+[metrics] peers=5 active=5 pending=0 ticks=1201 ticksPerSecond=30.12 tickP95Ms=4.338 tickP99Ms=4.626 tickMaxMs=4.648 loopMaxMs=4.653 loopGapMaxMs=16.662 pollMaxMs=0.013 simulationMaxMs=0.000 botMaxMs=0.000 movementMaxMs=0.000 worldMaxMs=0.000 resolutionMaxMs=0.000 snapshotMaxMs=0.000 streamsMaxMs=0.000 lifecycleMaxMs=0.000 botDecisionMaxMs=0.000 botPathMaxMs=0.000 gcPauseMs=3.997 previousReportMs=5.081 loopP95Ms=4.080 loopP99Ms=4.396 cpuOneCorePercent=6.86 tickOverruns=0 droppedTicks=0 pings=0 invalidPackets=0 historyUnavailable=0 rejected=0 rooms=5 workingSetMiB=58.71 roomSlots=7f55efb2-c7a7-4aac-af6f-06799a674ed0:10/10,501e9548-b47c-44a1-a3fb-c29e8dc77c40:10/10,6fbd5db9-e537-43a1-a81c-e62b6154b1d8:10/10,50b2c622-7f32-4c7d-9985-1e0662ba3c6a:10/10,46b61654-6ae0-44a9-8b4e-9a054202d091:10/10 bots=45 botPathNodesMax=55 botPathPendingMax=1 utc=2026-11-12T02:28:25.1439663Z
+[metrics] peers=5 active=5 pending=0 ticks=1351 ticksPerSecond=29.97 tickP95Ms=4.531 tickP99Ms=4.702 tickMaxMs=4.749 loopMaxMs=4.753 loopGapMaxMs=16.822 pollMaxMs=0.020 simulationMaxMs=0.000 botMaxMs=0.000 movementMaxMs=0.000 worldMaxMs=0.000 resolutionMaxMs=0.000 snapshotMaxMs=0.000 streamsMaxMs=0.000 lifecycleMaxMs=0.000 botDecisionMaxMs=0.000 botPathMaxMs=0.000 gcPauseMs=6.430 previousReportMs=4.341 loopP95Ms=4.474 loopP99Ms=4.669 cpuOneCorePercent=14.36 tickOverruns=0 droppedTicks=0 pings=0 invalidPackets=0 historyUnavailable=0 rejected=0 rooms=5 workingSetMiB=58.74 roomSlots=7f55efb2-c7a7-4aac-af6f-06799a674ed0:10/10,501e9548-b47c-44a1-a3fb-c29e8dc77c40:10/10,6fbd5db9-e537-43a1-a81c-e62b6154b1d8:10/10,50b2c622-7f32-4c7d-9985-1e0662ba3c6a:10/10,46b61654-6ae0-44a9-8b4e-9a054202d091:10/10 bots=45 botPathNodesMax=65 botPathPendingMax=35 utc=2026-11-12T02:28:30.1487269Z
+[metrics] peers=5 active=5 pending=0 ticks=1501 ticksPerSecond=29.95 tickP95Ms=4.460 tickP99Ms=4.588 tickMaxMs=4.806 loopMaxMs=4.810 loopGapMaxMs=17.010 pollMaxMs=0.007 simulationMaxMs=0.000 botMaxMs=0.000 movementMaxMs=0.000 worldMaxMs=0.000 resolutionMaxMs=0.000 snapshotMaxMs=0.000 streamsMaxMs=0.000 lifecycleMaxMs=0.000 botDecisionMaxMs=0.000 botPathMaxMs=0.000 gcPauseMs=4.920 previousReportMs=4.205 loopP95Ms=4.399 loopP99Ms=4.583 cpuOneCorePercent=2.50 tickOverruns=0 droppedTicks=0 pings=0 invalidPackets=0 historyUnavailable=0 rejected=0 rooms=5 workingSetMiB=59.57 roomSlots=7f55efb2-c7a7-4aac-af6f-06799a674ed0:10/10,501e9548-b47c-44a1-a3fb-c29e8dc77c40:10/10,6fbd5db9-e537-43a1-a81c-e62b6154b1d8:10/10,50b2c622-7f32-4c7d-9985-1e0662ba3c6a:10/10,46b61654-6ae0-44a9-8b4e-9a054202d091:10/10 bots=45 botPathNodesMax=58 botPathPendingMax=29 utc=2026-11-12T02:28:35.1622718Z
+[metrics] peers=5 active=5 pending=0 ticks=1651 ticksPerSecond=29.96 tickP95Ms=4.488 tickP99Ms=4.571 tickMaxMs=4.815 loopMaxMs=4.819 loopGapMaxMs=30.988 pollMaxMs=0.006 simulationMaxMs=0.000 botMaxMs=0.000 movementMaxMs=0.000 worldMaxMs=0.000 resolutionMaxMs=0.000 snapshotMaxMs=0.000 streamsMaxMs=0.000 lifecycleMaxMs=0.000 botDecisionMaxMs=0.000 botPathMaxMs=0.000 gcPauseMs=6.178 previousReportMs=8.748 loopP95Ms=4.462 loopP99Ms=4.530 cpuOneCorePercent=1.87 tickOverruns=0 droppedTicks=0 pings=0 invalidPackets=0 historyUnavailable=0 rejected=0 rooms=5 workingSetMiB=59.84 roomSlots=7f55efb2-c7a7-4aac-af6f-06799a674ed0:10/10,501e9548-b47c-44a1-a3fb-c29e8dc77c40:10/10,6fbd5db9-e537-43a1-a81c-e62b6154b1d8:10/10,50b2c622-7f32-4c7d-9985-1e0662ba3c6a:10/10,46b61654-6ae0-44a9-8b4e-9a054202d091:10/10 bots=45 botPathNodesMax=66 botPathPendingMax=27 utc=2026-11-12T02:28:40.1646122Z
+PASS: shared navigation budget and slots remain bounded during five-room stress
+BotChecks: 269 passed, 0 failed

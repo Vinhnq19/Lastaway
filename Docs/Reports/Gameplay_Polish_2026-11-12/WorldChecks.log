@@ -1,0 +1,176 @@
+D:\Unity\Lastaway\Backend\Tests\WorldChecks\Program.cs(214,293): warning CS8602: Dereference of a possibly null reference. [D:\Unity\Lastaway\Backend\Tests\WorldChecks\WorldChecks.csproj]
+PASS: fixed-point hash matches shared Mono/CoreCLR golden vector
+PASS: 60 chests
+PASS: 90 pots
+PASS: 45 bushes
+PASS: 3 portal pairs
+PASS: 10 spawns
+PASS: stable seed and hash
+PASS: different seed changes layout
+PASS: valid deterministic layout seed 1
+PASS: valid deterministic layout seed 2
+PASS: valid deterministic layout seed 3
+PASS: valid deterministic layout seed 4
+PASS: valid deterministic layout seed 5
+PASS: valid deterministic layout seed 6
+PASS: valid deterministic layout seed 7
+PASS: valid deterministic layout seed 8
+PASS: valid deterministic layout seed 9
+PASS: valid deterministic layout seed 10
+PASS: valid deterministic layout seed 11
+PASS: valid deterministic layout seed 12
+PASS: bounded impossible placement rejects
+PASS: nonfinite radius rejects
+PASS: confirmed damage applied
+PASS: duplicate damage ignored
+PASS: second attacker breaks chest
+PASS: single loot batch and broken state
+PASS: broken cannot respawn loot
+PASS: blast hits the exposed part of a chest once, even when its center is outside
+PASS: 20 blast damage breaks the exposed pot and drops one loot batch
+PASS: hard cover and a closed door protect containers
+PASS: supply and containers outside the blast are unaffected
+PASS: a second blast reaches an open doorway and cannot drop loot from a previously broken pot
+PASS: lava waits half-second
+PASS: slow and poison requests
+PASS: portal moves once
+PASS: lava damage 10 every 15 ticks
+PASS: same tick no duplicate lava
+PASS: second lava pulse
+PASS: swamp leaves remove source
+PASS: portal cooldown expires
+PASS: door closes and displaces occupant
+PASS: door all phases use server clock
+PASS: overlapping swamps retain separate slow sources
+PASS: leaving one swamp preserves the other slow
+PASS: leaving swamps never removes an unrelated slow source
+PASS: portal refuses a blocked destination
+PASS: failed portal traversal does not consume cooldown
+PASS: portal cooldown rejects immediate repeat traversal
+PASS: portal cooldown permits traversal after three seconds
+PASS: door stays open if no safe displacement exists
+PASS: world request roundtrip ushort ID
+PASS: wrong world version rejects
+PASS: world initializes from server profile at match start
+PASS: authored mode preserves exact 4 hard covers
+PASS: authored map contains 4 hard covers + 211 versioned fixed worldObjects
+PASS: authored map exact 60 chests
+PASS: authored map exact 90 pots
+PASS: authored map exact 45 bushes
+PASS: authored map exact 6 portals (3 pairs)
+PASS: authored map exact 2 doors
+PASS: authored map exact 2 swamps
+PASS: authored map exact 2 lava
+PASS: authored map exact 4 poison
+PASS: authored portals paired into 3 valid 2-endpoint groups
+PASS: portal destination is walkable with hero radius
+PASS: portal destination is walkable with hero radius
+PASS: portal destination is walkable with hero radius
+PASS: portal destination is walkable with hero radius
+PASS: portal destination is walkable with hero radius
+PASS: portal destination is walkable with hero radius
+PASS: spawn point is walkable
+PASS: spawn point has no hazard overlap
+PASS: spawn point inside initial zone radius
+PASS: pairwise spawn distance >= 6
+PASS: pairwise spawn distance >= 6
+PASS: pairwise spawn distance >= 6
+PASS: pairwise spawn distance >= 6
+PASS: pairwise spawn distance >= 6
+PASS: pairwise spawn distance >= 6
+PASS: pairwise spawn distance >= 6
+PASS: pairwise spawn distance >= 6
+PASS: pairwise spawn distance >= 6
+PASS: spawn point is walkable
+PASS: spawn point has no hazard overlap
+PASS: spawn point inside initial zone radius
+PASS: pairwise spawn distance >= 6
+PASS: pairwise spawn distance >= 6
+PASS: pairwise spawn distance >= 6
+PASS: pairwise spawn distance >= 6
+PASS: pairwise spawn distance >= 6
+PASS: pairwise spawn distance >= 6
+PASS: pairwise spawn distance >= 6
+PASS: pairwise spawn distance >= 6
+PASS: spawn point is walkable
+PASS: spawn point has no hazard overlap
+PASS: spawn point inside initial zone radius
+PASS: pairwise spawn distance >= 6
+PASS: pairwise spawn distance >= 6
+PASS: pairwise spawn distance >= 6
+PASS: pairwise spawn distance >= 6
+PASS: pairwise spawn distance >= 6
+PASS: pairwise spawn distance >= 6
+PASS: pairwise spawn distance >= 6
+PASS: spawn point is walkable
+PASS: spawn point has no hazard overlap
+PASS: spawn point inside initial zone radius
+PASS: pairwise spawn distance >= 6
+PASS: pairwise spawn distance >= 6
+PASS: pairwise spawn distance >= 6
+PASS: pairwise spawn distance >= 6
+PASS: pairwise spawn distance >= 6
+PASS: pairwise spawn distance >= 6
+PASS: spawn point is walkable
+PASS: spawn point has no hazard overlap
+PASS: spawn point inside initial zone radius
+PASS: pairwise spawn distance >= 6
+PASS: pairwise spawn distance >= 6
+PASS: pairwise spawn distance >= 6
+PASS: pairwise spawn distance >= 6
+PASS: pairwise spawn distance >= 6
+PASS: spawn point is walkable
+PASS: spawn point has no hazard overlap
+PASS: spawn point inside initial zone radius
+PASS: pairwise spawn distance >= 6
+PASS: pairwise spawn distance >= 6
+PASS: pairwise spawn distance >= 6
+PASS: pairwise spawn distance >= 6
+PASS: spawn point is walkable
+PASS: spawn point has no hazard overlap
+PASS: spawn point inside initial zone radius
+PASS: pairwise spawn distance >= 6
+PASS: pairwise spawn distance >= 6
+PASS: pairwise spawn distance >= 6
+PASS: spawn point is walkable
+PASS: spawn point has no hazard overlap
+PASS: spawn point inside initial zone radius
+PASS: pairwise spawn distance >= 6
+PASS: pairwise spawn distance >= 6
+PASS: spawn point is walkable
+PASS: spawn point has no hazard overlap
+PASS: spawn point inside initial zone radius
+PASS: pairwise spawn distance >= 6
+PASS: spawn point is walkable
+PASS: spawn point has no hazard overlap
+PASS: spawn point inside initial zone radius
+PASS: all spawns connected in single reachable component
+PASS: all portal exits connected to reachable component
+PASS: every authored loot container has a reachable interaction approach
+PASS: authored client/server hash matches golden vector
+PASS: authored mode preserves every team spawn coordinate
+PASS: authored mode preserves every team collider exactly
+PASS: world collision never mutates shared canonical map
+PASS: world spawns start inside actual zone schedule
+PASS: resync does not teleport or mutate world
+PASS: resync rejects old match identity
+PASS: authoritative scoped pickup
+PASS: pickup retry does not duplicate item
+PASS: inventory stores received item
+PASS: world start spreads its own floor loot plan
+PASS: confirmed chest break creates floor items
+PASS: room isolation of broken state and loot
+PASS: passive item picked into dược slot
+PASS: lethal hit consumes passive and restores 50 HP
+PASS: rescue invulnerability blocks repeat same-tick hit
+PASS: explicit leave bypasses invulnerability and passive
+PASS: leave elimination death-drops inventory immediately
+PASS: healing respects profile max60
+PASS: healing respects profile max150
+PASS: world snapshot includes floor catalog identity
+PASS: world page is bounded and roundtrips
+PASS: inventory snapshot roundtrip
+PASS: full floor rejects lethal container hit without losing its loot
+PASS: capacity recovery allows the same confirmed hit to spawn one complete loot batch
+PASS: retry after recovered destruction cannot duplicate the loot batch
+WorldChecks: 174 passed, 0 failed

@@ -1,0 +1,231 @@
+PASS: all seven ranged weapons enabled in the shipped catalog
+PASS: a wooden supply crate on the map rolls the chest table; only the dragon egg rolls the supply table
+PASS: chests drop every ranged weapon up to Rare and none above it
+PASS: PISTOL: weighted supply includes optional firearm (52.32%, weight 40)
+FIREARM_LOOT PISTOL chestItems=1390 supplyDrops=5232 rolls=10000
+PASS: ASSAULT_RIFLE: weighted supply includes optional firearm (37.13%, weight 25)
+FIREARM_LOOT ASSAULT_RIFLE chestItems=763 supplyDrops=3713 rolls=10000
+PASS: SNIPER_RIFLE: weighted supply includes optional firearm (16.36%, weight 10)
+FIREARM_LOOT SNIPER_RIFLE chestItems=0 supplyDrops=1636 rolls=10000
+PASS: weighted supply firearm frequencies retain pistol > rifle > sniper ordering
+PASS: chest firearm frequencies keep pistol > rifle; the Epic sniper never comes from a chest
+PASS: items_catalog.json rarities equal CreateBaseline
+PASS: rarity table of section 6
+PASS: JSON stores rarity as string and has a Floor block
+PASS: rarity defaults to Common
+PASS: undefined rarity rejected
+PASS: JSON without Loot.Floor reads with defaults
+PASS: JSON without Rarity reads as Common
+PASS: null Floor block falls back to defaults
+PASS: five floor group weights rejected
+PASS: spot chance above 1 rejected
+PASS: two tier rows rejected
+PASS: NaN multiplier rejected
+PASS: inverted scatter radius rejected
+PASS: tier with zero total weight rejected
+PASS: Floor profile is a defensive copy
+PASS: planner object cap equals WorldWire.MaxObjects
+PASS: map1_thap_co: spots are deterministic from the map
+PASS: map1_thap_co: map gets floor spots when the object budget allows (budget 1632)
+PASS: map1_thap_co: no spot on blocked/hazard cells, near portals/doors/containers or within 3 of a spawn
+PASS: map1_thap_co: minimum spacing 3 indoor / 5 elsewhere
+PASS: map1_thap_co: same seed gives the same floor
+PASS: map1_thap_co: another seed gives other items on the same spots
+PASS: map1_thap_co: every item belongs to a planned spot
+PASS: map1_thap_co: floor objects stay inside the 4096 world object budget with reserves
+PASS: map1_thap_co: spawn fairness (>= MinNearSpawn filled spots 6-14 cells away, one melee/heal) over 200 seeds
+PASS: map1_thap_co: every spawn has enough fairness spots in its ring
+PASS: map1_thap_co: every gun has one AMMO stack 0.8-1.2 cells away on a free point (436 guns)
+PASS: map1_thap_co: container drops land on free points and CountForContainer matches
+PASS: map1_thap_co: all 208 container drops lie 0.9-1.4 cells from the container
+PASS: map1_thap_co: container guns get AMMO 0.8-1.2 cells away
+PASS: map2_thi_tran: spots are deterministic from the map
+PASS: map2_thi_tran: map gets floor spots when the object budget allows (budget 1642)
+PASS: map2_thi_tran: no spot on blocked/hazard cells, near portals/doors/containers or within 3 of a spawn
+PASS: map2_thi_tran: minimum spacing 3 indoor / 5 elsewhere
+PASS: map2_thi_tran: same seed gives the same floor
+PASS: map2_thi_tran: another seed gives other items on the same spots
+PASS: map2_thi_tran: every item belongs to a planned spot
+PASS: map2_thi_tran: floor objects stay inside the 4096 world object budget with reserves
+PASS: map2_thi_tran: spawn fairness (>= MinNearSpawn filled spots 6-14 cells away, one melee/heal) over 200 seeds
+PASS: map2_thi_tran: every spawn has enough fairness spots in its ring
+PASS: map2_thi_tran: every gun has one AMMO stack 0.8-1.2 cells away on a free point (604 guns)
+PASS: map2_thi_tran: container drops land on free points and CountForContainer matches
+PASS: map2_thi_tran: all 207 container drops lie 0.9-1.4 cells from the container
+PASS: map2_thi_tran: container guns get AMMO 0.8-1.2 cells away
+PASS: map3_rung_sinh_ton: spots are deterministic from the map
+PASS: map3_rung_sinh_ton: map gets floor spots when the object budget allows (budget 579)
+PASS: map3_rung_sinh_ton: no spot on blocked/hazard cells, near portals/doors/containers or within 3 of a spawn
+PASS: map3_rung_sinh_ton: minimum spacing 3 indoor / 5 elsewhere
+PASS: map3_rung_sinh_ton: same seed gives the same floor
+PASS: map3_rung_sinh_ton: another seed gives other items on the same spots
+PASS: map3_rung_sinh_ton: every item belongs to a planned spot
+PASS: map3_rung_sinh_ton: floor objects stay inside the 4096 world object budget with reserves
+PASS: map3_rung_sinh_ton: spawn fairness (>= MinNearSpawn filled spots 6-14 cells away, one melee/heal) over 200 seeds
+PASS: map3_rung_sinh_ton: every spawn has enough fairness spots in its ring
+PASS: map3_rung_sinh_ton: every gun has one AMMO stack 0.8-1.2 cells away on a free point (1415 guns)
+PASS: map3_rung_sinh_ton: container drops land on free points and CountForContainer matches
+PASS: map3_rung_sinh_ton: all 111 container drops lie 0.9-1.4 cells from the container
+PASS: map3_rung_sinh_ton: container guns get AMMO 0.8-1.2 cells away
+PASS: all seven ranged weapons spawn as floor loot across the authored map rolls
+FIREARM_FLOOR PISTOL count=498 over 600 authored-map rolls
+FIREARM_FLOOR ASSAULT_RIFLE count=206 over 600 authored-map rolls
+FIREARM_FLOOR SNIPER_RIFLE count=55 over 600 authored-map rolls
+PASS: floor firearm frequencies retain pistol > rifle > sniper ordering across authored maps
+PASS: a map with fewer containers gets more floor spots
+PASS: Floor.Enabled=false plans no floor loot
+PASS: server spawns the floor plan into Floor at world start and bumps Revision
+PASS: same MatchId reproduces the same floor
+PASS: different MatchId changes floor items
+PASS: snapshot carries the floor items within the wire limit
+PASS: cached spots give the same floor as planning at start
+PASS: server breaks container 1359
+PASS: container 1359 spawns exactly the CanSpawnLoot count, with an AMMO stack per gun
+PASS: container 1359 drops lie 0.9-1.4 cells out (gun ammo 0.8-1.2 from its gun)
+PASS: container 1359 drops are walkable
+PASS: server breaks container 1360
+PASS: container 1360 spawns exactly the CanSpawnLoot count, with an AMMO stack per gun
+PASS: container 1360 drops lie 0.9-1.4 cells out (gun ammo 0.8-1.2 from its gun)
+PASS: container 1360 drops are walkable
+PASS: server breaks container 1361
+PASS: container 1361 spawns exactly the CanSpawnLoot count, with an AMMO stack per gun
+PASS: container 1361 drops lie 0.9-1.4 cells out (gun ammo 0.8-1.2 from its gun)
+PASS: container 1361 drops are walkable
+PASS: server breaks container 1362
+PASS: container 1362 spawns exactly the CanSpawnLoot count, with an AMMO stack per gun
+PASS: container 1362 drops lie 0.9-1.4 cells out (gun ammo 0.8-1.2 from its gun)
+PASS: container 1362 drops are walkable
+PASS: server breaks container 1365
+PASS: container 1365 spawns exactly the CanSpawnLoot count, with an AMMO stack per gun
+PASS: container 1365 drops lie 0.9-1.4 cells out (gun ammo 0.8-1.2 from its gun)
+PASS: container 1365 drops are walkable
+PASS: server breaks container 1366
+PASS: container 1366 spawns exactly the CanSpawnLoot count, with an AMMO stack per gun
+PASS: container 1366 drops lie 0.9-1.4 cells out (gun ammo 0.8-1.2 from its gun)
+PASS: container 1366 drops are walkable
+PASS: server breaks container 1369
+PASS: container 1369 spawns exactly the CanSpawnLoot count, with an AMMO stack per gun
+PASS: container 1369 drops lie 0.9-1.4 cells out (gun ammo 0.8-1.2 from its gun)
+PASS: container 1369 drops are walkable
+PASS: server breaks container 1370
+PASS: container 1370 spawns exactly the CanSpawnLoot count, with an AMMO stack per gun
+PASS: container 1370 drops lie 0.9-1.4 cells out (gun ammo 0.8-1.2 from its gun)
+PASS: container 1370 drops are walkable
+PASS: server breaks container 1373
+PASS: container 1373 spawns exactly the CanSpawnLoot count, with an AMMO stack per gun
+PASS: container 1373 drops lie 0.9-1.4 cells out (gun ammo 0.8-1.2 from its gun)
+PASS: container 1373 drops are walkable
+PASS: server breaks container 1374
+PASS: container 1374 spawns exactly the CanSpawnLoot count, with an AMMO stack per gun
+PASS: container 1374 drops lie 0.9-1.4 cells out (gun ammo 0.8-1.2 from its gun)
+PASS: container 1374 drops are walkable
+PASS: server breaks container 1381
+PASS: container 1381 spawns exactly the CanSpawnLoot count, with an AMMO stack per gun
+PASS: container 1381 drops lie 0.9-1.4 cells out (gun ammo 0.8-1.2 from its gun)
+PASS: container 1381 drops are walkable
+PASS: server breaks container 1382
+PASS: container 1382 spawns exactly the CanSpawnLoot count, with an AMMO stack per gun
+PASS: container 1382 drops lie 0.9-1.4 cells out (gun ammo 0.8-1.2 from its gun)
+PASS: container 1382 drops are walkable
+PASS: server breaks container 1384
+PASS: container 1384 spawns exactly the CanSpawnLoot count, with an AMMO stack per gun
+PASS: container 1384 drops lie 0.9-1.4 cells out (gun ammo 0.8-1.2 from its gun)
+PASS: container 1384 drops are walkable
+PASS: server breaks container 1387
+PASS: container 1387 spawns exactly the CanSpawnLoot count, with an AMMO stack per gun
+PASS: container 1387 drops lie 0.9-1.4 cells out (gun ammo 0.8-1.2 from its gun)
+PASS: container 1387 drops are walkable
+PASS: server breaks container 1390
+PASS: container 1390 spawns exactly the CanSpawnLoot count, with an AMMO stack per gun
+PASS: container 1390 drops lie 0.9-1.4 cells out (gun ammo 0.8-1.2 from its gun)
+PASS: container 1390 drops are walkable
+PASS: server breaks container 1397
+PASS: container 1397 spawns exactly the CanSpawnLoot count, with an AMMO stack per gun
+PASS: container 1397 drops lie 0.9-1.4 cells out (gun ammo 0.8-1.2 from its gun)
+PASS: container 1397 drops are walkable
+PASS: server breaks container 1398
+PASS: container 1398 spawns exactly the CanSpawnLoot count, with an AMMO stack per gun
+PASS: container 1398 drops lie 0.9-1.4 cells out (gun ammo 0.8-1.2 from its gun)
+PASS: container 1398 drops are walkable
+PASS: server breaks container 1470
+PASS: container 1470 spawns exactly the CanSpawnLoot count, with an AMMO stack per gun
+PASS: container 1470 drops lie 0.9-1.4 cells out (gun ammo 0.8-1.2 from its gun)
+PASS: container 1470 drops are walkable
+PASS: server breaks container 1471
+PASS: container 1471 spawns exactly the CanSpawnLoot count, with an AMMO stack per gun
+PASS: container 1471 drops lie 0.9-1.4 cells out (gun ammo 0.8-1.2 from its gun)
+PASS: container 1471 drops are walkable
+PASS: server breaks container 1472
+PASS: container 1472 spawns exactly the CanSpawnLoot count, with an AMMO stack per gun
+PASS: container 1472 drops lie 0.9-1.4 cells out (gun ammo 0.8-1.2 from its gun)
+PASS: container 1472 drops are walkable
+PASS: server breaks container 1477
+PASS: container 1477 spawns exactly the CanSpawnLoot count, with an AMMO stack per gun
+PASS: container 1477 drops lie 0.9-1.4 cells out (gun ammo 0.8-1.2 from its gun)
+PASS: container 1477 drops are walkable
+PASS: server breaks container 1478
+PASS: container 1478 spawns exactly the CanSpawnLoot count, with an AMMO stack per gun
+PASS: container 1478 drops lie 0.9-1.4 cells out (gun ammo 0.8-1.2 from its gun)
+PASS: container 1478 drops are walkable
+PASS: server breaks container 1479
+PASS: container 1479 spawns exactly the CanSpawnLoot count, with an AMMO stack per gun
+PASS: container 1479 drops lie 0.9-1.4 cells out (gun ammo 0.8-1.2 from its gun)
+PASS: container 1479 drops are walkable
+PASS: server breaks container 1480
+PASS: container 1480 spawns exactly the CanSpawnLoot count, with an AMMO stack per gun
+PASS: container 1480 drops lie 0.9-1.4 cells out (gun ammo 0.8-1.2 from its gun)
+PASS: container 1480 drops are walkable
+PASS: server breaks container 1484
+PASS: container 1484 spawns exactly the CanSpawnLoot count, with an AMMO stack per gun
+PASS: container 1484 drops lie 0.9-1.4 cells out (gun ammo 0.8-1.2 from its gun)
+PASS: container 1484 drops are walkable
+PASS: server breaks container 1485
+PASS: container 1485 spawns exactly the CanSpawnLoot count, with an AMMO stack per gun
+PASS: container 1485 drops lie 0.9-1.4 cells out (gun ammo 0.8-1.2 from its gun)
+PASS: container 1485 drops are walkable
+PASS: server breaks container 1503
+PASS: container 1503 spawns exactly the CanSpawnLoot count, with an AMMO stack per gun
+PASS: container 1503 drops lie 0.9-1.4 cells out (gun ammo 0.8-1.2 from its gun)
+PASS: container 1503 drops are walkable
+PASS: server breaks container 1504
+PASS: container 1504 spawns exactly the CanSpawnLoot count, with an AMMO stack per gun
+PASS: container 1504 drops lie 0.9-1.4 cells out (gun ammo 0.8-1.2 from its gun)
+PASS: container 1504 drops are walkable
+PASS: server breaks container 1509
+PASS: container 1509 spawns exactly the CanSpawnLoot count, with an AMMO stack per gun
+PASS: container 1509 drops lie 0.9-1.4 cells out (gun ammo 0.8-1.2 from its gun)
+PASS: container 1509 drops are walkable
+PASS: server breaks container 1511
+PASS: container 1511 spawns exactly the CanSpawnLoot count, with an AMMO stack per gun
+PASS: container 1511 drops lie 0.9-1.4 cells out (gun ammo 0.8-1.2 from its gun)
+PASS: container 1511 drops are walkable
+PASS: server breaks container 1512
+PASS: container 1512 spawns exactly the CanSpawnLoot count, with an AMMO stack per gun
+PASS: container 1512 drops lie 0.9-1.4 cells out (gun ammo 0.8-1.2 from its gun)
+PASS: container 1512 drops are walkable
+PASS: server breaks container 1513
+PASS: container 1513 spawns exactly the CanSpawnLoot count, with an AMMO stack per gun
+PASS: container 1513 drops lie 0.9-1.4 cells out (gun ammo 0.8-1.2 from its gun)
+PASS: container 1513 drops are walkable
+PASS: server breaks container 1516
+PASS: container 1516 spawns exactly the CanSpawnLoot count, with an AMMO stack per gun
+PASS: container 1516 drops lie 0.9-1.4 cells out (gun ammo 0.8-1.2 from its gun)
+PASS: container 1516 drops are walkable
+PASS: server breaks container 1517
+PASS: container 1517 spawns exactly the CanSpawnLoot count, with an AMMO stack per gun
+PASS: container 1517 drops lie 0.9-1.4 cells out (gun ammo 0.8-1.2 from its gun)
+PASS: container 1517 drops are walkable
+PASS: server container breaks exercised (34 containers, 13 with guns)
+PASS: full floor rejects the lethal hit without losing loot
+
+| map | objects | chest/pot/supply | walkable cells | area target | budget | spots | floor items/match | ammo stacks/match | world objects/match (of 4096) | container items (exp.) | total items | PlanSpots ms (median of 5) | Roll ms | map Build+Validate ms |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| map1_thap_co | 1577 | 32/56/2 | 16349 | 41 | 1632 | 48 (7 fair, 37 indoor; candidates open/cover/indoor 6795/8664/83) | 40.2 | 2.2 | 1619 (max 1628) | 210 | 250 | 10.5 (cold 24.7) | 0.02 | 69 |
+|   rarity by ring (map1_thap_co) | Outer: Common 67% Uncommon 26% Rare 5% Epic 2% Legendary 0% (n=4974) ; Middle: Common 53% Uncommon 27% Rare 13% Epic 6% Legendary 0% (n=1851) ; Inner: Common 36% Uncommon 32% Rare 21% Epic 11% Legendary 0% (n=1210) |
+| map2_thi_tran | 1460 | 35/45/2 | 16518 | 52 | 1642 | 63 (11 fair, 46 indoor; candidates open/cover/indoor 8776/6931/125) | 51.2 | 3.0 | 1514 (max 1522) | 204 | 255 | 9.9 (cold 9.0) | 0.02 | 21 |
+|   rarity by ring (map2_thi_tran) | Outer: Common 67% Uncommon 26% Rare 5% Epic 2% Legendary 0% (n=7045) ; Middle: Common 54% Uncommon 27% Rare 12% Epic 7% Legendary 0% (n=1261) ; Inner: Common 35% Uncommon 32% Rare 22% Epic 12% Legendary 0% (n=1941) |
+| map3_rung_sinh_ton | 3233 | 25/0/3 | 15339 | 166 | 579 | 169 (3 fair, 167 indoor; candidates open/cover/indoor 2807/11295/523) | 128.8 | 7.1 | 3369 (max 3386) | 108 | 237 | 10.7 (cold 9.8) | 0.09 | 67 |
+|   rarity by ring (map3_rung_sinh_ton) | Outer: Common 65% Uncommon 27% Rare 6% Epic 2% Legendary 0% (n=17157) ; Middle: Common 50% Uncommon 30% Rare 13% Epic 6% Legendary 0% (n=7391) ; Inner: Common 36% Uncommon 30% Rare 23% Epic 11% Legendary 0% (n=1221) |
+| map3 sim. section 8 (0 pots, 1/3 chests) | 3217 | 9/0/3 | 15354 | 238 | 659 | 239 | 179.5 | - | - | 52 | 232 | - | - | - |
+
+FloorLootChecks: 213 passed, 0 failed

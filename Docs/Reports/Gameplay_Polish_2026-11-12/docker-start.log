@@ -1,0 +1,141 @@
+ Image backend-api Building 
+ Image backend-game-server Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 956B 0.0s done
+#1 DONE 0.0s
+
+#2 [api internal] load build definition from Dockerfile
+#2 transferring dockerfile: 507B 0.0s done
+#2 DONE 0.0s
+
+#3 [game-server internal] load build definition from Dockerfile
+#3 transferring dockerfile: 733B 0.0s done
+#3 DONE 0.0s
+
+#4 [api internal] load metadata for mcr.microsoft.com/dotnet/aspnet:8.0
+#4 DONE 0.1s
+
+#5 [game-server internal] load metadata for mcr.microsoft.com/dotnet/sdk:8.0
+#5 DONE 0.5s
+
+#6 [game-server internal] load .dockerignore
+#6 transferring context: 90B 0.0s done
+#6 DONE 0.0s
+
+#7 [game-server stage-1 1/3] FROM mcr.microsoft.com/dotnet/aspnet:8.0@sha256:ea721098d6ea2894ff9bd8387821a1659d4765d6c014b8d648bb1da16f016f5a
+#7 resolve mcr.microsoft.com/dotnet/aspnet:8.0@sha256:ea721098d6ea2894ff9bd8387821a1659d4765d6c014b8d648bb1da16f016f5a 0.0s done
+#7 DONE 0.0s
+
+#8 [api build 1/7] FROM mcr.microsoft.com/dotnet/sdk:8.0@sha256:1b955f179b02df4f0eb5fadedaa898cbe44d620a64aab52eec72c8e91d1355b5
+#8 resolve mcr.microsoft.com/dotnet/sdk:8.0@sha256:1b955f179b02df4f0eb5fadedaa898cbe44d620a64aab52eec72c8e91d1355b5 0.0s done
+#8 DONE 0.1s
+
+#9 [api internal] load build context
+#9 transferring context: 102.87kB 0.1s done
+#9 DONE 0.1s
+
+#10 [game-server internal] load build context
+#10 transferring context: 414.65kB 0.1s done
+#10 DONE 0.1s
+
+#11 [api build 3/7] COPY Api/Api.csproj Api/
+#11 CACHED
+
+#12 [api build 4/7] RUN dotnet restore Api/Api.csproj
+#12 CACHED
+
+#13 [api build 5/7] COPY Api/ Api/
+#13 CACHED
+
+#14 [game-server build 2/7] WORKDIR /src
+#14 CACHED
+
+#15 [game-server build 3/7] COPY GameServer/GameServer.csproj GameServer/
+#15 CACHED
+
+#16 [game-server build 4/7] RUN dotnet restore GameServer/GameServer.csproj -r linux-x64 -p:PublishReadyToRun=true
+#16 CACHED
+
+#17 [game-server build 5/7] COPY GameServer/ GameServer/
+#17 DONE 0.1s
+
+#18 [api build 6/7] COPY Shared/ Shared/
+#18 DONE 0.2s
+
+#19 [game-server build 6/7] COPY Shared/ Shared/
+#19 DONE 0.2s
+
+#20 [api build 7/7] RUN dotnet publish Api/Api.csproj -c Release -o /out --no-restore
+#20 ...
+
+#21 [game-server build 7/7] RUN dotnet publish GameServer/GameServer.csproj -c Release -r linux-x64 --self-contained false -p:PublishReadyToRun=true -o /out --no-restore
+#21 ...
+
+#20 [api build 7/7] RUN dotnet publish Api/Api.csproj -c Release -o /out --no-restore
+#20 10.46   Api -> /src/Api/bin/Release/net8.0/Api.dll
+#20 10.56   Api -> /out/
+#20 DONE 10.7s
+
+#21 [game-server build 7/7] RUN dotnet publish GameServer/GameServer.csproj -c Release -r linux-x64 --self-contained false -p:PublishReadyToRun=true -o /out --no-restore
+#21 11.29   GameServer -> /src/GameServer/bin/Release/net8.0/linux-x64/GameServer.dll
+#21 ...
+
+#22 [api stage-1 2/3] WORKDIR /app
+#22 CACHED
+
+#23 [api stage-1 3/3] COPY --from=build /out .
+#23 CACHED
+
+#24 [api] exporting to image
+#24 exporting layers done
+#24 exporting manifest sha256:354bc9d79b0a273aa8fdc2aa27faccc66b1c511dbdd1b7fb44ed799953a220df done
+#24 exporting config sha256:284338eef0cec19ca633b9594b5917020ba928e38e88b0dd290d5b8032b2814f done
+#24 exporting attestation manifest sha256:2123f5059439643e348b85a0c2b36db5cafd7c120845f68681dbc1f17ce13216 0.0s done
+#24 exporting manifest list sha256:7526c1ea7570f29f8ddbe344cefd1b3a73defe5652e0b586351981935bfbb0b2 0.0s done
+#24 naming to docker.io/library/backend-api:latest done
+#24 unpacking to docker.io/library/backend-api:latest 0.0s done
+#24 DONE 0.2s
+
+#21 [game-server build 7/7] RUN dotnet publish GameServer/GameServer.csproj -c Release -r linux-x64 --self-contained false -p:PublishReadyToRun=true -o /out --no-restore
+#21 ...
+
+#25 [api] resolving provenance for metadata file
+#25 DONE 0.0s
+
+#21 [game-server build 7/7] RUN dotnet publish GameServer/GameServer.csproj -c Release -r linux-x64 --self-contained false -p:PublishReadyToRun=true -o /out --no-restore
+#21 13.89   GameServer -> /out/
+#21 DONE 14.1s
+
+#22 [game-server stage-1 2/3] WORKDIR /app
+#22 CACHED
+
+#26 [game-server stage-1 3/3] COPY --from=build /out .
+#26 DONE 0.1s
+
+#27 [game-server] exporting to image
+#27 exporting layers 0.7s done
+#27 exporting manifest sha256:ba24cf01ce7164d98a735a8ffbb3217d8578d63e8a6121b32c98b505092e1344 0.0s done
+#27 exporting config sha256:704a58b768de9ed6f31456ad1c6699e57bf3e166fbd4399c939fc26e6787d663 0.0s done
+#27 exporting attestation manifest sha256:48b7de21de3c10b156b5f47f0386db96ddb5b35e4f4c1d802903f4a43c3df7d7 0.0s done
+#27 exporting manifest list sha256:d53ceff05cab38aa40d54ed09cadd8ccbcc02fdd0b5c044140499230a3700d26 0.0s done
+#27 naming to docker.io/library/backend-game-server:latest
+#27 naming to docker.io/library/backend-game-server:latest done
+#27 unpacking to docker.io/library/backend-game-server:latest 0.1s done
+#27 DONE 1.0s
+
+#28 [game-server] resolving provenance for metadata file
+#28 DONE 0.0s
+ Image backend-api Built 
+ Image backend-game-server Built 
+ Container backend-game-server-1 Recreate 
+ Container backend-mongo-1 Recreate 
+ Container backend-game-server-1 Recreated 
+ Container backend-mongo-1 Recreated 
+ Container backend-mongo-1 Starting 
+ Container backend-game-server-1 Starting 
+ Container backend-mongo-1 Started 
+ Container backend-mongo-1 Waiting 
+ Container backend-game-server-1 Started 
+ Container backend-mongo-1 Healthy 
+ Container backend-api-1 Starting 
+ Container backend-api-1 Started 

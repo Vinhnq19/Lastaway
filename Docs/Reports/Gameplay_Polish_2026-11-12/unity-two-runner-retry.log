@@ -1,0 +1,25 @@
+=================================================================
+ JungleMaze Online Readiness Test Launcher
+ Scenario    : local2-accelerated (Clients: 2, MaxDuration: 130s)
+ Output Dir  : D:\Unity\Lastaway\Docs\Reports\Gameplay_Polish_2026-11-12\unity-mixed-two
+ Room Auth   : NET_ROOM_CODE env injected (masked from argv/logs)
+ Physical PCs: 1 (physicalTwoPc: NOT_TESTED)
+=================================================================
+Launching client 1/2 (Player1)...
+Launching client 2/2 (Player2)...
+All 2 clients launched. Monitoring execution (deadline: 130s)...
+Cleaning up owned client processes...
+
+========================= RUN SUMMARY =========================
+Overall Status: PASS (2/2 clients passed)
+PhysicalTwoPc : NOT_TESTED (single physical device)
+Report JSON   : D:\Unity\Lastaway\Docs\Reports\Gameplay_Polish_2026-11-12\unity-mixed-two\report.json
+Summary CSV   : D:\Unity\Lastaway\Docs\Reports\Gameplay_Polish_2026-11-12\unity-mixed-two\summary.csv
+---------------------------------------------------------------
+
+id      status selectedTransport connectedSeconds p50RttMs exitCode reason                                  
+--      ------ ----------------- ---------------- -------- -------- ------                                  
+Player1 PASS   Udp                          35.43    33.31        0 Required observations and rates verified
+Player2 PASS   Wss                          30.36    33.34        0 Required observations and rates verified
+
+

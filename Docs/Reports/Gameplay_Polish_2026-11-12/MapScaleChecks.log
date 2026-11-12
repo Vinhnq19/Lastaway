@@ -1,0 +1,33 @@
+=== Starting MapScaleChecks ===
+[PASS] square150 map with ring10 spawns validates
+[PASS] scaled schedule center is map midpoint (75, 75)
+[PASS] scaled initial radius is 75
+[PASS] scaled shrink speed is 3 (x3)
+[PASS] damage per second preserved
+[PASS] warning duration preserved
+[PASS] version preserved
+[PASS] interval count preserved
+[PASS] interval start/end times preserved
+[PASS] interval radii scaled (75 -> 54)
+[PASS] final scaled radius is 0
+[PASS] intervals are copied, not shared
+[PASS] scaled schedule validates
+[PASS] base schedule center/radius unchanged after ForMap
+[PASS] base schedule radii/speed unchanged after ForMap
+[PASS] simulation starts at scaled center (75, 75)
+[PASS] simulation starts with scaled radius 75
+[PASS] simulation reaches final radius 0 at last end time
+[PASS] r0 damages whole map including center
+[PASS] base schedule not mutated by constructor
+[PASS] second simulation from same base is not double-scaled
+[PASS] second simulation interval radii not double-scaled
+[PASS] base schedule still base-sized after repeats
+[PASS] ForMap returns unchanged base for 50 map
+[PASS] ForMap returns unchanged base for null map
+[PASS] 50 map simulation keeps base radius 25 at (25, 25)
+[PASS] no-map simulation keeps base radius 25 at (25, 25)
+[PASS] non-square map is rejected
+[PASS] unsafe spawn outside spawn circle is rejected
+
+=== Test Results: 29 passed, 0 failed ===
+ALL MAP SCALE CHECKS PASSED SUCCESSFULLY!

@@ -1,0 +1,86 @@
+PASS weapons.json gives all 8 WPN-03 weapons
+PASS seed column stunSeconds is a 1.5 s root, not a stun
+PASS bat: 3 charges, 3 cell knockback, 2 s stun, 90° arc
+PASS smoke: no damage, 7×7, 10 s
+PASS config overrides one number, GDD defaults fill the rest
+PASS duplicate throwable rejected
+PASS non-throwable id rejected
+PASS banana thrown
+PASS throw spends one banana from the stack
+PASS no damage before the 1.5 s fuse
+PASS still no damage at 1.4 s
+PASS detonation deals 30 to the target in 3×3
+PASS banana leaves a trap
+PASS trap needs 0.5 s to arm, blast victims can step off
+PASS standing on the armed peel stuns 1 s
+PASS trap is spent after one trigger
+PASS a spent trap never stuns twice
+PASS thrower and players outside 3×3 take no blast damage
+PASS last banana empties the slot
+PASS untouched trap expires after 20 s
+PASS expired trap stuns nobody
+PASS meteorite thrown
+PASS same request id is a duplicate
+PASS older request id is rejected
+PASS retries spend nothing and do not double the 35 damage
+PASS a new id after the 1 s cooldown is accepted
+PASS cooldown enforced
+PASS crystal lands in front of the wall
+PASS crystal does not hurt through the wall
+PASS crystal deals 45 with a clear line
+PASS two crystals (carry 2) are both spent
+PASS crystal thrown past its range
+PASS throw distance clamped to crystal range 7 (7 ≈ 7)
+PASS smoke covers 7×7 around the landing
+PASS outside the cloud is clear
+PASS smoke deals no damage or control
+PASS cloud lasts the full 10 s
+PASS cloud ends after 10 s
+PASS seed deals 20
+PASS seed roots 1.5 s (root, not stun: the target can still attack)
+PASS rope cast
+PASS rope pulls the enemy next to the user (10.85 ≈ 10.85)
+PASS rope deals 15
+PASS rope keeps 1 of 2 charges
+PASS rope cast at a wall
+PASS rope pulls the user to the cover (15.05 ≈ 15.05)
+PASS second charge used up the rope
+PASS no rope left
+PASS rope cannot grab an enemy behind cover
+PASS it pulls the user to that cover instead
+PASS rope into open space misses and moves nobody
+PASS bell rung
+PASS player inside 7×7 has movement reversed 10 s
+PASS player outside 7×7 is not affected
+PASS bell deals 15 in the area
+PASS the ringer is not reversed
+PASS bell has one charge
+PASS bat swung
+PASS bat knocks the target back 3 cells (14.5 ≈ 14.5)
+PASS free knockback does not stun
+PASS players outside the 90° arc are untouched
+PASS bat deals 25
+PASS bat keeps 2 of 3 charges
+PASS bat cooldown 1.5 s
+PASS bat swung again
+PASS knockback stops at the wall
+PASS hitting the wall stuns 2 s
+PASS knocked into another player: stunned 2 s
+PASS stunned players cannot throw
+PASS a refused throw spends nothing
+PASS request must match the held weapon
+PASS dead players cannot throw
+PASS NaN aim rejected
+PASS Banana can be used
+PASS Banana applies the expected container damage once
+PASS Meteorite can be used
+PASS Meteorite applies the expected container damage once
+PASS Crystal can be used
+PASS Crystal applies the expected container damage once
+PASS Seed can be used
+PASS Seed applies the expected container damage once
+PASS Smoke can be used
+PASS Smoke applies the expected container damage once
+PASS Bell can be used
+PASS Bell applies the expected container damage once
+ThrowableChecks: 85 passed
