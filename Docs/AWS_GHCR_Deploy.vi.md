@@ -57,7 +57,7 @@ Mở Docker Desktop. Kiểm `Backend/.env` có các secret Local và account-tic
 
 ```powershell
 & .\Backend\Deploy\deploy-aws.ps1 -Mode PrepareOnly -VerifyLocal `
-  -Player 'D:\Unity\Lastaway\Builds\AWS-Quality-6000.3.21f1\Lastaway.exe' `
+  -Player 'D:\Unity\Lastaway\Builds\Lastaway-Release\Lastaway.exe' `
   -OutputDirectory 'D:\Unity\Lastaway\Backend\out\registry-local'
 ```
 
@@ -71,7 +71,7 @@ Sau khi commit sạch và Local đạt:
 
 ```powershell
 & .\Backend\Deploy\deploy-aws.ps1 -Mode PrepareOnly `
-  -Player 'D:\Unity\Lastaway\Builds\AWS-Quality-6000.3.21f1\Lastaway.exe' `
+  -Player 'D:\Unity\Lastaway\Builds\Lastaway-Release\Lastaway.exe' `
   -LocalEvidence 'D:\Unity\Lastaway\Backend\out\registry-local\local-evidence.json' `
   -OutputDirectory 'D:\Unity\Lastaway\Backend\out\registry-release'
 ```
@@ -109,7 +109,7 @@ Dành riêng server, không có người chơi; bật EC2 thủ công nếu cầ
 ```powershell
 & .\Backend\Deploy\deploy-aws.ps1 -Mode Deploy `
   -Release 'D:\Unity\Lastaway\Backend\out\registry-release\<release-id>' `
-  -Player 'D:\Unity\Lastaway\Builds\AWS-Quality-6000.3.21f1\Lastaway.exe' `
+  -Player 'D:\Unity\Lastaway\Builds\Lastaway-Release\Lastaway.exe' `
   -LocalEvidence 'D:\Unity\Lastaway\Backend\out\registry-local\local-evidence.json' `
   -BudgetMinutes 20
 ```
@@ -183,3 +183,7 @@ Bằng chứng client có `frameQuality` theo phase: số frame, FPS trung bình
 
 ### Lựa chọn renderer cho máy kiểm thử
 `deploy-aws.ps1 -VerifyLocal -ForceD3D11` chuyển lựa chọn Direct3D11 tới runner Windows hiện có; thêm cờ này vào lệnh Deploy nếu cần cùng đường kiểm trên PC đó. Cờ không đổi renderer mặc định của build và không hạ tiêu chí Full. Báo cáo 12/11 dùng lựa chọn này. Luôn đối chiếu catalog volume: image mới không tự thay map đã phát hành. Local từng còn1.1.0 trong khi source1.2.0; dùng validate/publish/reload và giữ backup theo mục catalog ở trên.
+
+## Đóng gói Windows gọn
+
+Build scene chỉ gồm Boot và Game; các map Tháp cổ/Thị trấn là dữ liệu runtime, không cần đưa scene mẫu JSurviv vào player. Giữ source SampleScene/GameConfig/GameMain để tham khảo. Dùng Unity MCP `manage_build` với `target=windows64`, `development=false`, hai scene trên và `options=["compress_lz4", "strict_mode", "detailed_report"]`; không để options trống vì công cụ mặc định không bật nén player. Nén player không phải ZIP: vẫn bàn giao nguyên thư mục EXE/_Data/runtime. Khi đổi scene list hoặc cách đóng gói, build và kiểm artifact mới, không sửa fingerprint của bản cũ để nhận PASS. Backend AWS không cần deploy lại nếu chỉ thay cách đóng gói client.

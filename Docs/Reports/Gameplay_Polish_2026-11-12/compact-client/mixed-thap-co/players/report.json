@@ -1,0 +1,53 @@
+﻿{
+    "status":  "PASS",
+    "scenarioId":  "registry-auto2",
+    "schemaVersion":  1,
+    "timestampUtc":  "2026-11-12T16:45:23.8936493Z",
+    "reason":  null,
+    "playerSha256":  "48efab523aa684c653bd1254a6962d3410127b5c02dc1310f6f16f4810666556",
+    "playerFingerprint":  "b0efdf5107516b7662fe5986b332983eca7697c0e9d9b3dba0792a8567bedf5d",
+    "clientCount":  2,
+    "passedCount":  2,
+    "physicalDeviceCount":  1,
+    "physicalTwoPc":  "NOT_TESTED",
+    "clients":  [
+                    {
+                        "id":  "Player1",
+                        "index":  1,
+                        "pid":  30344,
+                        "exitCode":  0,
+                        "status":  "PASS",
+                        "evidenceStatus":  "PASS",
+                        "graphicsApi":  "Direct3D11",
+                        "selectedTransport":  "Wss",
+                        "fallbackReason":  "",
+                        "connectedSeconds":  33.59,
+                        "p50RttMs":  33.34,
+                        "p99RttMs":  34.4,
+                        "assertionsPassed":  8,
+                        "assertionsTotal":  8,
+                        "reason":  "Required observations and rates verified",
+                        "evidenceFile":  "evidence-client-1.json",
+                        "logFile":  "unity-client-1.log"
+                    },
+                    {
+                        "id":  "Player2",
+                        "index":  2,
+                        "pid":  22240,
+                        "exitCode":  0,
+                        "status":  "PASS",
+                        "evidenceStatus":  "PASS",
+                        "graphicsApi":  "Direct3D11",
+                        "selectedTransport":  "Udp",
+                        "fallbackReason":  "",
+                        "connectedSeconds":  33.55,
+                        "p50RttMs":  33.34,
+                        "p99RttMs":  50.78,
+                        "assertionsPassed":  8,
+                        "assertionsTotal":  8,
+                        "reason":  "Required observations and rates verified",
+                        "evidenceFile":  "evidence-client-2.json",
+                        "logFile":  "unity-client-2.log"
+                    }
+                ]
+}

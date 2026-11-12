@@ -1,0 +1,115 @@
+{
+  "status": "PASS",
+  "path": "D:/Unity/Lastaway/Builds/Lastaway-Release/Lastaway.exe",
+  "sizeMiB": 152.139,
+  "job": "build-0aea4c149b",
+  "buildSeconds": 152.7325487,
+  "errors": 0,
+  "warnings": 0,
+  "scenes": [
+    "Assets/_JungleMaze/Scenes/Boot.unity",
+    "Assets/_JungleMaze/Scenes/Game.unity"
+  ],
+  "options": [
+    "compress_lz4",
+    "strict_mode",
+    "detailed_report"
+  ],
+  "provenance": {
+    "schemaVersion": 1,
+    "sourceHash": "03f3a2c4ac14ba9100f27e46bd5c5210b33d031ea1b346fed70845873490af3e",
+    "playerFingerprint": "b0efdf5107516b7662fe5986b332983eca7697c0e9d9b3dba0792a8567bedf5d",
+    "unityVersion": "6000.3.21f1"
+  },
+  "verification": {
+    "sourceMatches": true,
+    "playerMatches": true,
+    "sourceHash": "03f3a2c4ac14ba9100f27e46bd5c5210b33d031ea1b346fed70845873490af3e",
+    "playerFingerprint": "b0efdf5107516b7662fe5986b332983eca7697c0e9d9b3dba0792a8567bedf5d",
+    "unity": "6000.3.21f1",
+    "totalMiB": 152.139
+  },
+  "mixedClients": [
+    {
+      "id": "Player1",
+      "index": 1,
+      "pid": 30344,
+      "exitCode": 0,
+      "status": "PASS",
+      "evidenceStatus": "PASS",
+      "graphicsApi": "Direct3D11",
+      "selectedTransport": "Wss",
+      "fallbackReason": "",
+      "connectedSeconds": 33.59,
+      "p50RttMs": 33.34,
+      "p99RttMs": 34.4,
+      "assertionsPassed": 8,
+      "assertionsTotal": 8,
+      "reason": "Required observations and rates verified",
+      "evidenceFile": "evidence-client-1.json",
+      "logFile": "unity-client-1.log"
+    },
+    {
+      "id": "Player2",
+      "index": 2,
+      "pid": 22240,
+      "exitCode": 0,
+      "status": "PASS",
+      "evidenceStatus": "PASS",
+      "graphicsApi": "Direct3D11",
+      "selectedTransport": "Udp",
+      "fallbackReason": "",
+      "connectedSeconds": 33.55,
+      "p50RttMs": 33.34,
+      "p99RttMs": 50.78,
+      "assertionsPassed": 8,
+      "assertionsTotal": 8,
+      "reason": "Required observations and rates verified",
+      "evidenceFile": "evidence-client-2.json",
+      "logFile": "unity-client-2.log"
+    }
+  ],
+  "townClients": [
+    {
+      "id": "Player1",
+      "index": 1,
+      "pid": 27480,
+      "exitCode": 0,
+      "status": "PASS",
+      "evidenceStatus": "PASS",
+      "graphicsApi": "Direct3D11",
+      "selectedTransport": "Wss",
+      "fallbackReason": "",
+      "connectedSeconds": 34.71,
+      "p50RttMs": 33.34,
+      "p99RttMs": 35.04,
+      "assertionsPassed": 8,
+      "assertionsTotal": 8,
+      "reason": "Required observations and rates verified",
+      "evidenceFile": "evidence-client-1.json",
+      "logFile": "unity-client-1.log"
+    }
+  ],
+  "cleanup": {
+    "deleted": [
+      {
+        "path": "D:\\Unity\\Lastaway\\Builds\\Bot-Recovery-Main",
+        "bytes": 321765222.0
+      }
+    ],
+    "alreadyAbsent": [
+      "Bot-Recovery",
+      "Gameplay-Polish"
+    ],
+    "deletedMiB": 306.859,
+    "kept": [
+      "Builds/Lastaway",
+      "Builds/Lastaway-Release"
+    ]
+  },
+  "localStateAfter": "stopped as found, main profile, memory limit 0",
+  "aws": "UNCHANGED",
+  "validationScope": "Packaging/launch/flow smoke, not a new 300-second Full receipt for this player. Prior AWS Full is for the previous packaging of the same gameplay code.",
+  "initialTownFixture": "Failed before launching player after back-to-back anonymous-room checks; consistent with room-create anonymous quota 5/min. Standalone attempt passed without changing API rules.",
+  "twoPhysicalPCs": "NOT_TESTED"
+}

@@ -4,10 +4,10 @@
 
 **PASS cổng Local mới nhất.** Đã xử lý bot đứng tại spawn, lỗi thiếu dữ liệu world khiến client không gửi input, và giảm cấp phát bộ nhớ trong gameplay. Full bằng Windows client mới + Docker giới hạn 256 MiB đạt; **AWS đã deploy và PASS Full** trong lượt tiếp theo cùng ngày, chi tiết cuối phần7.
 
-Bản bàn giao: `D:/Unity/Lastaway/Builds/Bot-Recovery-Main/Lastaway.exe` cùng toàn bộ thư mục. Unity cá nhân **6000.3.21f1**; phiên bản chung trong Git vẫn **6000.3.15f1**. Build `build-a09ec938a2`: 0 lỗi, 2 warning, 306,49 MiB. Không coi warning là lỗi compile.
+**Bản đóng gói hiện tại:** `D:/Unity/Lastaway/Builds/Lastaway-Release/Lastaway.exe`, **152,14 MiB**, job `build-0aea4c149b`, 0 lỗi/0 warning. Chỉ Boot + Game và nén LZ4. Bản 306 MiB dùng cho các lượt Full trước đã được dọn theo yêu cầu; bằng chứng/fingerprint cũ vẫn giữ để đối chiếu. Unity cá nhân 6000.3.21f1; Git chung vẫn 6000.3.15f1.
 
-- SourceHash: `40c799f06c4fb2b4d06c4fca33fd865204e3e1262ba9336fa03e9ad123cbb279`.
-- Player fingerprint: `0be25b7fc3b1a2b58441f64a20d4f2e920232d2df686adcb9762b1d02e57a647`.
+- SourceHash của bản Full cũ: `40c799f06c4fb2b4d06c4fca33fd865204e3e1262ba9336fa03e9ad123cbb279`.
+- Player fingerprint của bản Full cũ: `0be25b7fc3b1a2b58441f64a20d4f2e920232d2df686adcb9762b1d02e57a647`.
 - Receipt dùng cho pipeline: `Backend/out/bot-world-stream-gc-20261112/local-evidence.json`.
 - Báo cáo này gồm cả FAIL cũ và PASS mới; không sửa receipt hoặc giảm gate để nhận PASS.
 
@@ -60,7 +60,7 @@ WSS dự phòng vẫn chịu đặc tính TCP khi mạng mất gói. Bản sửa
 
 ## 7. Bàn giao, deploy và trạng thái sau test
 
-Dùng toàn bộ thư mục `Builds/Bot-Recovery-Main`, không chỉ chép EXE. Trong game chọn **Local Docker dành cho dev** → đăng nhập → tạo phòng → chọn Tháp cổ/Thị trấn → thêm9 bot → Bắt đầu. Quan sát bot, bo, loot/combat, chết/spectator, kết quả/history rồi chơi lại. Với server source mới cần rebuild Docker; chờ ready trước khi mở client.
+Dùng toàn bộ thư mục `Builds/Lastaway-Release`, không chỉ chép EXE. Trong game chọn **Local Docker dành cho dev** → đăng nhập → tạo phòng → chọn Tháp cổ/Thị trấn → thêm9 bot → Bắt đầu. Quan sát bot, bo, loot/combat, chết/spectator, kết quả/history rồi chơi lại. Với server source mới cần rebuild Docker; chờ ready trước khi mở client.
 
 ```powershell
 Set-Location 'D:\Unity\Lastaway\Backend'
@@ -88,4 +88,16 @@ Chuẩn bị GHCR **PASS**: release `ghcr-20261112-160052-b6e76560`, source comm
 - Guard đã nhận quyết định accept và xác nhận PASS đúng transaction/release. Không cần rollback; không coi lượt này là đã chạy lại bài rollback có chủ đích.
 - Client tác vụ đều đóng, phòng test dọn bởi runner. Camera Follow Player, spectator giữ; Local vẫn profile main/memory0. EC2 tiếp tục Running và tiếp tục phát sinh chi phí/tiêu credits theo tài khoản sau khi test kết thúc.
 
-Bằng chứng: `aws-deploy/` gồm deployment/remote-ready/remote-final, digest thực, số đo server, CSV, hai nhóm client, UDP/WSS, ảnh và log. Hai PC vật lý, buổi6–10 người,60FPS/720p và Full AWS riêng map Thị trấn vẫn **NOT_TESTED**. Dùng `Builds/Bot-Recovery-Main/Lastaway.exe` cùng toàn bộ thư mục → **Online · AWS** → đăng nhập → tạo/vào phòng → chọn map/bot → Bắt đầu.
+Bằng chứng: `aws-deploy/` gồm deployment/remote-ready/remote-final, digest thực, số đo server, CSV, hai nhóm client, UDP/WSS, ảnh và log. Hai PC vật lý, buổi6–10 người,60FPS/720p và Full AWS riêng map Thị trấn vẫn **NOT_TESTED**. Dùng bản đóng gói mới `Builds/Lastaway-Release/Lastaway.exe` cùng toàn bộ thư mục → **Online · AWS** → đăng nhập → tạo/vào phòng → chọn map/bot → Bắt đầu.
+
+
+### Đóng gói lại Windows — 152,14 MiB
+
+Đã đổi scene mặc định còn Boot và Game; giữ nguyên source SampleScene/GameConfig/GameMain để tham khảo. Build mới dùng `compress_lz4`, `strict_mode`, `detailed_report`; không Development. Cấu hình sử dụng MCP được ghi trong AGENTS.md và hướng dẫn deploy để tránh lặp lại build không nén. Bản cũ152,42 MiB làm đối chiếu; bản mới152,14 MiB thay cho306,86 MiB. Runtime/editor/gameplay không bị đổi để giảm dung lượng.
+
+- Fingerprint source/player của bản mới đã khớp; xem `compact-client/registry-build.json` và `packaging.json`. Không sửa registry-build.json thủ công.
+- Tháp cổ: hai Windows client, WSS và UDP, cùng PASS33,59/33,55s, gồm movement, bo/HP, kết quả/history/replay, exit0.
+- Thị trấn: một người+9bot qua WSS, PASS34,71s, kết quả/history/replay, exit0; profile test tăng tốc. Lượt đầu của wrapper dừng ở kiểm quyền Guest trước khi mở player, phù hợp quota5yêu cầu tạo phòng ẩn danh/phút khi chạy nối tiếp. Lượt độc lập PASS, không đổi API/account/rate limit.
+- Đây là kiểm đóng gói/khởi động/flow trên Local, không phải một receipt Full300s mới hoặc lượt AWS mới cho artifact này. Backend AWS đã PASS trước đó vẫn giữ; lần phát hành backend tiếp theo cần receipt khớp player hiện tại.
+- Xóa `Builds/Bot-Recovery-Main`306,86 MiB sau khi bản mới PASS. `Bot-Recovery` và `Gameplay-Polish` đã không còn ở lần kiểm đường dẫn để dọn; không quy phần dung lượng đó cho thao tác xóa của lượt này. Hiện chỉ giữ `Builds/Lastaway` cũ và `Builds/Lastaway-Release` mới.
+- Docker Local lúc bắt đầu đã Stopped; sau test trả main/memory0 rồi Stop, giữ DB/map/outbox. Camera Follow Player/spectator giữ nguyên. Không truy cập/deploy hoặc thay trạng thái AWS trong lượt đóng gói này. Chưa commit các thay đổi đóng gói.

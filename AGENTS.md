@@ -9,3 +9,7 @@ If `Docs/Network_Architecture.vi.md` changes, re-extract its semantic fragment o
 ## Camera state after tasks
 
 Always restore the normal Follow Player camera before completing a task. Temporary overview/free/debug cameras may be used during development or testing, but must not remain enabled in the final scene, runtime defaults, or delivered build. Preserve spectator camera behavior while spectating. If a build was made with a temporary camera, rebuild with Follow Player before handing that build over; if rebuilding is outside the authorized scope, explicitly mark that build as outdated rather than presenting it as updated.
+
+## Windows player packaging
+
+Release players include only `Assets/_JungleMaze/Scenes/Boot.unity` and `Assets/_JungleMaze/Scenes/Game.unity`. Keep reference/sample scenes in source, outside the release scene list. When using Unity MCP `manage_build`, pass `options=["compress_lz4", "strict_mode", "detailed_report"]` explicitly; its default `BuildOptions.None` does not preserve the compressed player packaging. Use a fresh output folder and verify runtime data/provenance plus launch/exit before replacing a tested player.
